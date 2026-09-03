@@ -1,0 +1,418 @@
+"""Tests for completions & small modules coverage.
+
+Covers missed lines in:
+- skills_completion.py
+- file_path_completion.py
+- load_context_completion.py
+- model_switching.py
+- markdown_patches.py
+- error_logging.py
+
+Note: mcp_completion.py is covered in tests/command_line/test_mcp_completion.py
+"""
+
+import os
+import tempfile
+from pathlib import Path
+from unittest.mock import MagicMock, patch
+
+from termflow.tui.completion import Document
+
+# ── skills_completion ───────────────────────────────────────────────────
+
+
+class TestLoadCatalogSkillIds:
+    """Cover lines 26-32."""
+
+    def test_success(self):
+        from code_puppy.command_line.skills_completion import load_catalog_skill_ids
+
+        provider = MagicMock()
+        provider.get_catalog_skill_ids.return_value = ["skill-1"]
+        with patch(
+            "code_puppy.command_line.skills_completion.get_skill_provider",
+            return_value=provider,
+        ):
+            assert load_catalog_skill_ids() == ["skill-1"]
+
+    def test_exception(self):
+        from code_puppy.command_line.skills_completion import load_catalog_skill_ids
+
+        with patch(
+            "code_puppy.command_line.skills_completion.get_skill_provider",
+            side_effect=RuntimeError("boom"),
+        ):
+            assert load_catalog_skill_ids() == []
+
+
+class TestSkillsCompleterGetCompletions:
+    """Cover lines 62-71, 78-160."""
+
+    def setup_method(self):
+        from code_puppy.command_line.skills_completion import SkillsCompleter
+
+        self.completer = SkillsCompleter()
+
+    def test_no_trigger(self):
+        doc = Document("hello")
+        assert list(self.completer.get_completions(doc, None)) == []
+
+    def test_no_space_after_trigger(self):
+        doc = Document("/skills")
+        assert list(self.completer.get_completions(doc, None)) == []
+
+    def test_show_all_subcommands(self):
+        doc = Document("/skills ")
+        completions = list(self.completer.get_completions(doc, None))
+        names = [c.text for c in completions]
+        assert "list" in names
+        assert "install" in names
+
+    def test_partial_subcommand(self):
+        doc = Document("/skills li")
+        completions = list(self.completer.get_completions(doc, None))
+        names = [c.text for c in completions]
+        assert "list" in names
+
+    def test_install_space_shows_skill_ids(self):
+        with patch.object(
+            self.completer, "_get_skill_ids", return_value=["git-helper", "docker"]
+        ):
+            doc = Document("/skills install ")
+            completions = list(self.completer.get_completions(doc, None))
+        names = [c.text for c in completions]
+        assert "git-helper" in names
+        assert "docker" in names
+
+    def test_install_partial_skill_id(self):
+        with patch.object(
+            self.completer, "_get_skill_ids", return_value=["git-helper", "docker"]
+        ):
+            doc = Document("/skills install gi")
+            completions = list(self.completer.get_completions(doc, None))
+        names = [c.text for c in completions]
+        assert "git-helper" in names
+        assert "docker" not in names
+
+    def test_non_install_subcommand_no_further(self):
+        doc = Document("/skills list ")
+        completions = list(self.completer.get_completions(doc, None))
+        assert completions == []
+
+    def test_get_skill_ids_caches(self):
+        with patch(
+            "code_puppy.command_line.skills_completion.load_catalog_skill_ids",
+            return_value=["s1"],
+        ):
+            result = self.completer._get_skill_ids()
+        assert result == ["s1"]
+        # Cached
+        assert self.completer._get_skill_ids() == ["s1"]
+
+    def test_get_skill_ids_none_returns_empty(self):
+        with patch(
+            "code_puppy.command_line.skills_completion.load_catalog_skill_ids",
+            return_value=None,
+        ):
+            result = self.completer._get_skill_ids()
+        assert result == []
+
+
+# ── file_path_completion ────────────────────────────────────────────────
+
+
+class TestFilePathCompleterMissedLines:
+    """Cover lines 33, 41, 53, 56, 58-62."""
+
+    def setup_method(self):
+        from code_puppy.command_line.file_path_completion import FilePathCompleter
+
+        self.completer = FilePathCompleter()
+
+    def test_tilde_expansion(self):
+        """Line 33: base_path starts with ~."""
+        doc = Document("@~/")
+        completions = list(self.completer.get_completions(doc, None))
+        # Should not crash; may return home dir contents
+        assert isinstance(completions, list)
+
+    def test_hidden_files_shown_when_dot_typed(self):
+        """Line 41: text_after_symbol ends with '.' in dir listing branch."""
+        # Hit the dir-listing branch (line 30-42): pattern.strip("*") must be empty
+        # or end with "/" - use a trailing-"/" path with text_after_symbol ending ".".
+        with tempfile.TemporaryDirectory() as tmpdir:
+            subdir = Path(tmpdir, "sub")
+            subdir.mkdir()
+            Path(subdir, ".hidden").touch()
+            Path(subdir, "visible").touch()
+            # Line 41's filter means the dir-listing branch shows non-hidden files by
+            # default; ".*" patterns (hidden files) fall through to the glob branch.
+            doc = Document(f"@{subdir}/")
+            completions = list(self.completer.get_completions(doc, None))
+            texts = [c.text for c in completions]
+            assert any("visible" in t for t in texts)
+            # .hidden should NOT be in results (line 41: f.startswith(".") and not endswith("."))
+            assert not any(".hidden" in t for t in texts)
+
+    def test_glob_filters_hidden(self):
+        """Line 53: glob pattern filtering hidden files."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            Path(tmpdir, "hello.txt").touch()
+            Path(tmpdir, ".secret").touch()
+            doc = Document(f"@{tmpdir}/h")
+            completions = list(self.completer.get_completions(doc, None))
+            names = [c.text for c in completions]
+            assert any("hello" in n for n in names)
+            assert not any(".secret" in n for n in names)
+
+    def test_absolute_path_display(self):
+        """Line 56: os.path.isabs(path) branch."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            Path(tmpdir, "file.txt").touch()
+            # Use absolute glob pattern
+            doc = Document(f"@{tmpdir}/f")
+            completions = list(self.completer.get_completions(doc, None))
+            # All paths should be absolute since the pattern is absolute
+            for c in completions:
+                assert os.path.isabs(c.text)
+
+    def test_slash_prefix_uses_abspath(self):
+        """Line 58: text_after_symbol starts with /."""
+        doc = Document("@/tmp")
+        completions = list(self.completer.get_completions(doc, None))
+        # Should produce absolute paths
+        assert isinstance(completions, list)
+
+    def test_tilde_prefix_display(self):
+        """Lines 59-62: tilde prefix display path."""
+        home = os.path.expanduser("~")
+        with tempfile.TemporaryDirectory(dir=home) as tmpdir:
+            Path(tmpdir, "test.txt").touch()
+            basename = os.path.basename(tmpdir)
+            doc = Document(f"@~/{basename}/t")
+            completions = list(self.completer.get_completions(doc, None))
+            for c in completions:
+                assert c.text.startswith("~")
+
+    def test_nonexistent_dir_listing(self):
+        """Line 41: base_path is not a directory → paths = []."""
+        doc = Document("@nonexistent_dir_xyz/")
+        completions = list(self.completer.get_completions(doc, None))
+        assert completions == []
+
+
+# ── load_context_completion ─────────────────────────────────────────────
+
+
+class TestLoadContextCompletionException:
+    """Cover lines 50-52."""
+
+    def test_exception_in_glob_silently_ignored(self):
+        from code_puppy.command_line.load_context_completion import LoadContextCompleter
+
+        completer = LoadContextCompleter()
+        # Make contexts_dir.exists() raise
+        with patch(
+            "code_puppy.command_line.load_context_completion.CONFIG_DIR",
+            "/nonexistent/x/y/z",
+        ):
+            with patch("pathlib.Path.exists", side_effect=PermissionError("nope")):
+                doc = Document("/load_context ")
+                completions = list(completer.get_completions(doc, None))
+        assert completions == []
+
+
+# ── model_switching ─────────────────────────────────────────────────────
+
+
+class TestModelSwitching:
+    """Cover lines 14-15, 37-38, 44, 62-63."""
+
+    def test_get_effective_agent_model_success(self):
+        from code_puppy.model_switching import _get_effective_agent_model
+
+        agent = MagicMock()
+        agent.get_model_name.return_value = "gpt-4"
+        assert _get_effective_agent_model(agent) == "gpt-4"
+
+    def test_get_effective_agent_model_exception(self):
+        from code_puppy.model_switching import _get_effective_agent_model
+
+        agent = MagicMock()
+        agent.get_model_name.side_effect = Exception("fail")
+        assert _get_effective_agent_model(agent) is None
+
+    def test_refresh_context_status_uses_effective_model_capacity(self):
+        from code_puppy.model_switching import _refresh_context_status
+
+        agent = MagicMock()
+        agent._get_model_context_length.return_value = 1_050_000
+        agent.get_message_history.return_value = ["first", "second"]
+        agent.estimate_tokens_for_message.side_effect = [20_000, 10_000]
+        agent._estimate_context_overhead.return_value = 2_000
+
+        with patch(
+            "code_puppy.messaging.spinner.update_spinner_context"
+        ) as update_status:
+            _refresh_context_status(agent)
+
+        update_status.assert_called_once_with("32k/1.1M tokens (3%)")
+
+    def test_refresh_context_status_clears_stale_value_on_failure(self):
+        from code_puppy.model_switching import _refresh_context_status
+
+        agent = MagicMock()
+        agent._get_model_context_length.side_effect = RuntimeError("missing config")
+
+        with patch(
+            "code_puppy.messaging.spinner.update_spinner_context"
+        ) as update_status:
+            _refresh_context_status(agent)
+
+        update_status.assert_called_once_with("")
+
+    def _run(self, model_name, agent=None):
+        """Helper to call set_model_and_reload_agent with proper patches."""
+        from code_puppy.model_switching import set_model_and_reload_agent
+
+        warns = []
+        infos = []
+
+        def fake_warn(msg):
+            warns.append(msg)
+
+        def fake_info(msg):
+            infos.append(msg)
+
+        with patch("code_puppy.model_switching.set_model_name"):
+            with patch("code_puppy.messaging.emit_warning", fake_warn):
+                with patch("code_puppy.messaging.emit_info", fake_info):
+                    with patch(
+                        "code_puppy.agents.get_current_agent", return_value=agent
+                    ):
+                        set_model_and_reload_agent(model_name)
+
+        return warns, infos
+
+    def test_no_active_agent(self):
+        warns, _ = self._run("model-x", agent=None)
+        assert any("no active agent" in w.lower() for w in warns)
+
+    def test_refresh_config_called(self):
+        agent = MagicMock()
+        agent.get_model_name.return_value = "model-x"
+        self._run("model-x", agent=agent)
+        agent.refresh_config.assert_called_once()
+        agent.reload_code_generation_agent.assert_called_once()
+
+    def test_reload_refreshes_context_status(self):
+        agent = MagicMock()
+        agent.get_model_name.return_value = "model-x"
+        with patch("code_puppy.model_switching._refresh_context_status") as refresh:
+            self._run("model-x", agent=agent)
+        refresh.assert_called_once_with(agent)
+
+    def test_refresh_config_exception_nonfatal(self):
+        agent = MagicMock()
+        agent.refresh_config.side_effect = Exception("oops")
+        agent.get_model_name.return_value = "model-x"
+        self._run("model-x", agent=agent)
+        agent.reload_code_generation_agent.assert_called_once()
+
+    def test_reload_exception(self):
+        agent = MagicMock()
+        agent.reload_code_generation_agent.side_effect = Exception("reload fail")
+        agent.get_model_name.return_value = "model-x"
+        warns, _ = self._run("model-x", agent=agent)
+        assert any("reload failed" in w for w in warns)
+
+    def test_pinned_model_warning(self):
+        agent = MagicMock()
+        agent.get_model_name.return_value = "pinned-model"
+        agent.name = "test-agent"
+        warns, _ = self._run("other-model", agent=agent)
+        assert any("pinned" in w for w in warns)
+
+
+# ── markdown_patches ────────────────────────────────────────────────────
+
+
+class TestMarkdownPatches:
+    """Cover lines 35-37, 51."""
+
+    def test_left_justified_heading_h1(self):
+        import io
+
+        from rich.console import Console
+        from rich.text import Text
+
+        from code_puppy.messaging.markdown_patches import LeftJustifiedHeading
+
+        heading = LeftJustifiedHeading.__new__(LeftJustifiedHeading)
+        heading.tag = "h1"
+        heading.text = Text("Hello")
+
+        console = Console(file=io.StringIO(), width=80)
+        # Render it
+        results = list(heading.__rich_console__(console, console.options))
+        assert len(results) > 0  # Should yield a Panel
+
+    def test_left_justified_heading_h2(self):
+        import io
+
+        from rich.console import Console
+        from rich.text import Text
+
+        from code_puppy.messaging.markdown_patches import LeftJustifiedHeading
+
+        heading = LeftJustifiedHeading.__new__(LeftJustifiedHeading)
+        heading.tag = "h2"
+        heading.text = Text("Sub")
+
+        console = Console(file=io.StringIO(), width=80)
+        results = list(heading.__rich_console__(console, console.options))
+        assert len(results) == 2  # Text("") + text
+
+    def test_patch_idempotent(self):
+        """Line 51: second call is no-op."""
+        from code_puppy.messaging import markdown_patches
+
+        markdown_patches._patched = False
+        markdown_patches.patch_markdown()
+        assert markdown_patches._patched is True
+        markdown_patches.patch_markdown()  # no-op
+        assert markdown_patches._patched is True
+
+
+# ── error_logging ───────────────────────────────────────────────────────
+
+
+class TestErrorLoggingRotation:
+    """Cover lines 29-32."""
+
+    def test_rotate_log_when_too_large(self):
+        from code_puppy.error_logging import MAX_LOG_SIZE, _rotate_log_if_needed
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            log_file = os.path.join(tmpdir, "errors.log")
+            rotated_file = log_file + ".1"
+
+            # Create a file larger than MAX_LOG_SIZE
+            with open(log_file, "w") as f:
+                f.write("x" * (MAX_LOG_SIZE + 1))
+
+            with patch("code_puppy.error_logging.ERROR_LOG_FILE", log_file):
+                _rotate_log_if_needed()
+            assert os.path.exists(rotated_file)
+            assert not os.path.exists(log_file)
+
+    def test_rotate_log_oserror_caught(self):
+        """Lines 31-32: OSError in rotation is silently caught."""
+        from code_puppy.error_logging import _rotate_log_if_needed
+
+        with patch("code_puppy.error_logging.os.path.exists", return_value=True):
+            with patch(
+                "code_puppy.error_logging.os.path.getsize",
+                side_effect=OSError("disk error"),
+            ):
+                _rotate_log_if_needed()  # Should not raise

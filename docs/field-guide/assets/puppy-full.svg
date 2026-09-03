@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 300">
+  <!-- Code Puppy full mark with code-tag chin (use at 96px+, watermarks, hero placements) -->
+  <path d="M62 78 C30 88 14 118 20 148 C24 172 44 186 62 182 L88 96 Z" fill="#A3A8F8"/>
+  <path d="M258 78 C290 88 306 118 300 148 C296 172 276 186 258 182 L232 96 Z" fill="#A3A8F8"/>
+  <path d="M88 62 C70 70 58 84 54 100" stroke="#1A2129" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M232 62 C250 70 262 84 266 100" stroke="#1A2129" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M70 96 C70 52 112 34 160 34 C208 34 250 52 250 96 C250 128 244 152 226 172 C206 192 184 200 160 200 C136 200 114 192 94 172 C76 152 70 128 70 96 Z" fill="#A3A8F8"/>
+  <circle cx="122" cy="108" r="13" fill="#1A2129"/>
+  <circle cx="198" cy="108" r="13" fill="#1A2129"/>
+  <path d="M138 138 C138 124 182 124 182 138 C182 150 172 156 168 160 L168 176 C180 178 188 184 186 192 C184 200 172 200 166 194" stroke="#1A2129" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M152 160 L152 176 C140 178 132 184 134 192 C136 200 148 200 154 194" stroke="#1A2129" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="160" cy="248" r="46" fill="#A3A8F8"/>
+  <path d="M132 236 L110 248 L132 260" stroke="#1A2129" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M188 236 L210 248 L188 260" stroke="#1A2129" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M168 230 L148 268" stroke="#1A2129" stroke-width="9" stroke-linecap="round"/>
+</svg>

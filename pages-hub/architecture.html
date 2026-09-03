@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Architecture — Code Puppy Self-Healing Pipeline</title>
+<meta name="description" content="Interactive system architecture: the update pipeline, Tyler's fork layer, update_schedule end to end, and the full plugin/agent/skill/tool inventory." />
+<link rel="icon" type="image/png" href="../assets/favicon_white.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/tokens.css" />
+<link rel="stylesheet" href="../assets/sidebar.css" />
+<link rel="stylesheet" href="../assets/popover.css" />
+<script src="../assets/icons.js"></script>
+<script>window.BB_SHELL = { base: "../", active: "architecture", assetsBase: "../assets/" };</script>
+<script src="../assets/shell.js" defer></script>
+<script src="../assets/sidebar.js" defer></script>
+<script src="../assets/popover.js" defer></script>
+<style>
+  :root{
+    --bg:#0E130F; --panel:#121813; --panel-2:#1B211C;
+    --line:rgba(238,235,229,.10); --line-2:rgba(238,235,229,.18);
+    --text:#EEEBE2; --t2:#D1CEC5; --t3:#A5A699; /* AAA on --bg: t2 11.96:1, t3 8.17:1 */
+    --peri:#E4AA71; --cyan:#F2A26A; --mint:#98B79E; --peri-l:#ECEBE5; --peri-d:#CAAB88;
+    --grad:linear-gradient(92deg,#E4AA71 0%,#F2A26A 55%,#98B79E 100%);
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display",Inter,"Helvetica Neue",Arial,sans-serif;
+    --mono:"SF Mono","JetBrains Mono",ui-monospace,Menlo,monospace;
+    --display:"Fraunces",Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--t2);text-decoration:none} a:hover{color:var(--text)}
+  code{font-family:var(--mono);font-size:.86em;background:rgba(242,162,106,.10);color:var(--cyan);padding:2px 6px;border-radius:5px;overflow-wrap:anywhere}
+  h1,h2,h3{margin:0;font-family:var(--display);letter-spacing:-.02em}
+  ::selection{background:rgba(228,170,113,.3)}
+
+  .hero{text-align:center;padding:72px 24px 40px;overflow:hidden;position:relative}
+  .kicker{display:inline-block;font-size:11.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--peri);border:1px solid var(--line-2);padding:7px 16px;border-radius:980px;background:rgba(228,170,113,.06)}
+  .hero h1{font-size:clamp(40px,5.6vw,68px);font-weight:800;letter-spacing:-.033em;line-height:1.04;margin-top:20px}
+  .hero h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{max-width:620px;margin:18px auto 0;font-size:17.5px;color:var(--t2)}
+  .hint{font-family:var(--mono);font-size:11px;color:var(--t3);margin-top:16px;letter-spacing:.06em}
+  .hint b{color:var(--cyan);font-weight:500}
+
+  main{max-width:min(1880px,96vw);margin:0 auto;padding:0 32px}
+
+  .lbl{display:flex;align-items:center;gap:14px;font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);margin:52px 0 18px}
+  .lbl::after{content:"";height:1px;flex:1;background:var(--line)}
+  .lbl .dotc{width:8px;height:8px;border-radius:50%}
+
+  main{overflow:hidden;max-width:100%}
+  /* ---- horizontal lanes on very wide screens; wrap to a grid below ---- */
+  .lane{display:flex;align-items:stretch;gap:0;max-width:100%}
+  @media(max-width:1650px){
+    .lane{flex-wrap:wrap;gap:12px}
+    .lane .arrow, .lane .fanwrap>.n-k{display:none}
+    .lane .fanwrap{flex:1 1 100%;order:-1;width:100%;max-width:100%}
+    .lane .stagetrain{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .lane .stagetrain .arrow{display:none}
+    .lane .cluster{flex:1 1 100%;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;justify-content:stretch}
+  }
+  @media(max-width:760px){
+    .lane .stagetrain, .lane .cluster{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:520px){
+    .lane .stagetrain, .lane .cluster{grid-template-columns:1fr}
+    .lane .node{max-width:100%}
+  }
+  .node{flex:1 1 150px;min-width:150px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px;min-width:170px;max-width:230px;cursor:pointer;transition:transform .25s cubic-bezier(.22,1,.36,1),border-color .25s,box-shadow .25s;position:relative}
+  .node:hover{transform:translateY(-3px);border-color:var(--line-2)}
+  .node:focus-visible{outline:2px solid var(--peri);outline-offset:2px}
+  .node.sel{border-color:var(--peri);box-shadow:0 0 0 1px var(--peri),0 12px 40px -12px rgba(228,170,113,.35)}
+  .node .n-k{font-size:10px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--peri);margin-bottom:6px}
+  .node .n-t{font-size:14px;font-weight:700;letter-spacing:-.01em;color:var(--text)}
+  .node .n-d{font-size:11.5px;color:var(--t2);margin-top:5px;line-height:1.45}
+  .node .n-open{position:absolute;top:10px;right:12px;font-family:var(--mono);font-size:10px;color:var(--t3)}
+  .node:hover .n-open{color:var(--cyan)}
+  .arrow{flex:0 0 34px;align-self:center;height:2px;background:var(--line-2);position:relative;overflow:hidden;margin:0 4px}
+  .arrow::after{content:"";position:absolute;left:-40%;top:0;width:40%;height:100%;background:linear-gradient(90deg,transparent,var(--peri),transparent);animation:slide 2.2s linear infinite}
+  @keyframes slide{to{left:110%}}
+  .cluster{flex:1 1 220px;display:flex;flex-direction:column;gap:12px;justify-content:center}
+  .cluster .node{min-width:210px;width:100%}
+
+  .fanwrap{flex:2 1 auto;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px 24px 26px;max-width:100%}
+  .stagetrain{display:flex;align-items:stretch;max-width:100%}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+
+  /* ---- inventory ---- */
+  .invbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;position:sticky;top:61px;z-index:40;background:rgba(14,19,15,.88);backdrop-filter:blur(14px);padding:12px 0;border-bottom:1px solid var(--line)}
+  .invbar input{background:var(--panel);border:1px solid var(--line);border-radius:980px;color:var(--text);font-family:var(--sans);font-size:13px;padding:8px 16px;min-width:240px;outline:none}
+  .invbar input:focus{border-color:var(--peri)}
+  .invbar .f{background:var(--panel);border:1px solid var(--line);border-radius:980px;color:var(--t2);font-size:12px;font-family:var(--mono);padding:8px 14px;cursor:pointer}
+  .invbar .f.on{border-color:var(--peri);color:var(--peri)}
+  .invbar .cnt{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--t3);align-self:center}
+  .inv{display:flex;flex-direction:column;gap:6px;margin-bottom:70px}
+  .inv .row{display:flex;align-items:baseline;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px 16px;cursor:pointer;transition:border-color .2s,transform .2s}
+  .inv .row:hover{border-color:var(--line-2);transform:translateX(3px)}
+  .inv .row:focus-visible{outline:2px solid var(--peri);outline-offset:2px}
+  .inv .row.sel{border-color:var(--peri)}
+  .inv .kind{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;flex:0 0 78px}
+  .inv .kind.p{color:var(--peri)} .inv .kind.a{color:var(--mint)} .inv .kind.t{color:var(--cyan)} .inv .kind.s{color:var(--peri-l)}
+  .inv .nm{font-family:var(--mono);font-size:12.5px;font-weight:500;flex:0 0 34%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .inv .ds{font-size:12px;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+  .inv .tg{font-family:var(--mono);font-size:10px;color:var(--t3);flex:0 0 auto}
+  @media(max-width:820px){.inv .ds,.inv .tg{display:none} .inv .nm{flex:1} .invbar input{min-width:0;flex:1}}
+
+  /* ---- drilldown sheet ---- */
+  .backdrop{position:fixed;inset:0;background:rgba(10,15,11,.55);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .25s;z-index:80}
+  .backdrop.on{opacity:1;pointer-events:auto}
+  .sheet{position:fixed;top:0;right:0;bottom:0;width:min(420px,92vw);background:var(--panel);border-left:1px solid var(--line-2);z-index:90;transform:translateX(105%);transition:transform .35s cubic-bezier(.22,1,.36,1);overflow-y:auto;padding:26px 26px 40px}
+  .sheet.on{transform:none}
+  @media(max-width:820px){.sheet{top:auto;left:0;right:0;width:auto;height:min(72vh,640px);transform:translateY(105%);border-left:none;border-top:1px solid var(--line-2);border-radius:20px 20px 0 0}.sheet.on{transform:none}}
+  .sheet .x{position:sticky;top:0;float:right;background:var(--panel-2);border:1px solid var(--line);color:var(--t2);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:14px;display:grid;place-items:center;z-index:2}
+  .sheet .x:hover{color:var(--text);border-color:var(--line-2)}
+  .sheet h3{font-size:19px;font-weight:750;letter-spacing:-.015em;margin:6px 0 4px;padding-right:36px}
+  .sheet .sh-k{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--peri)}
+  .sheet .sh-body{margin-top:14px;font-size:13.5px;color:var(--t2);line-height:1.65}
+  .sheet .sh-body p{margin:0 0 10px}
+  .sheet .kv{display:flex;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:11.5px;padding:8px 12px;background:rgba(238,235,229,.04);border-radius:9px;margin-bottom:6px}
+  .sheet .kv b{color:var(--peri);font-weight:500}
+  .sheet .kv span{color:var(--t2);text-align:right;overflow-wrap:anywhere}
+  .sheet .mini-h{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin:18px 0 9px}
+  .sheet .commit{display:block;font-family:var(--mono);font-size:11.5px;padding:7px 10px;border-radius:8px;margin-bottom:5px;background:rgba(238,235,229,.035);color:var(--t2)}
+  .sheet .commit b{color:var(--cyan);font-weight:500;margin-right:8px}
+  .sheet .chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+  .sheet .chip{font-family:var(--mono);font-size:10px;border:1px solid var(--line);border-radius:980px;padding:3px 9px;color:var(--t3)}
+
+  .n-ic{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;margin-bottom:10px;color:var(--peri);background:rgba(228,170,113,.09);border:1px solid rgba(228,170,113,.22)}
+  .n-ic.c{color:var(--cyan);background:rgba(242,162,106,.08);border-color:rgba(242,162,106,.22)}
+  .n-ic.m{color:var(--mint);background:rgba(152,183,158,.08);border-color:rgba(152,183,158,.22)}
+  .n-ic.pl{color:var(--peri-l);background:rgba(236,235,229,.09);border-color:rgba(236,235,229,.22)}
+  .watermark{position:absolute;top:40px;right:-60px;width:340px;height:auto;opacity:.05;pointer-events:none;z-index:0;object-fit:contain}
+  @media(max-width:900px){.watermark{display:none}}
+  main,.hero{position:relative;z-index:1}
+  footer{border-top:1px solid var(--line);padding:24px 32px 40px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  footer p{font-size:11.5px;color:var(--t3);max-width:580px;margin:0}
+  @media(prefers-reduced-motion:reduce){.arrow::after{animation:none}}
+</style>
+</head>
+<body>
+
+<header class="hero"><img class="watermark" src="../assets/code_puppy_logo_white.png" alt="" aria-hidden="true" />
+  <span class="kicker">Internal Training · System Architecture</span>
+  <h1>The machine, <span class="g">explained.</span></h1>
+  <p>Left to right: how one Mac stays current, tested, published, and documented — and everything living inside it.</p>
+  <div class="hint">click any node for <b>drill-down detail &rarr;</b></div>
+</header>
+
+<main>
+
+  <div class="lbl"><span class="dotc" style="background:var(--peri)"></span>The end-to-end loop</div>
+  <div class="lane">
+    <div class="node" data-d="machine" data-ic="server:peri"><span class="n-open">+</span><div class="n-k">Host</div><div class="n-t">Tyler's Mac</div><div class="n-d">Working clone, uv tool install, private profile. The whole show runs here.</div></div>
+    <div class="arrow"></div>
+    <div class="node" data-d="launchd" data-ic="clock:cyan"><span class="n-open">+</span><div class="n-k">Schedule</div><div class="n-t">launchd</div><div class="n-d">Ad-hoc via /update now (launchd plist paused).</div></div>
+    <div class="arrow"></div>
+    <div class="fanwrap" style="flex:0 0 auto">
+      <div class="n-k" style="font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--peri);margin-bottom:10px">update-code-puppy.sh — stage train</div>
+      <div class="stagetrain">
+        <div class="node" data-d="s1" data-ic="archive:cyan" style="min-width:140px"><span class="n-open">+</span><div class="n-k" style="color:var(--peri)">01</div><div class="n-t">Snapshot</div></div>
+        <div class="arrow" style="width:18px"></div>
+        <div class="node" data-d="s2" data-ic="branch:cyan" style="min-width:140px"><span class="n-open">+</span><div class="n-k" style="color:var(--cyan)">02</div><div class="n-t">Sync</div></div>
+        <div class="arrow" style="width:18px"></div>
+        <div class="node" data-d="s3" data-ic="flask:cyan" style="min-width:150px;border-color:rgba(242,162,106,.35);background:linear-gradient(180deg,rgba(242,162,106,.06),var(--panel))"><span class="n-open">+</span><div class="n-k" style="color:var(--cyan)">03</div><div class="n-t">Cross-Check</div></div>
+        <div class="arrow" style="width:18px"></div>
+        <div class="node" data-d="s4" data-ic="package:mint" style="min-width:140px"><span class="n-open">+</span><div class="n-k" style="color:var(--mint)">04</div><div class="n-t">Install + Regen</div></div>
+        <div class="arrow" style="width:18px"></div>
+        <div class="node" data-d="s5" data-ic="upload:peri" style="min-width:140px"><span class="n-open">+</span><div class="n-k" style="color:var(--peri)">05</div><div class="n-t">Publish</div></div>
+        <div class="arrow" style="width:18px"></div>
+        <div class="node" data-d="s6" data-ic="wrench:pl" style="min-width:140px"><span class="n-open">+</span><div class="n-k" style="color:var(--peri-l)">06</div><div class="n-t">Maintain</div></div>
+      </div>
+    </div>
+    <div class="arrow"></div>
+    <div class="cluster">
+      <div class="node" data-d="fork" data-ic="fork:peri"><span class="n-open">+</span><div class="n-k">Publish · public</div><div class="n-t">t-granlund/code_puppy</div><div class="n-d">Fork + this site</div></div>
+      <div class="node" data-d="mirror" data-ic="database:peri"><span class="n-open">+</span><div class="n-k">Publish · private</div><div class="n-t">Multi-Agent-Orch-CLI</div><div class="n-d">Insurance mirror</div></div>
+      <div class="node" data-d="profile" data-ic="archive:mint"><span class="n-open">+</span><div class="n-k">Backup · private</div><div class="n-t">profile-backup</div><div class="n-d">~/.code_puppy whitelist</div></div>
+    </div>
+  </div>
+
+  <div class="lbl"><span class="dotc" style="background:var(--mint)"></span>update_schedule, end to end</div>
+  <div class="lane">
+    <div class="node" data-d="e2e-plist" data-ic="calendar:peri"><span class="n-open">+</span><div class="n-k">Trigger</div><div class="n-t">com.code-puppy.daily-update.plist</div><div class="n-d">StartCalendarInterval ×3</div></div>
+    <div class="arrow"></div>
+    <div class="node" data-d="e2e-script" data-ic="terminal:peri"><span class="n-open">+</span><div class="n-k">Work</div><div class="n-t">update-code-puppy.sh</div><div class="n-d">The six-stage train above</div></div>
+    <div class="arrow"></div>
+    <div class="node" data-d="e2e-plugin" data-ic="layers:peri"><span class="n-open">+</span><div class="n-k">Watchdog</div><div class="n-t">register_callbacks.py</div><div class="n-d">User plugin, loaded every session</div></div>
+    <div class="arrow"></div>
+    <div class="node" data-d="e2e-trust" data-ic="shield:peri"><span class="n-open">+</span><div class="n-k">Gate</div><div class="n-t">trusted_plugins.json</div><div class="n-d">SHA-256 content hash</div></div>
+    <div class="arrow"></div>
+    <div class="node" data-d="e2e-notify" data-ic="bell:peri"><span class="n-open">+</span><div class="n-k">Surface</div><div class="n-t">Notifications + /update</div><div class="n-d">osascript, status, log, now</div></div>
+  </div>
+
+  <div class="lbl"><span class="dotc" style="background:var(--cyan)"></span>The fork layer — what upstream doesn't have</div>
+  <div class="cards">
+    <div class="node" data-d="f-site" data-ic="grid:peri"><span class="n-open">+</span><div class="n-k">Feature</div><div class="n-t">This public site</div><div class="n-d">5 sections, auto-deploying Pages build</div></div>
+    <div class="node" data-d="f-observatory" data-ic="activity:cyan"><span class="n-open">+</span><div class="n-k">Feature</div><div class="n-t">Evergreen observatory</div><div class="n-d">Auto-curated from every run</div></div>
+    <div class="node" data-d="f-pipeline" data-ic="refresh:peri"><span class="n-open">+</span><div class="n-k">Feature</div><div class="n-t">Self-healing updater v2</div><div class="n-d">Test-gated, mirror-publishing</div></div>
+    <div class="node" data-d="f-guide" data-ic="book:cyan"><span class="n-open">+</span><div class="n-k">Feature</div><div class="n-t">Deep field-guide introspection</div><div class="n-d">Core-package + user-tier scanning</div></div>
+    <div class="node" data-d="f-commits" data-ic="commit:peri"><span class="n-open">+</span><div class="n-k">Ledger</div><div class="n-t">Unique commits</div><div class="n-d">The full fork-only trail</div></div>
+  </div>
+
+  <div class="lbl"><span class="dotc" style="background:var(--peri-l)"></span>Full inventory — every plugin, agent, skill, tool</div>
+  <div class="invbar">
+    <input id="q" type="search" placeholder="Search plugins, agents, tools, skills…" aria-label="Search inventory" />
+    <button class="f on" data-k="all">all</button>
+    <button class="f" data-k="p">plugins</button>
+    <button class="f" data-k="a">agents</button>
+    <button class="f" data-k="t">tools</button>
+    <button class="f" data-k="s">skills</button>
+    <span class="cnt" id="cnt">loading data…</span>
+  </div>
+  <div class="inv" id="inv"></div>
+
+</main>
+
+<div class="backdrop" id="bd"></div>
+<aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Detail">
+  <button class="x" id="x" aria-label="Close"></button>
+  <div id="sc"></div>
+</aside>
+
+<footer>
+  <p>Interactive architecture of a live system. Structural nodes are hand-curated; the inventory streams from the field-guide data regenerated on every update run — it cannot go stale.</p>
+  <p style="text-align:right">code_puppy · internal reference</p>
+</footer>
+
+<script>
+/* ---------- detail content ---------- */
+const D = {
+  machine: {k:'Host', t:"Tyler's Mac", b:`
+    <p>The entire lifecycle executes locally in the user GUI session — no servers, no daemons outside launchd.</p>
+    <div class="mini-h">Layout</div>
+    <div class="kv"><b>~/code_puppy</b><span>working clone · 4 remotes (origin upstream, myfork, private, +profile git inside ~/.code_puppy)</span></div>
+    <div class="kv"><b>~/.code_puppy</b><span>profile: agents, plugins, kennel memory, config (whitelisted backup)</span></div>
+    <div class="kv"><b>uv tool install</b><span>code-puppy v0.0.768 at ~/.local/share/uv/tools/code-puppy</span></div>
+    <div class="kv"><b>launchd gui domain</b><span>~/Library/LaunchAgents/com.code-puppy.daily-update.plist</span></div>`},
+  launchd: {k:'Schedule', t:'launchd — paused (ad-hoc)', b:`
+    <p>Calendar-interval agent in the per-user GUI domain. Currently paused (plist renamed .paused). Updates run ad-hoc via /update now, which fires the pipeline script directly.</p>
+    <div class="kv"><b>intervals</b><span>Ad-hoc (launchd paused)</span></div>
+    <div class="kv"><b>last state</b><span>plist paused, not loaded</span></div>
+    <div class="kv"><b>logs</b><span>~/.code_puppy/logs/update-code-puppy.log</span></div>`},
+  s1: {k:'Stage 01', t:'Snapshot', b:`<p>Creates a <code>backup/pre-update-*</code> branch, then auto-commits any dirty-tree leftovers. A pull can never be blocked and work can never be lost — the guard that used to deadlock the whole updater.</p>`},
+  s2: {k:'Stage 02', t:'Sync', b:`<p>Fetches upstream <code>mpfaffenberger/code_puppy</code> and rebases local main on top. Fork-only commits ride cleanly over every upstream drop.</p>`},
+  s3: {k:'Stage 03 · the gate', t:'Cross-Check', b:`<p>Runs the full <b>7,311-test</b> suite against the merged tree <em>before anything is installed</em>. Any failure triggers a hard reset to the pre-sync SHA.</p><p>Broken upstream code never reaches the tool install. This stage is the entire reason the machine can be trusted to run unattended.</p>`},
+  s4: {k:'Stage 04', t:'Install + Regenerate', b:`<p><code>uv tool install --reinstall .</code> from local source, then regenerates the field guide and the release observatory's auto regions, consuming artifacts into a commit so the next run starts clean.</p>`},
+  s5: {k:'Stage 05', t:'Publish via GitHub CLI', b:`<p>Pushes to the public fork and private mirror. Diverged remotes are reconciled automatically (rebase onto remote, falling back to --force-with-lease, which refuses if anyone else pushed). A failed publish drops a <code>.pending-publish</code> marker that the next run retries.</p>`},
+  s6: {k:'Stage 06', t:'Maintain', b:`<p>Snapshots the whitelisted profile to the private backup repo, prunes old safety branches to the newest two, posts an osascript desktop notification, exits clean.</p>`},
+  fork: {k:'Publish · public', t:'t-granlund/code_puppy', b:`
+    <p>The public mirror and the origin of this site. Public visibility is what unlocks free GitHub Pages.</p>
+    <div class="kv"><b>Pages</b><span>t-granlund.github.io/code_puppy</span></div>
+    <div class="kv"><b>build_type</b><span>workflow (upload + deploy actions)</span></div>`},
+  mirror: {k:'Publish · private', t:'Multi-Agent-Orch-CLI', b:`<p>The insurance mirror — untouchable fallback if the public upstream ever disappears. Exact replica of local main, reconciled by force-with-lease.</p>`},
+  profile: {k:'Backup · private', t:'code-puppy-profile-backup', b:`<p>Whitelisted snapshot of <code>~/.code_puppy</code> on every run — agents, plugins, kennel memory, config, OAuth material. ~72 files, ~8MB of a 26GB profile. The part no upstream can rebuild.</p>`},
+  'e2e-plist': {k:'Trigger', t:'The plist (paused)', b:`
+    <div class="kv"><b>Label</b><span>com.code-puppy.daily-update</span></div>
+    <div class="kv"><b>Program</b><span>/bin/bash update-code-puppy.sh</span></div>
+    <div class="kv"><b>PATH</b><span>pinned: uv, gh, git all absolute</span></div>
+    <div class="kv"><b>RunAtLoad</b><span>false — pure calendar cadence</span></div>
+    <p>Currently paused (plist renamed .paused). The update_schedule plugin runs the pipeline script directly via /update now instead of launchd.</p>`},
+  'e2e-script': {k:'Work', t:'The script', b:`<p>~/.code_puppy/scripts/update-code-puppy.sh — every stage aborts safely: rebase conflicts abort with nothing installed, test failures roll back, publish failures mark-and-retry. /update now fires this script directly (no launchd needed).</p>`},
+  'e2e-plugin': {k:'Watchdog', t:'The plugin inside every session', b:`
+    <p>Lives at ~/.code_puppy/plugins/update_schedule and registers two callbacks:</p>
+    <div class="kv"><b>custom_command</b><span>/update now · status · log · enable · disable</span></div>
+    <div class="kv"><b>custom_command_help</b><span>registers the /update slash command in help</span></div>`},
+  'e2e-trust': {k:'Gate', t:'Trust store', b:`<p>Every edit to the plugin changes its content hash; code-puppy refuses to load it until re-trusted. The gate stores SHA-256 over every plugin file in <code>trusted_plugins.json</code>. (Last refresh: after the schedule/status upgrades.)</p>`},
+  'e2e-notify': {k:'Surface', t:'Where you see it', b:`<p>Desktop notifications on success/failure, <code>/update status</code> inside code-puppy (schedule, publish state, tree cleanliness), and the raw log tail. Silence means it ran, passed tests, published, and backed up.</p>`},
+  'f-site': {k:'Feature · fork-only', t:'This public site', b:`<p>Hub + interactive field guide + evergreen observatory + this page + offline flat file, deployed by .github/workflows/pages.yml on every docs-touching push. Upload/deploy actions only — configure-pages dropped after a week of codeload 429s.</p>`},
+  'f-observatory': {k:'Feature · fork-only', t:'Evergreen observatory', b:`<p>pages-hub/generate-updates.py rewrites AUTO-marked regions of the observatory from fresh changelog data on every run — stats, auto-detected new-feature cards, minor/fix lists. Idempotent by construction; curated deep-dives stay hand-authored.</p>`},
+  'f-pipeline': {k:'Feature · fork-only', t:'Self-healing updater v2', b:`<p>The six-stage train itself — snapshot → sync → test gate → install/regen → publish → maintain — plus publish-backlog markers, fork-divergence recovery, profile backup, and branch pruning. None of this exists upstream.</p>`},
+  'f-guide': {k:'Feature · fork-only', t:'Deep field-guide introspection', b:`<p>The guide scans the installed code-puppy-core-plugins package and the user plugin tier — not just the repo — with tier badges, hook extraction, and an SDLC lifecycle map (commits e45d7700, 9ac17179 and friends).</p>`},
+  'f-commits': {k:'Ledger · origin/main..main', t:'Fork-only commits (top of 29)', b:`
+    <span class="commit"><b>db7c3770</b>feat(brand): site-wide periwinkle/cyan/mint system</span>
+    <span class="commit"><b>41a7d07f</b>feat(pages): architecture diagram page</span>
+    <span class="commit"><b>fcee1c28</b>feat(pages): evergreen observatory generator</span>
+    <span class="commit"><b>6066badf</b>docs(pages): public site hub</span>
+    <span class="commit"><b>a58d48ab</b>ci(pages): Pages workflow v1</span>
+    <span class="commit"><b>b4e2519e</b>ci(pages): drop configure-pages flake</span>
+    <span class="commit"><b>e45d7700</b>feat(field-guide): core-plugins + user scan</span>
+    <span class="commit"><b>4f892564</b>docs: CPU curriculum web app + puppy mark</span>
+    <span class="commit"><b>0307f32a</b>docs: sovereignty playbook</span>
+    <span class="commit"><b>7252ee53</b>docs: profile backup automation</span>
+    <p style="margin-top:10px">…plus recurring <code>docs(field-guide+observatory): regenerate</code> commits the pipeline writes itself.</p>`},
+};
+
+
+const ICONS={
+server:'<rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01M6 18h.01"/>',
+clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+archive:'<rect width="20" height="5" x="2" y="3" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/>',
+branch:'<path d="M6 3v12"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>',
+flask:'<path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.5a1 1 0 0 0 .9 1.5h12.8a1 1 0 0 0 .9-1.5L14.2 10.4a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/>',
+pkg:'<path d="M21 8v8a2 2 0 0 1-1 1.73l-7 4a2 2 0 0 1-2 0l-7-4A2 2 0 0 1 3 16V8a2 2 0 0 1 1-1.73l7-4a2 2 0 0 1 2 0l7 4A2 2 0 0 1 21 8Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+upload:'<path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 2.5 8.2"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/>',
+wrench:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+fork:'<circle cx="12" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><path d="M18 9v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V9"/><path d="M12 12v3"/>',
+database:'<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>',
+calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+terminal:'<path d="m4 17 6-6-6-6"/><path d="M12 19h8"/>',
+layers:'<path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/>',
+shield:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+bell:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+grid:'<rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>',
+activity:'<path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/>',
+refresh:'<path d="M3 2v6h6"/><path d="M21 12A9 9 0 0 0 6 5.3L3 8"/><path d="M21 22v-6h-6"/><path d="M3 12a9 9 0 0 0 15 6.7l3-2.7"/>',
+book:'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>',
+commit:'<circle cx="12" cy="12" r="3"/><path d="M3 12h6M15 12h6"/>'
+};
+ICONS.package=ICONS.pkg;
+document.querySelectorAll('.node[data-ic]').forEach(n=>{
+  const [name,cls]=n.dataset.ic.split(':');
+  const body=ICONS[name]; if(!body) return;
+  const span=document.createElement('span');
+  span.className='n-ic '+(cls&&cls!=='peri'?cls:'');
+  span.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+body+'</svg>';
+  n.insertBefore(span, n.firstChild);
+});
+
+/* ---------- detail via the shared BB popover ----------
+   Nodes + inventory rows open the ARIA popover (focus trap, Esc/backdrop
+   close, open-in-new-page, copy-link, deep-linkable #detail=<key>).
+   The old .sheet/.backdrop markup remains present-but-unused; popover.js
+   builds its own overlay. */
+// Seed an empty shared map; merge node details (window.D) into it so
+// popover can resolve both structural nodes and inventory rows.
+window.BB_DETAIL = {};
+for (const k in D) window.BB_DETAIL[k] = D[k];
+window.D = D;   // expose const D as window.D for the popover's fallback path
+
+document.querySelectorAll('.node[data-d]').forEach(n=>{
+  n.setAttribute('tabindex','0');
+  n.setAttribute('data-pop', n.dataset.d);
+  const title = n.querySelector('.n-t') ? n.querySelector('.n-t').textContent : n.dataset.d;
+  const kind  = n.querySelector('.n-k') ? n.querySelector('.n-k').textContent : 'Detail';
+  n.setAttribute('data-pop-label', kind + ' · ' + title);
+  n.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); n.click(); }});
+});
+
+// register inventory/detail items (rendered later) with data-pop at render time
+window.__bbRegisterRow = function(row, key, label){
+  row.setAttribute('tabindex','0');
+  row.setAttribute('data-pop', key);
+  row.setAttribute('data-pop-label', label);
+  row.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();row.click();}});
+};
+
+/* ---------- inventory from field-guide data ---------- */
+const KIND={p:('plugin'),a:('agent'),t:('tool'),s:('skill')};
+let items=[];
+function loadData(urls){
+  if(!urls.length){ document.getElementById('cnt').textContent='inventory data unavailable offline'; return; }
+  const s=document.createElement('script');
+  s.src=urls[0];
+  s.onload=()=>build();
+  s.onerror=()=>loadData(urls.slice(1));
+  document.body.appendChild(s);
+}
+loadData(['../field-guide/data.js','../docs/field-guide/data.js']);
+
+function build(){
+  const d=window.FIELD_GUIDE_DATA; if(!d) return;
+  items=[];
+  d.plugins.forEach(p=>items.push({k:'p',nm:p.name,ds:p.description||'',tg:p.tier,raw:p}));
+  d.agents.forEach(a=>items.push({k:'a',nm:a.name,ds:a.description||'',tg:a.type,raw:a}));
+  d.tools.forEach(t=>items.push({k:'t',nm:t.name,ds:t.description||'',tg:t.category,raw:t}));
+  d.skills.forEach(s=>items.push({k:'s',nm:s.name,ds:s.description||'',tg:s.source,raw:s}));
+  render();
+  const m=d.meta||{}; document.getElementById('cnt').dataset.v=m.currentVersion||'';
+}
+const inv=document.getElementById('inv'), q=document.getElementById('q');
+let kind='all';
+document.querySelectorAll('.invbar .f').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.invbar .f').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); kind=b.dataset.k; render();
+});
+q.addEventListener('input', render);
+function render(){
+  const term=(q.value||'').toLowerCase();
+  const rows=items.filter(i=>(kind==='all'||i.k===kind)&&(!term||i.nm.toLowerCase().includes(term)||i.ds.toLowerCase().includes(term)));
+  document.getElementById('cnt').textContent=`${rows.length} of ${items.length}`;
+  inv.innerHTML=rows.map((i,ix)=>`<div class="row" tabindex="0" data-ix="${items.indexOf(i)}">
+    <span class="kind ${i.k}">${KIND[i.k]}</span><span class="nm">${esc(i.nm)}</span>
+    <span class="ds">${esc(i.ds.slice(0,110))}</span><span class="tg">${esc(i.tg)}</span></div>`).join('');
+  inv.querySelectorAll('.row').forEach(r=>{
+    const it = items[+r.dataset.ix];
+    // stash the built detail on the shared BB_DETAIL map, then let the
+    // popover open it (focus trap / open-in-new-page / copy-link).
+    const key = 'inv-' + (+r.dataset.ix);
+    window.BB_DETAIL[key] = { k: KIND[it.k] + ' · ' + it.tg, t: it.nm, b: buildItemBody(it) };
+    window.__bbRegisterRow(r, key, KIND[it.k] + ' · ' + it.nm);
+  });
+}
+function esc(s){return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function buildItemBody(i){
+  let body='';
+  if(i.k==='p'){const p=i.raw;
+    body=`<div class="kv"><b>tier</b><span>${esc(p.tier)}</span></div>
+      <div class="kv"><b>files</b><span>${(p.files||[]).length} py files</span></div>
+      <div class="kv"><b>custom command</b><span>${p.hasCustomCommand?'yes':'no'}</span></div>
+      <div class="kv"><b>skill bundled</b><span>${p.hasSkill?'yes':'no'}</span></div>
+      <div class="mini-h">Hooks</div><div class="chips">${(p.hooks||[]).map(h=>`<span class="chip">${esc(h)}</span>`).join('')||'<span class="chip">none registered</span>'}</div>
+      <p style="margin-top:12px">${esc(p.description||'No description captured — see source.')}</p>`;
+  } else if(i.k==='a'){const a=i.raw;
+    body=`<p>${esc(a.description||'Custom agent.')}</p>
+      <div class="kv"><b>type</b><span>${esc(a.type)}</span></div>
+      <div class="mini-h">Tools (${(a.tools||[]).length})</div><div class="chips">${(a.tools||[]).map(t=>`<span class="chip">${esc(t)}</span>`).join('')}</div>`;
+  } else if(i.k==='t'){
+    body=`<p>${esc(i.raw.description||'Discovered in the live tool registry; no curated summary yet.')}</p>
+      <div class="kv"><b>category</b><span>${esc(i.raw.category)}</span></div>`;
+  } else {const s=i.raw;
+    body=`<p>${esc(s.description||'')}</p><div class="kv"><b>source</b><span>${esc(s.source)}</span></div>
+      <div class="kv"><b>path</b><span>${esc(s.path)}</span></div>`;
+  }
+  return body;
+}
+</script>
+
+</body>
+</html>

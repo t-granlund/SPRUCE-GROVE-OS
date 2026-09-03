@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>code_puppy // release observatory</title>
+<meta name="description" content="Immersive 30-day release intelligence for code_puppy — every change that landed on Tyler's machine (v0.0.528 → v0.0.577), translated into what it is, how it works, why it matters, and how to use it at HTT Brands." />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+<style>
+  :root{
+    --bg:#070a0f; --bg2:#0a0e15;
+    --panel:#0d1219cc; --panel-solid:#0f141b; --panel-2:#11171f;
+    --border:#1c2430; --border-2:#2a3343; --border-glow:#3a4660;
+    --text:#dbe2ea; --text-soft:#aeb8c4; --muted:#6f7b8a; --faint:#4b555f;
+    /* theme hues — one per release bucket */
+    --commands:#f5b94d; --agents:#b692f6; --durability:#4cc46a; --models:#6cb6ff;
+    --governance:#36c6b0; --security:#ff7b72; --platform:#ff9f6b; --steering:#f49ac2;
+    --paw:#f5b94d; --paw-deep:#d99a2b; --blue:#6cb6ff; --green:#4cc46a; --red:#ff7b72; --violet:#b692f6;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono","Fira Code",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    --radius:14px; --maxw:1120px; --prose:780px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:var(--sans); font-size:16px; line-height:1.7;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  a{color:var(--blue);text-decoration:none;} a:hover{text-decoration:underline;text-underline-offset:3px;}
+  code,.mono{font-family:var(--mono);}
+  ::selection{background:rgba(245,185,77,.28);color:#fff;}
+  h1,h2,h3,h4{margin:0;}
+
+  /* ---------- WebGL stage (fixed background) ---------- */
+  #stage{position:fixed; inset:0; z-index:0; pointer-events:none;}
+  #stage canvas{display:block;width:100%;height:100%;}
+  #stage-fallback{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(1200px 700px at 78% -6%, rgba(245,185,77,.10), transparent 60%),
+      radial-gradient(900px 700px at 4% 8%, rgba(108,182,255,.08), transparent 55%),
+      radial-gradient(900px 700px at 96% 70%, rgba(182,146,246,.07), transparent 55%);}
+  .scrim{position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:linear-gradient(180deg, rgba(7,10,15,.30) 0%, rgba(7,10,15,.55) 40%, rgba(7,10,15,.86) 75%, var(--bg) 100%);}
+  /* content sits above the stage */
+  .page{position:relative;z-index:2;}
+
+  /* ---------- top nav ---------- */
+  .nav{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:16px;
+    padding:11px 20px;background:rgba(8,11,16,.72);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);}
+  .nav .lights{display:flex;gap:8px;}
+  .nav .lights i{width:12px;height:12px;border-radius:50%;display:block;}
+  .nav .lights .r{background:#ff5f57;} .nav .lights .y{background:#febc2e;} .nav .lights .g{background:#28c840;}
+  .nav .path{font-family:var(--mono);font-size:13px;color:var(--muted);}
+  .nav .path b{color:var(--paw);font-weight:600;}
+  .nav .links{margin-left:auto;display:flex;gap:18px;}
+  .nav .links a{font-family:var(--mono);font-size:12.5px;color:var(--text-soft);}
+  .nav .links a:hover{color:var(--paw);text-decoration:none;}
+  @media (max-width:760px){.nav .links{display:none;}}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  .prose{max-width:var(--prose);}
+
+  /* ---------- hero ---------- */
+  .hero{min-height:92vh;display:flex;flex-direction:column;justify-content:center;padding:60px 0 40px;}
+  .promptline{font-family:var(--mono);font-size:14px;color:var(--text-soft);}
+  .promptline .dollar{color:var(--green);} .promptline .flag{color:var(--paw);}
+  .hero h1{font-family:var(--mono);font-weight:700;letter-spacing:-1.5px;line-height:1.02;
+    font-size:clamp(40px,8vw,84px);margin:14px 0 0;}
+  .hero h1 .tag{color:var(--paw);}
+  .hero h1 .grad{background:linear-gradient(100deg,var(--commands),var(--models) 45%,var(--agents) 80%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero .cursor{display:inline-block;width:.55ch;height:.92em;background:var(--paw);
+    transform:translateY(.10em);margin-left:6px;animation:blink 1.05s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  .hero .lede{margin:22px 0 0;color:var(--text-soft);font-size:clamp(16px,2.1vw,19px);max-width:680px;}
+  .hero .lede b{color:var(--text);}
+  .hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px;}
+  .btn{font-family:var(--mono);font-size:13px;padding:10px 18px;border-radius:10px;cursor:pointer;
+    border:1px solid var(--border-2);background:#0d141c;color:var(--text);transition:.16s;}
+  .btn:hover{border-color:var(--paw);color:var(--paw);text-decoration:none;transform:translateY(-1px);}
+  .btn.primary{background:linear-gradient(180deg,rgba(245,185,77,.18),rgba(245,185,77,.06));border-color:rgba(245,185,77,.5);color:var(--paw);}
+  .scrollhint{margin-top:46px;font-family:var(--mono);font-size:11.5px;color:var(--faint);letter-spacing:.12em;text-transform:uppercase;
+    display:flex;align-items:center;gap:10px;}
+  .scrollhint .dot{width:6px;height:6px;border-radius:50%;background:var(--paw);animation:pulse 1.6s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:.3;transform:scale(.8);}50%{opacity:1;transform:scale(1.3);}}
+
+  /* ---------- section scaffolding ---------- */
+  section{padding:64px 0;position:relative;}
+  .seclabel{font-family:var(--mono);font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+    display:flex;align-items:center;gap:12px;margin:0 0 26px;}
+  .seclabel::before{content:"#";color:var(--paw);font-weight:700;}
+  .seclabel .rule{flex:1;height:1px;background:linear-gradient(90deg,var(--border-2),transparent);}
+  .sectitle{font-family:var(--mono);font-size:clamp(24px,4vw,34px);letter-spacing:-.5px;margin:0 0 14px;}
+  .secintro{color:var(--text-soft);max-width:var(--prose);margin:0 0 30px;font-size:16.5px;}
+  .secintro b{color:var(--text);}
+
+  /* glass card base */
+  .glass{border:1px solid var(--border);border-radius:var(--radius);
+    background:linear-gradient(180deg,rgba(17,23,31,.78),rgba(13,18,25,.72));
+    backdrop-filter:blur(8px);box-shadow:0 1px 0 rgba(255,255,255,.02) inset,0 30px 70px -44px rgba(0,0,0,.9);}
+
+  /* ---------- at a glance / stats ---------- */
+  .statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  @media (max-width:820px){.statgrid{grid-template-columns:repeat(2,1fr);}}
+  .stat{padding:22px 20px;}
+  .stat .num{font-family:var(--mono);font-size:clamp(30px,5vw,46px);font-weight:700;letter-spacing:-1px;color:var(--text);line-height:1;}
+  .stat .lbl{margin-top:10px;font-size:13.5px;color:var(--muted);}
+  .stat .lbl b{color:var(--text-soft);font-weight:600;}
+
+  .dist{margin-top:26px;padding:22px 22px 10px;}
+  .dist h4{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
+  .distrow{display:flex;align-items:center;gap:14px;margin-bottom:13px;cursor:pointer;}
+  .distrow .name{font-family:var(--mono);font-size:12.5px;width:128px;flex:none;color:var(--text-soft);text-transform:capitalize;}
+  .distrow .barwrap{flex:1;height:10px;border-radius:6px;background:#0b1016;overflow:hidden;border:1px solid var(--border);}
+  .distrow .bar{height:100%;width:0;border-radius:6px;transition:width 1.1s cubic-bezier(.2,.8,.2,1);}
+  .distrow .ct{font-family:var(--mono);font-size:12px;color:var(--muted);width:30px;text-align:right;}
+  .distrow:hover .name{color:var(--text);}
+
+  /* ---------- pillars ---------- */
+  .pillar{margin-top:22px;overflow:hidden;}
+  .pillar .ptop{padding:24px 26px 20px;border-bottom:1px solid var(--border);position:relative;}
+  .pillar .ptop::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);}
+  .pillar .pkicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .pillar .pkicker .vr{color:var(--faint);}
+  .pillar h3{font-family:var(--mono);font-size:clamp(20px,3vw,26px);letter-spacing:-.4px;}
+  .pillar .ptag{margin-top:12px;color:var(--text-soft);max-width:var(--prose);}
+  .pillar .ptag b{color:var(--text);}
+  .pillar .pbody{padding:8px 26px 26px;}
+  .wwgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0 4px;}
+  @media (max-width:760px){.wwgrid{grid-template-columns:1fr;}}
+  .ww{border:1px solid var(--border);border-left:2px solid var(--accent);border-radius:11px;background:#0b1016aa;padding:16px 18px;}
+  .ww h5{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:9px;}
+  .ww h5 b{color:var(--accent);font-weight:700;}
+  .ww p{margin:0 0 9px;font-size:14.5px;color:var(--text-soft);} .ww p:last-child{margin:0;}
+  .ww code{background:#070b10;border:1px solid var(--border-2);padding:1px 6px;border-radius:5px;font-size:12.5px;color:var(--text);}
+  .usecase{margin-top:16px;padding:15px 18px;border-radius:11px;background:rgba(245,185,77,.05);border:1px solid rgba(245,185,77,.20);}
+  .usecase .ut{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--paw);margin-bottom:7px;}
+  .usecase p{margin:0;font-size:14px;color:var(--text-soft);} .usecase p b{color:var(--text);}
+  .note{margin-top:16px;padding:13px 16px;border-radius:10px;font-size:13.5px;background:rgba(108,182,255,.06);border:1px solid rgba(108,182,255,.22);color:var(--text-soft);}
+  .note b{color:var(--blue);}
+  .note.warn{background:rgba(255,123,114,.08);border-color:rgba(255,123,114,.28);} .note.warn b{color:var(--red);}
+
+  /* interactive widget shell */
+  .widget{margin:22px 0 4px;border:1px solid var(--border-2);border-radius:12px;background:#070b10;overflow:hidden;}
+  .widget .wbar{display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid var(--border);
+    font-family:var(--mono);font-size:11.5px;color:var(--faint);}
+  .widget .wbar .live{margin-left:auto;color:var(--accent);display:flex;align-items:center;gap:6px;}
+  .widget .wbar .live i{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.6s infinite;}
+  .widget .wbody{padding:18px;}
+  .wbtn{font-family:var(--mono);font-size:12.5px;padding:8px 14px;border-radius:8px;cursor:pointer;border:1px solid var(--border-2);background:#0d141c;color:var(--text);transition:.14s;}
+  .wbtn:hover{border-color:var(--accent);color:var(--accent);}
+  .wbtn:active{transform:translateY(1px);}
+  .wbtn.ghost{background:transparent;}
+  .wbtn[disabled]{opacity:.4;cursor:not-allowed;}
+
+  /* code / diff blocks */
+  .codewrap{margin:20px 0 6px;border:1px solid var(--border-2);border-radius:11px;overflow:hidden;background:#070b10;}
+  .codewrap .cap{padding:8px 14px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:11.5px;color:var(--muted);display:flex;gap:10px;align-items:center;}
+  .codewrap .cap .file{color:var(--text-soft);}
+  pre{margin:0;padding:16px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.7;}
+  pre .add{display:block;background:rgba(76,196,106,.09);border-left:2px solid var(--green);padding-left:10px;margin-left:-16px;}
+  .k{color:var(--violet);} .fn{color:var(--blue);} .s{color:var(--green);} .c{color:var(--faint);font-style:italic;} .o{color:var(--paw);}
+
+  /* ---------- timeline ---------- */
+  .tlcontrols{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px;}
+  .chip{font-family:var(--mono);font-size:11.5px;padding:5px 12px;border-radius:999px;cursor:pointer;border:1px solid var(--border-2);background:#0b1016;color:var(--text-soft);transition:.14s;text-transform:capitalize;display:inline-flex;align-items:center;gap:7px;}
+  .chip .sw{width:8px;height:8px;border-radius:50%;background:var(--c,#888);}
+  .chip:hover{border-color:var(--border-glow);}
+  .chip.on{color:#fff;border-color:var(--c,#888);background:color-mix(in srgb,var(--c,#888) 18%, #0b1016);}
+  .tlsearch{font-family:var(--mono);font-size:12.5px;padding:7px 12px;border-radius:8px;border:1px solid var(--border-2);background:#070b10;color:var(--text);min-width:200px;flex:1;max-width:320px;}
+  .tlsearch::placeholder{color:var(--faint);}
+  .tlcount{font-family:var(--mono);font-size:12px;color:var(--muted);margin-left:auto;}
+  .timeline{position:relative;padding-left:30px;}
+  .timeline::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,var(--paw),var(--border-2) 70%,transparent);}
+  .tlnode{position:relative;padding:0 0 16px;}
+  .tlnode .pin{position:absolute;left:-30px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--c,#888);box-shadow:0 0 0 4px color-mix(in srgb,var(--c,#888) 18%, transparent);}
+  .tlitem{border:1px solid var(--border);border-radius:11px;background:#0b1016cc;padding:0;overflow:hidden;transition:border-color .15s;}
+  .tlitem:hover{border-color:var(--border-glow);}
+  .tlhead{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;}
+  .tlhead .ver{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--text);white-space:nowrap;}
+  .tlhead .ver .vt{color:var(--c,var(--paw));}
+  .tlhead .ttl{font-size:14px;color:var(--text-soft);flex:1;min-width:0;}
+  .tlhead .thtag{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--c,#888);border:1px solid color-mix(in srgb,var(--c,#888) 40%, transparent);padding:2px 8px;border-radius:999px;white-space:nowrap;}
+  .tlhead .date{font-family:var(--mono);font-size:11.5px;color:var(--muted);white-space:nowrap;}
+  .tlhead .exp{font-family:var(--mono);color:var(--faint);transition:transform .18s;}
+  .tlitem.open .tlhead .exp{transform:rotate(90deg);color:var(--accent,var(--paw));}
+  .tldetail{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+  .tlitem.open .tldetail{max-height:480px;}
+  .tldetail .inner{padding:2px 16px 16px;border-top:1px solid var(--border);color:var(--text-soft);font-size:14px;}
+  .tldetail .inner p{margin:12px 0 0;} .tldetail .inner b{color:var(--text);}
+  .tldetail .meta{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px 16px;font-family:var(--mono);font-size:11.5px;color:var(--muted);}
+  .tldetail .meta b{color:var(--text-soft);}
+
+  /* ---------- playbook scenarios ---------- */
+  .scenos{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  @media (max-width:900px){.scenos{grid-template-columns:1fr;}}
+  .sceno{padding:22px 22px;display:flex;flex-direction:column;}
+  .sceno .si{font-size:22px;margin-bottom:12px;}
+  .sceno h4{font-family:var(--mono);font-size:16px;margin-bottom:10px;color:var(--text);}
+  .sceno p{font-size:14px;color:var(--text-soft);margin:0 0 14px;}
+  .sceno .stack{margin-top:auto;display:flex;flex-wrap:wrap;gap:6px;}
+  .sceno .stack span{font-family:var(--mono);font-size:10.5px;padding:3px 8px;border-radius:999px;border:1px solid var(--border-2);color:var(--text-soft);background:#0b1016;}
+
+  footer{border-top:1px solid var(--border);margin-top:40px;padding:30px 0 60px;position:relative;z-index:2;background:var(--bg);}
+  footer .f{font-family:var(--mono);font-size:12px;color:var(--faint);display:flex;flex-wrap:wrap;gap:8px 18px;}
+  footer .f b{color:var(--muted);}
+  .paw{color:var(--paw);}
+
+  /* reveal on scroll */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1);}
+  .reveal.in{opacity:1;transform:none;}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}}
+</style>
+</head>
+<body>
+
+  <div id="stage-fallback"></div>
+  <div id="stage" aria-hidden="true"></div>
+  <div class="scrim"></div>
+
+  <div class="page">
+    <nav class="nav">
+      <span class="lights"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+      <span class="path"><b>code_puppy</b>://release-observatory</span>
+      <span class="links">
+        <a href="#glance">overview</a>
+        <a href="#pillars">themes</a>
+        <a href="#timeline">timeline</a>
+        <a href="#playbook">playbook</a>
+      </span>
+    </nav>
+    <main class="wrap">
+      <header class="hero" id="top">
+        <div class="promptline"><span class="dollar">$</span> uvx code-puppy <span class="flag">--version</span> <span style="color:var(--faint)">&amp;&amp;</span> git log <span class="flag">--since</span>=30d</div>
+        <h1><span class="grad">30 days</span><br>of <span class="tag">code_puppy</span><span class="cursor"></span></h1>
+        <p class="lede">A living map of every change that landed on your machine between <b>v0.0.528</b> and <b>v0.0.577</b> — <b>~46 releases, ~110 substantive commits</b>, flown through in 3D and broken down into <b>what each change is, how it works, why it matters, and how to put it to work at HTT</b>. Move your cursor to look around. Scroll to fly the timeline.</p>
+        <div class="cta">
+          <a class="btn primary" href="#glance">▸ explore the 30 days</a>
+          <a class="btn" href="#timeline">jump to full timeline</a>
+          <a class="btn" href="#playbook">HTT playbook</a>
+        </div>
+        <div class="scrollhint"><span class="dot"></span> scroll to begin the flythrough</div>
+      </header>
+      <section id="glance">
+        <div class="seclabel reveal">the 30 days at a glance <span class="rule"></span></div>
+        <h2 class="sectitle reveal">A month of fast, additive iteration</h2>
+        <p class="secintro reveal">code_puppy ships almost daily. Across this window every change was <b>auto-applied with no migration</b> — your only action all month was a single <code class="mono">uv tool upgrade</code>. Here's the shape of it. Tap a theme to filter the full timeline below.</p>
+        <div class="statgrid reveal">
+          <div class="stat glass"><div class="num" data-target="46">0</div><div class="lbl"><b>releases</b> shipped · v0.0.528 → v0.0.577</div></div>
+          <div class="stat glass"><div class="num" id="stat-changes" data-target="0">0</div><div class="lbl"><b>substantive changes</b> mapped &amp; explained</div></div>
+          <div class="stat glass"><div class="num" data-target="8">0</div><div class="lbl"><b>themes</b> — from agents to security</div></div>
+          <div class="stat glass"><div class="num" data-target="1">0</div><div class="lbl"><b>command</b> you had to run — <code class="mono">uv tool upgrade</code></div></div>
+        </div>
+        <div class="dist glass reveal">
+          <h4>where the work went · changes by theme</h4>
+          <div id="distrows"></div>
+        </div>
+      </section>
+      <section id="pillars">
+        <div class="seclabel reveal">the eight themes <span class="rule"></span></div>
+        <h2 class="sectitle reveal">What actually changed — and how to use it</h2>
+        <p class="secintro reveal">The month's ~110 commits cluster into eight themes. Each one below is broken down the same way: <b>what</b> it is, <b>how</b> it works under the hood, <b>why</b> it matters to you, and a concrete <b>HTT use case</b>. The marquee features ship with live, hands-on demos — poke them.</p>
+        <!-- ===== PILLAR: COMMANDS ===== -->
+        <article class="pillar glass reveal" style="--accent:var(--commands)">
+          <div class="ptop">
+            <div class="pkicker"><span>① slash commands &amp; interactive UX</span><span class="vr">·</span><span>v0.0.577 · 0.0.567 · 0.0.469</span></div>
+            <h3>The terminal learned new verbs</h3>
+            <p class="ptag">The headline of the month. Three brand-new slash commands — <b>/plan</b>, <b>/undo</b>, and <b>/-search inside /resume</b> — plus a redesigned <code class="mono">/set</code> menu, a <code class="mono">/theme</code> picker, output-density controls, and typewriter-smooth streaming. These are the surfaces you touch every session.</p>
+          </div>
+          <div class="pbody">
+
+            <!-- /plan -->
+            <h4 style="font-family:var(--mono);font-size:16px;margin:18px 0 0;color:var(--commands)">/plan &lt;goal&gt; — think before it builds</h4>
+            <div class="wwgrid">
+              <div class="ww"><h5><b>what</b></h5><p>A planning-only command. You hand it a goal; it returns a structured plan — objective, numbered steps, risks, a validation checklist — and runs <b>no tools, edits, or shell</b>.</p></div>
+              <div class="ww"><h5><b>how</b></h5><p>It wraps your goal in a "plan-only mode" prompt and routes it through the normal chat pipeline. It's a <b>prompt-level guard</b>, not a hard tool-lock — the model is instructed not to act.</p></div>
+              <div class="ww"><h5><b>why</b></h5><p>Lets you see the agent's intended approach and approve it <i>before</i> any files move — the natural first beat of any unattended run.</p></div>
+              <div class="ww"><h5><b>watch-out</b></h5><p>Because the guard is a prompt, treat <code>/plan</code> as "read-only by convention." For a hard guarantee, pair it with the dangerous-command-guard config.</p></div>
+            </div>
+            <div class="widget" id="plan-flow" style="--accent:var(--commands)">
+              <div class="wbar"><span>/plan — routing visualizer</span><span class="live"><i></i>interactive</span></div>
+              <div class="wbody"><div id="plan-flow-mount"></div></div>
+            </div>
+            <div class="usecase"><div class="ut">▸ HTT use case</div><p>Before kicking off an overnight script that touches a brand's BigCommerce catalog export, run <code class="mono">/plan migrate price rules for Brand X</code>, read the 5-step plan over coffee, and only then let it execute. <b>Plan first, commit second.</b></p></div>
+
+            <!-- /undo -->
+            <h4 style="font-family:var(--mono);font-size:16px;margin:30px 0 0;color:var(--commands)">/undo — a seatbelt for the agent's edits</h4>
+            <div class="wwgrid">
+              <div class="ww"><h5><b>what</b></h5><p>Reverts the agent's last file change. Aliases <code>/u</code>, <code>/undo_last</code>. Files it <i>created</i> get deleted; files it <i>edited</i> get restored to their prior bytes.</p></div>
+              <div class="ww"><h5><b>how</b></h5><p>A new <code>UndoManager</code> snapshots a file's contents at the top of all five mutators (write, replace, edit, delete, delete-snippet) before the change lands. <code>/undo</code> pops the last snapshot.</p></div>
+              <div class="ww"><h5><b>why</b></h5><p>One keystroke to walk back a wrong edit mid-session — no diff-hunting, no manual restore.</p></div>
+              <div class="ww"><h5><b>watch-out</b></h5><p>The history is an <b>in-memory singleton</b> — it's wiped on every restart. <code>/undo</code> only reverses edits from the <i>current running session</i>, one step per call.</p></div>
+            </div>
+            <div class="widget" id="undo-sim" style="--accent:var(--commands)">
+              <div class="wbar"><span>UndoManager — live in-memory stack</span><span class="live"><i></i>interactive</span></div>
+              <div class="wbody"><div id="undo-sim-mount"></div></div>
+            </div>
+            <div class="note warn"><b>Not a durable rollback.</b> Because the stack lives in RAM, <code>/undo</code> is an interactive safety net, not a substitute for version control. For unattended runs, git is still your real undo.</div>
+            <div class="usecase"><div class="ut">▸ HTT use case</div><p>You're editing a Freshdesk KB template interactively and the agent rewrites the wrong section. <code class="mono">/undo</code>, re-prompt, done — instead of fishing the old text out of git stash.</p></div>
+
+            <!-- /resume search -->
+            <h4 style="font-family:var(--mono);font-size:16px;margin:30px 0 0;color:var(--commands)">/ in /resume — find a session by what it said</h4>
+            <div class="wwgrid">
+              <div class="ww"><h5><b>what</b></h5><p>Press <code>/</code> inside the <code>/resume</code> session picker to filter your saved sessions by their <b>content</b> — the actual message text — not just by timestamp.</p></div>
+              <div class="ww"><h5><b>how</b></h5><p>A new <code>autosave_search.py</code> builds a lazy, thread-safe content index. The picker pre-warms it on a background thread and short-circuits on metadata (name, date, message count) before loading content.</p></div>
+              <div class="ww"><h5><b>why</b></h5><p>Once you have dozens of sessions, "the one where we debugged the Monday.com webhook" beats scrolling timestamps.</p></div>
+              <div class="ww"><h5><b>watch-out</b></h5><p>Case-insensitive substring match on raw message text — it's recall, not semantic search. Search for terms you actually typed.</p></div>
+            </div>
+            <div class="widget" id="search-demo" style="--accent:var(--commands)">
+              <div class="wbar"><span>/resume content search — try it</span><span class="live"><i></i>interactive</span></div>
+              <div class="wbody"><div id="search-demo-mount"></div></div>
+            </div>
+            <div class="usecase"><div class="ut">▸ HTT use case</div><p>Three weeks ago you worked through a tricky Power BI capacity issue with code_puppy. Type <code class="mono">/resume</code> → <code class="mono">/</code> → "fabric capacity" and you're back in that exact session, context intact.</p></div>
+
+            <!-- the rest of the commands bucket -->
+            <h4 style="font-family:var(--mono);font-size:15px;margin:30px 0 12px;color:var(--text-soft)">Also in this bucket</h4>
+            <div class="wwgrid">
+              <div class="ww"><h5><b>/set</b> · interactive menu (#390)</h5><p>A redesigned settings menu showing <i>effective</i> defaults, an expanded model catalog, and a model-cache fix — change config without memorizing keys.</p></div>
+              <div class="ww"><h5><b>/theme</b> · picker + 80 tests (#385, #476)</h5><p>An interactive theme picker plugin with new palettes (incl. a Deep Black). Cosmetic, but it makes long sessions easier on the eyes.</p></div>
+              <div class="ww"><h5><b>output density</b> (#469, #474)</h5><p><code>output_level</code> (low/medium/high) tunes how chatty the stream is, and <code>suppress_directory_listing</code> trims noisy file dumps — calmer logs for unattended runs.</p></div>
+              <div class="ww"><h5><b>smooth streaming</b> (0.0.5xx)</h5><p>Typewriter-style smoothing for both responses and the thinking stream, plus image-file paste from the clipboard. Polish that makes the REPL feel alive.</p></div>
+            </div>
+          </div>
+        </article>
+        <!-- ===== PILLAR: AGENTS ===== -->
+        <article class="pillar glass reveal" style="--accent:var(--agents)">
+          <div class="ptop">
+            <div class="pkicker"><span>② multi-agent orchestration</span><span class="vr">·</span><span>v0.0.569 · 0.0.x (#377, #486)</span></div>
+            <h3>Running a swarm, with a kill switch</h3>
+            <p class="ptag">code_puppy can spin up sub-agents to parallelize work. This month gave that swarm <b>visibility</b> (a live status panel), <b>a clean stop</b> (one Ctrl+C cancels everything), and <b>per-agent model control</b>. If you orchestrate, this is the most consequential bucket.</p>
+          </div>
+          <div class="pbody">
+            <div class="wwgrid">
+              <div class="ww"><h5><b>what</b></h5><p>A built-in <b>sub-agent status panel</b> renders a live <code>INVOKE AGENT</code> tree, a single <b>Ctrl+C now cancels the entire swarm</b> (not just the current shell batch), and you can set <b>per-invocation model overrides</b> and tier variants per sub-agent.</p></div>
+              <div class="ww"><h5><b>how</b></h5><p>The panel ships as a built-in plugin reading the agent invocation tree; the cancel path was rewired so one interrupt propagates across every concurrent sub-agent task instead of a single branch.</p></div>
+              <div class="ww"><h5><b>why</b></h5><p>Orchestration without visibility or a stop button is a runaway risk. Now you can <i>see</i> what each agent is doing and <i>halt all of it</i> instantly — and run a cheap model for grunt work, a strong one for synthesis.</p></div>
+              <div class="ww"><h5><b>watch-out</b></h5><p>Per-agent model overrides mean per-agent cost. Map your tiers deliberately or a wide swarm on a premium model adds up fast.</p></div>
+            </div>
+            <div class="widget" id="swarm-demo" style="--accent:var(--agents)">
+              <div class="wbar"><span>sub-agent swarm — one Ctrl+C cancels all</span><span class="live"><i></i>interactive</span></div>
+              <div class="wbody"><div id="swarm-demo-mount"></div></div>
+            </div>
+            <div class="usecase"><div class="ut">▸ HTT use case</div><p>Auditing documentation across all 5 brands at once: fan out one sub-agent per brand, watch the tree fill in live, and if one wanders off-scope, a single Ctrl+C stops the whole fleet — no orphaned processes chewing tokens overnight.</p></div>
+          </div>
+        </article>
+        <!-- ===== PILLAR: DURABILITY ===== -->
+        <article class="pillar glass reveal" style="--accent:var(--durability)">
+          <div class="ptop">
+            <div class="pkicker"><span>③ reliable &amp; durable unattended runs</span><span class="vr">·</span><span>v0.0.576 · 0.0.572–574 · 0.0.x</span></div>
+            <h3>Built to survive the night</h3>
+            <p class="ptag">Your scheduled and long-running jobs are exactly what this bucket protects. <b>Quick-resume</b> after a crash, <b>connection drops that retry instead of faking a crash</b>, <b>concurrent launches that don't corrupt state</b>, and <b>atomic, crash-safe writes</b>. The difference between a job that limps through a blip and one that dies at 2am.</p>
+          </div>
+          <div class="pbody">
+            <div class="wwgrid">
+              <div class="ww"><h5><b>what</b></h5><p><code>--quick-resume</code> / <code>-qr</code> reloads the most recent session for your dir + git branch. Transient VPN/WiFi drops auto-retry. Concurrent launches serialize the DBOS SQLite migration. File &amp; session writes are atomic. A fast Ctrl+C double-tap no longer nukes the REPL.</p></div>
+              <div class="ww"><h5><b>how</b></h5><p>Autosave drops a pointer to the latest session every turn; quick-resume resolves it by a hashed git-root+branch scope. Writes go to a temp file then atomic-rename. A startup lock makes parallel instances take turns through the migration.</p></div>
+              <div class="ww"><h5><b>why</b></h5><p>Unattended automation lives or dies on recovery. A blip used to mean a fake-crash traceback and a lost session; now it's a one-line retry, and restart is one flag back to context.</p></div>
+              <div class="ww"><h5><b>watch-out</b></h5><p>Quick-resume is scoped to git root + branch — switch branches and you'll resume <i>that</i> branch's session, which is usually what you want, occasionally surprising.</p></div>
+            </div>
+            <div class="widget" id="resilience-demo" style="--accent:var(--durability)">
+              <div class="wbar"><span>blip simulator — old vs. new behavior</span><span class="live"><i></i>interactive</span></div>
+              <div class="wbody"><div id="resilience-demo-mount"></div></div>
+            </div>
+            <div class="usecase"><div class="ut">▸ HTT use case</div><p>Your nightly <code class="mono">code-puppy-upstream-watch</code> task (this very report) benefits directly: if the office VPN hiccups mid-run, it retries instead of emailing you a scary traceback — and the atomic writes mean a power blip can't leave a half-written session pickle.</p></div>
+          </div>
+        </article>
+        <!-- ===== PILLAR: MODELS ===== -->
+        <article class="pillar glass reveal" style="--accent:var(--models)">
+          <div class="ptop">
+            <div class="pkicker"><span>④ model &amp; provider management</span><span class="vr">·</span><span>v0.0.5xx (#352, #372, #382)</span></div>
+            <h3>More providers, cleaner control</h3>
+            <p class="ptag">A steady stream of provider work: <b>Ollama</b> for local models, <b>Cerebras</b> fixes, support for <b>Claude Opus 4-8</b> and <b>Fable 5</b>, unified model-selection menus, in-menu <b>API-key management</b>, and clearer model-error messages. This is your control plane for cost, privacy, and capability.</p>
+          </div>
+          <div class="pbody">
+            <div class="wwgrid">
+              <div class="ww"><h5><b>what</b></h5><p>New providers (Ollama local; Cerebras default-endpoint fix), new models (Opus 4-8, Fable 5 with adaptive thinking), unified selection menus, credential management from the menu, and model-error types distinguished in fallback messages.</p></div>
+              <div class="ww"><h5><b>how</b></h5><p><code>models.json</code> now ships empty to force explicit setup; a None-model state is handled gracefully with an onboarding <code>/add_model</code> prompt; menus unify selection + credentials so keys live in one place.</p></div>
+              <div class="ww"><h5><b>why</b></h5><p>You choose the right brain for each job: a local Ollama model for sensitive franchise data that can't leave the building, a frontier model for hard reasoning, a cheap one for bulk.</p></div>
+              <div class="ww"><h5><b>watch-out</b></h5><p>Because <code>models.json</code> now ships empty, a fresh install needs an explicit <code>/add_model</code> before first use — expected, but don't let it surprise a new teammate.</p></div>
+            </div>
+            <div class="widget" id="provider-matrix" style="--accent:var(--models)">
+              <div class="wbar"><span>provider &amp; model support added this month</span><span class="live"><i></i>reference</span></div>
+              <div class="wbody"><div id="provider-matrix-mount"></div></div>
+            </div>
+            <div class="usecase"><div class="ut">▸ HTT use case</div><p>Point sensitive cross-brand inventory work at a <b>local Ollama model</b> so nothing leaves your network, while routine doc-drafting uses a hosted model. One tool, two trust zones, switchable from the <code class="mono">/set</code> menu.</p></div>
+          </div>
+        </article>
+
+        <!-- ===== PILLAR: GOVERNANCE ===== -->
+        <article class="pillar glass reveal" style="--accent:var(--governance)">
+          <div class="ptop">
+            <div class="pkicker"><span>⑤ plugins, skills &amp; governance</span><span class="vr">·</span><span>v0.0.571 · 0.0.575 · 0.0.x</span></div>
+            <h3>Your lever for keeping output on-policy</h3>
+            <p class="ptag">This is the layer that makes code_puppy <i>yours</i>. <b>Project-level plugin discovery</b>, a built-in <b>architecture skill</b>, smarter <b>skill search &amp; activation</b>, an <b>emoji filter</b>, a <b>dangerous-command-guard toggle</b>, hook-engine blocking decisions, and the <code>puppy_kennel</code> memory system. The same "one durable control beats N reminders" principle you run across 200+ locations.</p>
+          </div>
+          <div class="pbody">
+            <div class="wwgrid">
+              <div class="ww"><h5><b>what</b></h5><p>Drop plugins in <code>.code_puppy/plugins/</code> for per-project tooling; skills now match multi-word queries and the agent is told to activate the right one before answering; hooks can block actions via stdout JSON; <code>AGENTS.md</code> is capped at 10k chars.</p></div>
+              <div class="ww"><h5><b>how</b></h5><p>A project-local discovery path loads plugins alongside the built-ins; an <code>enabled_skills</code> module became the single source of truth; the hook engine honors structured stdout payloads to allow/deny a tool call.</p></div>
+              <div class="ww"><h5><b>why</b></h5><p>Governance that travels <i>with the repo</i>. Your voice charter, your guardrails, your franchise conventions become code the agent must load — not reminders it can ignore.</p></div>
+              <div class="ww"><h5><b>watch-out</b></h5><p>Project-level plugins run with the agent's permissions. Treat <code>.code_puppy/plugins/</code> like any executable in the repo — review before you trust.</p></div>
+            </div>
+            <div class="widget" id="gov-stack" style="--accent:var(--governance)">
+              <div class="wbar"><span>where governance attaches — layer map</span><span class="live"><i></i>reference</span></div>
+              <div class="wbody"><div id="gov-stack-mount"></div></div>
+            </div>
+            <div class="usecase"><div class="ut">▸ HTT use case</div><p>Commit a <code class="mono">.code_puppy/plugins/</code> bundle to each brand's repo encoding that brand's voice + a dangerous-command guard. Any teammate (or scheduled job) cloning that repo inherits the guardrails automatically — governance as version-controlled code.</p></div>
+          </div>
+        </article>
+        <!-- ===== PILLAR: SECURITY ===== -->
+        <article class="pillar glass reveal" style="--accent:var(--security)">
+          <div class="ptop">
+            <div class="pkicker"><span>⑥ security &amp; safety</span><span class="vr">·</span><span>v0.0.568 · 0.0.x (#484, #388)</span></div>
+            <h3>Closing the doors untrusted output can open</h3>
+            <p class="ptag">Small commits, outsized importance. A <b>terminal clipboard-hijack</b> vector neutralized at the source, a <b>path guard</b> on image loading, a toggle for <b>dangerous-command guards</b>, and atomic writes that can't leave corrupt state. The agent reads untrusted content all day — these harden the blast radius.</p>
+          </div>
+          <div class="pbody">
+            <div class="wwgrid">
+              <div class="ww"><h5><b>what</b></h5><p><b>OSC 52 clipboard hijack</b> from termflow output neutralized so a malicious payload can't silently rewrite your clipboard; <code>load_image</code> guarded against guessed/traversal paths; dangerous-command guards now toggleable.</p></div>
+              <div class="ww"><h5><b>how</b></h5><p>The fix sanitizes the OSC 52 escape sequence <i>at the source</i> before it reaches your terminal emulator — the same "sanitize untrusted output where it enters" instinct, one layer down.</p></div>
+              <div class="ww"><h5><b>why</b></h5><p>When an agent pastes web content or model output into a terminal, escape-sequence injection is a real attack surface. This shuts a known one.</p></div>
+              <div class="ww"><h5><b>watch-out</b></h5><p>The dangerous-command-guard <i>toggle</i> cuts both ways — disabling it removes a safety rail. Keep it on for unattended and shared environments.</p></div>
+            </div>
+            <div class="usecase"><div class="ut">▸ HTT use case</div><p>For any code_puppy run that ingests external content — scraping a vendor page, reading a customer ticket — the clipboard and path guards mean a poisoned input can't quietly hijack your terminal or read files outside scope.</p></div>
+          </div>
+        </article>
+
+        <!-- ===== PILLAR: PLATFORM ===== -->
+        <article class="pillar glass reveal" style="--accent:var(--platform)">
+          <div class="ptop">
+            <div class="pkicker"><span>⑦ cross-platform &amp; output polish</span><span class="vr">·</span><span>v0.0.574 · 0.0.x (#492, #389, #339)</span></div>
+            <h3>Same behavior on every machine</h3>
+            <p class="ptag">A run of fixes that matter most in a mixed Windows/Mac shop: <b>ANSI/CRLF leaks on Windows</b> cleaned up, a <b>Windows first-run Unicode crash</b> fixed, <b>grep</b> made to behave identically across OSes, and output spacing/timing corrected. Fewer "works on my machine" surprises.</p>
+          </div>
+          <div class="pbody">
+            <div class="wwgrid">
+              <div class="ww"><h5><b>what</b></h5><p>Stopped an ANSI escape leak from CRLF shell output on Windows; fixed a legacy-codepage <code>UnicodeEncodeError</code> on first run; unified grep pattern handling across OSes; corrected <code>output_level=low</code> spacing and t/s timing.</p></div>
+              <div class="ww"><h5><b>how</b></h5><p>Trailing carriage returns are normalized; the Windows console codepage is handled on startup; grep semantics were aligned so the same pattern matches the same way everywhere.</p></div>
+              <div class="ww"><h5><b>why</b></h5><p>If your team mixes platforms, consistent tool behavior means a script that works on your Mac works on a franchise Windows box without surprises.</p></div>
+              <div class="ww"><h5><b>watch-out</b></h5><p>None material — these are pure correctness fixes. If you'd built workarounds for the old Windows quirks, you can retire them.</p></div>
+            </div>
+            <div class="usecase"><div class="ut">▸ HTT use case</div><p>When you hand a code_puppy automation to a franchise location running Windows, grep-based checks and shell output now behave exactly as they did on your machine — one less support ticket.</p></div>
+          </div>
+        </article>
+
+        <!-- ===== PILLAR: STEERING ===== -->
+        <article class="pillar glass reveal" style="--accent:var(--steering)">
+          <div class="ptop">
+            <div class="pkicker"><span>⑧ live steering &amp; input</span><span class="vr">·</span><span>v0.0.x (Ctrl+T, Ctrl+X)</span></div>
+            <h3>Talk to a running agent without breaking it</h3>
+            <p class="ptag">The <b>Ctrl+T steering prompt</b> lets you nudge the agent mid-run. This month killed its <b>input lag</b>, added <b>cursor-aware line editing</b>, stopped <b>arrow keys from cancelling</b> the prompt, and made steer requests <b>inherit the system prompt</b>. Small ergonomics, big day-to-day difference.</p>
+          </div>
+          <div class="pbody">
+            <div class="wwgrid">
+              <div class="ww"><h5><b>what</b></h5><p>The mid-run steering prompt (Ctrl+T) gained responsive input and proper left/right cursor editing; arrow keys no longer cancel it; the shell Ctrl+X listener was unified with the canonical key handler; injected steer requests inherit system-prompt instructions.</p></div>
+              <div class="ww"><h5><b>how</b></h5><p>Escape sequences are now parsed instead of treated as cancels, and the steering input shares one key-listener path with the rest of the REPL so behavior is consistent.</p></div>
+              <div class="ww"><h5><b>why</b></h5><p>Steering is how you correct a long run without killing it. When the prompt lags or eats your arrow keys, you lose that control. Now it just works.</p></div>
+              <div class="ww"><h5><b>watch-out</b></h5><p>Steer requests inheriting the system prompt is usually right, but means your governance/voice rules apply to mid-run nudges too — by design.</p></div>
+            </div>
+            <div class="usecase"><div class="ut">▸ HTT use case</div><p>A long migration is running and you realize it should skip archived brands. Ctrl+T, "skip anything tagged archived," and it adjusts — no restart, no lost progress.</p></div>
+          </div>
+        </article>
+      </section>
+      <section id="timeline">
+        <div class="seclabel reveal">the complete timeline <span class="rule"></span></div>
+        <h2 class="sectitle reveal">Every substantive change, last 30 days</h2>
+        <p class="secintro reveal">All ~50 tracked changes that shipped between v0.0.528 and v0.0.577. Filter by theme, search by keyword or PR number, and click any entry to expand the full breakdown. This is the exhaustive record behind the themes above.</p>
+        <div class="tlcontrols reveal">
+          <div id="tlchips" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;"></div>
+        </div>
+        <div class="tlcontrols reveal">
+          <input id="tlsearch" class="tlsearch" type="text" placeholder="search title, PR #, theme…" />
+          <span class="tlcount" id="tlcount"></span>
+        </div>
+        <div class="timeline" id="timeline-list"></div>
+      </section>
+      <section id="playbook">
+        <div class="seclabel reveal">the HTT playbook <span class="rule"></span></div>
+        <h2 class="sectitle reveal">Putting the month to work</h2>
+        <p class="secintro reveal">Individual features are nice; combinations are where the leverage is. Three concrete ways this month's changes stack up for how you actually run IT across 200+ locations and 5 brands.</p>
+        <div class="scenos">
+          <div class="sceno glass reveal">
+            <div class="si">🌙</div>
+            <h4>The hands-off overnight build</h4>
+            <p>Kick off a long job before you leave. <code class="mono">/plan</code> to approve the approach, then let it run knowing a VPN blip retries instead of crashing, concurrent jobs won't corrupt state, and a power flicker can't half-write a session. Quick-resume gets you back to context if anything does stop.</p>
+            <div class="stack"><span>/plan</span><span>quick-resume</span><span>auto-retry</span><span>atomic writes</span><span>DBOS lock</span></div>
+          </div>
+          <div class="sceno glass reveal">
+            <div class="si">🏢</div>
+            <h4>Multi-brand parallel work</h4>
+            <p>One task, five brands. Fan out a sub-agent per brand, watch the live status tree, run a cheap model for bulk and a strong one for synthesis — and keep a single Ctrl+C kill switch over the whole fleet. Per-brand <code class="mono">.code_puppy/plugins/</code> keeps each brand's voice and guardrails attached.</p>
+            <div class="stack"><span>sub-agent swarm</span><span>swarm Ctrl+C</span><span>model overrides</span><span>project plugins</span></div>
+          </div>
+          <div class="sceno glass reveal">
+            <div class="si">🛟</div>
+            <h4>Safe interactive support work</h4>
+            <p>Drafting KB articles or fixing configs live. <code class="mono">/undo</code> is your seatbelt for a wrong edit, <code class="mono">/resume</code> content-search pulls up the session where you solved this before, and Ctrl+T lets you steer mid-run without losing progress. A local model keeps sensitive data in-building.</p>
+            <div class="stack"><span>/undo</span><span>/resume search</span><span>Ctrl+T steering</span><span>local model</span></div>
+          </div>
+        </div>
+        <div class="note reveal" style="margin-top:24px"><b>The through-line:</b> "one durable control beats N reminders." The swarm-wide cancel, the startup lock, project-level plugins, atomic writes — every one replaces a fragile manual habit with a built-in guarantee. That's the same operating principle that scales across your franchise footprint.</div>
+      </section>
+    </main>
+    <footer>
+      <div class="wrap">
+        <div class="f">
+          <span><span class="paw">●</span> code_puppy://release-observatory</span>
+          <span><b>window</b> v0.0.528 → v0.0.577 · last 30 days</span>
+          <span><b>single static file</b> · three.js + vanilla JS · no build step</span>
+          <span><b>built</b> 2026-06-25 · <b>verified</b> upstream git inspection</span>
+          <span><b>maintained by</b> Tyler · IT Systems &amp; Support · HTT Brands</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+  // ===== theme registry (hex must match CSS vars) =====
+  window.THEMES = {
+    commands:   {color:"#f5b94d", label:"commands & UX"},
+    agents:     {color:"#b692f6", label:"multi-agent"},
+    durability: {color:"#4cc46a", label:"durability"},
+    models:     {color:"#6cb6ff", label:"models"},
+    governance: {color:"#36c6b0", label:"governance"},
+    security:   {color:"#ff7b72", label:"security"},
+    platform:   {color:"#ff9f6b", label:"platform"},
+    steering:   {color:"#f49ac2", label:"steering"}
+  };
+
+  // ===== the 30-day release record (v0.0.528 -> v0.0.577) =====
+  // newest first; verified by upstream git inspection 2026-06-25
+  window.RELEASES = [
+    {v:"0.0.577", date:"2026-06-25", theme:"commands", pr:"#503", title:"/plan — planning-only slash command", detail:"New /plan <goal> returns a structured plan (objective, numbered steps, risks, validation checklist) and runs no tools, edits, or shell. A prompt-level guard for scoping a run before it executes."},
+    {v:"0.0.577", date:"2026-06-25", theme:"commands", pr:"#502", title:"/undo — revert the agent's last file edit", detail:"A new UndoManager snapshots a file's bytes at the top of all five mutators (write, replace, edit, delete, delete-snippet); /undo restores the last change. In-memory singleton, session-scoped — wiped on restart."},
+    {v:"0.0.577", date:"2026-06-25", theme:"commands", pr:"#500", title:"/ search inside the /resume picker", detail:"Press / in /resume to filter saved sessions by their actual message content, via a lazy thread-safe background-built index. (PUP-346)"},
+    {v:"0.0.576", date:"2026-06-24", theme:"durability", pr:"#501", title:"quick-resume support", detail:"--quick-resume / -qr (and /quick-resume) reload the most recent session for your directory + git branch — one flag instead of hunting for the right .pkl."},
+    {v:"0.0.575", date:"2026-06-22", theme:"governance", pr:"#498", title:"skill search multi-word matching + proactive activation", detail:"Skill search now matches multi-word queries and the agent is told to activate the right skill before answering — so your org skills actually load."},
+    {v:"0.0.574", date:"2026-06-20", theme:"platform", pr:"#492", title:"stop ANSI leak from Windows CRLF shell output", detail:"Normalizes trailing carriage returns so CRLF shell output no longer leaks ANSI escape sequences on Windows."},
+    {v:"0.0.573", date:"2026-06-19", theme:"durability", pr:"#491", title:"Ctrl+C double-tap no longer exits the whole REPL", detail:"A fast, accidental double-interrupt won't kill your session mid-run."},
+    {v:"0.0.572", date:"2026-06-19", theme:"durability", pr:"#482", title:"recoverable connection drop no longer looks like a crash", detail:"Transient VPN/WiFi drops auto-retry with a friendly one-liner instead of a fake-crash traceback."},
+    {v:"0.0.572", date:"2026-06-19", theme:"durability", pr:"#490", title:"serialize DBOS startup vs. the SQLite migration race", detail:"A startup lock makes concurrent launches take turns through the DBOS migration, so multiple instances keep durable execution instead of one silently losing it."},
+    {v:"0.0.571", date:"2026-06-18", theme:"governance", pr:"#488", title:"built-in code-puppy-agent architecture skill", detail:"A 553-line SKILL.md teaching the agent code_puppy's own internals (plugins, tools, agent system) so it can navigate and extend the project."},
+    {v:"0.0.570", date:"2026-06-18", theme:"models", pr:"#376", title:"distinguish model error types in fallback messages", detail:"Clearer signal when a provider/model genuinely fails versus a transient hiccup."},
+    {v:"0.0.569", date:"2026-06-17", theme:"agents", pr:"#486", title:"built-in sub-agent status panel", detail:"Renders a live INVOKE AGENT tree for swarm runs so you can see what each sub-agent is doing."},
+    {v:"0.0.569", date:"2026-06-17", theme:"agents", pr:"", title:"single Ctrl+C cancels the entire sub-agent swarm", detail:"One interrupt now propagates across every concurrent sub-agent task instead of just the current shell batch."},
+    {v:"0.0.569", date:"2026-06-17", theme:"agents", pr:"", title:"sub-agent model tier variants + version handling", detail:"Extracts tier variants and improves version handling for sub-agent models."},
+    {v:"0.0.569", date:"2026-06-17", theme:"models", pr:"", title:"dormant advisor-tool Anthropic beta opt-in", detail:"Adds a dormant opt-in for an advisor-tool Anthropic beta."},
+    {v:"0.0.569", date:"2026-06-17", theme:"commands", pr:"", title:"paste image files from the system clipboard", detail:"Support pasting image files (not just text) from the clipboard into a session."},
+    {v:"", date:"2026-06-17", theme:"security", pr:"", title:"guard load_image against guessed paths", detail:"A path guard prevents load_image from reading guessed or traversal paths."},
+    {v:"", date:"2026-06-17", theme:"durability", pr:"", title:"tolerate spinner teardown races during streaming", detail:"Hardens the spinner against teardown races while output is still streaming."},
+    {v:"0.0.568", date:"2026-06-16", theme:"security", pr:"#484", title:"neutralize termflow OSC 52 clipboard hijacking at the source", detail:"Sanitizes the OSC 52 escape sequence before it reaches your terminal emulator, closing a clipboard-hijack vector."},
+    {v:"0.0.567", date:"2026-06-13", theme:"commands", pr:"#476", title:"new theme options (incl. Deep Black)", detail:"Adds palettes and refines /theme; includes a theme-options screenshot."},
+    {v:"", date:"2026-06-13", theme:"platform", pr:"#478", title:"statusline above/newline modes + tests", detail:"Fixes the above/newline rendering modes for the status line."},
+    {v:"", date:"2026-06-13", theme:"platform", pr:"#477", title:"fix output_level=low spacing", detail:"Audits and fixes output_level=low for even spacing."},
+    {v:"", date:"2026-06-12", theme:"commands", pr:"#474", title:"suppress_directory_listing config flag", detail:"Optionally trims noisy directory dumps from the stream — calmer logs for unattended runs."},
+    {v:"", date:"2026-06-12", theme:"commands", pr:"#469", title:"output_level setting (low / medium / high)", detail:"Tunes conversation-stream density to taste."},
+    {v:"", date:"2026-06-12", theme:"governance", pr:"#472", title:"puppy_kennel: /kennel toggle in puppy.cfg", detail:"Stores the /kennel toggle in puppy.cfg as a single source of truth."},
+    {v:"", date:"2026-06-11", theme:"governance", pr:"", title:"hook_engine honors stdout JSON blocking decisions", detail:"Hooks can allow or deny a tool call via structured stdout payloads."},
+    {v:"", date:"2026-06-11", theme:"steering", pr:"", title:"kill input lag + cursor-aware editing in the Ctrl+T prompt", detail:"Responsive input and proper left/right cursor line-editing for the mid-run steering prompt."},
+    {v:"", date:"2026-06-11", theme:"steering", pr:"", title:"unify shell Ctrl+X listener with the canonical key listener", detail:"One key-listener path so steering input behaves consistently with the rest of the REPL."},
+    {v:"", date:"2026-06-11", theme:"durability", pr:"#466", title:"degrade gracefully on cross-task anyio cancel-scope errors", detail:"Prevents cross-task cancel-scope errors from crashing a run."},
+    {v:"", date:"2026-06-10", theme:"steering", pr:"", title:"arrow keys no longer cancel the steering prompt", detail:"Escape sequences are parsed instead of treated as cancels."},
+    {v:"", date:"2026-06-10", theme:"durability", pr:"", title:"abort all drainers on BaseException (no ghost typing)", detail:"Event-stream drainers abort cleanly to stop stray output after cancellation."},
+    {v:"", date:"2026-06-10", theme:"durability", pr:"", title:"smooth-stream abort() + pause-aware drain + safe cancellation", detail:"Makes the smooth-output stream safely cancellable mid-flight."},
+    {v:"", date:"2026-06-10", theme:"steering", pr:"", title:"injected steer requests inherit system-prompt instructions", detail:"Mid-run steer requests carry your system prompt — so governance and voice rules apply to nudges too."},
+    {v:"", date:"2026-06-10", theme:"platform", pr:"#339", title:"grep tool pattern handling identical on all OSes", detail:"Aligns grep semantics so the same pattern matches the same way everywhere."},
+    {v:"", date:"2026-06-09", theme:"governance", pr:"#394", title:"warn users to restart after plugin enable/disable", detail:"Surfaces a restart warning when plugin state changes so changes actually take effect."},
+    {v:"", date:"2026-06-09", theme:"governance", pr:"#393", title:"project-level plugin discovery via .code_puppy/plugins/", detail:"Loads project-local plugins alongside the built-ins — governance that travels with the repo."},
+    {v:"", date:"2026-06-09", theme:"governance", pr:"#392", title:"cap each AGENTS.md at 10,000 chars", detail:"Truncates an oversized AGENTS.md with a notice to protect the context budget."},
+    {v:"", date:"2026-06-09", theme:"models", pr:"", title:"adaptive thinking + summarized display for Fable 5", detail:"Enables adaptive thinking with a summarized thinking display for Fable 5 models."},
+    {v:"", date:"2026-06-08", theme:"commands", pr:"#390", title:"/set interactive menu with effective defaults", detail:"Redesigned settings menu showing effective defaults, an expanded model catalog, and a model-cache fix."},
+    {v:"", date:"2026-06-08", theme:"security", pr:"#388", title:"toggle to disable dangerous-command guards", detail:"Makes the dangerous-command guard configurable — keep it on for unattended and shared environments."},
+    {v:"", date:"2026-06-08", theme:"platform", pr:"#389", title:"fix UnicodeEncodeError on Windows first run", detail:"Handles the legacy console code page so a fresh Windows install doesn't crash on first run."},
+    {v:"", date:"2026-06-07", theme:"models", pr:"", title:"None-model handling + onboarding /add_model prompt", detail:"models.json now ships empty; a None-model state is handled gracefully and onboarding surfaces an explicit /add_model prompt."},
+    {v:"", date:"2026-06-06", theme:"agents", pr:"#377", title:"per-invocation sub-agent model overrides", detail:"Set the model per sub-agent invocation — cheap model for grunt work, strong one for synthesis."},
+    {v:"", date:"2026-06-06", theme:"models", pr:"#382", title:"unify model selection menus", detail:"One consistent model-selection menu across the app."},
+    {v:"", date:"2026-06-06", theme:"commands", pr:"#385", title:"/theme plugin with interactive picker (80 tests)", detail:"An interactive theme-picker plugin with thorough test coverage."},
+    {v:"", date:"2026-06-06", theme:"governance", pr:"", title:"kennel: reload agent + suppress tool advertisement on toggle", detail:"puppy_kennel reloads the active agent and hides tool advertisement when disabled."},
+    {v:"", date:"2026-06-02", theme:"commands", pr:"#373", title:"customizable status line plugin", detail:"A configurable status line you can tailor."},
+    {v:"", date:"2026-06-02", theme:"models", pr:"#372", title:"manage provider API keys from the model menus", detail:"Credential management now lives in the model menu, in one place."},
+    {v:"", date:"2026-06-02", theme:"durability", pr:"#379", title:"atomic, crash-safe file and session writes", detail:"Writes go to a temp file then atomic-rename, so a crash can't leave a half-written file or session."},
+    {v:"", date:"2026-06-01", theme:"commands", pr:"#378", title:"fix /woof to forward the prompt to the agent", detail:"/woof now forwards its prompt correctly."},
+    {v:"", date:"2026-06-01", theme:"governance", pr:"", title:"agent-skills: minimal markdown format + enabled_skills module", detail:"Replaces the XML skills block with a minimal markdown format and a single enabled_skills source of truth."},
+    {v:"", date:"2026-05-31", theme:"models", pr:"#352", title:"Ollama support", detail:"Run local models via Ollama — keep sensitive data in-building."},
+    {v:"", date:"2026-05-31", theme:"models", pr:"#368", title:"Cerebras: disable strict tool defs + default endpoint", detail:"Fixes Cerebras strict tool definitions and supports the default endpoint."},
+    {v:"", date:"2026-05-31", theme:"governance", pr:"", title:"emoji_filter plugin", detail:"Strips emojis from file writes, shell commands, and streamed output."},
+    {v:"", date:"2026-05-31", theme:"governance", pr:"", title:"puppy_kennel plugin (rename from palace) + memory bucket", detail:"Introduces the kennel memory system and breaks out kennel memory as its own context bucket."},
+    {v:"", date:"2026-05-29", theme:"commands", pr:"", title:"typewriter-style smooth output stream", detail:"Adds a smooth_response_stream toggle for typewriter-style agent output."},
+    {v:"", date:"2026-05-29", theme:"platform", pr:"", title:"exclude tool-execution time from the t/s rate", detail:"The token-rate stat no longer counts tool-execution time."},
+    {v:"", date:"2026-05-28", theme:"commands", pr:"", title:"smooth thinking stream (ThinkingStreamSmoother)", detail:"Smooths the thinking-stream output for calmer reasoning display."},
+    {v:"", date:"2026-05-28", theme:"models", pr:"", title:"Claude Opus 4-8 support (claude_code_oauth)", detail:"Adds Claude Opus 4-8 model support to the OAuth plugin."},
+    {v:"", date:"2026-05-26", theme:"durability", pr:"", title:"spill large directory listings to temp files", detail:"Large directory listings spill to temp files instead of bloating the context window."}
+  ];
+  </script>
+  <script>
+  // ===== immersive WebGL constellation =====
+  window.addEventListener("load", function () {
+    var stage = document.getElementById("stage");
+    var fallback = document.getElementById("stage-fallback");
+    if (!window.THREE || !stage) { return; }   // graceful: fallback gradient stays
+    try {
+      var THREE = window.THREE;
+      var W = window.innerWidth, H = window.innerHeight;
+
+      var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+      renderer.setSize(W, H);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      stage.appendChild(renderer.domElement);
+      if (fallback) fallback.style.display = "none";
+
+      var scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x070a0f, 0.0042);
+      var camera = new THREE.PerspectiveCamera(58, W / H, 0.1, 600);
+      camera.position.set(0, 0, 72);
+
+      var world = new THREE.Group();
+      scene.add(world);
+
+      // soft radial sprite for glowing points
+      function makeDot() {
+        var c = document.createElement("canvas"); c.width = c.height = 64;
+        var x = c.getContext("2d");
+        var g = x.createRadialGradient(32, 32, 0, 32, 32, 32);
+        g.addColorStop(0, "rgba(255,255,255,1)");
+        g.addColorStop(0.25, "rgba(255,255,255,0.9)");
+        g.addColorStop(0.55, "rgba(255,255,255,0.25)");
+        g.addColorStop(1, "rgba(255,255,255,0)");
+        x.fillStyle = g; x.fillRect(0, 0, 64, 64);
+        var t = new THREE.Texture(c); t.needsUpdate = true; return t;
+      }
+      var dotTex = makeDot();
+
+      // seeded RNG so the layout is stable across reloads
+      function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+      var rng = mulberry32(20260625);
+
+      var THEME_HEX = {commands:0xf5b94d,agents:0xb692f6,durability:0x4cc46a,models:0x6cb6ff,governance:0x36c6b0,security:0xff7b72,platform:0xff9f6b,steering:0xf49ac2};
+      var rel = (window.RELEASES || []);
+      var n = Math.max(rel.length, 2);
+
+      // build a flowing ribbon path (timeline flows along X, wobble in Y/Z)
+      var CN = 11, ctrl = [];
+      for (var i = 0; i < CN; i++) {
+        ctrl.push(new THREE.Vector3(
+          (i / (CN - 1) - 0.5) * 96 + (rng() - 0.5) * 9,
+          (rng() - 0.5) * 30,
+          (rng() - 0.5) * 50
+        ));
+      }
+      var curve = new THREE.CatmullRomCurve3(ctrl, false, "catmullrom", 0.5);
+
+      // node points (one per release), colored by theme
+      var positions = new Float32Array(n * 3), colors = new Float32Array(n * 3), sizes = new Float32Array(n);
+      var baseSize = new Float32Array(n);
+      var nodeVecs = [];
+      for (var j = 0; j < n; j++) {
+        var t = j / (n - 1);
+        var p = curve.getPoint(t);
+        nodeVecs.push(p);
+        positions[j*3] = p.x; positions[j*3+1] = p.y; positions[j*3+2] = p.z;
+        var hex = THEME_HEX[(rel[j] && rel[j].theme) || "commands"] || 0xffffff;
+        var col = new THREE.Color(hex);
+        colors[j*3] = col.r; colors[j*3+1] = col.g; colors[j*3+2] = col.b;
+        var s = (j === 0) ? 40 : (12 + rng() * 9);
+        if (j > 0 && j < 4) s += 6;
+        sizes[j] = s; baseSize[j] = s;
+      }
+      var geo = new THREE.BufferGeometry();
+      geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+      geo.setAttribute("customColor", new THREE.BufferAttribute(colors, 3));
+      geo.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
+
+      var nodeMat = new THREE.ShaderMaterial({
+        uniforms: { tex: { value: dotTex }, uScale: { value: 1.0 } },
+        vertexShader: [
+          "attribute float size;","attribute vec3 customColor;","varying vec3 vColor;","uniform float uScale;",
+          "void main(){","vColor=customColor;","vec4 mv=modelViewMatrix*vec4(position,1.0);",
+          "gl_PointSize=size*uScale*(300.0/-mv.z);","gl_Position=projectionMatrix*mv;","}"
+        ].join("\n"),
+        fragmentShader: [
+          "uniform sampler2D tex;","varying vec3 vColor;",
+          "void main(){","vec4 t=texture2D(tex,gl_PointCoord);","if(t.a<0.04)discard;","gl_FragColor=vec4(vColor,1.0)*t;","}"
+        ].join("\n"),
+        blending: THREE.AdditiveBlending, depthTest: true, depthWrite: false, transparent: true
+      });
+      var nodes = new THREE.Points(geo, nodeMat);
+      world.add(nodes);
+
+      // the spine connecting the releases
+      var spinePts = curve.getPoints(420);
+      var spineGeo = new THREE.BufferGeometry().setFromPoints(spinePts);
+      var spine = new THREE.Line(spineGeo, new THREE.LineBasicMaterial({ color: 0x3a4660, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending }));
+      world.add(spine);
+
+      // starfield
+      var SC = 1500, sp = new Float32Array(SC * 3), scol = new Float32Array(SC * 3);
+      for (var k = 0; k < SC; k++) {
+        var r = 90 + rng() * 160, th = rng() * Math.PI * 2, ph = Math.acos(rng() * 2 - 1);
+        sp[k*3] = r*Math.sin(ph)*Math.cos(th); sp[k*3+1] = r*Math.sin(ph)*Math.sin(th); sp[k*3+2] = r*Math.cos(ph);
+        var b = 0.4 + rng() * 0.6; scol[k*3]=b*0.8; scol[k*3+1]=b*0.86; scol[k*3+2]=b;
+      }
+      var starGeo = new THREE.BufferGeometry();
+      starGeo.setAttribute("position", new THREE.BufferAttribute(sp, 3));
+      starGeo.setAttribute("color", new THREE.BufferAttribute(scol, 3));
+      var stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ size: 0.7, sizeAttenuation: true, vertexColors: true, transparent: true, opacity: 0.8, depthWrite: false }));
+      scene.add(stars);
+
+      // interaction state
+      var mx = 0, my = 0, tmx = 0, tmy = 0, scrollP = 0;
+      window.addEventListener("pointermove", function (e) {
+        tmx = (e.clientX / window.innerWidth) * 2 - 1;
+        tmy = (e.clientY / window.innerHeight) * 2 - 1;
+      }, { passive: true });
+      function onScroll(){
+        var max = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+        scrollP = Math.min(Math.max(window.scrollY / max, 0), 1);
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+
+      window.addEventListener("resize", function () {
+        W = window.innerWidth; H = window.innerHeight;
+        camera.aspect = W / H; camera.updateProjectionMatrix();
+        renderer.setSize(W, H);
+      });
+
+      var clock = new THREE.Clock();
+      function tick() {
+        var dt = clock.getDelta(), tElapsed = clock.elapsedTime;
+        mx += (tmx - mx) * 0.05; my += (tmy - my) * 0.05;
+
+        // slow auto-spin + cursor parallax + scroll tilt
+        world.rotation.y = tElapsed * 0.035 + mx * 0.5;
+        world.rotation.x = my * 0.28 + scrollP * 0.5 - 0.1;
+        stars.rotation.y = tElapsed * 0.012;
+
+        // dolly the camera in as you scroll (fly the timeline), pan with cursor
+        camera.position.z = 74 - scrollP * 30;
+        camera.position.x += ((mx * 9) - camera.position.x) * 0.05;
+        camera.position.y += ((-my * 6 - scrollP * 6) - camera.position.y) * 0.05;
+        camera.lookAt(0, scrollP * -2, 0);
+
+        // gentle breathing of the node glow + brighter pulse on the latest release
+        nodeMat.uniforms.uScale.value = 1.0 + Math.sin(tElapsed * 1.6) * 0.06;
+        sizes[0] = baseSize[0] * (1.0 + Math.sin(tElapsed * 2.2) * 0.18);
+        geo.attributes.size.needsUpdate = true;
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(tick);
+      }
+      tick();
+    } catch (err) {
+      if (fallback) fallback.style.display = "";
+      if (stage) stage.style.display = "none";
+      console.warn("WebGL scene failed, using fallback:", err);
+    }
+  });
+  </script>
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var THEMES = window.THEMES, RELEASES = window.RELEASES || [];
+    var esc = function (s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); };
+    var $ = function (s, r) { return (r || document).querySelector(s); };
+
+    // ---- inject widget-specific styles ----
+    var st = document.createElement("style");
+    st.textContent = [
+      ".uf{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12px;padding:5px 10px;border-radius:7px;border:1px solid var(--border-2);background:#0b1016;color:var(--text-soft);margin:0 6px 6px 0;}",
+      ".uf .d{width:7px;height:7px;border-radius:50%;background:var(--commands);}",
+      ".ustack{display:flex;flex-direction:column-reverse;gap:6px;min-height:42px;}",
+      ".ucard{font-family:var(--mono);font-size:12px;padding:7px 10px;border-radius:7px;border:1px solid var(--border-2);background:#0d141c;color:var(--text);animation:pop .22s ease;}",
+      ".ucard .ttl{color:var(--commands);} .ucard small{color:var(--muted);}",
+      "@keyframes pop{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}",
+      ".ulog{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:10px;min-height:18px;}",
+      ".ulog .ok{color:var(--green);} .ulog .no{color:var(--red);}",
+      ".flowrow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;}",
+      ".fbox{flex:1;min-width:120px;border:1px solid var(--border-2);border-radius:9px;background:#0b1016;padding:11px 12px;font-size:12.5px;color:var(--text-soft);position:relative;}",
+      ".fbox b{color:var(--text);font-family:var(--mono);font-size:12px;} .fbox.safe{border-color:rgba(76,196,106,.4);} .fbox.danger{border-color:rgba(255,123,114,.45);}",
+      ".farrow{display:flex;align-items:center;color:var(--faint);padding:0 8px;font-family:var(--mono);}",
+      ".fpulse{position:absolute;top:50%;left:0;width:9px;height:9px;border-radius:50%;background:var(--accent,#f5b94d);box-shadow:0 0 12px var(--accent,#f5b94d);transform:translate(-50%,-50%);opacity:0;}",
+      ".ss-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:#0b1016;margin-bottom:6px;font-size:13px;}",
+      ".ss-row .nm{font-family:var(--mono);color:var(--text);} .ss-row .meta{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--muted);}",
+      ".ss-row mark{background:rgba(245,185,77,.3);color:#fff;border-radius:3px;padding:0 2px;}",
+      ".ss-row.hide{display:none;} .ss-empty{font-family:var(--mono);font-size:12px;color:var(--muted);padding:6px 2px;}",
+      ".ag{display:flex;align-items:center;gap:10px;margin:7px 0;font-family:var(--mono);font-size:12.5px;}",
+      ".ag .nm{width:120px;color:var(--text-soft);} .ag .pbar{flex:1;height:8px;border-radius:5px;background:#0b1016;border:1px solid var(--border);overflow:hidden;}",
+      ".ag .pfill{height:100%;width:0;background:var(--agents);transition:width .2s linear;} .ag .stt{width:88px;text-align:right;color:var(--muted);}",
+      ".ag.done .pfill{background:var(--green);} .ag.done .stt{color:var(--green);} .ag.cancel .pfill{background:var(--red);} .ag.cancel .stt{color:var(--red);}",
+      ".rl{font-family:var(--mono);font-size:12.5px;line-height:1.85;background:#06090d;border:1px solid var(--border);border-radius:8px;padding:12px 14px;min-height:96px;}",
+      ".rl .g{color:var(--green);} .rl .r{color:var(--red);} .rl .a{color:var(--paw);} .rl .m{color:var(--muted);}",
+      ".pm{width:100%;border-collapse:collapse;font-size:13px;}",
+      ".pm th,.pm td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);} .pm th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}",
+      ".pm td b{color:var(--text);} .pm .tag{font-family:var(--mono);font-size:10.5px;padding:2px 7px;border-radius:999px;border:1px solid var(--border-2);color:var(--models);}",
+      ".gl{display:flex;flex-direction:column;gap:8px;}",
+      ".glr{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;border:1px solid var(--border-2);background:linear-gradient(90deg,rgba(54,198,176,.10),transparent);}",
+      ".glr .ix{font-family:var(--mono);font-size:11px;color:var(--governance);width:20px;} .glr .gt{font-family:var(--mono);font-size:12.5px;color:var(--text);} .glr .gd{font-size:12.5px;color:var(--text-soft);margin-left:auto;text-align:right;max-width:60%;}"
+    ].join("");
+    document.head.appendChild(st);
+
+    // ---- reveal on scroll ----
+    var ro = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); ro.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll(".reveal").forEach(function (el) { ro.observe(el); });
+
+    // ---- stat count-up ----
+    var cstat = $("#stat-changes"); if (cstat) cstat.setAttribute("data-target", RELEASES.length);
+    document.querySelectorAll(".num[data-target]").forEach(function (el) {
+      var target = parseInt(el.getAttribute("data-target"), 10) || 0, done = false;
+      var ob = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting && !done) {
+            done = true; var t0 = performance.now(), dur = 1100;
+            (function step(now) {
+              var p = Math.min((now - t0) / dur, 1), eased = 1 - Math.pow(1 - p, 3);
+              el.textContent = Math.round(eased * target);
+              if (p < 1) requestAnimationFrame(step);
+            })(t0);
+          }
+        });
+      }, { threshold: 0.5 });
+      ob.observe(el);
+    });
+
+    // ---- theme distribution ----
+    var counts = {}; Object.keys(THEMES).forEach(function (k) { counts[k] = 0; });
+    RELEASES.forEach(function (r) { if (counts[r.theme] != null) counts[r.theme]++; });
+    var order = Object.keys(THEMES).sort(function (a, b) { return counts[b] - counts[a]; });
+    var maxc = Math.max.apply(null, order.map(function (k) { return counts[k]; })) || 1;
+    var drows = $("#distrows");
+    if (drows) {
+      order.forEach(function (k) {
+        var row = document.createElement("div"); row.className = "distrow"; row.setAttribute("data-theme", k);
+        row.innerHTML = '<span class="name">' + esc(THEMES[k].label) + '</span>'
+          + '<span class="barwrap"><span class="bar" style="background:' + THEMES[k].color + '"></span></span>'
+          + '<span class="ct">' + counts[k] + '</span>';
+        drows.appendChild(row);
+        var bar = row.querySelector(".bar");
+        requestAnimationFrame(function () { setTimeout(function () { bar.style.width = (counts[k] / maxc * 100) + "%"; }, 120); });
+        row.addEventListener("click", function () { setFilter(k); document.getElementById("timeline").scrollIntoView({ behavior: "smooth" }); });
+      });
+    }
+
+    // ---- timeline (chips + search + expandable list) ----
+    var filterTheme = null, searchStr = "";
+    var chipsWrap = $("#tlchips"), listWrap = $("#timeline-list"), countEl = $("#tlcount"), searchEl = $("#tlsearch");
+
+    function buildChips() {
+      if (!chipsWrap) return;
+      var html = '<span class="chip ' + (filterTheme === null ? "on" : "") + '" data-k="__all" style="--c:#8a93a3">all ' + RELEASES.length + '</span>';
+      order.forEach(function (k) {
+        html += '<span class="chip ' + (filterTheme === k ? "on" : "") + '" data-k="' + k + '" style="--c:' + THEMES[k].color + '"><span class="sw"></span>' + esc(THEMES[k].label) + ' ' + counts[k] + '</span>';
+      });
+      chipsWrap.innerHTML = html;
+      chipsWrap.querySelectorAll(".chip").forEach(function (c) {
+        c.addEventListener("click", function () { var k = c.getAttribute("data-k"); setFilter(k === "__all" ? null : (filterTheme === k ? null : k)); });
+      });
+    }
+    function setFilter(k) { filterTheme = k; buildChips(); renderList(); }
+
+    function renderList() {
+      if (!listWrap) return;
+      var q = searchStr.trim().toLowerCase(), shown = 0, html = "";
+      RELEASES.forEach(function (r, i) {
+        if (filterTheme && r.theme !== filterTheme) return;
+        var hay = (r.title + " " + r.detail + " " + r.pr + " " + r.v + " " + (THEMES[r.theme] ? THEMES[r.theme].label : r.theme)).toLowerCase();
+        if (q && hay.indexOf(q) === -1) return;
+        shown++;
+        var col = THEMES[r.theme] ? THEMES[r.theme].color : "#888";
+        var verLabel = r.v ? ("v<span class=\"vt\">" + esc(r.v) + "</span>") : "<span class=\"vt\">" + esc(THEMES[r.theme].label) + "</span>";
+        html += '<div class="tlnode"><span class="pin" style="--c:' + col + '"></span>'
+          + '<div class="tlitem" data-i="' + i + '" style="--c:' + col + ';--accent:' + col + '">'
+          + '<div class="tlhead">'
+          + '<span class="ver">' + verLabel + '</span>'
+          + '<span class="ttl">' + esc(r.title) + '</span>'
+          + '<span class="thtag" style="--c:' + col + '">' + esc(THEMES[r.theme].label) + '</span>'
+          + '<span class="date">' + esc(r.date) + '</span>'
+          + '<span class="exp">▸</span>'
+          + '</div>'
+          + '<div class="tldetail"><div class="inner"><p>' + esc(r.detail) + '</p>'
+          + '<div class="meta">' + (r.v ? '<span><b>version</b> v' + esc(r.v) + '</span>' : '')
+          + (r.pr ? '<span><b>PR</b> ' + esc(r.pr) + '</span>' : '<span><b>commit</b> direct to main</span>')
+          + '<span><b>theme</b> ' + esc(THEMES[r.theme].label) + '</span>'
+          + '<span><b>date</b> ' + esc(r.date) + '</span></div>'
+          + '</div></div></div></div>';
+      });
+      listWrap.innerHTML = html || '<div class="ss-empty">No changes match that filter.</div>';
+      if (countEl) countEl.textContent = shown + " of " + RELEASES.length + " changes";
+      listWrap.querySelectorAll(".tlhead").forEach(function (h) {
+        h.addEventListener("click", function () { h.parentElement.classList.toggle("open"); });
+      });
+    }
+    if (searchEl) searchEl.addEventListener("input", function () { searchStr = searchEl.value; renderList(); });
+    buildChips(); renderList();
+
+    // ===================== WIDGET: /undo stack sim =====================
+    (function () {
+      var m = $("#undo-sim-mount"); if (!m) return;
+      var files, stack;
+      function reset() { files = { "config.py": 1, "README.md": 1 }; stack = []; render(); log(""); }
+      var logEl;
+      function log(html) { if (logEl) logEl.innerHTML = html; }
+      m.innerHTML =
+        '<div style="display:flex;gap:18px;flex-wrap:wrap">'
+        + '<div style="flex:1;min-width:190px"><div style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">working files</div><div id="uf-files"></div></div>'
+        + '<div style="flex:1;min-width:190px"><div style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">UndoManager stack <span id="uf-depth"></span></div><div class="ustack" id="uf-stack"></div></div>'
+        + '</div>'
+        + '<div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:8px">'
+        + '<button class="wbtn" data-act="edit">✎ agent edits config.py</button>'
+        + '<button class="wbtn" data-act="create">＋ agent creates notes.md</button>'
+        + '<button class="wbtn" data-act="delete">🗑 agent deletes README.md</button>'
+        + '<button class="wbtn" data-act="undo" style="border-color:var(--commands);color:var(--commands)">↩ /undo</button>'
+        + '<button class="wbtn ghost" data-act="restart">⟳ restart session</button>'
+        + '</div><div class="ulog" id="uf-log"></div>';
+      logEl = $("#uf-log", m);
+      function render() {
+        var fEl = $("#uf-files", m), sEl = $("#uf-stack", m), dEl = $("#uf-depth", m);
+        fEl.innerHTML = Object.keys(files).length
+          ? Object.keys(files).map(function (f) { return '<span class="uf"><span class="d"></span>' + esc(f) + ' <small>v' + files[f] + '</small></span>'; }).join("")
+          : '<span style="font-family:var(--mono);font-size:12px;color:var(--muted)">(no files)</span>';
+        sEl.innerHTML = stack.length
+          ? stack.map(function (c) { return '<div class="ucard"><span class="ttl">' + esc(c.action) + '</span> <small>snapshot of</small> ' + esc(c.file) + '</div>'; }).join("")
+          : '<div style="font-family:var(--mono);font-size:12px;color:var(--muted)">empty — nothing to undo</div>';
+        dEl.textContent = "· depth " + stack.length;
+      }
+      m.addEventListener("click", function (e) {
+        var b = e.target.closest("[data-act]"); if (!b) return;
+        var act = b.getAttribute("data-act");
+        if (act === "edit") {
+          if (!files["config.py"]) { log('<span class="no">config.py does not exist to edit.</span>'); return; }
+          stack.push({ file: "config.py", action: "replace_in_file", prev: { existed: true, v: files["config.py"] } });
+          files["config.py"]++; log('<span class="m">agent modified config.py — original snapshotted first.</span>');
+        } else if (act === "create") {
+          if (files["notes.md"]) { log('<span class="no">notes.md already exists.</span>'); return; }
+          stack.push({ file: "notes.md", action: "write_to_file", prev: { existed: false } });
+          files["notes.md"] = 1; log('<span class="m">agent created notes.md.</span>');
+        } else if (act === "delete") {
+          if (!files["README.md"]) { log('<span class="no">README.md already gone.</span>'); return; }
+          stack.push({ file: "README.md", action: "delete_file", prev: { existed: true, v: files["README.md"] } });
+          delete files["README.md"]; log('<span class="m">agent deleted README.md — original snapshotted first.</span>');
+        } else if (act === "undo") {
+          var c = stack.pop();
+          if (!c) { log('<span class="no">No more actions to undo.</span>'); render(); return; }
+          if (!c.prev.existed) { delete files[c.file]; log('<span class="ok">Undid ' + c.action + ': deleted ' + c.file + '</span>'); }
+          else { files[c.file] = c.prev.v; log('<span class="ok">Undid ' + c.action + ': restored ' + c.file + '</span>'); }
+        } else if (act === "restart") {
+          stack = []; log('<span class="a">session restarted — in-memory undo history wiped. /undo now has nothing to revert (this is the key caveat).</span>');
+        }
+        render();
+      });
+      reset();
+    })();
+
+    // ===================== WIDGET: /plan routing =====================
+    (function () {
+      var m = $("#plan-flow-mount"); if (!m) return;
+      m.innerHTML =
+        '<div class="flowrow" style="position:relative">'
+        + '<div class="fbox"><b>your goal</b><br>"migrate price rules for Brand X"</div>'
+        + '<div class="farrow">→</div>'
+        + '<div class="fbox" id="pf-mid"><b>routing</b><br>—</div>'
+        + '<div class="farrow">→</div>'
+        + '<div class="fbox" id="pf-end"><b>outcome</b><br>—</div>'
+        + '<div class="fpulse" id="pf-pulse" style="--accent:var(--commands)"></div>'
+        + '</div>'
+        + '<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">'
+        + '<button class="wbtn" data-mode="plan" style="border-color:var(--commands);color:var(--commands)">▸ run /plan goal</button>'
+        + '<button class="wbtn ghost" data-mode="raw">▸ run WITHOUT /plan</button>'
+        + '</div>'
+        + '<div id="pf-result" style="margin-top:12px;font-family:var(--mono);font-size:12.5px;min-height:20px"></div>';
+      var mid = $("#pf-mid", m), end = $("#pf-end", m), pulse = $("#pf-pulse", m), res = $("#pf-result", m);
+      function runPulse(cb) {
+        pulse.style.transition = "none"; pulse.style.left = "0%"; pulse.style.opacity = "1";
+        requestAnimationFrame(function () { pulse.style.transition = "left 1.15s cubic-bezier(.4,0,.2,1)"; pulse.style.left = "100%"; });
+        setTimeout(function () { pulse.style.opacity = "0"; if (cb) cb(); }, 1180);
+      }
+      m.addEventListener("click", function (e) {
+        var b = e.target.closest("[data-mode]"); if (!b) return;
+        var mode = b.getAttribute("data-mode"); res.innerHTML = "";
+        if (mode === "plan") {
+          pulse.style.setProperty("--accent", "var(--commands)");
+          mid.className = "fbox safe"; mid.innerHTML = '<b>/plan guard</b><br>wraps goal in plan-only prompt · no tools/edits/shell';
+          end.className = "fbox safe"; end.innerHTML = '<b>outcome</b><br>—';
+          runPulse(function () {
+            end.innerHTML = '<b>plan returned</b><br><span style="color:var(--green)">0 files changed</span>';
+            res.innerHTML = '<span style="color:var(--green)">✓ Plan:</span> 1) objective 2) numbered steps 3) risks/unknowns 4) validation checklist — nothing executed.';
+          });
+        } else {
+          pulse.style.setProperty("--accent", "var(--red)");
+          mid.className = "fbox danger"; mid.innerHTML = '<b>no guard</b><br>agent free to call tools immediately';
+          end.className = "fbox danger"; end.innerHTML = '<b>outcome</b><br>—';
+          runPulse(function () {
+            end.innerHTML = '<b>tools ran</b><br><span style="color:var(--red)">3 files changed</span>';
+            res.innerHTML = '<span style="color:var(--red)">! Executed:</span> edited price_rules.json, wrote export.csv, ran shell — before you reviewed anything.';
+          });
+        }
+      });
+    })();
+
+    // ===================== WIDGET: /resume content search =====================
+    (function () {
+      var m = $("#search-demo-mount"); if (!m) return;
+      var SESS = [
+        { nm: "webhook-debug", date: "Jun 03", n: 42, c: "monday.com webhook 500 error signature validation retry" },
+        { nm: "fabric-capacity", date: "Jun 10", n: 88, c: "power bi fabric capacity F64 throttling report refresh" },
+        { nm: "bc-catalog-export", date: "Jun 12", n: 31, c: "bigcommerce catalog export price rules brand migration" },
+        { nm: "kb-troubleshoot", date: "Jun 15", n: 27, c: "freshdesk kb article printer offline troubleshooting" },
+        { nm: "sso-setup", date: "Jun 18", n: 55, c: "azure ad sso saml monday teams integration" },
+        { nm: "inventory-sync", date: "Jun 08", n: 64, c: "multi brand inventory sync bigcommerce locations" },
+        { nm: "undo-feature-test", date: "Jun 25", n: 12, c: "code_puppy undo command in-memory stack test" },
+        { nm: "opus-eval", date: "May 28", n: 19, c: "claude opus 4-8 model eval reasoning benchmark" }
+      ];
+      m.innerHTML =
+        '<div style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:8px">/resume → press <span style="color:var(--commands)">/</span> → type to filter by <b style="color:var(--text-soft)">content</b></div>'
+        + '<input id="sd-in" class="tlsearch" style="max-width:340px;width:100%" placeholder="try: fabric · webhook · brand · opus" />'
+        + '<div id="sd-status" style="font-family:var(--mono);font-size:11px;color:var(--muted);margin:8px 0 6px;min-height:14px"></div>'
+        + '<div id="sd-list" style="margin-top:4px"></div>';
+      var inp = $("#sd-in", m), listEl = $("#sd-list", m), statusEl = $("#sd-status", m);
+      function draw(q) {
+        q = (q || "").trim().toLowerCase(); var shown = 0;
+        listEl.innerHTML = SESS.map(function (s) {
+          var hay = (s.nm + " " + s.c).toLowerCase(); var match = !q || hay.indexOf(q) !== -1; if (match) shown++;
+          var prev = s.c; if (q && s.c.toLowerCase().indexOf(q) !== -1) {
+            var idx = s.c.toLowerCase().indexOf(q); prev = esc(s.c.slice(0, idx)) + "<mark>" + esc(s.c.slice(idx, idx + q.length)) + "</mark>" + esc(s.c.slice(idx + q.length));
+          } else prev = esc(s.c);
+          return '<div class="ss-row ' + (match ? "" : "hide") + '"><span class="nm">' + esc(s.nm) + '</span><span style="color:var(--muted);font-size:11.5px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + prev + '</span><span class="meta">' + s.date + ' · ' + s.n + ' msgs</span></div>';
+        }).join("");
+        if (shown === 0) listEl.innerHTML += '<div class="ss-empty">no session matches "' + esc(q) + '"</div>';
+        statusEl.textContent = q ? ("Filtering… " + shown + "/" + SESS.length + " match content") : (SESS.length + " sessions · indexed by content");
+      }
+      var warmed = false;
+      inp.addEventListener("focus", function () { if (!warmed) { warmed = true; statusEl.textContent = "Indexing 8/8 sessions…"; setTimeout(function () { draw(inp.value); }, 450); } });
+      inp.addEventListener("input", function () { draw(inp.value); });
+      draw("");
+    })();
+
+    // ===================== WIDGET: sub-agent swarm =====================
+    (function () {
+      var m = $("#swarm-demo-mount"); if (!m) return;
+      var NAMES = ["agent-01 · audit brand 1", "agent-02 · audit brand 2", "agent-03 · audit brand 3", "agent-04 · audit brand 4", "agent-05 · audit brand 5"];
+      var timers = [], running = false;
+      m.innerHTML =
+        '<div style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:10px">▾ INVOKE AGENT · orchestrator</div>'
+        + '<div id="sw-list"></div>'
+        + '<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">'
+        + '<button class="wbtn" data-a="launch" style="border-color:var(--agents);color:var(--agents)">▸ launch swarm</button>'
+        + '<button class="wbtn" data-a="cancel" style="border-color:var(--red);color:var(--red)">⎋ Ctrl+C — cancel all</button>'
+        + '<button class="wbtn ghost" data-a="reset">⟳ reset</button>'
+        + '</div><div id="sw-note" style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:10px;min-height:16px"></div>';
+      var listEl = $("#sw-list", m), noteEl = $("#sw-note", m);
+      var state = [];
+      function render() {
+        listEl.innerHTML = state.map(function (a, i) {
+          return '<div class="ag ' + a.cls + '" data-i="' + i + '"><span class="nm">' + esc(NAMES[i]) + '</span><span class="pbar"><span class="pfill" style="width:' + a.p + '%"></span></span><span class="stt">' + a.stt + '</span></div>';
+        }).join("");
+      }
+      function reset() { clearAll(); running = false; state = NAMES.map(function () { return { p: 0, stt: "queued", cls: "" }; }); noteEl.textContent = ""; render(); }
+      function clearAll() { timers.forEach(clearInterval); timers = []; }
+      function launch() {
+        reset(); running = true; noteEl.innerHTML = '<span style="color:var(--agents)">swarm running — 5 sub-agents in parallel</span>';
+        state.forEach(function (a, i) {
+          a.stt = "running"; a.cls = "";
+          var speed = 0.6 + Math.random() * 1.5;
+          var t = setInterval(function () {
+            if (!running) return;
+            a.p = Math.min(100, a.p + speed * (2 + Math.random() * 3));
+            if (a.p >= 100) { a.p = 100; a.stt = "done ✓"; a.cls = "done"; clearInterval(t); }
+            render();
+            if (state.every(function (x) { return x.cls === "done"; })) { running = false; noteEl.innerHTML = '<span style="color:var(--green)">all agents completed</span>'; }
+          }, 120);
+          timers.push(t);
+        });
+        render();
+      }
+      function cancel() {
+        if (!running && !state.some(function (a) { return a.stt === "running"; })) { noteEl.textContent = "nothing running to cancel."; return; }
+        running = false; clearAll();
+        state.forEach(function (a) { if (a.cls !== "done") { a.stt = "cancelled"; a.cls = "cancel"; } });
+        render(); noteEl.innerHTML = '<span style="color:var(--red)">⎋ swarm-wide cancel — every running agent stopped at once</span> <span style="color:var(--muted)">(old behavior stopped only the current batch)</span>';
+      }
+      m.addEventListener("click", function (e) { var b = e.target.closest("[data-a]"); if (!b) return; var a = b.getAttribute("data-a"); if (a === "launch") launch(); else if (a === "cancel") cancel(); else reset(); });
+      reset();
+    })();
+
+    // ===================== WIDGET: resilience / blip simulator =====================
+    (function () {
+      var m = $("#resilience-demo-mount"); if (!m) return;
+      m.innerHTML =
+        '<div class="rl" id="rl-out"><span class="m">ready — pick a scenario.</span></div>'
+        + '<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">'
+        + '<button class="wbtn ghost" data-s="old">⚡ connection blip — OLD</button>'
+        + '<button class="wbtn" data-s="new" style="border-color:var(--durability);color:var(--durability)">⚡ connection blip — NEW</button>'
+        + '<button class="wbtn" data-s="power" style="border-color:var(--durability);color:var(--durability)">🔌 power loss — atomic write</button>'
+        + '<button class="wbtn ghost" data-s="reset">⟳ reset</button>'
+        + '</div>';
+      var out = $("#rl-out", m), busy = false;
+      function play(lines) {
+        if (busy) return; busy = true; out.innerHTML = ""; var i = 0;
+        (function next() {
+          if (i >= lines.length) { busy = false; return; }
+          var d = document.createElement("div"); d.innerHTML = lines[i]; out.appendChild(d); i++; setTimeout(next, 620);
+        })();
+      }
+      var SCN = {
+        old: ['<span class="m">› building catalog export…</span>', '<span class="m">› connection lost</span>', '<span class="r">✗ ConnectionError — unhandled, surfaced as a crash</span>', '<span class="r">✗ traceback printed · session lost</span>'],
+        "new": ['<span class="m">› building catalog export…</span>', '<span class="m">› connection lost</span>', '<span class="a">⟳ recoverable drop — retrying (1/3)…</span>', '<span class="g">✓ reconnected — continuing where it left off</span>', '<span class="g">✓ session intact</span>'],
+        power: ['<span class="m">› writing session.pkl…</span>', '<span class="r">✗ power loss mid-write</span>', '<span class="a">› reboot · code_puppy starts</span>', '<span class="g">✓ atomic temp-then-rename means the previous file is intact — no corruption</span>', '<span class="g">✓ quick-resume (-qr) restores your branch session</span>']
+      };
+      m.addEventListener("click", function (e) { var b = e.target.closest("[data-s]"); if (!b) return; var s = b.getAttribute("data-s"); if (s === "reset") { out.innerHTML = '<span class="m">ready — pick a scenario.</span>'; busy = false; } else play(SCN[s]); });
+    })();
+
+    // ===================== WIDGET: provider matrix =====================
+    (function () {
+      var m = $("#provider-matrix-mount"); if (!m) return;
+      var rows = [
+        ["Ollama", "local", "#352", "Keep sensitive franchise data on-prem — nothing leaves the network"],
+        ["Cerebras", "hosted", "#368", "Very fast inference; strict tool-def + default endpoint fixed"],
+        ["Claude Opus 4-8", "hosted", "—", "Top-tier reasoning for the hard problems"],
+        ["Fable 5", "hosted", "—", "Adaptive thinking with a summarized thinking display"],
+        ["Unified menus + keys", "tooling", "#382 · #372", "Pick models and manage API keys from one menu"]
+      ];
+      m.innerHTML = '<table class="pm"><thead><tr><th>provider / model</th><th>type</th><th>PR</th><th>good for</th></tr></thead><tbody>'
+        + rows.map(function (r) { return '<tr><td><b>' + esc(r[0]) + '</b></td><td><span class="tag">' + esc(r[1]) + '</span></td><td style="font-family:var(--mono);font-size:11.5px;color:var(--muted)">' + esc(r[2]) + '</td><td>' + esc(r[3]) + '</td></tr>'; }).join("")
+        + '</tbody></table>';
+    })();
+
+    // ===================== WIDGET: governance layer map =====================
+    (function () {
+      var m = $("#gov-stack-mount"); if (!m) return;
+      var layers = [
+        ["1", ".code_puppy/plugins/", "project-level plugins load with the repo"],
+        ["2", "enabled_skills", "one source of truth · proactive activation before answering"],
+        ["3", "hooks · hook_engine", "allow / deny a tool call via stdout JSON"],
+        ["4", "dangerous-command guard", "toggle hard blocks on risky shell commands"],
+        ["5", "emoji_filter", "strip emojis from writes, shell, and streamed output"],
+        ["6", "AGENTS.md cap (10k)", "truncate oversized context to protect the budget"]
+      ];
+      m.innerHTML = '<div class="gl">' + layers.map(function (l) {
+        return '<div class="glr"><span class="ix">' + l[0] + '</span><span class="gt">' + esc(l[1]) + '</span><span class="gd">' + esc(l[2]) + '</span></div>';
+      }).join("") + '</div>';
+    })();
+  });
+  </script>
+</body>
+</html>

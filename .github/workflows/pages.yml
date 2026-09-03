@@ -1,0 +1,87 @@
+name: Deploy Field Guide to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/field-guide/**"
+      - "docs/field-guide-flat.html"
+      - "pages-hub/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch: {}
+
+permissions:
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare Pages artifact
+        run: |
+          mkdir -p _site
+
+          # 1. Landing hub at the root + shared assets (logo, favicon)
+          cp pages-hub/index.html _site/
+          cp -r pages-hub/assets _site/
+          # Inject live platform stats from the field guide data into the hub
+          node - <<'EOF'
+          const fs = require('fs');
+          const dataJs = fs.readFileSync('docs/field-guide/data.js', 'utf8')
+            .replace(/^window\.FIELD_GUIDE_DATA = /, '').replace(/;\s*$/, '');
+          const d = JSON.parse(dataJs);
+          let html = fs.readFileSync('_site/index.html', 'utf8');
+          html = html
+            .replace(/id="s-tools">—</,  `id="s-tools">${d.stats.tools}<`)
+            .replace(/id="s-agents">—</, `id="s-agents">${d.stats.agents}<`)
+            .replace(/id="s-plugins">—</,`id="s-plugins">${d.stats.plugins}<`)
+            .replace(/id="s-commits">—</,`id="s-commits">${d.stats.commitsLast2Months}<`);
+          fs.writeFileSync('_site/index.html', html);
+          EOF
+
+          # 2. Interactive field guide explorer
+          mkdir -p _site/field-guide
+          cp -r docs/field-guide/. _site/field-guide/
+
+          # 3. Release observatory
+          mkdir -p _site/releases
+          cp pages-hub/updates.html _site/releases/index.html
+
+          # 3b. Architecture diagram
+          mkdir -p _site/architecture
+          cp pages-hub/architecture.html _site/architecture/index.html
+
+          # 3c. Design system reference page
+          mkdir -p _site/design
+          cp pages-hub/design.html _site/design/index.html
+
+          # 4. Fully-offline flat file
+          mkdir -p _site/flat
+          cp docs/field-guide-flat.html _site/flat/index.html
+
+          # Stop GitHub Pages from Jekyll-transforming anything
+          touch _site/.nojekyll
+
+      # NOTE: actions/configure-pages deliberately omitted. It only sets
+      # static-generator metadata we don't use, and its codeload tarball
+      # was persistently 429ing (3 failed deploys on 2026-08-17).
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

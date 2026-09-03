@@ -1,0 +1,93 @@
+/* ============================================================
+   TOKENS — single source of truth, DS v2 "Cornerstone+"
+   Natural-language edits land HERE: every prompt-addressable
+   value is one custom property. theme.css consumes; nothing
+   in theme.css may hardcode a color, font, size, or z-magic.
+   ============================================================ */
+
+:root {
+  /* ── 1 · BRAND PRIMITIVES (Code-Puppy field-guide palette) ── */
+  --cp-ink-950: #06090d;
+  --cp-ink-900: #0b0f14;
+  --cp-ink-800: #111821;
+  --cp-ink-700: #151e28;
+  --cp-ink-600: #233040;
+  --cp-ink-500: #334459;
+
+  --cp-text: #e8eef4;
+  --cp-text-soft: #9fb0c3;
+  --cp-text-muted: #6b7d91;
+
+  --cp-gold: #f5b94d;   /* creator / brand primary */
+  --cp-sky: #6cb6ff;    /* builder / technical */
+  --cp-mint: #4cc46a;   /* hope / recovery */
+  --cp-violet: #b692f6; /* creative / weird */
+  --cp-coral: #ff7b72;  /* alarm / disruption */
+
+  /* ── 2 · SEMANTIC SURFACES & INK ── */
+  --surface-canvas: var(--cp-ink-900);
+  --surface-elev: var(--cp-ink-800);
+  --surface-card: var(--cp-ink-700);
+  --line: var(--cp-ink-600);
+  --line-light: var(--cp-ink-500);
+  --ink-primary: var(--cp-text);
+  --ink-soft: var(--cp-text-soft);
+  --ink-muted: var(--cp-text-muted);
+
+  /* ── 3 · ROLE ACCENTS ── */
+  --accent-creator: var(--cp-gold);
+  --accent-builder: var(--cp-sky);
+  --accent-hope: var(--cp-mint);
+  --accent-weird: var(--cp-violet);
+  --accent-alarm: var(--cp-coral);
+
+  /* ── 4 · ACT → HUE MAP (navigation by color; one hue per slide) ── */
+  --act-0: var(--accent-creator);  /* cold open        */
+  --act-1: var(--accent-builder);  /* 1895             */
+  --act-2: var(--accent-alarm);    /* panic pattern    */
+  --act-3: var(--accent-creator);  /* Chaplin (serif)  */
+  --act-4: var(--accent-hope);     /* sine wave        */
+  --act-5: var(--accent-alarm);    /* 2026 dip         */
+  --act-6: var(--accent-weird);    /* why humans win   */
+  --act-7: var(--accent-creator);  /* CPU answer       */
+  --act-8: var(--accent-creator);  /* the ask (seq'd)  */
+
+  /* ── 5 · TYPE FAMILIES ── */
+  --sans: "Inter", -apple-system, "Segoe UI", sans-serif;
+  --display: "Space Grotesk", "Inter", sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+  --serif: "Source Serif 4", Georgia, serif;
+
+  /* ── 6 · TYPE SCALE (@ 30px Reveal base; floors are WCAG/projector-driven) ── */
+  --type-mega: 3.4em;    /* STATEMENT display        */
+  --type-mega-max: 4.5em;
+  --type-h1: 2.6em;
+  --type-h2: 1.9em;
+  --type-h3: 1.3em;
+  --type-body: 0.85em;   /* prose ceiling            */
+  --type-small: 0.66em;  /* BODY FLOOR — nothing below this for reading text */
+  --type-micro: 0.52em;  /* eyebrows/attributions ONLY (never body) */
+  --type-quote: 1.1em;   /* pullquote                */
+  --type-chaplin: 1.5em; /* sacred text              */
+  --type-stat: 4.2em;    /* bigstat                  */
+
+  /* ── 7 · SPACE & GEOMETRY ── */
+  --margin-frame: 8%;          /* slide margins (slide-puppy rule)   */
+  --radius-card: 14px;
+  --radius-panel: 16px;
+  --radius-media: 10px;
+  --radius-pill: 999px;
+  --gap-grid: 0.8em;
+  --statement-height: 92vh;    /* load-bearing vs Reveal layout      */
+
+  /* ── 8 · MOTION BUDGET (wow is scarcity: 2 animated moments max) ── */
+  --motion-fade: slow;
+  --motion-autoanimate: 0.9s;
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-draw: 2.2s;         /* sine stroke-draw                   */
+  --motion-type-step: 0.7s;    /* terminal line cadence              */
+
+  /* ── 9 · ELEVATION / GLOW (luminous accents on dark) ── */
+  --glow-node: 14px;           /* panic-rail node bloom              */
+  --duotone-wash: 0.35;        /* .duo act-color multiply opacity    */
+}
