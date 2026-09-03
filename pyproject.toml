@@ -94,6 +94,7 @@ path = "spruce_grove/models.json"
 path = "spruce_grove/models_dev_api.json"
 
 [tool.ruff.lint.per-file-ignores]
+"spruce_grove/__init__.py" = ["E402"]
 "spruce_grove/main.py" = ["E402"]
 "spruce_grove/cli_runner.py" = ["E402"]
 "spruce_grove/messaging/__init__.py" = ["E402"]

@@ -158,5 +158,6 @@ Important rules:
         # into a cloned/persisted definition.
         return result
 
+
 # Historic class name (Code Puppy era), kept for third-party imports.
 CodePuppyAgent = SpruceGroveAgent

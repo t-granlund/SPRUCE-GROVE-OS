@@ -36,7 +36,7 @@ def get_core_plugins_version() -> str | None:
 # Planted in the grove. -Cedar
 __version__ = _get_distribution_version("spruce-grove", "0.0.0-dev")
 
-from spruce_grove._spruce_grove_compat import install as _install_legacy_shim
+from spruce_grove._code_puppy_compat import install as _install_legacy_shim
 
 _install_legacy_shim()
 del _install_legacy_shim

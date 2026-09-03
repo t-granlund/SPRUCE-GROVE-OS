@@ -8,14 +8,23 @@ core under its original dotted name, e.g. ``from code_puppy.callbacks import
 ``code_puppy`` or ``code_puppy.*`` to the corresponding ``spruce_grove``
 module, keeping the external plugin ecosystem working unchanged.
 
-The hook is *appended* to ``sys.meta_path`` so a genuinely installed
-``code_puppy`` distribution (if one ever exists alongside us) always wins.
+Design notes:
+
+- The finder is *prepended* to ``sys.meta_path``. It must come before
+  ``PathFinder`` because the legacy parent package gets aliased to the real
+  ``spruce_grove`` package, whose ``__path__`` would otherwise let
+  ``PathFinder`` load ``code_puppy.<submodule>`` as a *second, divergent*
+  module object from the same file.
+- If a genuinely installed ``code_puppy`` distribution is on ``sys.path``
+  (detected via ``PathFinder`` before our hook goes in), the shim stays out
+  of the way entirely and the real package wins.
 """
 
 from __future__ import annotations
 
 import importlib
 import importlib.abc
+import importlib.machinery
 import importlib.util
 import sys
 
@@ -65,8 +74,21 @@ class _CodePuppyAliasFinder(importlib.abc.MetaPathFinder):
         )
 
 
+def _real_legacy_package_exists() -> bool:
+    """True if a real ``code_puppy`` distribution is importable via sys.path."""
+    spec = importlib.machinery.PathFinder.find_spec(_LEGACY, None)
+    return spec is not None
+
+
 def install() -> None:
-    """Install the alias finder once (idempotent)."""
+    """Install the alias finder once (idempotent).
+
+    Skipped entirely when a real legacy package exists on disk - correctness
+    for external plugins matters, but an actual co-installed ``code_puppy``
+    must always win.
+    """
     if any(isinstance(f, _CodePuppyAliasFinder) for f in sys.meta_path):
         return
-    sys.meta_path.append(_CodePuppyAliasFinder())
+    if _real_legacy_package_exists():
+        return
+    sys.meta_path.insert(0, _CodePuppyAliasFinder())
