@@ -1,6 +1,6 @@
 """Tests for the DBOS plugin's startup_lock helpers.
 
-These guard the simultaneous-launch fix: multiple Code Puppy instances
+These guard the simultaneous-launch fix: multiple Spruce Grove instances
 (e.g. several Zellij panes) must serialize DBOS initialization instead of
 racing the shared SQLite system database and failing all-but-one.
 """

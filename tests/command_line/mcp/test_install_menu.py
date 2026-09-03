@@ -3,7 +3,7 @@
 from io import StringIO
 from unittest.mock import MagicMock, patch
 
-from code_puppy.command_line.mcp import install_menu as im
+from spruce_grove.command_line.mcp import install_menu as im
 
 
 class FakeServer:
@@ -168,7 +168,7 @@ class TestBrowseFlow:
 
 class TestRunMcpInstallMenu:
     def _session(self):
-        mock = patch("code_puppy.command_line.menu_session.menu_session")
+        mock = patch("spruce_grove.command_line.menu_session.menu_session")
         return mock
 
     def test_custom_selection_runs_form(self):

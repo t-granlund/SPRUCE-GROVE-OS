@@ -2,7 +2,7 @@
 theming owns banner styling). These tests pin the data contract the
 theme plugin depends on."""
 
-from code_puppy.command_line.colors_menu import (
+from spruce_grove.command_line.colors_menu import (
     BANNER_COLORS,
     BANNER_DISPLAY_INFO,
     BANNER_SAMPLE_CONTENT,
@@ -31,8 +31,8 @@ class TestBannerDataContract:
         # never drag UI dependencies in.
         import sys
 
-        import code_puppy.command_line.colors_menu as module
+        import spruce_grove.command_line.colors_menu as module
 
         source = open(module.__file__, encoding="utf-8").read()
         assert "prompt_toolkit" not in source
-        assert "code_puppy.command_line.colors_menu" in sys.modules
+        assert "spruce_grove.command_line.colors_menu" in sys.modules

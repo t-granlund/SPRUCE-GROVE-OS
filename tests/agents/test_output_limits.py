@@ -1,7 +1,7 @@
 """Unit tests for the harness output-limit capability builders.
 
 These capabilities replaced the hand-rolled ``filter_huge_messages`` pass;
-see ``code_puppy/agents/_output_limits.py`` for the migration story.
+see ``spruce_grove/agents/_output_limits.py`` for the migration story.
 """
 
 from pathlib import Path
@@ -17,13 +17,13 @@ from pydantic_ai.models.function import FunctionModel
 from pydantic_ai_harness.compaction import ClampOversizedMessages
 from pydantic_ai_harness.tool_output_limits import Spill, ToolOutputLimits, Truncate
 
-from code_puppy.agents import _output_limits
-from code_puppy.agents._output_limits import (
+from spruce_grove.agents import _output_limits
+from spruce_grove.agents._output_limits import (
     CLAMP_MAX_PART_TOKENS,
     build_response_clamp,
     build_tool_output_limits,
 )
-from code_puppy.config import (
+from spruce_grove.config import (
     TOOL_OUTPUT_LIMIT_CHARS_DEFAULT,
     get_tool_output_limit_chars,
 )
@@ -78,29 +78,29 @@ def test_response_clamp_budget_matches_legacy_filter():
 
 
 def test_config_default_when_unset(monkeypatch):
-    monkeypatch.setattr("code_puppy.config.get_value", lambda key: None)
+    monkeypatch.setattr("spruce_grove.config.get_value", lambda key: None)
     assert get_tool_output_limit_chars() == TOOL_OUTPUT_LIMIT_CHARS_DEFAULT
 
 
 def test_config_non_numeric_falls_back(monkeypatch):
-    monkeypatch.setattr("code_puppy.config.get_value", lambda key: "many")
+    monkeypatch.setattr("spruce_grove.config.get_value", lambda key: "many")
     assert get_tool_output_limit_chars() == TOOL_OUTPUT_LIMIT_CHARS_DEFAULT
 
 
 def test_config_explicit_zero_means_disabled(monkeypatch):
-    monkeypatch.setattr("code_puppy.config.get_value", lambda key: "0")
+    monkeypatch.setattr("spruce_grove.config.get_value", lambda key: "0")
     assert get_tool_output_limit_chars() == 0
 
 
 def test_config_negative_passes_through_as_disable(monkeypatch):
     """Pin the negative-disables semantic: a cleanup that normalizes negatives
     back to the default would silently re-enable an explicit opt-out."""
-    monkeypatch.setattr("code_puppy.config.get_value", lambda key: "-5")
+    monkeypatch.setattr("spruce_grove.config.get_value", lambda key: "-5")
     assert get_tool_output_limit_chars() == -5
 
 
 def test_config_whitespace_only_falls_back(monkeypatch):
-    monkeypatch.setattr("code_puppy.config.get_value", lambda key: "   ")
+    monkeypatch.setattr("spruce_grove.config.get_value", lambda key: "   ")
     assert get_tool_output_limit_chars() == TOOL_OUTPUT_LIMIT_CHARS_DEFAULT
 
 

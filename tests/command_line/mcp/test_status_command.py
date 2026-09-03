@@ -8,9 +8,9 @@ import pytest
 
 @pytest.fixture
 def status_cmd():
-    with patch("code_puppy.command_line.mcp.base.get_mcp_manager") as mock_mgr:
+    with patch("spruce_grove.command_line.mcp.base.get_mcp_manager") as mock_mgr:
         mock_mgr.return_value = MagicMock()
-        from code_puppy.command_line.mcp.status_command import StatusCommand
+        from spruce_grove.command_line.mcp.status_command import StatusCommand
 
         return StatusCommand()
 
@@ -18,8 +18,8 @@ def status_cmd():
 class TestStatusCommand:
     def test_generates_group_id(self, status_cmd):
         with (
-            patch("code_puppy.command_line.mcp.list_command.emit_info"),
-            patch("code_puppy.command_line.mcp.status_command.emit_info"),
+            patch("spruce_grove.command_line.mcp.list_command.emit_info"),
+            patch("spruce_grove.command_line.mcp.status_command.emit_info"),
         ):
             status_cmd.manager.list_servers.return_value = []
             status_cmd.execute([])
@@ -27,9 +27,9 @@ class TestStatusCommand:
     def test_no_args_delegates_to_list(self, status_cmd):
         with (
             patch(
-                "code_puppy.command_line.mcp.list_command.emit_info"
+                "spruce_grove.command_line.mcp.list_command.emit_info"
             ) as mock_list_emit,
-            patch("code_puppy.command_line.mcp.status_command.emit_info"),
+            patch("spruce_grove.command_line.mcp.status_command.emit_info"),
         ):
             status_cmd.manager.list_servers.return_value = []
             status_cmd.execute([], group_id="g1")
@@ -38,11 +38,11 @@ class TestStatusCommand:
     def test_server_not_found(self, status_cmd):
         with (
             patch(
-                "code_puppy.command_line.mcp.status_command.find_server_id_by_name",
+                "spruce_grove.command_line.mcp.status_command.find_server_id_by_name",
                 return_value=None,
             ),
-            patch("code_puppy.command_line.mcp.status_command.suggest_similar_servers"),
-            patch("code_puppy.command_line.mcp.status_command.emit_info") as mock_emit,
+            patch("spruce_grove.command_line.mcp.status_command.suggest_similar_servers"),
+            patch("spruce_grove.command_line.mcp.status_command.emit_info") as mock_emit,
         ):
             status_cmd.execute(["missing"], group_id="g1")
             assert "not found" in str(mock_emit.call_args_list)
@@ -62,12 +62,12 @@ class TestStatusCommand:
         }
         with (
             patch(
-                "code_puppy.command_line.mcp.status_command.find_server_id_by_name",
+                "spruce_grove.command_line.mcp.status_command.find_server_id_by_name",
                 return_value="id1",
             ),
-            patch("code_puppy.command_line.mcp.status_command.emit_info") as mock_emit,
-            patch("code_puppy.command_line.mcp.status_command.emit_error"),
-            patch("code_puppy.mcp_.async_lifecycle.get_lifecycle_manager") as mock_lm,
+            patch("spruce_grove.command_line.mcp.status_command.emit_info") as mock_emit,
+            patch("spruce_grove.command_line.mcp.status_command.emit_error"),
+            patch("spruce_grove.mcp_.async_lifecycle.get_lifecycle_manager") as mock_lm,
         ):
             mock_lm.return_value.is_running.return_value = True
             status_cmd.execute(["myserver"], group_id="g1")
@@ -77,10 +77,10 @@ class TestStatusCommand:
         status_cmd.manager.get_server_status.return_value = {"exists": False}
         with (
             patch(
-                "code_puppy.command_line.mcp.status_command.find_server_id_by_name",
+                "spruce_grove.command_line.mcp.status_command.find_server_id_by_name",
                 return_value="id1",
             ),
-            patch("code_puppy.command_line.mcp.status_command.emit_info") as mock_emit,
+            patch("spruce_grove.command_line.mcp.status_command.emit_info") as mock_emit,
         ):
             status_cmd.execute(["myserver"], group_id="g1")
             assert "not found" in str(mock_emit.call_args_list)
@@ -100,13 +100,13 @@ class TestStatusCommand:
         }
         with (
             patch(
-                "code_puppy.command_line.mcp.status_command.find_server_id_by_name",
+                "spruce_grove.command_line.mcp.status_command.find_server_id_by_name",
                 return_value="id1",
             ),
-            patch("code_puppy.command_line.mcp.status_command.emit_info"),
-            patch("code_puppy.command_line.mcp.status_command.emit_error"),
+            patch("spruce_grove.command_line.mcp.status_command.emit_info"),
+            patch("spruce_grove.command_line.mcp.status_command.emit_error"),
             patch(
-                "code_puppy.mcp_.async_lifecycle.get_lifecycle_manager",
+                "spruce_grove.mcp_.async_lifecycle.get_lifecycle_manager",
                 side_effect=Exception("nope"),
             ),
         ):
@@ -127,12 +127,12 @@ class TestStatusCommand:
         }
         with (
             patch(
-                "code_puppy.command_line.mcp.status_command.find_server_id_by_name",
+                "spruce_grove.command_line.mcp.status_command.find_server_id_by_name",
                 return_value="id1",
             ),
-            patch("code_puppy.command_line.mcp.status_command.emit_info"),
-            patch("code_puppy.command_line.mcp.status_command.emit_error"),
-            patch("code_puppy.mcp_.async_lifecycle.get_lifecycle_manager") as mock_lm,
+            patch("spruce_grove.command_line.mcp.status_command.emit_info"),
+            patch("spruce_grove.command_line.mcp.status_command.emit_error"),
+            patch("spruce_grove.mcp_.async_lifecycle.get_lifecycle_manager") as mock_lm,
         ):
             mock_lm.return_value.is_running.return_value = False
             status_cmd.execute(["myserver"], group_id="g1")
@@ -155,12 +155,12 @@ class TestStatusCommand:
         }
         with (
             patch(
-                "code_puppy.command_line.mcp.status_command.find_server_id_by_name",
+                "spruce_grove.command_line.mcp.status_command.find_server_id_by_name",
                 return_value="id1",
             ),
-            patch("code_puppy.command_line.mcp.status_command.emit_info") as mock_emit,
-            patch("code_puppy.command_line.mcp.status_command.emit_error"),
-            patch("code_puppy.mcp_.async_lifecycle.get_lifecycle_manager") as mock_lm,
+            patch("spruce_grove.command_line.mcp.status_command.emit_info") as mock_emit,
+            patch("spruce_grove.command_line.mcp.status_command.emit_error"),
+            patch("spruce_grove.mcp_.async_lifecycle.get_lifecycle_manager") as mock_lm,
         ):
             mock_lm.return_value.is_running.return_value = True
             status_cmd.execute(["myserver"], group_id="g1")
@@ -182,13 +182,13 @@ class TestStatusCommand:
         }
         with (
             patch(
-                "code_puppy.command_line.mcp.status_command.find_server_id_by_name",
+                "spruce_grove.command_line.mcp.status_command.find_server_id_by_name",
                 return_value="id1",
             ),
-            patch("code_puppy.command_line.mcp.status_command.emit_info"),
-            patch("code_puppy.command_line.mcp.status_command.emit_error"),
+            patch("spruce_grove.command_line.mcp.status_command.emit_info"),
+            patch("spruce_grove.command_line.mcp.status_command.emit_error"),
             patch(
-                "code_puppy.mcp_.async_lifecycle.get_lifecycle_manager",
+                "spruce_grove.mcp_.async_lifecycle.get_lifecycle_manager",
                 side_effect=Exception,
             ),
         ):
@@ -198,11 +198,11 @@ class TestStatusCommand:
         status_cmd.manager.get_server_status.side_effect = RuntimeError("boom")
         with (
             patch(
-                "code_puppy.command_line.mcp.status_command.find_server_id_by_name",
+                "spruce_grove.command_line.mcp.status_command.find_server_id_by_name",
                 return_value="id1",
             ),
-            patch("code_puppy.command_line.mcp.status_command.emit_info"),
-            patch("code_puppy.command_line.mcp.status_command.emit_error") as mock_err,
+            patch("spruce_grove.command_line.mcp.status_command.emit_info"),
+            patch("spruce_grove.command_line.mcp.status_command.emit_error") as mock_err,
         ):
             status_cmd.execute(["myserver"], group_id="g1")
             assert "boom" in str(mock_err.call_args)
@@ -210,10 +210,10 @@ class TestStatusCommand:
     def test_execute_exception(self, status_cmd):
         with (
             patch(
-                "code_puppy.command_line.mcp.status_command.find_server_id_by_name",
+                "spruce_grove.command_line.mcp.status_command.find_server_id_by_name",
                 side_effect=RuntimeError("fail"),
             ),
-            patch("code_puppy.command_line.mcp.status_command.emit_info") as mock_emit,
+            patch("spruce_grove.command_line.mcp.status_command.emit_info") as mock_emit,
         ):
             status_cmd.execute(["srv"], group_id="g1")
             assert any(
@@ -224,6 +224,6 @@ class TestStatusCommand:
     def test_detailed_generates_group_id(self, status_cmd):
         status_cmd.manager.get_server_status.return_value = {"exists": False}
         with (
-            patch("code_puppy.command_line.mcp.status_command.emit_info"),
+            patch("spruce_grove.command_line.mcp.status_command.emit_info"),
         ):
             status_cmd._show_detailed_server_status("id1", "srv")

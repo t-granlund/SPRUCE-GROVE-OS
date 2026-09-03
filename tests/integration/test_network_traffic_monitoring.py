@@ -1,6 +1,6 @@
 """Integration test to capture and report all network traffic during message processing.
 
-This test uses a custom HTTP/HTTPS proxy to monitor all requests made by code-puppy
+This test uses a custom HTTP/HTTPS proxy to monitor all requests made by spruce-grove
 when processing a simple message. The goal is to identify all external domains contacted
 so we can build proper assertions and understand the dependency chain.
 """
@@ -296,7 +296,7 @@ def test_network_traffic_on_simple_message(
     This test:
     1. Starts a logging proxy server
     2. Configures httpx to use the proxy
-    3. Spawns code-puppy in interactive mode
+    3. Spawns spruce-grove in interactive mode
     4. Sends a simple "hi" message
     5. Captures all network calls
     6. Generates a detailed report
@@ -323,7 +323,7 @@ def test_network_traffic_on_simple_message(
         test_env["http_proxy"] = proxy_url  # lowercase variants
         test_env["https_proxy"] = proxy_url
         # Disable retry transport for proxy testing (disables SSL verification)
-        test_env["CODE_PUPPY_DISABLE_RETRY_TRANSPORT"] = "true"
+        test_env["SPRUCE_GROVE_DISABLE_RETRY_TRANSPORT"] = "true"
 
         # Spawn CLI with proxy configured
         result = cli_harness.spawn(args=["-i"], env=test_env)

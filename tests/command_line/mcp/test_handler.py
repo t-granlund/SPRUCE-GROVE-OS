@@ -7,9 +7,9 @@ import pytest
 
 @pytest.fixture
 def handler():
-    with patch("code_puppy.command_line.mcp.base.get_mcp_manager") as mock_mgr:
+    with patch("spruce_grove.command_line.mcp.base.get_mcp_manager") as mock_mgr:
         mock_mgr.return_value = MagicMock()
-        from code_puppy.command_line.mcp.handler import MCPCommandHandler
+        from spruce_grove.command_line.mcp.handler import MCPCommandHandler
 
         h = MCPCommandHandler()
         # Mock all sub-commands
@@ -43,19 +43,19 @@ class TestMCPCommandHandler:
         assert args[0][0] == ["myserver"]
 
     def test_unknown_subcommand(self, handler):
-        with patch("code_puppy.command_line.mcp.handler.emit_info") as mock_emit:
+        with patch("spruce_grove.command_line.mcp.handler.emit_info") as mock_emit:
             assert handler.handle_mcp_command("/mcp foobar") is True
             assert mock_emit.call_count == 2  # unknown + help hint
 
     def test_shlex_error(self, handler):
-        with patch("code_puppy.command_line.mcp.handler.emit_info") as mock_emit:
+        with patch("spruce_grove.command_line.mcp.handler.emit_info") as mock_emit:
             assert handler.handle_mcp_command('/mcp "unclosed') is True
             call_args_str = str(mock_emit.call_args_list[0])
             assert "Invalid command syntax" in call_args_str or mock_emit.called
 
     def test_exception_in_command(self, handler):
         handler._commands["list"].execute.side_effect = Exception("boom")
-        with patch("code_puppy.command_line.mcp.handler.emit_info"):
+        with patch("spruce_grove.command_line.mcp.handler.emit_info"):
             assert handler.handle_mcp_command("/mcp list") is True
 
     def test_shlex_empty_result(self, handler):

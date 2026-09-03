@@ -1,4 +1,4 @@
-"""Tests for code_puppy.secret_store_backends -- consolidated macOS backend.
+"""Tests for spruce_grove.secret_store_backends -- consolidated macOS backend.
 
 Covers:
     1. gating -- should_use_consolidated_backend only on darwin + default
@@ -21,7 +21,7 @@ if sys.platform == "win32":
         allow_module_level=True,
     )
 
-from code_puppy import secret_store_backends as ssb  # noqa: E402
+from spruce_grove import secret_store_backends as ssb  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
@@ -89,9 +89,9 @@ def backend(tmp_path, monkeypatch):
 class TestBlobStorage:
     def test_multiple_secrets_share_one_item(self, backend):
         be, store = backend
-        be.set_password("code-puppy", "a", "1")
-        be.set_password("code-puppy", "b", "2")
-        be.set_password("code-puppy", "c", "3")
+        be.set_password("spruce-grove", "a", "1")
+        be.set_password("spruce-grove", "b", "2")
+        be.set_password("spruce-grove", "c", "3")
         # Exactly one keychain item exists, holding all three.
         assert len(store) == 1
         blob = json.loads(next(iter(store.values())))
@@ -99,27 +99,27 @@ class TestBlobStorage:
 
     def test_roundtrip(self, backend):
         be, _ = backend
-        be.set_password("code-puppy", "tok", "hunter2")
-        assert be.get_password("code-puppy", "tok") == "hunter2"
+        be.set_password("spruce-grove", "tok", "hunter2")
+        assert be.get_password("spruce-grove", "tok") == "hunter2"
 
     def test_get_missing_returns_none(self, backend):
         be, _ = backend
-        assert be.get_password("code-puppy", "nope") is None
+        assert be.get_password("spruce-grove", "nope") is None
 
     def test_delete_removes_only_that_key(self, backend):
         be, store = backend
-        be.set_password("code-puppy", "a", "1")
-        be.set_password("code-puppy", "b", "2")
-        be.delete_password("code-puppy", "a")
+        be.set_password("spruce-grove", "a", "1")
+        be.set_password("spruce-grove", "b", "2")
+        be.delete_password("spruce-grove", "a")
         blob = json.loads(next(iter(store.values())))
         assert blob == {"b": "2"}
 
     def test_distinct_services_get_distinct_items(self, backend):
         be, store = backend
-        be.set_password("code-puppy", "tok", "one")
+        be.set_password("spruce-grove", "tok", "one")
         be.set_password("other-app", "tok", "two")
         assert len(store) == 2
-        assert be.get_password("code-puppy", "tok") == "one"
+        assert be.get_password("spruce-grove", "tok") == "one"
         assert be.get_password("other-app", "tok") == "two"
 
 
@@ -127,17 +127,17 @@ class TestCorruptionSafety:
     def test_corrupt_blob_raises_not_clobbers(self, backend):
         be, store = backend
         # Simulate an unparseable existing blob.
-        store[("code-puppy", ssb._BLOB_ACCOUNT)] = "{ not json"
+        store[("spruce-grove", ssb._BLOB_ACCOUNT)] = "{ not json"
         with pytest.raises(json.JSONDecodeError):
-            be.set_password("code-puppy", "a", "1")
+            be.set_password("spruce-grove", "a", "1")
         # The bad blob is left intact; no silent overwrite.
-        assert store[("code-puppy", ssb._BLOB_ACCOUNT)] == "{ not json"
+        assert store[("spruce-grove", ssb._BLOB_ACCOUNT)] == "{ not json"
 
     def test_non_object_blob_rejected(self, backend):
         be, store = backend
-        store[("code-puppy", ssb._BLOB_ACCOUNT)] = json.dumps(["not", "a", "dict"])
+        store[("spruce-grove", ssb._BLOB_ACCOUNT)] = json.dumps(["not", "a", "dict"])
         with pytest.raises(ValueError, match="not a JSON object"):
-            be.get_password("code-puppy", "a")
+            be.get_password("spruce-grove", "a")
 
 
 # ---------------------------------------------------------------------------

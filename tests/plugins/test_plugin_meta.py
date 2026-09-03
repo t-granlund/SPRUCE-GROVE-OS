@@ -17,7 +17,7 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy import callbacks
+from spruce_grove import callbacks
 from code_puppy_core_plugins.plugin_list import plugin_meta
 from code_puppy_core_plugins.plugin_list.plugins_menu_render import (
     fill_pane,
@@ -82,7 +82,7 @@ class TestResolveModule:
     @pytest.mark.parametrize(
         "tier,template",
         [
-            ("builtin", "code_puppy.plugins.{name}.register_callbacks"),
+            ("builtin", "spruce_grove.plugins.{name}.register_callbacks"),
             ("user", "{name}.register_callbacks"),
             ("project", "project_plugins.{name}.register_callbacks"),
         ],
@@ -106,7 +106,7 @@ class TestGetDescription:
         mod = _fake_module(doc=doc, file="/x/register_callbacks.py")
         monkeypatch.setitem(
             __import__("sys").modules,
-            "code_puppy.plugins.descplug.register_callbacks",
+            "spruce_grove.plugins.descplug.register_callbacks",
             mod,
         )
 
@@ -166,7 +166,7 @@ class TestGetFilePath:
             del mod.__file__
         monkeypatch.setitem(
             __import__("sys").modules,
-            "code_puppy.plugins.nofile.register_callbacks",
+            "spruce_grove.plugins.nofile.register_callbacks",
             mod,
         )
         assert plugin_meta.get_file_path("nofile", "builtin") is None
@@ -208,7 +208,7 @@ class TestGetHooks:
         _register_owned("disabledplug", "startup")
         _register_owned("disabledplug", "stream_event")
         with patch(
-            "code_puppy.plugins.config.get_disabled_plugins",
+            "spruce_grove.plugins.config.get_disabled_plugins",
             return_value={"disabledplug"},
         ):
             assert plugin_meta.get_hooks("disabledplug") == [
@@ -232,11 +232,11 @@ def _make_menu(name="previewplug", tier="builtin"):
 
     with (
         patch(
-            "code_puppy.plugins.get_loaded_plugins",
+            "spruce_grove.plugins.get_loaded_plugins",
             return_value={"builtin": [], "user": [], "project": []},
         ),
         patch(
-            "code_puppy.plugins.config.get_disabled_plugins",
+            "spruce_grove.plugins.config.get_disabled_plugins",
             return_value=set(),
         ),
     ):

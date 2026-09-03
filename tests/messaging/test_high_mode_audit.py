@@ -1,6 +1,6 @@
 """Audit: High output mode — verify it only exposes existing data, adds nothing new.
 
-Bead: code_puppy_oss-bmc
+Bead: spruce_grove_oss-bmc
 
 Principle: High mode REMOVES filters and truncation.  It does NOT add new
 annotations.  Every high-mode annotation must trace to an existing field
@@ -15,13 +15,13 @@ from unittest.mock import MagicMock, patch
 
 from rich.console import Console
 
-from code_puppy.agents.run_stats import (
+from spruce_grove.agents.run_stats import (
     AgentRunStats,
     _render_high_mode_stats,
     _render_high_mode_tool_result,
 )
-from code_puppy.messaging.bus import MessageBus
-from code_puppy.messaging.messages import (
+from spruce_grove.messaging.bus import MessageBus
+from spruce_grove.messaging.messages import (
     AgentReasoningMessage,
     DiffLine,
     DiffMessage,
@@ -31,7 +31,7 @@ from code_puppy.messaging.messages import (
     ShellOutputMessage,
     SubAgentInvocationMessage,
 )
-from code_puppy.messaging.rich_renderer import RichConsoleRenderer
+from spruce_grove.messaging.rich_renderer import RichConsoleRenderer
 
 
 # ---------------------------------------------------------------------------
@@ -39,19 +39,19 @@ from code_puppy.messaging.rich_renderer import RichConsoleRenderer
 # ---------------------------------------------------------------------------
 
 _HIGH_PATCHES = {
-    "code_puppy.messaging.rich_renderer.get_output_level": "high",
-    "code_puppy.messaging.rich_renderer.get_subagent_verbose": False,
-    "code_puppy.messaging.rich_renderer.get_suppress_informational_messages": False,
-    "code_puppy.messaging.rich_renderer.get_suppress_thinking_messages": False,
-    "code_puppy.messaging.rich_renderer.is_subagent": False,
+    "spruce_grove.messaging.rich_renderer.get_output_level": "high",
+    "spruce_grove.messaging.rich_renderer.get_subagent_verbose": False,
+    "spruce_grove.messaging.rich_renderer.get_suppress_informational_messages": False,
+    "spruce_grove.messaging.rich_renderer.get_suppress_thinking_messages": False,
+    "spruce_grove.messaging.rich_renderer.is_subagent": False,
 }
 
 _MEDIUM_PATCHES = {
-    "code_puppy.messaging.rich_renderer.get_output_level": "medium",
-    "code_puppy.messaging.rich_renderer.get_subagent_verbose": False,
-    "code_puppy.messaging.rich_renderer.get_suppress_informational_messages": False,
-    "code_puppy.messaging.rich_renderer.get_suppress_thinking_messages": False,
-    "code_puppy.messaging.rich_renderer.is_subagent": False,
+    "spruce_grove.messaging.rich_renderer.get_output_level": "medium",
+    "spruce_grove.messaging.rich_renderer.get_subagent_verbose": False,
+    "spruce_grove.messaging.rich_renderer.get_suppress_informational_messages": False,
+    "spruce_grove.messaging.rich_renderer.get_suppress_thinking_messages": False,
+    "spruce_grove.messaging.rich_renderer.is_subagent": False,
 }
 
 
@@ -111,10 +111,10 @@ class TestChecklist1_ThinkingFullyExpanded:
             next_steps="Refactor module X.",
         )
         patches = {
-            "code_puppy.messaging.rich_renderer.get_output_level": "high",
-            "code_puppy.messaging.rich_renderer.get_suppress_thinking_messages": True,
-            "code_puppy.messaging.rich_renderer.get_suppress_informational_messages": False,
-            "code_puppy.messaging.rich_renderer.is_subagent": False,
+            "spruce_grove.messaging.rich_renderer.get_output_level": "high",
+            "spruce_grove.messaging.rich_renderer.get_suppress_thinking_messages": True,
+            "spruce_grove.messaging.rich_renderer.get_suppress_informational_messages": False,
+            "spruce_grove.messaging.rich_renderer.is_subagent": False,
         }
         out = _render_with_patches(renderer, console, msg, patches)
         assert "Deep thoughts" in out
@@ -124,20 +124,20 @@ class TestChecklist1_ThinkingFullyExpanded:
         renderer, console, _ = _make_renderer()
         msg = AgentReasoningMessage(reasoning="Should be hidden.")
         patches = {
-            "code_puppy.messaging.rich_renderer.get_output_level": "medium",
-            "code_puppy.messaging.rich_renderer.get_suppress_thinking_messages": True,
-            "code_puppy.messaging.rich_renderer.get_suppress_informational_messages": False,
-            "code_puppy.messaging.rich_renderer.is_subagent": False,
+            "spruce_grove.messaging.rich_renderer.get_output_level": "medium",
+            "spruce_grove.messaging.rich_renderer.get_suppress_thinking_messages": True,
+            "spruce_grove.messaging.rich_renderer.get_suppress_informational_messages": False,
+            "spruce_grove.messaging.rich_renderer.is_subagent": False,
         }
         out = _render_with_patches(renderer, console, msg, patches)
         assert out.strip() == ""
 
     def test_streaming_thinking_not_suppressed(self):
         """_suppress_thinking_stream returns False in high mode."""
-        from code_puppy.agents.event_stream_handler import _suppress_thinking_stream
+        from spruce_grove.agents.event_stream_handler import _suppress_thinking_stream
 
         with patch(
-            "code_puppy.agents.event_stream_handler.get_output_level",
+            "spruce_grove.agents.event_stream_handler.get_output_level",
             return_value="high",
         ):
             assert _suppress_thinking_stream() is False
@@ -145,25 +145,25 @@ class TestChecklist1_ThinkingFullyExpanded:
     def test_legacy_thinking_not_suppressed_in_high_mode(self):
         """_should_suppress_legacy does NOT hide thinking in high mode.
 
-        Regression test for code_puppy_oss-smu: the legacy renderer path
+        Regression test for spruce_grove_oss-smu: the legacy renderer path
         was missing the output_level != "high" guard that rich_renderer
         and event_stream_handler both have.
         """
-        from code_puppy.messaging.message_queue import MessageType, UIMessage
-        from code_puppy.messaging.renderers import _should_suppress_legacy
+        from spruce_grove.messaging.message_queue import MessageType, UIMessage
+        from spruce_grove.messaging.renderers import _should_suppress_legacy
 
         msg = UIMessage(type=MessageType.AGENT_REASONING, content="Deep thoughts")
         with (
             patch(
-                "code_puppy.messaging.renderers._get_output_level",
+                "spruce_grove.messaging.renderers._get_output_level",
                 return_value="high",
             ),
             patch(
-                "code_puppy.messaging.renderers._get_suppress_informational",
+                "spruce_grove.messaging.renderers._get_suppress_informational",
                 return_value=False,
             ),
             patch(
-                "code_puppy.messaging.renderers._get_suppress_thinking",
+                "spruce_grove.messaging.renderers._get_suppress_thinking",
                 return_value=True,
             ),
         ):
@@ -171,21 +171,21 @@ class TestChecklist1_ThinkingFullyExpanded:
 
     def test_legacy_planned_next_steps_not_suppressed_in_high_mode(self):
         """PLANNED_NEXT_STEPS (also a _THINKING_TYPE) is visible in high mode."""
-        from code_puppy.messaging.message_queue import MessageType, UIMessage
-        from code_puppy.messaging.renderers import _should_suppress_legacy
+        from spruce_grove.messaging.message_queue import MessageType, UIMessage
+        from spruce_grove.messaging.renderers import _should_suppress_legacy
 
         msg = UIMessage(type=MessageType.PLANNED_NEXT_STEPS, content="Next up")
         with (
             patch(
-                "code_puppy.messaging.renderers._get_output_level",
+                "spruce_grove.messaging.renderers._get_output_level",
                 return_value="high",
             ),
             patch(
-                "code_puppy.messaging.renderers._get_suppress_informational",
+                "spruce_grove.messaging.renderers._get_suppress_informational",
                 return_value=False,
             ),
             patch(
-                "code_puppy.messaging.renderers._get_suppress_thinking",
+                "spruce_grove.messaging.renderers._get_suppress_thinking",
                 return_value=True,
             ),
         ):
@@ -193,21 +193,21 @@ class TestChecklist1_ThinkingFullyExpanded:
 
     def test_legacy_thinking_still_suppressed_in_medium_mode(self):
         """Contrast: medium + suppress_thinking=True hides thinking."""
-        from code_puppy.messaging.message_queue import MessageType, UIMessage
-        from code_puppy.messaging.renderers import _should_suppress_legacy
+        from spruce_grove.messaging.message_queue import MessageType, UIMessage
+        from spruce_grove.messaging.renderers import _should_suppress_legacy
 
         msg = UIMessage(type=MessageType.AGENT_REASONING, content="Thoughts")
         with (
             patch(
-                "code_puppy.messaging.renderers._get_output_level",
+                "spruce_grove.messaging.renderers._get_output_level",
                 return_value="medium",
             ),
             patch(
-                "code_puppy.messaging.renderers._get_suppress_informational",
+                "spruce_grove.messaging.renderers._get_suppress_informational",
                 return_value=False,
             ),
             patch(
-                "code_puppy.messaging.renderers._get_suppress_thinking",
+                "spruce_grove.messaging.renderers._get_suppress_thinking",
                 return_value=True,
             ),
         ):
@@ -222,88 +222,88 @@ class TestChecklist1_ThinkingFullyExpanded:
 class TestChecklist1b_InformationalNotSuppressedInHighMode:
     """High mode overrides suppress_informational_messages toggle.
 
-    Regression test for code_puppy_oss-1xz: suppress_informational_messages
+    Regression test for spruce_grove_oss-1xz: suppress_informational_messages
     was checked without an output_level guard, causing INFO/WARNING/SUCCESS
     messages to be hidden even in high mode.
     """
 
     def test_info_not_suppressed_in_high_mode_rich_renderer(self):
         """TextMessage(INFO) renders in high mode even with suppress toggle on."""
-        from code_puppy.messaging.messages import MessageLevel, TextMessage
+        from spruce_grove.messaging.messages import MessageLevel, TextMessage
 
         renderer, console, _ = _make_renderer()
         msg = TextMessage(level=MessageLevel.INFO, text="Important info")
         patches = {
-            "code_puppy.messaging.rich_renderer.get_output_level": "high",
-            "code_puppy.messaging.rich_renderer.get_suppress_informational_messages": True,
-            "code_puppy.messaging.rich_renderer.get_suppress_thinking_messages": False,
-            "code_puppy.messaging.rich_renderer.is_subagent": False,
+            "spruce_grove.messaging.rich_renderer.get_output_level": "high",
+            "spruce_grove.messaging.rich_renderer.get_suppress_informational_messages": True,
+            "spruce_grove.messaging.rich_renderer.get_suppress_thinking_messages": False,
+            "spruce_grove.messaging.rich_renderer.is_subagent": False,
         }
         out = _render_with_patches(renderer, console, msg, patches)
         assert "Important info" in out
 
     def test_warning_not_suppressed_in_high_mode_rich_renderer(self):
         """TextMessage(WARNING) renders in high mode even with suppress toggle on."""
-        from code_puppy.messaging.messages import MessageLevel, TextMessage
+        from spruce_grove.messaging.messages import MessageLevel, TextMessage
 
         renderer, console, _ = _make_renderer()
         msg = TextMessage(level=MessageLevel.WARNING, text="Critical warning")
         patches = {
-            "code_puppy.messaging.rich_renderer.get_output_level": "high",
-            "code_puppy.messaging.rich_renderer.get_suppress_informational_messages": True,
-            "code_puppy.messaging.rich_renderer.get_suppress_thinking_messages": False,
-            "code_puppy.messaging.rich_renderer.is_subagent": False,
+            "spruce_grove.messaging.rich_renderer.get_output_level": "high",
+            "spruce_grove.messaging.rich_renderer.get_suppress_informational_messages": True,
+            "spruce_grove.messaging.rich_renderer.get_suppress_thinking_messages": False,
+            "spruce_grove.messaging.rich_renderer.is_subagent": False,
         }
         out = _render_with_patches(renderer, console, msg, patches)
         assert "Critical warning" in out
 
     def test_success_not_suppressed_in_high_mode_rich_renderer(self):
         """TextMessage(SUCCESS) renders in high mode even with suppress toggle on."""
-        from code_puppy.messaging.messages import MessageLevel, TextMessage
+        from spruce_grove.messaging.messages import MessageLevel, TextMessage
 
         renderer, console, _ = _make_renderer()
         msg = TextMessage(level=MessageLevel.SUCCESS, text="Great success")
         patches = {
-            "code_puppy.messaging.rich_renderer.get_output_level": "high",
-            "code_puppy.messaging.rich_renderer.get_suppress_informational_messages": True,
-            "code_puppy.messaging.rich_renderer.get_suppress_thinking_messages": False,
-            "code_puppy.messaging.rich_renderer.is_subagent": False,
+            "spruce_grove.messaging.rich_renderer.get_output_level": "high",
+            "spruce_grove.messaging.rich_renderer.get_suppress_informational_messages": True,
+            "spruce_grove.messaging.rich_renderer.get_suppress_thinking_messages": False,
+            "spruce_grove.messaging.rich_renderer.is_subagent": False,
         }
         out = _render_with_patches(renderer, console, msg, patches)
         assert "Great success" in out
 
     def test_info_still_suppressed_in_medium_mode(self):
         """Contrast: medium + suppress_informational=True hides the message."""
-        from code_puppy.messaging.messages import MessageLevel, TextMessage
+        from spruce_grove.messaging.messages import MessageLevel, TextMessage
 
         renderer, console, _ = _make_renderer()
         msg = TextMessage(level=MessageLevel.INFO, text="Should be hidden")
         patches = {
-            "code_puppy.messaging.rich_renderer.get_output_level": "medium",
-            "code_puppy.messaging.rich_renderer.get_suppress_informational_messages": True,
-            "code_puppy.messaging.rich_renderer.get_suppress_thinking_messages": False,
-            "code_puppy.messaging.rich_renderer.is_subagent": False,
+            "spruce_grove.messaging.rich_renderer.get_output_level": "medium",
+            "spruce_grove.messaging.rich_renderer.get_suppress_informational_messages": True,
+            "spruce_grove.messaging.rich_renderer.get_suppress_thinking_messages": False,
+            "spruce_grove.messaging.rich_renderer.is_subagent": False,
         }
         out = _render_with_patches(renderer, console, msg, patches)
         assert out.strip() == ""
 
     def test_legacy_info_not_suppressed_in_high_mode(self):
         """_should_suppress_legacy does NOT hide INFO in high mode."""
-        from code_puppy.messaging.message_queue import MessageType, UIMessage
-        from code_puppy.messaging.renderers import _should_suppress_legacy
+        from spruce_grove.messaging.message_queue import MessageType, UIMessage
+        from spruce_grove.messaging.renderers import _should_suppress_legacy
 
         msg = UIMessage(type=MessageType.INFO, content="Info message")
         with (
             patch(
-                "code_puppy.messaging.renderers._get_output_level",
+                "spruce_grove.messaging.renderers._get_output_level",
                 return_value="high",
             ),
             patch(
-                "code_puppy.messaging.renderers._get_suppress_informational",
+                "spruce_grove.messaging.renderers._get_suppress_informational",
                 return_value=True,
             ),
             patch(
-                "code_puppy.messaging.renderers._get_suppress_thinking",
+                "spruce_grove.messaging.renderers._get_suppress_thinking",
                 return_value=False,
             ),
         ):
@@ -311,21 +311,21 @@ class TestChecklist1b_InformationalNotSuppressedInHighMode:
 
     def test_legacy_warning_not_suppressed_in_high_mode(self):
         """_should_suppress_legacy does NOT hide WARNING in high mode."""
-        from code_puppy.messaging.message_queue import MessageType, UIMessage
-        from code_puppy.messaging.renderers import _should_suppress_legacy
+        from spruce_grove.messaging.message_queue import MessageType, UIMessage
+        from spruce_grove.messaging.renderers import _should_suppress_legacy
 
         msg = UIMessage(type=MessageType.WARNING, content="Warning message")
         with (
             patch(
-                "code_puppy.messaging.renderers._get_output_level",
+                "spruce_grove.messaging.renderers._get_output_level",
                 return_value="high",
             ),
             patch(
-                "code_puppy.messaging.renderers._get_suppress_informational",
+                "spruce_grove.messaging.renderers._get_suppress_informational",
                 return_value=True,
             ),
             patch(
-                "code_puppy.messaging.renderers._get_suppress_thinking",
+                "spruce_grove.messaging.renderers._get_suppress_thinking",
                 return_value=False,
             ),
         ):
@@ -333,21 +333,21 @@ class TestChecklist1b_InformationalNotSuppressedInHighMode:
 
     def test_legacy_success_not_suppressed_in_high_mode(self):
         """_should_suppress_legacy does NOT hide SUCCESS in high mode."""
-        from code_puppy.messaging.message_queue import MessageType, UIMessage
-        from code_puppy.messaging.renderers import _should_suppress_legacy
+        from spruce_grove.messaging.message_queue import MessageType, UIMessage
+        from spruce_grove.messaging.renderers import _should_suppress_legacy
 
         msg = UIMessage(type=MessageType.SUCCESS, content="Success message")
         with (
             patch(
-                "code_puppy.messaging.renderers._get_output_level",
+                "spruce_grove.messaging.renderers._get_output_level",
                 return_value="high",
             ),
             patch(
-                "code_puppy.messaging.renderers._get_suppress_informational",
+                "spruce_grove.messaging.renderers._get_suppress_informational",
                 return_value=True,
             ),
             patch(
-                "code_puppy.messaging.renderers._get_suppress_thinking",
+                "spruce_grove.messaging.renderers._get_suppress_thinking",
                 return_value=False,
             ),
         ):
@@ -355,21 +355,21 @@ class TestChecklist1b_InformationalNotSuppressedInHighMode:
 
     def test_legacy_info_still_suppressed_in_medium_mode(self):
         """Contrast: medium + suppress_informational=True hides INFO."""
-        from code_puppy.messaging.message_queue import MessageType, UIMessage
-        from code_puppy.messaging.renderers import _should_suppress_legacy
+        from spruce_grove.messaging.message_queue import MessageType, UIMessage
+        from spruce_grove.messaging.renderers import _should_suppress_legacy
 
         msg = UIMessage(type=MessageType.INFO, content="Info message")
         with (
             patch(
-                "code_puppy.messaging.renderers._get_output_level",
+                "spruce_grove.messaging.renderers._get_output_level",
                 return_value="medium",
             ),
             patch(
-                "code_puppy.messaging.renderers._get_suppress_informational",
+                "spruce_grove.messaging.renderers._get_suppress_informational",
                 return_value=True,
             ),
             patch(
-                "code_puppy.messaging.renderers._get_suppress_thinking",
+                "spruce_grove.messaging.renderers._get_suppress_thinking",
                 return_value=False,
             ),
         ):
@@ -392,7 +392,7 @@ class TestChecklist2_ToolCallArgs:
         """
         import inspect
 
-        from code_puppy.agents.event_stream_handler import event_stream_handler
+        from spruce_grove.agents.event_stream_handler import event_stream_handler
 
         source = inspect.getsource(event_stream_handler)
         # Confirm the flag exists and gates args display
@@ -415,9 +415,9 @@ class TestChecklist3_ToolResultsNoTruncation:
         console, buf = _make_console()
 
         with (
-            patch("code_puppy.config.get_output_level", return_value="high"),
+            patch("spruce_grove.config.get_output_level", return_value="high"),
             patch(
-                "code_puppy.agents.event_stream_handler.get_streaming_console",
+                "spruce_grove.agents.event_stream_handler.get_streaming_console",
                 return_value=console,
             ),
         ):
@@ -436,9 +436,9 @@ class TestChecklist3_ToolResultsNoTruncation:
         console, buf = _make_console()
 
         with (
-            patch("code_puppy.config.get_output_level", return_value="high"),
+            patch("spruce_grove.config.get_output_level", return_value="high"),
             patch(
-                "code_puppy.agents.event_stream_handler.get_streaming_console",
+                "spruce_grove.agents.event_stream_handler.get_streaming_console",
                 return_value=console,
             ),
         ):
@@ -461,7 +461,7 @@ class TestChecklist4_SubagentInline:
         """Code path verified: high mode wraps main handler in StreamingTextDetector."""
         import inspect
 
-        from code_puppy.tools import subagent_invocation
+        from spruce_grove.tools import subagent_invocation
 
         source = inspect.getsource(subagent_invocation)
         assert "StreamingTextDetector" in source
@@ -482,15 +482,15 @@ class TestChecklist5_SubagentVerboseOverride:
         renderer, _, _ = _make_renderer()
         with (
             patch(
-                "code_puppy.messaging.rich_renderer.get_output_level",
+                "spruce_grove.messaging.rich_renderer.get_output_level",
                 return_value="high",
             ),
             patch(
-                "code_puppy.messaging.rich_renderer.is_subagent",
+                "spruce_grove.messaging.rich_renderer.is_subagent",
                 return_value=True,
             ),
             patch(
-                "code_puppy.messaging.rich_renderer.get_subagent_verbose",
+                "spruce_grove.messaging.rich_renderer.get_subagent_verbose",
                 return_value=False,
             ),
         ):
@@ -498,19 +498,19 @@ class TestChecklist5_SubagentVerboseOverride:
 
     def test_event_handler_suppression_bypassed(self):
         """_should_suppress_output returns False in high mode."""
-        from code_puppy.agents.event_stream_handler import _should_suppress_output
+        from spruce_grove.agents.event_stream_handler import _should_suppress_output
 
         with (
             patch(
-                "code_puppy.agents.event_stream_handler.get_output_level",
+                "spruce_grove.agents.event_stream_handler.get_output_level",
                 return_value="high",
             ),
             patch(
-                "code_puppy.agents.event_stream_handler.is_subagent",
+                "spruce_grove.agents.event_stream_handler.is_subagent",
                 return_value=True,
             ),
             patch(
-                "code_puppy.agents.event_stream_handler.get_subagent_verbose",
+                "spruce_grove.agents.event_stream_handler.get_subagent_verbose",
                 return_value=False,
             ),
         ):
@@ -518,18 +518,18 @@ class TestChecklist5_SubagentVerboseOverride:
 
     def test_display_non_streamed_result_bypassed(self):
         """display_non_streamed_result renders for subagent+verbose=off in high mode."""
-        from code_puppy.tools.display import display_non_streamed_result
+        from spruce_grove.tools.display import display_non_streamed_result
 
         console, buf = _make_console()
 
         with (
-            patch("code_puppy.tools.display.is_subagent", return_value=True),
+            patch("spruce_grove.tools.display.is_subagent", return_value=True),
             patch(
-                "code_puppy.tools.display.get_subagent_verbose",
+                "spruce_grove.tools.display.get_subagent_verbose",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.display.get_output_level",
+                "spruce_grove.tools.display.get_output_level",
                 return_value="high",
             ),
         ):
@@ -599,7 +599,7 @@ class TestChecklist7_NoBannerModelName:
     def test_thinking_banner_has_no_model(self):
         import inspect
 
-        from code_puppy.agents.event_stream_handler import event_stream_handler
+        from spruce_grove.agents.event_stream_handler import event_stream_handler
 
         source = inspect.getsource(event_stream_handler)
         banner_section = source[
@@ -612,7 +612,7 @@ class TestChecklist7_NoBannerModelName:
     def test_response_banner_has_no_model(self):
         import inspect
 
-        from code_puppy.agents.event_stream_handler import event_stream_handler
+        from spruce_grove.agents.event_stream_handler import event_stream_handler
 
         source = inspect.getsource(event_stream_handler)
         banner_section = source[
@@ -625,7 +625,7 @@ class TestChecklist7_NoBannerModelName:
     def test_display_non_streamed_banner_has_no_model(self):
         import inspect
 
-        from code_puppy.tools.display import display_non_streamed_result
+        from spruce_grove.tools.display import display_non_streamed_result
 
         source = inspect.getsource(display_non_streamed_result)
         # The banner printing section doesn't inject model names.
@@ -643,7 +643,7 @@ class TestChecklist8_NoRawAPIPayloads:
     def test_no_api_payload_in_event_handler(self):
         import inspect
 
-        from code_puppy.agents.event_stream_handler import event_stream_handler
+        from spruce_grove.agents.event_stream_handler import event_stream_handler
 
         source = inspect.getsource(event_stream_handler)
         assert "request_body" not in source
@@ -853,9 +853,9 @@ class TestChecklist12_NoExtraAnnotations:
         """High mode shows compact 'returned (N ms)' for rich-rendered tools."""
         console, buf = _make_console()
         with (
-            patch("code_puppy.config.get_output_level", return_value="high"),
+            patch("spruce_grove.config.get_output_level", return_value="high"),
             patch(
-                "code_puppy.agents.event_stream_handler.get_streaming_console",
+                "spruce_grove.agents.event_stream_handler.get_streaming_console",
                 return_value=console,
             ),
         ):
@@ -875,9 +875,9 @@ class TestChecklist12_NoExtraAnnotations:
 
         console, buf = _make_console()
         with (
-            patch("code_puppy.config.get_output_level", return_value="high"),
+            patch("spruce_grove.config.get_output_level", return_value="high"),
             patch(
-                "code_puppy.agents.event_stream_handler.get_streaming_console",
+                "spruce_grove.agents.event_stream_handler.get_streaming_console",
                 return_value=console,
             ),
         ):

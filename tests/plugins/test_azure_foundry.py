@@ -480,7 +480,7 @@ class TestAddRemoveFoundryModels:
         models_path = tmp_path / "models.json"
 
         def _add_other_entry(name):
-            from code_puppy import atomic_json
+            from spruce_grove import atomic_json
 
             def _mutate(data):
                 data[name] = {"type": "custom_openai"}
@@ -807,15 +807,15 @@ class TestCreateAzureFoundryModel:
                 "anthropic.AsyncAnthropicFoundry", return_value=mock_client
             ) as mock_azure_class:
                 with patch(
-                    "code_puppy.config.get_effective_model_settings",
+                    "spruce_grove.config.get_effective_model_settings",
                     return_value={},
                 ):
                     with patch(
-                        "code_puppy.provider_identity.resolve_provider_identity",
+                        "spruce_grove.provider_identity.resolve_provider_identity",
                         return_value="identity",
                     ):
                         with patch(
-                            "code_puppy.provider_identity.make_anthropic_provider",
+                            "spruce_grove.provider_identity.make_anthropic_provider",
                             return_value=Mock(),
                         ):
                             with patch(
@@ -853,7 +853,7 @@ class TestPluginCallbackRegistration:
         # Import triggers callback registration (side effect is intentional)
         import code_puppy_core_plugins.azure_foundry.register_callbacks  # noqa: F401
 
-        from code_puppy.callbacks import get_callbacks
+        from spruce_grove.callbacks import get_callbacks
 
         # Check that there are callbacks registered for each phase
         help_callbacks = get_callbacks("custom_command_help")
@@ -1333,11 +1333,11 @@ class TestCreateAzureFoundryOpenAIModel:
         ):
             with patch("openai.AsyncAzureOpenAI") as mock_client_cls:
                 with patch(
-                    "code_puppy.provider_identity.resolve_provider_identity",
+                    "spruce_grove.provider_identity.resolve_provider_identity",
                     return_value="azure_foundry_openai",
                 ):
                     with patch(
-                        "code_puppy.provider_identity.make_openai_provider",
+                        "spruce_grove.provider_identity.make_openai_provider",
                         return_value=Mock(),
                     ):
                         with patch(

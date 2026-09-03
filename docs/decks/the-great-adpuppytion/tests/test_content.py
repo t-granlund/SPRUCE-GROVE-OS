@@ -54,7 +54,7 @@ class TestCorrectedFacts:
     def test_cpu_framing_intact(self, slides):
         text = all_text(slides)
         for phrase in (
-            "CODE-PUPPY", "UNIVERSITY", "Puppy OS", "two halves of the same future",
+            "SPRUCE-GROVE", "UNIVERSITY", "Cedar OS", "two halves of the same future",
             "The New Medium", "Agentic Craft for Creatives",
             "Creative Direction for Engineers", "The Rebuild Practice",
             "Ethics, Consent & Credit",
@@ -82,7 +82,7 @@ class TestWalmartActs:
 
     def test_pack_ladder_intact(self, slides):
         text = all_text(slides)
-        for level in ("L1 · Puppy", "L2 · Good Boy/Girl", "L3 · Top Dog",
+        for level in ("L1 · Cedar", "L2 · Good Boy/Girl", "L3 · Top Dog",
                       "L4 · Alpha", "L5 · Pack Leader"):
             assert level in text, f"missing ladder rung {level}"
         assert "Wiggum Loop" in text and "Naming Ceremony" in text

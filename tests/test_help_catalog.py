@@ -9,8 +9,8 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy.command_line.command_registry import CommandInfo
-from code_puppy.command_line.help_catalog import (
+from spruce_grove.command_line.command_registry import CommandInfo
+from spruce_grove.command_line.help_catalog import (
     _SECTION_ORDER,
     _keybinding_section,
     _parse_custom_command_result,
@@ -33,14 +33,14 @@ def _build(commands=(), custom_help=()):
     """Build sections against mocked registry + plugin-callback sources."""
     with (
         patch(
-            "code_puppy.command_line.command_registry.get_unique_commands",
+            "spruce_grove.command_line.command_registry.get_unique_commands",
             return_value=list(commands),
         ),
         patch(
-            "code_puppy.callbacks.on_custom_command_help",
+            "spruce_grove.callbacks.on_custom_command_help",
             return_value=list(custom_help),
         ),
-        patch("code_puppy.plugins.load_plugin_callbacks", return_value=None),
+        patch("spruce_grove.plugins.load_plugin_callbacks", return_value=None),
     ):
         return build_help_sections()
 
@@ -104,14 +104,14 @@ def test_slash_prefixed_plugin_names_do_not_render_a_double_slash():
 def test_a_broken_plugin_help_callback_never_crashes_the_catalog():
     with (
         patch(
-            "code_puppy.command_line.command_registry.get_unique_commands",
+            "spruce_grove.command_line.command_registry.get_unique_commands",
             return_value=[],
         ),
         patch(
-            "code_puppy.callbacks.on_custom_command_help",
+            "spruce_grove.callbacks.on_custom_command_help",
             side_effect=RuntimeError("boom"),
         ),
-        patch("code_puppy.plugins.load_plugin_callbacks", return_value=None),
+        patch("spruce_grove.plugins.load_plugin_callbacks", return_value=None),
     ):
         sections = build_help_sections()
 
@@ -145,7 +145,7 @@ def test_ctrl_c_gets_one_combined_row_when_it_is_the_cancel_key():
     both real behaviours.
     """
     with patch(
-        "code_puppy.command_line.help_catalog.get_cancel_agent_display_name",
+        "spruce_grove.command_line.help_catalog.get_cancel_agent_display_name",
         return_value="Ctrl+C",
     ):
         section = _keybinding_section()
@@ -161,7 +161,7 @@ def test_remapped_cancel_key_gives_ctrl_c_its_own_distinct_row():
     clear-the-line meaning, which is genuinely separate behaviour.
     """
     with patch(
-        "code_puppy.command_line.help_catalog.get_cancel_agent_display_name",
+        "spruce_grove.command_line.help_catalog.get_cancel_agent_display_name",
         return_value="Ctrl+K",
     ):
         section = _keybinding_section()
@@ -185,7 +185,7 @@ def test_ctrl_k_documents_kill_to_eol_only_when_it_reaches_the_editor(
     must not be advertised.
     """
     with patch(
-        "code_puppy.command_line.help_catalog.get_cancel_agent_display_name",
+        "spruce_grove.command_line.help_catalog.get_cancel_agent_display_name",
         return_value=cancel_key,
     ):
         section = _keybinding_section()

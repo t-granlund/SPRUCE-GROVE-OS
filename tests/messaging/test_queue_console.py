@@ -1,4 +1,4 @@
-"""Tests for code_puppy.messaging.queue_console."""
+"""Tests for spruce_grove.messaging.queue_console."""
 
 from io import StringIO
 from unittest.mock import MagicMock, patch
@@ -8,8 +8,8 @@ from rich.markdown import Markdown
 from rich.table import Table
 from rich.text import Text
 
-from code_puppy.messaging.message_queue import MessageQueue, MessageType
-from code_puppy.messaging.queue_console import QueueConsole, get_queue_console
+from spruce_grove.messaging.message_queue import MessageQueue, MessageType
+from spruce_grove.messaging.queue_console import QueueConsole, get_queue_console
 
 
 @pytest.fixture
@@ -209,7 +209,7 @@ def test_status(qc, mq):
 # =========================================================================
 
 
-@patch("code_puppy.tools.command_runner.set_awaiting_user_input")
+@patch("spruce_grove.tools.command_runner.set_awaiting_user_input")
 @pytest.mark.parametrize(
     (
         "mock_return",

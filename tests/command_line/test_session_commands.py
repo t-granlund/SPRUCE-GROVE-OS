@@ -7,10 +7,10 @@ import pytest
 
 class TestGetCommandsHelp:
     def test_lazy_import(self):
-        from code_puppy.command_line.session_commands import get_commands_help
+        from spruce_grove.command_line.session_commands import get_commands_help
 
         with patch(
-            "code_puppy.command_line.command_handler.get_commands_help",
+            "spruce_grove.command_line.command_handler.get_commands_help",
             return_value="help text",
         ):
             result = get_commands_help()
@@ -19,17 +19,17 @@ class TestGetCommandsHelp:
 
 class TestHandleSessionCommand:
     def _run(self, command):
-        from code_puppy.command_line.session_commands import handle_session_command
+        from spruce_grove.command_line.session_commands import handle_session_command
 
         return handle_session_command(command)
 
     def test_session_show_id(self):
         with (
             patch(
-                "code_puppy.config.get_current_session_name",
+                "spruce_grove.config.get_current_session_name",
                 return_value="auto_session_abc123",
             ),
-            patch("code_puppy.messaging.emit_info") as mock_info,
+            patch("spruce_grove.messaging.emit_info") as mock_info,
         ):
             result = self._run("/session")
             assert result is True
@@ -41,10 +41,10 @@ class TestHandleSessionCommand:
     def test_session_id_subcommand(self):
         with (
             patch(
-                "code_puppy.config.get_current_session_name",
+                "spruce_grove.config.get_current_session_name",
                 return_value="auto_session_xyz",
             ),
-            patch("code_puppy.messaging.emit_info"),
+            patch("spruce_grove.messaging.emit_info"),
         ):
             assert self._run("/session id") is True
 
@@ -52,10 +52,10 @@ class TestHandleSessionCommand:
         """User-named session displays the full name verbatim, no auto_ prefix."""
         with (
             patch(
-                "code_puppy.config.get_current_session_name",
+                "spruce_grove.config.get_current_session_name",
                 return_value="mywork",
             ),
-            patch("code_puppy.messaging.emit_info") as mock_info,
+            patch("spruce_grove.messaging.emit_info") as mock_info,
         ):
             assert self._run("/session") is True
             rendered = mock_info.call_args[0][0]
@@ -66,17 +66,17 @@ class TestHandleSessionCommand:
     def test_session_new(self):
         with (
             patch(
-                "code_puppy.config.rotate_session_name",
+                "spruce_grove.config.rotate_session_name",
                 return_value="auto_session_new123",
             ),
-            patch("code_puppy.messaging.emit_success") as mock_s,
+            patch("spruce_grove.messaging.emit_success") as mock_s,
         ):
             assert self._run("/session new") is True
             # Post-LEAN-Phase-2 emits the full name (not the bare id).
             assert "auto_session_new123" in mock_s.call_args[0][0]
 
     def test_session_invalid(self):
-        with patch("code_puppy.messaging.emit_warning") as mock_w:
+        with patch("spruce_grove.messaging.emit_warning") as mock_w:
             assert self._run("/session bad") is True
             mock_w.assert_called_once()
 
@@ -84,24 +84,24 @@ class TestHandleSessionCommand:
 class TestHandleCompactCommand:
     @pytest.fixture(autouse=True)
     def _mock_autosave(self):
-        with patch("code_puppy.config.auto_save_session_if_enabled") as autosave:
+        with patch("spruce_grove.config.auto_save_session_if_enabled") as autosave:
             self.autosave = autosave
             yield
 
     def _run(self, cmd="/compact"):
-        from code_puppy.command_line.session_commands import handle_compact_command
+        from spruce_grove.command_line.session_commands import handle_compact_command
 
         return handle_compact_command(cmd)
 
     def test_mid_run_queues_compaction_for_next_model_call(self):
         controller = MagicMock()
         with (
-            patch("code_puppy.messaging.run_ui.is_run_active", return_value=True),
+            patch("spruce_grove.messaging.run_ui.is_run_active", return_value=True),
             patch(
-                "code_puppy.messaging.pause_controller.get_pause_controller",
+                "spruce_grove.messaging.pause_controller.get_pause_controller",
                 return_value=controller,
             ),
-            patch("code_puppy.messaging.emit_info") as emit_info,
+            patch("spruce_grove.messaging.emit_info") as emit_info,
         ):
             assert self._run() is True
 
@@ -113,10 +113,10 @@ class TestHandleCompactCommand:
         agent.get_message_history.return_value = []
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
-            patch("code_puppy.messaging.emit_warning") as mw,
+            patch("spruce_grove.messaging.emit_warning") as mw,
         ):
             assert self._run() is True
             mw.assert_called_once()
@@ -127,21 +127,21 @@ class TestHandleCompactCommand:
         agent.estimate_tokens_for_message.return_value = 100
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
             patch(
-                "code_puppy.config.get_compaction_strategy",
+                "spruce_grove.config.get_compaction_strategy",
                 return_value="truncation",
             ),
-            patch("code_puppy.agents._compaction.build_compaction_strategy"),
-            patch("code_puppy.agents._compaction.resolve_agent_model"),
+            patch("spruce_grove.agents._compaction.build_compaction_strategy"),
+            patch("spruce_grove.agents._compaction.resolve_agent_model"),
             patch(
-                "code_puppy.agents._compaction.run_compaction_sync",
+                "spruce_grove.agents._compaction.run_compaction_sync",
                 return_value=["m3"],
             ) as rcs,
-            patch("code_puppy.messaging.emit_info"),
-            patch("code_puppy.messaging.emit_success") as ms,
+            patch("spruce_grove.messaging.emit_info"),
+            patch("spruce_grove.messaging.emit_success") as ms,
         ):
             assert self._run() is True
             rcs.assert_called_once()
@@ -155,21 +155,21 @@ class TestHandleCompactCommand:
         agent.estimate_tokens_for_message.return_value = 100
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
             patch(
-                "code_puppy.config.get_compaction_strategy",
+                "spruce_grove.config.get_compaction_strategy",
                 return_value="summarization",
             ),
-            patch("code_puppy.agents._compaction.build_compaction_strategy"),
-            patch("code_puppy.agents._compaction.resolve_agent_model"),
+            patch("spruce_grove.agents._compaction.build_compaction_strategy"),
+            patch("spruce_grove.agents._compaction.resolve_agent_model"),
             patch(
-                "code_puppy.agents._compaction.run_compaction_sync",
+                "spruce_grove.agents._compaction.run_compaction_sync",
                 return_value=["summary", "m2"],
             ),
-            patch("code_puppy.messaging.emit_info"),
-            patch("code_puppy.messaging.emit_success") as ms,
+            patch("spruce_grove.messaging.emit_info"),
+            patch("spruce_grove.messaging.emit_success") as ms,
         ):
             assert self._run() is True
             self.autosave.assert_called_once_with(force=True)
@@ -182,21 +182,21 @@ class TestHandleCompactCommand:
         self.autosave.return_value = False
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
             patch(
-                "code_puppy.config.get_compaction_strategy",
+                "spruce_grove.config.get_compaction_strategy",
                 return_value="summarization",
             ),
-            patch("code_puppy.agents._compaction.build_compaction_strategy"),
-            patch("code_puppy.agents._compaction.resolve_agent_model"),
+            patch("spruce_grove.agents._compaction.build_compaction_strategy"),
+            patch("spruce_grove.agents._compaction.resolve_agent_model"),
             patch(
-                "code_puppy.agents._compaction.run_compaction_sync",
+                "spruce_grove.agents._compaction.run_compaction_sync",
                 return_value=["summary"],
             ),
-            patch("code_puppy.messaging.emit_info"),
-            patch("code_puppy.messaging.emit_success") as ms,
+            patch("spruce_grove.messaging.emit_info"),
+            patch("spruce_grove.messaging.emit_success") as ms,
         ):
             assert self._run() is True
 
@@ -209,21 +209,21 @@ class TestHandleCompactCommand:
         agent.estimate_tokens_for_message.return_value = 100
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
             patch(
-                "code_puppy.config.get_compaction_strategy",
+                "spruce_grove.config.get_compaction_strategy",
                 return_value="summarization",
             ),
-            patch("code_puppy.agents._compaction.build_compaction_strategy"),
-            patch("code_puppy.agents._compaction.resolve_agent_model"),
+            patch("spruce_grove.agents._compaction.build_compaction_strategy"),
+            patch("spruce_grove.agents._compaction.resolve_agent_model"),
             patch(
-                "code_puppy.agents._compaction.run_compaction_sync",
+                "spruce_grove.agents._compaction.run_compaction_sync",
                 return_value=[],
             ),
-            patch("code_puppy.messaging.emit_info"),
-            patch("code_puppy.messaging.emit_error") as me,
+            patch("spruce_grove.messaging.emit_info"),
+            patch("spruce_grove.messaging.emit_error") as me,
         ):
             assert self._run() is True
             self.autosave.assert_not_called()
@@ -232,10 +232,10 @@ class TestHandleCompactCommand:
     def test_exception(self):
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 side_effect=Exception("boom"),
             ),
-            patch("code_puppy.messaging.emit_error") as me,
+            patch("spruce_grove.messaging.emit_error") as me,
         ):
             assert self._run() is True
             assert "boom" in me.call_args[0][0]
@@ -247,28 +247,28 @@ class TestHandleCompactCommand:
         agent.estimate_tokens_for_message.return_value = 0
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
             patch(
-                "code_puppy.config.get_compaction_strategy",
+                "spruce_grove.config.get_compaction_strategy",
                 return_value="summarization",
             ),
-            patch("code_puppy.agents._compaction.build_compaction_strategy"),
-            patch("code_puppy.agents._compaction.resolve_agent_model"),
+            patch("spruce_grove.agents._compaction.build_compaction_strategy"),
+            patch("spruce_grove.agents._compaction.resolve_agent_model"),
             patch(
-                "code_puppy.agents._compaction.run_compaction_sync",
+                "spruce_grove.agents._compaction.run_compaction_sync",
                 return_value=["s"],
             ),
-            patch("code_puppy.messaging.emit_info"),
-            patch("code_puppy.messaging.emit_success"),
+            patch("spruce_grove.messaging.emit_info"),
+            patch("spruce_grove.messaging.emit_success"),
         ):
             assert self._run() is True
 
 
 class TestHandleTruncateCommand:
     def _run(self, cmd):
-        from code_puppy.command_line.session_commands import handle_truncate_command
+        from spruce_grove.command_line.session_commands import handle_truncate_command
 
         return handle_truncate_command(cmd)
 
@@ -278,7 +278,7 @@ class TestHandleTruncateCommand:
         ids=["missing_arg", "invalid_n", "negative_n", "too_many_args"],
     )
     def test_invalid_args_return_true(self, cmd):
-        with patch("code_puppy.messaging.emit_error"):
+        with patch("spruce_grove.messaging.emit_error"):
             assert self._run(cmd) is True
 
     def test_no_history(self):
@@ -286,10 +286,10 @@ class TestHandleTruncateCommand:
         agent.get_message_history.return_value = []
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
-            patch("code_puppy.messaging.emit_warning"),
+            patch("spruce_grove.messaging.emit_warning"),
         ):
             assert self._run("/truncate 5") is True
 
@@ -298,10 +298,10 @@ class TestHandleTruncateCommand:
         agent.get_message_history.return_value = ["a", "b"]
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
-            patch("code_puppy.messaging.emit_info"),
+            patch("spruce_grove.messaging.emit_info"),
         ):
             assert self._run("/truncate 5") is True
 
@@ -310,15 +310,15 @@ class TestHandleTruncateCommand:
         agent.get_message_history.return_value = ["sys", "a", "b", "c", "d"]
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
-            patch("code_puppy.agents._compaction.resolve_agent_model"),
+            patch("spruce_grove.agents._compaction.resolve_agent_model"),
             patch(
-                "code_puppy.agents._compaction.run_compaction_sync",
+                "spruce_grove.agents._compaction.run_compaction_sync",
                 return_value=["sys", "c", "d"],
             ) as rcs,
-            patch("code_puppy.messaging.emit_success"),
+            patch("spruce_grove.messaging.emit_success"),
         ):
             assert self._run("/truncate 3") is True
             # The sliding window is asked for N-1 recent messages (+ first).
@@ -332,15 +332,15 @@ class TestHandleTruncateCommand:
         agent.get_message_history.return_value = ["sys", "a", "b"]
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
-            patch("code_puppy.agents._compaction.resolve_agent_model"),
+            patch("spruce_grove.agents._compaction.resolve_agent_model"),
             patch(
-                "code_puppy.agents._compaction.run_compaction_sync",
+                "spruce_grove.agents._compaction.run_compaction_sync",
                 return_value=["sys"],
             ) as rcs,
-            patch("code_puppy.messaging.emit_success"),
+            patch("spruce_grove.messaging.emit_success"),
         ):
             assert self._run("/truncate 1") is True
             assert rcs.call_args[0][0].keep_messages == 1
@@ -349,7 +349,7 @@ class TestHandleTruncateCommand:
 
 class TestHandleAutosaveLoadCommand:
     def test_returns_marker(self):
-        from code_puppy.command_line.session_commands import (
+        from spruce_grove.command_line.session_commands import (
             handle_autosave_load_command,
         )
 
@@ -358,14 +358,14 @@ class TestHandleAutosaveLoadCommand:
 
 class TestHandleDumpContextCommand:
     def _run(self, cmd):
-        from code_puppy.command_line.session_commands import (
+        from spruce_grove.command_line.session_commands import (
             handle_dump_context_command,
         )
 
         return handle_dump_context_command(cmd)
 
     def test_missing_name(self):
-        with patch("code_puppy.messaging.emit_warning"):
+        with patch("spruce_grove.messaging.emit_warning"):
             assert self._run("/dump_context") is True
 
     def test_no_history(self):
@@ -373,10 +373,10 @@ class TestHandleDumpContextCommand:
         agent.get_message_history.return_value = []
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
-            patch("code_puppy.messaging.emit_warning"),
+            patch("spruce_grove.messaging.emit_warning"),
         ):
             assert self._run("/dump_context mysession") is True
 
@@ -391,14 +391,14 @@ class TestHandleDumpContextCommand:
         )
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
             patch(
-                "code_puppy.session_lifecycle.persist_named_session",
+                "spruce_grove.session_lifecycle.persist_named_session",
                 return_value=meta,
             ),
-            patch("code_puppy.messaging.emit_success"),
+            patch("spruce_grove.messaging.emit_success"),
         ):
             assert self._run("/dump_context mysession") is True
 
@@ -407,14 +407,14 @@ class TestHandleDumpContextCommand:
         agent.get_message_history.return_value = ["m1"]
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
             patch(
-                "code_puppy.session_lifecycle.persist_named_session",
+                "spruce_grove.session_lifecycle.persist_named_session",
                 side_effect=Exception("disk full"),
             ),
-            patch("code_puppy.messaging.emit_error") as me,
+            patch("spruce_grove.messaging.emit_error") as me,
         ):
             assert self._run("/dump_context mysession") is True
             assert "disk full" in me.call_args[0][0]
@@ -431,10 +431,10 @@ class TestHandleDumpContextCommand:
         agent.get_message_history.return_value = ["m1"]
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
-            patch("code_puppy.messaging.emit_error") as me,
+            patch("spruce_grove.messaging.emit_error") as me,
         ):
             assert self._run("/dump_context auto_session_squat") is True
             assert "reserved" in me.call_args[0][0].lower()
@@ -442,14 +442,14 @@ class TestHandleDumpContextCommand:
 
 class TestHandleLoadContextCommand:
     def _run(self, cmd):
-        from code_puppy.command_line.session_commands import (
+        from spruce_grove.command_line.session_commands import (
             handle_load_context_command,
         )
 
         return handle_load_context_command(cmd)
 
     def test_missing_name(self):
-        with patch("code_puppy.messaging.emit_warning"):
+        with patch("spruce_grove.messaging.emit_warning"):
             assert self._run("/load_context") is True
 
     @pytest.mark.parametrize(
@@ -460,15 +460,15 @@ class TestHandleLoadContextCommand:
     def test_file_not_found(self, sessions, called):
         with (
             patch(
-                "code_puppy.command_line.session_commands.load_session",
+                "spruce_grove.command_line.session_commands.load_session",
                 side_effect=FileNotFoundError(),
             ),
             patch(
-                "code_puppy.command_line.session_commands.list_sessions",
+                "spruce_grove.command_line.session_commands.list_sessions",
                 return_value=sessions,
             ),
-            patch("code_puppy.messaging.emit_error"),
-            patch("code_puppy.messaging.emit_info") as mi,
+            patch("spruce_grove.messaging.emit_error"),
+            patch("spruce_grove.messaging.emit_info") as mi,
         ):
             assert self._run("/load_context missing") is True
             if called:
@@ -479,10 +479,10 @@ class TestHandleLoadContextCommand:
     def test_generic_exception(self):
         with (
             patch(
-                "code_puppy.command_line.session_commands.load_session",
+                "spruce_grove.command_line.session_commands.load_session",
                 side_effect=Exception("corrupt"),
             ),
-            patch("code_puppy.messaging.emit_error") as me,
+            patch("spruce_grove.messaging.emit_error") as me,
         ):
             assert self._run("/load_context bad") is True
             assert "corrupt" in me.call_args[0][0]
@@ -505,19 +505,19 @@ class TestHandleLoadContextCommand:
         agent.estimate_tokens_for_message.return_value = 50
         with (
             patch(
-                "code_puppy.command_line.session_commands.load_session",
+                "spruce_grove.command_line.session_commands.load_session",
                 return_value=["m1", "m2"],
             ),
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
             patch(
-                "code_puppy.config.rotate_session_name",
+                "spruce_grove.config.rotate_session_name",
                 return_value="auto_session_20260101_120000",
             ) as mock_rotate,
-            patch("code_puppy.messaging.emit_success") as mock_success,
-            patch("code_puppy.command_line.autosave_menu.display_resumed_history"),
+            patch("spruce_grove.messaging.emit_success") as mock_success,
+            patch("spruce_grove.command_line.autosave_menu.display_resumed_history"),
         ):
             assert self._run("/load_context mysession") is True
             mock_rotate.assert_called_once_with()
@@ -534,7 +534,7 @@ class TestHandleClearCommand:
     """
 
     def _run(self, command="/clear"):
-        from code_puppy.command_line.session_commands import handle_clear_command
+        from spruce_grove.command_line.session_commands import handle_clear_command
 
         return handle_clear_command(command)
 
@@ -544,20 +544,20 @@ class TestHandleClearCommand:
         clipboard.get_pending_count.return_value = 0
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
             patch(
-                "code_puppy.command_line.clipboard.get_clipboard_manager",
+                "spruce_grove.command_line.clipboard.get_clipboard_manager",
                 return_value=clipboard,
             ),
             patch(
-                "code_puppy.config.finalize_autosave_session",
+                "spruce_grove.config.finalize_autosave_session",
                 return_value="new-session-id",
             ),
-            patch("code_puppy.messaging.emit_warning") as mock_warn,
-            patch("code_puppy.messaging.emit_system_message"),
-            patch("code_puppy.messaging.emit_info") as mock_info,
+            patch("spruce_grove.messaging.emit_warning") as mock_warn,
+            patch("spruce_grove.messaging.emit_system_message"),
+            patch("spruce_grove.messaging.emit_info") as mock_info,
         ):
             assert self._run() is True
             agent.clear_message_history.assert_called_once()
@@ -572,20 +572,20 @@ class TestHandleClearCommand:
         clipboard.get_pending_count.return_value = 3
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
             patch(
-                "code_puppy.command_line.clipboard.get_clipboard_manager",
+                "spruce_grove.command_line.clipboard.get_clipboard_manager",
                 return_value=clipboard,
             ),
             patch(
-                "code_puppy.config.finalize_autosave_session",
+                "spruce_grove.config.finalize_autosave_session",
                 return_value="sid",
             ),
-            patch("code_puppy.messaging.emit_warning"),
-            patch("code_puppy.messaging.emit_system_message"),
-            patch("code_puppy.messaging.emit_info") as mock_info,
+            patch("spruce_grove.messaging.emit_warning"),
+            patch("spruce_grove.messaging.emit_system_message"),
+            patch("spruce_grove.messaging.emit_info") as mock_info,
         ):
             assert self._run() is True
             # One info for session rotation, one for the dropped clipboard count
@@ -595,8 +595,8 @@ class TestHandleClearCommand:
     def test_clear_is_registered_and_appears_in_help(self):
         """Regression: /clear must show up in /help (was previously hidden)."""
         # Trigger registration via import side-effects
-        import code_puppy.command_line.session_commands  # noqa: F401
-        from code_puppy.command_line.command_registry import get_unique_commands
+        import spruce_grove.command_line.session_commands  # noqa: F401
+        from spruce_grove.command_line.command_registry import get_unique_commands
 
         names = {c.name for c in get_unique_commands()}
         assert "clear" in names
@@ -609,22 +609,22 @@ class TestHandleClearCommand:
         clipboard.get_pending_count.return_value = 0
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             ),
             patch(
-                "code_puppy.command_line.clipboard.get_clipboard_manager",
+                "spruce_grove.command_line.clipboard.get_clipboard_manager",
                 return_value=clipboard,
             ),
             patch(
-                "code_puppy.config.finalize_autosave_session",
+                "spruce_grove.config.finalize_autosave_session",
                 return_value="sid",
             ),
-            patch("code_puppy.messaging.emit_warning"),
-            patch("code_puppy.messaging.emit_system_message"),
-            patch("code_puppy.messaging.emit_info"),
+            patch("spruce_grove.messaging.emit_warning"),
+            patch("spruce_grove.messaging.emit_system_message"),
+            patch("spruce_grove.messaging.emit_info"),
             patch(
-                "code_puppy.agents._builder.reset_model_fallback_warnings"
+                "spruce_grove.agents._builder.reset_model_fallback_warnings"
             ) as mock_reset,
         ):
             assert self._run() is True
@@ -634,8 +634,8 @@ class TestHandleClearCommand:
         """The overlay renders the registry description verbatim, so the
         bare-word `clear` shortcut has to be mentioned there or it's
         undiscoverable."""
-        import code_puppy.command_line.session_commands  # noqa: F401
-        from code_puppy.command_line.command_registry import get_command
+        import spruce_grove.command_line.session_commands  # noqa: F401
+        from spruce_grove.command_line.command_registry import get_command
 
         cmd = get_command("clear")
         assert cmd is not None

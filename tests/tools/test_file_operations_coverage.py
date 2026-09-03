@@ -8,7 +8,7 @@ import os
 import subprocess
 from unittest.mock import MagicMock, patch
 
-from code_puppy.tools.file_operations import (
+from spruce_grove.tools.file_operations import (
     GrepOutput,
     ListFileOutput,
     MatchInfo,
@@ -311,7 +311,7 @@ class TestGrepFunction:
 class TestGrepVerboseConfigWiring:
     """Verify grep_output_verbose config flows into GrepResultMessage.verbose.
 
-    Regression test for code_puppy_oss-7vr: the toggle was disconnected.
+    Regression test for spruce_grove_oss-7vr: the toggle was disconnected.
     """
 
     def test_grep_verbose_false_by_default(self, tmp_path):
@@ -325,11 +325,11 @@ class TestGrepVerboseConfigWiring:
 
         with (
             patch(
-                "code_puppy.tools.file_operations.get_message_bus",
+                "spruce_grove.tools.file_operations.get_message_bus",
                 return_value=mock_bus,
             ),
             patch(
-                "code_puppy.config.get_grep_output_verbose",
+                "spruce_grove.config.get_grep_output_verbose",
                 return_value=False,
             ),
         ):
@@ -350,11 +350,11 @@ class TestGrepVerboseConfigWiring:
 
         with (
             patch(
-                "code_puppy.tools.file_operations.get_message_bus",
+                "spruce_grove.tools.file_operations.get_message_bus",
                 return_value=mock_bus,
             ),
             patch(
-                "code_puppy.config.get_grep_output_verbose",
+                "spruce_grove.config.get_grep_output_verbose",
                 return_value=True,
             ),
         ):
@@ -635,7 +635,7 @@ class TestRegisterFunctions:
 
     def test_register_list_files_truncation(self):
         """Test that list_files truncates very large results."""
-        from code_puppy.tools.file_operations import register_list_files
+        from spruce_grove.tools.file_operations import register_list_files
 
         # Create a mock agent
         mock_agent = MagicMock()
@@ -654,7 +654,7 @@ class TestRegisterFunctions:
 
     def test_register_read_file(self):
         """Test that read_file tool is registered correctly."""
-        from code_puppy.tools.file_operations import register_read_file
+        from spruce_grove.tools.file_operations import register_read_file
 
         mock_agent = MagicMock()
         registered_tools = {}
@@ -671,7 +671,7 @@ class TestRegisterFunctions:
 
     def test_register_grep(self):
         """Test that grep tool is registered correctly."""
-        from code_puppy.tools.file_operations import register_grep
+        from spruce_grove.tools.file_operations import register_grep
 
         mock_agent = MagicMock()
         registered_tools = {}
@@ -688,7 +688,7 @@ class TestRegisterFunctions:
 
     def test_list_files_recursion_disabled_by_config(self, tmp_path):
         """Test that recursion is disabled when config says so."""
-        from code_puppy.tools.file_operations import register_list_files
+        from spruce_grove.tools.file_operations import register_list_files
 
         mock_agent = MagicMock()
         registered_tools = {}
@@ -700,7 +700,7 @@ class TestRegisterFunctions:
         mock_agent.tool = capture_tool
 
         # Mock get_allow_recursion at the config module level before registration
-        with patch("code_puppy.config.get_allow_recursion", return_value=False):
+        with patch("spruce_grove.config.get_allow_recursion", return_value=False):
             register_list_files(mock_agent)
             list_files_tool = registered_tools["list_files"]
 

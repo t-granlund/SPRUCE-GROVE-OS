@@ -2,7 +2,7 @@
 
 The token-accounting *implementation* tests moved to
 ``tests/test_token_usage.py`` when the estimator relocated to the core
-module ``code_puppy.token_usage``. This file keeps the plugin-level tests:
+module ``spruce_grove.token_usage``. This file keeps the plugin-level tests:
 the bottom-bar status patch, the ``/context`` slash command, and the
 ``_format_usage_report`` rendering. It also keeps a single compatibility
 test proving the old import path still re-exports the same core objects.
@@ -33,7 +33,7 @@ def _plugin_module():
 
 def _usage_module():
     """The core token-usage module (post-relocation home of the estimator)."""
-    return importlib.import_module("code_puppy.token_usage")
+    return importlib.import_module("spruce_grove.token_usage")
 
 
 # ---------------------------------------------------------------------------
@@ -45,7 +45,7 @@ def test_usage_shim_reexports_core_objects():
     Downstream code and tests still import the old path; identity (not just
     equality) guarantees patching either module observes one implementation.
     """
-    core = importlib.import_module("code_puppy.token_usage")
+    core = importlib.import_module("spruce_grove.token_usage")
     shim = importlib.import_module("code_puppy_core_plugins.context_indicator.usage")
     for name in (
         "ContextUsage",
@@ -67,7 +67,7 @@ def test_usage_shim_reexports_core_objects():
 # ---------------------------------------------------------------------------
 def test_install_status_patch_is_idempotent():
     module = _plugin_module()
-    from code_puppy.agents import _compaction
+    from spruce_grove.agents import _compaction
 
     original = _compaction.update_spinner_context
     try:
@@ -86,7 +86,7 @@ def test_install_status_patch_is_idempotent():
 def test_patched_status_writer_forwards_decorated_info():
     """The installed patch forwards ``_decorate_status(info)`` to the original."""
     module = _plugin_module()
-    from code_puppy.agents import _compaction
+    from spruce_grove.agents import _compaction
 
     original = _compaction.update_spinner_context
     captured = []

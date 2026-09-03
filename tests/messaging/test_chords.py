@@ -2,7 +2,7 @@
 
 import pytest
 
-from code_puppy.messaging import chords
+from spruce_grove.messaging import chords
 
 KEYS = ["\x05", "\x18", "\x02", "\x14"]
 
@@ -77,7 +77,7 @@ def test_hint_paint_and_clear_never_raise():
 
 @pytest.fixture
 def bar():
-    from code_puppy.messaging.bottom_bar import get_bottom_bar
+    from spruce_grove.messaging.bottom_bar import get_bottom_bar
 
     bar = get_bottom_bar()
     original = bar.get_status()

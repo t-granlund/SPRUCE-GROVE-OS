@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy.provider_credentials import (
+from spruce_grove.provider_credentials import (
     _SECRET_HEADER_NAMES,
     credential_display,
     credential_hint,
@@ -111,14 +111,14 @@ class TestMaskSecret:
 class TestCredentialDisplay(unittest.TestCase):
     def test_shows_set_with_masked_value(self):
         with patch(
-            "code_puppy.provider_credentials.get_credential_value",
+            "spruce_grove.provider_credentials.get_credential_value",
             return_value="sk-abc123",
         ):
             self.assertEqual(credential_display("OPENAI_API_KEY"), "set (…c123)")
 
     def test_shows_not_set_when_missing(self):
         with patch(
-            "code_puppy.provider_credentials.get_credential_value",
+            "spruce_grove.provider_credentials.get_credential_value",
             return_value=None,
         ):
             self.assertEqual(credential_display("MISSING_KEY"), "not set")
@@ -134,14 +134,14 @@ class TestCredentialHint(unittest.TestCase):
 
 class TestSaveCredential(unittest.TestCase):
     def test_saves_to_config_and_environ(self):
-        with patch("code_puppy.config.set_config_value") as mock_set:
+        with patch("spruce_grove.config.set_config_value") as mock_set:
             save_credential("TEST_KEY", "test_value")
             mock_set.assert_called_once_with("test_key", "test_value")
             self.assertEqual(os.environ.get("TEST_KEY"), "test_value")
             os.environ.pop("TEST_KEY", None)
 
     def test_saves_empty_value(self):
-        with patch("code_puppy.config.set_config_value") as mock_set:
+        with patch("spruce_grove.config.set_config_value") as mock_set:
             save_credential("TEST_KEY", "")
             mock_set.assert_called_once_with("test_key", "")
             self.assertNotIn("TEST_KEY", os.environ)
@@ -150,7 +150,7 @@ class TestSaveCredential(unittest.TestCase):
 class TestRequiredEnvVarForModel(unittest.TestCase):
     def test_finds_fireworks_model(self):
         with patch(
-            "code_puppy.provider_credentials._load_merged_model_config",
+            "spruce_grove.provider_credentials._load_merged_model_config",
             return_value={
                 "firepass-kimi-k2p6": {
                     "provider": "firepass",
@@ -163,7 +163,7 @@ class TestRequiredEnvVarForModel(unittest.TestCase):
 
     def test_returns_none_for_unknown_model(self):
         with patch(
-            "code_puppy.provider_credentials._load_merged_model_config",
+            "spruce_grove.provider_credentials._load_merged_model_config",
             return_value={},
         ):
             self.assertIsNone(required_env_var_for_model("nonexistent-model-xyz"))
@@ -172,7 +172,7 @@ class TestRequiredEnvVarForModel(unittest.TestCase):
 class TestRequiredEnvVarsByProvider(unittest.TestCase):
     def test_includes_firepass_provider(self):
         with patch(
-            "code_puppy.provider_credentials._load_merged_model_config",
+            "spruce_grove.provider_credentials._load_merged_model_config",
             return_value={
                 "firepass-kimi-k2p6": {
                     "provider": "firepass",
@@ -186,7 +186,7 @@ class TestRequiredEnvVarsByProvider(unittest.TestCase):
 
     def test_returns_sorted_lists(self):
         with patch(
-            "code_puppy.provider_credentials._load_merged_model_config",
+            "spruce_grove.provider_credentials._load_merged_model_config",
             return_value={
                 "model-a": {"provider": "p1", "api_key": "$Z_KEY"},
                 "model-b": {"provider": "p1", "api_key": "$A_KEY"},
@@ -199,7 +199,7 @@ class TestRequiredEnvVarsByProvider(unittest.TestCase):
 class TestGetCredentialValue(unittest.TestCase):
     def test_prefers_config_over_environ(self):
         with patch(
-            "code_puppy.config.get_value",
+            "spruce_grove.config.get_value",
             return_value="config_value",
         ):
             with patch.dict(os.environ, {"TEST_KEY": "env_value"}):
@@ -207,7 +207,7 @@ class TestGetCredentialValue(unittest.TestCase):
 
     def test_falls_back_to_environ(self):
         with patch(
-            "code_puppy.config.get_value",
+            "spruce_grove.config.get_value",
             return_value=None,
         ):
             with patch.dict(os.environ, {"TEST_KEY": "env_value"}):
@@ -215,7 +215,7 @@ class TestGetCredentialValue(unittest.TestCase):
 
     def test_returns_none_when_missing(self):
         with patch(
-            "code_puppy.config.get_value",
+            "spruce_grove.config.get_value",
             return_value=None,
         ):
             os.environ.pop("TEST_KEY_NEVER_SET", None)
@@ -230,7 +230,7 @@ class TestIsCredentialSet:
     )
     def test_is_credential_set(self, cred_value, expected):
         with patch(
-            "code_puppy.provider_credentials.get_credential_value",
+            "spruce_grove.provider_credentials.get_credential_value",
             return_value=cred_value,
         ):
             assert is_credential_set("ANY_KEY") is expected
@@ -240,10 +240,10 @@ class TestEnvironmentWithoutCredentials:
     """The child-shell scrub set derives from api_key fields only."""
 
     def test_keeps_custom_endpoint_header_non_secret(self, monkeypatch):
-        from code_puppy.provider_credentials import environment_without_credentials
+        from spruce_grove.provider_credentials import environment_without_credentials
 
         monkeypatch.setattr(
-            "code_puppy.provider_credentials._load_merged_model_config",
+            "spruce_grove.provider_credentials._load_merged_model_config",
             lambda: {
                 "openrouter-model": {
                     "provider": "openrouter",
@@ -267,10 +267,10 @@ class TestEnvironmentWithoutCredentials:
         an api_key does, so its var must not ride into a model-triggered child
         shell — while a non-secret ``X-Title: $SITE_URL`` still passes through.
         """
-        from code_puppy.provider_credentials import environment_without_credentials
+        from spruce_grove.provider_credentials import environment_without_credentials
 
         monkeypatch.setattr(
-            "code_puppy.provider_credentials._load_merged_model_config",
+            "spruce_grove.provider_credentials._load_merged_model_config",
             lambda: {
                 "custom-model": {
                     "provider": "custom",
@@ -293,7 +293,7 @@ class TestEnvironmentWithoutCredentials:
 
     def test_catalog_change_applies_to_next_call(self, monkeypatch):
         """A mid-session catalog edit reaches the scrub set with no invalidation step."""
-        from code_puppy.provider_credentials import (
+        from spruce_grove.provider_credentials import (
             credential_env_var_names,
             environment_without_credentials,
             save_credential,
@@ -301,10 +301,10 @@ class TestEnvironmentWithoutCredentials:
 
         catalog_keys: list = []
         monkeypatch.setattr(
-            "code_puppy.provider_credentials.all_api_key_env_vars",
+            "spruce_grove.provider_credentials.all_api_key_env_vars",
             lambda: list(catalog_keys),
         )
-        monkeypatch.setattr("code_puppy.config.set_config_value", lambda *a, **k: None)
+        monkeypatch.setattr("spruce_grove.config.set_config_value", lambda *a, **k: None)
         monkeypatch.setenv("NEW_CUSTOM_API_KEY", "placeholder")
         assert "NEW_CUSTOM_API_KEY" not in credential_env_var_names()
 

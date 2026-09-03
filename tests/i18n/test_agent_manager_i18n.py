@@ -2,7 +2,7 @@
 
 import re
 
-from code_puppy.i18n import catalog, pseudo, translate
+from spruce_grove.i18n import catalog, pseudo, translate
 
 _PLACEHOLDER = re.compile(r"\{(\w+)\}")
 _NAMESPACE = "agent_manager."
@@ -37,7 +37,7 @@ def test_catalog_translations_preserve_placeholders():
 
 
 def test_environment_selected_locale_resolves_message(monkeypatch):
-    monkeypatch.setenv("CODE_PUPPY_LOCALE", "es")
+    monkeypatch.setenv("SPRUCE_GROVE_LOCALE", "es")
     translate.use_detected_locale()
     assert "agente" in translate.t(
         "agent_manager.clone.source_not_found", agent_name="agent-x"

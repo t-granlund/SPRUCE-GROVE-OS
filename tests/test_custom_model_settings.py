@@ -10,8 +10,8 @@ from unittest.mock import patch
 
 import pytest
 
-import code_puppy.config as cp_config
-from code_puppy.model_factory import _merge_dotted_key
+import spruce_grove.config as cp_config
+from spruce_grove.model_factory import _merge_dotted_key
 
 
 class TestParseConfigScalar:
@@ -100,7 +100,7 @@ class TestCustomKeyExcludedFromScalarSettings:
     """The reserved 'custom' key must stay out of the generic namespace."""
 
     def test_get_all_model_settings_skips_custom_blob(self, tmp_path):
-        cfg_file = tmp_path / "puppy.cfg"
+        cfg_file = tmp_path / "grove.cfg"
         cfg_file.write_text(
             f"[{cp_config.DEFAULT_SECTION}]\n"
             "model_settings_test_model_temperature = 0.5\n"
@@ -147,10 +147,10 @@ class TestMakeModelSettingsCustomParams:
     """Custom params must land in extra_body, applied last so they win."""
 
     def test_custom_params_merged_into_extra_body(self):
-        from code_puppy.model_factory import make_model_settings
+        from spruce_grove.model_factory import make_model_settings
 
         with patch(
-            "code_puppy.config.get_custom_model_settings",
+            "spruce_grove.config.get_custom_model_settings",
             return_value={"chat_template_kwargs.thinking": "medium", "top_k": 5},
         ):
             settings = make_model_settings("some-model", max_tokens=4096)
@@ -160,10 +160,10 @@ class TestMakeModelSettingsCustomParams:
 
     def test_custom_params_override_built_in_extra_body(self):
         """GLM models set extra_body.thinking themselves; custom wins."""
-        from code_puppy.model_factory import make_model_settings
+        from spruce_grove.model_factory import make_model_settings
 
         with patch(
-            "code_puppy.config.get_custom_model_settings",
+            "spruce_grove.config.get_custom_model_settings",
             return_value={"thinking.type": "disabled"},
         ):
             settings = make_model_settings("zai-glm-5.1-api", max_tokens=4096)
@@ -173,10 +173,10 @@ class TestMakeModelSettingsCustomParams:
         assert settings["extra_body"]["thinking"]["clear_thinking"] is False
 
     def test_no_custom_params_leaves_extra_body_untouched(self):
-        from code_puppy.model_factory import make_model_settings
+        from spruce_grove.model_factory import make_model_settings
 
         with patch(
-            "code_puppy.config.get_custom_model_settings",
+            "spruce_grove.config.get_custom_model_settings",
             return_value={},
         ):
             settings = make_model_settings("some-model", max_tokens=4096)

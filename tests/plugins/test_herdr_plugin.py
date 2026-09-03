@@ -1,6 +1,6 @@
 """Tests for the built-in herdr integration plugin.
 
-code-puppy reports working/blocked/idle *authoritatively* -- state is a pure
+spruce-grove reports working/blocked/idle *authoritatively* -- state is a pure
 function of run-depth (working) and the ``awaiting_user_input`` signal
 (blocked), with no heartbeat and nothing for herdr to infer from the screen.
 
@@ -419,8 +419,8 @@ def test_tool_start_resolves_message_outside_lock():
 
 
 def test_set_awaiting_user_input_fires_callback():
-    from code_puppy import callbacks
-    from code_puppy.tools.command_runner import set_awaiting_user_input
+    from spruce_grove import callbacks
+    from spruce_grove.tools.command_runner import set_awaiting_user_input
 
     seen: list[bool] = []
     callbacks.register_callback(
@@ -435,7 +435,7 @@ def test_set_awaiting_user_input_fires_callback():
 
 
 def test_set_awaiting_user_input_exposes_notification_intent():
-    from code_puppy.tools.command_runner import (
+    from spruce_grove.tools.command_runner import (
         set_awaiting_user_input,
         should_notify_awaiting_user_input,
     )

@@ -124,10 +124,10 @@ class TestModelValidation:
         assert trimmed == "gpt-5"
         assert len(trimmed.split()) == 1
 
-    @patch("code_puppy.config.set_model_name")
+    @patch("spruce_grove.config.set_model_name")
     def test_set_model_name_called(self, mock_set_model):
         """Test that set_model_name is called with model."""
-        from code_puppy.config import set_model_name
+        from spruce_grove.config import set_model_name
 
         set_model_name("gpt-5")
         mock_set_model.assert_called_once_with("gpt-5")
@@ -136,10 +136,10 @@ class TestModelValidation:
 class TestAgentValidation:
     """Test agent validation from command line."""
 
-    @patch("code_puppy.agents.agent_manager.set_current_agent")
+    @patch("spruce_grove.agents.agent_manager.set_current_agent")
     def test_set_agent_called(self, mock_set_agent):
         """Test that set_current_agent is called with agent name."""
-        from code_puppy.agents.agent_manager import set_current_agent
+        from spruce_grove.agents.agent_manager import set_current_agent
 
         set_current_agent("code-reviewer")
         mock_set_agent.assert_called_once_with("code-reviewer")
@@ -163,10 +163,10 @@ class TestErrorHandling:
         with pytest.raises(EOFError):
             raise EOFError()
 
-    @patch("code_puppy.messaging.emit_error")
+    @patch("spruce_grove.messaging.emit_error")
     def test_emit_error_called(self, mock_emit_error):
         """Test that emit_error can be called for errors."""
-        from code_puppy.messaging import emit_error
+        from spruce_grove.messaging import emit_error
 
         emit_error("Test error")
         mock_emit_error.assert_called_once()
@@ -177,7 +177,7 @@ class TestVersionHandling:
 
     def test_version_string_exists(self):
         """Test that version string can be accessed."""
-        from code_puppy import __version__
+        from spruce_grove import __version__
 
         assert isinstance(__version__, str)
         assert len(__version__) > 0
@@ -215,12 +215,12 @@ class TestLogoDisplay:
 
 
 class TestAPIKeyLoading:
-    """Test API key loading from puppy.cfg."""
+    """Test API key loading from grove.cfg."""
 
-    @patch("code_puppy.config.load_api_keys_to_environment")
+    @patch("spruce_grove.config.load_api_keys_to_environment")
     def test_api_keys_load_function_called(self, mock_load_keys):
         """Test that API keys are loaded from config."""
-        from code_puppy.config import load_api_keys_to_environment
+        from spruce_grove.config import load_api_keys_to_environment
 
         load_api_keys_to_environment()
         mock_load_keys.assert_called_once()
@@ -242,11 +242,11 @@ class TestMessageRendering:
         display_console = Console()
         assert display_console is not None
 
-    @patch("code_puppy.messaging.get_global_queue")
-    @patch("code_puppy.messaging.get_message_bus")
+    @patch("spruce_grove.messaging.get_global_queue")
+    @patch("spruce_grove.messaging.get_message_bus")
     def test_queue_and_bus_initialized(self, mock_bus, mock_queue):
         """Test that both message bus and queue are initialized."""
-        from code_puppy.messaging import get_global_queue, get_message_bus
+        from spruce_grove.messaging import get_global_queue, get_message_bus
 
         get_global_queue()
         get_message_bus()
@@ -257,18 +257,18 @@ class TestMessageRendering:
 class TestTerminalReset:
     """Test terminal state reset functionality."""
 
-    @patch("code_puppy.terminal_utils.reset_windows_terminal_ansi")
+    @patch("spruce_grove.terminal_utils.reset_windows_terminal_ansi")
     def test_windows_ansi_reset_function_exists(self, mock_reset_ansi):
         """Test that Windows ANSI reset function can be called."""
-        from code_puppy.terminal_utils import reset_windows_terminal_ansi
+        from spruce_grove.terminal_utils import reset_windows_terminal_ansi
 
         reset_windows_terminal_ansi()
         mock_reset_ansi.assert_called_once()
 
-    @patch("code_puppy.terminal_utils.reset_unix_terminal")
+    @patch("spruce_grove.terminal_utils.reset_unix_terminal")
     def test_unix_terminal_reset_function_exists(self, mock_reset_unix):
         """Test that Unix terminal reset function can be called."""
-        from code_puppy.terminal_utils import reset_unix_terminal
+        from spruce_grove.terminal_utils import reset_unix_terminal
 
         reset_unix_terminal()
         mock_reset_unix.assert_called_once()
@@ -277,10 +277,10 @@ class TestTerminalReset:
 class TestCancelAgentKeyValidation:
     """Test cancel agent key validation."""
 
-    @patch("code_puppy.keymap.validate_cancel_agent_key")
+    @patch("spruce_grove.keymap.validate_cancel_agent_key")
     def test_cancel_key_validation_called(self, mock_validate):
         """Test that cancel key validation can be called."""
-        from code_puppy.keymap import validate_cancel_agent_key
+        from spruce_grove.keymap import validate_cancel_agent_key
 
         validate_cancel_agent_key()
         mock_validate.assert_called_once()
@@ -289,18 +289,18 @@ class TestCancelAgentKeyValidation:
 class TestConfigInitialization:
     """Test configuration initialization."""
 
-    @patch("code_puppy.config.ensure_config_exists")
+    @patch("spruce_grove.config.ensure_config_exists")
     def test_ensure_config_exists_called(self, mock_ensure):
         """Test that ensure_config_exists is called."""
-        from code_puppy.config import ensure_config_exists
+        from spruce_grove.config import ensure_config_exists
 
         ensure_config_exists()
         mock_ensure.assert_called_once()
 
-    @patch("code_puppy.config.initialize_command_history_file")
+    @patch("spruce_grove.config.initialize_command_history_file")
     def test_command_history_initialized(self, mock_init):
         """Test that command history file is initialized."""
-        from code_puppy.config import initialize_command_history_file
+        from spruce_grove.config import initialize_command_history_file
 
         initialize_command_history_file()
         mock_init.assert_called_once()
@@ -309,18 +309,18 @@ class TestConfigInitialization:
 class TestCallbackSystem:
     """Test callback system integration."""
 
-    @patch("code_puppy.callbacks.on_startup", new_callable=AsyncMock)
+    @patch("spruce_grove.callbacks.on_startup", new_callable=AsyncMock)
     async def test_on_startup_callback(self, mock_startup):
         """Test that on_startup callback exists and can be called."""
-        from code_puppy.callbacks import on_startup
+        from spruce_grove.callbacks import on_startup
 
         await on_startup()
         mock_startup.assert_called_once()
 
-    @patch("code_puppy.callbacks.on_shutdown", new_callable=AsyncMock)
+    @patch("spruce_grove.callbacks.on_shutdown", new_callable=AsyncMock)
     async def test_on_shutdown_callback(self, mock_shutdown):
         """Test that on_shutdown callback exists and can be called."""
-        from code_puppy.callbacks import on_shutdown
+        from spruce_grove.callbacks import on_shutdown
 
         await on_shutdown()
         mock_shutdown.assert_called_once()
@@ -329,10 +329,10 @@ class TestCallbackSystem:
 class TestPortAvailability:
     """Test port availability checking."""
 
-    @patch("code_puppy.http_utils.find_available_port")
+    @patch("spruce_grove.http_utils.find_available_port")
     def test_find_available_port_called(self, mock_find_port):
         """Test that find_available_port can be called."""
-        from code_puppy.http_utils import find_available_port
+        from spruce_grove.http_utils import find_available_port
 
         mock_find_port.return_value = 8090
         result = find_available_port()
@@ -341,7 +341,7 @@ class TestPortAvailability:
     def test_port_base_argparse_default_is_none(self):
         """--port-base defaults to None so cli_runner can fall back to config.
 
-        If this ever flips to a hardcoded value, the env-var / puppy.cfg
+        If this ever flips to a hardcoded value, the env-var / grove.cfg
         precedence chain silently breaks.
         """
         import argparse
@@ -357,10 +357,10 @@ class TestPortAvailability:
 
     def test_port_base_cli_wins_over_config(self):
         """resolve_port_base must honor a valid CLI value over env/cfg."""
-        from code_puppy.config import resolve_port_base
+        from spruce_grove.config import resolve_port_base
 
-        with patch("code_puppy.config.get_value", return_value="9500"):
-            with patch.dict("os.environ", {"CODE_PUPPY_PORT_BASE": "9700"}):
+        with patch("spruce_grove.config.get_value", return_value="9500"):
+            with patch.dict("os.environ", {"SPRUCE_GROVE_PORT_BASE": "9700"}):
                 assert resolve_port_base(cli_value="9100") == 9100
                 assert resolve_port_base(cli_value=None) == 9700  # falls to env
 
@@ -370,13 +370,13 @@ class TestPortAvailability:
         This is the whole point of type=str + resolve_port_base --
         argparse type=int would hard-exit before we could recover.
         """
-        from code_puppy.config import DEFAULT_PORT_BASE, resolve_port_base
+        from spruce_grove.config import DEFAULT_PORT_BASE, resolve_port_base
 
-        with patch("code_puppy.config.get_value", return_value=None):
+        with patch("spruce_grove.config.get_value", return_value=None):
             with patch.dict("os.environ", {}, clear=False):
                 import os
 
-                os.environ.pop("CODE_PUPPY_PORT_BASE", None)
+                os.environ.pop("SPRUCE_GROVE_PORT_BASE", None)
                 assert (
                     resolve_port_base(cli_value="totally-not-a-port")
                     == DEFAULT_PORT_BASE
@@ -386,14 +386,14 @@ class TestPortAvailability:
 class TestAgentRunning:
     """Test agent execution."""
 
-    @patch("code_puppy.agents.agent_manager.get_current_agent")
+    @patch("spruce_grove.agents.agent_manager.get_current_agent")
     def test_get_current_agent_returns_agent(self, mock_get_agent):
         """Test that get_current_agent returns an agent."""
         mock_agent = MagicMock()
         mock_agent.name = "test-agent"
         mock_get_agent.return_value = mock_agent
 
-        from code_puppy.agents.agent_manager import get_current_agent
+        from spruce_grove.agents.agent_manager import get_current_agent
 
         agent = get_current_agent()
         assert agent is not None
@@ -406,7 +406,7 @@ class TestResumeFlag:
     def test_resume_session_loading_logic(self, tmp_path):
         """Test that resume can load from a pickle file path."""
 
-        from code_puppy.session_storage import load_session, save_session
+        from spruce_grove.session_storage import load_session, save_session
 
         # Create a fake session
         fake_history = [{"role": "user", "content": "Hello"}]
@@ -485,7 +485,7 @@ class TestHeadlessSessionPersistence:
 
     @pytest.mark.asyncio
     async def test_save_back_on_success_path(self, tmp_path):
-        from code_puppy.cli_runner import execute_single_prompt
+        from spruce_grove.cli_runner import execute_single_prompt
 
         history = [{"role": "user", "content": "step 1"}]
         agent = self._agent_with_history(history)
@@ -493,16 +493,16 @@ class TestHeadlessSessionPersistence:
         run_result.output = "ok"
 
         with (
-            patch("code_puppy.cli_runner.get_current_agent", return_value=agent),
+            patch("spruce_grove.cli_runner.get_current_agent", return_value=agent),
             patch(
-                "code_puppy.cli_runner.run_prompt_with_attachments",
+                "spruce_grove.cli_runner.run_prompt_with_attachments",
                 new=AsyncMock(return_value=(run_result, MagicMock())),
             ),
-            patch("code_puppy.config.AUTOSAVE_DIR", str(tmp_path)),
+            patch("spruce_grove.config.AUTOSAVE_DIR", str(tmp_path)),
             patch(
-                "code_puppy.session_lifecycle.fire_post_autosave_callback"
+                "spruce_grove.session_lifecycle.fire_post_autosave_callback"
             ) as fire_cb,
-            patch("code_puppy.config.record_quick_resume_sessions") as mock_qr,
+            patch("spruce_grove.config.record_quick_resume_sessions") as mock_qr,
         ):
             await execute_single_prompt(
                 "hi",
@@ -530,24 +530,24 @@ class TestHeadlessSessionPersistence:
         untouched so ``--quick-resume`` does not point at a missing/corrupt
         session file.
         """
-        from code_puppy.cli_runner import execute_single_prompt
+        from spruce_grove.cli_runner import execute_single_prompt
 
         agent = self._agent_with_history([{"role": "user", "content": "hi"}])
         run_result = MagicMock()
         run_result.output = "ok"
 
         with (
-            patch("code_puppy.cli_runner.get_current_agent", return_value=agent),
+            patch("spruce_grove.cli_runner.get_current_agent", return_value=agent),
             patch(
-                "code_puppy.cli_runner.run_prompt_with_attachments",
+                "spruce_grove.cli_runner.run_prompt_with_attachments",
                 new=AsyncMock(return_value=(run_result, MagicMock())),
             ),
-            patch("code_puppy.config.AUTOSAVE_DIR", str(tmp_path)),
+            patch("spruce_grove.config.AUTOSAVE_DIR", str(tmp_path)),
             patch(
-                "code_puppy.session_lifecycle.persist_named_session",
+                "spruce_grove.session_lifecycle.persist_named_session",
                 side_effect=OSError("disk full"),
             ),
-            patch("code_puppy.config.record_quick_resume_sessions") as mock_qr,
+            patch("spruce_grove.config.record_quick_resume_sessions") as mock_qr,
         ):
             # Should not raise; error is swallowed and emitted as a message.
             await execute_single_prompt(
@@ -561,7 +561,7 @@ class TestHeadlessSessionPersistence:
     @pytest.mark.asyncio
     async def test_save_back_on_cancelled_error(self, tmp_path):
         """Partial state still persists when the run is cancelled."""
-        from code_puppy.cli_runner import execute_single_prompt
+        from spruce_grove.cli_runner import execute_single_prompt
 
         agent = self._agent_with_history([{"role": "user", "content": "partial"}])
 
@@ -569,13 +569,13 @@ class TestHeadlessSessionPersistence:
             raise asyncio.CancelledError()
 
         with (
-            patch("code_puppy.cli_runner.get_current_agent", return_value=agent),
+            patch("spruce_grove.cli_runner.get_current_agent", return_value=agent),
             patch(
-                "code_puppy.cli_runner.run_prompt_with_attachments",
+                "spruce_grove.cli_runner.run_prompt_with_attachments",
                 new=_raise_cancelled,
             ),
-            patch("code_puppy.config.AUTOSAVE_DIR", str(tmp_path)),
-            patch("code_puppy.session_lifecycle.fire_post_autosave_callback"),
+            patch("spruce_grove.config.AUTOSAVE_DIR", str(tmp_path)),
+            patch("spruce_grove.session_lifecycle.fire_post_autosave_callback"),
         ):
             await execute_single_prompt("hi", self._renderer(), session_name="mywork")
 
@@ -584,7 +584,7 @@ class TestHeadlessSessionPersistence:
     @pytest.mark.asyncio
     async def test_save_back_on_generic_exception(self, tmp_path):
         """Save still fires when the agent raises a non-cancel exception."""
-        from code_puppy.cli_runner import execute_single_prompt
+        from spruce_grove.cli_runner import execute_single_prompt
 
         agent = self._agent_with_history([{"role": "user", "content": "partial"}])
 
@@ -592,10 +592,10 @@ class TestHeadlessSessionPersistence:
             raise RuntimeError("model exploded")
 
         with (
-            patch("code_puppy.cli_runner.get_current_agent", return_value=agent),
-            patch("code_puppy.cli_runner.run_prompt_with_attachments", new=_raise),
-            patch("code_puppy.config.AUTOSAVE_DIR", str(tmp_path)),
-            patch("code_puppy.session_lifecycle.fire_post_autosave_callback"),
+            patch("spruce_grove.cli_runner.get_current_agent", return_value=agent),
+            patch("spruce_grove.cli_runner.run_prompt_with_attachments", new=_raise),
+            patch("spruce_grove.config.AUTOSAVE_DIR", str(tmp_path)),
+            patch("spruce_grove.session_lifecycle.fire_post_autosave_callback"),
         ):
             await execute_single_prompt("hi", self._renderer(), session_name="mywork")
 
@@ -613,7 +613,7 @@ class TestHeadlessSessionPersistence:
         """
         from pathlib import Path
 
-        from code_puppy.cli_runner import execute_single_prompt
+        from spruce_grove.cli_runner import execute_single_prompt
 
         generated_name = "auto_session_20250101_000000"
         agent = self._agent_with_history([{"role": "user", "content": "ephemeral"}])
@@ -621,17 +621,17 @@ class TestHeadlessSessionPersistence:
         run_result.output = "ok"
 
         with (
-            patch("code_puppy.cli_runner.get_current_agent", return_value=agent),
+            patch("spruce_grove.cli_runner.get_current_agent", return_value=agent),
             patch(
-                "code_puppy.cli_runner.run_prompt_with_attachments",
+                "spruce_grove.cli_runner.run_prompt_with_attachments",
                 new=AsyncMock(return_value=(run_result, MagicMock())),
             ),
-            patch("code_puppy.config.AUTOSAVE_DIR", str(tmp_path)),
+            patch("spruce_grove.config.AUTOSAVE_DIR", str(tmp_path)),
             patch(
-                "code_puppy.config.get_current_session_name",
+                "spruce_grove.config.get_current_session_name",
                 return_value=generated_name,
             ),
-            patch("code_puppy.session_lifecycle.persist_named_session") as mock_persist,
+            patch("spruce_grove.session_lifecycle.persist_named_session") as mock_persist,
         ):
             await execute_single_prompt("hi", self._renderer(), session_name=None)
 
@@ -645,7 +645,7 @@ class TestHeadlessSessionPersistence:
     @pytest.mark.asyncio
     async def test_shell_passthrough_does_not_clobber_session(self, tmp_path):
         """`-r mywork -p '!ls'` must not zero out an existing named session."""
-        from code_puppy.cli_runner import execute_single_prompt
+        from spruce_grove.cli_runner import execute_single_prompt
 
         # Seed an existing session file with real content.
         seeded = b"non-empty existing session bytes"
@@ -653,14 +653,14 @@ class TestHeadlessSessionPersistence:
 
         with (
             patch(
-                "code_puppy.command_line.shell_passthrough.is_shell_passthrough",
+                "spruce_grove.command_line.shell_passthrough.is_shell_passthrough",
                 return_value=True,
             ),
             patch(
-                "code_puppy.command_line.shell_passthrough.execute_shell_passthrough"
+                "spruce_grove.command_line.shell_passthrough.execute_shell_passthrough"
             ) as mock_shell,
-            patch("code_puppy.config.AUTOSAVE_DIR", str(tmp_path)),
-            patch("code_puppy.session_lifecycle.persist_named_session") as mock_persist,
+            patch("spruce_grove.config.AUTOSAVE_DIR", str(tmp_path)),
+            patch("spruce_grove.session_lifecycle.persist_named_session") as mock_persist,
         ):
             await execute_single_prompt("!ls", self._renderer(), session_name="mywork")
 

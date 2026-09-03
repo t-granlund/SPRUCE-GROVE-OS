@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from code_puppy.cli_runner import _write_usage_file, execute_single_prompt
+from spruce_grove.cli_runner import _write_usage_file, execute_single_prompt
 
 
 def test_write_usage_file_creates_parent_and_serializes_fields(tmp_path):
@@ -56,21 +56,21 @@ async def test_execute_single_prompt_writes_result_usage(tmp_path):
 
     with (
         patch(
-            "code_puppy.command_line.shell_passthrough.is_shell_passthrough",
+            "spruce_grove.command_line.shell_passthrough.is_shell_passthrough",
             return_value=False,
         ),
         patch(
-            "code_puppy.cli_runner.parse_prompt_attachments",
+            "spruce_grove.cli_runner.parse_prompt_attachments",
             return_value=SimpleNamespace(prompt="do it"),
         ),
-        patch("code_puppy.cli_runner.get_current_agent", return_value=agent),
+        patch("spruce_grove.cli_runner.get_current_agent", return_value=agent),
         patch(
-            "code_puppy.cli_runner.run_prompt_with_attachments",
+            "spruce_grove.cli_runner.run_prompt_with_attachments",
             new=AsyncMock(return_value=(result, MagicMock())),
         ),
-        patch("code_puppy.messaging.get_message_bus"),
-        patch("code_puppy.session_lifecycle.persist_named_session"),
-        patch("code_puppy.config.record_quick_resume_sessions"),
+        patch("spruce_grove.messaging.get_message_bus"),
+        patch("spruce_grove.session_lifecycle.persist_named_session"),
+        patch("spruce_grove.config.record_quick_resume_sessions"),
     ):
         await execute_single_prompt("do it", renderer, usage_file=target)
 

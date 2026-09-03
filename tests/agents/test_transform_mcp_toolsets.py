@@ -16,8 +16,8 @@ import pytest
 from pydantic_ai.models.test import TestModel
 from pydantic_ai.toolsets import FunctionToolset
 
-from code_puppy.agents import _builder
-from code_puppy.agents.base_agent import BaseAgent
+from spruce_grove.agents import _builder
+from spruce_grove.agents.base_agent import BaseAgent
 
 
 class _FakeAgentConfig(BaseAgent):
@@ -67,7 +67,7 @@ def _patched_build(agent, mcp_servers):
         patch.object(_builder.ModelFactory, "load_config", staticmethod(dict)),
         patch.object(_builder, "load_mcp_servers", lambda **k: mcp_servers),
         patch.object(_builder, "make_model_settings", lambda *a, **k: None),
-        patch("code_puppy.tools.register_tools_for_agent", lambda *a, **k: None),
+        patch("spruce_grove.tools.register_tools_for_agent", lambda *a, **k: None),
     ):
         yield
 

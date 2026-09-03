@@ -1,4 +1,4 @@
-/* Code Puppy — shared icon set (Lucide, stroke 2, MIT). Inline SVG, aria-hidden.
+/* Spruce Grove — shared icon set (Lucide, stroke 2, MIT). Inline SVG, aria-hidden.
    Use BB.icon('server') or BB.icons.server for raw. */
 (function () {
   "use strict";

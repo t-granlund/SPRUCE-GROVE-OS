@@ -10,7 +10,7 @@ import re
 
 import pytest
 
-from code_puppy.i18n import catalog, pseudo, translate
+from spruce_grove.i18n import catalog, pseudo, translate
 
 _PLACEHOLDER = re.compile(r"\{(\w+)\}")
 

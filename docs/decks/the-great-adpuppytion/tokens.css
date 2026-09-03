@@ -6,7 +6,7 @@
    ============================================================ */
 
 :root {
-  /* ── 1 · BRAND PRIMITIVES (Code-Puppy field-guide palette) ── */
+  /* ── 1 · BRAND PRIMITIVES (Code-Cedar field-guide palette) ── */
   --cp-ink-950: #06090d;
   --cp-ink-900: #0b0f14;
   --cp-ink-800: #111821;
@@ -72,7 +72,7 @@
   --type-stat: 4.2em;    /* bigstat                  */
 
   /* ── 7 · SPACE & GEOMETRY ── */
-  --margin-frame: 8%;          /* slide margins (slide-puppy rule)   */
+  --margin-frame: 8%;          /* slide margins (slide-grove rule)   */
   --radius-card: 14px;
   --radius-panel: 16px;
   --radius-media: 10px;

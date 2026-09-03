@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from code_puppy.model_factory import ModelFactory, make_model_settings
+from spruce_grove.model_factory import ModelFactory, make_model_settings
 
 
 def test_openai_gpt5_alias_uses_responses_reasoning_settings():
@@ -21,7 +21,7 @@ def test_openai_gpt5_alias_uses_responses_reasoning_settings():
     with (
         patch.object(ModelFactory, "load_config", return_value=config),
         patch(
-            "code_puppy.config.get_custom_model_settings",
+            "spruce_grove.config.get_custom_model_settings",
             return_value={},
         ),
     ):
@@ -36,7 +36,7 @@ def test_openai_gpt5_alias_uses_responses_reasoning_settings():
 
 def test_gpt56_alias_profile_enables_reasoning_fields():
     """The exact extra-model alias gets the profile gates it needs."""
-    from code_puppy.model_factory import _thinking_tags_profile
+    from spruce_grove.model_factory import _thinking_tags_profile
 
     profile = _thinking_tags_profile(
         "openai-gpt-5.6-luna",
@@ -71,7 +71,7 @@ def test_alias_keyed_custom_responses_model_gets_reasoning_settings():
     with (
         patch.object(ModelFactory, "load_config", return_value=config),
         patch(
-            "code_puppy.config.get_custom_model_settings",
+            "spruce_grove.config.get_custom_model_settings",
             return_value={},
         ),
     ):

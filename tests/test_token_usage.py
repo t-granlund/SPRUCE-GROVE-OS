@@ -1,4 +1,4 @@
-"""Tests for the core ``code_puppy.token_usage`` module.
+"""Tests for the core ``spruce_grove.token_usage`` module.
 
 Token accounting used to live in the ``context_indicator`` plugin
 (``code_puppy_core_plugins.context_indicator.usage``). It moved to this core
@@ -26,12 +26,12 @@ import pytest
 
 
 def _usage_module():
-    return importlib.import_module("code_puppy.token_usage")
+    return importlib.import_module("spruce_grove.token_usage")
 
 
 @pytest.fixture
 def stub_agent_manager(monkeypatch):
-    """Provide a scoped stub for ``code_puppy.agents.agent_manager``.
+    """Provide a scoped stub for ``spruce_grove.agents.agent_manager``.
 
     The module only ever calls ``get_current_agent`` from there, so a bare
     ``MagicMock`` with that attribute is enough. ``monkeypatch.setitem``
@@ -40,7 +40,7 @@ def stub_agent_manager(monkeypatch):
     """
     stub = MagicMock()
     stub.get_current_agent = MagicMock(side_effect=RuntimeError("unstubbed"))
-    monkeypatch.setitem(sys.modules, "code_puppy.agents.agent_manager", stub)
+    monkeypatch.setitem(sys.modules, "spruce_grove.agents.agent_manager", stub)
     return stub
 
 
@@ -144,7 +144,7 @@ def test_get_current_usage_computes_totals(stub_agent_manager):
     # 2500 chars / 2.5 chars-per-token == 1000 raw tokens per message.
     fake_messages = [MagicMock(parts=[MagicMock()]) for _ in range(3)]
     with patch(
-        "code_puppy.agents._history.stringify_part",
+        "spruce_grove.agents._history.stringify_part",
         return_value="x" * 2500,
     ):
         fake_agent = MagicMock()
@@ -193,11 +193,11 @@ def test_live_mcp_servers_for_uses_fresh_manager_state(monkeypatch):
 
     fake_mcp_module = MagicMock()
     fake_mcp_module.get_mcp_manager = MagicMock(return_value=fake_manager)
-    monkeypatch.setitem(sys.modules, "code_puppy.mcp_", fake_mcp_module)
+    monkeypatch.setitem(sys.modules, "spruce_grove.mcp_", fake_mcp_module)
 
     fake_config = MagicMock()
     fake_config.get_value = MagicMock(return_value=None)
-    monkeypatch.setitem(sys.modules, "code_puppy.config", fake_config)
+    monkeypatch.setitem(sys.modules, "spruce_grove.config", fake_config)
 
     fake_agent = MagicMock()
     fake_agent.name = "some-agent"
@@ -215,11 +215,11 @@ def test_live_mcp_servers_for_respects_disable_flag(monkeypatch):
     fake_manager = MagicMock()
     fake_mcp_module = MagicMock()
     fake_mcp_module.get_mcp_manager = MagicMock(return_value=fake_manager)
-    monkeypatch.setitem(sys.modules, "code_puppy.mcp_", fake_mcp_module)
+    monkeypatch.setitem(sys.modules, "spruce_grove.mcp_", fake_mcp_module)
 
     fake_config = MagicMock()
     fake_config.get_value = MagicMock(return_value="true")
-    monkeypatch.setitem(sys.modules, "code_puppy.config", fake_config)
+    monkeypatch.setitem(sys.modules, "spruce_grove.config", fake_config)
 
     fake_agent = MagicMock()
     fake_agent.name = "some-agent"
@@ -233,10 +233,10 @@ def test_live_mcp_servers_for_falls_back_to_cached_on_error(monkeypatch):
     mod = _usage_module()
     fake_mcp_module = MagicMock()
     fake_mcp_module.get_mcp_manager = MagicMock(side_effect=RuntimeError("boom"))
-    monkeypatch.setitem(sys.modules, "code_puppy.mcp_", fake_mcp_module)
+    monkeypatch.setitem(sys.modules, "spruce_grove.mcp_", fake_mcp_module)
     monkeypatch.setitem(
         sys.modules,
-        "code_puppy.config",
+        "spruce_grove.config",
         MagicMock(get_value=MagicMock(return_value=None)),
     )
 
@@ -270,7 +270,7 @@ def test_overhead_breakdown_carves_kennel_memory_out_of_system_prompt():
     with (
         patch.object(mod, "_resolved_system_prompt", return_value=resolved_prompt),
         patch.object(mod, "_kennel_memory_block", return_value=kennel_block),
-        patch("code_puppy.agents._builder.load_puppy_rules", return_value=""),
+        patch("spruce_grove.agents._builder.load_puppy_rules", return_value=""),
         patch.object(mod, "_agent_tools", return_value=None),
         patch.object(mod, "_live_mcp_servers_for", return_value=None),
     ):
@@ -292,7 +292,7 @@ def test_overhead_breakdown_kennel_zero_when_block_empty():
     with (
         patch.object(mod, "_resolved_system_prompt", return_value=resolved_prompt),
         patch.object(mod, "_kennel_memory_block", return_value=""),
-        patch("code_puppy.agents._builder.load_puppy_rules", return_value=""),
+        patch("spruce_grove.agents._builder.load_puppy_rules", return_value=""),
         patch.object(mod, "_agent_tools", return_value=None),
         patch.object(mod, "_live_mcp_servers_for", return_value=None),
     ):
@@ -318,7 +318,7 @@ def test_overhead_breakdown_kennel_clamps_when_block_larger_than_resolved():
     with (
         patch.object(mod, "_resolved_system_prompt", return_value=resolved_prompt),
         patch.object(mod, "_kennel_memory_block", return_value=kennel_block),
-        patch("code_puppy.agents._builder.load_puppy_rules", return_value=""),
+        patch("spruce_grove.agents._builder.load_puppy_rules", return_value=""),
         patch.object(mod, "_agent_tools", return_value=None),
         patch.object(mod, "_live_mcp_servers_for", return_value=None),
     ):
@@ -336,7 +336,7 @@ def test_kennel_memory_block_swallows_provider_exceptions(monkeypatch):
         raise RuntimeError("db on fire")
 
     monkeypatch.setattr(
-        "code_puppy.kennel_provider.get_kennel_memory_provider",
+        "spruce_grove.kennel_provider.get_kennel_memory_provider",
         lambda: _boom,
     )
     assert mod._kennel_memory_block() == ""
@@ -346,7 +346,7 @@ def test_kennel_memory_block_returns_empty_when_no_provider(monkeypatch):
     """Kennel plugin not registered -> empty string, no exception."""
     mod = _usage_module()
     monkeypatch.setattr(
-        "code_puppy.kennel_provider.get_kennel_memory_provider",
+        "spruce_grove.kennel_provider.get_kennel_memory_provider",
         lambda: None,
     )
     assert mod._kennel_memory_block() == ""

@@ -7,31 +7,31 @@ import pytest
 
 @pytest.fixture
 def stop_cmd():
-    with patch("code_puppy.command_line.mcp.base.get_mcp_manager") as mock_mgr:
+    with patch("spruce_grove.command_line.mcp.base.get_mcp_manager") as mock_mgr:
         mock_mgr.return_value = MagicMock()
-        from code_puppy.command_line.mcp.stop_command import StopCommand
+        from spruce_grove.command_line.mcp.stop_command import StopCommand
 
         return StopCommand()
 
 
 class TestStopCommand:
     def test_no_args_shows_usage(self, stop_cmd):
-        with patch("code_puppy.command_line.mcp.stop_command.emit_info") as mock_emit:
+        with patch("spruce_grove.command_line.mcp.stop_command.emit_info") as mock_emit:
             stop_cmd.execute([], group_id="g1")
             assert mock_emit.called
 
     def test_generates_group_id(self, stop_cmd):
-        with patch("code_puppy.command_line.mcp.stop_command.emit_info"):
+        with patch("spruce_grove.command_line.mcp.stop_command.emit_info"):
             stop_cmd.execute([])
 
     def test_server_not_found(self, stop_cmd):
         with (
             patch(
-                "code_puppy.command_line.mcp.stop_command.find_server_id_by_name",
+                "spruce_grove.command_line.mcp.stop_command.find_server_id_by_name",
                 return_value=None,
             ),
-            patch("code_puppy.command_line.mcp.stop_command.suggest_similar_servers"),
-            patch("code_puppy.command_line.mcp.stop_command.emit_info") as mock_emit,
+            patch("spruce_grove.command_line.mcp.stop_command.suggest_similar_servers"),
+            patch("spruce_grove.command_line.mcp.stop_command.emit_info") as mock_emit,
         ):
             stop_cmd.execute(["missing"], group_id="g1")
             assert "not found" in str(mock_emit.call_args_list)
@@ -39,12 +39,12 @@ class TestStopCommand:
     def test_stop_success(self, stop_cmd):
         with (
             patch(
-                "code_puppy.command_line.mcp.stop_command.find_server_id_by_name",
+                "spruce_grove.command_line.mcp.stop_command.find_server_id_by_name",
                 return_value="id1",
             ),
-            patch("code_puppy.command_line.mcp.stop_command.emit_info") as mock_emit,
+            patch("spruce_grove.command_line.mcp.stop_command.emit_info") as mock_emit,
             patch(
-                "code_puppy.command_line.mcp.stop_command.get_current_agent"
+                "spruce_grove.command_line.mcp.stop_command.get_current_agent"
             ) as mock_agent,
         ):
             stop_cmd.manager.stop_server_sync.return_value = True
@@ -56,12 +56,12 @@ class TestStopCommand:
     def test_stop_success_agent_reload_fails(self, stop_cmd):
         with (
             patch(
-                "code_puppy.command_line.mcp.stop_command.find_server_id_by_name",
+                "spruce_grove.command_line.mcp.stop_command.find_server_id_by_name",
                 return_value="id1",
             ),
-            patch("code_puppy.command_line.mcp.stop_command.emit_info"),
+            patch("spruce_grove.command_line.mcp.stop_command.emit_info"),
             patch(
-                "code_puppy.command_line.mcp.stop_command.get_current_agent",
+                "spruce_grove.command_line.mcp.stop_command.get_current_agent",
                 side_effect=Exception("no agent"),
             ),
         ):
@@ -71,10 +71,10 @@ class TestStopCommand:
     def test_stop_failure(self, stop_cmd):
         with (
             patch(
-                "code_puppy.command_line.mcp.stop_command.find_server_id_by_name",
+                "spruce_grove.command_line.mcp.stop_command.find_server_id_by_name",
                 return_value="id1",
             ),
-            patch("code_puppy.command_line.mcp.stop_command.emit_info") as mock_emit,
+            patch("spruce_grove.command_line.mcp.stop_command.emit_info") as mock_emit,
         ):
             stop_cmd.manager.stop_server_sync.return_value = False
             stop_cmd.execute(["myserver"], group_id="g1")
@@ -84,10 +84,10 @@ class TestStopCommand:
     def test_outer_exception(self, stop_cmd):
         with (
             patch(
-                "code_puppy.command_line.mcp.stop_command.find_server_id_by_name",
+                "spruce_grove.command_line.mcp.stop_command.find_server_id_by_name",
                 side_effect=Exception("boom"),
             ),
-            patch("code_puppy.command_line.mcp.stop_command.emit_error") as mock_err,
+            patch("spruce_grove.command_line.mcp.stop_command.emit_error") as mock_err,
         ):
             stop_cmd.execute(["myserver"], group_id="g1")
             mock_err.assert_called_once()

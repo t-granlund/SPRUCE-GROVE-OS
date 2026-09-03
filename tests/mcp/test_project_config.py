@@ -1,8 +1,8 @@
 """Tests for project-level, trust-gated MCP server configuration.
 
-Covers discovery of ``<CWD>/.code_puppy/mcp_servers.json``, the content-hash
+Covers discovery of ``<CWD>/.spruce_grove/mcp_servers.json``, the content-hash
 trust store, fail-closed behavior for untrusted/changed/malformed configs, and
-the merge precedence in :func:`code_puppy.config.load_mcp_server_configs`
+the merge precedence in :func:`spruce_grove.config.load_mcp_server_configs`
 (project wins on name collision).
 """
 
@@ -11,22 +11,22 @@ from pathlib import Path
 
 import pytest
 
-import code_puppy.config as cp_config
-from code_puppy.mcp_ import project_config as pc
+import spruce_grove.config as cp_config
+from spruce_grove.mcp_ import project_config as pc
 
 
 @pytest.fixture
 def project(tmp_path, monkeypatch):
     """A tmp project dir (as CWD) with an isolated user-side trust store."""
     monkeypatch.chdir(tmp_path)
-    trust_store = tmp_path / "home" / ".code_puppy" / "trusted_mcp.json"
+    trust_store = tmp_path / "home" / ".spruce_grove" / "trusted_mcp.json"
     monkeypatch.setattr(pc, "TRUST_STORE_FILE", trust_store)
     pc._reset_warning_cache()
     return tmp_path
 
 
 def _write_project_config(root: Path, servers: dict) -> Path:
-    cfg_dir = root / ".code_puppy"
+    cfg_dir = root / ".spruce_grove"
     cfg_dir.mkdir(parents=True, exist_ok=True)
     cfg = cfg_dir / "mcp_servers.json"
     cfg.write_text(json.dumps({"mcp_servers": servers}))
@@ -92,7 +92,7 @@ def test_trust_with_no_config_is_noop(project):
 
 
 def test_malformed_trusted_config_fails_closed(project):
-    cfg_dir = project / ".code_puppy"
+    cfg_dir = project / ".spruce_grove"
     cfg_dir.mkdir(parents=True)
     cfg = cfg_dir / "mcp_servers.json"
     cfg.write_text("{ not json ]")
@@ -144,7 +144,7 @@ def test_loader_ignores_untrusted_project(project, monkeypatch):
     assert merged == {"user_only": "u"}
 
 
-# CWD == $HOME: <CWD>/.code_puppy/mcp_servers.json IS ~/.code_puppy/mcp_servers.json — the
+# CWD == $HOME: <CWD>/.spruce_grove/mcp_servers.json IS ~/.spruce_grove/mcp_servers.json — the
 # gate must not flag it as an untrusted project config it already loads as user-level.
 
 
@@ -182,7 +182,7 @@ def test_symlink_to_user_level_config_is_not_a_project_config(
     real.write_text(json.dumps({"mcp_servers": {"s": "v"}}))
     monkeypatch.setattr(cp_config, "MCP_SERVERS_FILE", str(real))
 
-    cfg_dir = project / ".code_puppy"
+    cfg_dir = project / ".spruce_grove"
     cfg_dir.mkdir(parents=True, exist_ok=True)
     (cfg_dir / "mcp_servers.json").symlink_to(real)
 

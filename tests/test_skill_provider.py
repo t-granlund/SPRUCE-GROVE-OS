@@ -2,13 +2,13 @@
 
 from unittest.mock import MagicMock, patch
 
-from code_puppy.callbacks import (
+from spruce_grove.callbacks import (
     clear_callbacks,
     clear_loading_context,
     register_callback,
     set_loading_context,
 )
-from code_puppy.skill_provider import get_skill_provider
+from spruce_grove.skill_provider import get_skill_provider
 
 
 def setup_function():
@@ -56,7 +56,7 @@ def test_disabled_plugin_provider_is_filtered():
     clear_loading_context()
 
     with patch(
-        "code_puppy.callbacks._get_disabled_plugins", return_value={"agent_skills"}
+        "spruce_grove.callbacks._get_disabled_plugins", return_value={"agent_skills"}
     ):
         assert get_skill_provider() is None
 

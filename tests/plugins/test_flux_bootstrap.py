@@ -10,7 +10,7 @@ from code_puppy_core_plugins.flux_bootstrap import installer
 
 @pytest.fixture
 def config_dir(tmp_path: Path) -> Path:
-    return tmp_path / "code_puppy_home"
+    return tmp_path / "spruce_grove_home"
 
 
 def test_bundled_payload_present():

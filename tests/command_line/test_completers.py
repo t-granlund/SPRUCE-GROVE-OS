@@ -5,12 +5,12 @@ from unittest.mock import patch
 import pytest
 from termflow.tui.completion import Document
 
-from code_puppy.command_line.completers import (
+from spruce_grove.command_line.completers import (
     AgentCompleter,
     CDCompleter,
     SetCompleter,
 )
-from code_puppy.command_line.file_path_completion import FilePathCompleter
+from spruce_grove.command_line.file_path_completion import FilePathCompleter
 
 # Skip some path-format sensitive tests on Windows where backslashes are expected
 IS_WINDOWS = os.name == "nt" or sys.platform.startswith("win")
@@ -30,8 +30,8 @@ def test_fork_agent_completion_owns_at_slot():
     document = Document(text="/fork @qa", cursor_position=len("/fork @qa"))
 
     with patch(
-        "code_puppy.command_line.pin_command_completion.load_agent_names",
-        return_value=["code-puppy", "qa-kitten"],
+        "spruce_grove.command_line.pin_command_completion.load_agent_names",
+        return_value=["spruce-grove", "qa-kitten"],
     ):
         agents = list(
             AgentCompleter(trigger="/fork", prefix="@").get_completions(document, None)
@@ -53,15 +53,15 @@ def test_fork_agent_completion_requires_at_prefix():
 
 def test_fork_model_completion_with_prefix():
     """Test that ModelNameCompleter works with @ prefix in /fork context."""
-    from code_puppy.command_line.model_picker_completion import ModelNameCompleter
+    from spruce_grove.command_line.model_picker_completion import ModelNameCompleter
 
     document = Document(
-        text="/fork @code-puppy @codex", cursor_position=len("/fork @code-puppy @codex")
+        text="/fork @spruce-grove @codex", cursor_position=len("/fork @spruce-grove @codex")
     )
 
     with (
         patch(
-            "code_puppy.command_line.model_picker_completion._load_models_config",
+            "spruce_grove.command_line.model_picker_completion._load_models_config",
             return_value={
                 "codex-gpt-5.6-luna": {},
                 "gpt-4o": {},
@@ -69,7 +69,7 @@ def test_fork_model_completion_with_prefix():
             },
         ),
         patch(
-            "code_puppy.command_line.model_picker_completion.get_active_model",
+            "spruce_grove.command_line.model_picker_completion.get_active_model",
             return_value="gpt-4o",
         ),
     ):
@@ -88,14 +88,14 @@ def test_fork_model_completion_with_prefix():
 
 def test_fork_model_completion_requires_at_prefix():
     """Test that ModelNameCompleter with prefix requires @ in /fork context."""
-    from code_puppy.command_line.model_picker_completion import ModelNameCompleter
+    from spruce_grove.command_line.model_picker_completion import ModelNameCompleter
 
     document = Document(
-        text="/fork @code-puppy gpt", cursor_position=len("/fork @code-puppy gpt")
+        text="/fork @spruce-grove gpt", cursor_position=len("/fork @spruce-grove gpt")
     )
 
     with patch(
-        "code_puppy.command_line.model_picker_completion._load_models_config",
+        "spruce_grove.command_line.model_picker_completion._load_models_config",
         return_value={"gpt-4o": {}},
     ):
         models = list(
@@ -110,17 +110,17 @@ def test_fork_model_completion_requires_at_prefix():
 
 def test_fork_model_completion_no_prefix_still_works():
     """Test that ModelNameCompleter without prefix still works for /model."""
-    from code_puppy.command_line.model_picker_completion import ModelNameCompleter
+    from spruce_grove.command_line.model_picker_completion import ModelNameCompleter
 
     document = Document(text="/model gpt", cursor_position=len("/model gpt"))
 
     with (
         patch(
-            "code_puppy.command_line.model_picker_completion._load_models_config",
+            "spruce_grove.command_line.model_picker_completion._load_models_config",
             return_value={"gpt-4o": {}, "claude-sonnet": {}},
         ),
         patch(
-            "code_puppy.command_line.model_picker_completion.get_active_model",
+            "spruce_grove.command_line.model_picker_completion.get_active_model",
             return_value="claude-sonnet",
         ),
     ):
@@ -137,14 +137,14 @@ def test_fork_parse_args_with_model():
     from code_puppy_core_plugins.fork.register_callbacks import _parse_fork_args
 
     # Both agent and model
-    agent, model, prompt = _parse_fork_args("@code-puppy @gpt-5 fizzbuzz")
-    assert agent == "code-puppy"
+    agent, model, prompt = _parse_fork_args("@spruce-grove @gpt-5 fizzbuzz")
+    assert agent == "spruce-grove"
     assert model == "gpt-5"
     assert prompt == "fizzbuzz"
 
     # Only agent
-    agent, model, prompt = _parse_fork_args("@code-puppy fizzbuzz")
-    assert agent == "code-puppy"
+    agent, model, prompt = _parse_fork_args("@spruce-grove fizzbuzz")
+    assert agent == "spruce-grove"
     assert model is None
     assert prompt == "fizzbuzz"
 
@@ -231,11 +231,11 @@ def test_set_completer_exact_trigger(monkeypatch):
 def test_set_completer_on_set_trigger(monkeypatch):
     # Simulate config keys
     monkeypatch.setattr(
-        "code_puppy.command_line.completers.get_config_keys",
+        "spruce_grove.command_line.completers.get_config_keys",
         lambda: ["foo", "bar"],
     )
     monkeypatch.setattr(
-        "code_puppy.command_line.completers.get_value",
+        "spruce_grove.command_line.completers.get_value",
         lambda key: "woo" if key == "foo" else None,
     )
     completer = SetCompleter()
@@ -256,11 +256,11 @@ def test_set_completer_on_set_trigger(monkeypatch):
 
 def test_set_completer_partial_key(monkeypatch):
     monkeypatch.setattr(
-        "code_puppy.command_line.completers.get_config_keys",
+        "spruce_grove.command_line.completers.get_config_keys",
         lambda: ["long_key_name", "other_key", "model"],
     )
     monkeypatch.setattr(
-        "code_puppy.command_line.completers.get_value",
+        "spruce_grove.command_line.completers.get_value",
         lambda key: "value_for_" + key if key == "long_key_name" else None,
     )
     completer = SetCompleter()
@@ -283,7 +283,7 @@ def test_set_completer_partial_key(monkeypatch):
 
 def test_set_completer_excludes_model_settings_only_keys(monkeypatch):
     monkeypatch.setattr(
-        "code_puppy.command_line.completers.get_config_keys",
+        "spruce_grove.command_line.completers.get_config_keys",
         lambda: [
             "openai_reasoning_effort",
             "openai_verbosity",
@@ -291,7 +291,7 @@ def test_set_completer_excludes_model_settings_only_keys(monkeypatch):
         ],
     )
     monkeypatch.setattr(
-        "code_puppy.command_line.completers.get_value",
+        "spruce_grove.command_line.completers.get_value",
         lambda key: "high",
     )
     completer = SetCompleter()
@@ -306,11 +306,11 @@ def test_set_completer_excludes_model_settings_only_keys(monkeypatch):
 def test_set_completer_excludes_model_key(monkeypatch):
     # Ensure 'model' is a config key but SetCompleter doesn't offer it
     monkeypatch.setattr(
-        "code_puppy.command_line.completers.get_config_keys",
+        "spruce_grove.command_line.completers.get_config_keys",
         lambda: ["api_key", "model", "temperature"],
     )
     monkeypatch.setattr(
-        "code_puppy.command_line.completers.get_value",
+        "spruce_grove.command_line.completers.get_value",
         lambda key: "test_value",
     )
     completer = SetCompleter()
@@ -339,11 +339,11 @@ def test_set_completer_excludes_model_key(monkeypatch):
 def test_set_completer_excludes_puppy_token(monkeypatch):
     # Ensure 'puppy_token' is a config key but SetCompleter doesn't offer it
     monkeypatch.setattr(
-        "code_puppy.command_line.completers.get_config_keys",
+        "spruce_grove.command_line.completers.get_config_keys",
         lambda: ["puppy_token", "user_name", "temp_dir"],
     )
     monkeypatch.setattr(
-        "code_puppy.command_line.completers.get_value",
+        "spruce_grove.command_line.completers.get_value",
         lambda key: "sensitive_token_value" if key == "puppy_token" else "normal_value",
     )
     completer = SetCompleter()
@@ -355,8 +355,8 @@ def test_set_completer_excludes_puppy_token(monkeypatch):
         "SetCompleter should not complete for 'puppy_token' key directly"
     )
 
-    # Test with partial "puppy" that would match "puppy_token"
-    doc = Document(text="/set puppy", cursor_position=len("/set puppy"))
+    # Test with partial "grove" that would match "puppy_token"
+    doc = Document(text="/set grove", cursor_position=len("/set grove"))
     completions = list(completer.get_completions(doc, None))
     assert completions == [], (
         "SetCompleter should not complete for 'puppy_token' key even partially"
@@ -370,7 +370,7 @@ def test_set_completer_excludes_puppy_token(monkeypatch):
 
 
 def test_set_completer_no_match(monkeypatch):
-    monkeypatch.setattr("code_puppy.config.get_config_keys", lambda: ["actual_key"])
+    monkeypatch.setattr("spruce_grove.config.get_config_keys", lambda: ["actual_key"])
     completer = SetCompleter()
     doc = Document(text="/set non_existent", cursor_position=len("/set non_existent"))
     completions = list(completer.get_completions(doc, None))
@@ -542,7 +542,7 @@ def test_cd_completer_non_existent_base(setup_cd_test_dirs, monkeypatch):
 def test_cd_completer_root_path_keeps_absolute_prefix():
     completer = CDCompleter()
     with patch(
-        "code_puppy.command_line.completers.list_directory",
+        "spruce_grove.command_line.completers.list_directory",
         return_value=(["usr", "tmp"], []),
     ):
         doc = Document(text="/cd /", cursor_position=len("/cd /"))
@@ -556,7 +556,7 @@ def test_cd_completer_permission_error_silently_handled(monkeypatch):
     completer = CDCompleter()
     # Patch the utility function used by CDCompleter
     with patch(
-        "code_puppy.command_line.completers.list_directory",
+        "spruce_grove.command_line.completers.list_directory",
         side_effect=PermissionError,
     ) as mock_list_dir:
         doc = Document(text="/cd somedir/", cursor_position=len("/cd somedir/"))

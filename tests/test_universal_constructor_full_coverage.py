@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy.tools.universal_constructor import (
+from spruce_grove.tools.universal_constructor import (
     UniversalConstructorOutput,
     _build_summary,
     _emit_uc_message,
@@ -66,7 +66,7 @@ class TestStubNotImplemented:
 
 class TestEmitUcMessage:
     def test_emits(self):
-        with patch("code_puppy.tools.universal_constructor.get_message_bus") as mb:
+        with patch("spruce_grove.tools.universal_constructor.get_message_bus") as mb:
             _emit_uc_message("list", True, "summary", "tool", "details")
             mb().emit.assert_called_once()
 
@@ -155,7 +155,7 @@ class TestHandleListAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(MagicMock(), "list")
             assert result.success is True
@@ -167,7 +167,7 @@ class TestHandleListAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 side_effect=Exception("boom"),
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(MagicMock(), "list")
             assert result.success is False
@@ -176,7 +176,7 @@ class TestHandleListAction:
 class TestHandleCallAction:
     @pytest.mark.anyio
     async def test_no_tool_name(self):
-        with patch("code_puppy.tools.universal_constructor.get_message_bus"):
+        with patch("spruce_grove.tools.universal_constructor.get_message_bus"):
             result = await universal_constructor_impl(MagicMock(), "call")
             assert result.success is False
             assert "required" in result.error
@@ -190,7 +190,7 @@ class TestHandleCallAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(
                 MagicMock(), "call", tool_name="x"
@@ -208,7 +208,7 @@ class TestHandleCallAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(
                 MagicMock(), "call", tool_name="x"
@@ -228,7 +228,7 @@ class TestHandleCallAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(
                 MagicMock(), "call", tool_name="x"
@@ -248,7 +248,7 @@ class TestHandleCallAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(
                 MagicMock(), "call", tool_name="x", tool_args="{bad"
@@ -268,7 +268,7 @@ class TestHandleCallAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(
                 MagicMock(), "call", tool_name="x", tool_args=[1, 2]
@@ -288,7 +288,7 @@ class TestHandleCallAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(
                 MagicMock(), "call", tool_name="x"
@@ -317,7 +317,7 @@ class TestHandleCallAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(
                 MagicMock(),
@@ -345,7 +345,7 @@ class TestHandleCallAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(
                 MagicMock(), "call", tool_name="x"
@@ -369,7 +369,7 @@ class TestHandleCallAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(
                 MagicMock(), "call", tool_name="x"
@@ -384,7 +384,7 @@ class TestHandleCreateAction:
     )
     @pytest.mark.anyio
     async def test_create_rejects_bad_code(self, code, marker):
-        with patch("code_puppy.tools.universal_constructor.get_message_bus"):
+        with patch("spruce_grove.tools.universal_constructor.get_message_bus"):
             result = await universal_constructor_impl(
                 MagicMock(), "create", python_code=code
             )
@@ -394,7 +394,7 @@ class TestHandleCreateAction:
     async def test_create_with_tool_name(self, tmp_path):
         code = 'def hello():\n    return "hi"'
         with (
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
             patch(
                 "code_puppy_core_plugins.universal_constructor.USER_UC_DIR", tmp_path
             ),
@@ -415,7 +415,7 @@ class TestHandleCreateAction:
     async def test_create_with_namespace(self, tmp_path):
         code = 'def hello():\n    return "hi"'
         with (
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
             patch(
                 "code_puppy_core_plugins.universal_constructor.USER_UC_DIR", tmp_path
             ),
@@ -432,7 +432,7 @@ class TestHandleCreateAction:
     async def test_create_with_tool_meta(self, tmp_path):
         code = 'TOOL_META = {"name": "mytool", "description": "test", "enabled": True}\ndef f():\n    pass'
         with (
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
             patch(
                 "code_puppy_core_plugins.universal_constructor.USER_UC_DIR", tmp_path
             ),
@@ -449,13 +449,13 @@ class TestHandleCreateAction:
 class TestHandleUpdateAction:
     @pytest.mark.anyio
     async def test_no_tool_name(self):
-        with patch("code_puppy.tools.universal_constructor.get_message_bus"):
+        with patch("spruce_grove.tools.universal_constructor.get_message_bus"):
             result = await universal_constructor_impl(MagicMock(), "update")
             assert "required" in result.error
 
     @pytest.mark.anyio
     async def test_no_code(self):
-        with patch("code_puppy.tools.universal_constructor.get_message_bus"):
+        with patch("spruce_grove.tools.universal_constructor.get_message_bus"):
             result = await universal_constructor_impl(
                 MagicMock(), "update", tool_name="x"
             )
@@ -470,7 +470,7 @@ class TestHandleUpdateAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(
                 MagicMock(), "update", tool_name="x", python_code="x=1"
@@ -488,7 +488,7 @@ class TestHandleUpdateAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(
                 MagicMock(), "update", tool_name="x", python_code="x=1"
@@ -509,7 +509,7 @@ class TestHandleUpdateAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(
                 MagicMock(), "update", tool_name="x", python_code=code
@@ -530,7 +530,7 @@ class TestHandleUpdateAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(
                 MagicMock(), "update", tool_name="x", python_code=code
@@ -550,7 +550,7 @@ class TestHandleUpdateAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(
                 MagicMock(), "update", tool_name="x", python_code="def f("
@@ -561,7 +561,7 @@ class TestHandleUpdateAction:
 class TestHandleInfoAction:
     @pytest.mark.anyio
     async def test_no_tool_name(self):
-        with patch("code_puppy.tools.universal_constructor.get_message_bus"):
+        with patch("spruce_grove.tools.universal_constructor.get_message_bus"):
             result = await universal_constructor_impl(MagicMock(), "info")
             assert "required" in result.error
 
@@ -574,7 +574,7 @@ class TestHandleInfoAction:
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
             ),
-            patch("code_puppy.tools.universal_constructor.get_message_bus"),
+            patch("spruce_grove.tools.universal_constructor.get_message_bus"),
         ):
             result = await universal_constructor_impl(
                 MagicMock(), "info", tool_name="x"
@@ -585,7 +585,7 @@ class TestHandleInfoAction:
 class TestUnknownAction:
     @pytest.mark.anyio
     async def test_unknown(self):
-        with patch("code_puppy.tools.universal_constructor.get_message_bus"):
+        with patch("spruce_grove.tools.universal_constructor.get_message_bus"):
             result = await universal_constructor_impl(MagicMock(), "unknown")
             assert result.success is False
             assert "Unknown" in result.error

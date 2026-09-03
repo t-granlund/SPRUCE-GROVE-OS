@@ -14,7 +14,7 @@ def _reset_plugin_state(tmp_path, monkeypatch):
     """Point the log dir at a tmpdir and disarm after each test."""
     import faulthandler
 
-    import code_puppy.error_logging as el
+    import spruce_grove.error_logging as el
 
     monkeypatch.setattr(el, "LOGS_DIR", str(tmp_path))
     yield
@@ -78,6 +78,6 @@ def test_arm_failure_is_swallowed(monkeypatch):
     def boom():
         raise OSError("disk full of dog hair")
 
-    monkeypatch.setattr("code_puppy.error_logging._ensure_logs_dir", boom, raising=True)
+    monkeypatch.setattr("spruce_grove.error_logging._ensure_logs_dir", boom, raising=True)
     sd._on_startup()  # must not raise
     assert sd._dump_file is None

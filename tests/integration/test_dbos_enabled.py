@@ -16,9 +16,9 @@ def test_dbos_initializes_and_creates_db(spawned_cli):
     log = spawned_cli.read_log()
     assert "Initializing DBOS with database at:" in log
 
-    # Database path should be under temp HOME/.code_puppy by default
+    # Database path should be under temp HOME/.spruce_grove by default
     home = Path(spawned_cli.temp_home)
-    db_path = home / ".code_puppy" / "dbos_store.sqlite"
+    db_path = home / ".spruce_grove" / "dbos_store.sqlite"
 
     # DBOS init runs via the plugin's startup callback; on slow CI the sqlite
     # migrations can lag behind the prompt — poll up to 10s before giving up.

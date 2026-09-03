@@ -1,6 +1,6 @@
 """Neutral provider seam for kennel memory recall."""
 
-import code_puppy.kennel_provider as kennel_provider
+import spruce_grove.kennel_provider as kennel_provider
 
 
 def test_returns_empty_without_provider(monkeypatch):

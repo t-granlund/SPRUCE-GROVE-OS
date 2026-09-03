@@ -2,7 +2,7 @@
 
 from unittest.mock import MagicMock
 
-from code_puppy.tools import command_runner
+from spruce_grove.tools import command_runner
 
 
 class _StopPopen(Exception):
@@ -32,7 +32,7 @@ async def test_shell_command_env_excludes_api_keys(monkeypatch):
     async def _no_callbacks(*args, **kwargs):
         return []
 
-    monkeypatch.setattr("code_puppy.callbacks.on_run_shell_command", _no_callbacks)
+    monkeypatch.setattr("spruce_grove.callbacks.on_run_shell_command", _no_callbacks)
 
     result = await command_runner.run_shell_command(
         MagicMock(), "echo hi", None, 5, False
@@ -70,7 +70,7 @@ async def test_shell_command_env_keeps_non_agent_tokens(monkeypatch):
     async def _no_callbacks(*args, **kwargs):
         return []
 
-    monkeypatch.setattr("code_puppy.callbacks.on_run_shell_command", _no_callbacks)
+    monkeypatch.setattr("spruce_grove.callbacks.on_run_shell_command", _no_callbacks)
 
     await command_runner.run_shell_command(MagicMock(), "echo hi", None, 5, False)
 
@@ -83,7 +83,7 @@ async def test_shell_command_env_strips_configured_model_credentials(monkeypatch
     """A custom ``$ENV`` credential referenced by a configured model is stripped."""
 
     monkeypatch.setattr(
-        "code_puppy.provider_credentials.all_api_key_env_vars",
+        "spruce_grove.provider_credentials.all_api_key_env_vars",
         lambda: ["MY_CUSTOM_PROVIDER_KEY"],
     )
     monkeypatch.setenv("MY_CUSTOM_PROVIDER_KEY", "custom-secret")
@@ -102,7 +102,7 @@ async def test_shell_command_env_strips_configured_model_credentials(monkeypatch
     async def _no_callbacks(*args, **kwargs):
         return []
 
-    monkeypatch.setattr("code_puppy.callbacks.on_run_shell_command", _no_callbacks)
+    monkeypatch.setattr("spruce_grove.callbacks.on_run_shell_command", _no_callbacks)
 
     await command_runner.run_shell_command(MagicMock(), "echo hi", None, 5, False)
 
@@ -113,11 +113,11 @@ async def test_shell_command_env_strips_well_known_provider_keys(monkeypatch):
     """Provider keys beyond the original eight are stripped from the child env.
 
     With an empty catalog the scrub set is just the well-known names, which now
-    cover every provider code_puppy manages (GROQ, MISTRAL, ...), so they no
+    cover every provider spruce_grove manages (GROQ, MISTRAL, ...), so they no
     longer leak into child shells.
     """
     monkeypatch.setattr(
-        "code_puppy.provider_credentials.all_api_key_env_vars", lambda: []
+        "spruce_grove.provider_credentials.all_api_key_env_vars", lambda: []
     )
     monkeypatch.setenv("GROQ_API_KEY", "groq-secret")
     monkeypatch.setenv("MISTRAL_API_KEY", "mistral-secret")
@@ -136,7 +136,7 @@ async def test_shell_command_env_strips_well_known_provider_keys(monkeypatch):
     async def _no_callbacks(*args, **kwargs):
         return []
 
-    monkeypatch.setattr("code_puppy.callbacks.on_run_shell_command", _no_callbacks)
+    monkeypatch.setattr("spruce_grove.callbacks.on_run_shell_command", _no_callbacks)
 
     await command_runner.run_shell_command(MagicMock(), "echo hi", None, 5, False)
 
@@ -146,8 +146,8 @@ async def test_shell_command_env_strips_well_known_provider_keys(monkeypatch):
 
 def test_hook_environment_includes_provider_credentials(monkeypatch):
     """Hooks are user config, so provider keys are inherited (a hook may call an LLM)."""
-    from code_puppy.hook_engine.executor import _build_environment
-    from code_puppy.hook_engine.models import EventData
+    from spruce_grove.hook_engine.executor import _build_environment
+    from spruce_grove.hook_engine.models import EventData
 
     monkeypatch.setenv("ANTHROPIC_API_KEY", "agent-key")
     monkeypatch.setenv("GITHUB_TOKEN", "user-token")

@@ -23,7 +23,7 @@ def isolated_judges():
             yield path
 
 
-def _fake_agent(name: str = "code-puppy", history: list | None = None):
+def _fake_agent(name: str = "spruce-grove", history: list | None = None):
     agent = MagicMock()
     agent.name = name
     agent.get_message_history = MagicMock(return_value=history or [])
@@ -140,7 +140,7 @@ async def test_judge_exception_becomes_abstaining_verdict(isolated_judges):
     with (
         patch.object(register_callbacks, "judge_goal", new=fake_judge_goal),
         patch.object(register_callbacks, "_display_llm_judge"),
-        patch("code_puppy.error_logging.log_error"),
+        patch("spruce_grove.error_logging.log_error"),
     ):
         all_complete, notes, verdicts = await register_callbacks._run_goal_judges(
             agent=_fake_agent(),
@@ -319,7 +319,7 @@ async def test_judges_running_in_parallel_dont_share_failure_state(isolated_judg
     with (
         patch.object(register_callbacks, "judge_goal", new=fake_judge_goal),
         patch.object(register_callbacks, "_display_llm_judge"),
-        patch("code_puppy.error_logging.log_error"),
+        patch("spruce_grove.error_logging.log_error"),
     ):
         all_complete, _, verdicts = await register_callbacks._run_goal_judges(
             agent=_fake_agent(),
@@ -530,7 +530,7 @@ async def test_judge_runs_inside_subagent_context(isolated_judges):
     chatter (read_file, grep, agent reasoning, etc.) in the goal-loop UI.
     """
     from code_puppy_core_plugins.wiggum import judge as judge_module
-    from code_puppy.tools.subagent_context import is_subagent
+    from spruce_grove.tools.subagent_context import is_subagent
 
     judge_config.add_judge(JudgeConfig(name="checker", model="fake-model"))
 
@@ -563,7 +563,7 @@ async def test_judge_runs_inside_subagent_context(isolated_judges):
             "load_agent",
             return_value=MagicMock(get_available_tools=lambda: []),
         ),
-        patch("code_puppy.tools.register_tools_for_agent"),
+        patch("spruce_grove.tools.register_tools_for_agent"),
         patch.object(judge_module, "Agent") as mock_agent_cls,
     ):
         mock_agent = MagicMock()

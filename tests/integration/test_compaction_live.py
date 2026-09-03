@@ -46,7 +46,7 @@ _FAKE_CI_KEYS = {"fake-key-for-ci-testing", ""}
 
 
 def _lilac_key_available() -> bool:
-    """True if LILAC_API_KEY is set via env OR in puppy.cfg.
+    """True if LILAC_API_KEY is set via env OR in grove.cfg.
 
     Skips live tests when only a fake/placeholder CI key is available,
     since those cause opaque 401 errors that mask the real problem.
@@ -59,7 +59,7 @@ def _lilac_key_available() -> bool:
     if env_key and env_key not in _FAKE_CI_KEYS:
         return True
     try:
-        from code_puppy.model_factory import get_api_key
+        from spruce_grove.model_factory import get_api_key
 
         cfg_key = (get_api_key("LILAC_API_KEY") or "").strip()
         return bool(cfg_key) and cfg_key not in _FAKE_CI_KEYS
@@ -72,12 +72,12 @@ def _lilac_model_present() -> bool:
 
     ``models.json`` ships EMPTY — the lilac model only exists when someone
     (a dev, or the CI "Provision CI model" step) has written it into
-    ``~/.code_puppy/extra_models.json``. If it was never added, the agent
+    ``~/.spruce_grove/extra_models.json``. If it was never added, the agent
     can't instantiate it and ``run_with_mcp`` fails opaquely (returns None).
     Be explicit about that contract: skip loudly instead of failing cryptically.
     """
     try:
-        from code_puppy.model_factory import ModelFactory
+        from spruce_grove.model_factory import ModelFactory
 
         return LILAC_MODEL in ModelFactory.load_config()
     except Exception:
@@ -94,7 +94,7 @@ def _live_lilac_skip_reason() -> str | None:
     if not _lilac_model_present():
         return (
             f"{LILAC_MODEL!r} not found in models config — models.json is empty "
-            "and it was never added to ~/.code_puppy/extra_models.json; "
+            "and it was never added to ~/.spruce_grove/extra_models.json; "
             "live compaction tests skipped."
         )
     return None
@@ -108,7 +108,7 @@ pytestmark = pytest.mark.skipif(
 
 # -- Also disable the integration-env-var gate for THIS file ------------------
 # tests/integration/conftest.py auto-skips everything unless CI=1 and
-# CODE_PUPPY_TEST_FAST=1 are set. Those gates exist for pexpect-harness tests;
+# SPRUCE_GROVE_TEST_FAST=1 are set. Those gates exist for pexpect-harness tests;
 # we're not using pexpect, so opt out by overriding the autouse fixture.
 
 
@@ -293,16 +293,16 @@ def huge_history() -> List[ModelMessage]:
 
 
 @pytest.fixture
-def pinned_code_puppy_agent(monkeypatch):
+def pinned_spruce_grove_agent(monkeypatch):
     """Fresh CodePuppyAgent pinned to ``LILAC_MODEL``.
 
     Uses monkeypatch to override the global model getter so we don't touch
     the user's on-disk config during the test run.
     """
-    from code_puppy import config as cp_config
-    from code_puppy.agents import _builder, _compaction, _runtime
-    from code_puppy.agents import base_agent as _base_agent_mod
-    from code_puppy.agents.agent_code_puppy import CodePuppyAgent
+    from spruce_grove import config as cp_config
+    from spruce_grove.agents import _builder, _compaction, _runtime
+    from spruce_grove.agents import base_agent as _base_agent_mod
+    from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
 
     test_model = LILAC_MODEL
 
@@ -310,15 +310,15 @@ def pinned_code_puppy_agent(monkeypatch):
     # was added to extra_models.json. The module-level skip already guards
     # this, but assert here too so any future refactor that bypasses the gate
     # fails loudly ("model not added") instead of as an opaque None response.
-    from code_puppy.model_factory import ModelFactory
+    from spruce_grove.model_factory import ModelFactory
 
     assert test_model in ModelFactory.load_config(), (
         f"{test_model!r} is not in the model config. models.json ships empty; "
-        "add it to ~/.code_puppy/extra_models.json (CI does this in the "
+        "add it to ~/.spruce_grove/extra_models.json (CI does this in the "
         "'Provision CI model' step)."
     )
 
-    # `from code_puppy.config import foo` captures a binding at import time, so
+    # `from spruce_grove.config import foo` captures a binding at import time, so
     # patching cp_config.foo alone doesnt propagate. Patch every site that
     # re-imports the model-name getters.
     for mod in (cp_config, _base_agent_mod):
@@ -348,18 +348,18 @@ def pinned_code_puppy_agent(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_live_compaction_truncation_strategy(
-    pinned_code_puppy_agent, huge_history, monkeypatch
+    pinned_spruce_grove_agent, huge_history, monkeypatch
 ):
     """180k tokens + truncation strategy → run succeeds, history shrinks."""
-    from code_puppy.agents import _compaction
-    from code_puppy.agents._history import estimate_tokens_for_message
+    from spruce_grove.agents import _compaction
+    from spruce_grove.agents._history import estimate_tokens_for_message
 
     # Force truncation strategy + low threshold via monkeypatch (no disk writes)
     monkeypatch.setattr(_compaction, "get_compaction_strategy", lambda: "truncation")
     monkeypatch.setattr(_compaction, "get_compaction_threshold", lambda: 0.5)
     monkeypatch.setattr(_compaction, "get_protected_token_count", lambda: 20_000)
 
-    agent = pinned_code_puppy_agent
+    agent = pinned_spruce_grove_agent
     agent.set_message_history(list(huge_history))
 
     before_tokens = sum(estimate_tokens_for_message(m) for m in huge_history)
@@ -428,7 +428,7 @@ async def test_live_compaction_truncation_strategy(
 
 @pytest.mark.asyncio
 async def test_live_compaction_summarization_strategy(
-    pinned_code_puppy_agent, huge_history, monkeypatch
+    pinned_spruce_grove_agent, huge_history, monkeypatch
 ):
     """180k tokens + summarization strategy.
 
@@ -447,8 +447,8 @@ async def test_live_compaction_summarization_strategy(
       - History becomes corrupted (orphan tool pairs, trailing ModelResponse)
       - Summarization is skipped when it should fire (detectable via spy)
     """
-    from code_puppy.agents import _compaction
-    from code_puppy.agents._history import estimate_tokens_for_message
+    from spruce_grove.agents import _compaction
+    from spruce_grove.agents._history import estimate_tokens_for_message
 
     monkeypatch.setattr(_compaction, "get_compaction_strategy", lambda: "summarization")
     monkeypatch.setattr(_compaction, "get_compaction_threshold", lambda: 0.5)
@@ -457,7 +457,7 @@ async def test_live_compaction_summarization_strategy(
     # Spy: did summarization actually get attempted?
     summarize_calls = _spy_summarizing_compaction(monkeypatch)
 
-    agent = pinned_code_puppy_agent
+    agent = pinned_spruce_grove_agent
     agent.set_message_history(list(huge_history))
 
     before_tokens = sum(estimate_tokens_for_message(m) for m in huge_history)
@@ -514,16 +514,16 @@ async def test_live_compaction_summarization_strategy(
 
 
 @pytest.mark.asyncio
-async def test_live_no_compaction_under_threshold(pinned_code_puppy_agent, monkeypatch):
+async def test_live_no_compaction_under_threshold(pinned_spruce_grove_agent, monkeypatch):
     """Small history + high threshold → compaction must NOT fire, run succeeds."""
-    from code_puppy.agents import _compaction
-    from code_puppy.agents._history import estimate_tokens_for_message
+    from spruce_grove.agents import _compaction
+    from spruce_grove.agents._history import estimate_tokens_for_message
 
     # High threshold — should never trip
     monkeypatch.setattr(_compaction, "get_compaction_threshold", lambda: 0.95)
     monkeypatch.setattr(_compaction, "get_compaction_strategy", lambda: "truncation")
 
-    agent = pinned_code_puppy_agent
+    agent = pinned_spruce_grove_agent
     small_history = _build_huge_history(target_tokens=5_000)
     agent.set_message_history(list(small_history))
 
@@ -540,7 +540,7 @@ async def test_live_no_compaction_under_threshold(pinned_code_puppy_agent, monke
     # Under-threshold run should NOT cause a big drop. It may still grow from
     # the new prompt + response. Key invariant: all of the original messages
     # are still there (by hash).
-    from code_puppy.agents._history import hash_message
+    from spruce_grove.agents._history import hash_message
 
     original_hashes = {hash_message(m) for m in small_history}
     after_hashes = {hash_message(m) for m in after_history}
@@ -554,7 +554,7 @@ async def test_live_no_compaction_under_threshold(pinned_code_puppy_agent, monke
 
 @pytest.mark.asyncio
 async def test_live_orphan_tool_call_does_not_block_compaction(
-    pinned_code_puppy_agent, monkeypatch
+    pinned_spruce_grove_agent, monkeypatch
 ):
     """REGRESSION: orphan tool_calls in history must not permanently defer
     compaction. This is the actual bug the user hit in production.
@@ -573,8 +573,8 @@ async def test_live_orphan_tool_call_does_not_block_compaction(
       "Summarization deferred: pending tool call(s) detected"
     on every turn, forever.
     """
-    from code_puppy.agents import _compaction
-    from code_puppy.agents._history import estimate_tokens_for_message
+    from spruce_grove.agents import _compaction
+    from spruce_grove.agents._history import estimate_tokens_for_message
 
     monkeypatch.setattr(_compaction, "get_compaction_strategy", lambda: "summarization")
     monkeypatch.setattr(_compaction, "get_compaction_threshold", lambda: 0.5)
@@ -596,7 +596,7 @@ async def test_live_orphan_tool_call_does_not_block_compaction(
     # Insert between system message and the rest — permanent orphan
     history = [history[0], orphan] + history[1:]
 
-    agent = pinned_code_puppy_agent
+    agent = pinned_spruce_grove_agent
     agent.set_message_history(list(history))
 
     before_tokens = sum(estimate_tokens_for_message(m) for m in history)

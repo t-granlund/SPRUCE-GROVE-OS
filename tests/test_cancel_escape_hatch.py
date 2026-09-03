@@ -13,8 +13,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from code_puppy import cli_runner
-from code_puppy.agents import _run_signals
+from spruce_grove import cli_runner
+from spruce_grove.agents import _run_signals
 
 
 @pytest.fixture(autouse=True)
@@ -73,7 +73,7 @@ def fake_clock(monkeypatch):
 async def test_repeat_cancel_after_window_escalates_to_detach(monkeypatch, fake_clock):
     monkeypatch.setattr(_run_signals, "emit_warning", lambda *a, **k: None)
     monkeypatch.setattr(
-        "code_puppy.tools.command_runner._tear_down_live_panels", lambda: None
+        "spruce_grove.tools.command_runner._tear_down_live_panels", lambda: None
     )
     flag = {"stop": False}
     task = asyncio.create_task(_make_stubborn(flag)())
@@ -139,7 +139,7 @@ async def test_shutdown_agent_task_bounded_on_stuck_task(monkeypatch):
     monkeypatch.setattr(cli_runner, "_QUIT_CANCEL_TIMEOUT_S", 0.05)
     warnings = []
     monkeypatch.setattr(
-        "code_puppy.messaging.emit_warning",
+        "spruce_grove.messaging.emit_warning",
         lambda msg, **k: warnings.append(str(msg)),
     )
     flag = {"stop": False}

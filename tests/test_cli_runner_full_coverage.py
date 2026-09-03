@@ -78,40 +78,40 @@ def _assert_core_plugins_message_once(mock_emit, version):
 def _base_main_patches():
     """Return a dict of common patches needed for main()."""
     return {
-        "code_puppy.cli_runner.find_available_port": MagicMock(return_value=8090),
-        "code_puppy.cli_runner.ensure_config_exists": MagicMock(),
-        "code_puppy.cli_runner.validate_cancel_agent_key": MagicMock(),
-        "code_puppy.cli_runner.initialize_command_history_file": MagicMock(),
-        "code_puppy.cli_runner.default_version_mismatch_behavior": MagicMock(),
-        "code_puppy.cli_runner.print_truecolor_warning": MagicMock(),
-        "code_puppy.cli_runner.reset_unix_terminal": MagicMock(),
-        "code_puppy.cli_runner.reset_windows_terminal_ansi": MagicMock(),
-        "code_puppy.cli_runner.reset_windows_terminal_full": MagicMock(),
-        "code_puppy.cli_runner.callbacks": MagicMock(
+        "spruce_grove.cli_runner.find_available_port": MagicMock(return_value=8090),
+        "spruce_grove.cli_runner.ensure_config_exists": MagicMock(),
+        "spruce_grove.cli_runner.validate_cancel_agent_key": MagicMock(),
+        "spruce_grove.cli_runner.initialize_command_history_file": MagicMock(),
+        "spruce_grove.cli_runner.default_version_mismatch_behavior": MagicMock(),
+        "spruce_grove.cli_runner.print_truecolor_warning": MagicMock(),
+        "spruce_grove.cli_runner.reset_unix_terminal": MagicMock(),
+        "spruce_grove.cli_runner.reset_windows_terminal_ansi": MagicMock(),
+        "spruce_grove.cli_runner.reset_windows_terminal_full": MagicMock(),
+        "spruce_grove.cli_runner.callbacks": MagicMock(
             on_startup=AsyncMock(),
             on_shutdown=AsyncMock(),
             on_version_check=AsyncMock(),
             get_callbacks=MagicMock(return_value=[]),
         ),
-        "code_puppy.cli_runner.plugins": MagicMock(),
-        "code_puppy.config.load_api_keys_to_environment": MagicMock(),
+        "spruce_grove.cli_runner.plugins": MagicMock(),
+        "spruce_grove.config.load_api_keys_to_environment": MagicMock(),
     }
 
 
 def _interactive_patches():
     return {
-        "code_puppy.cli_runner.print_truecolor_warning": MagicMock(),
-        "code_puppy.cli_runner.reset_windows_terminal_ansi": MagicMock(),
-        "code_puppy.cli_runner.reset_windows_terminal_full": MagicMock(),
-        "code_puppy.cli_runner.save_command_to_history": MagicMock(),
-        "code_puppy.cli_runner.finalize_autosave_session": MagicMock(
+        "spruce_grove.cli_runner.print_truecolor_warning": MagicMock(),
+        "spruce_grove.cli_runner.reset_windows_terminal_ansi": MagicMock(),
+        "spruce_grove.cli_runner.reset_windows_terminal_full": MagicMock(),
+        "spruce_grove.cli_runner.save_command_to_history": MagicMock(),
+        "spruce_grove.cli_runner.finalize_autosave_session": MagicMock(
             return_value="session-1"
         ),
-        "code_puppy.cli_runner.COMMAND_HISTORY_FILE": "/tmp/test_history",
-        "code_puppy.command_line.onboarding_wizard.should_show_onboarding": MagicMock(
+        "spruce_grove.cli_runner.COMMAND_HISTORY_FILE": "/tmp/test_history",
+        "spruce_grove.command_line.onboarding_wizard.should_show_onboarding": MagicMock(
             return_value=False
         ),
-        "code_puppy.config.auto_save_session_if_enabled": MagicMock(),
+        "spruce_grove.config.auto_save_session_if_enabled": MagicMock(),
     }
 
 
@@ -133,14 +133,14 @@ async def _run_interactive(
         stack.enter_context(patch("builtins.input", _sync_input(input_fn)))
         stack.enter_context(
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=agent,
             )
         )
         if extra_patches:
             _apply_patches(stack, extra_patches)
 
-        from code_puppy.cli_runner import interactive_mode
+        from spruce_grove.cli_runner import interactive_mode
 
         await interactive_mode(renderer, initial_command=initial_command)
 
@@ -183,26 +183,26 @@ class TestMain:
             stack.enter_context(patch("sys.argv", argv))
             stack.enter_context(
                 patch(
-                    "code_puppy.messaging.SynchronousInteractiveRenderer",
+                    "spruce_grove.messaging.SynchronousInteractiveRenderer",
                     return_value=_mock_renderer(),
                 )
             )
             stack.enter_context(
                 patch(
-                    "code_puppy.messaging.RichConsoleRenderer",
+                    "spruce_grove.messaging.RichConsoleRenderer",
                     return_value=_mock_renderer(),
                 )
             )
             stack.enter_context(
-                patch("code_puppy.messaging.get_global_queue", return_value=MagicMock())
+                patch("spruce_grove.messaging.get_global_queue", return_value=MagicMock())
             )
             stack.enter_context(
-                patch("code_puppy.messaging.get_message_bus", return_value=MagicMock())
+                patch("spruce_grove.messaging.get_message_bus", return_value=MagicMock())
             )
             _apply_patches(stack, patches)
             if extra_patches:
                 _apply_patches(stack, extra_patches)
-            from code_puppy.cli_runner import main
+            from spruce_grove.cli_runner import main
 
             await main()
 
@@ -210,8 +210,8 @@ class TestMain:
     async def test_prompt_mode(self):
         mock_exec = AsyncMock()
         await self._run_main(
-            ["code-puppy", "-p", "hello world"],
-            extra_patches={"code_puppy.cli_runner.execute_single_prompt": mock_exec},
+            ["spruce-grove", "-p", "hello world"],
+            extra_patches={"spruce_grove.cli_runner.execute_single_prompt": mock_exec},
         )
         mock_exec.assert_called_once()
 
@@ -219,9 +219,9 @@ class TestMain:
     async def test_interactive_mode_default(self):
         mock_inter = AsyncMock()
         await self._run_main(
-            ["code-puppy"],
+            ["spruce-grove"],
             extra_patches={
-                "code_puppy.cli_runner.interactive_mode": mock_inter,
+                "spruce_grove.cli_runner.interactive_mode": mock_inter,
                 "pyfiglet.figlet_format": MagicMock(return_value="LOGO\n\n"),
             },
         )
@@ -232,12 +232,12 @@ class TestMain:
         mock_inter = AsyncMock()
         mock_figlet = MagicMock(return_value="LOGO\n\n")
         # Rich's Console honors COLUMNS, so this squeezes the banner width
-        # below the full CODE PUPPY figlet (79 cols).
+        # below the full SPRUCE GROVE figlet (79 cols).
         with patch.dict(os.environ, {"COLUMNS": "50"}):
             await self._run_main(
-                ["code-puppy"],
+                ["spruce-grove"],
                 extra_patches={
-                    "code_puppy.cli_runner.interactive_mode": mock_inter,
+                    "spruce_grove.cli_runner.interactive_mode": mock_inter,
                     "pyfiglet.figlet_format": mock_figlet,
                 },
             )
@@ -248,9 +248,9 @@ class TestMain:
     async def test_with_command_args(self):
         mock_inter = AsyncMock()
         await self._run_main(
-            ["code-puppy", "do", "something"],
+            ["spruce-grove", "do", "something"],
             extra_patches={
-                "code_puppy.cli_runner.interactive_mode": mock_inter,
+                "spruce_grove.cli_runner.interactive_mode": mock_inter,
                 "pyfiglet.figlet_format": MagicMock(return_value="LOGO\n\n"),
             },
         )
@@ -259,9 +259,9 @@ class TestMain:
     @pytest.mark.anyio
     async def test_no_available_port(self):
         await self._run_main(
-            ["code-puppy", "-p", "test"],
+            ["spruce-grove", "-p", "test"],
             base_overrides={
-                "code_puppy.cli_runner.find_available_port": MagicMock(
+                "spruce_grove.cli_runner.find_available_port": MagicMock(
                     return_value=None
                 ),
             },
@@ -269,13 +269,13 @@ class TestMain:
 
     @pytest.mark.anyio
     async def test_keymap_error(self):
-        from code_puppy.keymap import KeymapError
+        from spruce_grove.keymap import KeymapError
 
         with pytest.raises(SystemExit):
             await self._run_main(
-                ["code-puppy", "-p", "test"],
+                ["spruce-grove", "-p", "test"],
                 base_overrides={
-                    "code_puppy.cli_runner.validate_cancel_agent_key": MagicMock(
+                    "spruce_grove.cli_runner.validate_cancel_agent_key": MagicMock(
                         side_effect=KeymapError("bad key")
                     ),
                 },
@@ -285,11 +285,11 @@ class TestMain:
     async def test_model_valid(self):
         mock_set = MagicMock()
         await self._run_main(
-            ["code-puppy", "-m", "gpt-5", "-p", "hi"],
+            ["spruce-grove", "-m", "gpt-5", "-p", "hi"],
             extra_patches={
-                "code_puppy.cli_runner.execute_single_prompt": AsyncMock(),
-                "code_puppy.config.set_model_name": mock_set,
-                "code_puppy.config._validate_model_exists": MagicMock(
+                "spruce_grove.cli_runner.execute_single_prompt": AsyncMock(),
+                "spruce_grove.config.set_model_name": mock_set,
+                "spruce_grove.config._validate_model_exists": MagicMock(
                     return_value=True
                 ),
             },
@@ -302,13 +302,13 @@ class TestMain:
         mock_mf.load_config.return_value = {"gpt-5": {}}
         with pytest.raises(SystemExit):
             await self._run_main(
-                ["code-puppy", "-m", "bad-model", "-p", "hi"],
+                ["spruce-grove", "-m", "bad-model", "-p", "hi"],
                 extra_patches={
-                    "code_puppy.config.set_model_name": MagicMock(),
-                    "code_puppy.config._validate_model_exists": MagicMock(
+                    "spruce_grove.config.set_model_name": MagicMock(),
+                    "spruce_grove.config._validate_model_exists": MagicMock(
                         return_value=False
                     ),
-                    "code_puppy.model_factory.ModelFactory": mock_mf,
+                    "spruce_grove.model_factory.ModelFactory": mock_mf,
                 },
             )
 
@@ -316,10 +316,10 @@ class TestMain:
     async def test_model_validation_exception(self):
         with pytest.raises(SystemExit):
             await self._run_main(
-                ["code-puppy", "-m", "bad", "-p", "hi"],
+                ["spruce-grove", "-m", "bad", "-p", "hi"],
                 extra_patches={
-                    "code_puppy.config.set_model_name": MagicMock(),
-                    "code_puppy.config._validate_model_exists": MagicMock(
+                    "spruce_grove.config.set_model_name": MagicMock(),
+                    "spruce_grove.config._validate_model_exists": MagicMock(
                         side_effect=RuntimeError("boom")
                     ),
                 },
@@ -329,25 +329,25 @@ class TestMain:
     async def test_agent_valid(self):
         mock_set = MagicMock()
         await self._run_main(
-            ["code-puppy", "-a", "code-puppy", "-p", "hi"],
+            ["spruce-grove", "-a", "spruce-grove", "-p", "hi"],
             extra_patches={
-                "code_puppy.cli_runner.execute_single_prompt": AsyncMock(),
-                "code_puppy.agents.agent_manager.get_available_agents": MagicMock(
-                    return_value={"code-puppy": {}}
+                "spruce_grove.cli_runner.execute_single_prompt": AsyncMock(),
+                "spruce_grove.agents.agent_manager.get_available_agents": MagicMock(
+                    return_value={"spruce-grove": {}}
                 ),
-                "code_puppy.agents.agent_manager.set_current_agent": mock_set,
+                "spruce_grove.agents.agent_manager.set_current_agent": mock_set,
             },
         )
-        mock_set.assert_called_with("code-puppy")
+        mock_set.assert_called_with("spruce-grove")
 
     @pytest.mark.anyio
     async def test_agent_invalid(self):
         with pytest.raises(SystemExit):
             await self._run_main(
-                ["code-puppy", "-a", "bad-agent", "-p", "hi"],
+                ["spruce-grove", "-a", "bad-agent", "-p", "hi"],
                 extra_patches={
-                    "code_puppy.agents.agent_manager.get_available_agents": MagicMock(
-                        return_value={"code-puppy": {}}
+                    "spruce_grove.agents.agent_manager.get_available_agents": MagicMock(
+                        return_value={"spruce-grove": {}}
                     ),
                 },
             )
@@ -356,9 +356,9 @@ class TestMain:
     async def test_agent_exception(self):
         with pytest.raises(SystemExit):
             await self._run_main(
-                ["code-puppy", "-a", "bad", "-p", "hi"],
+                ["spruce-grove", "-a", "bad", "-p", "hi"],
                 extra_patches={
-                    "code_puppy.agents.agent_manager.get_available_agents": MagicMock(
+                    "spruce_grove.agents.agent_manager.get_available_agents": MagicMock(
                         side_effect=RuntimeError("boom")
                     ),
                 },
@@ -369,10 +369,10 @@ class TestMain:
         ("argv", "mode_target"),
         [
             (
-                ["code-puppy", "-p", "hi"],
-                "code_puppy.cli_runner.execute_single_prompt",
+                ["spruce-grove", "-p", "hi"],
+                "spruce_grove.cli_runner.execute_single_prompt",
             ),
-            (["code-puppy"], "code_puppy.cli_runner.interactive_mode"),
+            (["spruce-grove"], "spruce_grove.cli_runner.interactive_mode"),
         ],
         ids=["one-shot", "interactive"],
     )
@@ -384,13 +384,13 @@ class TestMain:
             argv,
             extra_patches={
                 mode_target: AsyncMock(),
-                "code_puppy.cli_runner.get_core_plugins_version": mock_core_version,
-                "code_puppy.messaging.emit_system_message": mock_emit,
+                "spruce_grove.cli_runner.get_core_plugins_version": mock_core_version,
+                "spruce_grove.messaging.emit_system_message": mock_emit,
                 "pyfiglet.figlet_format": MagicMock(return_value="LOGO\n\n"),
             },
         )
 
-        from code_puppy.cli_runner import __version__ as current_version
+        from spruce_grove.cli_runner import __version__ as current_version
 
         mock_core_version.assert_called_once_with()
         assert call(f"Current version: {current_version}") in mock_emit.call_args_list
@@ -402,7 +402,7 @@ class TestMain:
 
         from rich.console import Console as RichConsole
 
-        from code_puppy.messaging.message_queue import MessageQueue
+        from spruce_grove.messaging.message_queue import MessageQueue
 
         output = StringIO()
         queue = MessageQueue()
@@ -413,47 +413,47 @@ class TestMain:
             assert queue.drain()
 
         patches = _base_main_patches()
-        patches["code_puppy.cli_runner.get_core_plugins_version"] = MagicMock(
+        patches["spruce_grove.cli_runner.get_core_plugins_version"] = MagicMock(
             return_value="0.0.2"
         )
 
         try:
             with ExitStack() as stack:
                 stack.enter_context(patch.dict(os.environ, {"NO_VERSION_UPDATE": "1"}))
-                stack.enter_context(patch("sys.argv", ["code-puppy", "-p", "hi"]))
+                stack.enter_context(patch("sys.argv", ["spruce-grove", "-p", "hi"]))
                 stack.enter_context(
-                    patch("code_puppy.cli_runner.Console", return_value=console)
+                    patch("spruce_grove.cli_runner.Console", return_value=console)
                 )
                 stack.enter_context(
                     patch(
-                        "code_puppy.messaging.RichConsoleRenderer",
+                        "spruce_grove.messaging.RichConsoleRenderer",
                         return_value=_mock_renderer(),
                     )
                 )
                 stack.enter_context(
-                    patch("code_puppy.messaging.get_global_queue", return_value=queue)
+                    patch("spruce_grove.messaging.get_global_queue", return_value=queue)
                 )
                 stack.enter_context(
                     patch(
-                        "code_puppy.messaging.message_queue.get_global_queue",
+                        "spruce_grove.messaging.message_queue.get_global_queue",
                         return_value=queue,
                     )
                 )
                 stack.enter_context(
                     patch(
-                        "code_puppy.messaging.get_message_bus",
+                        "spruce_grove.messaging.get_message_bus",
                         return_value=MagicMock(),
                     )
                 )
                 stack.enter_context(
                     patch(
-                        "code_puppy.cli_runner.execute_single_prompt",
+                        "spruce_grove.cli_runner.execute_single_prompt",
                         side_effect=execute_and_drain,
                     )
                 )
                 _apply_patches(stack, patches)
 
-                from code_puppy.cli_runner import main
+                from spruce_grove.cli_runner import main
 
                 await main()
         finally:
@@ -466,13 +466,13 @@ class TestMain:
         mock_emit = MagicMock()
 
         await self._run_main(
-            ["code-puppy", "-p", "hi"],
+            ["spruce-grove", "-p", "hi"],
             extra_patches={
-                "code_puppy.cli_runner.execute_single_prompt": AsyncMock(),
-                "code_puppy.cli_runner.get_core_plugins_version": MagicMock(
+                "spruce_grove.cli_runner.execute_single_prompt": AsyncMock(),
+                "spruce_grove.cli_runner.get_core_plugins_version": MagicMock(
                     return_value=None
                 ),
-                "code_puppy.messaging.emit_system_message": mock_emit,
+                "spruce_grove.messaging.emit_system_message": mock_emit,
             },
         )
 
@@ -480,15 +480,15 @@ class TestMain:
 
     @pytest.mark.anyio
     async def test_version_flag_output_is_unchanged(self, capsys):
-        from code_puppy.cli_runner import __version__ as current_version
-        from code_puppy.cli_runner import main
+        from spruce_grove.cli_runner import __version__ as current_version
+        from spruce_grove.cli_runner import main
 
         mock_core_version = MagicMock()
         capsys.readouterr()
         with (
-            patch("sys.argv", ["code-puppy", "--version"]),
-            patch("code_puppy.cli_runner.callbacks", MagicMock()),
-            patch("code_puppy.cli_runner.get_core_plugins_version", mock_core_version),
+            patch("sys.argv", ["spruce-grove", "--version"]),
+            patch("spruce_grove.cli_runner.callbacks", MagicMock()),
+            patch("spruce_grove.cli_runner.get_core_plugins_version", mock_core_version),
             pytest.raises(SystemExit) as exc_info,
         ):
             await main()
@@ -507,44 +507,44 @@ class TestMain:
         )
         patches = _base_main_patches()
         default_version_check = patches[
-            "code_puppy.cli_runner.default_version_mismatch_behavior"
+            "spruce_grove.cli_runner.default_version_mismatch_behavior"
         ]
         mock_core_version = MagicMock(return_value="0.0.2")
         mock_emit = MagicMock()
-        patches["code_puppy.cli_runner.callbacks"] = cb_mock
-        patches["code_puppy.cli_runner.get_core_plugins_version"] = mock_core_version
-        patches["code_puppy.messaging.emit_system_message"] = mock_emit
+        patches["spruce_grove.cli_runner.callbacks"] = cb_mock
+        patches["spruce_grove.cli_runner.get_core_plugins_version"] = mock_core_version
+        patches["spruce_grove.messaging.emit_system_message"] = mock_emit
         with ExitStack() as stack:
             stack.enter_context(
                 patch.dict(os.environ, {"NO_VERSION_UPDATE": ""}, clear=False)
             )
-            stack.enter_context(patch("sys.argv", ["code-puppy", "-p", "hi"]))
+            stack.enter_context(patch("sys.argv", ["spruce-grove", "-p", "hi"]))
             stack.enter_context(
                 patch(
-                    "code_puppy.messaging.SynchronousInteractiveRenderer",
+                    "spruce_grove.messaging.SynchronousInteractiveRenderer",
                     return_value=_mock_renderer(),
                 )
             )
             stack.enter_context(
                 patch(
-                    "code_puppy.messaging.RichConsoleRenderer",
+                    "spruce_grove.messaging.RichConsoleRenderer",
                     return_value=_mock_renderer(),
                 )
             )
             stack.enter_context(
-                patch("code_puppy.messaging.get_global_queue", return_value=MagicMock())
+                patch("spruce_grove.messaging.get_global_queue", return_value=MagicMock())
             )
             stack.enter_context(
-                patch("code_puppy.messaging.get_message_bus", return_value=MagicMock())
+                patch("spruce_grove.messaging.get_message_bus", return_value=MagicMock())
             )
             stack.enter_context(
                 patch(
-                    "code_puppy.cli_runner.execute_single_prompt",
+                    "spruce_grove.cli_runner.execute_single_prompt",
                     new_callable=AsyncMock,
                 )
             )
             _apply_patches(stack, patches)
-            from code_puppy.cli_runner import main
+            from spruce_grove.cli_runner import main
 
             await main()
             cb_mock.on_version_check.assert_called_once()
@@ -557,49 +557,49 @@ class TestMain:
         """Version check falls back to default_version_mismatch_behavior."""
         patches = _base_main_patches()
         default_version_check = patches[
-            "code_puppy.cli_runner.default_version_mismatch_behavior"
+            "spruce_grove.cli_runner.default_version_mismatch_behavior"
         ]
         mock_core_version = MagicMock(return_value="0.0.2")
         mock_emit = MagicMock()
-        patches["code_puppy.cli_runner.callbacks"] = MagicMock(
+        patches["spruce_grove.cli_runner.callbacks"] = MagicMock(
             on_startup=AsyncMock(),
             on_shutdown=AsyncMock(),
             on_version_check=AsyncMock(),
             get_callbacks=MagicMock(return_value=[]),
         )
-        patches["code_puppy.cli_runner.get_core_plugins_version"] = mock_core_version
-        patches["code_puppy.messaging.emit_system_message"] = mock_emit
+        patches["spruce_grove.cli_runner.get_core_plugins_version"] = mock_core_version
+        patches["spruce_grove.messaging.emit_system_message"] = mock_emit
         with ExitStack() as stack:
             stack.enter_context(
                 patch.dict(os.environ, {"NO_VERSION_UPDATE": ""}, clear=False)
             )
-            stack.enter_context(patch("sys.argv", ["code-puppy", "-p", "hi"]))
+            stack.enter_context(patch("sys.argv", ["spruce-grove", "-p", "hi"]))
             stack.enter_context(
                 patch(
-                    "code_puppy.messaging.SynchronousInteractiveRenderer",
+                    "spruce_grove.messaging.SynchronousInteractiveRenderer",
                     return_value=_mock_renderer(),
                 )
             )
             stack.enter_context(
                 patch(
-                    "code_puppy.messaging.RichConsoleRenderer",
+                    "spruce_grove.messaging.RichConsoleRenderer",
                     return_value=_mock_renderer(),
                 )
             )
             stack.enter_context(
-                patch("code_puppy.messaging.get_global_queue", return_value=MagicMock())
+                patch("spruce_grove.messaging.get_global_queue", return_value=MagicMock())
             )
             stack.enter_context(
-                patch("code_puppy.messaging.get_message_bus", return_value=MagicMock())
+                patch("spruce_grove.messaging.get_message_bus", return_value=MagicMock())
             )
             stack.enter_context(
                 patch(
-                    "code_puppy.cli_runner.execute_single_prompt",
+                    "spruce_grove.cli_runner.execute_single_prompt",
                     new_callable=AsyncMock,
                 )
             )
             _apply_patches(stack, patches)
-            from code_puppy.cli_runner import main
+            from spruce_grove.cli_runner import main
 
             await main()
             default_version_check.assert_called_once()
@@ -618,9 +618,9 @@ class TestMain:
             return real_import(name, *args, **kwargs)
 
         await self._run_main(
-            ["code-puppy"],
+            ["spruce-grove"],
             extra_patches={
-                "code_puppy.cli_runner.interactive_mode": AsyncMock(),
+                "spruce_grove.cli_runner.interactive_mode": AsyncMock(),
                 "builtins.__import__": fake_import,
             },
         )
@@ -653,7 +653,7 @@ class TestInteractiveMode:
             _interactive_patches(),
             AsyncMock(return_value="/exit"),
             extra_patches={
-                "code_puppy.messaging.emit_system_message": emit_system_message,
+                "spruce_grove.messaging.emit_system_message": emit_system_message,
             },
         )
 
@@ -708,7 +708,7 @@ class TestInteractiveMode:
             _interactive_patches(),
             fake_input,
             extra_patches={
-                "code_puppy.callbacks.on_interactive_turn_cancel": mock_cancel,
+                "spruce_grove.callbacks.on_interactive_turn_cancel": mock_cancel,
             },
         )
         mock_cancel.assert_awaited()
@@ -726,15 +726,15 @@ class TestInteractiveMode:
             fake_input,
             agent=agent,
             extra_patches={
-                "code_puppy.cli_runner.get_current_agent": MagicMock(
+                "spruce_grove.cli_runner.get_current_agent": MagicMock(
                     return_value=agent
                 ),
                 # /clear lives in session_commands and lazy-imports the clipboard
                 # manager + autosave rotation — patch at the source modules.
-                "code_puppy.command_line.clipboard.get_clipboard_manager": MagicMock(
+                "spruce_grove.command_line.clipboard.get_clipboard_manager": MagicMock(
                     return_value=_mock_clipboard([b"img"])
                 ),
-                "code_puppy.config.finalize_autosave_session": MagicMock(
+                "spruce_grove.config.finalize_autosave_session": MagicMock(
                     return_value="session-1"
                 ),
             },
@@ -750,10 +750,10 @@ class TestInteractiveMode:
             _interactive_patches(),
             fake_input,
             extra_patches={
-                "code_puppy.command_line.command_handler.handle_command": MagicMock(
+                "spruce_grove.command_line.command_handler.handle_command": MagicMock(
                     return_value=True
                 ),
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("/help")
                 ),
             },
@@ -771,13 +771,13 @@ class TestInteractiveMode:
             _interactive_patches(),
             fake_input,
             extra_patches={
-                "code_puppy.command_line.command_handler.handle_command": MagicMock(
+                "spruce_grove.command_line.command_handler.handle_command": MagicMock(
                     return_value="run this"
                 ),
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("/custom")
                 ),
-                "code_puppy.cli_runner.run_prompt_with_attachments": AsyncMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": AsyncMock(
                     return_value=(mock_result, MagicMock())
                 ),
             },
@@ -792,10 +792,10 @@ class TestInteractiveMode:
             _interactive_patches(),
             fake_input,
             extra_patches={
-                "code_puppy.command_line.command_handler.handle_command": MagicMock(
+                "spruce_grove.command_line.command_handler.handle_command": MagicMock(
                     side_effect=RuntimeError("cmd error")
                 ),
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("/bad")
                 ),
             },
@@ -813,10 +813,10 @@ class TestInteractiveMode:
             _interactive_patches(),
             fake_input,
             extra_patches={
-                "code_puppy.cli_runner.run_prompt_with_attachments": AsyncMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": AsyncMock(
                     return_value=(mock_result, MagicMock())
                 ),
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("write hello")
                 ),
             },
@@ -831,10 +831,10 @@ class TestInteractiveMode:
             _interactive_patches(),
             fake_input,
             extra_patches={
-                "code_puppy.cli_runner.run_prompt_with_attachments": AsyncMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": AsyncMock(
                     return_value=(None, MagicMock())
                 ),
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("write hello")
                 ),
             },
@@ -850,11 +850,11 @@ class TestInteractiveMode:
             _interactive_patches(),
             fake_input,
             extra_patches={
-                "code_puppy.cli_runner.run_prompt_with_attachments": AsyncMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": AsyncMock(
                     return_value=(None, MagicMock())
                 ),
-                "code_puppy.callbacks.on_interactive_turn_cancel": mock_cancel,
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.callbacks.on_interactive_turn_cancel": mock_cancel,
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("write hello")
                 ),
             },
@@ -870,13 +870,13 @@ class TestInteractiveMode:
             _interactive_patches(),
             fake_input,
             extra_patches={
-                "code_puppy.cli_runner.run_prompt_with_attachments": AsyncMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": AsyncMock(
                     side_effect=RuntimeError("agent error")
                 ),
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("write hello")
                 ),
-                "code_puppy.messaging.queue_console.get_queue_console": MagicMock(
+                "spruce_grove.messaging.queue_console.get_queue_console": MagicMock(
                     return_value=MagicMock()
                 ),
             },
@@ -891,7 +891,7 @@ class TestInteractiveMode:
             _interactive_patches(),
             fake_input,
             extra_patches={
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("   ")
                 ),
             },
@@ -911,10 +911,10 @@ class TestInteractiveMode:
             agent=agent,
             initial_command="do stuff",
             extra_patches={
-                "code_puppy.cli_runner.get_current_agent": MagicMock(
+                "spruce_grove.cli_runner.get_current_agent": MagicMock(
                     return_value=agent
                 ),
-                "code_puppy.cli_runner.run_prompt_with_attachments": AsyncMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": AsyncMock(
                     return_value=(mock_result, MagicMock())
                 ),
             },
@@ -932,10 +932,10 @@ class TestInteractiveMode:
             agent=agent,
             initial_command="do stuff",
             extra_patches={
-                "code_puppy.cli_runner.get_current_agent": MagicMock(
+                "spruce_grove.cli_runner.get_current_agent": MagicMock(
                     return_value=agent
                 ),
-                "code_puppy.cli_runner.run_prompt_with_attachments": AsyncMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": AsyncMock(
                     side_effect=RuntimeError("fail")
                 ),
             },
@@ -953,10 +953,10 @@ class TestInteractiveMode:
             agent=agent,
             initial_command="do stuff",
             extra_patches={
-                "code_puppy.cli_runner.get_current_agent": MagicMock(
+                "spruce_grove.cli_runner.get_current_agent": MagicMock(
                     return_value=agent
                 ),
-                "code_puppy.cli_runner.run_prompt_with_attachments": AsyncMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": AsyncMock(
                     return_value=(None, MagicMock())
                 ),
             },
@@ -976,10 +976,10 @@ class TestInteractiveMode:
             _interactive_patches(),
             fake_input,
             extra_patches={
-                "code_puppy.command_line.command_handler.handle_command": MagicMock(
+                "spruce_grove.command_line.command_handler.handle_command": MagicMock(
                     return_value="__AUTOSAVE_LOAD__"
                 ),
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("/autosave_load")
                 ),
                 "sys.stdin": mock_stdin,
@@ -996,21 +996,21 @@ class TestInteractiveMode:
         mock_stdout = MagicMock()
         mock_stdout.isatty.return_value = True
 
-        with patch.dict(os.environ, {"CODE_PUPPY_NO_TUI": ""}, clear=False):
+        with patch.dict(os.environ, {"SPRUCE_GROVE_NO_TUI": ""}, clear=False):
             await _run_interactive(
                 _mock_renderer(),
                 _interactive_patches(),
                 fake_input,
                 extra_patches={
-                    "code_puppy.command_line.command_handler.handle_command": MagicMock(
+                    "spruce_grove.command_line.command_handler.handle_command": MagicMock(
                         return_value="__AUTOSAVE_LOAD__"
                     ),
-                    "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                    "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                         return_value=_mock_parse_result("/autosave_load")
                     ),
                     "sys.stdin": mock_stdin,
                     "sys.stdout": mock_stdout,
-                    "code_puppy.command_line.autosave_menu.interactive_autosave_picker": AsyncMock(
+                    "spruce_grove.command_line.autosave_menu.interactive_autosave_picker": AsyncMock(
                         return_value=None
                     ),
                 },
@@ -1029,30 +1029,30 @@ class TestInteractiveMode:
         mock_stdout = MagicMock()
         mock_stdout.isatty.return_value = True
 
-        with patch.dict(os.environ, {"CODE_PUPPY_NO_TUI": ""}, clear=False):
+        with patch.dict(os.environ, {"SPRUCE_GROVE_NO_TUI": ""}, clear=False):
             await _run_interactive(
                 _mock_renderer(),
                 _interactive_patches(),
                 fake_input,
                 agent=agent,
                 extra_patches={
-                    "code_puppy.command_line.command_handler.handle_command": MagicMock(
+                    "spruce_grove.command_line.command_handler.handle_command": MagicMock(
                         return_value="__AUTOSAVE_LOAD__"
                     ),
-                    "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                    "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                         return_value=_mock_parse_result("/autosave_load")
                     ),
                     "sys.stdin": mock_stdin,
                     "sys.stdout": mock_stdout,
-                    "code_puppy.command_line.autosave_menu.interactive_autosave_picker": AsyncMock(
+                    "spruce_grove.command_line.autosave_menu.interactive_autosave_picker": AsyncMock(
                         return_value="my-session"
                     ),
-                    "code_puppy.session_storage.load_session": MagicMock(
+                    "spruce_grove.session_storage.load_session": MagicMock(
                         return_value=[MagicMock()]
                     ),
-                    "code_puppy.config.set_current_autosave_from_session_name": MagicMock(),
-                    "code_puppy.command_line.autosave_menu.display_resumed_history": MagicMock(),
-                    "code_puppy.cli_runner.get_current_agent": MagicMock(
+                    "spruce_grove.config.set_current_autosave_from_session_name": MagicMock(),
+                    "spruce_grove.command_line.autosave_menu.display_resumed_history": MagicMock(),
+                    "spruce_grove.cli_runner.get_current_agent": MagicMock(
                         return_value=agent
                     ),
                 },
@@ -1073,10 +1073,10 @@ class TestInteractiveMode:
             _interactive_patches(),
             fake_input,
             extra_patches={
-                "code_puppy.command_line.command_handler.handle_command": MagicMock(
+                "spruce_grove.command_line.command_handler.handle_command": MagicMock(
                     return_value="__AUTOSAVE_LOAD__"
                 ),
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("/autosave_load")
                 ),
                 "sys.stdin": mock_stdin,
@@ -1097,13 +1097,13 @@ class TestInteractiveMode:
             _interactive_patches(),
             fake_input,
             extra_patches={
-                "code_puppy.command_line.command_handler.handle_command": MagicMock(
+                "spruce_grove.command_line.command_handler.handle_command": MagicMock(
                     return_value=False
                 ),
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("/unknown")
                 ),
-                "code_puppy.cli_runner.run_prompt_with_attachments": AsyncMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": AsyncMock(
                     return_value=(mock_result, MagicMock())
                 ),
             },
@@ -1126,11 +1126,11 @@ class TestInteractiveMode:
             _interactive_patches(),
             fake_input,
             extra_patches={
-                "code_puppy.cli_runner.run_prompt_with_attachments": mock_run,
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": mock_run,
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("write hello")
                 ),
-                "code_puppy.callbacks.on_interactive_turn_end": mock_turn_end,
+                "spruce_grove.callbacks.on_interactive_turn_end": mock_turn_end,
             },
         )
         assert mock_run.await_count == 2
@@ -1160,12 +1160,12 @@ class TestInteractiveMode:
             _interactive_patches(),
             fake_input,
             extra_patches={
-                "code_puppy.cli_runner.run_prompt_with_attachments": fake_run,
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": fake_run,
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("write hello")
                 ),
-                "code_puppy.callbacks.on_interactive_turn_end": mock_turn_end,
-                "code_puppy.callbacks.on_interactive_turn_cancel": mock_cancel,
+                "spruce_grove.callbacks.on_interactive_turn_end": mock_turn_end,
+                "spruce_grove.callbacks.on_interactive_turn_cancel": mock_cancel,
             },
         )
         mock_cancel.assert_awaited()
@@ -1184,11 +1184,11 @@ class TestInteractiveMode:
             _interactive_patches(),
             fake_input,
             extra_patches={
-                "code_puppy.cli_runner.run_prompt_with_attachments": mock_run,
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": mock_run,
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("write hello")
                 ),
-                "code_puppy.callbacks.on_interactive_turn_end": mock_turn_end,
+                "spruce_grove.callbacks.on_interactive_turn_end": mock_turn_end,
             },
         )
         mock_turn_end.assert_called()
@@ -1218,11 +1218,11 @@ class TestInteractiveMode:
             _interactive_patches(),
             fake_input,
             extra_patches={
-                "code_puppy.cli_runner.run_prompt_with_attachments": fake_run,
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": fake_run,
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("write hello")
                 ),
-                "code_puppy.callbacks.on_interactive_turn_end": mock_turn_end,
+                "spruce_grove.callbacks.on_interactive_turn_end": mock_turn_end,
             },
         )
         assert mock_turn_end.call_count >= 2
@@ -1230,7 +1230,7 @@ class TestInteractiveMode:
     @pytest.mark.anyio
     async def test_onboarding_chatgpt(self):
         patches = _interactive_patches()
-        patches["code_puppy.command_line.onboarding_wizard.should_show_onboarding"] = (
+        patches["spruce_grove.command_line.onboarding_wizard.should_show_onboarding"] = (
             MagicMock(return_value=True)
         )
 
@@ -1250,18 +1250,18 @@ class TestInteractiveMode:
                 "concurrent.futures.ThreadPoolExecutor": MagicMock(
                     return_value=mock_executor
                 ),
-                "code_puppy.command_line.onboarding_wizard.run_onboarding_wizard": AsyncMock(
+                "spruce_grove.command_line.onboarding_wizard.run_onboarding_wizard": AsyncMock(
                     return_value="chatgpt"
                 ),
                 "code_puppy_core_plugins.chatgpt_oauth.oauth_flow.run_oauth_flow": MagicMock(),
-                "code_puppy.config.set_model_name": MagicMock(),
+                "spruce_grove.config.set_model_name": MagicMock(),
             },
         )
 
     @pytest.mark.anyio
     async def test_onboarding_claude(self):
         patches = _interactive_patches()
-        patches["code_puppy.command_line.onboarding_wizard.should_show_onboarding"] = (
+        patches["spruce_grove.command_line.onboarding_wizard.should_show_onboarding"] = (
             MagicMock(return_value=True)
         )
 
@@ -1282,7 +1282,7 @@ class TestInteractiveMode:
                     return_value=mock_executor
                 ),
                 "code_puppy_core_plugins.claude_code_oauth.register_callbacks._perform_authentication": MagicMock(),
-                "code_puppy.config.set_model_name": MagicMock(),
+                "spruce_grove.config.set_model_name": MagicMock(),
             },
         )
 
@@ -1290,7 +1290,7 @@ class TestInteractiveMode:
     @pytest.mark.parametrize("onboarding_result", ["completed", "skipped"])
     async def test_onboarding_result(self, onboarding_result):
         patches = _interactive_patches()
-        patches["code_puppy.command_line.onboarding_wizard.should_show_onboarding"] = (
+        patches["spruce_grove.command_line.onboarding_wizard.should_show_onboarding"] = (
             MagicMock(return_value=True)
         )
 
@@ -1316,7 +1316,7 @@ class TestInteractiveMode:
     @pytest.mark.anyio
     async def test_onboarding_exception(self):
         patches = _interactive_patches()
-        patches["code_puppy.command_line.onboarding_wizard.should_show_onboarding"] = (
+        patches["spruce_grove.command_line.onboarding_wizard.should_show_onboarding"] = (
             MagicMock(side_effect=RuntimeError("fail"))
         )
 
@@ -1340,14 +1340,14 @@ class TestInteractiveMode:
             fake_input,
             agent=agent,
             extra_patches={
-                "code_puppy.cli_runner.get_current_agent": MagicMock(
+                "spruce_grove.cli_runner.get_current_agent": MagicMock(
                     return_value=agent
                 ),
                 # Same lazy-import targets as test_clear_command above.
-                "code_puppy.command_line.clipboard.get_clipboard_manager": MagicMock(
+                "spruce_grove.command_line.clipboard.get_clipboard_manager": MagicMock(
                     return_value=_mock_clipboard()
                 ),
-                "code_puppy.config.finalize_autosave_session": MagicMock(
+                "spruce_grove.config.finalize_autosave_session": MagicMock(
                     return_value="session-1"
                 ),
             },
@@ -1391,8 +1391,8 @@ class TestInteractiveModeEdgeCases:
             fake_input,
             agent=agent,
             extra_patches={
-                "code_puppy.cli_runner.run_prompt_with_attachments": fake_run,
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": fake_run,
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("do work")
                 ),
             },
@@ -1420,8 +1420,8 @@ class TestInteractiveModeEdgeCases:
             fake_input,
             agent=agent,
             extra_patches={
-                "code_puppy.cli_runner.run_prompt_with_attachments": fake_run,
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": fake_run,
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("do work")
                 ),
             },
@@ -1442,10 +1442,10 @@ class TestInteractiveModeEdgeCases:
             fake_input,
             agent=agent,
             extra_patches={
-                "code_puppy.cli_runner.get_current_agent": MagicMock(
+                "spruce_grove.cli_runner.get_current_agent": MagicMock(
                     return_value=agent
                 ),
-                "code_puppy.command_line.clipboard.get_clipboard_manager": MagicMock(
+                "spruce_grove.command_line.clipboard.get_clipboard_manager": MagicMock(
                     return_value=clip
                 ),
             },
@@ -1453,7 +1453,7 @@ class TestInteractiveModeEdgeCases:
 
     @pytest.mark.anyio
     async def test_autosave_load_no_tui_env(self):
-        """Line 656: CODE_PUPPY_NO_TUI=1 forces non-interactive picker."""
+        """Line 656: SPRUCE_GROVE_NO_TUI=1 forces non-interactive picker."""
         fake_input = _scripted_input("/autosave_load")
 
         mock_stdin = MagicMock()
@@ -1461,16 +1461,16 @@ class TestInteractiveModeEdgeCases:
         mock_stdout = MagicMock()
         mock_stdout.isatty.return_value = True
 
-        with patch.dict(os.environ, {"CODE_PUPPY_NO_TUI": "1"}, clear=False):
+        with patch.dict(os.environ, {"SPRUCE_GROVE_NO_TUI": "1"}, clear=False):
             await _run_interactive(
                 _mock_renderer(),
                 _interactive_patches(),
                 fake_input,
                 extra_patches={
-                    "code_puppy.command_line.command_handler.handle_command": MagicMock(
+                    "spruce_grove.command_line.command_handler.handle_command": MagicMock(
                         return_value="__AUTOSAVE_LOAD__"
                     ),
-                    "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                    "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                         return_value=_mock_parse_result("/autosave_load")
                     ),
                     "sys.stdin": mock_stdin,
@@ -1491,42 +1491,42 @@ class TestMainWindowsClampAndEdgeCases:
         patches = _base_main_patches()
         with ExitStack() as stack:
             stack.enter_context(patch.dict(os.environ, {"NO_VERSION_UPDATE": "1"}))
-            stack.enter_context(patch("sys.argv", ["code-puppy", "-p", "hi"]))
+            stack.enter_context(patch("sys.argv", ["spruce-grove", "-p", "hi"]))
             stack.enter_context(
                 patch(
-                    "code_puppy.messaging.SynchronousInteractiveRenderer",
+                    "spruce_grove.messaging.SynchronousInteractiveRenderer",
                     return_value=_mock_renderer(),
                 )
             )
             stack.enter_context(
                 patch(
-                    "code_puppy.messaging.RichConsoleRenderer",
+                    "spruce_grove.messaging.RichConsoleRenderer",
                     return_value=_mock_renderer(),
                 )
             )
             stack.enter_context(
-                patch("code_puppy.messaging.get_global_queue", return_value=MagicMock())
+                patch("spruce_grove.messaging.get_global_queue", return_value=MagicMock())
             )
             stack.enter_context(
-                patch("code_puppy.messaging.get_message_bus", return_value=MagicMock())
+                patch("spruce_grove.messaging.get_message_bus", return_value=MagicMock())
             )
             stack.enter_context(
                 patch(
-                    "code_puppy.cli_runner.execute_single_prompt",
+                    "spruce_grove.cli_runner.execute_single_prompt",
                     new_callable=AsyncMock,
                 )
             )
             _apply_patches(stack, patches)
             mock_disable = stack.enter_context(
                 patch(
-                    "code_puppy.terminal_utils.disable_windows_ctrl_c",
+                    "spruce_grove.terminal_utils.disable_windows_ctrl_c",
                     return_value=True,
                 )
             )
             mock_keep = stack.enter_context(
-                patch("code_puppy.terminal_utils.set_keep_ctrl_c_disabled")
+                patch("spruce_grove.terminal_utils.set_keep_ctrl_c_disabled")
             )
-            from code_puppy.cli_runner import main
+            from spruce_grove.cli_runner import main
 
             await main()
 
@@ -1549,13 +1549,13 @@ class TestMainWindowsClampAndEdgeCases:
             agent=agent,
             initial_command="do stuff",
             extra_patches={
-                "code_puppy.cli_runner.get_current_agent": MagicMock(
+                "spruce_grove.cli_runner.get_current_agent": MagicMock(
                     return_value=agent
                 ),
-                "code_puppy.cli_runner.run_prompt_with_attachments": AsyncMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": AsyncMock(
                     return_value=(mock_result, MagicMock())
                 ),
-                "code_puppy.tools.command_runner.is_awaiting_user_input": MagicMock(
+                "spruce_grove.tools.command_runner.is_awaiting_user_input": MagicMock(
                     return_value=True
                 ),
             },
@@ -1587,10 +1587,10 @@ class TestMainWindowsClampAndEdgeCases:
             agent=agent,
             initial_command="do stuff",
             extra_patches={
-                "code_puppy.cli_runner.get_current_agent": MagicMock(
+                "spruce_grove.cli_runner.get_current_agent": MagicMock(
                     return_value=agent
                 ),
-                "code_puppy.cli_runner.run_prompt_with_attachments": AsyncMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": AsyncMock(
                     return_value=(mock_result, MagicMock())
                 ),
             },
@@ -1615,13 +1615,13 @@ class TestRemainingEdgeCases:
             fake_input,
             agent=agent,
             extra_patches={
-                "code_puppy.cli_runner.run_prompt_with_attachments": AsyncMock(
+                "spruce_grove.cli_runner.run_prompt_with_attachments": AsyncMock(
                     return_value=(None, MagicMock())
                 ),
-                "code_puppy.cli_runner.parse_prompt_attachments": MagicMock(
+                "spruce_grove.cli_runner.parse_prompt_attachments": MagicMock(
                     return_value=_mock_parse_result("write hello")
                 ),
-                "code_puppy.callbacks.on_interactive_turn_cancel": mock_cancel,
+                "spruce_grove.callbacks.on_interactive_turn_cancel": mock_cancel,
             },
         )
         mock_cancel.assert_awaited()
@@ -1629,7 +1629,7 @@ class TestRemainingEdgeCases:
     @pytest.mark.anyio
     async def test_execute_single_prompt_success_path(self):
         """Lines 1005-1015: execute_single_prompt success with .output access."""
-        from code_puppy.cli_runner import execute_single_prompt
+        from spruce_grove.cli_runner import execute_single_prompt
 
         mock_renderer = _mock_renderer()
         # response needs .output attribute (not a tuple)
@@ -1637,15 +1637,15 @@ class TestRemainingEdgeCases:
         mock_response.output = "the response"
 
         with ExitStack() as stack:
-            stack.enter_context(patch("code_puppy.cli_runner.get_current_agent"))
+            stack.enter_context(patch("spruce_grove.cli_runner.get_current_agent"))
             stack.enter_context(
                 patch(
-                    "code_puppy.cli_runner.run_prompt_with_attachments",
+                    "spruce_grove.cli_runner.run_prompt_with_attachments",
                     new_callable=AsyncMock,
                     return_value=mock_response,
                 )
             )
-            stack.enter_context(patch("code_puppy.cli_runner.emit_info"))
+            stack.enter_context(patch("spruce_grove.cli_runner.emit_info"))
             await execute_single_prompt("test", mock_renderer)
 
 
@@ -1673,7 +1673,7 @@ class TestImportErrorFallbacks:
         real_import = builtins.__import__
 
         def fake_import(name, *args, **kwargs):
-            if name == "code_puppy.tools.command_runner":
+            if name == "spruce_grove.tools.command_runner":
                 raise ImportError("no command_runner")
             return real_import(name, *args, **kwargs)
 
@@ -1689,22 +1689,22 @@ class TestImportErrorFallbacks:
             stack.enter_context(patch("builtins.input", return_value="/exit"))
             stack.enter_context(
                 patch(
-                    "code_puppy.agents.agent_manager.get_current_agent",
+                    "spruce_grove.agents.agent_manager.get_current_agent",
                     return_value=agent,
                 )
             )
             stack.enter_context(
-                patch("code_puppy.cli_runner.get_current_agent", return_value=agent)
+                patch("spruce_grove.cli_runner.get_current_agent", return_value=agent)
             )
             stack.enter_context(
                 patch(
-                    "code_puppy.cli_runner.run_prompt_with_attachments",
+                    "spruce_grove.cli_runner.run_prompt_with_attachments",
                     new_callable=AsyncMock,
                     return_value=(mock_result, MagicMock()),
                 )
             )
             stack.enter_context(patch("builtins.__import__", side_effect=fake_import))
-            from code_puppy.cli_runner import interactive_mode
+            from spruce_grove.cli_runner import interactive_mode
 
             await interactive_mode(renderer, initial_command="test")
 
@@ -1712,9 +1712,9 @@ class TestImportErrorFallbacks:
 class TestMainEntryAdditional:
     @patch("asyncio.run", side_effect=KeyboardInterrupt)
     def test_keyboard_interrupt_stderr_output(self, mock_run):
-        from code_puppy.cli_runner import main_entry
+        from spruce_grove.cli_runner import main_entry
 
         with ExitStack() as stack:
-            stack.enter_context(patch("code_puppy.cli_runner.reset_unix_terminal"))
+            stack.enter_context(patch("spruce_grove.cli_runner.reset_unix_terminal"))
             result = main_entry()
             assert result == 0

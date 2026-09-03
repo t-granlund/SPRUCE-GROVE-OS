@@ -1,6 +1,6 @@
-"""Direct tests for code_puppy.atomic_io -- the shared bounded-read /
-cross-process-lock / atomic-write primitives that code_puppy.config_file
-(INI) and code_puppy.atomic_json (JSON) both build on.
+"""Direct tests for spruce_grove.atomic_io -- the shared bounded-read /
+cross-process-lock / atomic-write primitives that spruce_grove.config_file
+(INI) and spruce_grove.atomic_json (JSON) both build on.
 
 These pin the generic contract independent of any file format, since a bug
 here would silently affect every config surface built on top.
@@ -13,7 +13,7 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy import atomic_io
+from spruce_grove import atomic_io
 
 
 @pytest.fixture
@@ -68,7 +68,7 @@ class TestReadBoundedBytes:
                 return _Tracking(real_open(path, mode))
             return real_open(path, mode)
 
-        with patch("code_puppy.atomic_io.open", _tracking_open, create=True):
+        with patch("spruce_grove.atomic_io.open", _tracking_open, create=True):
             with pytest.raises(atomic_io.ContentTooLarge):
                 atomic_io.read_bounded_bytes(str(target_path), max_bytes=1024)
 

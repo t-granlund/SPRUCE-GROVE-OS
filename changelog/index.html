@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>code_puppy // release observatory</title>
-<meta name="description" content="Immersive 30-day release intelligence for code_puppy — every change that landed on Tyler's machine (v0.0.528 → v0.0.577), translated into what it is, how it works, why it matters, and how to use it at HTT Brands." />
+<title>spruce_grove // release observatory</title>
+<meta name="description" content="Immersive 30-day release intelligence for spruce_grove — every change that landed on Tyler's machine (v0.0.528 → v0.0.577), translated into what it is, how it works, why it matters, and how to use it at HTT Brands." />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
 <style>
   :root{
@@ -223,7 +223,7 @@
   <div class="page">
     <nav class="nav">
       <span class="lights"><i class="r"></i><i class="y"></i><i class="g"></i></span>
-      <span class="path"><b>code_puppy</b>://release-observatory</span>
+      <span class="path"><b>spruce_grove</b>://release-observatory</span>
       <span class="links">
         <a href="#glance">overview</a>
         <a href="#pillars">themes</a>
@@ -233,8 +233,8 @@
     </nav>
     <main class="wrap">
       <header class="hero" id="top">
-        <div class="promptline"><span class="dollar">$</span> uvx code-puppy <span class="flag">--version</span> <span style="color:var(--faint)">&amp;&amp;</span> git log <span class="flag">--since</span>=30d</div>
-        <h1><span class="grad">30 days</span><br>of <span class="tag">code_puppy</span><span class="cursor"></span></h1>
+        <div class="promptline"><span class="dollar">$</span> uvx spruce-grove <span class="flag">--version</span> <span style="color:var(--faint)">&amp;&amp;</span> git log <span class="flag">--since</span>=30d</div>
+        <h1><span class="grad">30 days</span><br>of <span class="tag">spruce_grove</span><span class="cursor"></span></h1>
         <p class="lede">A living map of every change that landed on your machine between <b>v0.0.528</b> and <b>v0.0.577</b> — <b>~46 releases, ~110 substantive commits</b>, flown through in 3D and broken down into <b>what each change is, how it works, why it matters, and how to put it to work at HTT</b>. Move your cursor to look around. Scroll to fly the timeline.</p>
         <div class="cta">
           <a class="btn primary" href="#glance">▸ explore the 30 days</a>
@@ -246,7 +246,7 @@
       <section id="glance">
         <div class="seclabel reveal">the 30 days at a glance <span class="rule"></span></div>
         <h2 class="sectitle reveal">A month of fast, additive iteration</h2>
-        <p class="secintro reveal">code_puppy ships almost daily. Across this window every change was <b>auto-applied with no migration</b> — your only action all month was a single <code class="mono">uv tool upgrade</code>. Here's the shape of it. Tap a theme to filter the full timeline below.</p>
+        <p class="secintro reveal">spruce_grove ships almost daily. Across this window every change was <b>auto-applied with no migration</b> — your only action all month was a single <code class="mono">uv tool upgrade</code>. Here's the shape of it. Tap a theme to filter the full timeline below.</p>
         <div class="statgrid reveal">
           <div class="stat glass"><div class="num" data-target="46">0</div><div class="lbl"><b>releases</b> shipped · v0.0.528 → v0.0.577</div></div>
           <div class="stat glass"><div class="num" id="stat-changes" data-target="0">0</div><div class="lbl"><b>substantive changes</b> mapped &amp; explained</div></div>
@@ -312,7 +312,7 @@
               <div class="wbar"><span>/resume content search — try it</span><span class="live"><i></i>interactive</span></div>
               <div class="wbody"><div id="search-demo-mount"></div></div>
             </div>
-            <div class="usecase"><div class="ut">▸ HTT use case</div><p>Three weeks ago you worked through a tricky Power BI capacity issue with code_puppy. Type <code class="mono">/resume</code> → <code class="mono">/</code> → "fabric capacity" and you're back in that exact session, context intact.</p></div>
+            <div class="usecase"><div class="ut">▸ HTT use case</div><p>Three weeks ago you worked through a tricky Power BI capacity issue with spruce_grove. Type <code class="mono">/resume</code> → <code class="mono">/</code> → "fabric capacity" and you're back in that exact session, context intact.</p></div>
 
             <!-- the rest of the commands bucket -->
             <h4 style="font-family:var(--mono);font-size:15px;margin:30px 0 12px;color:var(--text-soft)">Also in this bucket</h4>
@@ -329,7 +329,7 @@
           <div class="ptop">
             <div class="pkicker"><span>② multi-agent orchestration</span><span class="vr">·</span><span>v0.0.569 · 0.0.x (#377, #486)</span></div>
             <h3>Running a swarm, with a kill switch</h3>
-            <p class="ptag">code_puppy can spin up sub-agents to parallelize work. This month gave that swarm <b>visibility</b> (a live status panel), <b>a clean stop</b> (one Ctrl+C cancels everything), and <b>per-agent model control</b>. If you orchestrate, this is the most consequential bucket.</p>
+            <p class="ptag">spruce_grove can spin up sub-agents to parallelize work. This month gave that swarm <b>visibility</b> (a live status panel), <b>a clean stop</b> (one Ctrl+C cancels everything), and <b>per-agent model control</b>. If you orchestrate, this is the most consequential bucket.</p>
           </div>
           <div class="pbody">
             <div class="wwgrid">
@@ -363,7 +363,7 @@
               <div class="wbar"><span>blip simulator — old vs. new behavior</span><span class="live"><i></i>interactive</span></div>
               <div class="wbody"><div id="resilience-demo-mount"></div></div>
             </div>
-            <div class="usecase"><div class="ut">▸ HTT use case</div><p>Your nightly <code class="mono">code-puppy-upstream-watch</code> task (this very report) benefits directly: if the office VPN hiccups mid-run, it retries instead of emailing you a scary traceback — and the atomic writes mean a power blip can't leave a half-written session pickle.</p></div>
+            <div class="usecase"><div class="ut">▸ HTT use case</div><p>Your nightly <code class="mono">spruce-grove-upstream-watch</code> task (this very report) benefits directly: if the office VPN hiccups mid-run, it retries instead of emailing you a scary traceback — and the atomic writes mean a power blip can't leave a half-written session pickle.</p></div>
           </div>
         </article>
         <!-- ===== PILLAR: MODELS ===== -->
@@ -393,20 +393,20 @@
           <div class="ptop">
             <div class="pkicker"><span>⑤ plugins, skills &amp; governance</span><span class="vr">·</span><span>v0.0.571 · 0.0.575 · 0.0.x</span></div>
             <h3>Your lever for keeping output on-policy</h3>
-            <p class="ptag">This is the layer that makes code_puppy <i>yours</i>. <b>Project-level plugin discovery</b>, a built-in <b>architecture skill</b>, smarter <b>skill search &amp; activation</b>, an <b>emoji filter</b>, a <b>dangerous-command-guard toggle</b>, hook-engine blocking decisions, and the <code>puppy_kennel</code> memory system. The same "one durable control beats N reminders" principle you run across 200+ locations.</p>
+            <p class="ptag">This is the layer that makes spruce_grove <i>yours</i>. <b>Project-level plugin discovery</b>, a built-in <b>architecture skill</b>, smarter <b>skill search &amp; activation</b>, an <b>emoji filter</b>, a <b>dangerous-command-guard toggle</b>, hook-engine blocking decisions, and the <code>puppy_kennel</code> memory system. The same "one durable control beats N reminders" principle you run across 200+ locations.</p>
           </div>
           <div class="pbody">
             <div class="wwgrid">
-              <div class="ww"><h5><b>what</b></h5><p>Drop plugins in <code>.code_puppy/plugins/</code> for per-project tooling; skills now match multi-word queries and the agent is told to activate the right one before answering; hooks can block actions via stdout JSON; <code>AGENTS.md</code> is capped at 10k chars.</p></div>
+              <div class="ww"><h5><b>what</b></h5><p>Drop plugins in <code>.spruce_grove/plugins/</code> for per-project tooling; skills now match multi-word queries and the agent is told to activate the right one before answering; hooks can block actions via stdout JSON; <code>AGENTS.md</code> is capped at 10k chars.</p></div>
               <div class="ww"><h5><b>how</b></h5><p>A project-local discovery path loads plugins alongside the built-ins; an <code>enabled_skills</code> module became the single source of truth; the hook engine honors structured stdout payloads to allow/deny a tool call.</p></div>
               <div class="ww"><h5><b>why</b></h5><p>Governance that travels <i>with the repo</i>. Your voice charter, your guardrails, your franchise conventions become code the agent must load — not reminders it can ignore.</p></div>
-              <div class="ww"><h5><b>watch-out</b></h5><p>Project-level plugins run with the agent's permissions. Treat <code>.code_puppy/plugins/</code> like any executable in the repo — review before you trust.</p></div>
+              <div class="ww"><h5><b>watch-out</b></h5><p>Project-level plugins run with the agent's permissions. Treat <code>.spruce_grove/plugins/</code> like any executable in the repo — review before you trust.</p></div>
             </div>
             <div class="widget" id="gov-stack" style="--accent:var(--governance)">
               <div class="wbar"><span>where governance attaches — layer map</span><span class="live"><i></i>reference</span></div>
               <div class="wbody"><div id="gov-stack-mount"></div></div>
             </div>
-            <div class="usecase"><div class="ut">▸ HTT use case</div><p>Commit a <code class="mono">.code_puppy/plugins/</code> bundle to each brand's repo encoding that brand's voice + a dangerous-command guard. Any teammate (or scheduled job) cloning that repo inherits the guardrails automatically — governance as version-controlled code.</p></div>
+            <div class="usecase"><div class="ut">▸ HTT use case</div><p>Commit a <code class="mono">.spruce_grove/plugins/</code> bundle to each brand's repo encoding that brand's voice + a dangerous-command guard. Any teammate (or scheduled job) cloning that repo inherits the guardrails automatically — governance as version-controlled code.</p></div>
           </div>
         </article>
         <!-- ===== PILLAR: SECURITY ===== -->
@@ -423,7 +423,7 @@
               <div class="ww"><h5><b>why</b></h5><p>When an agent pastes web content or model output into a terminal, escape-sequence injection is a real attack surface. This shuts a known one.</p></div>
               <div class="ww"><h5><b>watch-out</b></h5><p>The dangerous-command-guard <i>toggle</i> cuts both ways — disabling it removes a safety rail. Keep it on for unattended and shared environments.</p></div>
             </div>
-            <div class="usecase"><div class="ut">▸ HTT use case</div><p>For any code_puppy run that ingests external content — scraping a vendor page, reading a customer ticket — the clipboard and path guards mean a poisoned input can't quietly hijack your terminal or read files outside scope.</p></div>
+            <div class="usecase"><div class="ut">▸ HTT use case</div><p>For any spruce_grove run that ingests external content — scraping a vendor page, reading a customer ticket — the clipboard and path guards mean a poisoned input can't quietly hijack your terminal or read files outside scope.</p></div>
           </div>
         </article>
 
@@ -441,7 +441,7 @@
               <div class="ww"><h5><b>why</b></h5><p>If your team mixes platforms, consistent tool behavior means a script that works on your Mac works on a franchise Windows box without surprises.</p></div>
               <div class="ww"><h5><b>watch-out</b></h5><p>None material — these are pure correctness fixes. If you'd built workarounds for the old Windows quirks, you can retire them.</p></div>
             </div>
-            <div class="usecase"><div class="ut">▸ HTT use case</div><p>When you hand a code_puppy automation to a franchise location running Windows, grep-based checks and shell output now behave exactly as they did on your machine — one less support ticket.</p></div>
+            <div class="usecase"><div class="ut">▸ HTT use case</div><p>When you hand a spruce_grove automation to a franchise location running Windows, grep-based checks and shell output now behave exactly as they did on your machine — one less support ticket.</p></div>
           </div>
         </article>
 
@@ -490,7 +490,7 @@
           <div class="sceno glass reveal">
             <div class="si">🏢</div>
             <h4>Multi-brand parallel work</h4>
-            <p>One task, five brands. Fan out a sub-agent per brand, watch the live status tree, run a cheap model for bulk and a strong one for synthesis — and keep a single Ctrl+C kill switch over the whole fleet. Per-brand <code class="mono">.code_puppy/plugins/</code> keeps each brand's voice and guardrails attached.</p>
+            <p>One task, five brands. Fan out a sub-agent per brand, watch the live status tree, run a cheap model for bulk and a strong one for synthesis — and keep a single Ctrl+C kill switch over the whole fleet. Per-brand <code class="mono">.spruce_grove/plugins/</code> keeps each brand's voice and guardrails attached.</p>
             <div class="stack"><span>sub-agent swarm</span><span>swarm Ctrl+C</span><span>model overrides</span><span>project plugins</span></div>
           </div>
           <div class="sceno glass reveal">
@@ -506,7 +506,7 @@
     <footer>
       <div class="wrap">
         <div class="f">
-          <span><span class="paw">●</span> code_puppy://release-observatory</span>
+          <span><span class="paw">●</span> spruce_grove://release-observatory</span>
           <span><b>window</b> v0.0.528 → v0.0.577 · last 30 days</span>
           <span><b>single static file</b> · three.js + vanilla JS · no build step</span>
           <span><b>built</b> 2026-06-25 · <b>verified</b> upstream git inspection</span>
@@ -541,7 +541,7 @@
     {v:"0.0.573", date:"2026-06-19", theme:"durability", pr:"#491", title:"Ctrl+C double-tap no longer exits the whole REPL", detail:"A fast, accidental double-interrupt won't kill your session mid-run."},
     {v:"0.0.572", date:"2026-06-19", theme:"durability", pr:"#482", title:"recoverable connection drop no longer looks like a crash", detail:"Transient VPN/WiFi drops auto-retry with a friendly one-liner instead of a fake-crash traceback."},
     {v:"0.0.572", date:"2026-06-19", theme:"durability", pr:"#490", title:"serialize DBOS startup vs. the SQLite migration race", detail:"A startup lock makes concurrent launches take turns through the DBOS migration, so multiple instances keep durable execution instead of one silently losing it."},
-    {v:"0.0.571", date:"2026-06-18", theme:"governance", pr:"#488", title:"built-in code-puppy-agent architecture skill", detail:"A 553-line SKILL.md teaching the agent code_puppy's own internals (plugins, tools, agent system) so it can navigate and extend the project."},
+    {v:"0.0.571", date:"2026-06-18", theme:"governance", pr:"#488", title:"built-in spruce-grove-agent architecture skill", detail:"A 553-line SKILL.md teaching the agent spruce_grove's own internals (plugins, tools, agent system) so it can navigate and extend the project."},
     {v:"0.0.570", date:"2026-06-18", theme:"models", pr:"#376", title:"distinguish model error types in fallback messages", detail:"Clearer signal when a provider/model genuinely fails versus a transient hiccup."},
     {v:"0.0.569", date:"2026-06-17", theme:"agents", pr:"#486", title:"built-in sub-agent status panel", detail:"Renders a live INVOKE AGENT tree for swarm runs so you can see what each sub-agent is doing."},
     {v:"0.0.569", date:"2026-06-17", theme:"agents", pr:"", title:"single Ctrl+C cancels the entire sub-agent swarm", detail:"One interrupt now propagates across every concurrent sub-agent task instead of just the current shell batch."},
@@ -556,7 +556,7 @@
     {v:"", date:"2026-06-13", theme:"platform", pr:"#477", title:"fix output_level=low spacing", detail:"Audits and fixes output_level=low for even spacing."},
     {v:"", date:"2026-06-12", theme:"commands", pr:"#474", title:"suppress_directory_listing config flag", detail:"Optionally trims noisy directory dumps from the stream — calmer logs for unattended runs."},
     {v:"", date:"2026-06-12", theme:"commands", pr:"#469", title:"output_level setting (low / medium / high)", detail:"Tunes conversation-stream density to taste."},
-    {v:"", date:"2026-06-12", theme:"governance", pr:"#472", title:"puppy_kennel: /kennel toggle in puppy.cfg", detail:"Stores the /kennel toggle in puppy.cfg as a single source of truth."},
+    {v:"", date:"2026-06-12", theme:"governance", pr:"#472", title:"puppy_kennel: /kennel toggle in grove.cfg", detail:"Stores the /kennel toggle in grove.cfg as a single source of truth."},
     {v:"", date:"2026-06-11", theme:"governance", pr:"", title:"hook_engine honors stdout JSON blocking decisions", detail:"Hooks can allow or deny a tool call via structured stdout payloads."},
     {v:"", date:"2026-06-11", theme:"steering", pr:"", title:"kill input lag + cursor-aware editing in the Ctrl+T prompt", detail:"Responsive input and proper left/right cursor line-editing for the mid-run steering prompt."},
     {v:"", date:"2026-06-11", theme:"steering", pr:"", title:"unify shell Ctrl+X listener with the canonical key listener", detail:"One key-listener path so steering input behaves consistently with the rest of the REPL."},
@@ -567,7 +567,7 @@
     {v:"", date:"2026-06-10", theme:"steering", pr:"", title:"injected steer requests inherit system-prompt instructions", detail:"Mid-run steer requests carry your system prompt — so governance and voice rules apply to nudges too."},
     {v:"", date:"2026-06-10", theme:"platform", pr:"#339", title:"grep tool pattern handling identical on all OSes", detail:"Aligns grep semantics so the same pattern matches the same way everywhere."},
     {v:"", date:"2026-06-09", theme:"governance", pr:"#394", title:"warn users to restart after plugin enable/disable", detail:"Surfaces a restart warning when plugin state changes so changes actually take effect."},
-    {v:"", date:"2026-06-09", theme:"governance", pr:"#393", title:"project-level plugin discovery via .code_puppy/plugins/", detail:"Loads project-local plugins alongside the built-ins — governance that travels with the repo."},
+    {v:"", date:"2026-06-09", theme:"governance", pr:"#393", title:"project-level plugin discovery via .spruce_grove/plugins/", detail:"Loads project-local plugins alongside the built-ins — governance that travels with the repo."},
     {v:"", date:"2026-06-09", theme:"governance", pr:"#392", title:"cap each AGENTS.md at 10,000 chars", detail:"Truncates an oversized AGENTS.md with a notice to protect the context budget."},
     {v:"", date:"2026-06-09", theme:"models", pr:"", title:"adaptive thinking + summarized display for Fable 5", detail:"Enables adaptive thinking with a summarized thinking display for Fable 5 models."},
     {v:"", date:"2026-06-08", theme:"commands", pr:"#390", title:"/set interactive menu with effective defaults", detail:"Redesigned settings menu showing effective defaults, an expanded model catalog, and a model-cache fix."},
@@ -1009,7 +1009,7 @@
         { nm: "kb-troubleshoot", date: "Jun 15", n: 27, c: "freshdesk kb article printer offline troubleshooting" },
         { nm: "sso-setup", date: "Jun 18", n: 55, c: "azure ad sso saml monday teams integration" },
         { nm: "inventory-sync", date: "Jun 08", n: 64, c: "multi brand inventory sync bigcommerce locations" },
-        { nm: "undo-feature-test", date: "Jun 25", n: 12, c: "code_puppy undo command in-memory stack test" },
+        { nm: "undo-feature-test", date: "Jun 25", n: 12, c: "spruce_grove undo command in-memory stack test" },
         { nm: "opus-eval", date: "May 28", n: 19, c: "claude opus 4-8 model eval reasoning benchmark" }
       ];
       m.innerHTML =
@@ -1106,7 +1106,7 @@
       var SCN = {
         old: ['<span class="m">› building catalog export…</span>', '<span class="m">› connection lost</span>', '<span class="r">✗ ConnectionError — unhandled, surfaced as a crash</span>', '<span class="r">✗ traceback printed · session lost</span>'],
         "new": ['<span class="m">› building catalog export…</span>', '<span class="m">› connection lost</span>', '<span class="a">⟳ recoverable drop — retrying (1/3)…</span>', '<span class="g">✓ reconnected — continuing where it left off</span>', '<span class="g">✓ session intact</span>'],
-        power: ['<span class="m">› writing session.pkl…</span>', '<span class="r">✗ power loss mid-write</span>', '<span class="a">› reboot · code_puppy starts</span>', '<span class="g">✓ atomic temp-then-rename means the previous file is intact — no corruption</span>', '<span class="g">✓ quick-resume (-qr) restores your branch session</span>']
+        power: ['<span class="m">› writing session.pkl…</span>', '<span class="r">✗ power loss mid-write</span>', '<span class="a">› reboot · spruce_grove starts</span>', '<span class="g">✓ atomic temp-then-rename means the previous file is intact — no corruption</span>', '<span class="g">✓ quick-resume (-qr) restores your branch session</span>']
       };
       m.addEventListener("click", function (e) { var b = e.target.closest("[data-s]"); if (!b) return; var s = b.getAttribute("data-s"); if (s === "reset") { out.innerHTML = '<span class="m">ready — pick a scenario.</span>'; busy = false; } else play(SCN[s]); });
     })();
@@ -1130,7 +1130,7 @@
     (function () {
       var m = $("#gov-stack-mount"); if (!m) return;
       var layers = [
-        ["1", ".code_puppy/plugins/", "project-level plugins load with the repo"],
+        ["1", ".spruce_grove/plugins/", "project-level plugins load with the repo"],
         ["2", "enabled_skills", "one source of truth · proactive activation before answering"],
         ["3", "hooks · hook_engine", "allow / deny a tool call via stdout JSON"],
         ["4", "dangerous-command guard", "toggle hard blocks on risky shell commands"],

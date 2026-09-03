@@ -10,11 +10,11 @@ from types import SimpleNamespace
 
 import pytest
 
-from code_puppy.mcp_.managed_server import (
+from spruce_grove.mcp_.managed_server import (
     _input_schema_for_tool,
     process_tool_call,
 )
-from code_puppy.mcp_.tool_arg_coercion import coerce_tool_args
+from spruce_grove.mcp_.tool_arg_coercion import coerce_tool_args
 
 
 def _schema(properties: dict) -> dict:

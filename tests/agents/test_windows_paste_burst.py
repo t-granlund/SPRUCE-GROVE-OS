@@ -9,7 +9,7 @@ bursts in a synthesized bracketed paste.
 
 import pytest
 
-from code_puppy.agents._key_listeners import (
+from spruce_grove.agents._key_listeners import (
     _PASTE_CLOSE,
     _PASTE_OPEN,
     _SHIFT_ENTER_SEQ,
@@ -157,7 +157,7 @@ class TestShiftEnter:
 
     def test_seq_maps_to_editor_newline_action(self):
         """End-to-end contract: the synthesized body is a known newline."""
-        from code_puppy.messaging.editor_keys import classify_csi
+        from spruce_grove.messaging.editor_keys import classify_csi
 
         assert _SHIFT_ENTER_SEQ.startswith("\x1b[")
         assert classify_csi(_SHIFT_ENTER_SEQ[2:]) == "newline"
@@ -165,7 +165,7 @@ class TestShiftEnter:
     def test_default_shift_checker_never_raises(self):
         """On non-Windows there is no user32 — must degrade to False
         (plain Enter) instead of raising into the listener loop."""
-        from code_puppy.agents._key_listeners import _win_shift_is_down
+        from spruce_grove.agents._key_listeners import _win_shift_is_down
 
         assert _win_shift_is_down() in (True, False)
 
@@ -191,7 +191,7 @@ class TestRouteBurst:
 
     @pytest.fixture
     def editor(self):
-        from code_puppy.messaging.line_editor import RunningLineEditor
+        from spruce_grove.messaging.line_editor import RunningLineEditor
 
         ed = RunningLineEditor()
         set_line_editor(ed)
@@ -205,7 +205,7 @@ class TestRouteBurst:
         """Fake an image-bearing clipboard (never shell out in CI)."""
         placeholder = "[ clipboard image 1]"
         monkeypatch.setattr(
-            "code_puppy.command_line.clipboard.capture_clipboard_image_to_pending",
+            "spruce_grove.command_line.clipboard.capture_clipboard_image_to_pending",
             lambda: placeholder,
         )
         return placeholder

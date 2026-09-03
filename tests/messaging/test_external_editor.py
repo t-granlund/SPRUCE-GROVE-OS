@@ -5,13 +5,13 @@ import sys
 
 import pytest
 
-from code_puppy.messaging import chords, external_editor
-from code_puppy.messaging.external_editor import (
+from spruce_grove.messaging import chords, external_editor
+from spruce_grove.messaging.external_editor import (
     edit_text_blocking,
     make_external_edit_handler,
     resolve_editor_command,
 )
-from code_puppy.messaging.line_editor import RunningLineEditor
+from spruce_grove.messaging.line_editor import RunningLineEditor
 
 CTRL_X = "\x18"
 CTRL_E = "\x05"

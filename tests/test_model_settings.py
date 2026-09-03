@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-import code_puppy.config as cp_config
+import spruce_grove.config as cp_config
 
 
 class TestPerModelSettings:

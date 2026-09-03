@@ -5,7 +5,7 @@ tags in the prompt row (AttachmentPlaceholderProcessor behavior) while
 the REAL buffer keeps the path for submit-time resolution.
 """
 
-from code_puppy.messaging.editor_display import (
+from spruce_grove.messaging.editor_display import (
     MAX_TEXT_LENGTH_FOR_REALTIME,
     to_display,
 )
@@ -111,7 +111,7 @@ class TestToDisplayCursor:
 
 class TestNeverRaises:
     def test_detection_failure_falls_back(self, monkeypatch):
-        import code_puppy.messaging.editor_display as mod
+        import spruce_grove.messaging.editor_display as mod
 
         def boom(text):
             raise RuntimeError("kaboom")

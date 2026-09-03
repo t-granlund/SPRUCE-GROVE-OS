@@ -1,4 +1,4 @@
-from code_puppy.tools import file_modifications
+from spruce_grove.tools import file_modifications
 
 
 def test_replace_in_file_missing_file(tmp_path):
@@ -40,7 +40,7 @@ def test_replace_in_file_ambiguous_match_refused(tmp_path):
 
 def test_replace_in_file_unicode(tmp_path):
     path = tmp_path / "unicode.txt"
-    path.write_text("puppy 🐶 says meow")
+    path.write_text("grove 🐶 says meow")
     reps = [{"old_str": "meow", "new_str": "woof"}]
     res = file_modifications._replace_in_file(None, str(path), reps)
     assert res["success"]
@@ -84,7 +84,7 @@ def test_write_to_file_invalid_path(tmp_path):
     # Directory as filename
     d = tmp_path / "adir"
     d.mkdir()
-    res = file_modifications._write_to_file(None, str(d), "puppy", overwrite=False)
+    res = file_modifications._write_to_file(None, str(d), "grove", overwrite=False)
     assert "error" in res or not res.get("success")
 
 

@@ -16,8 +16,8 @@ broad `except Exception: pass`, and the tool ran anyway.
 
 import pytest
 
-from code_puppy import callbacks
-from code_puppy._pydantic_tool_helpers import _GENERIC_BLOCK_REASON, _block_reason
+from spruce_grove import callbacks
+from spruce_grove._pydantic_tool_helpers import _GENERIC_BLOCK_REASON, _block_reason
 
 
 @pytest.fixture(autouse=True)

@@ -1,7 +1,7 @@
 """Reference in-memory FileSystemBackend + contract/coherence tests.
 
 The in-memory backend here is the canonical *reference implementation* of
-``code_puppy.tools.io_backends.FileSystemBackend``: it is not the local disk and
+``spruce_grove.tools.io_backends.FileSystemBackend``: it is not the local disk and
 not ACP, so it proves the seam stands on its own -- any host that implements the
 protocol gets a single coherent filesystem across every file tool.
 
@@ -22,8 +22,8 @@ from typing import Dict, List, Optional
 
 import pytest
 
-from code_puppy.tools import fs_access
-from code_puppy.tools.io_backends import (
+from spruce_grove.tools import fs_access
+from spruce_grove.tools.io_backends import (
     DirEntry,
     FileSystemBackend,
     get_filesystem_backend,
@@ -199,7 +199,7 @@ def test_paths_are_posix_join(backend):
 # --- tool-level coherence: the real list_files / grep tools ------------------
 def test_list_files_tool_uses_backend(backend):
     """``_list_files`` composes its listing from the backend, not local disk."""
-    from code_puppy.tools.file_operations import _list_files
+    from spruce_grove.tools.file_operations import _list_files
 
     out = _list_files(None, "/ws", recursive=True)
     assert out.error is None
@@ -217,7 +217,7 @@ def test_list_files_tool_lists_backend_root_under_ignored_dir(backend):
     matched ``**/tmp/**`` against every absolute candidate path, so each entry was
     skipped and the listing came back empty -- with no error at all.
     """
-    from code_puppy.tools.file_operations import _list_files
+    from spruce_grove.tools.file_operations import _list_files
 
     backend.write_text_file("/tmp/ws/a.py", "x\n")
     backend.write_text_file("/tmp/ws/pkg/b.py", "y\n")
@@ -231,7 +231,7 @@ def test_list_files_tool_lists_backend_root_under_ignored_dir(backend):
 
 def test_list_files_tool_prunes_ignored_dirs_inside_backend_root(backend):
     """The ancestor fix must not weaken ignoring *below* the backend root."""
-    from code_puppy.tools.file_operations import _list_files
+    from spruce_grove.tools.file_operations import _list_files
 
     backend.write_text_file("/ws/node_modules/vendored.py", "z\n")
 
@@ -244,7 +244,7 @@ def test_list_files_tool_prunes_ignored_dirs_inside_backend_root(backend):
 
 def test_grep_tool_searches_backend(backend):
     """``_grep`` searches the backend's files (walk + read), not local ripgrep."""
-    from code_puppy.tools.file_operations import _grep
+    from spruce_grove.tools.file_operations import _grep
 
     out = _grep(None, "NEEDLE", "/ws")
     assert out.error is None
@@ -261,7 +261,7 @@ def test_grep_tool_searches_backend_root_under_ignored_dir(backend):
     against absolute paths they also matched the root's ancestors, so a root like
     this one -- under /tmp -- silently produced no matches.
     """
-    from code_puppy.tools.file_operations import _grep
+    from spruce_grove.tools.file_operations import _grep
 
     backend.write_text_file("/tmp/ws/app.py", "MARKER = 1\n")
 
@@ -278,7 +278,7 @@ def test_grep_tool_prunes_ignored_dirs_inside_backend_root(backend):
     against, so this pins the other half of that trade: a ``node_modules`` sitting
     under the root is still pruned, while ordinary files are still found.
     """
-    from code_puppy.tools.file_operations import _grep
+    from spruce_grove.tools.file_operations import _grep
 
     backend.write_text_file("/ws/node_modules/vendored.py", "NEEDLE = 99\n")
 
@@ -292,7 +292,7 @@ def test_grep_tool_prunes_ignored_dirs_inside_backend_root(backend):
 
 def test_created_file_is_listable_and_greppable(backend):
     """End-to-end anti-split-brain: write via backend, then the *tools* agree."""
-    from code_puppy.tools.file_operations import _grep, _list_files
+    from spruce_grove.tools.file_operations import _grep, _list_files
 
     backend.write_text_file("/ws/pkg/fresh.py", "MARKER = 'x'\n")
 
@@ -305,7 +305,7 @@ def test_created_file_is_listable_and_greppable(backend):
 
 # --- backend grep flag-mode parity ------------------------------------------
 def test_grep_ignore_case_flag(backend):
-    from code_puppy.tools.file_operations import _grep
+    from spruce_grove.tools.file_operations import _grep
 
     # 'needle' lower-case only matches NEEDLE with -i.
     assert _grep(None, "needle", "/ws").matches == []
@@ -314,7 +314,7 @@ def test_grep_ignore_case_flag(backend):
 
 
 def test_grep_fixed_string_flag(backend):
-    from code_puppy.tools.file_operations import _grep
+    from spruce_grove.tools.file_operations import _grep
 
     backend.write_text_file("/ws/dots.py", "a=b.c.d\naXbYcZd\n")
     # As regex, 'b.c.d' matches 'aXbYcZd'? No -- but 'b.c.d' regex matches
@@ -324,7 +324,7 @@ def test_grep_fixed_string_flag(backend):
 
 
 def test_grep_word_flag(backend):
-    from code_puppy.tools.file_operations import _grep
+    from spruce_grove.tools.file_operations import _grep
 
     backend.write_text_file("/ws/w.py", "cat\ncategory\nscatter\n")
     words = {m.line_content for m in _grep(None, "-w cat", "/ws").matches}
@@ -332,7 +332,7 @@ def test_grep_word_flag(backend):
 
 
 def test_grep_type_filter(backend):
-    from code_puppy.tools.file_operations import _grep
+    from spruce_grove.tools.file_operations import _grep
 
     # b.py and c.txt both contain 'no match'? Put a common token in both.
     backend.write_text_file("/ws/pkg/b.py", "import os\nTOKEN = 42\n")
@@ -342,7 +342,7 @@ def test_grep_type_filter(backend):
 
 
 def test_grep_unsupported_flag_errors_loudly(backend):
-    from code_puppy.tools.file_operations import _grep
+    from spruce_grove.tools.file_operations import _grep
 
     out = _grep(None, "-z foo", "/ws")
     assert out.matches == []
@@ -351,8 +351,8 @@ def test_grep_unsupported_flag_errors_loudly(backend):
 
 def test_grep_backend_flags_truncation_only_beyond_budget(backend):
     """Backend path mirrors ripgrep: over budget -> truncated, at budget -> not."""
-    from code_puppy.config import GREP_MAX_MATCHES_DEFAULT
-    from code_puppy.tools.file_operations import _grep
+    from spruce_grove.config import GREP_MAX_MATCHES_DEFAULT
+    from spruce_grove.tools.file_operations import _grep
 
     backend.write_text_file("/ws/many.py", "HIT\n" * (GREP_MAX_MATCHES_DEFAULT + 1))
     over = _grep(None, "HIT", "/ws")
@@ -366,7 +366,7 @@ def test_grep_backend_flags_truncation_only_beyond_budget(backend):
 
 
 def test_grep_unknown_type_errors(backend):
-    from code_puppy.tools.file_operations import _grep
+    from spruce_grove.tools.file_operations import _grep
 
     out = _grep(None, "--type cobol foo", "/ws")
     assert out.matches == []
@@ -379,7 +379,7 @@ def test_grep_nonexistent_directory_errors(backend):
     Parity with the local ripgrep path (which errors on a bad directory) so a
     typo'd path isn't mistaken for "searched, found nothing".
     """
-    from code_puppy.tools.file_operations import _grep
+    from spruce_grove.tools.file_operations import _grep
 
     out = _grep(None, "NEEDLE", "/ws/does_not_exist")
     assert out.matches == []
@@ -387,7 +387,7 @@ def test_grep_nonexistent_directory_errors(backend):
 
 
 def test_grep_skips_binary_files(backend):
-    from code_puppy.tools.file_operations import _grep
+    from spruce_grove.tools.file_operations import _grep
 
     backend.write_text_file("/ws/bin.dat", "MARK\x00MARK\n")
     out = _grep(None, "MARK", "/ws")
@@ -436,7 +436,7 @@ class _DeepBackend(_CyclicBackend):
 
 def test_walk_survives_cyclic_backend():
     """A cyclic list_dir must not blow the stack (no OS ELOOP to save us)."""
-    from code_puppy.tools import fs_access
+    from spruce_grove.tools import fs_access
 
     set_filesystem_backend(_CyclicBackend())
     old = sys.getrecursionlimit()
@@ -451,7 +451,7 @@ def test_walk_survives_cyclic_backend():
 
 def test_walk_survives_deep_tree():
     """A legitimately very deep tree must not overflow the recursive stack."""
-    from code_puppy.tools import fs_access
+    from spruce_grove.tools import fs_access
 
     set_filesystem_backend(_DeepBackend(5000))
     old = sys.getrecursionlimit()
@@ -466,7 +466,7 @@ def test_walk_survives_deep_tree():
 
 def test_list_files_degrades_when_backend_raises():
     """A backend raising must become a tool error, never a crash."""
-    from code_puppy.tools.file_operations import _list_files
+    from spruce_grove.tools.file_operations import _list_files
 
     class _Boom:
         def read_text_file(self, p, line=None, limit=None):
@@ -503,7 +503,7 @@ def test_list_files_degrades_when_backend_raises():
 
 def test_grep_skips_unreadable_file(backend):
     """One file whose read raises must not abort the whole search."""
-    from code_puppy.tools.file_operations import _grep
+    from spruce_grove.tools.file_operations import _grep
 
     real_read = backend.read_text_file
 
@@ -522,7 +522,7 @@ def test_grep_skips_unreadable_file(backend):
 # --- gap A: the facade's LOCAL (no-backend) branches ------------------------
 def test_facade_local_disk_roundtrip(tmp_path):
     """With no backend, the facade operates on real local disk."""
-    from code_puppy.tools import fs_access
+    from spruce_grove.tools import fs_access
 
     assert get_filesystem_backend() is None
     d = tmp_path / "proj"
@@ -541,7 +541,7 @@ def test_facade_local_disk_roundtrip(tmp_path):
 
 
 def test_facade_local_list_dir_errors(tmp_path):
-    from code_puppy.tools import fs_access
+    from spruce_grove.tools import fs_access
 
     with pytest.raises(FileNotFoundError):
         fs_access.list_dir(str(tmp_path / "nope"))
@@ -553,7 +553,7 @@ def test_facade_local_list_dir_errors(tmp_path):
 
 def test_facade_local_walk_and_symlink_cycle(tmp_path):
     """Local walk traverses real disk and survives a real symlink cycle."""
-    from code_puppy.tools import fs_access
+    from spruce_grove.tools import fs_access
 
     (tmp_path / "a").mkdir()
     (tmp_path / "a" / "f.py").write_text("hi\n")
@@ -599,7 +599,7 @@ def test_acp_backend_list_dir_errors(tmp_path):
 
 # --- gap C: file-mod tools + undo, WITH a backend installed -----------------
 def test_file_mod_tools_hit_backend(backend):
-    from code_puppy.tools.file_modifications import (
+    from spruce_grove.tools.file_modifications import (
         _delete_file,
         delete_snippet_from_file,
         replace_in_file,
@@ -624,8 +624,8 @@ def test_file_mod_tools_hit_backend(backend):
 
 def test_undo_is_backend_coherent(backend):
     """Undo must snapshot/restore through the backend, not local disk."""
-    from code_puppy.tools.file_modifications import write_to_file
-    from code_puppy.undo_manager import UndoManager
+    from spruce_grove.tools.file_modifications import write_to_file
+    from spruce_grove.undo_manager import UndoManager
 
     UndoManager()._instance.history.clear()
     write_to_file(None, "/ws/created.py", "NEW = 1\n", True)

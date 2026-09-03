@@ -62,14 +62,14 @@ def test_contains_emoji_detects():
 
 
 def test_is_enabled_defaults_to_true(tmp_path, monkeypatch):
-    cfg_file = tmp_path / "puppy.cfg"
-    monkeypatch.setattr("code_puppy.config.CONFIG_FILE", str(cfg_file))
+    cfg_file = tmp_path / "grove.cfg"
+    monkeypatch.setattr("spruce_grove.config.CONFIG_FILE", str(cfg_file))
     assert _config_module().is_enabled() is True
 
 
 def test_set_enabled_persists_off(tmp_path, monkeypatch):
-    cfg_file = tmp_path / "puppy.cfg"
-    monkeypatch.setattr("code_puppy.config.CONFIG_FILE", str(cfg_file))
+    cfg_file = tmp_path / "grove.cfg"
+    monkeypatch.setattr("spruce_grove.config.CONFIG_FILE", str(cfg_file))
     cfg = _config_module()
     cfg.set_enabled(False)
     assert cfg.is_enabled() is False
@@ -232,7 +232,7 @@ def test_pre_tool_call_context_message_for_edit_file_payload():
 # ``_on_stream_event`` / ``_install_render_wrapper`` lives in the plugins
 # repo (code_puppy_core_plugins/tests/test_emoji_filter_plugin.py); here we
 # assert core's side of the contract: the exact event shapes fired by
-# ``code_puppy.agents.event_stream_handler._fire_stream_event`` carry raw
+# ``spruce_grove.agents.event_stream_handler._fire_stream_event`` carry raw
 # parts the plugin can filter in place.
 # ---------------------------------------------------------------------------
 
@@ -331,8 +331,8 @@ def test_core_stream_seam_delivers_raw_parts_to_plugin():
 
     from pydantic_ai.messages import TextPartDelta
 
-    from code_puppy import callbacks
-    from code_puppy.agents.event_stream_handler import _fire_stream_event
+    from spruce_grove import callbacks
+    from spruce_grove.agents.event_stream_handler import _fire_stream_event
 
     module = _plugin_module()
     delta = TextPartDelta(content_delta="stream \U0001f389 me")
@@ -375,8 +375,8 @@ def test_handle_command_ignores_unrelated():
 
 
 def test_handle_command_toggles(tmp_path, monkeypatch):
-    cfg_file = tmp_path / "puppy.cfg"
-    monkeypatch.setattr("code_puppy.config.CONFIG_FILE", str(cfg_file))
+    cfg_file = tmp_path / "grove.cfg"
+    monkeypatch.setattr("spruce_grove.config.CONFIG_FILE", str(cfg_file))
     module = _plugin_module()
     cfg = _config_module()
 
@@ -385,17 +385,17 @@ def test_handle_command_toggles(tmp_path, monkeypatch):
         ("off", True, False),
     ):
         cfg.set_enabled(start)
-        with patch("code_puppy.messaging.emit_info"):
+        with patch("spruce_grove.messaging.emit_info"):
             result = module._handle_command(f"/emoji-filter {command}", "emoji-filter")
         assert result is True
         assert cfg.is_enabled() is end
 
 
 def test_handle_command_status(tmp_path, monkeypatch):
-    cfg_file = tmp_path / "puppy.cfg"
-    monkeypatch.setattr("code_puppy.config.CONFIG_FILE", str(cfg_file))
+    cfg_file = tmp_path / "grove.cfg"
+    monkeypatch.setattr("spruce_grove.config.CONFIG_FILE", str(cfg_file))
     module = _plugin_module()
-    with patch("code_puppy.messaging.emit_info") as mock_info:
+    with patch("spruce_grove.messaging.emit_info") as mock_info:
         result = module._handle_command("/emoji-filter status", "emoji-filter")
     assert result is True
     assert mock_info.called

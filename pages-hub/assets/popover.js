@@ -1,4 +1,4 @@
-/* Code Puppy — reusable popover / detail modal (WCAG 2.2 AAA-aware).
+/* Spruce Grove — reusable popover / detail modal (WCAG 2.2 AAA-aware).
    Features: dialog roles, focus trap, Esc/backdrop close, "open in new page",
    "close", "copy link". Works with any element carrying [data-pop]. */
 (function () {

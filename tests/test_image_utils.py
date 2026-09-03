@@ -1,4 +1,4 @@
-"""Unit tests for code_puppy.command_line.image_utils."""
+"""Unit tests for spruce_grove.command_line.image_utils."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy.command_line.image_utils import (
+from spruce_grove.command_line.image_utils import (
     MAX_IMAGE_DIMENSION,
     MAX_IMAGE_SIZE_BYTES,
     _resize_image_if_needed,
@@ -53,7 +53,7 @@ class TestSafeOpenImage:
         assert result is None
 
     def test_pil_unavailable_returns_none(self) -> None:
-        import code_puppy.command_line.image_utils as iu
+        import spruce_grove.command_line.image_utils as iu
 
         with patch.object(iu, "_PIL_AVAILABLE", False):
             result = _safe_open_image(_make_png_bytes())
@@ -164,7 +164,7 @@ class TestNormalizeImageBytes:
         assert mt == "image/png"
 
     def test_pil_unavailable_passthrough(self) -> None:
-        import code_puppy.command_line.image_utils as iu
+        import spruce_grove.command_line.image_utils as iu
 
         png = _make_png_bytes()
         with patch.object(iu, "_PIL_AVAILABLE", False):

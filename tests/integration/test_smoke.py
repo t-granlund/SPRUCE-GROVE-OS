@@ -8,7 +8,7 @@ import pexpect
 
 
 def test_version_smoke() -> None:
-    child = pexpect.spawn("code-puppy --version", encoding="utf-8")
+    child = pexpect.spawn("spruce-grove --version", encoding="utf-8")
     child.expect(pexpect.EOF, timeout=10)
     output = child.before
     assert output.strip()  # just ensure we got something
@@ -16,7 +16,7 @@ def test_version_smoke() -> None:
 
 
 def test_help_smoke() -> None:
-    child = pexpect.spawn("code-puppy --help", encoding="utf-8")
+    child = pexpect.spawn("spruce-grove --help", encoding="utf-8")
     child.expect("--version", timeout=10)
     child.expect(pexpect.EOF, timeout=10)
     output = child.before
@@ -30,7 +30,7 @@ def test_interactive_smoke() -> None:
     This test is designed to be efficient with timeouts - using a single expect
     call with multiple patterns rather than back-to-back expect calls.
     """
-    child = pexpect.spawn("code-puppy -i", encoding="utf-8")
+    child = pexpect.spawn("spruce-grove -i", encoding="utf-8")
 
     # Wait for output and look for coding task prompt
     time.sleep(3)  # Give the CLI time to start and output
@@ -38,7 +38,7 @@ def test_interactive_smoke() -> None:
     try:
         idx = child.expect(
             [
-                "What should we name the puppy?",
+                "What should we name the grove?",
                 "Enter your coding task",
                 ">>> ",
                 pexpect.TIMEOUT,
@@ -46,7 +46,7 @@ def test_interactive_smoke() -> None:
             timeout=15,
         )
 
-        if idx == 0:  # Puppy name prompt
+        if idx == 0:  # Cedar name prompt
             child.sendline("IntegrationPup\r")
             child.expect("What's your name", timeout=15)
             child.sendline("HarnessTester\r")

@@ -5,10 +5,10 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy.agents._builder import build_pydantic_agent
-from code_puppy.agents.json_agent import JSONAgent
-from code_puppy.model_factory import ModelFactory, make_model_settings
-from code_puppy.model_utils import PreparedPrompt
+from spruce_grove.agents._builder import build_pydantic_agent
+from spruce_grove.agents.json_agent import JSONAgent
+from spruce_grove.model_factory import ModelFactory, make_model_settings
+from spruce_grove.model_utils import PreparedPrompt
 
 
 def _json_agent_config(**overrides):
@@ -89,7 +89,7 @@ def test_json_agent_rejects_invalid_choice_model_settings_value(tmp_path):
 
 
 def test_agent_creator_rejects_non_object_model_settings():
-    from code_puppy.agents.agent_creator_agent import AgentCreatorAgent
+    from spruce_grove.agents.agent_creator_agent import AgentCreatorAgent
 
     errors = AgentCreatorAgent().validate_agent_json(
         _json_agent_config(model_settings="high")
@@ -99,7 +99,7 @@ def test_agent_creator_rejects_non_object_model_settings():
 
 
 def test_agent_creator_rejects_unknown_model_settings_key():
-    from code_puppy.agents.agent_creator_agent import AgentCreatorAgent
+    from spruce_grove.agents.agent_creator_agent import AgentCreatorAgent
 
     errors = AgentCreatorAgent().validate_agent_json(
         _json_agent_config(model_settings={"resoning_effort": "high"})
@@ -120,9 +120,9 @@ def test_empty_catalog_does_not_reload_per_override_setting():
     def _load_count_for(overrides):
         with (
             patch.object(ModelFactory, "load_config", return_value={}) as mock_load,
-            patch("code_puppy.config.get_effective_model_settings", return_value={}),
-            patch("code_puppy.config.get_custom_model_settings", return_value={}),
-            patch("code_puppy.model_factory.get_yolo_mode", return_value=True),
+            patch("spruce_grove.config.get_effective_model_settings", return_value={}),
+            patch("spruce_grove.config.get_custom_model_settings", return_value={}),
+            patch("spruce_grove.model_factory.get_yolo_mode", return_value=True),
         ):
             make_model_settings("gpt-5-test", max_tokens=4096, overrides=overrides)
         return mock_load.call_count
@@ -141,9 +141,9 @@ def test_failed_catalog_load_does_not_drop_supported_overrides():
         patch.object(
             ModelFactory, "load_config", side_effect=OSError("catalog unavailable")
         ),
-        patch("code_puppy.config.get_effective_model_settings", return_value={}),
-        patch("code_puppy.config.get_custom_model_settings", return_value={}),
-        patch("code_puppy.model_factory.get_yolo_mode", return_value=True),
+        patch("spruce_grove.config.get_effective_model_settings", return_value={}),
+        patch("spruce_grove.config.get_custom_model_settings", return_value={}),
+        patch("spruce_grove.model_factory.get_yolo_mode", return_value=True),
     ):
         settings = make_model_settings(
             "gpt-5-test",
@@ -166,11 +166,11 @@ def test_agent_settings_override_per_model_values_before_provider_translation():
     with (
         patch.object(ModelFactory, "load_config", return_value=model_config),
         patch(
-            "code_puppy.config.get_effective_model_settings",
+            "spruce_grove.config.get_effective_model_settings",
             return_value={"reasoning_effort": "low", "verbosity": "low"},
         ),
-        patch("code_puppy.config.get_custom_model_settings", return_value={}),
-        patch("code_puppy.model_factory.get_yolo_mode", return_value=True),
+        patch("spruce_grove.config.get_custom_model_settings", return_value={}),
+        patch("spruce_grove.model_factory.get_yolo_mode", return_value=True),
     ):
         settings = make_model_settings(
             "gpt-5-test",
@@ -194,12 +194,12 @@ def test_custom_params_remain_the_final_wire_level_override():
 
     with (
         patch.object(ModelFactory, "load_config", return_value=model_config),
-        patch("code_puppy.config.get_effective_model_settings", return_value={}),
+        patch("spruce_grove.config.get_effective_model_settings", return_value={}),
         patch(
-            "code_puppy.config.get_custom_model_settings",
+            "spruce_grove.config.get_custom_model_settings",
             return_value={"verbosity": "high"},
         ),
-        patch("code_puppy.model_factory.get_yolo_mode", return_value=True),
+        patch("spruce_grove.model_factory.get_yolo_mode", return_value=True),
     ):
         settings = make_model_settings(
             "gpt-5-test",
@@ -226,34 +226,34 @@ def test_main_agent_builder_passes_agent_model_settings():
     with (
         patch.object(ModelFactory, "load_config", return_value={"gpt-5-test": {}}),
         patch(
-            "code_puppy.agents._builder.load_model_with_fallback",
+            "spruce_grove.agents._builder.load_model_with_fallback",
             return_value=(model, "gpt-5-test"),
         ),
         patch(
-            "code_puppy.agents._builder._assemble_instructions",
+            "spruce_grove.agents._builder._assemble_instructions",
             return_value=PreparedPrompt(
                 instructions="instructions", user_prompt="", is_claude_code=False
             ),
         ),
-        patch("code_puppy.agents._builder.load_mcp_servers", return_value=[]),
-        patch("code_puppy.agents._builder.make_model_settings") as make_settings,
+        patch("spruce_grove.agents._builder.load_mcp_servers", return_value=[]),
+        patch("spruce_grove.agents._builder.make_model_settings") as make_settings,
         patch(
-            "code_puppy.agents._builder.make_history_processor",
+            "spruce_grove.agents._builder.make_history_processor",
             return_value=MagicMock(),
         ),
         patch(
-            "code_puppy.agents._builder.make_steer_history_processor",
+            "spruce_grove.agents._builder.make_steer_history_processor",
             return_value=MagicMock(),
         ),
-        patch("code_puppy.agents._builder.build_tool_output_limits", return_value=[]),
-        patch("code_puppy.agents._builder.build_response_clamp"),
+        patch("spruce_grove.agents._builder.build_tool_output_limits", return_value=[]),
+        patch("spruce_grove.agents._builder.build_response_clamp"),
         patch(
-            "code_puppy.agents._builder.PydanticAgent",
+            "spruce_grove.agents._builder.PydanticAgent",
             side_effect=[probe, final],
         ),
-        patch("code_puppy.tools.register_tools_for_agent"),
+        patch("spruce_grove.tools.register_tools_for_agent"),
         patch(
-            "code_puppy.agents._builder.on_wrap_pydantic_agent",
+            "spruce_grove.agents._builder.on_wrap_pydantic_agent",
             side_effect=lambda _agent, built, **_kwargs: built,
         ),
     ):

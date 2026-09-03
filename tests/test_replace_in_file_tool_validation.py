@@ -6,7 +6,7 @@ because that's where malformed payloads from a model would arrive.
 
 from typing import Any, Awaitable, Callable, Dict
 
-from code_puppy.tools.file_modifications import register_replace_in_file
+from spruce_grove.tools.file_modifications import register_replace_in_file
 
 
 class _CapturingAgent:

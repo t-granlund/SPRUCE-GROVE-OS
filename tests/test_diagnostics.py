@@ -8,7 +8,7 @@ import sys
 
 import pytest
 
-from code_puppy import diagnostics
+from spruce_grove import diagnostics
 
 
 async def test_dump_stacks_includes_threads_and_tasks():
@@ -45,7 +45,7 @@ async def test_write_stack_dump_creates_file(tmp_path, monkeypatch):
     path = diagnostics.write_stack_dump(loop=asyncio.get_running_loop())
     assert path is not None and path.exists()
     content = path.read_text()
-    assert "code-puppy stack dump" in content
+    assert "spruce-grove stack dump" in content
     assert f"pid {os.getpid()}" in content
 
 

@@ -30,18 +30,18 @@ from pydantic_ai.messages import (
 )
 from pydantic_ai.models.function import AgentInfo, FunctionModel
 
-from code_puppy.agents._subagent_recursion import (
+from spruce_grove.agents._subagent_recursion import (
     GUARDED_TOOL_NAMES,
     SubagentRecursionGuard,
     build_subagent_recursion_guard,
 )
-from code_puppy.i18n import t
-from code_puppy.tools import subagent_invocation as si
-from code_puppy.tools.agent_tools import (
+from spruce_grove.i18n import t
+from spruce_grove.tools import subagent_invocation as si
+from spruce_grove.tools.agent_tools import (
     AgentInvokeOutput,
     AgentInvokeWithModelOutput,
 )
-from code_puppy.tools.subagent_usage_metrics import build_invoke_output
+from spruce_grove.tools.subagent_usage_metrics import build_invoke_output
 
 # ---------------------------------------------------------------------------
 # Harness
@@ -336,7 +336,7 @@ def test_builder_wires_guard_from_tool_surface():
     """Source pin: the builder splices the guard from ``agent_tools``."""
     import inspect
 
-    from code_puppy.agents import _builder
+    from spruce_grove.agents import _builder
 
     src = inspect.getsource(_builder.build_pydantic_agent)
     assert "agent_tools = agent.get_available_tools()" in src

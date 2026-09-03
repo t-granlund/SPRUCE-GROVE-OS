@@ -13,7 +13,7 @@ import httpx
 import pytest
 from pydantic_ai.exceptions import ModelHTTPError
 
-from code_puppy.agents._runtime import (
+from spruce_grove.agents._runtime import (
     _collect_exceptions,
     _is_mcp_transport_failure,
 )

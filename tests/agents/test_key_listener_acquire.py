@@ -18,8 +18,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy.agents import _key_listeners
-from code_puppy.agents._key_listeners import (
+from spruce_grove.agents import _key_listeners
+from spruce_grove.agents._key_listeners import (
     KeyListenerHandle,
     acquire_listener,
     get_active_handle,
@@ -169,7 +169,7 @@ def test_suspended_key_listener_happy_path_no_warning():
 
 
 def test_stop_run_ui_respawns_dead_persistent_listener(monkeypatch):
-    from code_puppy.messaging import run_ui
+    from spruce_grove.messaging import run_ui
 
     corpse = _make_handle(alive=False)
     replacement = _make_handle(alive=True)
@@ -188,7 +188,7 @@ def test_stop_run_ui_respawns_dead_persistent_listener(monkeypatch):
 
 
 def test_stop_run_ui_leaves_healthy_persistent_listener_alone(monkeypatch):
-    from code_puppy.messaging import run_ui
+    from spruce_grove.messaging import run_ui
 
     healthy = _make_handle(alive=True)
     monkeypatch.setattr(run_ui, "_persistent", True)

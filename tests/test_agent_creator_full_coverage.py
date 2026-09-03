@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy.agents.agent_creator_agent import AgentCreatorAgent
+from spruce_grove.agents.agent_creator_agent import AgentCreatorAgent
 
 
 class TestAgentCreatorAgent:
@@ -29,14 +29,14 @@ class TestAgentCreatorAgent:
         agent = AgentCreatorAgent()
         with (
             patch(
-                "code_puppy.agents.agent_creator_agent.get_available_tool_names",
+                "spruce_grove.agents.agent_creator_agent.get_available_tool_names",
                 return_value=["read_file"],
             ),
             patch(
-                "code_puppy.agents.agent_creator_agent.get_user_agents_directory",
+                "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
                 return_value="/tmp/agents",
             ),
-            patch("code_puppy.agents.agent_creator_agent.ModelFactory") as mock_factory,
+            patch("spruce_grove.agents.agent_creator_agent.ModelFactory") as mock_factory,
         ):
             mock_factory.load_config.return_value = {
                 "gpt-4": {"type": "openai", "context_length": 128000}
@@ -57,14 +57,14 @@ class TestAgentCreatorAgent:
 
         with (
             patch(
-                "code_puppy.agents.agent_creator_agent.get_available_tool_names",
+                "spruce_grove.agents.agent_creator_agent.get_available_tool_names",
                 return_value=[],
             ),
             patch(
-                "code_puppy.agents.agent_creator_agent.get_user_agents_directory",
+                "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
                 return_value="/tmp",
             ),
-            patch("code_puppy.agents.agent_creator_agent.ModelFactory") as mock_factory,
+            patch("spruce_grove.agents.agent_creator_agent.ModelFactory") as mock_factory,
             patch(
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,
@@ -77,7 +77,7 @@ class TestAgentCreatorAgent:
     def test_get_available_tools(self):
         agent = AgentCreatorAgent()
         with patch(
-            "code_puppy.config.get_universal_constructor_enabled", return_value=True
+            "spruce_grove.config.get_universal_constructor_enabled", return_value=True
         ):
             tools = agent.get_available_tools()
             assert "universal_constructor" in tools
@@ -85,7 +85,7 @@ class TestAgentCreatorAgent:
     def test_get_available_tools_uc_disabled(self):
         agent = AgentCreatorAgent()
         with patch(
-            "code_puppy.config.get_universal_constructor_enabled", return_value=False
+            "spruce_grove.config.get_universal_constructor_enabled", return_value=False
         ):
             tools = agent.get_available_tools()
             assert "universal_constructor" not in tools
@@ -168,7 +168,7 @@ class TestAgentCreatorAgent:
     def test_get_agent_file_path(self):
         agent = AgentCreatorAgent()
         with patch(
-            "code_puppy.agents.agent_creator_agent.get_user_agents_directory",
+            "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
             return_value="/tmp/agents",
         ):
             path = agent.get_agent_file_path("my-agent")

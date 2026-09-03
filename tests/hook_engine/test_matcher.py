@@ -2,7 +2,7 @@
 
 import pytest
 
-from code_puppy.hook_engine.matcher import _extract_file_path, matches
+from spruce_grove.hook_engine.matcher import _extract_file_path, matches
 
 # One row per branch: (matcher, tool_name, tool_args, expected) — folded from one
 # test per case into a matrix: same branches, less boilerplate.

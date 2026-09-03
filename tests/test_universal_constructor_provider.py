@@ -6,8 +6,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy import universal_constructor_provider as ucp
-from code_puppy.universal_constructor_provider import (
+from spruce_grove import universal_constructor_provider as ucp
+from spruce_grove.universal_constructor_provider import (
     get_universal_constructor_provider,
     register_universal_constructor_provider,
     unregister_universal_constructor_provider,
@@ -38,13 +38,13 @@ class BlockUniversalConstructor(importlib.abc.MetaPathFinder):
 
 
 sys.meta_path.insert(0, BlockUniversalConstructor())
-import code_puppy.tools
-import code_puppy.tools.universal_constructor
-import code_puppy.agents.json_agent
-import code_puppy.agents.agent_creator_agent
-import code_puppy.command_line.uc_menu
+import spruce_grove.tools
+import spruce_grove.tools.universal_constructor
+import spruce_grove.agents.json_agent
+import spruce_grove.agents.agent_creator_agent
+import spruce_grove.command_line.uc_menu
 
-assert "universal_constructor" not in code_puppy.tools.TOOL_REGISTRY
+assert "universal_constructor" not in spruce_grove.tools.TOOL_REGISTRY
 loaded = [
     name for name in sys.modules
     if name.startswith("code_puppy_core_plugins.universal_constructor")
@@ -59,9 +59,9 @@ assert loaded == [], loaded
 
 @pytest.mark.anyio
 async def test_no_provider_returns_clear_tool_error(isolated_provider):
-    from code_puppy.tools.universal_constructor import universal_constructor_impl
+    from spruce_grove.tools.universal_constructor import universal_constructor_impl
 
-    with patch("code_puppy.tools.universal_constructor.get_message_bus"):
+    with patch("spruce_grove.tools.universal_constructor.get_message_bus"):
         result = await universal_constructor_impl(MagicMock(), "list")
 
     assert result.success is False
@@ -70,7 +70,7 @@ async def test_no_provider_returns_clear_tool_error(isolated_provider):
 
 @pytest.mark.anyio
 async def test_registered_provider_drives_list_action(isolated_provider):
-    from code_puppy.tools.universal_constructor import universal_constructor_impl
+    from spruce_grove.tools.universal_constructor import universal_constructor_impl
 
     tool = MagicMock()
     tool.meta.enabled = True
@@ -78,7 +78,7 @@ async def test_registered_provider_drives_list_action(isolated_provider):
     provider.list_tools.return_value = [tool]
     register_universal_constructor_provider(provider)
 
-    with patch("code_puppy.tools.universal_constructor.get_message_bus"):
+    with patch("spruce_grove.tools.universal_constructor.get_message_bus"):
         result = await universal_constructor_impl(MagicMock(), "list")
 
     provider.list_tools.assert_called_once_with(include_disabled=True)
@@ -88,13 +88,13 @@ async def test_registered_provider_drives_list_action(isolated_provider):
 
 
 def test_uc_menu_returns_empty_without_provider(isolated_provider):
-    from code_puppy.command_line.uc_menu import _get_tool_entries
+    from spruce_grove.command_line.uc_menu import _get_tool_entries
 
     assert _get_tool_entries() == []
 
 
 def test_registration_captures_plugin_loading_owner(isolated_provider):
-    from code_puppy.callbacks import clear_loading_context, set_loading_context
+    from spruce_grove.callbacks import clear_loading_context, set_loading_context
 
     set_loading_context("universal_constructor")
     try:
@@ -111,7 +111,7 @@ def test_disabled_owner_makes_loaded_provider_inactive(isolated_provider, monkey
         provider, owner="universal_constructor"
     )
     monkeypatch.setattr(
-        "code_puppy.plugins.config.get_disabled_plugins",
+        "spruce_grove.plugins.config.get_disabled_plugins",
         lambda: {"universal_constructor"},
     )
 
@@ -119,7 +119,7 @@ def test_disabled_owner_makes_loaded_provider_inactive(isolated_provider, monkey
     assert get_universal_constructor_provider() is None
 
     monkeypatch.setattr(
-        "code_puppy.plugins.config.get_disabled_plugins",
+        "spruce_grove.plugins.config.get_disabled_plugins",
         lambda: set(),
     )
     assert get_universal_constructor_provider() is provider

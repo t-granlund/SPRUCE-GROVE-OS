@@ -41,7 +41,7 @@ def clean_state(monkeypatch):
 @pytest.fixture
 def bar(monkeypatch):
     fake = FakeBar()
-    monkeypatch.setattr("code_puppy.messaging.bottom_bar.get_bottom_bar", lambda: fake)
+    monkeypatch.setattr("spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake)
     return fake
 
 

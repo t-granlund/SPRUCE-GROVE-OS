@@ -6,7 +6,7 @@ import pytest
 from bs4 import BeautifulSoup
 
 DECK = Path(__file__).resolve().parent.parent
-REPO_DOCS = DECK.parent.parent  # code_puppy/docs
+REPO_DOCS = DECK.parent.parent  # spruce_grove/docs
 
 
 @pytest.fixture(scope="session")

@@ -10,12 +10,12 @@ newline must survive two stages that otherwise sanitize it away:
   chrome rows ABOVE the input line.
 """
 
-from code_puppy.messaging.bar_rendering import (
+from spruce_grove.messaging.bar_rendering import (
     REVERSE_ON,
     count_prompt_rows,
     render_prompt_block,
 )
-from code_puppy.messaging.prompt_prefix_style import flatten_prompt_fragments
+from spruce_grove.messaging.prompt_prefix_style import flatten_prompt_fragments
 
 
 class TestFlattenKeepsNewlines:

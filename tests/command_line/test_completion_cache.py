@@ -1,7 +1,7 @@
 import threading
 import time
 
-from code_puppy.command_line.completion_cache import TTLCache
+from spruce_grove.command_line.completion_cache import TTLCache
 
 
 def test_ttl_cache_hits_and_expires():

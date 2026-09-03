@@ -25,7 +25,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from code_puppy.session_storage import (
+from spruce_grove.session_storage import (
     compute_scope_key,
     list_sessions,
     save_session,
@@ -259,27 +259,27 @@ class TestCliRunnerHereFlag:
     """
 
     def _base_main_patches(self):
-        from code_puppy.session_lifecycle import ResumeTargetError
+        from spruce_grove.session_lifecycle import ResumeTargetError
 
         return {
-            "code_puppy.cli_runner.find_available_port": MagicMock(return_value=8090),
-            "code_puppy.cli_runner.ensure_config_exists": MagicMock(),
-            "code_puppy.cli_runner.validate_cancel_agent_key": MagicMock(),
-            "code_puppy.cli_runner.initialize_command_history_file": MagicMock(),
-            "code_puppy.cli_runner.default_version_mismatch_behavior": MagicMock(),
-            "code_puppy.cli_runner.print_truecolor_warning": MagicMock(),
-            "code_puppy.cli_runner.reset_unix_terminal": MagicMock(),
-            "code_puppy.cli_runner.reset_windows_terminal_ansi": MagicMock(),
-            "code_puppy.cli_runner.reset_windows_terminal_full": MagicMock(),
-            "code_puppy.cli_runner.callbacks": MagicMock(
+            "spruce_grove.cli_runner.find_available_port": MagicMock(return_value=8090),
+            "spruce_grove.cli_runner.ensure_config_exists": MagicMock(),
+            "spruce_grove.cli_runner.validate_cancel_agent_key": MagicMock(),
+            "spruce_grove.cli_runner.initialize_command_history_file": MagicMock(),
+            "spruce_grove.cli_runner.default_version_mismatch_behavior": MagicMock(),
+            "spruce_grove.cli_runner.print_truecolor_warning": MagicMock(),
+            "spruce_grove.cli_runner.reset_unix_terminal": MagicMock(),
+            "spruce_grove.cli_runner.reset_windows_terminal_ansi": MagicMock(),
+            "spruce_grove.cli_runner.reset_windows_terminal_full": MagicMock(),
+            "spruce_grove.cli_runner.callbacks": MagicMock(
                 on_startup=AsyncMock(),
                 on_shutdown=AsyncMock(),
                 on_version_check=AsyncMock(),
                 get_callbacks=MagicMock(return_value=[]),
             ),
-            "code_puppy.cli_runner.plugins": MagicMock(),
-            "code_puppy.config.load_api_keys_to_environment": MagicMock(),
-            "code_puppy.session_lifecycle.resolve_or_create_resume_target": MagicMock(
+            "spruce_grove.cli_runner.plugins": MagicMock(),
+            "spruce_grove.config.load_api_keys_to_environment": MagicMock(),
+            "spruce_grove.session_lifecycle.resolve_or_create_resume_target": MagicMock(
                 side_effect=ResumeTargetError("nope")
             ),
         }
@@ -289,7 +289,7 @@ class TestCliRunnerHereFlag:
         from contextlib import ExitStack
 
         patches = self._base_main_patches()
-        patches["code_puppy.session_storage.list_sessions"] = list_sessions_mock
+        patches["spruce_grove.session_storage.list_sessions"] = list_sessions_mock
 
         with ExitStack() as stack:
             stack.enter_context(patch.dict(os.environ, {"NO_VERSION_UPDATE": "1"}))
@@ -297,7 +297,7 @@ class TestCliRunnerHereFlag:
             stack.enter_context(patch("sys.exit", side_effect=SystemExit))
             for target, value in patches.items():
                 stack.enter_context(patch(target, value))
-            from code_puppy.cli_runner import main
+            from spruce_grove.cli_runner import main
 
             try:
                 await main()
@@ -309,7 +309,7 @@ class TestCliRunnerHereFlag:
         mock_list_sessions = MagicMock(return_value=["local-session"])
 
         await self._run_main(
-            ["code-puppy", "-r", "missing", "--cwd"], mock_list_sessions
+            ["spruce-grove", "-r", "missing", "--cwd"], mock_list_sessions
         )
 
         assert mock_list_sessions.called
@@ -320,7 +320,7 @@ class TestCliRunnerHereFlag:
         """Absent --cwd, the unfiltered (scope_key=None) call is preserved."""
         mock_list_sessions = MagicMock(return_value=["some-session"])
 
-        await self._run_main(["code-puppy", "-r", "missing"], mock_list_sessions)
+        await self._run_main(["spruce-grove", "-r", "missing"], mock_list_sessions)
 
         assert mock_list_sessions.called
         _args, kwargs = mock_list_sessions.call_args
@@ -343,7 +343,7 @@ class TestRealResolverScopeInteraction:
     """
 
     def test_valid_looking_missing_name_lazy_creates_not_errors(self, tmp_path):
-        from code_puppy.session_lifecycle import resolve_or_create_resume_target
+        from spruce_grove.session_lifecycle import resolve_or_create_resume_target
 
         session_name, _session_dir, lazy_created = resolve_or_create_resume_target(
             "totally-made-up-name",
@@ -356,7 +356,7 @@ class TestRealResolverScopeInteraction:
         assert (tmp_path / "totally-made-up-name.json").exists()
 
     def test_invalid_slug_raises_and_cwd_narrows_real_hint(self, tmp_path):
-        from code_puppy.session_lifecycle import (
+        from spruce_grove.session_lifecycle import (
             ResumeTargetError,
             resolve_or_create_resume_target,
         )
@@ -397,7 +397,7 @@ class TestLoadContextHereToken:
     """
 
     def _run(self, cmd):
-        from code_puppy.command_line.session_commands import (
+        from spruce_grove.command_line.session_commands import (
             handle_load_context_command,
         )
 
@@ -406,14 +406,14 @@ class TestLoadContextHereToken:
     def test_cwd_token_passes_scope_key(self):
         with (
             patch(
-                "code_puppy.command_line.session_commands.load_session",
+                "spruce_grove.command_line.session_commands.load_session",
                 side_effect=FileNotFoundError(),
             ),
             patch(
-                "code_puppy.command_line.session_commands.list_sessions"
+                "spruce_grove.command_line.session_commands.list_sessions"
             ) as mock_list_sessions,
-            patch("code_puppy.messaging.emit_error"),
-            patch("code_puppy.messaging.emit_info"),
+            patch("spruce_grove.messaging.emit_error"),
+            patch("spruce_grove.messaging.emit_info"),
         ):
             mock_list_sessions.return_value = []
             assert self._run("/load_context missing cwd") is True
@@ -425,14 +425,14 @@ class TestLoadContextHereToken:
     def test_without_cwd_token_scope_key_is_none(self):
         with (
             patch(
-                "code_puppy.command_line.session_commands.load_session",
+                "spruce_grove.command_line.session_commands.load_session",
                 side_effect=FileNotFoundError(),
             ),
             patch(
-                "code_puppy.command_line.session_commands.list_sessions"
+                "spruce_grove.command_line.session_commands.list_sessions"
             ) as mock_list_sessions,
-            patch("code_puppy.messaging.emit_error"),
-            patch("code_puppy.messaging.emit_info"),
+            patch("spruce_grove.messaging.emit_error"),
+            patch("spruce_grove.messaging.emit_info"),
         ):
             mock_list_sessions.return_value = []
             assert self._run("/load_context missing") is True
@@ -486,8 +486,8 @@ class TestSessionBrowserProjectScoping:
     def test_projects_group_by_scope_key_with_unscoped_last(self):
         from io import StringIO
 
-        from code_puppy.command_line.session_browser import build_session_browser
-        from code_puppy.command_line.session_browser_data import SessionEntry
+        from spruce_grove.command_line.session_browser import build_session_browser
+        from spruce_grove.command_line.session_browser_data import SessionEntry
 
         entries = [
             SessionEntry.from_pair(

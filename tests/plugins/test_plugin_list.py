@@ -13,9 +13,9 @@ from code_puppy_core_plugins.plugin_list.register_callbacks import (
 )
 
 # Patch targets live on the source module because _build_output() uses
-# lazy imports: ``from code_puppy.plugins import …``.
-_PLUGINS_MOD = "code_puppy.plugins"
-_PLUGINS_CONFIG_MOD = "code_puppy.plugins.config"
+# lazy imports: ``from spruce_grove.plugins import …``.
+_PLUGINS_MOD = "spruce_grove.plugins"
+_PLUGINS_CONFIG_MOD = "spruce_grove.plugins.config"
 
 
 # ── Unit tests for helpers ────────────────────────────────────────────────
@@ -54,7 +54,7 @@ class TestBuildOutput:
             ),
             patch(
                 f"{_PLUGINS_MOD}.get_project_plugins_directory",
-                return_value=Path("/tmp/proj/.code_puppy/plugins"),
+                return_value=Path("/tmp/proj/.spruce_grove/plugins"),
             ),
             patch(
                 f"{_PLUGINS_CONFIG_MOD}.get_disabled_plugins",
@@ -66,9 +66,9 @@ class TestBuildOutput:
             assert "Builtin (" in output
             assert "agent_skills" in output
             assert "statusline" in output
-            assert "User (~/.code_puppy/plugins/):" in output
+            assert "User (~/.spruce_grove/plugins/):" in output
             assert "my_tool" in output
-            assert "Project (/tmp/proj/.code_puppy/plugins/):" in output
+            assert "Project (/tmp/proj/.spruce_grove/plugins/):" in output
             assert "repo_guard" in output
 
     def test_empty_tiers_show_none(self):
@@ -115,7 +115,7 @@ class TestBuildOutput:
             ),
         ):
             output = _build_output()
-            assert "<CWD>/.code_puppy/plugins/" in output
+            assert "<CWD>/.spruce_grove/plugins/" in output
 
 
 # ── Slash command tests ───────────────────────────────────────────────────
@@ -150,7 +150,7 @@ class TestHandleCustomCommand:
                 return_value=set(),
             ),
             patch(
-                "code_puppy.messaging.emit_info",
+                "spruce_grove.messaging.emit_info",
             ) as mock_emit,
         ):
             result = _handle_custom_command("/plugins list", "plugins")
@@ -189,14 +189,14 @@ class TestMenuShowsGatedProjectPlugins:
             "sketchy": "untrusted",
             "drifted": "changed",
         }
-        menu = self._make_menu(loaded, statuses, Path("/proj/.code_puppy/plugins"))
+        menu = self._make_menu(loaded, statuses, Path("/proj/.spruce_grove/plugins"))
 
         by_name = {e.name: e for e in menu.plugins if e.tier == "project"}
         assert set(by_name) == {"trusted_one", "sketchy", "drifted"}
         assert by_name["trusted_one"].status == "loaded"
         assert by_name["sketchy"].status == "untrusted"
         assert by_name["drifted"].status == "changed"
-        assert menu.project_dir == "/proj/.code_puppy/plugins"
+        assert menu.project_dir == "/proj/.spruce_grove/plugins"
 
     def test_toggle_is_noop_for_gated_plugin(self):
         loaded = {"builtin": [], "user": [], "project": []}
@@ -216,14 +216,14 @@ class TestMenuShowsGatedProjectPlugins:
 
         loaded = {"builtin": [], "user": [], "project": []}
         menu = self._make_menu(
-            loaded, {"sketchy": "untrusted"}, Path("/proj/.code_puppy/plugins")
+            loaded, {"sketchy": "untrusted"}, Path("/proj/.spruce_grove/plugins")
         )
         menu.selected_idx = 0
 
         text = "".join(frag for _style, frag in render_detail(menu))
         assert "Press Enter" in text
         assert "disabled by default" in text
-        assert "/proj/.code_puppy/plugins" in text  # project path visible
+        assert "/proj/.spruce_grove/plugins" in text  # project path visible
 
 
 class TestSlashEnableOpensTUI:
@@ -236,7 +236,7 @@ class TestSlashEnableOpensTUI:
             try_enable_project_plugin,
         )
 
-        plugin_dir = tmp_path / ".code_puppy" / "plugins" / "sketchy"
+        plugin_dir = tmp_path / ".spruce_grove" / "plugins" / "sketchy"
         plugin_dir.mkdir(parents=True)
         (plugin_dir / "register_callbacks.py").write_text("# sketchy\n")
 
@@ -246,10 +246,10 @@ class TestSlashEnableOpensTUI:
                 return_value=plugin_dir.parent,
             ),
             patch(
-                "code_puppy.plugins.trust.get_trust_status",
+                "spruce_grove.plugins.trust.get_trust_status",
                 return_value=status,
             ),
-            patch("code_puppy.plugins.trust.trust_plugin") as mock_trust,
+            patch("spruce_grove.plugins.trust.trust_plugin") as mock_trust,
             patch(
                 f"{_PLUGINS_MOD}.load_project_plugin_now", return_value=True
             ) as mock_load,
@@ -258,7 +258,7 @@ class TestSlashEnableOpensTUI:
                 return_value={"builtin": [], "user": [], "project": []},
             ),
             patch(f"{_PLUGINS_CONFIG_MOD}.set_plugin_disabled"),
-            patch("code_puppy.messaging.emit_info") as mock_info,
+            patch("spruce_grove.messaging.emit_info") as mock_info,
             patch(self._MENU, side_effect=menu_effect) as mock_menu,
         ):
             handled = try_enable_project_plugin("sketchy")
@@ -313,7 +313,7 @@ class TestTrustModal:
             ),
             patch(
                 f"{_PLUGINS_MOD}.get_project_plugins_directory",
-                return_value=Path("/proj/.code_puppy/plugins"),
+                return_value=Path("/proj/.spruce_grove/plugins"),
             ),
             patch(
                 f"{_PLUGINS_CONFIG_MOD}.get_disabled_plugins",
@@ -345,7 +345,7 @@ class TestTrustModal:
             ),
             patch(
                 f"{_PLUGINS_MOD}.get_project_plugins_directory",
-                return_value=Path("/proj/.code_puppy/plugins"),
+                return_value=Path("/proj/.spruce_grove/plugins"),
             ),
             patch(
                 f"{_PLUGINS_CONFIG_MOD}.get_disabled_plugins",
@@ -405,19 +405,19 @@ class TestTrustModal:
 
 class TestBannerShowsProjectPath:
     def test_banner_names_the_project(self):
-        from code_puppy.plugins.trust_notice import emit_skipped_plugin_notice
+        from spruce_grove.plugins.trust_notice import emit_skipped_plugin_notice
 
         with (
             patch(
                 f"{_PLUGINS_MOD}.get_project_plugins_directory",
-                return_value=Path("/proj/.code_puppy/plugins"),
+                return_value=Path("/proj/.spruce_grove/plugins"),
             ),
-            patch("code_puppy.messaging.emit_warning") as mock_warn,
+            patch("spruce_grove.messaging.emit_warning") as mock_warn,
         ):
             emit_skipped_plugin_notice({"sketchy": "untrusted"})
 
         banner = mock_warn.call_args[0][0]
-        assert "/proj/.code_puppy/plugins" in banner.plain
+        assert "/proj/.spruce_grove/plugins" in banner.plain
 
 
 class TestCustomHelp:

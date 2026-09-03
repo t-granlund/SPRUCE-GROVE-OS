@@ -488,7 +488,7 @@ class TestHandleHooksCommand:
 
     def test_alias_hook_is_handled(self, tmp_path, monkeypatch):
         monkeypatch.chdir(tmp_path)
-        with patch("code_puppy.messaging.emit_info"):
+        with patch("spruce_grove.messaging.emit_info"):
             with patch(
                 "code_puppy_core_plugins.hook_manager.config._load_global_hooks_config",
                 return_value={},
@@ -498,7 +498,7 @@ class TestHandleHooksCommand:
 
     def test_list_subcommand_returns_true(self, tmp_settings, monkeypatch):
         monkeypatch.chdir(tmp_settings.parent.parent)
-        with patch("code_puppy.messaging.emit_info"):
+        with patch("spruce_grove.messaging.emit_info"):
             with patch(
                 "code_puppy_core_plugins.hook_manager.config._load_global_hooks_config",
                 return_value={},
@@ -508,7 +508,7 @@ class TestHandleHooksCommand:
 
     def test_list_empty_config(self, tmp_path, monkeypatch):
         monkeypatch.chdir(tmp_path)
-        with patch("code_puppy.messaging.emit_info") as mock_info:
+        with patch("spruce_grove.messaging.emit_info") as mock_info:
             with patch(
                 "code_puppy_core_plugins.hook_manager.config._load_global_hooks_config",
                 return_value={},
@@ -520,7 +520,7 @@ class TestHandleHooksCommand:
 
     def test_enable_subcommand(self, tmp_settings, monkeypatch):
         monkeypatch.chdir(tmp_settings.parent.parent)
-        with patch("code_puppy.messaging.emit_success") as mock_ok:
+        with patch("spruce_grove.messaging.emit_success") as mock_ok:
             with patch(
                 "code_puppy_core_plugins.hook_manager.config._load_global_hooks_config",
                 return_value={},
@@ -531,7 +531,7 @@ class TestHandleHooksCommand:
 
     def test_disable_subcommand(self, tmp_settings, monkeypatch):
         monkeypatch.chdir(tmp_settings.parent.parent)
-        with patch("code_puppy.messaging.emit_warning") as mock_warn:
+        with patch("spruce_grove.messaging.emit_warning") as mock_warn:
             with patch(
                 "code_puppy_core_plugins.hook_manager.config._load_global_hooks_config",
                 return_value={},
@@ -542,7 +542,7 @@ class TestHandleHooksCommand:
 
     def test_status_subcommand(self, tmp_settings, monkeypatch):
         monkeypatch.chdir(tmp_settings.parent.parent)
-        with patch("code_puppy.messaging.emit_info") as mock_info:
+        with patch("spruce_grove.messaging.emit_info") as mock_info:
             with patch(
                 "code_puppy_core_plugins.hook_manager.config._load_global_hooks_config",
                 return_value={},
@@ -554,7 +554,7 @@ class TestHandleHooksCommand:
 
     def test_unknown_subcommand_returns_true_with_error(self, tmp_path, monkeypatch):
         monkeypatch.chdir(tmp_path)
-        with patch("code_puppy.messaging.emit_error") as mock_err:
+        with patch("spruce_grove.messaging.emit_error") as mock_err:
             with patch(
                 "code_puppy_core_plugins.hook_manager.config._load_global_hooks_config",
                 return_value={},
@@ -565,7 +565,7 @@ class TestHandleHooksCommand:
 
     def test_enable_then_all_hooks_enabled_on_disk(self, tmp_settings, monkeypatch):
         monkeypatch.chdir(tmp_settings.parent.parent)
-        with patch("code_puppy.messaging.emit_success"):
+        with patch("spruce_grove.messaging.emit_success"):
             with patch(
                 "code_puppy_core_plugins.hook_manager.config._load_global_hooks_config",
                 return_value={},
@@ -581,7 +581,7 @@ class TestHandleHooksCommand:
 
     def test_disable_then_all_hooks_disabled_on_disk(self, tmp_settings, monkeypatch):
         monkeypatch.chdir(tmp_settings.parent.parent)
-        with patch("code_puppy.messaging.emit_warning"):
+        with patch("spruce_grove.messaging.emit_warning"):
             with patch(
                 "code_puppy_core_plugins.hook_manager.config._load_global_hooks_config",
                 return_value={},
@@ -642,7 +642,7 @@ class TestPluginRegistration:
 
         importlib.reload(rcb)
 
-        from code_puppy.callbacks import get_callbacks
+        from spruce_grove.callbacks import get_callbacks
 
         cbs = get_callbacks("custom_command")
         modules = [f.__module__ for f in cbs]
@@ -655,7 +655,7 @@ class TestPluginRegistration:
 
         importlib.reload(rcb)
 
-        from code_puppy.callbacks import get_callbacks
+        from spruce_grove.callbacks import get_callbacks
 
         cbs = get_callbacks("custom_command_help")
         modules = [f.__module__ for f in cbs]

@@ -12,7 +12,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from code_puppy.tools.browser.browser_scripts import (
+from spruce_grove.tools.browser.browser_scripts import (
     clear_highlights,
     execute_javascript,
     highlight_element,
@@ -29,7 +29,7 @@ from code_puppy.tools.browser.browser_scripts import (
     wait_for_element,
 )
 
-MOD = "code_puppy.tools.browser.browser_scripts"
+MOD = "spruce_grove.tools.browser.browser_scripts"
 
 
 @contextmanager

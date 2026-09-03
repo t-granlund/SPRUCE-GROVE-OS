@@ -1,4 +1,4 @@
-"""Tests for code_puppy.messaging.bus - MessageBus and global functions."""
+"""Tests for spruce_grove.messaging.bus - MessageBus and global functions."""
 
 import asyncio
 import queue
@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy.messaging.bus import (
+from spruce_grove.messaging.bus import (
     MessageBus,
     emit,
     emit_debug,
@@ -20,13 +20,13 @@ from code_puppy.messaging.bus import (
     reset_message_bus,
     set_session_context,
 )
-from code_puppy.messaging.commands import (
+from spruce_grove.messaging.commands import (
     CancelAgentCommand,
     ConfirmationResponse,
     SelectionResponse,
     UserInputResponse,
 )
-from code_puppy.messaging.messages import (
+from spruce_grove.messaging.messages import (
     MessageCategory,
     MessageLevel,
     ShellLineMessage,

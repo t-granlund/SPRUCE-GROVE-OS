@@ -1,6 +1,6 @@
 # DESIGN — The Great Adpuppytion DS v2 ("Cornerstone+")
 
-Design system + layout architecture for the Code-Puppy University founding deck.
+Design system + layout architecture for the Code-Cedar University founding deck.
 Supersedes the informal v1 conventions. Locked 2026-07-30.
 
 ## Architecture (prompt-addressable)

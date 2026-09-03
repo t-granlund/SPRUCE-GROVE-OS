@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy.mcp_.mcp_logs import (
+from spruce_grove.mcp_.mcp_logs import (
     MAX_LOG_SIZE,
     clear_logs,
     get_log_stats,
@@ -24,7 +24,7 @@ def temp_logs_dir(tmp_path):
     """Create a temporary logs directory."""
     logs_dir = tmp_path / "mcp_logs"
     logs_dir.mkdir()
-    with patch("code_puppy.mcp_.mcp_logs.get_mcp_logs_dir", return_value=logs_dir):
+    with patch("spruce_grove.mcp_.mcp_logs.get_mcp_logs_dir", return_value=logs_dir):
         # Also patch get_log_file_path to use temp directory
         def patched_get_log_file_path(server_name: str) -> Path:
             safe_name = "".join(
@@ -33,7 +33,7 @@ def temp_logs_dir(tmp_path):
             return logs_dir / f"{safe_name}.log"
 
         with patch(
-            "code_puppy.mcp_.mcp_logs.get_log_file_path", patched_get_log_file_path
+            "spruce_grove.mcp_.mcp_logs.get_log_file_path", patched_get_log_file_path
         ):
             yield logs_dir
 
@@ -43,7 +43,7 @@ class TestMCPLogs:
 
     def test_get_mcp_logs_dir_creates_directory(self, tmp_path):
         """Test that get_mcp_logs_dir creates the directory if it doesn't exist."""
-        with patch("code_puppy.mcp_.mcp_logs.STATE_DIR", str(tmp_path)):
+        with patch("spruce_grove.mcp_.mcp_logs.STATE_DIR", str(tmp_path)):
             logs_dir = get_mcp_logs_dir()
             assert logs_dir.exists()
             assert logs_dir.is_dir()
@@ -53,10 +53,10 @@ class TestMCPLogs:
         """Test that server names are sanitized for filesystem safety."""
         # We need to test the real function, not the patched one
         with patch(
-            "code_puppy.mcp_.mcp_logs.get_mcp_logs_dir", return_value=temp_logs_dir
+            "spruce_grove.mcp_.mcp_logs.get_mcp_logs_dir", return_value=temp_logs_dir
         ):
             # Re-import to get fresh function
-            from code_puppy.mcp_.mcp_logs import get_log_file_path
+            from spruce_grove.mcp_.mcp_logs import get_log_file_path
 
             path = get_log_file_path("my-server")
             assert path.name == "my-server.log"
@@ -140,7 +140,7 @@ class TestMCPLogs:
         """Test listing servers that have log files."""
         # Initially no servers
         with patch(
-            "code_puppy.mcp_.mcp_logs.get_mcp_logs_dir", return_value=temp_logs_dir
+            "spruce_grove.mcp_.mcp_logs.get_mcp_logs_dir", return_value=temp_logs_dir
         ):
             servers = list_servers_with_logs()
             assert servers == []

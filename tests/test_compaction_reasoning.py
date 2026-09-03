@@ -1,6 +1,6 @@
 from pydantic_ai.messages import ModelResponse, ThinkingPart
 
-from code_puppy.agents._compaction import _strip_empty_thinking_parts
+from spruce_grove.agents._compaction import _strip_empty_thinking_parts
 
 
 def test_preserve_empty_signed_thinking_part():

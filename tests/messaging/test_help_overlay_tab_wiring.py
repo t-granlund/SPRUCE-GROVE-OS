@@ -5,7 +5,7 @@ prompt_toolkit path's equivalent branch lives in
 ``tests/test_prompt_toolkit_completion.py``.
 """
 
-from code_puppy.messaging.line_editor import RunningLineEditor
+from spruce_grove.messaging.line_editor import RunningLineEditor
 
 
 class FakeBar:

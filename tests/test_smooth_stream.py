@@ -6,7 +6,7 @@ import io
 import pytest
 from rich.console import Console
 
-from code_puppy.agents.smooth_stream import (
+from spruce_grove.agents.smooth_stream import (
     SmoothTermflowWriter,
     ThinkingStreamSmoother,
     _split_by_visible,
@@ -107,7 +107,7 @@ async def test_cancellation_discards_instead_of_dumping():
 @pytest.mark.asyncio
 async def test_pause_suspends_typing_until_resume():
     """Content fed DURING a pause must stay silent until resume."""
-    from code_puppy.messaging.pause_controller import (
+    from spruce_grove.messaging.pause_controller import (
         get_pause_controller,
         reset_pause_controller,
     )
@@ -135,7 +135,7 @@ async def test_pause_transition_flushes_tail_atomically():
     The tail must land before the steering prompt renders, and the buffer
     must be empty so close() can't stall the agent pipeline.
     """
-    from code_puppy.messaging.pause_controller import (
+    from spruce_grove.messaging.pause_controller import (
         get_pause_controller,
         reset_pause_controller,
     )
@@ -165,7 +165,7 @@ async def test_close_does_not_stall_while_paused():
     (handler blocked in close() inside ``node.stream``), getting connections
     killed upstream → RemoteProtocolError on the post-steer model call.
     """
-    from code_puppy.messaging.pause_controller import (
+    from spruce_grove.messaging.pause_controller import (
         get_pause_controller,
         reset_pause_controller,
     )
@@ -188,20 +188,20 @@ async def test_close_does_not_stall_while_paused():
 
 def test_make_thinking_smoother_respects_disabled(monkeypatch):
     """make_thinking_smoother returns None when smoothing is toggled off."""
-    monkeypatch.setattr("code_puppy.config.get_smooth_thinking_stream", lambda: False)
+    monkeypatch.setattr("spruce_grove.config.get_smooth_thinking_stream", lambda: False)
     console, _ = _plain_console()
     assert make_thinking_smoother(console) is None
 
 
 def test_make_thinking_smoother_enabled_by_default(monkeypatch):
-    monkeypatch.setattr("code_puppy.config.get_smooth_thinking_stream", lambda: True)
+    monkeypatch.setattr("spruce_grove.config.get_smooth_thinking_stream", lambda: True)
     console, _ = _plain_console()
     assert isinstance(make_thinking_smoother(console), ThinkingStreamSmoother)
 
 
 def test_make_thinking_smoother_skips_non_tty(monkeypatch):
     """Pipes/CI never see the typewriter, whatever the config toggle says."""
-    monkeypatch.setattr("code_puppy.config.get_smooth_thinking_stream", lambda: True)
+    monkeypatch.setattr("spruce_grove.config.get_smooth_thinking_stream", lambda: True)
     console = Console(file=io.StringIO(), force_terminal=False, width=200)
     assert make_thinking_smoother(console) is None
 
@@ -261,16 +261,16 @@ async def test_termflow_writer_types_in_multiple_writes():
 
 
 def test_make_smooth_termflow_writer_respects_disabled(monkeypatch):
-    monkeypatch.setattr("code_puppy.config.get_smooth_response_stream", lambda: False)
+    monkeypatch.setattr("spruce_grove.config.get_smooth_response_stream", lambda: False)
     assert make_smooth_termflow_writer(io.StringIO()) is None
 
 
 def test_make_smooth_termflow_writer_enabled_by_default(monkeypatch):
-    monkeypatch.setattr("code_puppy.config.get_smooth_response_stream", lambda: True)
+    monkeypatch.setattr("spruce_grove.config.get_smooth_response_stream", lambda: True)
     assert isinstance(make_smooth_termflow_writer(_TtyStringIO()), SmoothTermflowWriter)
 
 
 def test_make_smooth_termflow_writer_skips_non_tty(monkeypatch):
     """Pipes/CI never see the typewriter, whatever the config toggle says."""
-    monkeypatch.setattr("code_puppy.config.get_smooth_response_stream", lambda: True)
+    monkeypatch.setattr("spruce_grove.config.get_smooth_response_stream", lambda: True)
     assert make_smooth_termflow_writer(io.StringIO()) is None

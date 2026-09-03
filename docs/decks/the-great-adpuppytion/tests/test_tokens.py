@@ -42,7 +42,7 @@ class TestPaletteIntegrity:
     def test_brand_primitives_exact(self, tokens_css):
         for token, hexval in BRAND.items():
             assert f"{token}: {hexval}" in tokens_css, (
-                f"brand primitive {token} drifted from {hexval} (Code-Puppy field-guide)"
+                f"brand primitive {token} drifted from {hexval} (Code-Cedar field-guide)"
             )
 
     def test_semantic_layer_references_primitives(self, tokens_css):

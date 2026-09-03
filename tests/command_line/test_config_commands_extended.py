@@ -18,7 +18,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 # Import the functions we need to test
-from code_puppy.command_line.config_commands import (
+from spruce_grove.command_line.config_commands import (
     handle_pin_model_command,
     handle_set_command,
     handle_unpin_command,
@@ -28,7 +28,7 @@ from code_puppy.command_line.config_commands import (
 # Mock these functions if they don't exist
 def _get_agent_by_name(agent_name):
     """Mock implementation for testing."""
-    from code_puppy.agents.agent_manager import get_agent_descriptions
+    from spruce_grove.agents.agent_manager import get_agent_descriptions
 
     agents = get_agent_descriptions()
     # Try exact match first
@@ -43,7 +43,7 @@ def _get_agent_by_name(agent_name):
 
 def _show_color_options(diff_type):
     """Mock implementation for testing."""
-    from code_puppy.messaging import emit_info
+    from spruce_grove.messaging import emit_info
 
     if diff_type == "additions":
         emit_info("Recommended Colors for Additions:")
@@ -64,9 +64,9 @@ class TestSetCommand:
 
     def test_set_command_valid_key_value(self):
         """Test set command with valid key=value pairs."""
-        with patch("code_puppy.config.set_config_value") as mock_set:
-            with patch("code_puppy.config.get_config_keys", return_value=["test_key"]):
-                with patch("code_puppy.messaging.emit_success") as mock_success:
+        with patch("spruce_grove.config.set_config_value") as mock_set:
+            with patch("spruce_grove.config.get_config_keys", return_value=["test_key"]):
+                with patch("spruce_grove.messaging.emit_success") as mock_success:
                     result = handle_set_command("/set test_key test_value")
                     assert result is True
 
@@ -75,9 +75,9 @@ class TestSetCommand:
 
     def test_set_command_empty_value(self):
         """Test set command with empty value."""
-        with patch("code_puppy.config.set_config_value") as mock_set:
-            with patch("code_puppy.config.get_config_keys", return_value=["test_key"]):
-                with patch("code_puppy.messaging.emit_success"):
+        with patch("spruce_grove.config.set_config_value") as mock_set:
+            with patch("spruce_grove.config.get_config_keys", return_value=["test_key"]):
+                with patch("spruce_grove.messaging.emit_success"):
                     result = handle_set_command("/set test_key")
                     assert result is True
 
@@ -93,8 +93,8 @@ class TestSetCommand:
     )
     def test_set_command_passthrough(self, command, key, value):
         """Test set command passes the value through to set_config_value."""
-        with patch("code_puppy.config.set_config_value") as mock_set:
-            with patch("code_puppy.messaging.emit_success"):
+        with patch("spruce_grove.config.set_config_value") as mock_set:
+            with patch("spruce_grove.messaging.emit_success"):
                 result = handle_set_command(command)
                 assert result is True
 
@@ -103,7 +103,7 @@ class TestSetCommand:
     def test_set_command_no_arguments(self):
         """Test set command with no arguments launches interactive menu."""
         with patch(
-            "code_puppy.command_line.set_menu.interactive_set_picker",
+            "spruce_grove.command_line.set_menu.interactive_set_picker",
             return_value=None,
         ):
             result = handle_set_command("/set")
@@ -112,7 +112,7 @@ class TestSetCommand:
     def test_set_command_configuration_failure(self):
         """Test set command when configuration fails to set."""
         with patch(
-            "code_puppy.config.set_config_value", side_effect=Exception("Set failed")
+            "spruce_grove.config.set_config_value", side_effect=Exception("Set failed")
         ):
             # The actual implementation doesn't catch exceptions from set_config_value
             # it should propagate the exception
@@ -133,18 +133,18 @@ class TestPinModelCommand:
 
         try:
             with patch(
-                "code_puppy.command_line.model_picker_completion.load_model_names",
+                "spruce_grove.command_line.model_picker_completion.load_model_names",
                 return_value=["gpt-4"],
             ):
                 with patch(
-                    "code_puppy.agents.json_agent.discover_json_agents",
+                    "spruce_grove.agents.json_agent.discover_json_agents",
                     return_value={"test_agent": temp_path},
                 ):
                     with patch(
-                        "code_puppy.agents.agent_manager.get_agent_descriptions",
+                        "spruce_grove.agents.agent_manager.get_agent_descriptions",
                         return_value={},
                     ):
-                        with patch("code_puppy.messaging.emit_success"):
+                        with patch("spruce_grove.messaging.emit_success"):
                             result = handle_pin_model_command(
                                 "/pin_model test_agent gpt-4"
                             )
@@ -163,18 +163,18 @@ class TestPinModelCommand:
         mock_models = ["gpt-4"]
 
         with patch(
-            "code_puppy.command_line.model_picker_completion.load_model_names",
+            "spruce_grove.command_line.model_picker_completion.load_model_names",
             return_value=mock_models,
         ):
             with patch(
-                "code_puppy.agents.json_agent.discover_json_agents", return_value={}
+                "spruce_grove.agents.json_agent.discover_json_agents", return_value={}
             ):
                 with patch(
-                    "code_puppy.agents.agent_manager.get_agent_descriptions",
+                    "spruce_grove.agents.agent_manager.get_agent_descriptions",
                     return_value=mock_agents,
                 ):
-                    with patch("code_puppy.config.set_agent_pinned_model") as mock_pin:
-                        with patch("code_puppy.messaging.emit_success"):
+                    with patch("spruce_grove.config.set_agent_pinned_model") as mock_pin:
+                        with patch("spruce_grove.messaging.emit_success"):
                             result = handle_pin_model_command(
                                 "/pin_model test_agent gpt-4"
                             )
@@ -185,17 +185,17 @@ class TestPinModelCommand:
     def test_pin_model_agent_not_found(self):
         """Test pin model when agent is not found."""
         with patch(
-            "code_puppy.command_line.model_picker_completion.load_model_names",
+            "spruce_grove.command_line.model_picker_completion.load_model_names",
             return_value=[],
         ):
             with patch(
-                "code_puppy.agents.json_agent.discover_json_agents", return_value={}
+                "spruce_grove.agents.json_agent.discover_json_agents", return_value={}
             ):
                 with patch(
-                    "code_puppy.agents.agent_manager.get_agent_descriptions",
+                    "spruce_grove.agents.agent_manager.get_agent_descriptions",
                     return_value={},
                 ):
-                    with patch("code_puppy.messaging.emit_error") as mock_error:
+                    with patch("spruce_grove.messaging.emit_error") as mock_error:
                         result = handle_pin_model_command(
                             "/pin_model unknown_agent model"
                         )
@@ -209,17 +209,17 @@ class TestPinModelCommand:
         mock_models = []  # No models available
 
         with patch(
-            "code_puppy.command_line.model_picker_completion.load_model_names",
+            "spruce_grove.command_line.model_picker_completion.load_model_names",
             return_value=mock_models,
         ):
             with patch(
-                "code_puppy.agents.json_agent.discover_json_agents", return_value={}
+                "spruce_grove.agents.json_agent.discover_json_agents", return_value={}
             ):
                 with patch(
-                    "code_puppy.agents.agent_manager.get_agent_descriptions",
+                    "spruce_grove.agents.agent_manager.get_agent_descriptions",
                     return_value=mock_agents,
                 ):
-                    with patch("code_puppy.messaging.emit_error") as mock_error:
+                    with patch("spruce_grove.messaging.emit_error") as mock_error:
                         result = handle_pin_model_command(
                             "/pin_model test_agent unavailable_model"
                         )
@@ -238,18 +238,18 @@ class TestPinModelCommand:
 
         try:
             with patch(
-                "code_puppy.command_line.model_picker_completion.load_model_names",
+                "spruce_grove.command_line.model_picker_completion.load_model_names",
                 return_value=["model"],
             ):
                 with patch(
-                    "code_puppy.agents.json_agent.discover_json_agents",
+                    "spruce_grove.agents.json_agent.discover_json_agents",
                     return_value={"test_agent": temp_path},
                 ):
                     with patch(
-                        "code_puppy.agents.agent_manager.get_agent_descriptions",
+                        "spruce_grove.agents.agent_manager.get_agent_descriptions",
                         return_value={},
                     ):
-                        with patch("code_puppy.messaging.emit_error") as mock_error:
+                        with patch("spruce_grove.messaging.emit_error") as mock_error:
                             result = handle_pin_model_command(
                                 "/pin_model test_agent model"
                             )
@@ -263,10 +263,10 @@ class TestPinModelCommand:
     def test_pin_model_no_arguments(self):
         """Test pin model command with missing arguments."""
         with patch(
-            "code_puppy.command_line.model_picker_completion.load_model_names",
+            "spruce_grove.command_line.model_picker_completion.load_model_names",
             return_value=[],
         ):
-            with patch("code_puppy.messaging.emit_warning") as mock_warning:
+            with patch("spruce_grove.messaging.emit_warning") as mock_warning:
                 result = handle_pin_model_command("/pin_model")
                 assert result is True
 
@@ -281,14 +281,14 @@ class TestUnpinCommand:
         mock_agents = {"test_agent": "Test Description"}
 
         with patch(
-            "code_puppy.agents.json_agent.discover_json_agents", return_value={}
+            "spruce_grove.agents.json_agent.discover_json_agents", return_value={}
         ):
             with patch(
-                "code_puppy.agents.agent_manager.get_agent_descriptions",
+                "spruce_grove.agents.agent_manager.get_agent_descriptions",
                 return_value=mock_agents,
             ):
-                with patch("code_puppy.config.clear_agent_pinned_model") as mock_clear:
-                    with patch("code_puppy.messaging.emit_success") as mock_success:
+                with patch("spruce_grove.config.clear_agent_pinned_model") as mock_clear:
+                    with patch("spruce_grove.messaging.emit_success") as mock_success:
                         result = handle_unpin_command("/unpin test_agent")
                         assert result is True
 
@@ -309,18 +309,18 @@ class TestUnpinCommand:
 
         try:
             with patch(
-                "code_puppy.agents.json_agent.discover_json_agents",
+                "spruce_grove.agents.json_agent.discover_json_agents",
                 return_value={"test_agent": temp_path},
             ):
                 with patch(
-                    "code_puppy.agents.agent_manager.get_agent_descriptions",
+                    "spruce_grove.agents.agent_manager.get_agent_descriptions",
                     return_value={},
                 ):
                     with patch(
-                        "code_puppy.agents.get_current_agent",
+                        "spruce_grove.agents.get_current_agent",
                         return_value=MagicMock(name="other_agent"),
                     ):
-                        with patch("code_puppy.messaging.emit_success"):
+                        with patch("spruce_grove.messaging.emit_success"):
                             result = handle_unpin_command("/unpin test_agent")
                             assert result is True
 
@@ -334,14 +334,14 @@ class TestUnpinCommand:
     def test_unpin_model_usage_help(self):
         """Test unpin model command shows usage help when arguments are missing."""
         with patch(
-            "code_puppy.agents.json_agent.discover_json_agents", return_value={}
+            "spruce_grove.agents.json_agent.discover_json_agents", return_value={}
         ):
             with patch(
-                "code_puppy.agents.agent_manager.get_agent_descriptions",
+                "spruce_grove.agents.agent_manager.get_agent_descriptions",
                 return_value={"agent": "desc"},
             ):
-                with patch("code_puppy.messaging.emit_warning") as mock_warning:
-                    with patch("code_puppy.messaging.emit_info") as mock_info:
+                with patch("spruce_grove.messaging.emit_warning") as mock_warning:
+                    with patch("spruce_grove.messaging.emit_info") as mock_info:
                         result = handle_unpin_command("/unpin")
                         assert result is True
 
@@ -353,13 +353,13 @@ class TestUnpinCommand:
     def test_unpin_model_invalid_agent(self):
         """Test unpin model with invalid agent name."""
         with patch(
-            "code_puppy.agents.json_agent.discover_json_agents", return_value={}
+            "spruce_grove.agents.json_agent.discover_json_agents", return_value={}
         ):
             with patch(
-                "code_puppy.agents.agent_manager.get_agent_descriptions",
+                "spruce_grove.agents.agent_manager.get_agent_descriptions",
                 return_value={},
             ):
-                with patch("code_puppy.messaging.emit_error") as mock_error:
+                with patch("spruce_grove.messaging.emit_error") as mock_error:
                     result = handle_unpin_command("/unpin invalid_agent")
                     assert result is True
 
@@ -376,7 +376,7 @@ class TestGetAgentByName:
         mock_agents = {"Test_Agent": "Description"}
 
         with patch(
-            "code_puppy.agents.agent_manager.get_agent_descriptions",
+            "spruce_grove.agents.agent_manager.get_agent_descriptions",
             return_value=mock_agents,
         ):
             # Exact match should work

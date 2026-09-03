@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import pytest
 
-from code_puppy import callbacks
+from spruce_grove import callbacks
 from code_puppy_core_plugins.plugin_list import plugin_contributions as pc
 
 
@@ -331,7 +331,7 @@ def _handler_in(module_name):
         ("project_plugins.my_plug.register_callbacks", "my_plug"),
         ("user_plug.register_callbacks", "user_plug"),
         # Core modules resolve to a prefix that is not a real plugin name.
-        ("code_puppy.command_line.command_handler", "code_puppy"),
+        ("spruce_grove.command_line.command_handler", "spruce_grove"),
         (None, None),
         ("", None),
     ],
@@ -342,7 +342,7 @@ def test_plugin_owner_of_module(module, expected):
 
 
 def test_registry_commands_attributed_by_handler_module(monkeypatch):
-    from code_puppy.command_line import command_registry
+    from spruce_grove.command_line import command_registry
 
     infos = [
         _FakeCommandInfo(
@@ -353,12 +353,12 @@ def test_registry_commands_attributed_by_handler_module(monkeypatch):
         _FakeCommandInfo(
             "other",
             "Other plugin command",
-            _handler_in("code_puppy.plugins.elsewhere.register_callbacks"),
+            _handler_in("spruce_grove.plugins.elsewhere.register_callbacks"),
         ),
         _FakeCommandInfo(
             "core_cmd",
             "A core command",
-            _handler_in("code_puppy.command_line.command_handler"),
+            _handler_in("spruce_grove.command_line.command_handler"),
         ),
     ]
     monkeypatch.setattr(command_registry, "get_unique_commands", lambda: infos)
@@ -367,11 +367,11 @@ def test_registry_commands_attributed_by_handler_module(monkeypatch):
     # Sibling plugin's command never leaks into wiggum's list.
     assert pc._registry_commands("elsewhere") == ["/other — Other plugin command"]
     # Core commands aren't attributed to any plugin.
-    assert pc._registry_commands("code_puppy") == ["/core_cmd — A core command"]
+    assert pc._registry_commands("spruce_grove") == ["/core_cmd — A core command"]
 
 
 def test_registry_commands_lookup_failure_yields_empty(monkeypatch):
-    from code_puppy.command_line import command_registry
+    from spruce_grove.command_line import command_registry
 
     def _boom():
         raise RuntimeError("registry exploded")
@@ -381,7 +381,7 @@ def test_registry_commands_lookup_failure_yields_empty(monkeypatch):
 
 
 def test_get_commands_merges_callback_and_registry(clean_callbacks, monkeypatch):
-    from code_puppy.command_line import command_registry
+    from spruce_grove.command_line import command_registry
 
     _register("plugA", "custom_command_help", lambda: [("hooked", "From the hook")])
     monkeypatch.setattr(
@@ -391,7 +391,7 @@ def test_get_commands_merges_callback_and_registry(clean_callbacks, monkeypatch)
             _FakeCommandInfo(
                 "decorated",
                 "From the decorator",
-                _handler_in("code_puppy.plugins.plugA.register_callbacks"),
+                _handler_in("spruce_grove.plugins.plugA.register_callbacks"),
             )
         ],
     )
@@ -404,7 +404,7 @@ def test_get_commands_merges_callback_and_registry(clean_callbacks, monkeypatch)
 def test_get_commands_dedupes_across_callback_and_registry(
     clean_callbacks, monkeypatch
 ):
-    from code_puppy.command_line import command_registry
+    from spruce_grove.command_line import command_registry
 
     _register("plugA", "custom_command_help", lambda: [("dup", "Same command")])
     monkeypatch.setattr(
@@ -414,7 +414,7 @@ def test_get_commands_dedupes_across_callback_and_registry(
             _FakeCommandInfo(
                 "dup",
                 "Same command",
-                _handler_in("code_puppy.plugins.plugA.register_callbacks"),
+                _handler_in("spruce_grove.plugins.plugA.register_callbacks"),
             )
         ],
     )
@@ -422,20 +422,20 @@ def test_get_commands_dedupes_across_callback_and_registry(
 
 
 def test_registry_tools_attributed_by_register_func_module(monkeypatch):
-    import code_puppy.tools as tools_pkg
+    import spruce_grove.tools as tools_pkg
 
     fake_registry = {
-        "plugA_tool": _handler_in("code_puppy.plugins.plugA.register_callbacks"),
-        "core_tool": _handler_in("code_puppy.tools.file_operations"),
+        "plugA_tool": _handler_in("spruce_grove.plugins.plugA.register_callbacks"),
+        "core_tool": _handler_in("spruce_grove.tools.file_operations"),
     }
     monkeypatch.setattr(tools_pkg, "TOOL_REGISTRY", fake_registry, raising=False)
 
     assert pc._registry_tools("plugA") == ["plugA_tool"]
-    assert pc._registry_tools("code_puppy") == ["core_tool"]
+    assert pc._registry_tools("spruce_grove") == ["core_tool"]
 
 
 def test_get_tools_merges_callback_and_registry(clean_callbacks, monkeypatch):
-    import code_puppy.tools as tools_pkg
+    import spruce_grove.tools as tools_pkg
 
     _register(
         "plugA",
@@ -445,7 +445,7 @@ def test_get_tools_merges_callback_and_registry(clean_callbacks, monkeypatch):
     monkeypatch.setattr(
         tools_pkg,
         "TOOL_REGISTRY",
-        {"direct_tool": _handler_in("code_puppy.plugins.plugA.register_callbacks")},
+        {"direct_tool": _handler_in("spruce_grove.plugins.plugA.register_callbacks")},
         raising=False,
     )
     assert pc.get_tools("plugA") == ["hooked_tool", "direct_tool"]

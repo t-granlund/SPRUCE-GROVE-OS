@@ -8,28 +8,28 @@ import pytest
 
 @pytest.fixture
 def edit_cmd():
-    with patch("code_puppy.command_line.mcp.base.get_mcp_manager") as mock_mgr:
+    with patch("spruce_grove.command_line.mcp.base.get_mcp_manager") as mock_mgr:
         mock_mgr.return_value = MagicMock()
-        from code_puppy.command_line.mcp.edit_command import EditCommand
+        from spruce_grove.command_line.mcp.edit_command import EditCommand
 
         return EditCommand()
 
 
 class TestEditCommand:
     def test_no_args_shows_usage(self, edit_cmd):
-        with patch("code_puppy.command_line.mcp.edit_command.emit_info") as mock_emit:
+        with patch("spruce_grove.command_line.mcp.edit_command.emit_info") as mock_emit:
             edit_cmd.execute([], group_id="g1")
             assert mock_emit.call_count == 2
 
     def test_generates_group_id(self, edit_cmd):
-        with patch("code_puppy.command_line.mcp.edit_command.emit_info"):
+        with patch("spruce_grove.command_line.mcp.edit_command.emit_info"):
             edit_cmd.execute([])  # no group_id
 
     def test_config_file_not_exists(self, edit_cmd):
         with (
             patch("os.path.exists", return_value=False),
-            patch("code_puppy.command_line.mcp.edit_command.emit_error") as mock_err,
-            patch("code_puppy.command_line.mcp.edit_command.emit_info"),
+            patch("spruce_grove.command_line.mcp.edit_command.emit_error") as mock_err,
+            patch("spruce_grove.command_line.mcp.edit_command.emit_info"),
         ):
             edit_cmd.execute(["myserver"], group_id="g1")
             assert "No MCP servers configured" in str(mock_err.call_args)
@@ -39,9 +39,9 @@ class TestEditCommand:
         with (
             patch("os.path.exists", return_value=True),
             patch("builtins.open", mock_open(read_data=json.dumps(data))),
-            patch("code_puppy.command_line.mcp.edit_command.emit_error") as mock_err,
-            patch("code_puppy.command_line.mcp.edit_command.emit_warning"),
-            patch("code_puppy.command_line.mcp.edit_command.emit_info"),
+            patch("spruce_grove.command_line.mcp.edit_command.emit_error") as mock_err,
+            patch("spruce_grove.command_line.mcp.edit_command.emit_warning"),
+            patch("spruce_grove.command_line.mcp.edit_command.emit_info"),
         ):
             edit_cmd.execute(["myserver"], group_id="g1")
             assert "not found" in str(mock_err.call_args)
@@ -51,9 +51,9 @@ class TestEditCommand:
         with (
             patch("os.path.exists", return_value=True),
             patch("builtins.open", mock_open(read_data=json.dumps(data))),
-            patch("code_puppy.command_line.mcp.edit_command.emit_error"),
-            patch("code_puppy.command_line.mcp.edit_command.emit_warning") as mock_warn,
-            patch("code_puppy.command_line.mcp.edit_command.emit_info") as mock_info,
+            patch("spruce_grove.command_line.mcp.edit_command.emit_error"),
+            patch("spruce_grove.command_line.mcp.edit_command.emit_warning") as mock_warn,
+            patch("spruce_grove.command_line.mcp.edit_command.emit_info") as mock_info,
         ):
             edit_cmd.execute(["missing"], group_id="g1")
             mock_warn.assert_called_once()
@@ -66,16 +66,16 @@ class TestEditCommand:
             patch("os.path.exists", return_value=True),
             patch("builtins.open", mock_open(read_data=json.dumps(data))),
             patch(
-                "code_puppy.command_line.mcp.edit_command.run_custom_server_form",
+                "spruce_grove.command_line.mcp.edit_command.run_custom_server_form",
                 return_value=True,
             ) as mock_form,
             patch(
-                "code_puppy.command_line.mcp.edit_command.reload_mcp_servers",
+                "spruce_grove.command_line.mcp.edit_command.reload_mcp_servers",
                 create=True,
             ),
         ):
             # Patch the import inside execute
-            with patch.dict("sys.modules", {"code_puppy.agent": MagicMock()}):
+            with patch.dict("sys.modules", {"spruce_grove.agent": MagicMock()}):
                 edit_cmd.execute(["myserver"], group_id="g1")
             mock_form.assert_called_once()
             assert mock_form.call_args[1]["edit_mode"] is True
@@ -88,22 +88,22 @@ class TestEditCommand:
             patch("os.path.exists", return_value=True),
             patch("builtins.open", mock_open(read_data=json.dumps(data))),
             patch(
-                "code_puppy.command_line.mcp.edit_command.run_custom_server_form",
+                "spruce_grove.command_line.mcp.edit_command.run_custom_server_form",
                 return_value=True,
             ),
         ):
             # Make the import fail
             import sys
 
-            saved = sys.modules.get("code_puppy.agent")
-            sys.modules["code_puppy.agent"] = None  # will cause ImportError
+            saved = sys.modules.get("spruce_grove.agent")
+            sys.modules["spruce_grove.agent"] = None  # will cause ImportError
             try:
                 edit_cmd.execute(["myserver"], group_id="g1")
             finally:
                 if saved is not None:
-                    sys.modules["code_puppy.agent"] = saved
+                    sys.modules["spruce_grove.agent"] = saved
                 else:
-                    sys.modules.pop("code_puppy.agent", None)
+                    sys.modules.pop("spruce_grove.agent", None)
 
     def test_form_returns_false(self, edit_cmd):
         data = {"mcp_servers": {"myserver": {"type": "stdio", "command": "echo"}}}
@@ -111,7 +111,7 @@ class TestEditCommand:
             patch("os.path.exists", return_value=True),
             patch("builtins.open", mock_open(read_data=json.dumps(data))),
             patch(
-                "code_puppy.command_line.mcp.edit_command.run_custom_server_form",
+                "spruce_grove.command_line.mcp.edit_command.run_custom_server_form",
                 return_value=False,
             ),
         ):
@@ -121,7 +121,7 @@ class TestEditCommand:
         with (
             patch("os.path.exists", return_value=True),
             patch("builtins.open", mock_open(read_data="{bad json")),
-            patch("code_puppy.command_line.mcp.edit_command.emit_error") as mock_err,
+            patch("spruce_grove.command_line.mcp.edit_command.emit_error") as mock_err,
         ):
             edit_cmd.execute(["myserver"], group_id="g1")
             assert "Error reading config" in str(mock_err.call_args)
@@ -130,7 +130,7 @@ class TestEditCommand:
         with (
             patch("os.path.exists", return_value=True),
             patch("builtins.open", side_effect=PermissionError("denied")),
-            patch("code_puppy.command_line.mcp.edit_command.emit_error") as mock_err,
+            patch("spruce_grove.command_line.mcp.edit_command.emit_error") as mock_err,
         ):
             edit_cmd.execute(["myserver"], group_id="g1")
             assert "Error loading server config" in str(mock_err.call_args)
@@ -140,7 +140,7 @@ class TestEditCommand:
             patch.object(
                 edit_cmd, "_load_server_config", side_effect=Exception("boom")
             ),
-            patch("code_puppy.command_line.mcp.edit_command.emit_error") as mock_err,
+            patch("spruce_grove.command_line.mcp.edit_command.emit_error") as mock_err,
         ):
             edit_cmd.execute(["myserver"], group_id="g1")
             mock_err.assert_called_once()
@@ -152,7 +152,7 @@ class TestEditCommand:
             patch("os.path.exists", return_value=True),
             patch("builtins.open", mock_open(read_data=json.dumps(data))),
             patch(
-                "code_puppy.command_line.mcp.edit_command.run_custom_server_form",
+                "spruce_grove.command_line.mcp.edit_command.run_custom_server_form",
                 return_value=False,
             ) as mock_form,
         ):

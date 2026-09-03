@@ -65,7 +65,7 @@ def test_append_newline_returns_formatted_text_with_trailing_newline():
 
 def test_install_prompt_patch_is_idempotent():
     module = _plugin_module()
-    from code_puppy.command_line import completers as ptc
+    from spruce_grove.command_line import completers as ptc
 
     original = ptc.get_prompt_with_active_model
     try:
@@ -84,7 +84,7 @@ def test_install_prompt_patch_is_idempotent():
 
 def test_patched_prompt_appends_newline_only_when_enabled():
     module = _plugin_module()
-    from code_puppy.command_line import completers as ptc
+    from spruce_grove.command_line import completers as ptc
 
     original = ptc.get_prompt_with_active_model
     try:
@@ -111,9 +111,9 @@ def test_patched_prompt_appends_newline_only_when_enabled():
 
 
 def test_handle_command_persists_explicit_on(tmp_path, monkeypatch):
-    # Point the config at a throwaway file so we don't trash real puppy.cfg
-    cfg_file = tmp_path / "puppy.cfg"
-    monkeypatch.setattr("code_puppy.config.CONFIG_FILE", str(cfg_file))
+    # Point the config at a throwaway file so we don't trash real grove.cfg
+    cfg_file = tmp_path / "grove.cfg"
+    monkeypatch.setattr("spruce_grove.config.CONFIG_FILE", str(cfg_file))
 
     module = _plugin_module()
     cfg = _config_module()
@@ -132,8 +132,8 @@ def test_handle_command_persists_explicit_on(tmp_path, monkeypatch):
 
 
 def test_handle_command_flips_when_no_arg(tmp_path, monkeypatch):
-    cfg_file = tmp_path / "puppy.cfg"
-    monkeypatch.setattr("code_puppy.config.CONFIG_FILE", str(cfg_file))
+    cfg_file = tmp_path / "grove.cfg"
+    monkeypatch.setattr("spruce_grove.config.CONFIG_FILE", str(cfg_file))
 
     module = _plugin_module()
     cfg = _config_module()
@@ -159,8 +159,8 @@ def test_handle_command_flips_when_no_arg(tmp_path, monkeypatch):
 
 
 def test_handle_command_rejects_garbage_arg(tmp_path, monkeypatch):
-    cfg_file = tmp_path / "puppy.cfg"
-    monkeypatch.setattr("code_puppy.config.CONFIG_FILE", str(cfg_file))
+    cfg_file = tmp_path / "grove.cfg"
+    monkeypatch.setattr("spruce_grove.config.CONFIG_FILE", str(cfg_file))
 
     module = _plugin_module()
 
@@ -177,8 +177,8 @@ def test_handle_command_rejects_garbage_arg(tmp_path, monkeypatch):
 
 
 def test_is_enabled_defaults_to_false(tmp_path, monkeypatch):
-    cfg_file = tmp_path / "puppy.cfg"
-    monkeypatch.setattr("code_puppy.config.CONFIG_FILE", str(cfg_file))
+    cfg_file = tmp_path / "grove.cfg"
+    monkeypatch.setattr("spruce_grove.config.CONFIG_FILE", str(cfg_file))
 
     cfg = _config_module()
     assert cfg.is_enabled() is False

@@ -1,4 +1,4 @@
-"""Changelog feed generator for the Code Puppy field guide.
+"""Changelog feed generator for the Spruce Grove field guide.
 
 Produces the `changelog_data` dict the HTML renderer consumes: a summary of
 recent commits on main and a simple set of monthly release buckets.

@@ -8,9 +8,9 @@ model catalog: load_model_config callbacks may perform HTTP discovery).
 from io import StringIO
 from unittest.mock import patch
 
-from code_puppy.command_line import model_settings_menu as msm
-from code_puppy.command_line.model_settings_defs import SETTING_DEFINITIONS
-from code_puppy.config import CUSTOM_MODEL_SETTING
+from spruce_grove.command_line import model_settings_menu as msm
+from spruce_grove.command_line.model_settings_defs import SETTING_DEFINITIONS
+from spruce_grove.config import CUSTOM_MODEL_SETTING
 
 CATALOG = {
     "vizio-gpt": {

@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock, Mock, patch
 import httpx2
 import pytest
 
-from code_puppy.claude_cache_client import ClaudeCacheAsyncClient
+from spruce_grove.claude_cache_client import ClaudeCacheAsyncClient
 from code_puppy_core_plugins.claude_code_oauth.register_callbacks import (
     _reauthenticate_after_expired_oauth,
 )

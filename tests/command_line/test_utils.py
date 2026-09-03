@@ -6,7 +6,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy.command_line.utils import (
+from spruce_grove.command_line.utils import (
     _reset_windows_console,
     list_directory,
     make_directory_table,
@@ -70,14 +70,14 @@ class TestResetWindowsConsole:
 
 
 class TestSafeInput:
-    @patch("code_puppy.command_line.utils._reset_windows_console")
+    @patch("spruce_grove.command_line.utils._reset_windows_console")
     @patch("builtins.input", return_value="  hello  ")
     def test_strips_input(self, mock_input, mock_reset):
         result = safe_input("prompt> ")
         assert result == "hello"
         mock_reset.assert_called_once()
 
-    @patch("code_puppy.command_line.utils._reset_windows_console")
+    @patch("spruce_grove.command_line.utils._reset_windows_console")
     @patch("builtins.input", return_value="")
     def test_empty_input(self, mock_input, mock_reset):
         result = safe_input()

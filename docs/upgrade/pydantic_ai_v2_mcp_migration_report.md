@@ -1,6 +1,6 @@
 # Phase B.2.5 — MCP subsystem migration to MCPToolset (report)
 
-Repo: code_puppy @ pydantic-ai 1.107.5. Commits: `8732872f` (mcp_ core + tests),
+Repo: spruce_grove @ pydantic-ai 1.107.5. Commits: `8732872f` (mcp_ core + tests),
 `56591821` (consumers). Verified against installed 1.107.5 sources and
 `git show v2.31.0:...` in the local pydantic-ai checkout.
 
@@ -35,8 +35,8 @@ declares the type authoritatively. Constructor surface checked in v2.31.0:
   `is_ready` / `get_captured_stderr` and the "/mcp logs" failure hint;
   `StderrFileCapture` is now a pure log-tailer (rotate + markers + in-memory
   deque) since fastmcp writes the stderr.
-- `code_puppy/mcp_/captured_stdio_server.py` deleted (zero prod consumers).
-- New `code_puppy/mcp_/toolset_utils.py`: `unwrap_toolset`, `toolset_prefix`,
+- `spruce_grove/mcp_/captured_stdio_server.py` deleted (zero prod consumers).
+- New `spruce_grove/mcp_/toolset_utils.py`: `unwrap_toolset`, `toolset_prefix`,
   `toolset_is_running`, `iter_cached_tool_defs` — shared by async_lifecycle,
   _history, token_usage, base_agent (removed duplicated extraction loops).
 
@@ -53,7 +53,7 @@ declares the type authoritatively. Constructor surface checked in v2.31.0:
 | 2f. process_tool_call deps forwarding | DONE — same hook point exists on `MCPToolset`; `metadata={"deps": ctx.deps}` (kw-only); arg-coercion schema lookup unwraps the partial |
 | 3. filter_conflicting_mcp_tools on public APIs | DONE — `.filtered()`; zero private writes; filtering now actually works for MCP toolsets (old code only filtered objects with a `.tools` dict, i.e. never real servers, and would have raised ImportError on 1.107.5) |
 | 4. Feature gaps | None dropped. One quarantined private *read* remains: `MCPToolset._cached_tools` in `iter_cached_tool_defs` (defensive getattr) because pydantic-ai has no sync tool-listing API in either version — flagged for hop 2 review, attr exists unchanged in v2.31.0 |
-| 5. Zero deprecated imports | DONE — `grep MCPServer(Stdio|SSE|StreamableHTTP|HTTP)` in code_puppy/ and tests/: zero (docstring mentions only) |
+| 5. Zero deprecated imports | DONE — `grep MCPServer(Stdio|SSE|StreamableHTTP|HTTP)` in spruce_grove/ and tests/: zero (docstring mentions only) |
 | 6. Deprecation gate, no exclusions | DONE — full suite with `-W error::pydantic_ai._warnings.PydanticAIDeprecationWarning`: **7203 passed, 26 skipped, 0 failed, 1 xpassed** (xpass = pre-existing non-strict prompt_toolkit xfail, unrelated). Baseline was 7220/26; delta −17 = deleted captured_stdio tests + consolidated rewrites |
 
 ## Behavior deltas (intentional, small)

@@ -7,8 +7,8 @@ where they are") after a terminal resize.
 
 import io
 
-from code_puppy.messaging.bar_rendering import CLEAR_LINE, RESET_REGION
-from code_puppy.messaging.bottom_bar import BottomBar
+from spruce_grove.messaging.bar_rendering import CLEAR_LINE, RESET_REGION
+from spruce_grove.messaging.bottom_bar import BottomBar
 
 
 class FakeTTY(io.StringIO):

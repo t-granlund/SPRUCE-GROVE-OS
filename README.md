@@ -1,11 +1,11 @@
 <div align="center">
 
-![Code Puppy Logo](code_puppy.png)
+![Spruce Grove Logo](spruce_grove.png)
 
 **🐶✨The sassy AI code agent that makes IDEs look outdated** ✨🐶
 
-[![Version](https://img.shields.io/pypi/v/code-puppy?style=for-the-badge&logo=python&label=Version&color=purple)](https://pypi.org/project/code-puppy/)
-[![Downloads](https://img.shields.io/badge/Downloads-170k%2B-brightgreen?style=for-the-badge&logo=download)](https://pypi.org/project/code-puppy/)
+[![Version](https://img.shields.io/pypi/v/spruce-grove?style=for-the-badge&logo=python&label=Version&color=purple)](https://pypi.org/project/spruce-grove/)
+[![Downloads](https://img.shields.io/badge/Downloads-170k%2B-brightgreen?style=for-the-badge&logo=download)](https://pypi.org/project/spruce-grove/)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen?style=for-the-badge&logo=github)](https://github.com/mpfaffenberger/code_puppy/actions)
@@ -14,13 +14,13 @@
 [![100% Open Source](https://img.shields.io/badge/100%25-Open%20Source-blue?style=for-the-badge)](https://github.com/mpfaffenberger/code_puppy)
 [![Pydantic AI](https://img.shields.io/badge/Pydantic-AI-success?style=for-the-badge)](https://github.com/pydantic/pydantic-ai)
 
-[![100% privacy](https://img.shields.io/badge/FULL-Privacy%20commitment-blue?style=for-the-badge)](https://github.com/mpfaffenberger/code_puppy/blob/main/README.md#code-puppy-privacy-commitment)
+[![100% privacy](https://img.shields.io/badge/FULL-Privacy%20commitment-blue?style=for-the-badge)](https://github.com/mpfaffenberger/code_puppy/blob/main/README.md#spruce-grove-privacy-commitment)
 
-[![GitHub stars](https://img.shields.io/github/stars/mpfaffenberger/code_puppy?style=for-the-badge&logo=github)](https://github.com/mpfaffenberger/code_puppy/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/mpfaffenberger/code_puppy?style=for-the-badge&logo=github)](https://github.com/mpfaffenberger/code_puppy/network)
+[![GitHub stars](https://img.shields.io/github/stars/mpfaffenberger/spruce_grove?style=for-the-badge&logo=github)](https://github.com/mpfaffenberger/code_puppy/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/mpfaffenberger/spruce_grove?style=for-the-badge&logo=github)](https://github.com/mpfaffenberger/code_puppy/network)
 
 [![Discord](https://img.shields.io/badge/Discord-Community-purple?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/eAGdE4J7Ca)
-[![Docs](https://img.shields.io/badge/Read-The%20Docs-blue?style=for-the-badge&logo=readthedocs)](https://code-puppy.dev)
+[![Docs](https://img.shields.io/badge/Read-The%20Docs-blue?style=for-the-badge&logo=readthedocs)](https://spruce-grove.dev)
 
 **[⭐ Star this repo if you hate expensive IDEs! ⭐](#quick-start)**
 
@@ -42,13 +42,13 @@
     - If you pick the ox, better slam that back button in your browser.
 
 
-Code Puppy is an AI-powered code generation agent, designed to understand programming tasks, generate high-quality code, and explain its reasoning similar to tools like Windsurf and Cursor.
+Spruce Grove is an AI-powered code generation agent, designed to understand programming tasks, generate high-quality code, and explain its reasoning similar to tools like Windsurf and Cursor.
 
 
 ## Quick start
 
 ```bash
-uvx code-puppy -i
+uvx spruce-grove -i
 ````
 
 ## Installation
@@ -61,18 +61,18 @@ uvx code-puppy -i
 # Install UV if you don't have it
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-uvx code-puppy
+uvx spruce-grove
 ```
 
 #### Windows
 
-On Windows, we recommend installing code-puppy as a global tool for the best experience with keyboard shortcuts (Ctrl+C/Ctrl+X cancellation):
+On Windows, we recommend installing spruce-grove as a global tool for the best experience with keyboard shortcuts (Ctrl+C/Ctrl+X cancellation):
 
 ```powershell
 # Install UV if you don't have it (run in PowerShell as Admin)
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 
-uvx code-puppy
+uvx spruce-grove
 ```
 
 #### Android (Termux)
@@ -97,32 +97,32 @@ up to 14 days.
 Run the released package:
 
 ```bash
-pipx run code-puppy
+pipx run spruce-grove
 ```
 
 To run a source checkout instead, use an editable persistent installation:
 
 ```bash
 git clone https://github.com/mpfaffenberger/code_puppy.git
-cd code_puppy
+cd spruce_grove
 pipx install --editable .
-code-puppy
+spruce-grove
 ```
 
 After a `git pull`, Python source changes are available immediately. Run
-`pipx reinstall code-puppy` only when project dependencies change.
+`pipx reinstall spruce-grove` only when project dependencies change.
 Playwright-backed browser tools are not installed on Android.
 
 #### Optional: DBOS durable execution
 
-Code Puppy ships with an optional [DBOS](https://github.com/dbos-inc/dbos-transact-py)-backed
+Spruce Grove ships with an optional [DBOS](https://github.com/dbos-inc/dbos-transact-py)-backed
 durable-execution plugin that survives crashes and lets you resume long agent runs.
 It's **off by default in the dependency tree** — install the `durable` extra to opt in:
 
 ```bash
-pip install "code-puppy[durable]"
+pip install "spruce-grove[durable]"
 # or
-uv pip install "code-puppy[durable]"
+uv pip install "spruce-grove[durable]"
 ```
 
 Then toggle it from inside the app via `/dbos on` (and restart). Use `/dbos status`
@@ -130,20 +130,20 @@ to check, `/dbos off` to disable.
 
 ## Changelog (By Kittylog!)
 
-[📋 View the full changelog on Kittylog](https://kittylog.app/c/mpfaffenberger/code_puppy)
+[📋 View the full changelog on Kittylog](https://kittylog.app/c/mpfaffenberger/spruce_grove)
 
 ## Usage
 
 ### Meta Muse OAuth
 
-Code Puppy can use the same Meta account login as Muse Code. If Muse is already
+Spruce Grove can use the same Meta account login as Muse Code. If Muse is already
 logged in, its credential at `~/.config/muse/auth.json` is detected automatically.
-You can also authenticate directly from Code Puppy:
+You can also authenticate directly from Spruce Grove:
 
 ```text
 /meta-auth       # approve a device code with your Meta account
 /meta-status     # show the credential source and available Muse models
-/meta-logout     # remove only Code Puppy's saved Meta credential
+/meta-logout     # remove only Spruce Grove's saved Meta credential
 ```
 
 Meta models are registered with a `meta-` prefix, including
@@ -152,7 +152,7 @@ remains supported and takes precedence over saved OAuth credentials.
 
 ### Adding Models from models.dev 🆕
 
-While there are several models configured right out of the box from providers like Synthetic, Cerebras, OpenAI, Google, and Anthropic, Code Puppy integrates with [models.dev](https://models.dev) to let you browse and add models from **65+ providers** with a single command:
+While there are several models configured right out of the box from providers like Synthetic, Cerebras, OpenAI, Google, and Anthropic, Spruce Grove integrates with [models.dev](https://models.dev) to let you browse and add models from **65+ providers** with a single command:
 
 ```bash
 /add_model
@@ -174,7 +174,7 @@ The `/add_model` command fetches the latest model data from models.dev in real-t
 
 #### Supported Providers
 
-Code Puppy integrates with https://models.dev giving you access to 65 providers and >1000 different model offerings.
+Spruce Grove integrates with https://models.dev giving you access to 65 providers and >1000 different model offerings.
 
 There are **39+ additional providers** that already have OpenAI-compatible APIs configured in models.dev!
 
@@ -194,11 +194,11 @@ These providers are automatically configured with correct OpenAI-compatible endp
 #### Smart Warnings
 
 - **⚠️ Unsupported Providers** - Providers like Amazon Bedrock and Google Vertex that require special authentication are clearly marked
-- **⚠️ No Tool Calling** - Models without tool calling support show a big warning since they can't use Code Puppy's file/shell tools
+- **⚠️ No Tool Calling** - Models without tool calling support show a big warning since they can't use Spruce Grove's file/shell tools
 
 ### Durable Execution
 
-Code Puppy now supports **[DBOS](https://github.com/dbos-inc/dbos-transact-py)** durable execution.
+Spruce Grove now supports **[DBOS](https://github.com/dbos-inc/dbos-transact-py)** durable execution.
 
 When enabled, every agent is automatically wrapped as a `DBOSAgent`, checkpointing key interactions (including agent inputs, LLM responses, MCP calls, and tool calls) in a database for durability and recovery.
 
@@ -212,10 +212,10 @@ Config takes precedence if set; otherwise the environment variable is used.
 ### Configuration
 
 The following environment variables control DBOS behavior:
-- `DBOS_CONDUCTOR_KEY`: If set, Code Puppy connects to the [DBOS Management Console](https://console.dbos.dev/). Make sure you first register an app named `dbos-code-puppy` on the console to generate a Conductor key. Default: `None`.
+- `DBOS_CONDUCTOR_KEY`: If set, Spruce Grove connects to the [DBOS Management Console](https://console.dbos.dev/). Make sure you first register an app named `dbos-code-grove` on the console to generate a Conductor key. Default: `None`.
 - `DBOS_LOG_LEVEL`: Logging verbosity: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, or `DEBUG`. Default: `ERROR`.
 - `DBOS_SYSTEM_DATABASE_URL`: Database URL used by DBOS. Can point to a local SQLite file or a Postgres instance. Example: `postgresql://postgres:dbos@localhost:5432/postgres`. Default: `dbos_store.sqlite` file in the config directory.
-- `DBOS_APP_VERSION`: If set, Code Puppy uses it as the [DBOS application version](https://docs.dbos.dev/architecture#application-and-workflow-versions) and automatically tries to recover pending workflows for this version. Default: Code Puppy version + Unix timestamp in millisecond (disable automatic recovery).
+- `DBOS_APP_VERSION`: If set, Spruce Grove uses it as the [DBOS application version](https://docs.dbos.dev/architecture#application-and-workflow-versions) and automatically tries to recover pending workflows for this version. Default: Spruce Grove version + Unix timestamp in millisecond (disable automatic recovery).
 
 ### Custom Commands
 Create markdown files in `.claude/commands/`, `.github/prompts/`, or `.agents/commands/` to define custom slash commands. The filename becomes the command name and the content runs as a prompt.
@@ -226,7 +226,7 @@ echo "# Code Review
 
 Please review this code for security issues." > .claude/commands/review.md
 
-# Use it in Code Puppy
+# Use it in Spruce Grove
 /review with focus on authentication
 ```
 
@@ -241,23 +241,23 @@ Please review this code for security issues." > .claude/commands/review.md
 
 ## Agent Rules
 
-Code Puppy supports `AGENTS.md` files for defining coding standards, project conventions, and behavioral guidelines that the AI should follow. These rules can cover formatting, naming conventions, architectural patterns, and project-specific instructions.
+Spruce Grove supports `AGENTS.md` files for defining coding standards, project conventions, and behavioral guidelines that the AI should follow. These rules can cover formatting, naming conventions, architectural patterns, and project-specific instructions.
 
 For examples and more information about agent rules, visit [https://agent.md](https://agent.md)
 
 ### AGENTS.md Search Order
 
-Code Puppy loads rules from multiple locations, combining them in order:
+Spruce Grove loads rules from multiple locations, combining them in order:
 
 | Priority | Location | Purpose |
 |----------|----------|----------|
-| 1 | `~/.code_puppy/AGENTS.md` | Global rules (applied to all projects) |
-| 2 | `.code_puppy/AGENTS.md` | Project rules (preferred location) |
+| 1 | `~/.spruce_grove/AGENTS.md` | Global rules (applied to all projects) |
+| 2 | `.spruce_grove/AGENTS.md` | Project rules (preferred location) |
 | 3 | `./AGENTS.md` | Project rules (alternate location) |
 
 **Key behaviors:**
 - Global and project rules are **combined** (global first, then project)
-- `.code_puppy/` directory takes **precedence** over project root
+- `.spruce_grove/` directory takes **precedence** over project root
 - All filename variants are supported: `AGENTS.md`, `AGENT.md`, `agents.md`, `agent.md`
 
 ## Using MCP Servers for External Tools
@@ -266,10 +266,10 @@ Use the `/mcp` command to manage MCP (list, start, stop, status, etc.)
 
 ## Round Robin Model Distribution
 
-Code Puppy supports **Round Robin model distribution** to help you overcome rate limits and distribute load across multiple AI models. This feature automatically cycles through configured models with each request, maximizing your API usage while staying within rate limits.
+Spruce Grove supports **Round Robin model distribution** to help you overcome rate limits and distribute load across multiple AI models. This feature automatically cycles through configured models with each request, maximizing your API usage while staying within rate limits.
 
 ### Configuration
-Add a round-robin model configuration to your `~/.code_puppy/extra_models.json` file:
+Add a round-robin model configuration to your `~/.spruce_grove/extra_models.json` file:
 
 ```bash
 export CEREBRAS_API_KEY1=csk-...
@@ -366,7 +366,7 @@ For custom model endpoints (`custom_openai`, `custom_anthropic`, `custom_gemini`
 - Gemini models: 180 seconds
 
 ### Configuration
-Add a `timeout` field to your model configuration in `~/.code_puppy/extra_models.json`:
+Add a `timeout` field to your model configuration in `~/.spruce_grove/extra_models.json`:
 
 ```json
 {
@@ -401,7 +401,7 @@ Timeout values must be positive numbers (integers or floats) representing second
 
 ## Create your own Agent!!!
 
-Code Puppy features a flexible agent system that allows you to work with specialized AI assistants tailored for different coding tasks. The system supports both built-in Python agents and custom JSON agents that you can create yourself.
+Spruce Grove features a flexible agent system that allows you to work with specialized AI assistants tailored for different coding tasks. The system supports both built-in Python agents and custom JSON agents that you can create yourself.
 
 ## Quick Start
 
@@ -437,8 +437,8 @@ This is useful for managing context length when you have a long conversation his
 
 ## Available Agents
 
-### Code-Puppy 🐶 (Default)
-- **Name**: `code-puppy`
+### Code-Cedar 🐶 (Default)
+- **Name**: `spruce-grove`
 - **Specialty**: General-purpose coding assistant
 - **Personality**: Playful, sarcastic, pedantic about code quality
 - **Tools**: Full access to all tools
@@ -457,10 +457,10 @@ This is useful for managing context length when you have a long conversation his
 
 ### Python Agents
 Built-in agents implemented in Python with full system integration:
-- Discovered automatically from `code_puppy/agents/` directory
+- Discovered automatically from `spruce_grove/agents/` directory
 - Inherit from `BaseAgent` class
 - Full access to system internals
-- Examples: `code-puppy`, `agent-creator`
+- Examples: `spruce-grove`, `agent-creator`
 
 ### JSON Agents
 User-created agents defined in JSON files:
@@ -556,7 +556,7 @@ Agents can access these tools based on their configuration:
 ### Tool Access Examples
 - **Read-only agent**: `["list_files", "read_file", "grep"]`
 - **File editor agent**: `["list_files", "read_file", "create_file", "edit"]`
-- **Full access agent**: All tools (like Code-Puppy)
+- **Full access agent**: All tools (like Code-Cedar)
 
 ## System Prompt Formats
 
@@ -642,10 +642,10 @@ Agents can access these tools based on their configuration:
 ## File Locations
 
 ### JSON Agents Directory
-- **All platforms**: `~/.code_puppy/agents/`
+- **All platforms**: `~/.spruce_grove/agents/`
 
 ### Python Agents Directory
-- **Built-in**: `code_puppy/agents/` (in package)
+- **Built-in**: `spruce_grove/agents/` (in package)
 
 ## Best Practices
 
@@ -677,12 +677,12 @@ Agents can access these tools based on their configuration:
 
 ### Agent Discovery
 The system automatically discovers agents by:
-1. **Python Agents**: Scanning `code_puppy/agents/` for classes inheriting from `BaseAgent`
+1. **Python Agents**: Scanning `spruce_grove/agents/` for classes inheriting from `BaseAgent`
 2. **JSON Agents**: Scanning user's agents directory for `*-agent.json` files
 3. Instantiating and registering discovered agents
 
 ### JSONAgent Implementation
-JSON agents are powered by the `JSONAgent` class (`code_puppy/agents/json_agent.py`):
+JSON agents are powered by the `JSONAgent` class (`spruce_grove/agents/json_agent.py`):
 - Inherits from `BaseAgent` for full system integration
 - Loads configuration from JSON files with robust validation
 - Supports all BaseAgent features (tools, prompts, settings)
@@ -715,7 +715,7 @@ The `agent_manager.py` provides:
 
 To create a new Python agent:
 
-1. Create file in `code_puppy/agents/` (e.g., `my_agent.py`)
+1. Create file in `spruce_grove/agents/` (e.g., `my_agent.py`)
 2. Implement class inheriting from `BaseAgent`
 3. Define required properties and methods
 4. Agent will be automatically discovered
@@ -763,7 +763,7 @@ class MyCustomAgent(BaseAgent):
 ### Agent Not Found
 - Ensure JSON file is in correct directory
 - Check JSON syntax is valid
-- Restart Code Puppy or clear agent cache
+- Restart Spruce Grove or clear agent cache
 - Verify filename ends with `-agent.json`
 
 ### Validation Errors
@@ -824,13 +824,13 @@ The agent system supports future expansion:
 ## Implementation Details
 
 ### Files in System
-- **Core Implementation**: `code_puppy/agents/json_agent.py`
-- **Agent Discovery**: Integrated in `code_puppy/agents/agent_manager.py`
+- **Core Implementation**: `spruce_grove/agents/json_agent.py`
+- **Agent Discovery**: Integrated in `spruce_grove/agents/agent_manager.py`
 - **Command Interface**: Works through existing `/agent` command
 - **Testing**: Comprehensive test suite in `tests/test_json_agents.py`
 
 ### JSON Agent Loading Process
-1. System scans `~/.code_puppy/agents/` for `*-agent.json` files
+1. System scans `~/.spruce_grove/agents/` for `*-agent.json` files
 2. `JSONAgent` class loads and validates each JSON configuration
 3. Agents are registered in unified agent registry
 4. Users can switch to JSON agents via `/agent <name>` command
@@ -877,13 +877,13 @@ Consider contributing agent templates for:
 
 ---
 
-# Code Puppy Privacy Commitment
+# Spruce Grove Privacy Commitment
 
 **Zero-compromise privacy policy. Always.**
 
 Unlike other Agentic Coding software, there is no corporate or investor backing for this project, which means **zero pressure to compromise our principles for profit**. This isn't just a nice-to-have feature – it's fundamental to the project's DNA.
 
-### What Code Puppy _absolutely does not_ collect:
+### What Spruce Grove _absolutely does not_ collect:
 - ❌ **Zero telemetry** – no usage analytics, crash reports, or behavioral tracking
 - ❌ **Zero prompt logging** – your code, conversations, or project details are never stored
 - ❌ **Zero behavioral profiling** – we don't track what you build, how you code, or when you use the tool
@@ -891,11 +891,11 @@ Unlike other Agentic Coding software, there is no corporate or investor backing 
 
 ### What data flows where:
 - **LLM Provider Communication**: Your prompts are sent directly to whichever LLM provider you've configured (OpenAI, Anthropic, local models, etc.) – this is unavoidable for AI functionality
-- **Complete Local Option**: Run your own VLLM/SGLang/Llama.cpp server locally → **zero data leaves your network**. Configure this with `~/.code_puppy/extra_models.json`
+- **Complete Local Option**: Run your own VLLM/SGLang/Llama.cpp server locally → **zero data leaves your network**. Configure this with `~/.spruce_grove/extra_models.json`
 - **Direct Developer Contact**: All feature requests, bug reports, and discussions happen directly with me – no middleman analytics platforms or customer data harvesting tools
 
 ### Our privacy-first architecture:
-Code Puppy is designed with privacy-by-design principles. Every feature has been evaluated through a privacy lens, and every integration respects user data sovereignty. When you use Code Puppy, you're not the product – you're just a developer getting things done.
+Spruce Grove is designed with privacy-by-design principles. Every feature has been evaluated through a privacy lens, and every integration respects user data sovereignty. When you use Spruce Grove, you're not the product – you're just a developer getting things done.
 
 **This commitment is enforceable because it's structurally impossible to violate it.** No external pressures, no investor demands, no quarterly earnings targets to hit. Just solid code that respects your privacy.
 

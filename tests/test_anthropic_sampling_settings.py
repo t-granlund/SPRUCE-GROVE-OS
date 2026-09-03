@@ -13,9 +13,9 @@ pydantic-ai drops them and warns on every request. We fix this two ways:
 import warnings
 from unittest.mock import patch
 
-from code_puppy import pydantic_patches
-from code_puppy.model_factory import ModelFactory, make_model_settings
-from code_puppy.model_utils import anthropic_disallows_sampling_settings
+from spruce_grove import pydantic_patches
+from spruce_grove.model_factory import ModelFactory, make_model_settings
+from spruce_grove.model_utils import anthropic_disallows_sampling_settings
 
 SAMPLING_PARAMS = ("temperature", "top_p", "top_k")
 
@@ -29,10 +29,10 @@ def _build_settings(model_key: str, model_configs: dict, effective: dict):
     with (
         patch.object(ModelFactory, "load_config", return_value=model_configs),
         patch(
-            "code_puppy.config.get_effective_model_settings",
+            "spruce_grove.config.get_effective_model_settings",
             return_value=effective,
         ),
-        patch("code_puppy.config.get_custom_model_settings", return_value={}),
+        patch("spruce_grove.config.get_custom_model_settings", return_value={}),
     ):
         return make_model_settings(model_key)
 

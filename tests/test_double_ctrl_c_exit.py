@@ -16,9 +16,9 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-import code_puppy.cli_runner as cli_runner
-import code_puppy.messaging.run_ui as run_ui
-from code_puppy.messaging.line_editor import RunningLineEditor
+import spruce_grove.cli_runner as cli_runner
+import spruce_grove.messaging.run_ui as run_ui
+from spruce_grove.messaging.line_editor import RunningLineEditor
 
 
 # ---------------------------------------------------------------------------
@@ -154,7 +154,7 @@ def renderer():
 def _force_classic(monkeypatch):
     monkeypatch.setattr(cli_runner, "_use_persistent_prompt", lambda: True)
     monkeypatch.setattr(
-        "code_puppy.messaging.run_ui.start_persistent_ui",
+        "spruce_grove.messaging.run_ui.start_persistent_ui",
         lambda prompt_prefix=None, prefix_sgrs=None: False,
     )
     monkeypatch.setattr(cli_runner, "print_truecolor_warning", lambda console: None)
@@ -172,10 +172,10 @@ async def test_classic_double_ctrl_c_quits(monkeypatch, renderer):
     successes = []
     with (
         patch("builtins.input", fake_classic_input),
-        patch("code_puppy.messaging.emit_info", lambda msg, **k: None),
-        patch("code_puppy.messaging.emit_warning", lambda msg, **k: None),
+        patch("spruce_grove.messaging.emit_info", lambda msg, **k: None),
+        patch("spruce_grove.messaging.emit_warning", lambda msg, **k: None),
         patch(
-            "code_puppy.messaging.emit_success",
+            "spruce_grove.messaging.emit_success",
             lambda msg, **k: successes.append(str(msg)),
         ),
     ):
@@ -202,10 +202,10 @@ async def test_classic_slow_ctrl_c_taps_do_not_quit(monkeypatch, renderer):
     successes = []
     with (
         patch("builtins.input", fake_classic_input),
-        patch("code_puppy.messaging.emit_info", lambda msg, **k: None),
-        patch("code_puppy.messaging.emit_warning", lambda msg, **k: None),
+        patch("spruce_grove.messaging.emit_info", lambda msg, **k: None),
+        patch("spruce_grove.messaging.emit_warning", lambda msg, **k: None),
         patch(
-            "code_puppy.messaging.emit_success",
+            "spruce_grove.messaging.emit_success",
             lambda msg, **k: successes.append(str(msg)),
         ),
     ):

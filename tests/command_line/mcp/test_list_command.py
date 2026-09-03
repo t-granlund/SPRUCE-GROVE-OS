@@ -4,14 +4,14 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy.mcp_.managed_server import ServerState
+from spruce_grove.mcp_.managed_server import ServerState
 
 
 @pytest.fixture
 def list_cmd():
-    with patch("code_puppy.command_line.mcp.base.get_mcp_manager") as mock_mgr:
+    with patch("spruce_grove.command_line.mcp.base.get_mcp_manager") as mock_mgr:
         mock_mgr.return_value = MagicMock()
-        from code_puppy.command_line.mcp.list_command import ListCommand
+        from spruce_grove.command_line.mcp.list_command import ListCommand
 
         cmd = ListCommand()
         return cmd
@@ -39,13 +39,13 @@ def _make_server(
 
 class TestListCommand:
     def test_generates_group_id(self, list_cmd):
-        with patch("code_puppy.command_line.mcp.list_command.emit_info"):
+        with patch("spruce_grove.command_line.mcp.list_command.emit_info"):
             list_cmd.manager.list_servers.return_value = []
             list_cmd.execute([])  # no group_id
 
     def test_no_servers(self, list_cmd):
         list_cmd.manager.list_servers.return_value = []
-        with patch("code_puppy.command_line.mcp.list_command.emit_info") as mock_emit:
+        with patch("spruce_grove.command_line.mcp.list_command.emit_info") as mock_emit:
             list_cmd.execute([], group_id="g1")
             assert "No MCP servers registered" in str(mock_emit.call_args)
 
@@ -59,7 +59,7 @@ class TestListCommand:
                 "c", state=ServerState.RUNNING, enabled=True, quarantined=True
             ),
         ]
-        with patch("code_puppy.command_line.mcp.list_command.emit_info") as mock_emit:
+        with patch("spruce_grove.command_line.mcp.list_command.emit_info") as mock_emit:
             list_cmd.execute([], group_id="g1")
             # Table + summary = at least 2 calls
             assert mock_emit.call_count >= 2
@@ -68,11 +68,11 @@ class TestListCommand:
         list_cmd.manager.list_servers.return_value = [
             _make_server("x", enabled=False, state=ServerState.STOPPED),
         ]
-        with patch("code_puppy.command_line.mcp.list_command.emit_info"):
+        with patch("spruce_grove.command_line.mcp.list_command.emit_info"):
             list_cmd.execute([], group_id="g1")
 
     def test_exception(self, list_cmd):
         list_cmd.manager.list_servers.side_effect = RuntimeError("boom")
-        with patch("code_puppy.command_line.mcp.list_command.emit_error") as mock_err:
+        with patch("spruce_grove.command_line.mcp.list_command.emit_error") as mock_err:
             list_cmd.execute([], group_id="g1")
             assert "boom" in str(mock_err.call_args)

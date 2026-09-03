@@ -1,4 +1,4 @@
-"""Pytest configuration and fixtures for code-puppy tests.
+"""Pytest configuration and fixtures for spruce-grove tests.
 
 This file intentionally keeps the test environment lean (no extra deps).
 To support `async def` tests without pytest-asyncio, we provide a minimal
@@ -17,7 +17,7 @@ import pytest
 
 # Config paths resolve at import time, before fixtures run - point every XDG category
 # at one session-scoped temp root so collection/tests never touch the dev's config.
-_XDG_TEMP_DIR = tempfile.TemporaryDirectory(prefix="code_puppy_pytest_xdg_")
+_XDG_TEMP_DIR = tempfile.TemporaryDirectory(prefix="spruce_grove_pytest_xdg_")
 _XDG_ENV_VARS = (
     "XDG_CONFIG_HOME",
     "XDG_DATA_HOME",
@@ -28,9 +28,9 @@ _ORIGINAL_XDG_ENV = {name: os.environ.get(name) for name in _XDG_ENV_VARS}
 for _xdg_name in _XDG_ENV_VARS:
     os.environ[_xdg_name] = os.path.join(_XDG_TEMP_DIR.name, _xdg_name.lower())
 
-from code_puppy import config as cp_config  # noqa: E402
-from code_puppy import callbacks as cp_callbacks  # noqa: E402
-from code_puppy.messaging import bottom_bar as cp_bottom_bar  # noqa: E402
+from spruce_grove import config as cp_config  # noqa: E402
+from spruce_grove import callbacks as cp_callbacks  # noqa: E402
+from spruce_grove.messaging import bottom_bar as cp_bottom_bar  # noqa: E402
 
 
 def pytest_unconfigure(config):
@@ -75,7 +75,7 @@ def _ensure_builtin_plugin_callback_registrations() -> None:
     cp_callbacks.register_callback("custom_command", foundry._handle_custom_command)
     cp_callbacks.register_callback("register_model_type", foundry._register_model_types)
     # Keep hook callbacks registered for wiring tests, but do not let local
-    # ~/.code_puppy or project .claude hook configuration affect test runs.
+    # ~/.spruce_grove or project .claude hook configuration affect test runs.
     hooks._hook_engine = None
     cp_callbacks.register_callback("pre_tool_call", hooks.on_pre_tool_call_hook)
     cp_callbacks.register_callback("post_tool_call", hooks.on_post_tool_call_hook)
@@ -106,7 +106,7 @@ def isolate_global_state_between_tests(tmp_path_factory):
     """Isolate mutable global state between tests.
 
     Tests must be deterministic locally and in CI. Do not seed test config from
-    the developer's real ``~/.code_puppy/puppy.cfg`` because user defaults such
+    the developer's real ``~/.spruce_grove/grove.cfg`` because user defaults such
     as ``default_agent`` or ``compaction_threshold`` change expected defaults.
     Also snapshot callback registrations so tests exercising callback mutation
     cannot wipe plugin registrations needed by later tests.
@@ -133,10 +133,10 @@ def isolate_global_state_between_tests(tmp_path_factory):
 
     # Create a completely separate temp directory for config isolation
     # (not using tmp_path which tests may use for their own purposes).
-    config_temp_dir = tempfile.mkdtemp(prefix="code_puppy_test_config_")
-    temp_config_dir = os.path.join(config_temp_dir, ".code_puppy")
+    config_temp_dir = tempfile.mkdtemp(prefix="spruce_grove_test_config_")
+    temp_config_dir = os.path.join(config_temp_dir, ".spruce_grove")
     os.makedirs(temp_config_dir, exist_ok=True)
-    temp_config_file = os.path.join(temp_config_dir, "puppy.cfg")
+    temp_config_file = os.path.join(temp_config_dir, "grove.cfg")
 
     # Redirect config to an empty temp file so defaults are true product
     # defaults, not the local developer's personal settings.

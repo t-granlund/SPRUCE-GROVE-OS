@@ -9,8 +9,8 @@ commit, the history-safe grow-scroll variant, and install gating
 import io
 import sys
 
-from code_puppy.messaging.bottom_bar import BottomBar
-from code_puppy.messaging.transcript_guard import (
+from spruce_grove.messaging.bottom_bar import BottomBar
+from spruce_grove.messaging.transcript_guard import (
     SYNC_OFF,
     SYNC_ON,
     StreamGuard,
@@ -260,7 +260,7 @@ class TestGrowScroll:
 class TestInstall:
     def test_no_install_on_posix(self, monkeypatch):
         monkeypatch.setattr(
-            "code_puppy.messaging.transcript_guard.platform.system",
+            "spruce_grove.messaging.transcript_guard.platform.system",
             lambda: "Linux",
         )
         bar = BottomBar(get_size=lambda: (80, 24))
@@ -270,7 +270,7 @@ class TestInstall:
 
     def test_no_install_for_injected_stream(self, monkeypatch):
         monkeypatch.setattr(
-            "code_puppy.messaging.transcript_guard.platform.system",
+            "spruce_grove.messaging.transcript_guard.platform.system",
             lambda: "Windows",
         )
         bar, _ = make_bar()
@@ -279,7 +279,7 @@ class TestInstall:
 
     def test_install_and_uninstall_on_windows(self, monkeypatch):
         monkeypatch.setattr(
-            "code_puppy.messaging.transcript_guard.platform.system",
+            "spruce_grove.messaging.transcript_guard.platform.system",
             lambda: "Windows",
         )
         fake_out, fake_err, fake_dunder = FakeTTY(), FakeTTY(), FakeTTY()
@@ -305,7 +305,7 @@ class TestInstall:
 
     def test_no_install_when_stdout_redirected(self, monkeypatch):
         monkeypatch.setattr(
-            "code_puppy.messaging.transcript_guard.platform.system",
+            "spruce_grove.messaging.transcript_guard.platform.system",
             lambda: "Windows",
         )
         monkeypatch.setattr(sys, "stdout", io.StringIO())  # not a tty

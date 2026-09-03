@@ -15,7 +15,7 @@ from pydantic_ai.messages import (
     UserPromptPart,
 )
 
-from code_puppy.agents._history import (
+from spruce_grove.agents._history import (
     has_pending_tool_calls,
     prune_interrupted_tool_calls,
 )

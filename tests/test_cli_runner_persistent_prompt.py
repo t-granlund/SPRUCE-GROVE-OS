@@ -9,7 +9,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-import code_puppy.cli_runner as cli_runner
+import spruce_grove.cli_runner as cli_runner
 
 
 @pytest.fixture
@@ -37,19 +37,19 @@ def _drive_interactive(monkeypatch, submissions):
     monkeypatch.setattr(cli_runner, "_use_persistent_prompt", lambda: True)
     monkeypatch.setattr(cli_runner, "_persistent_prompt_parts", lambda: (">>> ", []))
     monkeypatch.setattr(
-        "code_puppy.messaging.run_ui.start_persistent_ui",
+        "spruce_grove.messaging.run_ui.start_persistent_ui",
         lambda prompt_prefix=None, prefix_sgrs=None: True,
     )
     monkeypatch.setattr(
-        "code_puppy.messaging.run_ui.set_idle_prompt_prefix",
+        "spruce_grove.messaging.run_ui.set_idle_prompt_prefix",
         lambda prefix, prefix_sgrs=None: None,
     )
     monkeypatch.setattr(
-        "code_puppy.messaging.run_ui.wait_for_idle_submission", fake_wait
+        "spruce_grove.messaging.run_ui.wait_for_idle_submission", fake_wait
     )
     stopped = []
     monkeypatch.setattr(
-        "code_puppy.messaging.run_ui.stop_persistent_ui",
+        "spruce_grove.messaging.run_ui.stop_persistent_ui",
         lambda: stopped.append(True),
     )
     monkeypatch.setattr(cli_runner, "print_truecolor_warning", lambda console: None)
@@ -63,9 +63,9 @@ async def test_persistent_submission_is_echoed_then_exit(monkeypatch, renderer):
     infos = []
     successes = []
     with (
-        patch("code_puppy.messaging.emit_info", lambda msg, **k: infos.append(msg)),
+        patch("spruce_grove.messaging.emit_info", lambda msg, **k: infos.append(msg)),
         patch(
-            "code_puppy.messaging.emit_success",
+            "spruce_grove.messaging.emit_success",
             lambda msg, **k: successes.append(str(msg)),
         ),
     ):
@@ -87,9 +87,9 @@ async def test_persistent_ctrl_d_quits(monkeypatch, renderer):
     stopped = _drive_interactive(monkeypatch, [EOFError])
     successes = []
     with (
-        patch("code_puppy.messaging.emit_info", lambda msg, **k: None),
+        patch("spruce_grove.messaging.emit_info", lambda msg, **k: None),
         patch(
-            "code_puppy.messaging.emit_success",
+            "spruce_grove.messaging.emit_success",
             lambda msg, **k: successes.append(str(msg)),
         ),
     ):
@@ -112,10 +112,10 @@ async def test_startup_tab_hint_is_a_bold_text_object(monkeypatch, renderer):
     stopped = _drive_interactive(monkeypatch, ["/exit"])
     system_messages = []
     with (
-        patch("code_puppy.messaging.emit_info", lambda msg, **k: None),
-        patch("code_puppy.messaging.emit_success", lambda msg, **k: None),
+        patch("spruce_grove.messaging.emit_info", lambda msg, **k: None),
+        patch("spruce_grove.messaging.emit_success", lambda msg, **k: None),
         patch(
-            "code_puppy.messaging.emit_system_message",
+            "spruce_grove.messaging.emit_system_message",
             lambda msg, **k: system_messages.append(msg),
         ),
     ):
@@ -136,9 +136,9 @@ async def test_persistent_path_skips_task_banner(monkeypatch, renderer):
     infos = []
     with (
         patch(
-            "code_puppy.messaging.emit_info", lambda msg, **k: infos.append(str(msg))
+            "spruce_grove.messaging.emit_info", lambda msg, **k: infos.append(str(msg))
         ),
-        patch("code_puppy.messaging.emit_success", lambda msg, **k: None),
+        patch("spruce_grove.messaging.emit_success", lambda msg, **k: None),
     ):
         await asyncio.wait_for(
             cli_runner.interactive_mode(renderer, initial_command=None), 10.0
@@ -153,7 +153,7 @@ async def test_persistent_start_failure_degrades_to_classic(monkeypatch, rendere
     prompt path (non-TTY bar) rather than crash or hang."""
     monkeypatch.setattr(cli_runner, "_use_persistent_prompt", lambda: True)
     monkeypatch.setattr(
-        "code_puppy.messaging.run_ui.start_persistent_ui",
+        "spruce_grove.messaging.run_ui.start_persistent_ui",
         lambda prompt_prefix=None: False,
     )
     monkeypatch.setattr(cli_runner, "print_truecolor_warning", lambda console: None)
@@ -167,8 +167,8 @@ async def test_persistent_start_failure_degrades_to_classic(monkeypatch, rendere
             "builtins.input",
             fake_classic_input,
         ),
-        patch("code_puppy.messaging.emit_info", lambda msg, **k: None),
-        patch("code_puppy.messaging.emit_success", lambda msg, **k: None),
+        patch("spruce_grove.messaging.emit_info", lambda msg, **k: None),
+        patch("spruce_grove.messaging.emit_success", lambda msg, **k: None),
     ):
         await asyncio.wait_for(
             cli_runner.interactive_mode(renderer, initial_command=None), 10.0
@@ -179,9 +179,9 @@ class TestUsePersistentPromptVTGate:
     """The raw-VT gate: unconfirmed VT support -> classic prompt."""
 
     def _clean_env(self, monkeypatch):
-        monkeypatch.delenv("CODE_PUPPY_CLASSIC_PROMPT", raising=False)
-        monkeypatch.delenv("CODE_PUPPY_NO_TUI", raising=False)
-        monkeypatch.setattr("code_puppy.config.get_value", lambda _k: None)
+        monkeypatch.delenv("SPRUCE_GROVE_CLASSIC_PROMPT", raising=False)
+        monkeypatch.delenv("SPRUCE_GROVE_NO_TUI", raising=False)
+        monkeypatch.setattr("spruce_grove.config.get_value", lambda _k: None)
         tty = MagicMock()
         tty.isatty.return_value = True
         monkeypatch.setattr("sys.stdin", tty)
@@ -190,7 +190,7 @@ class TestUsePersistentPromptVTGate:
     def test_degrades_to_classic_when_vt_unconfirmed(self, monkeypatch):
         self._clean_env(monkeypatch)
         monkeypatch.setattr(
-            "code_puppy.terminal_utils.ensure_windows_vt_processing",
+            "spruce_grove.terminal_utils.ensure_windows_vt_processing",
             lambda: False,
         )
         assert cli_runner._use_persistent_prompt() is False
@@ -198,7 +198,7 @@ class TestUsePersistentPromptVTGate:
     def test_persistent_when_vt_confirmed(self, monkeypatch):
         self._clean_env(monkeypatch)
         monkeypatch.setattr(
-            "code_puppy.terminal_utils.ensure_windows_vt_processing",
+            "spruce_grove.terminal_utils.ensure_windows_vt_processing",
             lambda: True,
         )
         assert cli_runner._use_persistent_prompt() is True
@@ -211,6 +211,6 @@ class TestUsePersistentPromptVTGate:
             raise RuntimeError("kernel32 ate my homework")
 
         monkeypatch.setattr(
-            "code_puppy.terminal_utils.ensure_windows_vt_processing", boom
+            "spruce_grove.terminal_utils.ensure_windows_vt_processing", boom
         )
         assert cli_runner._use_persistent_prompt() is True

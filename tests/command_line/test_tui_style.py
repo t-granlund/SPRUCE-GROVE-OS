@@ -3,9 +3,9 @@
 import json
 from unittest.mock import patch
 
-from code_puppy.command_line.tui_style import menu_style, themed
+from spruce_grove.command_line.tui_style import menu_style, themed
 
-MODULE = "code_puppy.command_line.tui_style"
+MODULE = "spruce_grove.command_line.tui_style"
 
 
 def _palette_json():

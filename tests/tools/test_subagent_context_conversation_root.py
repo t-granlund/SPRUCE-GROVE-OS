@@ -2,7 +2,7 @@
 
 This is the primitive ``load_model_with_fallback``'s ``conversation_scope``
 (see ``_builder.py`` / ``subagent_invocation.py``) is built on, replacing an
-earlier attempt that read ``code_puppy.messaging.bus.get_session_context()``
+earlier attempt that read ``spruce_grove.messaging.bus.get_session_context()``
 -- a plain, lock-protected instance attribute on a process-wide singleton,
 NOT a ``contextvars.ContextVar``, and therefore unsafe for anything
 correctness-sensitive under concurrent asyncio tasks.
@@ -24,7 +24,7 @@ import asyncio
 
 import pytest
 
-from code_puppy.tools.subagent_context import (
+from spruce_grove.tools.subagent_context import (
     get_conversation_root_id,
     reset_conversation_root_id,
     set_conversation_root_id,

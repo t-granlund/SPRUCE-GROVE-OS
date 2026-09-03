@@ -1,4 +1,4 @@
-"""Tests for ``code_puppy.agents._diagnostics`` (issue #296).
+"""Tests for ``spruce_grove.agents._diagnostics`` (issue #296).
 
 We don't want to boot the whole agent runtime just to check that an exception
 renders with all of its signal intact, so these tests hit the helpers
@@ -11,7 +11,7 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy.agents._diagnostics import (
+from spruce_grove.agents._diagnostics import (
     _emit_exception_chain,
     _emit_useful_attrs,
     _needs_deep_diagnostics,
@@ -47,8 +47,8 @@ def _rendered_lines(calls) -> str:
 
 class TestCheapPath:
     def test_plain_runtime_error_emits_summary_and_skips_deep_block(self):
-        with patch("code_puppy.agents._diagnostics.emit_info") as mock_emit:
-            with patch("code_puppy.agents._diagnostics.log_error") as mock_log:
+        with patch("spruce_grove.agents._diagnostics.emit_info") as mock_emit:
+            with patch("spruce_grove.agents._diagnostics.log_error") as mock_log:
                 emit_exception_diagnostics(RuntimeError("boom"), group_id="g1")
 
         rendered = _rendered_lines(mock_emit.call_args_list)
@@ -58,9 +58,9 @@ class TestCheapPath:
         mock_log.assert_called_once()
 
     def test_log_failure_does_not_propagate(self):
-        with patch("code_puppy.agents._diagnostics.emit_info"):
+        with patch("spruce_grove.agents._diagnostics.emit_info"):
             with patch(
-                "code_puppy.agents._diagnostics.log_error",
+                "spruce_grove.agents._diagnostics.log_error",
                 side_effect=OSError("disk full"),
             ):
                 # Must not raise.
@@ -68,17 +68,17 @@ class TestCheapPath:
 
     def test_emit_info_failure_does_not_propagate(self):
         with patch(
-            "code_puppy.agents._diagnostics.emit_info",
+            "spruce_grove.agents._diagnostics.emit_info",
             side_effect=RuntimeError("display dead"),
         ):
-            with patch("code_puppy.agents._diagnostics.log_error"):
+            with patch("spruce_grove.agents._diagnostics.log_error"):
                 emit_exception_diagnostics(RuntimeError("boom"), group_id="g3")
 
 
 class TestDeepPath:
     def test_trigger_phrase_enables_deep_diagnostics(self):
-        with patch("code_puppy.agents._diagnostics.emit_info") as mock_emit:
-            with patch("code_puppy.agents._diagnostics.log_error"):
+        with patch("spruce_grove.agents._diagnostics.emit_info") as mock_emit:
+            with patch("spruce_grove.agents._diagnostics.log_error"):
                 emit_exception_diagnostics(
                     RuntimeError("output validation failed: schema mismatch"),
                     group_id="g",
@@ -102,8 +102,8 @@ class TestDeepPath:
         )
         group = BaseExceptionGroup("agent task group failed", [leaf1, leaf2])
 
-        with patch("code_puppy.agents._diagnostics.emit_info") as mock_emit:
-            with patch("code_puppy.agents._diagnostics.log_error"):
+        with patch("spruce_grove.agents._diagnostics.emit_info") as mock_emit:
+            with patch("spruce_grove.agents._diagnostics.log_error"):
                 emit_exception_diagnostics(group, group_id="g")
 
         rendered = _rendered_lines(mock_emit.call_args_list)
@@ -125,8 +125,8 @@ class TestDeepPath:
         except RuntimeError as exc:
             caught = exc
 
-        with patch("code_puppy.agents._diagnostics.emit_info") as mock_emit:
-            with patch("code_puppy.agents._diagnostics.log_error"):
+        with patch("spruce_grove.agents._diagnostics.emit_info") as mock_emit:
+            with patch("spruce_grove.agents._diagnostics.log_error"):
                 emit_exception_diagnostics(caught, group_id="g")
 
         rendered = _rendered_lines(mock_emit.call_args_list)
@@ -141,8 +141,8 @@ class TestDeepPath:
         leaves = [RuntimeError(f"err {i}") for i in range(15)]
         group = BaseExceptionGroup("too many", leaves)
 
-        with patch("code_puppy.agents._diagnostics.emit_info") as mock_emit:
-            with patch("code_puppy.agents._diagnostics.log_error"):
+        with patch("spruce_grove.agents._diagnostics.emit_info") as mock_emit:
+            with patch("spruce_grove.agents._diagnostics.log_error"):
                 emit_exception_diagnostics(group, group_id="g")
 
         rendered = _rendered_lines(mock_emit.call_args_list)
@@ -155,7 +155,7 @@ class TestHelpers:
     def test_emit_useful_attrs_skips_missing_and_empty(self):
         exc = _FakeAPIError("msg", body=None)
 
-        with patch("code_puppy.agents._diagnostics.emit_info") as mock_emit:
+        with patch("spruce_grove.agents._diagnostics.emit_info") as mock_emit:
             _emit_useful_attrs(exc, "g", indent="  ")
 
         # Only ``message`` is set (via ``Exception.__init__``'s args); body/response/etc are None.
@@ -171,7 +171,7 @@ class TestHelpers:
             response="HTTP 429",
         )
 
-        with patch("code_puppy.agents._diagnostics.emit_info") as mock_emit:
+        with patch("spruce_grove.agents._diagnostics.emit_info") as mock_emit:
             _emit_useful_attrs(exc, "g", indent="  ")
 
         rendered = _rendered_lines(mock_emit.call_args_list)
@@ -187,7 +187,7 @@ class TestHelpers:
         a.__cause__ = b
         b.__cause__ = a
 
-        with patch("code_puppy.agents._diagnostics.emit_info") as mock_emit:
+        with patch("spruce_grove.agents._diagnostics.emit_info") as mock_emit:
             # Should not loop forever.
             _emit_exception_chain(a, "g", max_depth=10)
 

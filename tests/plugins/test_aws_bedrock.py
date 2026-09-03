@@ -250,7 +250,7 @@ class TestAddBedrockModelsToConfig:
         )
 
         def _add_other_entry(name):
-            from code_puppy import atomic_json
+            from spruce_grove import atomic_json
 
             def _mutate(data):
                 data[name] = {"type": "custom_openai"}
@@ -414,7 +414,7 @@ class TestSupportsAdaptiveThinking:
         ],
     )
     def test_supports_adaptive_thinking(self, alias, actual_model_id, expected):
-        from code_puppy.model_utils import supports_adaptive_thinking
+        from spruce_grove.model_utils import supports_adaptive_thinking
 
         assert (
             supports_adaptive_thinking(alias, actual_model_id=actual_model_id)
@@ -426,17 +426,17 @@ class TestGetDefaultExtendedThinking:
     """Test get_default_extended_thinking uses the shared helper."""
 
     def test_adaptive_for_opus(self):
-        from code_puppy.model_utils import get_default_extended_thinking
+        from spruce_grove.model_utils import get_default_extended_thinking
 
         assert get_default_extended_thinking("claude-opus-4-7") == "adaptive"
 
     def test_enabled_for_haiku(self):
-        from code_puppy.model_utils import get_default_extended_thinking
+        from spruce_grove.model_utils import get_default_extended_thinking
 
         assert get_default_extended_thinking("claude-haiku-4-5") == "enabled"
 
     def test_adaptive_via_actual_model_id(self):
-        from code_puppy.model_utils import get_default_extended_thinking
+        from spruce_grove.model_utils import get_default_extended_thinking
 
         result = get_default_extended_thinking(
             "bedrock-opus", actual_model_id="us.anthropic.claude-opus-4-6-v1:0"
@@ -448,17 +448,17 @@ class TestShouldUseThinkingSummary:
     """Test should_use_anthropic_thinking_summary."""
 
     def test_true_for_opus_4_7(self):
-        from code_puppy.model_utils import should_use_anthropic_thinking_summary
+        from spruce_grove.model_utils import should_use_anthropic_thinking_summary
 
         assert should_use_anthropic_thinking_summary("claude-opus-4-7") is True
 
     def test_false_for_opus_4_6(self):
-        from code_puppy.model_utils import should_use_anthropic_thinking_summary
+        from spruce_grove.model_utils import should_use_anthropic_thinking_summary
 
         assert should_use_anthropic_thinking_summary("claude-opus-4-6") is False
 
     def test_true_via_actual_model_id(self):
-        from code_puppy.model_utils import should_use_anthropic_thinking_summary
+        from spruce_grove.model_utils import should_use_anthropic_thinking_summary
 
         assert (
             should_use_anthropic_thinking_summary(
@@ -482,7 +482,7 @@ class TestResolveAnthropicThinkingPayload:
     )
     @pytest.mark.parametrize("alias", ["claude-opus-5", "claude-5-opus"])
     def test_opus_5_payload(self, alias, mode, expected):
-        from code_puppy.model_utils import resolve_anthropic_thinking_payload
+        from spruce_grove.model_utils import resolve_anthropic_thinking_payload
 
         result = resolve_anthropic_thinking_payload(
             mode, budget_tokens=1024, model_name=alias, actual_model_id=None

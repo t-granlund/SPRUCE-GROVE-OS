@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from code_puppy.callbacks import clear_callbacks, register_callback
+from spruce_grove.callbacks import clear_callbacks, register_callback
 from code_puppy_core_plugins.agent_skills.config import (
     add_skill_directory,
     get_disabled_skills,
@@ -162,8 +162,8 @@ class TestSkillDiscovery:
         """Test default skill directories are correctly returned."""
         directories = get_default_skill_directories()
         assert len(directories) == 3
-        assert directories[0] == Path.home() / ".code_puppy" / "skills"
-        assert directories[1] == Path.cwd() / ".code_puppy" / "skills"
+        assert directories[0] == Path.home() / ".spruce_grove" / "skills"
+        assert directories[1] == Path.cwd() / ".spruce_grove" / "skills"
         assert directories[2] == Path.cwd() / "skills"
 
     def test_is_valid_skill_directory_valid(self, valid_skill_dir):
@@ -302,7 +302,7 @@ class TestSkillDiscovery:
         """Test that same skill name in multiple directories only keeps first discovered.
 
         When the same skill name exists in multiple skill directories (e.g.,
-        ~/.code_puppy/skills/foo and ~/.claude/skills/foo), only the first one
+        ~/.spruce_grove/skills/foo and ~/.claude/skills/foo), only the first one
         discovered should be kept. This prevents /help from showing duplicate entries.
         """
         # Create first skill directory (higher priority - discovered first)
@@ -847,8 +847,8 @@ class TestSkillsConfig:
         directories = get_skill_directories()
         assert len(directories) == 3
         # The tilde will be expanded to the actual home directory
-        assert ".code_puppy/skills" in directories[0]
-        assert ".code_puppy/skills" in directories[1]
+        assert ".spruce_grove/skills" in directories[0]
+        assert ".spruce_grove/skills" in directories[1]
         # The current directory path will contain the full path, ending with "skills"
         assert "skills" in directories[2]
 

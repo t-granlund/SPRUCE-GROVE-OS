@@ -17,7 +17,7 @@ import io
 import pyte
 import pytest
 
-from code_puppy.messaging.bottom_bar import BottomBar
+from spruce_grove.messaging.bottom_bar import BottomBar
 
 COLS, ROWS = 60, 24
 

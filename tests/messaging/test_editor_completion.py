@@ -3,13 +3,13 @@
 import asyncio
 
 
-from code_puppy.messaging.editor_completion import (
+from spruce_grove.messaging.editor_completion import (
     DEBOUNCE_S,
     CompletionEngine,
     query_completions,
     should_autotrigger,
 )
-from code_puppy.messaging.line_editor import RunningLineEditor
+from spruce_grove.messaging.line_editor import RunningLineEditor
 
 
 class FakeCompleter:
@@ -440,7 +440,7 @@ async def test_menu_open_up_down_still_navigates_menu():
 def test_popup_takes_precedence_over_panel():
     import io
 
-    from code_puppy.messaging.bottom_bar import BottomBar
+    from spruce_grove.messaging.bottom_bar import BottomBar
 
     class TTY(io.StringIO):
         def isatty(self):

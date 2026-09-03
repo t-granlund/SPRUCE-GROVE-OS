@@ -12,8 +12,8 @@ from pydantic_ai.messages import (
 from pydantic_ai.models.test import TestModel
 from pydantic_ai.usage import RequestUsage, RunUsage
 
-from code_puppy.tools.agent_tools import SubagentRequestUsage
-from code_puppy.tools.subagent_usage_metrics import (
+from spruce_grove.tools.agent_tools import SubagentRequestUsage
+from spruce_grove.tools.subagent_usage_metrics import (
     _extract_token_buckets,
     _extract_usage_metrics,
     build_invoke_output,

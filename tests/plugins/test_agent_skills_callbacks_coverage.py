@@ -329,7 +329,7 @@ class TestSkillsCommandHelp:
 
 
 # Patch targets for lazy imports inside _handle_skills_command
-_MSG = "code_puppy.messaging"
+_MSG = "spruce_grove.messaging"
 _SKILLS_MENU = "code_puppy_core_plugins.agent_skills.skills_menu"
 _SKILLS_INSTALL = "code_puppy_core_plugins.agent_skills.skills_install_menu"
 

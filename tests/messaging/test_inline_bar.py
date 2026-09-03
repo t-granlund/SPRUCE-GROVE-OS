@@ -3,11 +3,11 @@
 import io
 import sys
 
-from code_puppy.messaging import bottom_bar as bottom_bar_mod
-from code_puppy.messaging.bottom_bar import BottomBar
-from code_puppy.messaging.bar_rendering import CURSOR_HIDE, CURSOR_SHOW
-from code_puppy.messaging.inline_bar import InlineBottomBar
-from code_puppy.messaging.transcript_guard import StreamGuard
+from spruce_grove.messaging import bottom_bar as bottom_bar_mod
+from spruce_grove.messaging.bottom_bar import BottomBar
+from spruce_grove.messaging.bar_rendering import CURSOR_HIDE, CURSOR_SHOW
+from spruce_grove.messaging.inline_bar import InlineBottomBar
+from spruce_grove.messaging.transcript_guard import StreamGuard
 
 
 class FakeTTY(io.StringIO):
@@ -17,7 +17,7 @@ class FakeTTY(io.StringIO):
 
 def test_jediterm_selects_inline_surface(monkeypatch):
     monkeypatch.setenv("TERMINAL_EMULATOR", "JetBrains-JediTerm")
-    monkeypatch.delenv("CODE_PUPPY_PROMPT_MODE", raising=False)
+    monkeypatch.delenv("SPRUCE_GROVE_PROMPT_MODE", raising=False)
     bottom_bar_mod.reset_bottom_bar()
     try:
         assert isinstance(bottom_bar_mod.get_bottom_bar(), InlineBottomBar)
@@ -29,7 +29,7 @@ def test_android_studio_bundle_needs_no_special_case(monkeypatch):
     """Android Studio is covered by its shared JediTerm emulator marker."""
     monkeypatch.setenv("TERMINAL_EMULATOR", "JetBrains-JediTerm")
     monkeypatch.setenv("__CFBundleIdentifier", "com.google.android.studio")
-    monkeypatch.delenv("CODE_PUPPY_PROMPT_MODE", raising=False)
+    monkeypatch.delenv("SPRUCE_GROVE_PROMPT_MODE", raising=False)
     bottom_bar_mod.reset_bottom_bar()
     try:
         assert isinstance(bottom_bar_mod.get_bottom_bar(), InlineBottomBar)
@@ -39,7 +39,7 @@ def test_android_studio_bundle_needs_no_special_case(monkeypatch):
 
 def test_non_jediterm_keeps_scroll_region_surface(monkeypatch):
     monkeypatch.setenv("TERMINAL_EMULATOR", "iTerm2")
-    monkeypatch.delenv("CODE_PUPPY_PROMPT_MODE", raising=False)
+    monkeypatch.delenv("SPRUCE_GROVE_PROMPT_MODE", raising=False)
     bottom_bar_mod.reset_bottom_bar()
     try:
         bar = bottom_bar_mod.get_bottom_bar()
@@ -50,7 +50,7 @@ def test_non_jediterm_keeps_scroll_region_surface(monkeypatch):
 
 def test_prompt_mode_override_wins(monkeypatch):
     monkeypatch.setenv("TERMINAL_EMULATOR", "JetBrains-JediTerm")
-    monkeypatch.setenv("CODE_PUPPY_PROMPT_MODE", "pinned")
+    monkeypatch.setenv("SPRUCE_GROVE_PROMPT_MODE", "pinned")
     bottom_bar_mod.reset_bottom_bar()
     try:
         assert type(bottom_bar_mod.get_bottom_bar()) is BottomBar
@@ -88,7 +88,7 @@ def test_overlong_rows_are_cell_clipped_below_terminal_width():
     bar = InlineBottomBar(stream=FakeTTY(), get_size=lambda: (cols, 24))
     bar.start()
     bar.set_prompt_text("> ", "hi", 2)
-    bar.set_status_prefix("\U0001f436  ")  # double-width puppy spinner frame
+    bar.set_status_prefix("\U0001f436  ")  # double-width grove spinner frame
     bar.set_status("tokens 123,456/200,000 " * 5)  # way past 40 cells
     bar.set_status_suffix(" | queued: 3")
     bar.set_panel_lines(["sub-agent panel line " * 5])
@@ -129,7 +129,7 @@ def test_inline_panel_clamps_to_viewport_with_overflow():
 
 
 def test_spinner_tick_repaints_in_place_without_growing_block():
-    """A status-prefix tick (the 5fps puppy) must erase and repaint the
+    """A status-prefix tick (the 5fps grove) must erase and repaint the
     same number of rows -- never leaving extra lines behind."""
     tty = FakeTTY()
     bar = InlineBottomBar(stream=tty, get_size=lambda: (80, 24))

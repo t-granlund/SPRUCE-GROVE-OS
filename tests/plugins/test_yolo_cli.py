@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy import config
+from spruce_grove import config
 from code_puppy_core_plugins.yolo_cli import register_callbacks as yolo_cli
 
 
@@ -26,7 +26,7 @@ def _parse(*arguments: str) -> argparse.Namespace:
 def test_cli_flag_sets_runtime_override_without_writing_config(raw, expected):
     args = _parse("--yolo", raw)
 
-    with patch("code_puppy.config.set_config_value") as set_config:
+    with patch("spruce_grove.config.set_config_value") as set_config:
         assert yolo_cli._handle_cli_args(args) is None
 
     assert config.get_cli_yolo_override() is expected
@@ -34,7 +34,7 @@ def test_cli_flag_sets_runtime_override_without_writing_config(raw, expected):
 
 
 def test_omitted_cli_flag_does_not_override_persisted_config():
-    with patch("code_puppy.config.get_value", return_value="false"):
+    with patch("spruce_grove.config.get_value", return_value="false"):
         yolo_cli._handle_cli_args(_parse())
         assert config.get_yolo_mode() is False
 
@@ -54,5 +54,5 @@ def test_cli_flag_rejects_non_boolean_values(raw):
 def test_cli_override_takes_precedence_over_config(persisted, cli_value, expected):
     config.set_cli_yolo_override(cli_value)
 
-    with patch("code_puppy.config.get_value", return_value=persisted):
+    with patch("spruce_grove.config.get_value", return_value=persisted):
         assert config.get_yolo_mode() is expected

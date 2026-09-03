@@ -38,8 +38,8 @@ jobs:
         # models.json ships empty. CI gets its model from extra_models.json,
         # exactly like a real user would after running /add_model.
         run: |
-          mkdir -p "$HOME/.code_puppy"
-          cat > "$HOME/.code_puppy/extra_models.json" <<'JSON'
+          mkdir -p "$HOME/.spruce_grove"
+          cat > "$HOME/.spruce_grove/extra_models.json" <<'JSON'
           {
             "lilac-zai-org-glm-5.2": {
               "type": "custom_openai",
@@ -67,7 +67,7 @@ jobs:
           JSON
           # Tests isolate user config, and several fallback contracts require a
           # non-empty bundled catalog.
-          cp "$HOME/.code_puppy/extra_models.json" code_puppy/models.json
+          cp "$HOME/.spruce_grove/extra_models.json" spruce_grove/models.json
           echo "Wrote CI model catalog and test-only bundled fallback"
 
       - name: Debug environment variables
@@ -95,7 +95,7 @@ jobs:
       - name: Run tests
         env:
           CI: '1'
-          CODE_PUPPY_TEST_FAST: '1'
+          SPRUCE_GROVE_TEST_FAST: '1'
           CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY || 'fake-key-for-ci-testing' }}
           CONTEXT7_API_KEY: ${{ secrets.CONTEXT7_API_KEY || 'fake-key-for-ci-testing' }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'fake-key-for-ci-testing' }}
@@ -105,7 +105,7 @@ jobs:
         run: |
           echo "Running unit tests (skipping integration tests) on ${{ runner.os }} with Python ${{ matrix.python-version }}..."
           echo "Required environment variables are set (using CI fallbacks if secrets not available)"
-          uv run pytest tests/ --ignore tests/integration -v --cov=code_puppy --cov-report=term-missing
+          uv run pytest tests/ --ignore tests/integration -v --cov=spruce_grove --cov-report=term-missing
 
   # The exec-runner UTF-8 pipe contract is a Windows-only failure mode: child
   # Pythons attached to a pipe default their stdio to the legacy codepage
@@ -153,7 +153,7 @@ jobs:
         # 0.16.0 sneak in and change the default rule set (5,901 "new" errors).
         run: pip install 'ruff>=0.15,<0.16'
 
-      - name: Install code_puppy
+      - name: Install spruce_grove
         run: pip install .
 
       - name: Lint with ruff

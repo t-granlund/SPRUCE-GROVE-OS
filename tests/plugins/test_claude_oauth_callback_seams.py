@@ -13,9 +13,9 @@ from unittest.mock import MagicMock
 import httpx2
 import pytest
 
-from code_puppy import callbacks
-from code_puppy.claude_cache_client import ClaudeCacheAsyncClient
-from code_puppy.model_factory import ModelFactory
+from spruce_grove import callbacks
+from spruce_grove.claude_cache_client import ClaudeCacheAsyncClient
+from spruce_grove.model_factory import ModelFactory
 
 PLUGIN_NAME = "claude_code_oauth"
 
@@ -198,8 +198,8 @@ def test_token_refresh_seam(case, expected, install_provider, isolate_callback_p
 
 @contextmanager
 def _claude_models_config(monkeypatch, tmp_path):
-    import code_puppy.config as config
-    import code_puppy.model_factory as model_factory
+    import spruce_grove.config as config
+    import spruce_grove.model_factory as model_factory
 
     claude_file = tmp_path / "claude_models.json"
     fallback = {"fallback-model": {"type": "claude_code", "name": "fallback"}}
@@ -273,9 +273,9 @@ def test_tutorial_authentication_seam(
 ):
     import concurrent.futures
 
-    from code_puppy.command_line import onboarding_wizard
-    from code_puppy.command_line.core_commands import handle_tutorial_command
-    from code_puppy import model_switching
+    from spruce_grove.command_line import onboarding_wizard
+    from spruce_grove.command_line.core_commands import handle_tutorial_command
+    from spruce_grove import model_switching
 
     phase = "claude_oauth_authenticate"
     isolate_callback_phases(phase)

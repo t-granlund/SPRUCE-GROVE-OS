@@ -1,4 +1,4 @@
-"""Tests for code_puppy.agents.run_stats: TTFT + gen-speed timing.
+"""Tests for spruce_grove.agents.run_stats: TTFT + gen-speed timing.
 
 Covers both the ``AgentRunStats`` state container and the callback
 hooks that drive it (agent_run_start / stream_event / agent_run_end /
@@ -12,7 +12,7 @@ from unittest.mock import patch
 import pytest
 from rich.console import Console
 
-from code_puppy.agents.run_stats import (
+from spruce_grove.agents.run_stats import (
     AgentRunStats,
     _estimate_tokens,
     _on_agent_run_end,
@@ -22,7 +22,7 @@ from code_puppy.agents.run_stats import (
     _render_high_mode_tool_result,
     _stringify_result,
 )
-from code_puppy.tools.subagent_context import subagent_context
+from spruce_grove.tools.subagent_context import subagent_context
 
 
 @pytest.fixture(autouse=True)
@@ -316,7 +316,7 @@ async def test_on_agent_run_start_skipped_in_subagent():
 def _text_part_start_payload():
     from pydantic_ai.messages import TextPart
 
-    return {"part": TextPart(content="hello world from the puppy")}
+    return {"part": TextPart(content="hello world from the grove")}
 
 
 def _text_part_delta_payload():
@@ -487,11 +487,11 @@ class TestHighModeToolResult:
         console = Console(file=buf, force_terminal=False, width=120)
         with (
             patch(
-                "code_puppy.config.get_output_level",
+                "spruce_grove.config.get_output_level",
                 return_value=level,
             ),
             patch(
-                "code_puppy.agents.event_stream_handler.get_streaming_console",
+                "spruce_grove.agents.event_stream_handler.get_streaming_console",
                 return_value=console,
             ),
         ):
@@ -550,7 +550,7 @@ class TestHighModeToolResult:
 
     def test_invoke_agent_shows_summary_not_repr(self):
         """invoke_agent result should show a compact summary, not raw repr."""
-        from code_puppy.tools.agent_tools import AgentInvokeOutput
+        from spruce_grove.tools.agent_tools import AgentInvokeOutput
 
         result = AgentInvokeOutput(
             response="Hello\nWorld\nMultiline",
@@ -570,14 +570,14 @@ class TestHighModeToolResult:
 
     def test_invoke_agent_with_model_shows_summary(self):
         """invoke_agent_with_model gets the same compact treatment."""
-        from code_puppy.tools.agent_tools import AgentInvokeOutput
+        from spruce_grove.tools.agent_tools import AgentInvokeOutput
 
         result = AgentInvokeOutput(
             response="big response" * 100,
-            agent_name="code-puppy",
+            agent_name="spruce-grove",
         )
         out = self._capture("invoke_agent_with_model", result)
-        assert "code-puppy" in out
+        assert "spruce-grove" in out
         assert "OK" in out
         assert "1,200 chars" in out
         # Raw body must not leak
@@ -585,7 +585,7 @@ class TestHighModeToolResult:
 
     def test_invoke_agent_error_shows_fail(self):
         """Error sub-agent results should show FAIL status."""
-        from code_puppy.tools.agent_tools import AgentInvokeOutput
+        from spruce_grove.tools.agent_tools import AgentInvokeOutput
 
         result = AgentInvokeOutput(
             response=None,
@@ -600,7 +600,7 @@ class TestHighModeToolResult:
 
     def test_invoke_agent_no_response(self):
         """Sub-agent with None response and no error shows 'no response'."""
-        from code_puppy.tools.agent_tools import AgentInvokeOutput
+        from spruce_grove.tools.agent_tools import AgentInvokeOutput
 
         result = AgentInvokeOutput(
             response=None,
@@ -660,7 +660,7 @@ class TestHighModeToolResult:
         assert "1" in out
 
     def test_stringify_pydantic_model(self):
-        from code_puppy.tools.agent_tools import AgentInvokeOutput
+        from spruce_grove.tools.agent_tools import AgentInvokeOutput
 
         result = AgentInvokeOutput(
             response="Hello\nWorld",
@@ -703,11 +703,11 @@ async def test_on_post_tool_call_delegates_to_renderer():
     console = Console(file=buf, force_terminal=False, width=120)
     with (
         patch(
-            "code_puppy.config.get_output_level",
+            "spruce_grove.config.get_output_level",
             return_value="high",
         ),
         patch(
-            "code_puppy.agents.event_stream_handler.get_streaming_console",
+            "spruce_grove.agents.event_stream_handler.get_streaming_console",
             return_value=console,
         ),
     ):

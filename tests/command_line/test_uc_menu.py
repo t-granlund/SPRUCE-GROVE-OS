@@ -3,7 +3,7 @@
 from io import StringIO
 from unittest.mock import patch
 
-from code_puppy.command_line import uc_menu
+from spruce_grove.command_line import uc_menu
 from code_puppy_core_plugins.universal_constructor.models import ToolMeta, UCToolInfo
 
 

@@ -47,11 +47,11 @@ def _agent_manager_module(agent: MagicMock) -> SimpleNamespace:
 
 
 def _system_msg() -> ModelRequest:
-    return ModelRequest(parts=[SystemPromptPart(content="you are a puppy")])
+    return ModelRequest(parts=[SystemPromptPart(content="you are a grove")])
 
 
 def _system_plus_user_msg(
-    system: str = "you are a puppy", user: str = "first turn"
+    system: str = "you are a grove", user: str = "first turn"
 ) -> ModelRequest:
     """How pydantic-ai actually bundles history[0]: system + first user."""
     return ModelRequest(

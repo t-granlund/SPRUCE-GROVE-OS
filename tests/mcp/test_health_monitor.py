@@ -17,12 +17,12 @@ from unittest.mock import Mock, patch
 import httpx
 import pytest
 
-from code_puppy.mcp_.health_monitor import (
+from spruce_grove.mcp_.health_monitor import (
     HealthCheckResult,
     HealthMonitor,
     HealthStatus,
 )
-from code_puppy.mcp_.managed_server import ManagedMCPServer
+from spruce_grove.mcp_.managed_server import ManagedMCPServer
 
 
 @pytest.fixture
@@ -122,7 +122,7 @@ class TestHealthMonitor:
         assert health_monitor.monitoring_tasks[server_id].cancelled() is False
 
         # Test duplicate start
-        with patch("code_puppy.mcp_.health_monitor.logger") as mock_logger:
+        with patch("spruce_grove.mcp_.health_monitor.logger") as mock_logger:
             await health_monitor.start_monitoring(server_id, mock_server)
             mock_logger.warning.assert_called()
 
@@ -133,7 +133,7 @@ class TestHealthMonitor:
         assert server_id not in health_monitor.last_check_time
 
         # Test stop non-existent server
-        with patch("code_puppy.mcp_.health_monitor.logger") as mock_logger:
+        with patch("spruce_grove.mcp_.health_monitor.logger") as mock_logger:
             await health_monitor.stop_monitoring("non-existent")
             mock_logger.warning.assert_called()
 
@@ -642,7 +642,7 @@ class TestHealthMonitor:
             check_type="test",
         )
 
-        with patch("code_puppy.mcp_.health_monitor.logger") as mock_logger:
+        with patch("spruce_grove.mcp_.health_monitor.logger") as mock_logger:
             await health_monitor._record_health_status(server_id, status_healthy)
             mock_logger.debug.assert_called()
 

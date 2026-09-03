@@ -1,7 +1,7 @@
 {
   "$schema": "cpu-deck-ds/2.0",
   "name": "Cornerstone+",
-  "description": "Design system for The Great Adpuppytion — Code-Puppy University founding deck. Natural-language prompts map to tokens (tokens.css) and archetype/component classes (theme.css). All edits: change a token or a class, never hardcode.",
+  "description": "Design system for The Great Adpuppytion — Code-Cedar University founding deck. Natural-language prompts map to tokens (tokens.css) and archetype/component classes (theme.css). All edits: change a token or a class, never hardcode.",
 
   "prompt_guide": {
     "recolor an act": "Edit the --act-N token in tokens.css §4 (e.g. --act-2: var(--accent-builder))",
@@ -64,7 +64,7 @@
     },
     "media": {
       "duotone": { "class": "duo", "archetypes": ["split", "stage"], "token": "--duotone-wash", "slides": [5, 49], "notes": "grayscale + act-color multiply; FPO placehold.co until licensed" },
-      "logo": { "class": "logo-mark", "implemented_as": "plain img src=assets/code-puppy-logo.png", "archetypes": ["statement"], "slides": [50], "notes": "Code-Puppy era moment — typographic object, sanctioned .duo exception" }
+      "logo": { "class": "logo-mark", "implemented_as": "plain img src=assets/spruce-grove-logo.png", "archetypes": ["statement"], "slides": [50], "notes": "Code-Cedar era moment — typographic object, sanctioned .duo exception" }
     }
   },
 

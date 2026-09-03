@@ -1,7 +1,7 @@
-# The Great Adpuppytion — Code-Puppy University deck
+# The Great Adpuppytion — Code-Cedar University deck
 
 A Reveal.js presentation built on Jack Conte's SXSW 2026 talk ("a talk about change"),
-extended into the founding charter for **Code-Puppy University**.
+extended into the founding charter for **Code-Cedar University**.
 
 ## Run it
 
@@ -24,7 +24,7 @@ Or just open `index.html` directly — Reveal, fonts, and theme all load from CD
 | IV · The Sine Wave | 22–25 | Pomplamoose rebuild cycles; animated stroke-draw SVG wave; "change is not death" |
 | V · 2026 | 26–31 | Slop phase, consent/theft, stat wall, **Fireship beat: the moat is gone + asteroid→soil**, permission to feel conflicted |
 | VI · Why humans win | 32–34 | Risk / Scarcity / Connection pillars; the 1959 thought experiment |
-| VII · The Answer | 35–41 | **Code-Puppy University** — thesis, two personas, the stack (Puppy OS / Code-Puppy / University), founding curriculum (5 schools), self-typing terminal, who it's for |
+| VII · The Answer | 35–41 | **Code-Cedar University** — thesis, two personas, the stack (Cedar OS / Code-Cedar / University), founding curriculum (5 schools), self-typing terminal, who it's for |
 | VIII · The Ask | 42–45 | Three charter commitments (ledger), Chaplin bookend, thank-you |
 
 Design system: see `DESIGN.md` (four archetypes, act-color discipline, motion budget).
@@ -37,9 +37,9 @@ The Great Dictator final speech appears **verbatim, one beat per slide**, slides
 gold emphasis beats. Do not paraphrase, truncate, or split differently without sign-off —
 this was an explicit, non-negotiable requirement.
 
-## Design tokens (Code-Puppy brand)
+## Design tokens (Code-Cedar brand)
 
-Extracted from `docs/field-guide/index.html` CSS variables (the code_puppy field guide):
+Extracted from `docs/field-guide/index.html` CSS variables (the spruce_grove field guide):
 
 | Token | Hex | Used for |
 |-------|-----|----------|
@@ -54,7 +54,7 @@ Extracted from `docs/field-guide/index.html` CSS variables (the code_puppy field
 | `--danger` | `#ff7b72` | coral — alarm / disruption |
 
 Type: Space Grotesk (display), Inter (body), JetBrains Mono (eyebrows/labels/terminal),
-Source Serif 4 (quotes + Chaplin). Dark mode with luminous accents, per slide-puppy
+Source Serif 4 (quotes + Chaplin). Dark mode with luminous accents, per slide-grove
 "Cornerstone" DS conventions (one idea per slide, 8% margins, auto-animate pairs).
 
 ## Provenance
@@ -63,8 +63,8 @@ Source Serif 4 (quotes + Chaplin). Dark mode with luminous accents, per slide-pu
   pull-quotes are verbatim from the transcript.
 - Chaplin speech text: as delivered in the transcript; trimmed only for stage delivery
   in the original film (this deck uses the transcript's wording exactly).
-- Code-Puppy facts: the tool is real and open-source — github.com/mpfaffenberger/code_puppy (MIT).
-- Code-Puppy University and Puppy OS are presented as founding concepts — this deck is
+- Code-Cedar facts: the tool is real and open-source — github.com/mpfaffenberger/code_puppy (MIT).
+- Code-Cedar University and Cedar OS are presented as founding concepts — this deck is
   intentionally their charter document. No prior CPU artifacts existed on disk as of
   2026-07-28 (full-machine search performed).
 - Historical anchors (Lumière 1895, Gorky 1896, Méliès 1902, Jazz Singer 1927, ~20K
@@ -74,8 +74,8 @@ Source Serif 4 (quotes + Chaplin). Dark mode with luminous accents, per slide-pu
 - Fireship beat (slides 29–30): The Code Report, July 29 2026 — "the moat was coding
   itself"; execution at $20/month; asteroid → soil (distribution, branding, taste).
 
-## Slide-puppy notes
+## Slide-grove notes
 
-Design system: DS v2 "Cornerstone+" (DESIGN.md), Code-Puppy brand binding.
+Design system: DS v2 "Cornerstone+" (DESIGN.md), Code-Cedar brand binding.
 Reveal.js 5.1.0 via CDN. Auto-animate pairs on title/Chaplin/reveal sequences.
 Two sanctioned animations: sine stroke-draw (Act IV), terminal type-in (Act VII).

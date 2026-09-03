@@ -6,11 +6,11 @@ import pytest
 
 from termflow.tui.completion import Document
 
-from code_puppy.command_line.mcp_completion import MCPCompleter, load_server_names
+from spruce_grove.command_line.mcp_completion import MCPCompleter, load_server_names
 
 
 class TestLoadServerNames:
-    @patch("code_puppy.mcp_.manager.MCPManager")
+    @patch("spruce_grove.mcp_.manager.MCPManager")
     def test_success(self, mock_mgr_cls):
         mock_server = MagicMock()
         mock_server.name = "test-server"
@@ -19,7 +19,7 @@ class TestLoadServerNames:
         assert isinstance(result, list)
 
     def test_failure(self):
-        with patch("code_puppy.mcp_.manager.MCPManager", side_effect=Exception("err")):
+        with patch("spruce_grove.mcp_.manager.MCPManager", side_effect=Exception("err")):
             result = load_server_names()
             assert result == []
 
@@ -84,7 +84,7 @@ class TestMCPCompleter:
         self.completer._server_names_cache = None
         self.completer._cache_timestamp = None
         with patch(
-            "code_puppy.command_line.mcp_completion.load_server_names",
+            "spruce_grove.command_line.mcp_completion.load_server_names",
             return_value=["new"],
         ):
             result = self.completer._get_server_names()
@@ -94,7 +94,7 @@ class TestMCPCompleter:
         self.completer._server_names_cache = None
         self.completer._cache_timestamp = None
         with patch(
-            "code_puppy.command_line.mcp_completion.load_server_names",
+            "spruce_grove.command_line.mcp_completion.load_server_names",
             return_value=None,
         ):
             assert self.completer._get_server_names() == []

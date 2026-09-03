@@ -12,7 +12,7 @@ class TestCaptureClipboardImageToPending:
 
     def test_rate_limiting_blocks_rapid_captures(self):
         """Test that rate limiting blocks rapid captures."""
-        from code_puppy.command_line import clipboard
+        from spruce_grove.command_line import clipboard
 
         # Reset for clean state
         original_manager = clipboard._clipboard_manager
@@ -22,7 +22,7 @@ class TestCaptureClipboardImageToPending:
         fake_png = b"\x89PNG\r\n\x1a\n" + b"\x00" * 100
 
         with patch(
-            "code_puppy.command_line.clipboard.get_clipboard_image",
+            "spruce_grove.command_line.clipboard.get_clipboard_image",
             return_value=fake_png,
         ):
             # First capture should succeed
@@ -38,13 +38,13 @@ class TestCaptureClipboardImageToPending:
 
     def test_returns_none_when_no_image(self):
         """Test that function returns None when clipboard has no image."""
-        from code_puppy.command_line import clipboard
+        from spruce_grove.command_line import clipboard
 
         # Reset rate limit for test
         clipboard._last_clipboard_capture = 0.0
 
         with patch(
-            "code_puppy.command_line.clipboard.get_clipboard_image", return_value=None
+            "spruce_grove.command_line.clipboard.get_clipboard_image", return_value=None
         ):
             result = clipboard.capture_clipboard_image_to_pending()
 
@@ -52,7 +52,7 @@ class TestCaptureClipboardImageToPending:
 
     def test_returns_placeholder_when_image_captured(self):
         """Test that function returns placeholder when image is captured."""
-        from code_puppy.command_line import clipboard
+        from spruce_grove.command_line import clipboard
 
         # Reset manager for predictable placeholder and reset rate limit
         original_manager = clipboard._clipboard_manager
@@ -62,7 +62,7 @@ class TestCaptureClipboardImageToPending:
         fake_png = b"\x89PNG\r\n\x1a\n" + b"\x00" * 100
 
         with patch(
-            "code_puppy.command_line.clipboard.get_clipboard_image",
+            "spruce_grove.command_line.clipboard.get_clipboard_image",
             return_value=fake_png,
         ):
             result = clipboard.capture_clipboard_image_to_pending()
@@ -78,7 +78,7 @@ class TestClipboardAttachmentManager:
 
     def test_add_image_returns_placeholder(self):
         """Test that add_image returns a properly formatted placeholder."""
-        from code_puppy.command_line.clipboard import ClipboardAttachmentManager
+        from spruce_grove.command_line.clipboard import ClipboardAttachmentManager
 
         manager = ClipboardAttachmentManager()
         # Create fake PNG bytes (minimal valid PNG header)
@@ -90,7 +90,7 @@ class TestClipboardAttachmentManager:
 
     def test_clear_pending_removes_all_images(self):
         """Test that clear_pending removes all pending images."""
-        from code_puppy.command_line.clipboard import ClipboardAttachmentManager
+        from spruce_grove.command_line.clipboard import ClipboardAttachmentManager
 
         manager = ClipboardAttachmentManager()
         manager.add_image(b"\x89PNG\r\n\x1a\n" + b"\x00" * 100)
@@ -106,7 +106,7 @@ class TestClipboardAttachmentManager:
 
     def test_get_pending_images_returns_binary_content_list(self):
         """Test that get_pending_images returns list of BinaryContent."""
-        from code_puppy.command_line.clipboard import ClipboardAttachmentManager
+        from spruce_grove.command_line.clipboard import ClipboardAttachmentManager
 
         manager = ClipboardAttachmentManager()
         fake_png1 = b"\x89PNG\r\n\x1a\n" + b"\x01" * 100
@@ -130,12 +130,12 @@ class TestGetClipboardImage:
 
     def test_handles_clipboard_access_error(self):
         """Test that function handles clipboard access errors gracefully."""
-        from code_puppy.command_line.clipboard import get_clipboard_image
+        from spruce_grove.command_line.clipboard import get_clipboard_image
 
         with (
-            patch("code_puppy.command_line.clipboard.PIL_AVAILABLE", True),
-            patch("code_puppy.command_line.clipboard.sys.platform", "darwin"),
-            patch("code_puppy.command_line.clipboard.ImageGrab") as mock_grab,
+            patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", True),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "darwin"),
+            patch("spruce_grove.command_line.clipboard.ImageGrab") as mock_grab,
         ):
             mock_grab.grabclipboard.side_effect = OSError("Clipboard access denied")
             result = get_clipboard_image()
@@ -144,13 +144,13 @@ class TestGetClipboardImage:
 
     def test_returns_none_when_clipboard_contains_file_list(self):
         """Test that function returns None when clipboard has file list (not image)."""
-        from code_puppy.command_line.clipboard import get_clipboard_image
+        from spruce_grove.command_line.clipboard import get_clipboard_image
 
         with (
-            patch("code_puppy.command_line.clipboard.PIL_AVAILABLE", True),
-            patch("code_puppy.command_line.clipboard.sys.platform", "darwin"),
-            patch("code_puppy.command_line.clipboard.ImageGrab") as mock_grab,
-            patch("code_puppy.command_line.clipboard.Image") as mock_image_module,
+            patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", True),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "darwin"),
+            patch("spruce_grove.command_line.clipboard.ImageGrab") as mock_grab,
+            patch("spruce_grove.command_line.clipboard.Image") as mock_image_module,
         ):
             # File list instead of image
             mock_grab.grabclipboard.return_value = ["/path/to/file.txt"]
@@ -161,12 +161,12 @@ class TestGetClipboardImage:
 
     def test_returns_none_when_no_image_in_clipboard(self):
         """Test that function returns None when clipboard has no image."""
-        from code_puppy.command_line.clipboard import get_clipboard_image
+        from spruce_grove.command_line.clipboard import get_clipboard_image
 
         with (
-            patch("code_puppy.command_line.clipboard.PIL_AVAILABLE", True),
-            patch("code_puppy.command_line.clipboard.sys.platform", "darwin"),
-            patch("code_puppy.command_line.clipboard.ImageGrab") as mock_grab,
+            patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", True),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "darwin"),
+            patch("spruce_grove.command_line.clipboard.ImageGrab") as mock_grab,
         ):
             mock_grab.grabclipboard.return_value = None
             result = get_clipboard_image()
@@ -176,10 +176,10 @@ class TestGetClipboardImage:
     def test_returns_none_when_pil_unavailable(self):
         """Test that function returns None when PIL is not available."""
         with (
-            patch("code_puppy.command_line.clipboard.PIL_AVAILABLE", False),
-            patch("code_puppy.command_line.clipboard.sys.platform", "darwin"),
+            patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", False),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "darwin"),
         ):
-            from code_puppy.command_line.clipboard import get_clipboard_image
+            from spruce_grove.command_line.clipboard import get_clipboard_image
 
             result = get_clipboard_image()
 
@@ -187,7 +187,7 @@ class TestGetClipboardImage:
 
     def test_returns_png_bytes_when_image_captured(self):
         """Test that function returns PNG bytes when image is captured."""
-        from code_puppy.command_line.clipboard import get_clipboard_image
+        from spruce_grove.command_line.clipboard import get_clipboard_image
 
         # Create a mock image that saves as PNG
         mock_image = MagicMock()
@@ -202,10 +202,10 @@ class TestGetClipboardImage:
         mock_image.save.side_effect = save_as_png
 
         with (
-            patch("code_puppy.command_line.clipboard.PIL_AVAILABLE", True),
-            patch("code_puppy.command_line.clipboard.sys.platform", "darwin"),
-            patch("code_puppy.command_line.clipboard.ImageGrab") as mock_grab,
-            patch("code_puppy.command_line.clipboard.Image") as mock_image_module,
+            patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", True),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "darwin"),
+            patch("spruce_grove.command_line.clipboard.ImageGrab") as mock_grab,
+            patch("spruce_grove.command_line.clipboard.Image") as mock_image_module,
         ):
             mock_image_module.Image = type(mock_image)
             mock_grab.grabclipboard.return_value = mock_image
@@ -220,14 +220,14 @@ class TestGetClipboardImageAsBinaryContent:
 
     def test_returns_binary_content_when_image_available(self):
         """Test that function returns BinaryContent when image is available."""
-        from code_puppy.command_line.clipboard import (
+        from spruce_grove.command_line.clipboard import (
             get_clipboard_image_as_binary_content,
         )
 
         fake_png = b"\x89PNG\r\n\x1a\n" + b"\x00" * 100
 
         with patch(
-            "code_puppy.command_line.clipboard.get_clipboard_image",
+            "spruce_grove.command_line.clipboard.get_clipboard_image",
             return_value=fake_png,
         ):
             result = get_clipboard_image_as_binary_content()
@@ -238,8 +238,8 @@ class TestGetClipboardImageAsBinaryContent:
 
     def test_returns_none_when_binary_content_unavailable(self):
         """Test that function returns None when BinaryContent not importable."""
-        with patch("code_puppy.command_line.clipboard.BINARY_CONTENT_AVAILABLE", False):
-            from code_puppy.command_line.clipboard import (
+        with patch("spruce_grove.command_line.clipboard.BINARY_CONTENT_AVAILABLE", False):
+            from spruce_grove.command_line.clipboard import (
                 get_clipboard_image_as_binary_content,
             )
 
@@ -249,12 +249,12 @@ class TestGetClipboardImageAsBinaryContent:
 
     def test_returns_none_when_no_image(self):
         """Test that function returns None when no image available."""
-        from code_puppy.command_line.clipboard import (
+        from spruce_grove.command_line.clipboard import (
             get_clipboard_image_as_binary_content,
         )
 
         with patch(
-            "code_puppy.command_line.clipboard.get_clipboard_image", return_value=None
+            "spruce_grove.command_line.clipboard.get_clipboard_image", return_value=None
         ):
             result = get_clipboard_image_as_binary_content()
 
@@ -265,24 +265,24 @@ class TestGetClipboardImageLinux:
     """Tests for get_clipboard_image on Linux."""
 
     def test_linux_large_image_pil_unavailable(self):
-        from code_puppy.command_line.clipboard import (
+        from spruce_grove.command_line.clipboard import (
             MAX_IMAGE_SIZE_BYTES,
             get_clipboard_image,
         )
 
         large_bytes = b"x" * (MAX_IMAGE_SIZE_BYTES + 1)
         with (
-            patch("code_puppy.command_line.clipboard.sys.platform", "linux"),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "linux"),
             patch(
-                "code_puppy.command_line.clipboard._get_linux_clipboard_image",
+                "spruce_grove.command_line.clipboard._get_linux_clipboard_image",
                 return_value=large_bytes,
             ),
-            patch("code_puppy.command_line.clipboard.PIL_AVAILABLE", False),
+            patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", False),
         ):
             assert get_clipboard_image() is None
 
     def test_linux_large_image_resize_exception(self):
-        from code_puppy.command_line.clipboard import (
+        from spruce_grove.command_line.clipboard import (
             MAX_IMAGE_SIZE_BYTES,
             get_clipboard_image,
         )
@@ -291,25 +291,25 @@ class TestGetClipboardImageLinux:
         mock_img = MagicMock()
 
         with (
-            patch("code_puppy.command_line.clipboard.sys.platform", "linux"),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "linux"),
             patch(
-                "code_puppy.command_line.clipboard._get_linux_clipboard_image",
+                "spruce_grove.command_line.clipboard._get_linux_clipboard_image",
                 return_value=large_bytes,
             ),
-            patch("code_puppy.command_line.clipboard.PIL_AVAILABLE", True),
+            patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", True),
             patch(
-                "code_puppy.command_line.clipboard._safe_open_image",
+                "spruce_grove.command_line.clipboard._safe_open_image",
                 return_value=mock_img,
             ),
             patch(
-                "code_puppy.command_line.clipboard._resize_image_if_needed",
+                "spruce_grove.command_line.clipboard._resize_image_if_needed",
                 side_effect=RuntimeError("resize fail"),
             ),
         ):
             assert get_clipboard_image() is None
 
     def test_linux_large_image_resize_success(self):
-        from code_puppy.command_line.clipboard import (
+        from spruce_grove.command_line.clipboard import (
             MAX_IMAGE_SIZE_BYTES,
             get_clipboard_image,
         )
@@ -324,18 +324,18 @@ class TestGetClipboardImageLinux:
         resized_img.save.side_effect = save_side_effect
 
         with (
-            patch("code_puppy.command_line.clipboard.sys.platform", "linux"),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "linux"),
             patch(
-                "code_puppy.command_line.clipboard._get_linux_clipboard_image",
+                "spruce_grove.command_line.clipboard._get_linux_clipboard_image",
                 return_value=large_bytes,
             ),
-            patch("code_puppy.command_line.clipboard.PIL_AVAILABLE", True),
+            patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", True),
             patch(
-                "code_puppy.command_line.clipboard._safe_open_image",
+                "spruce_grove.command_line.clipboard._safe_open_image",
                 return_value=mock_img,
             ),
             patch(
-                "code_puppy.command_line.clipboard._resize_image_if_needed",
+                "spruce_grove.command_line.clipboard._resize_image_if_needed",
                 return_value=resized_img,
             ),
         ):
@@ -343,51 +343,51 @@ class TestGetClipboardImageLinux:
         assert result == b"resized_png"
 
     def test_linux_large_image_verification_fails(self):
-        from code_puppy.command_line.clipboard import (
+        from spruce_grove.command_line.clipboard import (
             MAX_IMAGE_SIZE_BYTES,
             get_clipboard_image,
         )
 
         large_bytes = b"x" * (MAX_IMAGE_SIZE_BYTES + 1)
         with (
-            patch("code_puppy.command_line.clipboard.sys.platform", "linux"),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "linux"),
             patch(
-                "code_puppy.command_line.clipboard._get_linux_clipboard_image",
+                "spruce_grove.command_line.clipboard._get_linux_clipboard_image",
                 return_value=large_bytes,
             ),
-            patch("code_puppy.command_line.clipboard.PIL_AVAILABLE", True),
+            patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", True),
             patch(
-                "code_puppy.command_line.clipboard._safe_open_image", return_value=None
+                "spruce_grove.command_line.clipboard._safe_open_image", return_value=None
             ),
         ):
             assert get_clipboard_image() is None
 
     def test_linux_returns_none_when_no_image(self):
-        from code_puppy.command_line.clipboard import get_clipboard_image
+        from spruce_grove.command_line.clipboard import get_clipboard_image
 
         with (
-            patch("code_puppy.command_line.clipboard.sys.platform", "linux"),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "linux"),
             patch(
-                "code_puppy.command_line.clipboard._get_linux_clipboard_image",
+                "spruce_grove.command_line.clipboard._get_linux_clipboard_image",
                 return_value=None,
             ),
         ):
             assert get_clipboard_image() is None
 
     def test_linux_small_image_pil_available_verified(self):
-        from code_puppy.command_line.clipboard import get_clipboard_image
+        from spruce_grove.command_line.clipboard import get_clipboard_image
 
         small_bytes = b"pngdata" * 10
         mock_img = MagicMock()
         with (
-            patch("code_puppy.command_line.clipboard.sys.platform", "linux"),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "linux"),
             patch(
-                "code_puppy.command_line.clipboard._get_linux_clipboard_image",
+                "spruce_grove.command_line.clipboard._get_linux_clipboard_image",
                 return_value=small_bytes,
             ),
-            patch("code_puppy.command_line.clipboard.PIL_AVAILABLE", True),
+            patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", True),
             patch(
-                "code_puppy.command_line.clipboard._safe_open_image",
+                "spruce_grove.command_line.clipboard._safe_open_image",
                 return_value=mock_img,
             ),
         ):
@@ -395,18 +395,18 @@ class TestGetClipboardImageLinux:
         assert result == small_bytes
 
     def test_linux_small_image_verification_fails(self):
-        from code_puppy.command_line.clipboard import get_clipboard_image
+        from spruce_grove.command_line.clipboard import get_clipboard_image
 
         small_bytes = b"pngdata" * 10
         with (
-            patch("code_puppy.command_line.clipboard.sys.platform", "linux"),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "linux"),
             patch(
-                "code_puppy.command_line.clipboard._get_linux_clipboard_image",
+                "spruce_grove.command_line.clipboard._get_linux_clipboard_image",
                 return_value=small_bytes,
             ),
-            patch("code_puppy.command_line.clipboard.PIL_AVAILABLE", True),
+            patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", True),
             patch(
-                "code_puppy.command_line.clipboard._safe_open_image", return_value=None
+                "spruce_grove.command_line.clipboard._safe_open_image", return_value=None
             ),
         ):
             assert get_clipboard_image() is None
@@ -429,19 +429,19 @@ class TestGetClipboardImageModes:
         return mock_image
 
     def test_l_mode_converted_to_rgb(self):
-        from code_puppy.command_line.clipboard import get_clipboard_image
+        from spruce_grove.command_line.clipboard import get_clipboard_image
 
         mock_image = self._make_mock_image("L")
         converted = self._make_mock_image("RGB")
         mock_image.convert.return_value = converted
 
         with (
-            patch("code_puppy.command_line.clipboard.PIL_AVAILABLE", True),
-            patch("code_puppy.command_line.clipboard.sys.platform", "darwin"),
-            patch("code_puppy.command_line.clipboard.ImageGrab") as mock_grab,
-            patch("code_puppy.command_line.clipboard.Image") as mock_img_mod,
+            patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", True),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "darwin"),
+            patch("spruce_grove.command_line.clipboard.ImageGrab") as mock_grab,
+            patch("spruce_grove.command_line.clipboard.Image") as mock_img_mod,
             patch(
-                "code_puppy.command_line.clipboard._resize_image_if_needed",
+                "spruce_grove.command_line.clipboard._resize_image_if_needed",
                 return_value=converted,
             ),
         ):
@@ -452,16 +452,16 @@ class TestGetClipboardImageModes:
         mock_image.convert.assert_called_once_with("RGB")
 
     def test_rgba_mode_kept(self):
-        from code_puppy.command_line.clipboard import get_clipboard_image
+        from spruce_grove.command_line.clipboard import get_clipboard_image
 
         mock_image = self._make_mock_image("RGBA")
         with (
-            patch("code_puppy.command_line.clipboard.PIL_AVAILABLE", True),
-            patch("code_puppy.command_line.clipboard.sys.platform", "darwin"),
-            patch("code_puppy.command_line.clipboard.ImageGrab") as mock_grab,
-            patch("code_puppy.command_line.clipboard.Image") as mock_img_mod,
+            patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", True),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "darwin"),
+            patch("spruce_grove.command_line.clipboard.ImageGrab") as mock_grab,
+            patch("spruce_grove.command_line.clipboard.Image") as mock_img_mod,
             patch(
-                "code_puppy.command_line.clipboard._resize_image_if_needed",
+                "spruce_grove.command_line.clipboard._resize_image_if_needed",
                 return_value=mock_image,
             ),
         ):
@@ -477,7 +477,7 @@ class TestGetClipboardManager:
 
     def test_returns_same_instance(self):
         """Test that get_clipboard_manager returns the same instance."""
-        from code_puppy.command_line.clipboard import get_clipboard_manager
+        from spruce_grove.command_line.clipboard import get_clipboard_manager
 
         manager1 = get_clipboard_manager()
         manager2 = get_clipboard_manager()

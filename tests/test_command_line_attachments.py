@@ -8,8 +8,8 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from pydantic_ai import BinaryContent
 
-from code_puppy.cli_runner import run_prompt_with_attachments
-from code_puppy.command_line.attachments import (
+from spruce_grove.cli_runner import run_prompt_with_attachments
+from spruce_grove.command_line.attachments import (
     DEFAULT_ACCEPTED_IMAGE_EXTENSIONS,
     parse_prompt_attachments,
 )
@@ -97,7 +97,7 @@ def test_image_attachment_calls_normalize(tmp_path: Path) -> None:
     sentinel_mime = "image/png"
 
     with patch(
-        "code_puppy.command_line.attachments.normalize_image_bytes",
+        "spruce_grove.command_line.attachments.normalize_image_bytes",
         return_value=(sentinel_bytes, sentinel_mime),
     ) as mock_norm:
         processed = parse_prompt_attachments(str(png_path))
@@ -114,7 +114,7 @@ def test_image_attachment_normalize_updates_media_type(tmp_path: Path) -> None:
     jpeg_path.write_bytes(b"raw-jpeg-bytes")
 
     with patch(
-        "code_puppy.command_line.attachments.normalize_image_bytes",
+        "spruce_grove.command_line.attachments.normalize_image_bytes",
         return_value=(b"png-reencoded", "image/png"),
     ):
         processed = parse_prompt_attachments(str(jpeg_path))
@@ -132,7 +132,7 @@ def test_non_image_attachment_normalize_not_applied(tmp_path: Path) -> None:
     # Return unchanged (mime starts with image/ so normalize IS called, but
     # for a file-that-PIL-can't-parse it returns the original bytes untouched).
     with patch(
-        "code_puppy.command_line.attachments.normalize_image_bytes",
+        "spruce_grove.command_line.attachments.normalize_image_bytes",
         side_effect=lambda data, mt, **kw: (data, mt),  # identity
     ) as mock_norm:
         processed = parse_prompt_attachments(str(gif_path))
@@ -144,7 +144,7 @@ def test_non_image_attachment_normalize_not_applied(tmp_path: Path) -> None:
 
 
 def test_parse_prompt_leaves_urls_untouched() -> None:
-    url = "https://example.com/cute-puppy.png"
+    url = "https://example.com/cute-grove.png"
     processed = parse_prompt_attachments(f"describe {url}")
 
     assert processed.prompt == f"describe {url}"
@@ -164,8 +164,8 @@ async def test_run_prompt_with_attachments_passes_binary(tmp_path: Path) -> None
     fake_agent.run_with_mcp.return_value = fake_result
 
     with (
-        patch("code_puppy.messaging.emit_warning") as mock_warn,
-        patch("code_puppy.messaging.emit_system_message") as mock_system,
+        patch("spruce_grove.messaging.emit_warning") as mock_warn,
+        patch("spruce_grove.messaging.emit_system_message") as mock_system,
     ):
         result, _ = await run_prompt_with_attachments(
             fake_agent,
@@ -194,9 +194,9 @@ async def test_run_prompt_with_attachments_uses_run_ui(tmp_path: Path) -> None:
     dummy_console = object()
 
     with (
-        patch("code_puppy.messaging.run_ui.run_ui") as mock_run_ui,
-        patch("code_puppy.messaging.emit_system_message"),
-        patch("code_puppy.messaging.emit_warning"),
+        patch("spruce_grove.messaging.run_ui.run_ui") as mock_run_ui,
+        patch("spruce_grove.messaging.emit_system_message"),
+        patch("spruce_grove.messaging.emit_warning"),
     ):
         await run_prompt_with_attachments(
             fake_agent,
@@ -213,8 +213,8 @@ async def test_run_prompt_with_attachments_warns_on_blank_prompt() -> None:
     fake_agent = AsyncMock()
 
     with (
-        patch("code_puppy.messaging.emit_warning") as mock_warn,
-        patch("code_puppy.messaging.emit_system_message"),
+        patch("spruce_grove.messaging.emit_warning") as mock_warn,
+        patch("spruce_grove.messaging.emit_system_message"),
     ):
         result, _ = await run_prompt_with_attachments(
             fake_agent,
@@ -261,7 +261,7 @@ def test_parse_prompt_handles_long_paragraph_paste() -> None:
     """Test that pasting long error messages doesn't cause slowdown."""
     # Simulate pasting a long error message with fake paths
     long_text = (
-        "File /Users/testuser/.code-puppy-venv/lib/python3.13/site-packages/prompt_toolkit/layout/processors.py, "
+        "File /Users/testuser/.spruce-grove-venv/lib/python3.13/site-packages/prompt_toolkit/layout/processors.py, "
         "line 948, in apply_transformation return processor.apply_transformation(ti) "
         * 20
     )

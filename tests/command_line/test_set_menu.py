@@ -1,4 +1,4 @@
-"""Tests for ``code_puppy.command_line.set_menu`` and the slash dispatcher.
+"""Tests for ``spruce_grove.command_line.set_menu`` and the slash dispatcher.
 
 This file covers:
 * ``apply_setting`` validation + restart warnings + agent reload toggle
@@ -17,8 +17,8 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from code_puppy.command_line.config_apply import ApplyResult, apply_setting
-from code_puppy.command_line.set_menu import (
+from spruce_grove.command_line.config_apply import ApplyResult, apply_setting
+from spruce_grove.command_line.set_menu import (
     PickerResult,
     _apply_and_record,
     _build_entries,
@@ -30,7 +30,7 @@ from code_puppy.command_line.set_menu import (
     build_settings_menu,
     run_text_editor,
 )
-from code_puppy.command_line.set_menu_settings import (
+from spruce_grove.command_line.set_menu_settings import (
     SETTINGS_CATEGORIES,
     Setting,
 )
@@ -48,7 +48,7 @@ def find_setting(key: str) -> Setting:
 def test_dbos_effective_value_uses_plugin_capability():
     setting = find_setting("enable_dbos")
     with patch(
-        "code_puppy.command_line.set_menu_catalog.get_feature_capability",
+        "spruce_grove.command_line.set_menu_catalog.get_feature_capability",
         return_value=False,
     ) as capability:
         assert setting.effective_getter() is False
@@ -68,14 +68,14 @@ class TestApplySetting:
 
     @pytest.mark.parametrize("key", ["openai_reasoning_effort", "openai_verbosity"])
     def test_model_settings_only_keys_are_rejected(self, key):
-        with patch("code_puppy.config.set_config_value") as mock_set:
+        with patch("spruce_grove.config.set_config_value") as mock_set:
             result = apply_setting(key, "high")
         assert result.ok is False
         assert "/model_settings" in (result.error or "")
         mock_set.assert_not_called()
 
     def test_cancel_agent_key_invalid_returns_error(self):
-        with patch("code_puppy.config.set_config_value") as mock_set:
+        with patch("spruce_grove.config.set_config_value") as mock_set:
             result = apply_setting("cancel_agent_key", "ctrl+x")
         assert result.ok is False
         assert "Invalid cancel_agent_key" in (result.error or "")
@@ -83,8 +83,8 @@ class TestApplySetting:
 
     def test_cancel_agent_key_valid_warns_restart(self):
         with (
-            patch("code_puppy.config.set_config_value") as mock_set,
-            patch("code_puppy.agents.get_current_agent") as mock_agent,
+            patch("spruce_grove.config.set_config_value") as mock_set,
+            patch("spruce_grove.agents.get_current_agent") as mock_agent,
         ):
             mock_agent.return_value.reload_code_generation_agent.return_value = None
             result = apply_setting("cancel_agent_key", "CTRL+K")
@@ -96,8 +96,8 @@ class TestApplySetting:
 
     def test_enable_dbos_warns_restart(self):
         with (
-            patch("code_puppy.config.set_config_value"),
-            patch("code_puppy.agents.get_current_agent") as mock_agent,
+            patch("spruce_grove.config.set_config_value"),
+            patch("spruce_grove.agents.get_current_agent") as mock_agent,
         ):
             mock_agent.return_value.reload_code_generation_agent.return_value = None
             result = apply_setting("enable_dbos", "false")
@@ -107,8 +107,8 @@ class TestApplySetting:
 
     def test_yolo_mode_no_restart(self):
         with (
-            patch("code_puppy.config.set_config_value"),
-            patch("code_puppy.agents.get_current_agent") as mock_agent,
+            patch("spruce_grove.config.set_config_value"),
+            patch("spruce_grove.agents.get_current_agent") as mock_agent,
         ):
             mock_agent.return_value.reload_code_generation_agent.return_value = None
             result = apply_setting("yolo_mode", "true")
@@ -118,16 +118,16 @@ class TestApplySetting:
 
     def test_reload_agent_false_skips_reload(self):
         with (
-            patch("code_puppy.config.set_config_value"),
-            patch("code_puppy.agents.get_current_agent") as mock_agent,
+            patch("spruce_grove.config.set_config_value"),
+            patch("spruce_grove.agents.get_current_agent") as mock_agent,
         ):
             apply_setting("yolo_mode", "true", reload_agent=False)
         mock_agent.assert_not_called()
 
     def test_reload_failure_does_not_break_save(self):
         with (
-            patch("code_puppy.config.set_config_value"),
-            patch("code_puppy.agents.get_current_agent") as mock_agent,
+            patch("spruce_grove.config.set_config_value"),
+            patch("spruce_grove.agents.get_current_agent") as mock_agent,
         ):
             mock_agent.return_value.reload_code_generation_agent.side_effect = (
                 RuntimeError("boom")
@@ -144,8 +144,8 @@ class TestApplySetting:
         same key. Original /set always emitted both the restart notice and
         the reload-failure warning; the split-field layout preserves that."""
         with (
-            patch("code_puppy.config.set_config_value"),
-            patch("code_puppy.agents.get_current_agent") as mock_agent,
+            patch("spruce_grove.config.set_config_value"),
+            patch("spruce_grove.agents.get_current_agent") as mock_agent,
         ):
             mock_agent.return_value.reload_code_generation_agent.side_effect = (
                 RuntimeError("boom")
@@ -200,7 +200,7 @@ class TestEditFlow:
     def test_choice_real_value_applies(self):
         result = PickerResult()
         with patch(
-            "code_puppy.command_line.set_menu.apply_setting",
+            "spruce_grove.command_line.set_menu.apply_setting",
             return_value=ApplyResult(ok=True, value_after="truncation"),
         ) as mock_apply:
             _edit_setting(
@@ -218,7 +218,7 @@ class TestEditFlow:
     def test_choice_custom_falls_through_to_text_editor(self):
         result = PickerResult()
         with patch(
-            "code_puppy.command_line.set_menu.apply_setting",
+            "spruce_grove.command_line.set_menu.apply_setting",
             return_value=ApplyResult(ok=True, value_after="wild"),
         ):
             _edit_setting(
@@ -242,7 +242,7 @@ class TestEditFlow:
             description="",
             type_hint="string",
         )
-        with patch("code_puppy.command_line.set_menu.reset_value") as mock_reset:
+        with patch("spruce_grove.command_line.set_menu.reset_value") as mock_reset:
             _edit_setting(
                 result,
                 setting,
@@ -348,7 +348,7 @@ class TestCoerceTypedInput:
 class TestEntryBuilding:
     def test_curated_keys_land_in_their_categories(self):
         with patch(
-            "code_puppy.command_line.set_menu.get_config_keys",
+            "spruce_grove.command_line.set_menu.get_config_keys",
             return_value=[],
         ):
             entries = _build_entries()
@@ -358,7 +358,7 @@ class TestEntryBuilding:
 
     def test_dynamic_keys_land_in_dynamic_category(self):
         with patch(
-            "code_puppy.command_line.set_menu.get_config_keys",
+            "spruce_grove.command_line.set_menu.get_config_keys",
             return_value=["custom_random_key"],
         ):
             entries = _build_entries()
@@ -368,7 +368,7 @@ class TestEntryBuilding:
 
     def test_model_settings_only_keys_are_absent(self):
         with patch(
-            "code_puppy.command_line.set_menu.get_config_keys",
+            "spruce_grove.command_line.set_menu.get_config_keys",
             return_value=["openai_reasoning_effort", "openai_verbosity"],
         ):
             entries = _build_entries()
@@ -378,7 +378,7 @@ class TestEntryBuilding:
 
     def test_dynamic_does_not_double_curated_keys(self):
         with patch(
-            "code_puppy.command_line.set_menu.get_config_keys",
+            "spruce_grove.command_line.set_menu.get_config_keys",
             return_value=["yolo_mode"],
         ):
             entries = _build_entries()
@@ -390,7 +390,7 @@ class TestEntryBuilding:
         from io import StringIO
 
         with patch(
-            "code_puppy.command_line.set_menu.get_config_keys",
+            "spruce_grove.command_line.set_menu.get_config_keys",
             return_value=[],
         ):
             entries = _build_entries()
@@ -405,18 +405,18 @@ class TestEntryBuilding:
         assert result.item.value.setting.key == "yolo_mode"
 
     def test_detect_dynamic_type_bool_by_suffix(self):
-        with patch("code_puppy.command_line.set_menu.get_value", return_value=None):
+        with patch("spruce_grove.command_line.set_menu.get_value", return_value=None):
             assert _detect_dynamic_type("some_enabled") == "bool"
             assert _detect_dynamic_type("foo_mode") == "bool"
 
     def test_detect_dynamic_type_by_value(self):
-        with patch("code_puppy.command_line.set_menu.get_value", return_value="42"):
+        with patch("spruce_grove.command_line.set_menu.get_value", return_value="42"):
             assert _detect_dynamic_type("random_key") == "int"
-        with patch("code_puppy.command_line.set_menu.get_value", return_value="0.5"):
+        with patch("spruce_grove.command_line.set_menu.get_value", return_value="0.5"):
             assert _detect_dynamic_type("random_key") == "float"
-        with patch("code_puppy.command_line.set_menu.get_value", return_value="true"):
+        with patch("spruce_grove.command_line.set_menu.get_value", return_value="true"):
             assert _detect_dynamic_type("random_key") == "bool"
-        with patch("code_puppy.command_line.set_menu.get_value", return_value="hi"):
+        with patch("spruce_grove.command_line.set_menu.get_value", return_value="hi"):
             assert _detect_dynamic_type("random_key") == "string"
 
 
@@ -430,7 +430,7 @@ class TestRecordResetAndApply:
         """Reset must enter ``changed_settings`` so the dispatcher's
         coalesced agent reload actually fires."""
         result = PickerResult()
-        with patch("code_puppy.command_line.set_menu.reset_value") as mock_reset:
+        with patch("spruce_grove.command_line.set_menu.reset_value") as mock_reset:
             _record_reset(result, "yolo_mode")
         mock_reset.assert_called_once_with("yolo_mode")
         assert "yolo_mode" in result.changed_settings
@@ -447,9 +447,9 @@ class TestRecordResetAndApply:
         key (the helper itself decides which keys actually need clearing)."""
         result = PickerResult()
         with (
-            patch("code_puppy.command_line.set_menu.reset_value"),
+            patch("spruce_grove.command_line.set_menu.reset_value"),
             patch(
-                "code_puppy.command_line.config_apply.invalidate_post_write_caches"
+                "spruce_grove.command_line.config_apply.invalidate_post_write_caches"
             ) as mock_invalidate,
         ):
             _record_reset(result, "model")
@@ -459,13 +459,13 @@ class TestRecordResetAndApply:
         result = PickerResult()
         token_setting = Setting(
             key="puppy_token",
-            display_name="Puppy Token",
+            display_name="Cedar Token",
             description="",
             type_hint="string",
             sensitive=True,
         )
         with patch(
-            "code_puppy.command_line.set_menu.apply_setting",
+            "spruce_grove.command_line.set_menu.apply_setting",
             return_value=ApplyResult(ok=True, value_after="abcd1234efgh"),
         ):
             _apply_and_record(result, token_setting, "abcd1234efgh")
@@ -482,7 +482,7 @@ class TestRecordResetAndApply:
         result = PickerResult()
         yolo = find_setting("yolo_mode")
         with patch(
-            "code_puppy.command_line.set_menu.apply_setting",
+            "spruce_grove.command_line.set_menu.apply_setting",
             return_value=ApplyResult(ok=True, value_after="true"),
         ):
             _apply_and_record(result, yolo, "true")
@@ -499,7 +499,7 @@ class TestRecordResetAndApply:
 
 class TestHandleSetCommandDispatcher:
     def test_no_args_launches_picker_and_drains_messages(self):
-        from code_puppy.command_line.config_commands import handle_set_command
+        from spruce_grove.command_line.config_commands import handle_set_command
 
         picker_result = PickerResult(
             changed_settings={"yolo_mode": "true"},
@@ -511,13 +511,13 @@ class TestHandleSetCommandDispatcher:
         )
         with (
             patch(
-                "code_puppy.command_line.set_menu.interactive_set_picker",
+                "spruce_grove.command_line.set_menu.interactive_set_picker",
                 new=AsyncMock(return_value=picker_result),
             ),
-            patch("code_puppy.messaging.emit_success") as mock_success,
-            patch("code_puppy.messaging.emit_warning") as mock_warning,
-            patch("code_puppy.messaging.emit_info") as mock_info,
-            patch("code_puppy.agents.get_current_agent") as mock_agent,
+            patch("spruce_grove.messaging.emit_success") as mock_success,
+            patch("spruce_grove.messaging.emit_warning") as mock_warning,
+            patch("spruce_grove.messaging.emit_info") as mock_info,
+            patch("spruce_grove.agents.get_current_agent") as mock_agent,
         ):
             mock_agent.return_value.reload_code_generation_agent.return_value = None
             assert handle_set_command("/set") is True
@@ -529,7 +529,7 @@ class TestHandleSetCommandDispatcher:
         mock_agent.return_value.reload_code_generation_agent.assert_called_once()
 
     def test_no_args_picker_no_changes_no_reload(self):
-        from code_puppy.command_line.config_commands import handle_set_command
+        from spruce_grove.command_line.config_commands import handle_set_command
 
         picker_result = PickerResult(
             changed_settings={},
@@ -537,23 +537,23 @@ class TestHandleSetCommandDispatcher:
         )
         with (
             patch(
-                "code_puppy.command_line.set_menu.interactive_set_picker",
+                "spruce_grove.command_line.set_menu.interactive_set_picker",
                 new=AsyncMock(return_value=picker_result),
             ),
-            patch("code_puppy.messaging.emit_info"),
-            patch("code_puppy.agents.get_current_agent") as mock_agent,
+            patch("spruce_grove.messaging.emit_info"),
+            patch("spruce_grove.agents.get_current_agent") as mock_agent,
         ):
             handle_set_command("/set")
         mock_agent.assert_not_called()
 
     def test_slash_set_puppy_token_masks_value_in_success(self):
-        from code_puppy.command_line.config_commands import handle_set_command
+        from spruce_grove.command_line.config_commands import handle_set_command
 
         with (
-            patch("code_puppy.config.set_config_value"),
-            patch("code_puppy.agents.get_current_agent") as mock_agent,
-            patch("code_puppy.messaging.emit_success") as mock_success,
-            patch("code_puppy.messaging.emit_info"),
+            patch("spruce_grove.config.set_config_value"),
+            patch("spruce_grove.agents.get_current_agent") as mock_agent,
+            patch("spruce_grove.messaging.emit_success") as mock_success,
+            patch("spruce_grove.messaging.emit_info"),
         ):
             mock_agent.return_value.reload_code_generation_agent.return_value = None
             handle_set_command("/set puppy_token abcd1234efgh")
@@ -563,13 +563,13 @@ class TestHandleSetCommandDispatcher:
         assert not any("abcd1234efgh" in m for m in recorded)
 
     def test_slash_set_yolo_does_not_mask(self):
-        from code_puppy.command_line.config_commands import handle_set_command
+        from spruce_grove.command_line.config_commands import handle_set_command
 
         with (
-            patch("code_puppy.config.set_config_value"),
-            patch("code_puppy.agents.get_current_agent") as mock_agent,
-            patch("code_puppy.messaging.emit_success") as mock_success,
-            patch("code_puppy.messaging.emit_info"),
+            patch("spruce_grove.config.set_config_value"),
+            patch("spruce_grove.agents.get_current_agent") as mock_agent,
+            patch("spruce_grove.messaging.emit_success") as mock_success,
+            patch("spruce_grove.messaging.emit_info"),
         ):
             mock_agent.return_value.reload_code_generation_agent.return_value = None
             handle_set_command("/set yolo_mode true")

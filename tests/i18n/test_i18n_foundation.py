@@ -1,4 +1,4 @@
-"""Tests for the code_puppy.i18n foundation package (PUP-475).
+"""Tests for the spruce_grove.i18n foundation package (PUP-475).
 
 Covers the PUP-473 Definition-of-Done items applicable to the foundation:
 missing-key fallback, locale switching, per-locale formatting, plurals, and
@@ -9,8 +9,8 @@ import json
 
 import pytest
 
-from code_puppy import i18n
-from code_puppy.i18n import catalog, formats, locale, plurals, pseudo, translate
+from spruce_grove import i18n
+from spruce_grove.i18n import catalog, formats, locale, plurals, pseudo, translate
 
 
 def _write_catalog(tmp_path, name, data):
@@ -40,7 +40,7 @@ def test_normalize_locale(raw, expected):
 
 
 def test_detect_precedence_env_override(monkeypatch):
-    monkeypatch.setenv("CODE_PUPPY_LOCALE", "fr_FR.UTF-8")
+    monkeypatch.setenv("SPRUCE_GROVE_LOCALE", "fr_FR.UTF-8")
     monkeypatch.setenv("LANG", "de_DE")
     assert locale.detect_locale(config_value="es-ES") == "fr-FR"
 
@@ -115,7 +115,7 @@ def test_malformed_catalog_is_skipped(tmp_path):
 
 # --- interpolation --------------------------------------------------------
 def test_interpolation():
-    assert i18n.t("startup.welcome", name="TJ") == "Welcome to Code Puppy, TJ!"
+    assert i18n.t("startup.welcome", name="TJ") == "Welcome to Spruce Grove, TJ!"
 
 
 @pytest.mark.parametrize(
@@ -156,11 +156,11 @@ def test_core_plugins_unknown_pseudolocalizes_once():
 def test_missing_param_leaves_placeholder():
     # A DIFFERENT param present -> the forgiving-missing path is exercised and
     # the unknown {name} placeholder is preserved verbatim.
-    assert i18n.t("startup.welcome", unrelated="z") == "Welcome to Code Puppy, {name}!"
+    assert i18n.t("startup.welcome", unrelated="z") == "Welcome to Spruce Grove, {name}!"
 
 
 def test_no_params_leaves_placeholder():
-    assert i18n.t("startup.welcome") == "Welcome to Code Puppy, {name}!"
+    assert i18n.t("startup.welcome") == "Welcome to Spruce Grove, {name}!"
 
 
 # --- locale switching -----------------------------------------------------
@@ -254,7 +254,7 @@ def test_spanish_catalog_ships_and_resolves():
     translate.set_locale("es")
     assert i18n.t("confirm.yes") == "S\u00ed"
     assert (
-        i18n.t("startup.welcome", name="TJ") == "\u00a1Bienvenido(a) a Code Puppy, TJ!"
+        i18n.t("startup.welcome", name="TJ") == "\u00a1Bienvenido(a) a Spruce Grove, TJ!"
     )
 
 
@@ -287,7 +287,7 @@ def test_central_south_american_dialect_inherits_base_es(tmp_path):
 def test_french_canadian_catalog_ships_and_resolves():
     translate.set_locale("fr-CA")
     assert i18n.t("confirm.yes") == "Oui"
-    assert i18n.t("startup.welcome", name="TJ") == "Bienvenue dans Code Puppy, TJ!"
+    assert i18n.t("startup.welcome", name="TJ") == "Bienvenue dans Spruce Grove, TJ!"
 
 
 def test_french_canadian_plurals():
@@ -337,7 +337,7 @@ def test_unshipped_spanish_region_falls_back_to_base_es():
 
 # --- emit choke point wiring ---------------------------------------------
 def test_emit_message_resolves_lazy_translation(monkeypatch):
-    from code_puppy.messaging import message_queue as mq
+    from spruce_grove.messaging import message_queue as mq
 
     captured = {}
 

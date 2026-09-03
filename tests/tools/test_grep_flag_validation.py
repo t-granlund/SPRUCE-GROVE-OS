@@ -1,6 +1,6 @@
 """Flag handling for the local ripgrep grep path (``_build_grep_args``)."""
 
-from code_puppy.tools.file_operations import (
+from spruce_grove.tools.file_operations import (
     _build_backend_matcher,
     _build_grep_args,
     _carries_type_filter,

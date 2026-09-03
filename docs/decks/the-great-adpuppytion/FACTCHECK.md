@@ -1,6 +1,6 @@
 # FACTCHECK — staging area (verified 2026-07-30)
 
-Source: web-puppy research pass on claims from Jack Conte's SXSW 2026 talk.
+Source: web-grove research pass on claims from Jack Conte's SXSW 2026 talk.
 Status: **staged, NOT yet applied to index.html.** Apply during the content
 edit pass after the design-system overhaul lands.
 

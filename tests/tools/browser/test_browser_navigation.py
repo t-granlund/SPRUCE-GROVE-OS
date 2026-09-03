@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from code_puppy.tools.browser.browser_navigation import (
+from spruce_grove.tools.browser.browser_navigation import (
     get_page_info,
     go_back,
     go_forward,
@@ -37,12 +37,12 @@ class TestNavigateToUrl:
         mock_manager.get_current_page.return_value = mock_page
 
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
                 with patch(
-                    "code_puppy.tools.browser.browser_navigation.emit_success"
+                    "spruce_grove.tools.browser.browser_navigation.emit_success"
                 ) as mock_emit_success:
                     result = await navigate_to_url("https://example.com")
 
@@ -63,11 +63,11 @@ class TestNavigateToUrl:
         mock_manager.get_current_page.return_value = mock_page
 
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
-                with patch("code_puppy.tools.browser.browser_navigation.emit_success"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
+                with patch("spruce_grove.tools.browser.browser_navigation.emit_success"):
                     result = await navigate_to_url("https://example.com")
 
                     assert result["success"] is True
@@ -81,10 +81,10 @@ class TestNavigateToUrl:
         mock_manager.get_current_page.return_value = None
 
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
                 result = await navigate_to_url("https://example.com")
 
                 assert result["success"] is False
@@ -99,11 +99,11 @@ class TestNavigateToUrl:
         mock_manager.get_current_page.return_value = mock_page
 
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
-                with patch("code_puppy.tools.browser.browser_navigation.emit_error"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
+                with patch("spruce_grove.tools.browser.browser_navigation.emit_error"):
                     result = await navigate_to_url("https://slow-site.com")
 
                     assert result["success"] is False
@@ -118,11 +118,11 @@ class TestNavigateToUrl:
         mock_manager.get_current_page.return_value = mock_page
 
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
-                with patch("code_puppy.tools.browser.browser_navigation.emit_error"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
+                with patch("spruce_grove.tools.browser.browser_navigation.emit_error"):
                     result = await navigate_to_url("https://unreachable.com")
 
                     assert result["success"] is False
@@ -141,10 +141,10 @@ class TestGetPageInfo:
         mock_manager.get_current_page.return_value = mock_page
 
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
                 result = await get_page_info()
 
                 assert result["success"] is True
@@ -158,10 +158,10 @@ class TestGetPageInfo:
         mock_manager.get_current_page.return_value = None
 
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
                 result = await get_page_info()
 
                 assert result["success"] is False
@@ -177,10 +177,10 @@ class TestGetPageInfo:
         mock_manager.get_current_page.return_value = mock_page
 
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
                 result = await get_page_info()
 
                 assert result["success"] is False
@@ -201,11 +201,11 @@ class TestGoBack:
         mock_manager.get_current_page.return_value = mock_page
 
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
-                with patch("code_puppy.tools.browser.browser_navigation.emit_success"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
+                with patch("spruce_grove.tools.browser.browser_navigation.emit_success"):
                     result = await go_back()
 
                     assert result["success"] is True
@@ -224,11 +224,11 @@ class TestGoBack:
         mock_manager.get_current_page.return_value = mock_page
 
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
-                with patch("code_puppy.tools.browser.browser_navigation.emit_success"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
+                with patch("spruce_grove.tools.browser.browser_navigation.emit_success"):
                     result = await go_back()
 
                     # Should still return success (no-op)
@@ -241,10 +241,10 @@ class TestGoBack:
         mock_manager.get_current_page.return_value = None
 
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
                 result = await go_back()
 
                 assert result["success"] is False
@@ -264,11 +264,11 @@ class TestGoForward:
         mock_manager.get_current_page.return_value = mock_page
 
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
-                with patch("code_puppy.tools.browser.browser_navigation.emit_success"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
+                with patch("spruce_grove.tools.browser.browser_navigation.emit_success"):
                     result = await go_forward()
 
                     assert result["success"] is True
@@ -289,11 +289,11 @@ class TestReloadPage:
         mock_manager.get_current_page.return_value = mock_page
 
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
-                with patch("code_puppy.tools.browser.browser_navigation.emit_success"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
+                with patch("spruce_grove.tools.browser.browser_navigation.emit_success"):
                     result = await reload_page()
 
                     assert result["success"] is True
@@ -313,10 +313,10 @@ class TestWaitForLoadState:
         mock_manager.get_current_page.return_value = mock_page
 
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
                 result = await wait_for_load_state("networkidle")
 
                 assert result["success"] is True
@@ -346,11 +346,11 @@ class TestSimpleOperationBranches:
             getattr(mock_page, page_method).side_effect = RuntimeError("nav failed")
             mock_manager.get_current_page.return_value = mock_page
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
-                with patch("code_puppy.tools.browser.browser_navigation.emit_error"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
+                with patch("spruce_grove.tools.browser.browser_navigation.emit_error"):
                     result = await operation()
         assert result["success"] is False
 
@@ -369,11 +369,11 @@ class TestNavigationIntegration:
         mock_manager.get_current_page.return_value = mock_page
 
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
-                with patch("code_puppy.tools.browser.browser_navigation.emit_success"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
+                with patch("spruce_grove.tools.browser.browser_navigation.emit_success"):
                     # Navigate
                     nav_result = await navigate_to_url("https://example.com")
                     assert nav_result["success"] is True
@@ -396,11 +396,11 @@ class TestNavigationIntegration:
         mock_manager.get_current_page.return_value = mock_page
 
         with patch(
-            "code_puppy.tools.browser.browser_navigation.get_session_browser_manager",
+            "spruce_grove.tools.browser.browser_navigation.get_session_browser_manager",
             return_value=mock_manager,
         ):
-            with patch("code_puppy.tools.browser.browser_navigation.emit_info"):
-                with patch("code_puppy.tools.browser.browser_navigation.emit_success"):
+            with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
+                with patch("spruce_grove.tools.browser.browser_navigation.emit_success"):
                     # Navigate to page 1
                     await navigate_to_url("https://page1.com")
 

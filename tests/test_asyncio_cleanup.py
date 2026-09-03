@@ -3,7 +3,7 @@
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
-from code_puppy.asyncio_cleanup import install_httpcore2_shutdown_filter
+from spruce_grove.asyncio_cleanup import install_httpcore2_shutdown_filter
 
 
 def _context(
@@ -22,7 +22,7 @@ def _context(
 
 def _install_on(loop: MagicMock):
     with patch(
-        "code_puppy.asyncio_cleanup.asyncio.get_running_loop", return_value=loop
+        "spruce_grove.asyncio_cleanup.asyncio.get_running_loop", return_value=loop
     ):
         install_httpcore2_shutdown_filter()
     return loop.set_exception_handler.call_args.args[0]
@@ -30,7 +30,7 @@ def _install_on(loop: MagicMock):
 
 def _previous_handler() -> MagicMock:
     handler = MagicMock()
-    setattr(handler, "_code_puppy_httpcore2_shutdown_filter", False)
+    setattr(handler, "_spruce_grove_httpcore2_shutdown_filter", False)
     return handler
 
 
@@ -100,11 +100,11 @@ def test_delegates_malformed_context_instead_of_crashing():
 def test_install_is_idempotent():
     loop = MagicMock()
     existing_handler = MagicMock()
-    setattr(existing_handler, "_code_puppy_httpcore2_shutdown_filter", True)
+    setattr(existing_handler, "_spruce_grove_httpcore2_shutdown_filter", True)
     loop.get_exception_handler.return_value = existing_handler
 
     with patch(
-        "code_puppy.asyncio_cleanup.asyncio.get_running_loop", return_value=loop
+        "spruce_grove.asyncio_cleanup.asyncio.get_running_loop", return_value=loop
     ):
         install_httpcore2_shutdown_filter()
 

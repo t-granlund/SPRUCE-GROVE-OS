@@ -5,9 +5,9 @@ returned, -t restricts types, and a trailing value flag errors instead of
 silently re-scoping the search.
 """
 
-from code_puppy.config import GREP_MAX_MATCHES_DEFAULT
-from code_puppy.tools import file_operations
-from code_puppy.tools.file_operations import (
+from spruce_grove.config import GREP_MAX_MATCHES_DEFAULT
+from spruce_grove.tools import file_operations
+from spruce_grove.tools.file_operations import (
     _MAX_GREP_CONTEXT_ROWS,
     MatchInfo,
     _emit_grep_result,
@@ -213,7 +213,7 @@ def test_grep_truncation_survives_context_lines(tmp_path):
 
 def test_grep_match_budget_is_configurable(tmp_path, monkeypatch):
     """`grep_max_matches` moves the cap; truncation semantics follow it."""
-    import code_puppy.config as cp_config
+    import spruce_grove.config as cp_config
 
     monkeypatch.setattr(cp_config, "get_grep_max_matches", lambda: 5)
     _write_hits(tmp_path / "a.py", 6)

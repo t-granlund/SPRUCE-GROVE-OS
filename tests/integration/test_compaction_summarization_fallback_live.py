@@ -68,11 +68,11 @@ def _live_lilac_skip_reason() -> str | None:
     run would fail opaquely (run_with_mcp returns None) instead of skipping.
     """
     if not _lilac_key_available():
-        return "LILAC_API_KEY not set (env or puppy.cfg); lilac fallback test skipped."
+        return "LILAC_API_KEY not set (env or grove.cfg); lilac fallback test skipped."
     if not _lilac_model_present():
         return (
             f"{LILAC_MODEL!r} not found in models config — models.json is empty "
-            "and it was never added to ~/.code_puppy/extra_models.json; "
+            "and it was never added to ~/.spruce_grove/extra_models.json; "
             "lilac fallback test skipped."
         )
     return None
@@ -97,25 +97,25 @@ def _require_integration_env_vars():
 @pytest.fixture
 def lilac_agent(monkeypatch):
     """Fresh CodePuppyAgent pinned to ``LILAC_MODEL`` (Kimi K2.6, 262k ctx)."""
-    from code_puppy import config as cp_config
-    from code_puppy.agents import _builder, _compaction, _runtime
-    from code_puppy.agents import base_agent as _base_agent_mod
-    from code_puppy.agents.agent_code_puppy import CodePuppyAgent
+    from spruce_grove import config as cp_config
+    from spruce_grove.agents import _builder, _compaction, _runtime
+    from spruce_grove.agents import base_agent as _base_agent_mod
+    from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
 
     pinned = LILAC_MODEL
 
     # models.json is empty: this model only exists if added to
     # extra_models.json. Module-level skip already guards it; assert here too
     # so a bypass surfaces as "model not added" rather than an opaque None.
-    from code_puppy.model_factory import ModelFactory
+    from spruce_grove.model_factory import ModelFactory
 
     assert pinned in ModelFactory.load_config(), (
         f"{pinned!r} is not in the model config. models.json ships empty; "
-        "add it to ~/.code_puppy/extra_models.json (CI does this in the "
+        "add it to ~/.spruce_grove/extra_models.json (CI does this in the "
         "'Provision CI model' step)."
     )
 
-    # `from code_puppy.config import foo` captures bindings at import time, so
+    # `from spruce_grove.config import foo` captures bindings at import time, so
     # patch every site that re-imports the model-name getters.
     for mod in (cp_config, _base_agent_mod):
         if hasattr(mod, "get_global_model_name"):
@@ -147,8 +147,8 @@ async def test_summarization_oversize_falls_back_to_truncation(
     the summarizer's provider rejects the oversized payload →
     FallbackCompaction advances to the sliding window → main run completes.
     """
-    from code_puppy.agents import _compaction
-    from code_puppy.agents._history import estimate_tokens_for_message
+    from spruce_grove.agents import _compaction
+    from spruce_grove.agents._history import estimate_tokens_for_message
 
     # Force summarization strategy with a low threshold so compaction fires
     # immediately, and a small protected window so the summarizer is asked
@@ -193,8 +193,8 @@ async def test_summarization_oversize_falls_back_to_truncation(
     monkeypatch.setattr(SlidingWindowCompaction, "compact", spy_sliding_compact)
 
     # -- Exception spy (to detect rate limits swallowed by run_agent_task) ---
-    from code_puppy.agents import _runtime as _runtime_mod
-    from code_puppy.agents._diagnostics import emit_exception_diagnostics
+    from spruce_grove.agents import _runtime as _runtime_mod
+    from spruce_grove.agents._diagnostics import emit_exception_diagnostics
 
     _captured_exceptions: list[BaseException] = []
     orig_emit_diag = emit_exception_diagnostics

@@ -1,4 +1,4 @@
-"""Focused edge-case coverage for :mod:`code_puppy.mcp_.registry`."""
+"""Focused edge-case coverage for :mod:`spruce_grove.mcp_.registry`."""
 
 import json
 from pathlib import Path
@@ -6,13 +6,13 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy.mcp_.managed_server import ServerConfig
-from code_puppy.mcp_.registry import ServerRegistry
+from spruce_grove.mcp_.managed_server import ServerConfig
+from spruce_grove.mcp_.registry import ServerRegistry
 
 
 @pytest.fixture
 def registry(tmp_path):
-    with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmp_path):
+    with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmp_path):
         yield ServerRegistry()
 
 
@@ -205,7 +205,7 @@ def test_load_config_exception_during_parse(tmp_path):
         )
     )
     with patch(
-        "code_puppy.mcp_.registry.ServerConfig", side_effect=Exception("Parse error")
+        "spruce_grove.mcp_.registry.ServerConfig", side_effect=Exception("Parse error")
     ):
         assert not ServerRegistry(storage_path=str(storage_path))._servers
 

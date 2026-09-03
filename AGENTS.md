@@ -1,8 +1,8 @@
-# Contributing to Code Puppy
+# Contributing to Spruce Grove
 
 > **Golden rule:** nearly all new functionality should be a **plugin** in the
 > `code_puppy_core_plugins` repository that hooks into core via
-> `code_puppy/callbacks.py`. Don't edit `code_puppy/command_line/`.
+> `spruce_grove/callbacks.py`. Don't edit `spruce_grove/command_line/`.
 
 ## How Plugins Work
 
@@ -11,13 +11,13 @@ Plugins are discovered from three tiers, loaded in order:
 | Tier | Location | When to use |
 |------|----------|-------------|
 | **Builtin** | `code_puppy_core_plugins/<name>/register_callbacks.py` | Official package discovered via Python entry points |
-| **User** | `~/.code_puppy/plugins/<name>/register_callbacks.py` | Personal plugins, applied to every project |
-| **Project** | `<CWD>/.code_puppy/plugins/<name>/register_callbacks.py` | Repo-specific plugins, shared with your team via git |
+| **User** | `~/.spruce_grove/plugins/<name>/register_callbacks.py` | Personal plugins, applied to every project |
+| **Project** | `<CWD>/.spruce_grove/plugins/<name>/register_callbacks.py` | Repo-specific plugins, shared with your team via git |
 
 All three tiers use the same pattern — drop a `register_callbacks.py` in a named subdirectory:
 
 ```python
-from code_puppy.callbacks import register_callback
+from spruce_grove.callbacks import register_callback
 
 def _on_startup():
     print("my_feature loaded!")
@@ -29,25 +29,25 @@ That's it. The plugin loader auto-discovers `register_callbacks.py` in subdirs.
 
 ### Project Plugins
 
-Project plugins live at `<CWD>/.code_puppy/plugins/<name>/register_callbacks.py`.
-This mirrors the project-level discovery already used by agents (`<CWD>/.code_puppy/agents/`)
-and skills (`<CWD>/.code_puppy/skills/`).
+Project plugins live at `<CWD>/.spruce_grove/plugins/<name>/register_callbacks.py`.
+This mirrors the project-level discovery already used by agents (`<CWD>/.spruce_grove/agents/`)
+and skills (`<CWD>/.spruce_grove/skills/`).
 
 **Key details:**
 
-- **Directory must be created intentionally.** Code Puppy will never auto-create
-  `.code_puppy/plugins/` — your team opts in by creating it.
+- **Directory must be created intentionally.** Spruce Grove will never auto-create
+  `.spruce_grove/plugins/` — your team opts in by creating it.
 - **Disabled by default (trust gate).** Project plugins run arbitrary repo
   code at import time, so none load until the user accepts them in the
   `/plugins` TUI ceremony (select → Enter → type `trust`); accepted plugins
   hot-load with no restart. Trust is a SHA-256 of the plugin dir, stored
-  user-side in `~/.code_puppy/trusted_plugins.json` and scoped to the project
+  user-side in `~/.spruce_grove/trusted_plugins.json` and scoped to the project
   path — any file change reverts the plugin to untrusted, and everything else
   fails closed. `/plugins revoke <name>` removes trust. Full security model:
-  `code_puppy/plugins/trust.py`.
+  `spruce_grove/plugins/trust.py`.
 - **Keep runtime state out of the plugin dir** — writing state (SQLite,
   caches, logs) next to the code self-tampers the hash and demands
-  re-acceptance every boot. Use `~/.code_puppy/` like builtin plugins do, or
+  re-acceptance every boot. Use `~/.spruce_grove/` like builtin plugins do, or
   a dot-path (e.g. `.state/`), which is excluded from hashing.
 - **Load order is builtin → user → project.** Project plugins load last, giving
   them highest precedence for override-style hooks.
@@ -101,14 +101,14 @@ approval. With `fail_closed=True` its exception is reported as a block instead. 
 | `transform_model_messages` | Before each model request, after history processing | `(agent_name, messages) -> None` — mutate the final `list[ModelMessage]` in place |
 | `pre_mcp_autostart` | Before bound MCP servers auto-start | `(agent_name, server_names) -> None` (refresh tokens / mint creds here) |
 
-Full list + rarely-used hooks: see `code_puppy/callbacks.py` source.
+Full list + rarely-used hooks: see `spruce_grove/callbacks.py` source.
 
 ## Ctrl+X Chords
 
 `Ctrl+X` is a **chord prefix** (readline-style), never a standalone hotkey. The
 line editor arms a pending state on `Ctrl+X`, paints a hint of the currently
 registered bindings on the bottom bar, and resolves the NEXT key against the
-chord registry in `code_puppy/messaging/chords.py`. `Esc` (or any unbound key)
+chord registry in `spruce_grove/messaging/chords.py`. `Esc` (or any unbound key)
 cancels the chord; unbound keys are then processed normally.
 
 | Chord | Action | Registered by | Active when |
@@ -134,7 +134,7 @@ cancels the chord; unbound keys are then processed normally.
 **Plugins can register their own chords:**
 
 ```python
-from code_puppy.messaging.chords import register_chord, unregister_chord
+from spruce_grove.messaging.chords import register_chord, unregister_chord
 
 register_chord("\x14", my_callback, "Ctrl+T do the thing")  # Ctrl+X Ctrl+T
 ```
@@ -148,13 +148,13 @@ hint stays honest. Keys are single raw control characters -- prefer
 
 ## Internationalization (i18n)
 
-User-facing CLI/TUI strings are localizable via `code_puppy/i18n/`. See
+User-facing CLI/TUI strings are localizable via `spruce_grove/i18n/`. See
 **`docs/I18N.md`** for the full guide (architecture, decisions, translator
 quickstart). Rules for new user-facing output (PUP-473):
 
 - **Wrap display strings** in `t("key", **params)` / `ngettext("key", n)`
-  (`from code_puppy.i18n import t, ngettext`). Keys are dotted IDs; catalogs
-  live in `code_puppy/i18n/locales/<locale>.json`. A missing key echoes the
+  (`from spruce_grove.i18n import t, ngettext`). Keys are dotted IDs; catalogs
+  live in `spruce_grove/i18n/locales/<locale>.json`. A missing key echoes the
   key (never crashes).
 - **Interpolate with `{name}`** placeholders — do NOT build strings with
   f-strings/concatenation, and do NOT rely on `str.format` semantics on

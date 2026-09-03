@@ -4,12 +4,12 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from code_puppy.tools.browser.browser_locator_resolver import (
+from spruce_grove.tools.browser.browser_locator_resolver import (
     SEMANTIC_STRATEGIES,
     describe_target,
     resolve_locator,
 )
-from code_puppy.tools.browser.browser_semantic_interactions import (
+from spruce_grove.tools.browser.browser_semantic_interactions import (
     click_by_role,
     click_by_text,
     register_click_by_role,
@@ -92,12 +92,12 @@ def _mock_page_with_locator(count=1):
 async def test_click_by_role_success():
     manager, _page, element = _mock_page_with_locator()
     with patch(
-        "code_puppy.tools.browser.browser_semantic_interactions.get_session_browser_manager",
+        "spruce_grove.tools.browser.browser_semantic_interactions.get_session_browser_manager",
         return_value=manager,
     ):
-        with patch("code_puppy.tools.browser.browser_semantic_interactions.emit_info"):
+        with patch("spruce_grove.tools.browser.browser_semantic_interactions.emit_info"):
             with patch(
-                "code_puppy.tools.browser.browser_semantic_interactions.emit_success"
+                "spruce_grove.tools.browser.browser_semantic_interactions.emit_success"
             ):
                 result = await click_by_role("button", name="Submit")
 
@@ -111,12 +111,12 @@ async def test_click_by_role_success():
 async def test_click_by_text_no_match_is_deterministic():
     manager, _page, element = _mock_page_with_locator(count=0)
     with patch(
-        "code_puppy.tools.browser.browser_semantic_interactions.get_session_browser_manager",
+        "spruce_grove.tools.browser.browser_semantic_interactions.get_session_browser_manager",
         return_value=manager,
     ):
-        with patch("code_puppy.tools.browser.browser_semantic_interactions.emit_info"):
+        with patch("spruce_grove.tools.browser.browser_semantic_interactions.emit_info"):
             with patch(
-                "code_puppy.tools.browser.browser_semantic_interactions.emit_error"
+                "spruce_grove.tools.browser.browser_semantic_interactions.emit_error"
             ):
                 result = await click_by_text("Nope")
 
@@ -129,12 +129,12 @@ async def test_click_by_text_no_match_is_deterministic():
 async def test_set_text_by_label_fills():
     manager, _page, element = _mock_page_with_locator()
     with patch(
-        "code_puppy.tools.browser.browser_semantic_interactions.get_session_browser_manager",
+        "spruce_grove.tools.browser.browser_semantic_interactions.get_session_browser_manager",
         return_value=manager,
     ):
-        with patch("code_puppy.tools.browser.browser_semantic_interactions.emit_info"):
+        with patch("spruce_grove.tools.browser.browser_semantic_interactions.emit_info"):
             with patch(
-                "code_puppy.tools.browser.browser_semantic_interactions.emit_success"
+                "spruce_grove.tools.browser.browser_semantic_interactions.emit_success"
             ):
                 result = await set_text_by_label("Email", "a@b.com")
 
@@ -148,10 +148,10 @@ async def test_semantic_no_page():
     manager = AsyncMock()
     manager.get_current_page.return_value = None
     with patch(
-        "code_puppy.tools.browser.browser_semantic_interactions.get_session_browser_manager",
+        "spruce_grove.tools.browser.browser_semantic_interactions.get_session_browser_manager",
         return_value=manager,
     ):
-        with patch("code_puppy.tools.browser.browser_semantic_interactions.emit_info"):
+        with patch("spruce_grove.tools.browser.browser_semantic_interactions.emit_info"):
             result = await click_by_role("button")
 
     assert result["success"] is False

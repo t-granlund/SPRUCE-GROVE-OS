@@ -24,7 +24,7 @@ def test_other_commands_are_not_ours():
 
 
 def test_bare_btw_shows_usage_and_is_handled():
-    with patch("code_puppy.messaging.emit_info") as emit:
+    with patch("spruce_grove.messaging.emit_info") as emit:
         assert _handle_custom_command("/btw", "btw") is True
     assert emit.called
     assert "Usage" in str(emit.call_args)
@@ -64,7 +64,7 @@ def test_non_tty_happy_path_uses_fallback():
         patch.object(inline_view, "is_tty", return_value=False),
         patch.object(inline_view, "wait_for_dismiss") as wait,
         patch.object(inline_view, "emit_fallback") as fallback,
-        patch("code_puppy.messaging.emit_info"),
+        patch("spruce_grove.messaging.emit_info"),
     ):
         assert _handle_custom_command("/btw meaning of life?", "btw") is True
     fallback.assert_called_once_with("meaning of life?", "42")
@@ -77,7 +77,7 @@ def test_non_tty_happy_path_uses_fallback():
 def test_no_model_resolved_emits_error():
     with (
         patch.object(side_query, "resolve_model_name", return_value=None),
-        patch("code_puppy.messaging.emit_error") as err,
+        patch("spruce_grove.messaging.emit_error") as err,
     ):
         assert _handle_custom_command("/btw hi", "btw") is True
     assert err.called
@@ -89,8 +89,8 @@ def test_query_failure_is_swallowed_with_error():
         patch.object(side_query, "ask_blocking", side_effect=RuntimeError("boom")),
         patch.object(inline_view, "is_tty", return_value=False),
         patch.object(inline_view, "emit_fallback") as fallback,
-        patch("code_puppy.messaging.emit_info"),
-        patch("code_puppy.messaging.emit_error") as err,
+        patch("spruce_grove.messaging.emit_info"),
+        patch("spruce_grove.messaging.emit_error") as err,
     ):
         assert _handle_custom_command("/btw hi", "btw") is True
     assert err.called
@@ -101,17 +101,17 @@ def test_query_failure_is_swallowed_with_error():
 # inline_view unit behavior
 # ---------------------------------------------------------------------------
 def test_is_tty_respects_no_tui_env(monkeypatch):
-    monkeypatch.setenv("CODE_PUPPY_NO_TUI", "1")
+    monkeypatch.setenv("SPRUCE_GROVE_NO_TUI", "1")
     assert inline_view.is_tty() is False
 
 
 def test_wait_for_dismiss_noop_without_tty(monkeypatch):
-    monkeypatch.setenv("CODE_PUPPY_NO_TUI", "1")
+    monkeypatch.setenv("SPRUCE_GROVE_NO_TUI", "1")
     inline_view.wait_for_dismiss(timeout_s=0.01)  # must return instantly, no raise
 
 
 def test_emit_fallback_includes_question_and_answer():
-    with patch("code_puppy.messaging.emit_info") as emit:
+    with patch("spruce_grove.messaging.emit_info") as emit:
         inline_view.emit_fallback("q?", "a.")
     text = str(emit.call_args)
     assert "q?" in text
@@ -127,7 +127,7 @@ def test_resolve_model_prefers_agent_pin():
             return "pinned-model"
 
     with patch(
-        "code_puppy.agents.agent_manager.get_current_agent",
+        "spruce_grove.agents.agent_manager.get_current_agent",
         return_value=FakeAgent(),
     ):
         assert side_query.resolve_model_name() == "pinned-model"
@@ -140,11 +140,11 @@ def test_resolve_model_falls_back_to_global():
 
     with (
         patch(
-            "code_puppy.agents.agent_manager.get_current_agent",
+            "spruce_grove.agents.agent_manager.get_current_agent",
             return_value=FakeAgent(),
         ),
         patch(
-            "code_puppy.config.get_global_model_name",
+            "spruce_grove.config.get_global_model_name",
             return_value="global-model",
         ),
     ):

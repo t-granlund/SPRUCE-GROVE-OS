@@ -1,4 +1,4 @@
-/* Code Puppy — sidebar behavior (progressive enhancement, WCAG-aware). */
+/* Spruce Grove — sidebar behavior (progressive enhancement, WCAG-aware). */
 (function () {
   "use strict";
   var body = document.body;

@@ -21,10 +21,10 @@ from pathlib import Path
 
 import pytest
 
-from code_puppy import config as cp_config
-from code_puppy import session_format_migration as sfm
-from code_puppy import session_storage
-from code_puppy.session_storage import (
+from spruce_grove import config as cp_config
+from spruce_grove import session_format_migration as sfm
+from spruce_grove import session_storage
+from spruce_grove.session_storage import (
     ENCODING_JSON,
     ENCODING_MESSAGES,
     SESSION_FORMAT_VERSION,
@@ -57,7 +57,7 @@ def _assert_golden_history(history: list) -> None:
     assert isinstance(history[1], ModelResponse)
 
     system_part, user_part = history[0].parts
-    assert system_part.content == "You are Biscuit, a digital puppy."
+    assert system_part.content == "You are Biscuit, a digital grove."
     attachment = user_part.content[1]
     assert isinstance(attachment, BinaryContent)
     assert attachment.data == PNG_BYTES  # bytes survive base64 round-trip
@@ -68,7 +68,7 @@ def _assert_golden_history(history: list) -> None:
     assert thinking.signature == "sig-abc123"  # signature survives
     assert text.content == "Looks like a PNG. Let me grep around."
     assert isinstance(tool_call, ToolCallPart)
-    assert tool_call.args == {"search_string": "puppy"}
+    assert tool_call.args == {"search_string": "grove"}
 
     tool_return = history[2].parts[0]
     assert isinstance(tool_return, ToolReturnPart)
@@ -169,7 +169,7 @@ class TestTzAwareDatetimes:
     def test_pydantic_core_tzinfo_maps_to_stdlib_timezone(self):
         from pydantic_core import TzInfo
 
-        from code_puppy import session_surrogate_unpickler as ssu
+        from spruce_grove import session_surrogate_unpickler as ssu
 
         aware = datetime(2025, 5, 1, 12, 30, tzinfo=TzInfo(3600))
         history, _ = ssu.load_surrogate_pickle(pickle.dumps([aware]))
@@ -179,7 +179,7 @@ class TestTzAwareDatetimes:
         assert restored.isoformat() == "2025-05-01T12:30:00+01:00"
 
     def test_unknown_tzinfo_degrades_to_naive_datetime(self):
-        from code_puppy import session_surrogate_unpickler as ssu
+        from spruce_grove import session_surrogate_unpickler as ssu
 
         aware = datetime(2025, 5, 1, 12, 30, tzinfo=_WeirdTz())
         history, had_surrogates = ssu.load_surrogate_pickle(pickle.dumps([aware]))
@@ -219,7 +219,7 @@ class TestNoPydanticAiImportGuard:
         """The surrogate unpickler must work with pydantic_ai fully absent."""
         module_path = (
             Path(__file__).parent.parent
-            / "code_puppy"
+            / "spruce_grove"
             / "session_surrogate_unpickler.py"
         )
         script = f"""
@@ -323,7 +323,7 @@ class TestStartupSweep:
         (autosaves / "bad1.pkl").write_bytes(b"garbage one")
         (autosaves / "bad2.pkl").write_bytes(b"garbage two")
         warnings: list[str] = []
-        from code_puppy import messaging
+        from spruce_grove import messaging
 
         monkeypatch.setattr(
             messaging, "emit_warning", lambda msg, **kw: warnings.append(msg)
@@ -384,7 +384,7 @@ class TestJsonRoundTrip:
         )
 
         return [
-            ModelRequest(parts=[UserPromptPart(content="hi puppy")]),
+            ModelRequest(parts=[UserPromptPart(content="hi grove")]),
             ModelResponse(parts=[TextPart(content="woof")]),
         ]
 
@@ -434,7 +434,7 @@ class TestJsonRoundTrip:
         assert (tmp_path / "new_style.json").exists()
 
     def test_subagent_session_roundtrip_and_lazy_migration(self, tmp_path, monkeypatch):
-        from code_puppy.tools import agent_tools
+        from spruce_grove.tools import agent_tools
 
         monkeypatch.setattr(agent_tools, "_get_subagent_sessions_dir", lambda: tmp_path)
 

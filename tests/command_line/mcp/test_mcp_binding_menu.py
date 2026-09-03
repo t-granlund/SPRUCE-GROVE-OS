@@ -3,13 +3,13 @@
 from io import StringIO
 from unittest.mock import patch
 
-from code_puppy.command_line.mcp_binding_menu import (
+from spruce_grove.command_line.mcp_binding_menu import (
     _binding_label,
     _render_details,
     build_binding_menu,
 )
 
-MODULE = "code_puppy.command_line.mcp_binding_menu"
+MODULE = "spruce_grove.command_line.mcp_binding_menu"
 
 SERVERS = [("alpha", "stdio", "running"), ("beta", "sse", "stopped")]
 
@@ -20,7 +20,7 @@ def _drive(keys, bindings):
     out = StringIO()
     with patch(f"{MODULE}.get_bound_servers", return_value=bindings):
         menu = build_binding_menu(
-            "code-puppy",
+            "spruce-grove",
             SERVERS,
             key_source=lambda: next(script),
             output=out,
@@ -34,14 +34,14 @@ def _drive(keys, bindings):
 def test_binding_label_shows_checkbox_and_auto_marker():
     bindings = {"alpha": {"auto_start": True}}
     with patch(f"{MODULE}.get_bound_servers", return_value=bindings):
-        assert _binding_label("code-puppy", "alpha") == "[x] alpha \u26a1auto"
-        assert _binding_label("code-puppy", "beta") == "[ ] beta"
+        assert _binding_label("spruce-grove", "alpha") == "[x] alpha \u26a1auto"
+        assert _binding_label("spruce-grove", "beta") == "[ ] beta"
 
 
 def test_details_pane_reflects_binding_state():
     bindings = {"alpha": {"auto_start": True}}
     with patch(f"{MODULE}.get_bound_servers", return_value=bindings):
-        details = _render_details("code-puppy", SERVERS, "alpha")
+        details = _render_details("spruce-grove", SERVERS, "alpha")
     assert "alpha" in details
     assert "stdio" in details
     assert "running" in details
@@ -52,7 +52,7 @@ def test_details_pane_reflects_binding_state():
 def test_space_toggles_binding():
     with patch(f"{MODULE}.toggle_binding") as mock_toggle:
         result, _ = _drive([" ", "enter"], bindings={})
-    mock_toggle.assert_called_once_with("code-puppy", "alpha")
+    mock_toggle.assert_called_once_with("spruce-grove", "alpha")
     assert not result.cancelled
 
 
@@ -62,8 +62,8 @@ def test_a_binds_then_enables_auto_start_when_unbound():
         patch(f"{MODULE}.set_binding") as mock_set,
     ):
         _drive(["down", "a", "enter"], bindings={})
-    mock_auto.assert_called_once_with("code-puppy", "beta")
-    mock_set.assert_called_once_with("code-puppy", "beta", auto_start=True)
+    mock_auto.assert_called_once_with("spruce-grove", "beta")
+    mock_set.assert_called_once_with("spruce-grove", "beta", auto_start=True)
 
 
 def test_q_exits_like_enter():

@@ -1,4 +1,4 @@
-"""Tests for code_puppy.mcp_.agent_bindings."""
+"""Tests for spruce_grove.mcp_.agent_bindings."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy.mcp_ import agent_bindings as ab
+from spruce_grove.mcp_ import agent_bindings as ab
 
 
 @pytest.fixture
@@ -148,7 +148,7 @@ class TestManagerFilter:
     """get_servers_for_agent should respect bindings (strict opt-in)."""
 
     def test_unbound_agent_gets_nothing(self, tmp_bindings):
-        from code_puppy.mcp_.manager import MCPManager
+        from spruce_grove.mcp_.manager import MCPManager
 
         with (
             patch.object(MCPManager, "sync_from_config"),
@@ -165,7 +165,7 @@ class TestManagerFilter:
         assert manager.get_servers_for_agent(agent_name="ghost-agent") == []
 
     def test_bound_agent_gets_only_bound(self, tmp_bindings):
-        from code_puppy.mcp_.manager import MCPManager
+        from spruce_grove.mcp_.manager import MCPManager
 
         with (
             patch.object(MCPManager, "sync_from_config"),
@@ -182,7 +182,7 @@ class TestManagerFilter:
         assert servers == [fake_a.get_pydantic_server.return_value]
 
     def test_legacy_no_agent_name_returns_all(self, tmp_bindings):
-        from code_puppy.mcp_.manager import MCPManager
+        from spruce_grove.mcp_.manager import MCPManager
 
         with (
             patch.object(MCPManager, "sync_from_config"),
@@ -208,8 +208,8 @@ class TestUnboundOrphanWarning:
     """
 
     def _fresh_manager(self):
-        from code_puppy.mcp_ import manager as mgr_mod
-        from code_puppy.mcp_.manager import MCPManager
+        from spruce_grove.mcp_ import manager as mgr_mod
+        from spruce_grove.mcp_.manager import MCPManager
 
         with (
             patch.object(MCPManager, "sync_from_config"),
@@ -310,7 +310,7 @@ class TestUnboundOrphanWarning:
         with (
             patch.object(mgr_mod, "emit_warning") as mock_warn,
             patch(
-                "code_puppy.config.get_mcp_unbound_warning_silenced",
+                "spruce_grove.config.get_mcp_unbound_warning_silenced",
                 return_value=True,
             ),
         ):
@@ -329,7 +329,7 @@ class TestUnboundOrphanWarning:
         with (
             patch.object(mgr_mod, "emit_warning") as mock_warn,
             patch(
-                "code_puppy.config.get_mcp_unbound_warning_silenced",
+                "spruce_grove.config.get_mcp_unbound_warning_silenced",
                 return_value=True,
             ),
         ):
@@ -341,7 +341,7 @@ class TestUnboundOrphanWarning:
         with (
             patch.object(mgr_mod, "emit_warning") as mock_warn,
             patch(
-                "code_puppy.config.get_mcp_unbound_warning_silenced",
+                "spruce_grove.config.get_mcp_unbound_warning_silenced",
                 return_value=False,
             ),
         ):
@@ -368,12 +368,12 @@ class TestJsonDeclaredBindingsMerge:
     """
 
     def _stub_json_agent(self, declared):
-        from code_puppy.agents.json_agent import JSONAgent
+        from spruce_grove.agents.json_agent import JSONAgent
 
         fake_agent = MagicMock(spec=JSONAgent)
         fake_agent.get_declared_mcp_bindings.return_value = declared
         return patch(
-            "code_puppy.agents.agent_manager.load_agent", return_value=fake_agent
+            "spruce_grove.agents.agent_manager.load_agent", return_value=fake_agent
         )
 
     def test_declared_bindings_merged(self, tmp_bindings):
@@ -402,13 +402,13 @@ class TestJsonDeclaredBindingsMerge:
             json.dumps({"bindings": {"clone-1": {"sqlite": {"auto_start": True}}}})
         )
         with patch(
-            "code_puppy.agents.agent_manager.load_agent",
+            "spruce_grove.agents.agent_manager.load_agent",
             side_effect=RuntimeError("boom"),
         ):
             assert ab.get_bound_servers("clone-1") == {"sqlite": {"auto_start": True}}
 
     def test_get_declared_raises_falls_back_to_file(self, tmp_bindings):
-        from code_puppy.agents.json_agent import JSONAgent
+        from spruce_grove.agents.json_agent import JSONAgent
 
         tmp_bindings.write_text(
             json.dumps({"bindings": {"clone-1": {"sqlite": {"auto_start": True}}}})
@@ -416,7 +416,7 @@ class TestJsonDeclaredBindingsMerge:
         bad_agent = MagicMock(spec=JSONAgent)
         bad_agent.get_declared_mcp_bindings.side_effect = RuntimeError("kaboom")
         with patch(
-            "code_puppy.agents.agent_manager.load_agent", return_value=bad_agent
+            "spruce_grove.agents.agent_manager.load_agent", return_value=bad_agent
         ):
             assert ab.get_bound_servers("clone-1") == {"sqlite": {"auto_start": True}}
 
@@ -425,6 +425,6 @@ class TestJsonDeclaredBindingsMerge:
             json.dumps({"bindings": {"clone-1": {"sqlite": {"auto_start": True}}}})
         )
         with patch(
-            "code_puppy.agents.agent_manager.load_agent", return_value=MagicMock()
+            "spruce_grove.agents.agent_manager.load_agent", return_value=MagicMock()
         ):
             assert ab.get_bound_servers("clone-1") == {"sqlite": {"auto_start": True}}

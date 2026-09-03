@@ -1,4 +1,4 @@
-"""Tests for the stable content-based hashing in code_puppy.agents._history.
+"""Tests for the stable content-based hashing in spruce_grove.agents._history.
 
 Properties under test:
 - Determinism: same content -> same hash across separate constructions
@@ -21,12 +21,12 @@ from pydantic_ai.messages import (
     UserPromptPart,
 )
 
-from code_puppy.agents._history import hash_message, stringify_part
+from spruce_grove.agents._history import hash_message, stringify_part
 
 
 def test_same_content_same_hash_across_constructions():
-    msg_a = ModelRequest(parts=[UserPromptPart(content="hello puppy")])
-    msg_b = ModelRequest(parts=[UserPromptPart(content="hello puppy")])
+    msg_a = ModelRequest(parts=[UserPromptPart(content="hello grove")])
+    msg_b = ModelRequest(parts=[UserPromptPart(content="hello grove")])
     assert hash_message(msg_a) == hash_message(msg_b)
 
 

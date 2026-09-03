@@ -14,7 +14,7 @@ Every key/needle pair is preserved exactly; only the boilerplate is gone.
 
 import pytest
 
-from code_puppy.i18n import translate
+from spruce_grove.i18n import translate
 
 # topic name -> [(key, params, (needles that must appear, ...)), ...]
 _CONTRACTS = {
@@ -262,11 +262,11 @@ def test_add_model_failed_interpolates_error_param():
 @pytest.mark.parametrize(
     "module_name,attr",
     [
-        ("code_puppy.cli_runner", "interactive_mode"),
-        ("code_puppy.command_line.config_commands", "handle_unpin_command"),
-        ("code_puppy.command_line.core_commands", "handle_cd_command"),
-        ("code_puppy.mcp_.config_wizard", None),
-        ("code_puppy.command_line.session_commands", None),
+        ("spruce_grove.cli_runner", "interactive_mode"),
+        ("spruce_grove.command_line.config_commands", "handle_unpin_command"),
+        ("spruce_grove.command_line.core_commands", "handle_cd_command"),
+        ("spruce_grove.mcp_.config_wizard", None),
+        ("spruce_grove.command_line.session_commands", None),
         ("code_puppy_core_plugins.claude_code_oauth.register_callbacks", None),
     ],
     ids=[

@@ -1,4 +1,4 @@
-"""Tests for code_puppy.atomic_json -- the JSON counterpart to config_file's
+"""Tests for spruce_grove.atomic_json -- the JSON counterpart to config_file's
 corruption resilience, per the PUP-605 follow-up review (Andrew Tilson's
 comment on #757 flagged mcp_servers.json / extra_models.json / spinners.json
 as sharing the same unbounded-read / torn-write / no-lock failure modes)."""
@@ -9,7 +9,7 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy import atomic_json
+from spruce_grove import atomic_json
 
 
 @pytest.fixture

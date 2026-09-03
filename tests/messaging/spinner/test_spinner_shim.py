@@ -7,8 +7,8 @@ bar's status line.
 
 import io
 
-from code_puppy.messaging import bottom_bar as bottom_bar_mod
-from code_puppy.messaging.spinner import (
+from spruce_grove.messaging import bottom_bar as bottom_bar_mod
+from spruce_grove.messaging.spinner import (
     ConsoleSpinner,
     clear_spinner_context,
     format_context_info,
@@ -73,7 +73,7 @@ def test_update_spinner_context_dropped_for_subagents(monkeypatch):
     bar = bottom_bar_mod.BottomBar(stream=tty, get_size=lambda: (80, 24))
     bottom_bar_mod.reset_bottom_bar()
     bottom_bar_mod._bottom_bar = bar
-    monkeypatch.setattr("code_puppy.tools.subagent_context.is_subagent", lambda: True)
+    monkeypatch.setattr("spruce_grove.tools.subagent_context.is_subagent", lambda: True)
     try:
         bar.start()
         bar.set_status("main agent context")
@@ -85,7 +85,7 @@ def test_update_spinner_context_dropped_for_subagents(monkeypatch):
 
 def test_update_spinner_context_never_raises(monkeypatch):
     monkeypatch.setattr(
-        "code_puppy.messaging.bottom_bar.get_bottom_bar",
+        "spruce_grove.messaging.bottom_bar.get_bottom_bar",
         lambda: (_ for _ in ()).throw(RuntimeError("no bar")),
     )
     update_spinner_context("info")  # must not raise
@@ -117,10 +117,10 @@ def _codex_usage_status() -> str:
 
 
 def test_format_context_info_appends_usage_for_codex_model(monkeypatch):
-    from code_puppy.callbacks import register_callback, unregister_callback
+    from spruce_grove.callbacks import register_callback, unregister_callback
 
     monkeypatch.setattr(
-        "code_puppy.config.get_global_model_name", lambda: "codex-gpt-5.4"
+        "spruce_grove.config.get_global_model_name", lambda: "codex-gpt-5.4"
     )
     register_callback("usage_status", _codex_usage_status)
     try:
@@ -132,10 +132,10 @@ def test_format_context_info_appends_usage_for_codex_model(monkeypatch):
 
 
 def test_format_context_info_hides_codex_usage_for_other_models(monkeypatch):
-    from code_puppy.callbacks import register_callback, unregister_callback
+    from spruce_grove.callbacks import register_callback, unregister_callback
 
     monkeypatch.setattr(
-        "code_puppy.config.get_global_model_name", lambda: "openai-gpt-5"
+        "spruce_grove.config.get_global_model_name", lambda: "openai-gpt-5"
     )
     register_callback("usage_status", _codex_usage_status)
     try:

@@ -21,7 +21,7 @@ from typing import Final
 import pexpect
 import pytest
 
-CONFIG_TEMPLATE: Final[str] = """[puppy]
+CONFIG_TEMPLATE: Final[str] = """[grove]
 puppy_name = IntegrationPup
 owner_name = CodePuppyTester
 auto_save_session = true
@@ -31,7 +31,7 @@ enable_dbos = true
 """
 
 # models.json ships empty, so tests provision the "lilac synthetic GLM-5.2"
-# model via ~/.code_puppy/extra_models.json, like a real user would.
+# model via ~/.spruce_grove/extra_models.json, like a real user would.
 EXTRA_MODELS_TEMPLATE: Final[str] = """{
   "lilac-zai-org-glm-5.2": {
     "type": "custom_openai",
@@ -209,7 +209,7 @@ def dump_dbos_report(temp_home: pathlib.Path) -> None:
     Appends human-readable text to a global report buffer.
     """
     try:
-        db_path = temp_home / ".code_puppy" / "dbos_store.sqlite"
+        db_path = temp_home / ".spruce_grove" / "dbos_store.sqlite"
         if not db_path.exists():
             return
         conn = sqlite3.connect(str(db_path))
@@ -274,50 +274,50 @@ class CliHarness:
         """Spawn the CLI, optionally reusing an existing HOME for autosave tests."""
         if existing_home is not None:
             temp_home = pathlib.Path(existing_home)
-            config_dir = temp_home / ".config" / "code_puppy"
-            code_puppy_dir = temp_home / ".code_puppy"
+            config_dir = temp_home / ".config" / "spruce_grove"
+            spruce_grove_dir = temp_home / ".spruce_grove"
             config_dir.mkdir(parents=True, exist_ok=True)
-            code_puppy_dir.mkdir(parents=True, exist_ok=True)
-            write_config = not (config_dir / "puppy.cfg").exists()
+            spruce_grove_dir.mkdir(parents=True, exist_ok=True)
+            write_config = not (config_dir / "grove.cfg").exists()
         else:
             temp_home = pathlib.Path(
-                tempfile.mkdtemp(prefix=f"code_puppy_home_{_random_name()}_")
+                tempfile.mkdtemp(prefix=f"spruce_grove_home_{_random_name()}_")
             )
-            config_dir = temp_home / ".config" / "code_puppy"
-            code_puppy_dir = temp_home / ".code_puppy"
+            config_dir = temp_home / ".config" / "spruce_grove"
+            spruce_grove_dir = temp_home / ".spruce_grove"
             config_dir.mkdir(parents=True, exist_ok=True)
-            code_puppy_dir.mkdir(parents=True, exist_ok=True)
+            spruce_grove_dir.mkdir(parents=True, exist_ok=True)
             write_config = True
 
         if write_config:
-            # Write config to both XDG config dir and ~/.code_puppy for compatibility
-            (config_dir / "puppy.cfg").write_text(CONFIG_TEMPLATE, encoding="utf-8")
-            (code_puppy_dir / "puppy.cfg").write_text(CONFIG_TEMPLATE, encoding="utf-8")
+            # Write config to both XDG config dir and ~/.spruce_grove for compatibility
+            (config_dir / "grove.cfg").write_text(CONFIG_TEMPLATE, encoding="utf-8")
+            (spruce_grove_dir / "grove.cfg").write_text(CONFIG_TEMPLATE, encoding="utf-8")
 
         # Provision lilac into extra_models.json (models.json ships empty; else the CLI
         # resolves active model to [None]). Idempotent so reused-home spawns can't miss it.
-        extra_models_path = code_puppy_dir / "extra_models.json"
+        extra_models_path = spruce_grove_dir / "extra_models.json"
         if not extra_models_path.exists():
             extra_models_path.write_text(EXTRA_MODELS_TEMPLATE, encoding="utf-8")
 
         log_path = temp_home / f"cli_output_{uuid.uuid4().hex}.log"
-        cmd_args = ["code-puppy"] + (args or [])
+        cmd_args = ["spruce-grove"] + (args or [])
 
         spawn_env = os.environ.copy()
         spawn_env.update(env or {})
         spawn_env["HOME"] = str(temp_home)
         spawn_env.pop("PYTHONPATH", None)  # avoid accidental venv confusion
-        # Clear XDG vars so the spawned CLI uses ~/.code_puppy (temp home)
+        # Clear XDG vars so the spawned CLI uses ~/.spruce_grove (temp home)
         spawn_env.pop("XDG_CONFIG_HOME", None)
         spawn_env.pop("XDG_DATA_HOME", None)
         spawn_env.pop("XDG_CACHE_HOME", None)
         spawn_env.pop("XDG_STATE_HOME", None)
         # Ensure DBOS uses a temp sqlite under this HOME
-        dbos_sqlite = code_puppy_dir / "dbos_store.sqlite"
+        dbos_sqlite = spruce_grove_dir / "dbos_store.sqlite"
         spawn_env["DBOS_SYSTEM_DATABASE_URL"] = f"sqlite:///{dbos_sqlite}"
         spawn_env.setdefault("DBOS_LOG_LEVEL", "ERROR")
         # Skip the interactive tutorial wizard in tests
-        spawn_env["CODE_PUPPY_SKIP_TUTORIAL"] = "1"
+        spawn_env["SPRUCE_GROVE_SKIP_TUTORIAL"] = "1"
 
         child = pexpect.spawn(
             cmd_args[0],
@@ -364,7 +364,7 @@ class CliHarness:
 
     def cleanup(self, result: SpawnResult) -> None:
         """Terminate the child, dump DBOS report, then remove test-created files unless kept."""
-        keep_home = os.getenv("CODE_PUPPY_KEEP_TEMP_HOME") in {
+        keep_home = os.getenv("SPRUCE_GROVE_KEEP_TEMP_HOME") in {
             "1",
             "true",
             "TRUE",
@@ -383,7 +383,7 @@ class CliHarness:
             if not keep_home:
                 # Use selective cleanup - only delete files created during test
                 use_selective_cleanup = os.getenv(
-                    "CODE_PUPPY_SELECTIVE_CLEANUP", "true"
+                    "SPRUCE_GROVE_SELECTIVE_CLEANUP", "true"
                 ).lower() in {"1", "true", "yes", "on"}
                 if use_selective_cleanup:
                     _cleanup_test_only_files(result.temp_home, result._initial_files)
@@ -408,7 +408,7 @@ def integration_env() -> dict[str, str]:
     """Return a basic environment for integration tests."""
     return {
         "CEREBRAS_API_KEY": os.environ["CEREBRAS_API_KEY"],
-        "CODE_PUPPY_TEST_FAST": "1",
+        "SPRUCE_GROVE_TEST_FAST": "1",
     }
 
 
@@ -441,7 +441,7 @@ def spawned_cli(
 
     # Try to satisfy first-run prompts if they appear; otherwise continue
     try:
-        result.child.expect("What should we name the puppy?", timeout=15)
+        result.child.expect("What should we name the grove?", timeout=15)
         result.sendline("\r")
         result.child.expect("What's your name", timeout=15)
         result.sendline("\r")

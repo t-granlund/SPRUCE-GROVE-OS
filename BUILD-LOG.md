@@ -1,10 +1,10 @@
-# Code Puppy Site — Build Log & Roadmap
+# Spruce Grove Site — Build Log & Roadmap
 
 > Single source of truth for **what was built, when, where it lives locally vs. deployed**, QA status, and the forward roadmap.
 >
-> - **Local repo:** `~/code_puppy` (branch `main`)
-> - **Live site:** https://t-granlund.github.io/code_puppy/
-> - **Remotes:** `myfork` = t-granlund/code_puppy (the public site source) · `private` = Multi-Agent-Orch-CLI (insurance mirror) · `origin` = mpfaffenberger/code_puppy (upstream, not pushed by us)
+> - **Local repo:** `~/spruce_grove` (branch `main`)
+> - **Live site:** https://t-granlund.github.io/spruce_grove/
+> - **Remotes:** `myfork` = t-granlund/spruce_grove (the public site source) · `private` = Multi-Agent-Orch-CLI (insurance mirror) · `origin` = mpfaffenberger/spruce_grove (upstream, not pushed by us)
 > - **Deploy:** `.github/workflows/pages.yml` → GitHub Pages (`build_type: workflow`)
 
 ---
@@ -31,7 +31,7 @@ Times are local (CDT). "Local files" = repo paths; "Live" = deployed URL; "Remot
 
 ### a. Earlier in the day — icon/brand pass (pre-crash recovery)
 - **Live commit:** `f8415651` — *feat(brand): lucide icon pass + face-only mark, brand watermarks across site*
-- **Local files:** `pages-hub/index.html`, `pages-hub/architecture.html`, `pages-hub/updates.html`, `docs/field-guide/index.html`, `*/assets/puppy.svg`, new `*/assets/puppy-full.svg`
+- **Local files:** `pages-hub/index.html`, `pages-hub/architecture.html`, `pages-hub/updates.html`, `docs/field-guide/index.html`, `*/assets/grove.svg`, new `*/assets/grove-full.svg`
 - **What:** face-only nav/favicon mark, lucide icons on cards/sections, brand watermarks. (This is the work the 1:36 PM session was finishing when it died on a `400 Unterminated string` vision-model transport error; we recovered the uncommitted changes and shipped them.)
 - **Pushed to:** `myfork` + `private`; **Live:** all sections.
 
@@ -55,8 +55,8 @@ Times are local (CDT). "Local files" = repo paths; "Live" = deployed URL; "Remot
   | `pages-hub/assets/popover.js` | Reusable ARIA popover (open-page / copy-link / close / deep-link) |
   | `pages-hub/assets/icons.js` | Shared Lucide icon set (30 icons) |
   | `pages-hub/design.html` | **New Design System page** |
-- **Local files (modified):** `pages-hub/index.html` (hub), `pages-hub/updates.html` (releases), `pages-hub/architecture.html`, `docs/field-guide/index.html`, `*/assets/puppy.svg` (square-safe mark), `.github/workflows/pages.yml` (deploys `/design/`)
-- **Live URL new this round:** https://t-granlund.github.io/code_puppy/design/
+- **Local files (modified):** `pages-hub/index.html` (hub), `pages-hub/updates.html` (releases), `pages-hub/architecture.html`, `docs/field-guide/index.html`, `*/assets/grove.svg` (square-safe mark), `.github/workflows/pages.yml` (deploys `/design/`)
+- **Live URL new this round:** https://t-granlund.github.io/spruce_grove/design/
 - **Pushed to:** `myfork` + `private`; **Live:** all six sections.
 
 ---
@@ -150,7 +150,7 @@ Only the tokens that actually failed were touched — the bright accents (#A3A8F
 ## 6. How to verify / reproduce
 ```bash
 # serve a Pages-mirrored layout locally (file:// can't express /releases/ style URLs)
-cd ~/code_puppy
+cd ~/spruce_grove
 rm -rf /tmp/bbsite && mkdir -p /tmp/bbsite/{field-guide,releases,architecture,design,flat}
 cp pages-hub/index.html /tmp/bbsite/
 cp -r pages-hub/assets /tmp/bbsite/
@@ -162,7 +162,7 @@ cp docs/field-guide-flat.html  /tmp/bbsite/flat/index.html
 (cd /tmp/bbsite && python3 -m http.server 8931)
 
 # live validation sweep used for this log
-# (Playwright over https://t-granlund.github.io/code_puppy + the staging URL)
+# (Playwright over https://t-granlund.github.io/spruce_grove + the staging URL)
 ```
 
 ---

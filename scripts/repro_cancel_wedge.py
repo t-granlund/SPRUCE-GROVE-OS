@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Stress repro for the cancelled-run wedge (sub-agents + hammered Ctrl+C).
 
-Drives a real interactive code-puppy in a pty, per iteration:
+Drives a real interactive spruce-grove in a pty, per iteration:
 
 1. wait for warmup, submit a prompt that fans out to a sub-agent;
 2. after a (randomized) delay, hammer raw Ctrl+C like an impatient human;
 3. give the cancel time to settle, then type ``exit``;
 4. if the process is still alive after the exit timeout, it WEDGED:
-   send SIGUSR2 (code-puppy's stack-dump hook writes thread + asyncio-task
-   stacks to ~/.code_puppy/stackdumps/), then SIGKILL and keep the pty
+   send SIGUSR2 (spruce-grove's stack-dump hook writes thread + asyncio-task
+   stacks to ~/.spruce_grove/stackdumps/), then SIGKILL and keep the pty
    transcript for the post-mortem.
 
 POSIX only (pty + SIGUSR2). Needs a configured model — this makes real
@@ -35,7 +35,7 @@ import sys
 import time
 from pathlib import Path
 
-STACKDUMP_DIR = Path.home() / ".code_puppy" / "stackdumps"
+STACKDUMP_DIR = Path.home() / ".spruce_grove" / "stackdumps"
 ARTIFACT_DIR = Path("wedge_artifacts")
 
 DEFAULT_PROMPT = (
@@ -53,8 +53,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--prompt", default=DEFAULT_PROMPT)
     p.add_argument(
         "--cmd",
-        default="code-puppy",
-        help="command to launch (default: code-puppy on PATH)",
+        default="spruce-grove",
+        help="command to launch (default: spruce-grove on PATH)",
     )
     p.add_argument(
         "--warmup",

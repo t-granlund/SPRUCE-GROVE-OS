@@ -1,13 +1,13 @@
 # STATE — pick up here
 
-**Last saved:** 2026-07-30 (evening) by code-puppy-8aaf0e
+**Last saved:** 2026-07-30 (evening) by spruce-grove-8aaf0e
 **Status:** v2.1 — DS "Cornerstone+" refactored into token/component architecture,
 42-test compliance suite green, headless QA re-verified post-refactor.
 
 ## How to resume
 
 ```bash
-cd /Users/tygranlund/code_puppy/docs/decks/the-great-adpuppytion
+cd /Users/tygranlund/spruce_grove/docs/decks/the-great-adpuppytion
 python3 -m http.server 8084   # then open http://localhost:8084/
 ```
 
@@ -19,7 +19,7 @@ python3 -m http.server 8084   # then open http://localhost:8084/
 - `components.json` — machine-readable DS registry. Natural-language prompts
   map to tokens/classes via its `prompt_guide`. Keep in sync with deck edits
   (test_registry.py enforces).
-- `FACTCHECK.md` — web-puppy verified claims table; corrections applied.
+- `FACTCHECK.md` — web-grove verified claims table; corrections applied.
 - `tokens.css` — SINGLE SOURCE OF TRUTH for every color/size/motion value.
   Prompt-driven edits land here (e.g. "recolor Act II" → edit `--act-2`).
 - `theme.css` — component layer. Consumes tokens only; zero hardcoded hex
@@ -33,7 +33,7 @@ python3 -m http.server 8084   # then open http://localhost:8084/
 1. **Chaplin's Great Dictator speech = verbatim, one beat per slide, 8 slides**
    (eyebrow I–VIII, slides 13–20). Text exactly from `docs/jack-conte-sxsw.md`.
    Bookended on slide 44.
-2. Code-Puppy brand tokens (gold #f5b94d / sky #6cb6ff / mint #4cc46a /
+2. Code-Cedar brand tokens (gold #f5b94d / sky #6cb6ff / mint #4cc46a /
    violet #b692f6 / coral #ff7b72 on ink #0b0f14). One accent hue per act/slide
    (`.act-*` scoping) — the v1 five-hues-per-slide sin is banned.
 3. Archetype discipline: every slide is STATEMENT, SPLIT, STAGE, or LEDGER.
@@ -51,7 +51,7 @@ refusal + speech → sine wave (Pomplamoose) → 2026 dip (slop + consent +
 ## CPU framing (locked concept)
 
 Two halves of one future: creative-non-technical + technical-non-creative.
-Stack: **Puppy OS** (front door) → **Code-Puppy** (engine, real, MIT) →
+Stack: **Cedar OS** (front door) → **Code-Cedar** (engine, real, MIT) →
 **University** (bridge; this deck is its charter).
 5 schools: New Medium / Agentic Craft for Creatives / Creative Direction for
 Engineers / The Rebuild Practice / Ethics, Consent & Credit.

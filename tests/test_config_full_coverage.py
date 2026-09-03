@@ -1,4 +1,4 @@
-"""Full coverage tests for code_puppy/config.py.
+"""Full coverage tests for spruce_grove/config.py.
 
 Targets all uncovered lines from existing test suites.
 """
@@ -12,7 +12,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 
-from code_puppy import config as cp_config
+from spruce_grove import config as cp_config
 
 
 # ---------------------------------------------------------------------------
@@ -22,12 +22,12 @@ class TestGetXdgDir:
     def test_returns_xdg_path_when_env_set(self, monkeypatch):
         monkeypatch.setenv("XDG_CONFIG_HOME", "/custom/config")
         result = cp_config._get_xdg_dir("XDG_CONFIG_HOME", ".config")
-        assert result == "/custom/config/code_puppy"
+        assert result == "/custom/config/spruce_grove"
 
     def test_returns_legacy_path_when_env_not_set(self, monkeypatch):
         monkeypatch.delenv("XDG_CONFIG_HOME", raising=False)
         result = cp_config._get_xdg_dir("XDG_CONFIG_HOME", ".config")
-        assert result == os.path.join(os.path.expanduser("~"), ".code_puppy")
+        assert result == os.path.join(os.path.expanduser("~"), ".spruce_grove")
 
 
 # ---------------------------------------------------------------------------
@@ -440,7 +440,7 @@ class TestModelSupportsSetting:
     def test_with_supported_settings_list(self):
         mock_config = {"test-model": {"supported_settings": ["temperature", "seed"]}}
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config",
+            "spruce_grove.model_factory.ModelFactory.load_config",
             return_value=mock_config,
         ):
             assert cp_config.model_supports_setting("test-model", "temperature") is True
@@ -449,7 +449,7 @@ class TestModelSupportsSetting:
     def test_claude_default_settings(self):
         mock_config = {"claude-test": {}}
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config",
+            "spruce_grove.model_factory.ModelFactory.load_config",
             return_value=mock_config,
         ):
             assert (
@@ -463,7 +463,7 @@ class TestModelSupportsSetting:
     def test_claude_opus_4_6_effort(self):
         mock_config = {"claude-opus-4-6": {}}
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config",
+            "spruce_grove.model_factory.ModelFactory.load_config",
             return_value=mock_config,
         ):
             assert cp_config.model_supports_setting("claude-opus-4-6", "effort") is True
@@ -471,7 +471,7 @@ class TestModelSupportsSetting:
     def test_generic_model_defaults(self):
         mock_config = {"generic": {}}
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config",
+            "spruce_grove.model_factory.ModelFactory.load_config",
             return_value=mock_config,
         ):
             assert cp_config.model_supports_setting("generic", "temperature") is True
@@ -480,7 +480,7 @@ class TestModelSupportsSetting:
 
     def test_exception_returns_true(self):
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config", side_effect=Exception
+            "spruce_grove.model_factory.ModelFactory.load_config", side_effect=Exception
         ):
             assert cp_config.model_supports_setting("any", "any") is True
 
@@ -536,7 +536,7 @@ class TestDefaultModel:
     def test_default_model_from_config(self):
         cp_config._default_model_cache = None
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config",
+            "spruce_grove.model_factory.ModelFactory.load_config",
             return_value={"first": {}, "second": {}},
         ):
             result = cp_config._default_model_from_models_json()
@@ -548,7 +548,7 @@ class TestDefaultModel:
         # resolver returns None so callers can surface a "no model" warning.
         cp_config._default_model_cache = None
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config", return_value={}
+            "spruce_grove.model_factory.ModelFactory.load_config", return_value={}
         ):
             result = cp_config._default_model_from_models_json()
             assert result is None
@@ -557,7 +557,7 @@ class TestDefaultModel:
     def test_default_model_exception(self):
         cp_config._default_model_cache = None
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config", side_effect=Exception
+            "spruce_grove.model_factory.ModelFactory.load_config", side_effect=Exception
         ):
             result = cp_config._default_model_from_models_json()
             assert result is None
@@ -576,7 +576,7 @@ class TestDefaultVisionModel:
     def test_supports_vision_tag(self):
         cp_config._default_vision_model_cache = None
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config",
+            "spruce_grove.model_factory.ModelFactory.load_config",
             return_value={"model-a": {"supports_vision": True}},
         ):
             assert cp_config._default_vision_model_from_models_json() == "model-a"
@@ -585,7 +585,7 @@ class TestDefaultVisionModel:
     def test_preferred_candidates(self):
         cp_config._default_vision_model_cache = None
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config",
+            "spruce_grove.model_factory.ModelFactory.load_config",
             return_value={"gpt-4.1": {}, "other": {}},
         ):
             assert cp_config._default_vision_model_from_models_json() == "gpt-4.1"
@@ -594,7 +594,7 @@ class TestDefaultVisionModel:
     def test_fallback_to_general_default(self):
         cp_config._default_vision_model_cache = None
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config",
+            "spruce_grove.model_factory.ModelFactory.load_config",
             return_value={"some-model": {}},
         ):
             with patch.object(
@@ -608,7 +608,7 @@ class TestDefaultVisionModel:
     def test_empty_config(self):
         cp_config._default_vision_model_cache = None
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config", return_value={}
+            "spruce_grove.model_factory.ModelFactory.load_config", return_value={}
         ):
             assert cp_config._default_vision_model_from_models_json() == "gpt-4.1"
         cp_config._default_vision_model_cache = None
@@ -616,7 +616,7 @@ class TestDefaultVisionModel:
     def test_exception(self):
         cp_config._default_vision_model_cache = None
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config", side_effect=Exception
+            "spruce_grove.model_factory.ModelFactory.load_config", side_effect=Exception
         ):
             assert cp_config._default_vision_model_from_models_json() == "gpt-4.1"
         cp_config._default_vision_model_cache = None
@@ -634,21 +634,21 @@ class TestValidateModel:
     def test_found(self):
         cp_config._model_validation_cache.clear()
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config", return_value={"m": {}}
+            "spruce_grove.model_factory.ModelFactory.load_config", return_value={"m": {}}
         ):
             assert cp_config._validate_model_exists("m") is True
 
     def test_not_found(self):
         cp_config._model_validation_cache.clear()
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config", return_value={}
+            "spruce_grove.model_factory.ModelFactory.load_config", return_value={}
         ):
             assert cp_config._validate_model_exists("missing") is False
 
     def test_exception(self):
         cp_config._model_validation_cache.clear()
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config", side_effect=Exception
+            "spruce_grove.model_factory.ModelFactory.load_config", side_effect=Exception
         ):
             assert cp_config._validate_model_exists("any") is True
 
@@ -659,7 +659,7 @@ class TestValidateModel:
 class TestModelContextLength:
     def test_from_config(self):
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config",
+            "spruce_grove.model_factory.ModelFactory.load_config",
             return_value={"m": {"context_length": 32000}},
         ):
             with patch.object(cp_config, "get_global_model_name", return_value="m"):
@@ -667,14 +667,14 @@ class TestModelContextLength:
 
     def test_default(self):
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config", return_value={}
+            "spruce_grove.model_factory.ModelFactory.load_config", return_value={}
         ):
             with patch.object(cp_config, "get_global_model_name", return_value="m"):
                 assert cp_config.get_model_context_length() == 128000
 
     def test_exception(self):
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config", side_effect=Exception
+            "spruce_grove.model_factory.ModelFactory.load_config", side_effect=Exception
         ):
             assert cp_config.get_model_context_length() == 128000
 
@@ -698,7 +698,7 @@ class TestMCPServerConfigs:
         f = tmp_path / "mcp_servers.json"
         f.write_text("not json")
         with patch.object(cp_config, "MCP_SERVERS_FILE", str(f)):
-            with patch("code_puppy.messaging.message_queue.emit_error"):
+            with patch("spruce_grove.messaging.message_queue.emit_error"):
                 result = cp_config.load_mcp_server_configs()
                 assert result == {}
 
@@ -706,7 +706,7 @@ class TestMCPServerConfigs:
         f = tmp_path / "mcp_servers.json"
         f.write_text("not json")
         with patch.object(cp_config, "MCP_SERVERS_FILE", str(f)):
-            with patch("code_puppy.messaging.message_queue.emit_error"):
+            with patch("spruce_grove.messaging.message_queue.emit_error"):
                 with pytest.raises(json.JSONDecodeError):
                     cp_config.load_mcp_server_configs(raise_on_error=True)
 
@@ -775,7 +775,7 @@ class TestAgentPinnedModels:
 
 
 # ---------------------------------------------------------------------------
-# Puppy token
+# Cedar token
 # ---------------------------------------------------------------------------
 class TestPuppyToken:
     def test_get_set(self):
@@ -942,13 +942,13 @@ class TestAutosaveSession:
         mock_metadata = MagicMock(message_count=1, total_tokens=10)
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=mock_agent,
             ),
-            patch("code_puppy.config.save_session", return_value=mock_metadata),
-            patch("code_puppy.config.record_quick_resume_sessions"),
-            patch("code_puppy.messaging.emit_info"),
-            patch("code_puppy.session_lifecycle.fire_post_autosave_callback"),
+            patch("spruce_grove.config.save_session", return_value=mock_metadata),
+            patch("spruce_grove.config.record_quick_resume_sessions"),
+            patch("spruce_grove.messaging.emit_info"),
+            patch("spruce_grove.session_lifecycle.fire_post_autosave_callback"),
         ):
             assert cp_config.auto_save_session_if_enabled(force=True) is True
 
@@ -957,7 +957,7 @@ class TestAutosaveSession:
         mock_agent = MagicMock()
         mock_agent.get_message_history.return_value = []
         with patch(
-            "code_puppy.agents.agent_manager.get_current_agent", return_value=mock_agent
+            "spruce_grove.agents.agent_manager.get_current_agent", return_value=mock_agent
         ):
             assert cp_config.auto_save_session_if_enabled() is False
 
@@ -971,10 +971,10 @@ class TestAutosaveSession:
         mock_metadata.message_count = 1
         mock_metadata.total_tokens = 100
         with patch(
-            "code_puppy.agents.agent_manager.get_current_agent", return_value=mock_agent
+            "spruce_grove.agents.agent_manager.get_current_agent", return_value=mock_agent
         ):
-            with patch("code_puppy.config.save_session", return_value=mock_metadata):
-                with patch("code_puppy.messaging.emit_info"):
+            with patch("spruce_grove.config.save_session", return_value=mock_metadata):
+                with patch("spruce_grove.messaging.emit_info"):
                     assert cp_config.auto_save_session_if_enabled() is True
 
     def test_finalize_autosave_session(self):
@@ -989,7 +989,7 @@ class TestAutosaveSession:
 class TestEnsureConfigExists:
     def test_creates_dirs_and_prompts(self, monkeypatch, tmp_path):
         cfg_dir = str(tmp_path / "config")
-        cfg_file = os.path.join(cfg_dir, "puppy.cfg")
+        cfg_file = os.path.join(cfg_dir, "grove.cfg")
         monkeypatch.setattr(cp_config, "CONFIG_DIR", cfg_dir)
         monkeypatch.setattr(cp_config, "CONFIG_FILE", cfg_file)
         monkeypatch.setattr(cp_config, "DATA_DIR", str(tmp_path / "data"))
@@ -1000,15 +1000,15 @@ class TestEnsureConfigExists:
         monkeypatch.setattr("builtins.input", lambda _: next(inputs))
 
         config = cp_config.ensure_config_exists()
-        assert config["puppy"]["puppy_name"] == "TestPup"
-        assert config["puppy"]["owner_name"] == "TestOwner"
+        assert config["grove"]["puppy_name"] == "TestPup"
+        assert config["grove"]["owner_name"] == "TestOwner"
         assert os.path.exists(cfg_file)
 
     def test_existing_config_no_prompt(self, tmp_path, monkeypatch):
         cfg_dir = str(tmp_path)
-        cfg_file = os.path.join(cfg_dir, "puppy.cfg")
+        cfg_file = os.path.join(cfg_dir, "grove.cfg")
         cp = configparser.ConfigParser()
-        cp["puppy"] = {"puppy_name": "Buddy", "owner_name": "Alice"}
+        cp["grove"] = {"puppy_name": "Buddy", "owner_name": "Alice"}
         with open(cfg_file, "w") as f:
             cp.write(f)
 
@@ -1019,12 +1019,12 @@ class TestEnsureConfigExists:
         monkeypatch.setattr(cp_config, "STATE_DIR", str(tmp_path / "state"))
 
         config = cp_config.ensure_config_exists()
-        assert config["puppy"]["puppy_name"] == "Buddy"
+        assert config["grove"]["puppy_name"] == "Buddy"
 
     def test_seeds_port_base(self, monkeypatch, tmp_path):
-        """Fresh puppy.cfg should include port_base so users discover the knob."""
+        """Fresh grove.cfg should include port_base so users discover the knob."""
         cfg_dir = str(tmp_path / "config")
-        cfg_file = os.path.join(cfg_dir, "puppy.cfg")
+        cfg_file = os.path.join(cfg_dir, "grove.cfg")
         monkeypatch.setattr(cp_config, "CONFIG_DIR", cfg_dir)
         monkeypatch.setattr(cp_config, "CONFIG_FILE", cfg_file)
         monkeypatch.setattr(cp_config, "DATA_DIR", str(tmp_path / "data"))
@@ -1035,7 +1035,7 @@ class TestEnsureConfigExists:
         monkeypatch.setattr("builtins.input", lambda _: next(inputs))
 
         config = cp_config.ensure_config_exists()
-        assert config["puppy"]["port_base"] == str(cp_config.DEFAULT_PORT_BASE)
+        assert config["grove"]["port_base"] == str(cp_config.DEFAULT_PORT_BASE)
 
 
 # ---------------------------------------------------------------------------
@@ -1053,7 +1053,7 @@ class TestCommandHistory:
         with patch.object(
             cp_config, "COMMAND_HISTORY_FILE", "/nonexistent/dir/hist.txt"
         ):
-            with patch("code_puppy.messaging.emit_error"):
+            with patch("spruce_grove.messaging.emit_error"):
                 cp_config.save_command_to_history("test")  # Should not raise
 
     def test_initialize_command_history_file_new(self, tmp_path, monkeypatch):
@@ -1068,7 +1068,7 @@ class TestCommandHistory:
         state_dir = str(tmp_path / "state")
         os.makedirs(state_dir, exist_ok=True)
         hist_file = os.path.join(state_dir, "history.txt")
-        old_file = os.path.join(str(tmp_path), ".code_puppy_history.txt")
+        old_file = os.path.join(str(tmp_path), ".spruce_grove_history.txt")
         with open(old_file, "w") as f:
             f.write("old history")
 
@@ -1090,7 +1090,7 @@ class TestAgentsDirectories:
         assert os.path.isdir(d)
 
     def test_get_project_agents_directory_exists(self, tmp_path, monkeypatch):
-        agents_dir = tmp_path / ".code_puppy" / "agents"
+        agents_dir = tmp_path / ".spruce_grove" / "agents"
         agents_dir.mkdir(parents=True)
         monkeypatch.chdir(tmp_path)
         assert cp_config.get_project_agents_directory() is not None
@@ -1105,7 +1105,7 @@ class TestAgentsDirectories:
 # ---------------------------------------------------------------------------
 class TestDefaultAgent:
     def test_default(self):
-        assert cp_config.get_default_agent() == "code-puppy"
+        assert cp_config.get_default_agent() == "spruce-grove"
 
     def test_set_and_get(self):
         cp_config.set_default_agent("custom-agent")
@@ -1175,76 +1175,76 @@ class TestClearModelCache:
 # Port base resolution
 # ---------------------------------------------------------------------------
 class TestGetPortBase:
-    """Precedence for get_port_base: env var > puppy.cfg > default.
+    """Precedence for get_port_base: env var > grove.cfg > default.
 
     Also covers bounds validation and graceful skipping of invalid sources.
     """
 
-    @patch("code_puppy.config.get_value")
+    @patch("spruce_grove.config.get_value")
     def test_env_var_overrides_cfg(self, mock_get_value, monkeypatch):
         mock_get_value.return_value = "9500"
-        monkeypatch.setenv("CODE_PUPPY_PORT_BASE", "9700")
+        monkeypatch.setenv("SPRUCE_GROVE_PORT_BASE", "9700")
         assert cp_config.get_port_base() == 9700
 
-    @patch("code_puppy.config.get_value")
+    @patch("spruce_grove.config.get_value")
     def test_cfg_used_when_no_env(self, mock_get_value, monkeypatch):
         mock_get_value.return_value = "9500"
-        monkeypatch.delenv("CODE_PUPPY_PORT_BASE", raising=False)
+        monkeypatch.delenv("SPRUCE_GROVE_PORT_BASE", raising=False)
         assert cp_config.get_port_base() == 9500
 
-    @patch("code_puppy.config.get_value")
+    @patch("spruce_grove.config.get_value")
     def test_default_when_nothing_set(self, mock_get_value, monkeypatch):
         mock_get_value.return_value = None
-        monkeypatch.delenv("CODE_PUPPY_PORT_BASE", raising=False)
+        monkeypatch.delenv("SPRUCE_GROVE_PORT_BASE", raising=False)
         assert cp_config.get_port_base() == cp_config.DEFAULT_PORT_BASE
 
-    @patch("code_puppy.config.get_value")
+    @patch("spruce_grove.config.get_value")
     def test_bad_env_value_skips_to_cfg(self, mock_get_value, monkeypatch):
         # env is garbage -> should fall through to cfg, not crash
         mock_get_value.return_value = "9200"
-        monkeypatch.setenv("CODE_PUPPY_PORT_BASE", "not-a-number")
+        monkeypatch.setenv("SPRUCE_GROVE_PORT_BASE", "not-a-number")
         assert cp_config.get_port_base() == 9200
 
-    @patch("code_puppy.config.get_value")
+    @patch("spruce_grove.config.get_value")
     def test_bad_env_and_bad_cfg_uses_default(self, mock_get_value, monkeypatch):
         mock_get_value.return_value = "also-not-a-number"
-        monkeypatch.setenv("CODE_PUPPY_PORT_BASE", "not-a-number")
+        monkeypatch.setenv("SPRUCE_GROVE_PORT_BASE", "not-a-number")
         assert cp_config.get_port_base() == cp_config.DEFAULT_PORT_BASE
 
-    @patch("code_puppy.config.get_value")
+    @patch("spruce_grove.config.get_value")
     def test_whitespace_stripped(self, mock_get_value, monkeypatch):
         mock_get_value.return_value = None
-        monkeypatch.setenv("CODE_PUPPY_PORT_BASE", "  9300  ")
+        monkeypatch.setenv("SPRUCE_GROVE_PORT_BASE", "  9300  ")
         assert cp_config.get_port_base() == 9300
 
-    @patch("code_puppy.config.get_value")
+    @patch("spruce_grove.config.get_value")
     def test_empty_string_skipped(self, mock_get_value, monkeypatch):
-        # Empty env string shouldn't shadow puppy.cfg.
+        # Empty env string shouldn't shadow grove.cfg.
         mock_get_value.return_value = "9400"
-        monkeypatch.setenv("CODE_PUPPY_PORT_BASE", "")
+        monkeypatch.setenv("SPRUCE_GROVE_PORT_BASE", "")
         assert cp_config.get_port_base() == 9400
 
-    @patch("code_puppy.config.get_value")
+    @patch("spruce_grove.config.get_value")
     def test_below_min_port_base_rejected(self, mock_get_value, monkeypatch):
         # Privileged port (< 1024) -> skip and fall through.
         mock_get_value.return_value = None
-        monkeypatch.setenv("CODE_PUPPY_PORT_BASE", "80")
+        monkeypatch.setenv("SPRUCE_GROVE_PORT_BASE", "80")
         assert cp_config.get_port_base() == cp_config.DEFAULT_PORT_BASE
 
-    @patch("code_puppy.config.get_value")
+    @patch("spruce_grove.config.get_value")
     def test_above_max_port_base_rejected(self, mock_get_value, monkeypatch):
         # port_base + PORT_PROBE_WIDTH would exceed 65535 -> skip.
         mock_get_value.return_value = None
-        monkeypatch.setenv("CODE_PUPPY_PORT_BASE", str(cp_config.MAX_PORT_BASE + 1))
+        monkeypatch.setenv("SPRUCE_GROVE_PORT_BASE", str(cp_config.MAX_PORT_BASE + 1))
         assert cp_config.get_port_base() == cp_config.DEFAULT_PORT_BASE
 
-    @patch("code_puppy.config.get_value")
+    @patch("spruce_grove.config.get_value")
     def test_exact_boundaries_accepted(self, mock_get_value, monkeypatch):
         mock_get_value.return_value = None
-        monkeypatch.setenv("CODE_PUPPY_PORT_BASE", str(cp_config.MIN_PORT_BASE))
+        monkeypatch.setenv("SPRUCE_GROVE_PORT_BASE", str(cp_config.MIN_PORT_BASE))
         assert cp_config.get_port_base() == cp_config.MIN_PORT_BASE
 
-        monkeypatch.setenv("CODE_PUPPY_PORT_BASE", str(cp_config.MAX_PORT_BASE))
+        monkeypatch.setenv("SPRUCE_GROVE_PORT_BASE", str(cp_config.MAX_PORT_BASE))
         assert cp_config.get_port_base() == cp_config.MAX_PORT_BASE
 
     def test_probe_width_keeps_top_port_valid(self):
@@ -1257,22 +1257,22 @@ class TestGetPortBase:
 class TestResolvePortBase:
     """CLI value takes highest priority, invalid CLI value falls through."""
 
-    @patch("code_puppy.config.get_value")
+    @patch("spruce_grove.config.get_value")
     def test_cli_value_wins(self, mock_get_value, monkeypatch):
         mock_get_value.return_value = "9500"
-        monkeypatch.setenv("CODE_PUPPY_PORT_BASE", "9700")
+        monkeypatch.setenv("SPRUCE_GROVE_PORT_BASE", "9700")
         assert cp_config.resolve_port_base(cli_value="9100") == 9100
         assert cp_config.resolve_port_base(cli_value=9100) == 9100
 
-    @patch("code_puppy.config.get_value")
+    @patch("spruce_grove.config.get_value")
     def test_bad_cli_falls_through_to_env(self, mock_get_value, monkeypatch):
         mock_get_value.return_value = None
-        monkeypatch.setenv("CODE_PUPPY_PORT_BASE", "9700")
+        monkeypatch.setenv("SPRUCE_GROVE_PORT_BASE", "9700")
         # Non-integer CLI input must NOT crash -- next source wins.
         assert cp_config.resolve_port_base(cli_value="garbage") == 9700
 
-    @patch("code_puppy.config.get_value")
+    @patch("spruce_grove.config.get_value")
     def test_none_cli_defers_to_lower_layers(self, mock_get_value, monkeypatch):
         mock_get_value.return_value = "9500"
-        monkeypatch.delenv("CODE_PUPPY_PORT_BASE", raising=False)
+        monkeypatch.delenv("SPRUCE_GROVE_PORT_BASE", raising=False)
         assert cp_config.resolve_port_base(cli_value=None) == 9500

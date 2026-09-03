@@ -188,7 +188,7 @@ def test_client_seq_strictly_increases(monkeypatch):
 def test_client_retries_until_herdr_acks(monkeypatch):
     """A dropped report (no ack) is retried, then delivered exactly once.
 
-    With code-puppy authoritative AND herdr no longer screen-scraping, a lost
+    With spruce-grove authoritative AND herdr no longer screen-scraping, a lost
     edge has no safety net, so delivery must be reliable. Re-sending the same
     envelope is safe because herdr dedupes on ``seq``.
     """

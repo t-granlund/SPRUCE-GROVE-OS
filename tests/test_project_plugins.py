@@ -1,7 +1,7 @@
 """Tests for project-level plugin discovery (_load_project_plugins).
 
-Covers the feature implemented in code_puppy_oss-864:
-- Project plugin loading from <CWD>/.code_puppy/plugins/
+Covers the feature implemented in spruce_grove_oss-864:
+- Project plugin loading from <CWD>/.spruce_grove/plugins/
 - Name collision warnings (builtin and user shadows)
 - Error handling (ImportError, RuntimeError)
 - get_project_plugins_directory() helper
@@ -15,7 +15,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy.plugins import (
+from spruce_grove.plugins import (
     _load_project_plugins,
     get_project_plugins_directory,
 )
@@ -38,7 +38,7 @@ def _make_plugin(plugins_dir: Path, name: str, *, via_init: bool = False) -> Pat
 @pytest.fixture()
 def project_plugins_dir(tmp_path: Path) -> Path:
     """Provide a fresh project plugins directory."""
-    d = tmp_path / ".code_puppy" / "plugins"
+    d = tmp_path / ".spruce_grove" / "plugins"
     d.mkdir(parents=True)
     return d
 
@@ -62,16 +62,16 @@ def _trust_everything():
     exercise the loading machinery itself, so trust is granted wholesale.
     Trust-gate behavior is tested separately in TestTrustGate.
     """
-    import code_puppy.plugins as plugins_module
+    import spruce_grove.plugins as plugins_module
 
     plugins_module._project_plugin_status.clear()
     with (
         patch(
-            "code_puppy.plugins.trust.get_trust_status",
+            "spruce_grove.plugins.trust.get_trust_status",
             return_value="trusted",
         ),
         patch(
-            "code_puppy.plugins.config.is_plugin_disabled",
+            "spruce_grove.plugins.config.is_plugin_disabled",
             return_value=False,
         ),
     ):
@@ -110,11 +110,11 @@ class TestValidPlugin:
 
         with (
             patch(
-                "code_puppy.plugins.importlib.util.spec_from_file_location",
+                "spruce_grove.plugins.importlib.util.spec_from_file_location",
                 return_value=mock_spec,
             ),
             patch(
-                "code_puppy.plugins.importlib.util.module_from_spec",
+                "spruce_grove.plugins.importlib.util.module_from_spec",
                 return_value=MagicMock(),
             ),
         ):
@@ -130,11 +130,11 @@ class TestValidPlugin:
 
         with (
             patch(
-                "code_puppy.plugins.importlib.util.spec_from_file_location",
+                "spruce_grove.plugins.importlib.util.spec_from_file_location",
                 return_value=mock_spec,
             ) as mock_sfl,
             patch(
-                "code_puppy.plugins.importlib.util.module_from_spec",
+                "spruce_grove.plugins.importlib.util.module_from_spec",
                 return_value=MagicMock(),
             ),
         ):
@@ -159,11 +159,11 @@ class TestBuiltinCollision:
 
         with (
             patch(
-                "code_puppy.plugins.importlib.util.spec_from_file_location",
+                "spruce_grove.plugins.importlib.util.spec_from_file_location",
                 return_value=mock_spec,
             ),
             patch(
-                "code_puppy.plugins.importlib.util.module_from_spec",
+                "spruce_grove.plugins.importlib.util.module_from_spec",
                 return_value=MagicMock(),
             ),
         ):
@@ -194,11 +194,11 @@ class TestUserCollision:
 
         with (
             patch(
-                "code_puppy.plugins.importlib.util.spec_from_file_location",
+                "spruce_grove.plugins.importlib.util.spec_from_file_location",
                 return_value=mock_spec,
             ),
             patch(
-                "code_puppy.plugins.importlib.util.module_from_spec",
+                "spruce_grove.plugins.importlib.util.module_from_spec",
                 return_value=MagicMock(),
             ),
         ):
@@ -242,11 +242,11 @@ class TestBrokenPlugin:
 
         with (
             patch(
-                "code_puppy.plugins.importlib.util.spec_from_file_location",
+                "spruce_grove.plugins.importlib.util.spec_from_file_location",
                 side_effect=spec_side_effect,
             ),
             patch(
-                "code_puppy.plugins.importlib.util.module_from_spec",
+                "spruce_grove.plugins.importlib.util.module_from_spec",
                 return_value=MagicMock(),
             ),
         ):
@@ -265,11 +265,11 @@ class TestBrokenPlugin:
 
         with (
             patch(
-                "code_puppy.plugins.importlib.util.spec_from_file_location",
+                "spruce_grove.plugins.importlib.util.spec_from_file_location",
                 return_value=mock_spec,
             ),
             patch(
-                "code_puppy.plugins.importlib.util.module_from_spec",
+                "spruce_grove.plugins.importlib.util.module_from_spec",
                 return_value=MagicMock(),
             ),
         ):
@@ -286,7 +286,7 @@ class TestBrokenPlugin:
 
 class TestGetProjectPluginsDirectory:
     def test_returns_none_when_missing(self, tmp_path: Path):
-        with patch("code_puppy.plugins.Path.cwd", return_value=tmp_path):
+        with patch("spruce_grove.plugins.Path.cwd", return_value=tmp_path):
             assert get_project_plugins_directory() is None
 
     # -----------------------------------------------------------------------
@@ -294,33 +294,33 @@ class TestGetProjectPluginsDirectory:
     # -----------------------------------------------------------------------
 
     def test_returns_path_when_exists(self, tmp_path: Path):
-        plugins_dir = tmp_path / ".code_puppy" / "plugins"
+        plugins_dir = tmp_path / ".spruce_grove" / "plugins"
         plugins_dir.mkdir(parents=True)
 
-        with patch("code_puppy.plugins.Path.cwd", return_value=tmp_path):
+        with patch("spruce_grove.plugins.Path.cwd", return_value=tmp_path):
             result = get_project_plugins_directory()
             assert result is not None
             assert result == plugins_dir
 
     def test_home_user_plugins_are_not_treated_as_project_plugins(self, tmp_path: Path):
         """Launching from home must not scan the user tier as a project tier."""
-        import code_puppy.plugins as plugins_module
+        import spruce_grove.plugins as plugins_module
 
-        plugins_dir = tmp_path / ".code_puppy" / "plugins"
+        plugins_dir = tmp_path / ".spruce_grove" / "plugins"
         plugins_dir.mkdir(parents=True)
 
         with (
-            patch("code_puppy.plugins.Path.cwd", return_value=tmp_path),
+            patch("spruce_grove.plugins.Path.cwd", return_value=tmp_path),
             patch.object(plugins_module, "USER_PLUGINS_DIR", plugins_dir),
         ):
             assert get_project_plugins_directory() is None
 
     def test_user_plugins_path_alias_is_not_a_project(self, tmp_path: Path):
         """Physical identity, not path spelling, determines the plugin tier."""
-        import code_puppy.plugins as plugins_module
+        import spruce_grove.plugins as plugins_module
 
         home = tmp_path / "home"
-        plugins_dir = home / ".code_puppy" / "plugins"
+        plugins_dir = home / ".spruce_grove" / "plugins"
         plugins_dir.mkdir(parents=True)
         home_alias = tmp_path / "home-alias"
         try:
@@ -329,7 +329,7 @@ class TestGetProjectPluginsDirectory:
             pytest.skip("directory symlinks are unavailable on this platform")
 
         with (
-            patch("code_puppy.plugins.Path.cwd", return_value=home_alias),
+            patch("spruce_grove.plugins.Path.cwd", return_value=home_alias),
             patch.object(plugins_module, "USER_PLUGINS_DIR", plugins_dir),
         ):
             assert get_project_plugins_directory() is None
@@ -342,16 +342,16 @@ class TestGetProjectPluginsDirectory:
 
 class TestLoadPluginCallbacksProjectKey:
     def test_result_dict_has_project_key(self):
-        import code_puppy.plugins as plugins_module
+        import spruce_grove.plugins as plugins_module
 
         original_loaded = plugins_module._PLUGINS_LOADED
         plugins_module._PLUGINS_LOADED = False
 
         with (
-            patch("code_puppy.plugins._load_builtin_plugins", return_value=["bp"]),
-            patch("code_puppy.plugins._load_user_plugins", return_value=["up"]),
+            patch("spruce_grove.plugins._load_builtin_plugins", return_value=["bp"]),
+            patch("spruce_grove.plugins._load_user_plugins", return_value=["up"]),
             patch(
-                "code_puppy.plugins.get_project_plugins_directory",
+                "spruce_grove.plugins.get_project_plugins_directory",
                 return_value=None,
             ),
         ):
@@ -363,7 +363,7 @@ class TestLoadPluginCallbacksProjectKey:
                 plugins_module._PLUGINS_LOADED = original_loaded
 
     def test_idempotent_returns_project_key(self):
-        import code_puppy.plugins as plugins_module
+        import spruce_grove.plugins as plugins_module
 
         original_loaded = plugins_module._PLUGINS_LOADED
         plugins_module._PLUGINS_LOADED = True
@@ -415,11 +415,11 @@ class TestInitFallback:
 
         with (
             patch(
-                "code_puppy.plugins.importlib.util.spec_from_file_location",
+                "spruce_grove.plugins.importlib.util.spec_from_file_location",
                 return_value=mock_spec,
             ),
             patch(
-                "code_puppy.plugins.importlib.util.module_from_spec",
+                "spruce_grove.plugins.importlib.util.module_from_spec",
                 return_value=MagicMock(),
             ),
         ):
@@ -435,11 +435,11 @@ class TestInitFallback:
 
         with (
             patch(
-                "code_puppy.plugins.importlib.util.spec_from_file_location",
+                "spruce_grove.plugins.importlib.util.spec_from_file_location",
                 return_value=mock_spec,
             ) as mock_sfl,
             patch(
-                "code_puppy.plugins.importlib.util.module_from_spec",
+                "spruce_grove.plugins.importlib.util.module_from_spec",
                 return_value=MagicMock(),
             ),
         ):
@@ -457,11 +457,11 @@ class TestInitFallback:
 
         with (
             patch(
-                "code_puppy.plugins.importlib.util.spec_from_file_location",
+                "spruce_grove.plugins.importlib.util.spec_from_file_location",
                 return_value=mock_spec,
             ),
             patch(
-                "code_puppy.plugins.importlib.util.module_from_spec",
+                "spruce_grove.plugins.importlib.util.module_from_spec",
                 return_value=MagicMock(),
             ),
         ):
@@ -474,7 +474,7 @@ class TestInitFallback:
         _make_plugin(project_plugins_dir, "no_spec_init", via_init=True)
 
         with patch(
-            "code_puppy.plugins.importlib.util.spec_from_file_location",
+            "spruce_grove.plugins.importlib.util.spec_from_file_location",
             return_value=None,
         ):
             result = _load_project_plugins(project_plugins_dir, set(), set())
@@ -488,7 +488,7 @@ class TestInitFallback:
         mock_spec.loader = None
 
         with patch(
-            "code_puppy.plugins.importlib.util.spec_from_file_location",
+            "spruce_grove.plugins.importlib.util.spec_from_file_location",
             return_value=mock_spec,
         ):
             result = _load_project_plugins(project_plugins_dir, set(), set())
@@ -516,7 +516,7 @@ class TestEdgeCases:
         _make_plugin(project_plugins_dir, "no_spec")
 
         with patch(
-            "code_puppy.plugins.importlib.util.spec_from_file_location",
+            "spruce_grove.plugins.importlib.util.spec_from_file_location",
             return_value=None,
         ):
             result = _load_project_plugins(project_plugins_dir, set(), set())
@@ -531,7 +531,7 @@ class TestEdgeCases:
         mock_spec.loader = None
 
         with patch(
-            "code_puppy.plugins.importlib.util.spec_from_file_location",
+            "spruce_grove.plugins.importlib.util.spec_from_file_location",
             return_value=mock_spec,
         ):
             result = _load_project_plugins(project_plugins_dir, set(), set())
@@ -596,7 +596,7 @@ class TestBytecodeRefusal:
         assert "Refusing to load project plugin 'shipped_bytecode'" in caplog.text
 
     def test_plugin_with_pycache_dir_is_refused(self, project_plugins_dir: Path):
-        import code_puppy.plugins as plugins_module
+        import spruce_grove.plugins as plugins_module
 
         plugin_dir = _make_plugin(project_plugins_dir, "cached_plugin")
         (plugin_dir / "__pycache__").mkdir()
@@ -621,13 +621,13 @@ class TestTrustGate:
         _make_plugin(project_plugins_dir, "sketchy")
 
         with (
-            caplog.at_level(logging.INFO, logger="code_puppy.plugins"),
+            caplog.at_level(logging.INFO, logger="spruce_grove.plugins"),
             patch(
-                "code_puppy.plugins.trust.get_trust_status",
+                "spruce_grove.plugins.trust.get_trust_status",
                 return_value="untrusted",
             ),
             patch(
-                "code_puppy.plugins.importlib.util.spec_from_file_location",
+                "spruce_grove.plugins.importlib.util.spec_from_file_location",
             ) as mock_sfl,
         ):
             result = _load_project_plugins(project_plugins_dir, set(), set())
@@ -642,9 +642,9 @@ class TestTrustGate:
         _make_plugin(project_plugins_dir, "drifted")
 
         with (
-            caplog.at_level(logging.INFO, logger="code_puppy.plugins"),
+            caplog.at_level(logging.INFO, logger="spruce_grove.plugins"),
             patch(
-                "code_puppy.plugins.trust.get_trust_status",
+                "spruce_grove.plugins.trust.get_trust_status",
                 return_value="changed",
             ),
         ):
@@ -660,7 +660,7 @@ class TestTrustGate:
             sys.path.remove(project_str)
 
         with patch(
-            "code_puppy.plugins.trust.get_trust_status",
+            "spruce_grove.plugins.trust.get_trust_status",
             return_value="untrusted",
         ):
             _load_project_plugins(project_plugins_dir, set(), set())
@@ -668,12 +668,12 @@ class TestTrustGate:
         assert project_str not in sys.path
 
     def test_status_recorded_for_skipped_plugins(self, project_plugins_dir: Path):
-        import code_puppy.plugins as plugins_module
+        import spruce_grove.plugins as plugins_module
 
         _make_plugin(project_plugins_dir, "sketchy")
 
         with patch(
-            "code_puppy.plugins.trust.get_trust_status",
+            "spruce_grove.plugins.trust.get_trust_status",
             return_value="untrusted",
         ):
             _load_project_plugins(project_plugins_dir, set(), set())
@@ -681,12 +681,12 @@ class TestTrustGate:
         assert plugins_module.get_project_plugin_status()["sketchy"] == "untrusted"
 
     def test_trusted_but_disabled_not_loaded(self, project_plugins_dir: Path):
-        import code_puppy.plugins as plugins_module
+        import spruce_grove.plugins as plugins_module
 
         _make_plugin(project_plugins_dir, "napping")
 
         with patch(
-            "code_puppy.plugins.config.is_plugin_disabled",
+            "spruce_grove.plugins.config.is_plugin_disabled",
             return_value=True,
         ):
             # _trust_everything fixture already returns "trusted"
@@ -697,9 +697,9 @@ class TestTrustGate:
 
     def test_startup_notice_lists_skipped_plugins(self):
         """The startup-hook banner names every held-back plugin, in orange."""
-        from code_puppy.plugins.trust_notice import emit_skipped_plugin_notice
+        from spruce_grove.plugins.trust_notice import emit_skipped_plugin_notice
 
-        with patch("code_puppy.messaging.emit_warning") as mock_warn:
+        with patch("spruce_grove.messaging.emit_warning") as mock_warn:
             emit_skipped_plugin_notice(
                 {
                     "sketchy": "untrusted",
@@ -723,9 +723,9 @@ class TestTrustGate:
 
     def test_no_notice_when_nothing_skipped(self):
         """Fully trusted (or empty) project tier stays quiet."""
-        from code_puppy.plugins.trust_notice import emit_skipped_plugin_notice
+        from spruce_grove.plugins.trust_notice import emit_skipped_plugin_notice
 
-        with patch("code_puppy.messaging.emit_warning") as mock_warn:
+        with patch("spruce_grove.messaging.emit_warning") as mock_warn:
             emit_skipped_plugin_notice({"fine": "loaded", "napping": "disabled"})
 
         mock_warn.assert_not_called()
@@ -736,10 +736,10 @@ class TestTrustGate:
 
         with (
             patch(
-                "code_puppy.plugins.get_project_plugin_status",
+                "spruce_grove.plugins.get_project_plugin_status",
                 return_value={"sketchy": "untrusted"},
             ),
-            patch("code_puppy.messaging.emit_warning") as mock_warn,
+            patch("spruce_grove.messaging.emit_warning") as mock_warn,
         ):
             _on_startup()
 
@@ -747,9 +747,9 @@ class TestTrustGate:
 
     def test_untrusted_names_do_not_suppress_user_plugins(self, tmp_path: Path):
         """An untrusted repo must not knock out user plugins via name squatting."""
-        import code_puppy.plugins as plugins_module
+        import spruce_grove.plugins as plugins_module
 
-        project_dir = tmp_path / ".code_puppy" / "plugins"
+        project_dir = tmp_path / ".spruce_grove" / "plugins"
         project_dir.mkdir(parents=True)
         _make_plugin(project_dir, "user_only_plugin")
 
@@ -757,19 +757,19 @@ class TestTrustGate:
         plugins_module._PLUGINS_LOADED = False
 
         with (
-            patch("code_puppy.plugins._load_builtin_plugins", return_value=[]),
+            patch("spruce_grove.plugins._load_builtin_plugins", return_value=[]),
             patch(
-                "code_puppy.plugins._load_user_plugins", return_value=[]
+                "spruce_grove.plugins._load_user_plugins", return_value=[]
             ) as mock_user,
             patch(
-                "code_puppy.plugins.get_project_plugins_directory",
+                "spruce_grove.plugins.get_project_plugins_directory",
                 return_value=project_dir,
             ),
             patch(
-                "code_puppy.plugins.trust.is_plugin_trusted",
+                "spruce_grove.plugins.trust.is_plugin_trusted",
                 return_value=False,
             ),
-            patch("code_puppy.plugins._load_project_plugins", return_value=[]),
+            patch("spruce_grove.plugins._load_project_plugins", return_value=[]),
         ):
             try:
                 plugins_module.load_plugin_callbacks()

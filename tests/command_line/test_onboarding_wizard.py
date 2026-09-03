@@ -1,11 +1,11 @@
-"""Tests for code_puppy/command_line/onboarding_wizard.py"""
+"""Tests for spruce_grove/command_line/onboarding_wizard.py"""
 
 import os
 from unittest.mock import AsyncMock, mock_open, patch
 
 import pytest
 
-MODULE = "code_puppy.command_line.onboarding_wizard"
+MODULE = "spruce_grove.command_line.onboarding_wizard"
 
 
 # ---------------------------------------------------------------------------
@@ -16,13 +16,13 @@ MODULE = "code_puppy.command_line.onboarding_wizard"
 class TestHasCompletedOnboarding:
     @patch(f"{MODULE}.os.path.exists", return_value=True)
     def test_returns_true_when_file_exists(self, mock_exists):
-        from code_puppy.command_line.onboarding_wizard import has_completed_onboarding
+        from spruce_grove.command_line.onboarding_wizard import has_completed_onboarding
 
         assert has_completed_onboarding() is True
 
     @patch(f"{MODULE}.os.path.exists", return_value=False)
     def test_returns_false_when_file_missing(self, mock_exists):
-        from code_puppy.command_line.onboarding_wizard import has_completed_onboarding
+        from spruce_grove.command_line.onboarding_wizard import has_completed_onboarding
 
         assert has_completed_onboarding() is False
 
@@ -31,7 +31,7 @@ class TestMarkOnboardingComplete:
     @patch(f"{MODULE}.os.makedirs")
     @patch("builtins.open", new_callable=mock_open)
     def test_creates_file(self, m_open, m_makedirs):
-        from code_puppy.command_line.onboarding_wizard import mark_onboarding_complete
+        from spruce_grove.command_line.onboarding_wizard import mark_onboarding_complete
 
         mark_onboarding_complete()
         m_makedirs.assert_called_once()
@@ -41,17 +41,17 @@ class TestMarkOnboardingComplete:
 class TestShouldShowOnboarding:
     @patch(f"{MODULE}.has_completed_onboarding", return_value=True)
     def test_returns_false_when_completed(self, mock_completed):
-        from code_puppy.command_line.onboarding_wizard import should_show_onboarding
+        from spruce_grove.command_line.onboarding_wizard import should_show_onboarding
 
         assert should_show_onboarding() is False
 
     @patch(f"{MODULE}.has_completed_onboarding", return_value=False)
     def test_returns_true_when_not_completed(self, mock_completed):
-        from code_puppy.command_line.onboarding_wizard import should_show_onboarding
+        from spruce_grove.command_line.onboarding_wizard import should_show_onboarding
 
         with patch.dict(os.environ, {}, clear=False):
             # Make sure skip env var is not set
-            os.environ.pop("CODE_PUPPY_SKIP_TUTORIAL", None)
+            os.environ.pop("SPRUCE_GROVE_SKIP_TUTORIAL", None)
             assert should_show_onboarding() is True
 
     @pytest.mark.parametrize(
@@ -59,9 +59,9 @@ class TestShouldShowOnboarding:
     )
     @patch(f"{MODULE}.has_completed_onboarding", return_value=False)
     def test_returns_false_when_env_skip(self, mock_completed, env_value):
-        from code_puppy.command_line.onboarding_wizard import should_show_onboarding
+        from spruce_grove.command_line.onboarding_wizard import should_show_onboarding
 
-        with patch.dict(os.environ, {"CODE_PUPPY_SKIP_TUTORIAL": env_value}):
+        with patch.dict(os.environ, {"SPRUCE_GROVE_SKIP_TUTORIAL": env_value}):
             assert should_show_onboarding() is False
 
 
@@ -69,7 +69,7 @@ class TestResetOnboarding:
     @patch(f"{MODULE}.os.path.exists", return_value=True)
     @patch(f"{MODULE}.os.remove")
     def test_removes_file(self, mock_remove, mock_exists):
-        from code_puppy.command_line.onboarding_wizard import reset_onboarding
+        from spruce_grove.command_line.onboarding_wizard import reset_onboarding
 
         reset_onboarding()
         mock_remove.assert_called_once()
@@ -77,7 +77,7 @@ class TestResetOnboarding:
     @patch(f"{MODULE}.os.path.exists", return_value=False)
     @patch(f"{MODULE}.os.remove")
     def test_no_op_when_missing(self, mock_remove, mock_exists):
-        from code_puppy.command_line.onboarding_wizard import reset_onboarding
+        from spruce_grove.command_line.onboarding_wizard import reset_onboarding
 
         reset_onboarding()
         mock_remove.assert_not_called()
@@ -90,7 +90,7 @@ class TestResetOnboarding:
 
 class TestOnboardingWizard:
     def _make_wizard(self):
-        from code_puppy.command_line.onboarding_wizard import OnboardingWizard
+        from spruce_grove.command_line.onboarding_wizard import OnboardingWizard
 
         return OnboardingWizard()
 
@@ -239,7 +239,7 @@ class TestOnboardingWizard:
 
 class TestGetSlidePanelContent:
     def test_returns_fragments_with_progress_header(self):
-        from code_puppy.command_line.onboarding_wizard import (
+        from spruce_grove.command_line.onboarding_wizard import (
             OnboardingWizard,
             _get_slide_panel_content,
         )
@@ -252,7 +252,7 @@ class TestGetSlidePanelContent:
 
 class TestFragmentsToLines:
     def test_splits_on_newlines_and_styles_fragments(self):
-        from code_puppy.command_line.onboarding_wizard import _fragments_to_lines
+        from spruce_grove.command_line.onboarding_wizard import _fragments_to_lines
 
         lines = _fragments_to_lines(
             [("class:tui.title", "Hello\nWorld"), ("class:tui.body", " plain")]
@@ -262,7 +262,7 @@ class TestFragmentsToLines:
         assert lines[1].endswith(" plain")  # body is unstyled
 
     def test_unknown_class_renders_plain(self):
-        from code_puppy.command_line.onboarding_wizard import _fragments_to_lines
+        from spruce_grove.command_line.onboarding_wizard import _fragments_to_lines
 
         lines = _fragments_to_lines([("class:tui.whatever", "text")])
         assert lines == ["text"]
@@ -276,7 +276,7 @@ class TestFragmentsToLines:
 def drive(keys, wizard=None):
     from io import StringIO
 
-    from code_puppy.command_line.onboarding_wizard import (
+    from spruce_grove.command_line.onboarding_wizard import (
         OnboardingTUI,
         OnboardingWizard,
     )
@@ -329,7 +329,7 @@ class TestOnboardingTUI:
 
     def test_paint_shows_title_and_progress(self):
         _, out = drive(["escape"])
-        assert "Code Puppy Tutorial" in out
+        assert "Spruce Grove Tutorial" in out
         assert "Slide 1 of 5" in out
 
     def test_every_line_fits_width(self):
@@ -364,10 +364,10 @@ def _fake_tui(result, trigger_oauth=None, raises=None):
 class TestRunOnboardingWizard:
     @pytest.mark.asyncio
     @patch(f"{MODULE}.mark_onboarding_complete")
-    @patch("code_puppy.messaging.emit_info")
-    @patch("code_puppy.tools.command_runner.set_awaiting_user_input")
+    @patch("spruce_grove.messaging.emit_info")
+    @patch("spruce_grove.tools.command_runner.set_awaiting_user_input")
     async def test_skipped(self, mock_set, mock_emit, mock_mark):
-        from code_puppy.command_line.onboarding_wizard import run_onboarding_wizard
+        from spruce_grove.command_line.onboarding_wizard import run_onboarding_wizard
 
         with patch(f"{MODULE}.OnboardingTUI", _fake_tui("skipped")):
             result = await run_onboarding_wizard()
@@ -381,12 +381,12 @@ class TestRunOnboardingWizard:
     )
     @pytest.mark.asyncio
     @patch(f"{MODULE}.mark_onboarding_complete")
-    @patch("code_puppy.messaging.emit_info")
-    @patch("code_puppy.tools.command_runner.set_awaiting_user_input")
+    @patch("spruce_grove.messaging.emit_info")
+    @patch("spruce_grove.tools.command_runner.set_awaiting_user_input")
     async def test_run_wizard_completion(
         self, mock_set, mock_emit, mock_mark, trigger_oauth, expected
     ):
-        from code_puppy.command_line.onboarding_wizard import run_onboarding_wizard
+        from spruce_grove.command_line.onboarding_wizard import run_onboarding_wizard
 
         with patch(f"{MODULE}.OnboardingTUI", _fake_tui("completed", trigger_oauth)):
             result = await run_onboarding_wizard()
@@ -395,10 +395,10 @@ class TestRunOnboardingWizard:
 
     @pytest.mark.asyncio
     @patch(f"{MODULE}.mark_onboarding_complete")
-    @patch("code_puppy.messaging.emit_info")
-    @patch("code_puppy.tools.command_runner.set_awaiting_user_input")
+    @patch("spruce_grove.messaging.emit_info")
+    @patch("spruce_grove.tools.command_runner.set_awaiting_user_input")
     async def test_keyboard_interrupt(self, mock_set, mock_emit, mock_mark):
-        from code_puppy.command_line.onboarding_wizard import run_onboarding_wizard
+        from spruce_grove.command_line.onboarding_wizard import run_onboarding_wizard
 
         with patch(
             f"{MODULE}.OnboardingTUI", _fake_tui(None, raises=KeyboardInterrupt())
@@ -407,10 +407,10 @@ class TestRunOnboardingWizard:
         assert result == "skipped"
 
     @pytest.mark.asyncio
-    @patch("code_puppy.messaging.emit_info")
-    @patch("code_puppy.tools.command_runner.set_awaiting_user_input")
+    @patch("spruce_grove.messaging.emit_info")
+    @patch("spruce_grove.tools.command_runner.set_awaiting_user_input")
     async def test_exception(self, mock_set, mock_emit):
-        from code_puppy.command_line.onboarding_wizard import run_onboarding_wizard
+        from spruce_grove.command_line.onboarding_wizard import run_onboarding_wizard
 
         with patch(
             f"{MODULE}.OnboardingTUI", _fake_tui(None, raises=RuntimeError("boom"))
@@ -428,7 +428,7 @@ class TestRunOnboardingIfNeeded:
     @pytest.mark.asyncio
     @patch(f"{MODULE}.should_show_onboarding", return_value=False)
     async def test_skips_if_not_needed(self, mock_should):
-        from code_puppy.command_line.onboarding_wizard import run_onboarding_if_needed
+        from spruce_grove.command_line.onboarding_wizard import run_onboarding_if_needed
 
         result = await run_onboarding_if_needed()
         assert result is None
@@ -441,7 +441,7 @@ class TestRunOnboardingIfNeeded:
     )
     @patch(f"{MODULE}.should_show_onboarding", return_value=True)
     async def test_runs_if_needed(self, mock_should, mock_run):
-        from code_puppy.command_line.onboarding_wizard import run_onboarding_if_needed
+        from spruce_grove.command_line.onboarding_wizard import run_onboarding_if_needed
 
         result = await run_onboarding_if_needed()
         assert result == "completed"

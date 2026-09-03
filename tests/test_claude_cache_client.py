@@ -9,7 +9,7 @@ import httpx2
 import pytest
 from anthropic import AsyncAnthropic
 
-from code_puppy.claude_cache_client import (
+from spruce_grove.claude_cache_client import (
     CLAUDE_CLI_USER_AGENT,
     CLAUDE_CODE_SYSTEM_PROMPT,
     TOKEN_MAX_AGE_SECONDS,

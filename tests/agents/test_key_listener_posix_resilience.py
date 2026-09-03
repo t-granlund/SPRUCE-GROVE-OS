@@ -24,7 +24,7 @@ try:
 except ImportError:  # Windows: a bare import here would abort COLLECTION
     termios = tty = None  # of the whole test run, not just skip this module
 
-from code_puppy.agents import _key_listeners as kl
+from spruce_grove.agents import _key_listeners as kl
 
 pytestmark = pytest.mark.skipif(
     termios is None or not hasattr(select_mod, "select") or os.name == "nt",

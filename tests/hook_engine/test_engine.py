@@ -2,7 +2,7 @@
 
 import pytest
 
-from code_puppy.hook_engine import EventData, HookConfig, HookEngine
+from spruce_grove.hook_engine import EventData, HookConfig, HookEngine
 
 
 class TestHookEngineInit:

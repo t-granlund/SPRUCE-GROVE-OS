@@ -2,8 +2,8 @@
 
 from unittest.mock import patch
 
-from code_puppy.command_line.menu_session import menu_session
-from code_puppy.messaging.pause_controller import get_pause_controller
+from spruce_grove.command_line.menu_session import menu_session
+from spruce_grove.messaging.pause_controller import get_pause_controller
 
 
 def test_session_pauses_renderer_and_resumes_after():
@@ -39,7 +39,7 @@ def test_session_resumes_on_exception():
 def test_failed_entry_unwinds_cleanly():
     pc = get_pause_controller()
     with patch(
-        "code_puppy.messaging.run_ui.suspended_run_ui",
+        "spruce_grove.messaging.run_ui.suspended_run_ui",
         side_effect=RuntimeError("no ui"),
     ):
         try:
@@ -64,7 +64,7 @@ def test_resume_fires_after_run_ui_restored():
     import contextlib
     from unittest.mock import patch
 
-    from code_puppy.command_line import menu_session as ms
+    from spruce_grove.command_line import menu_session as ms
 
     events = []
 
@@ -88,10 +88,10 @@ def test_resume_fires_after_run_ui_restored():
             events.append("resume")
 
     with (
-        patch("code_puppy.messaging.run_ui.suspended_run_ui", fake_suspend),
+        patch("spruce_grove.messaging.run_ui.suspended_run_ui", fake_suspend),
         patch.object(ms, "terminal_session", fake_terminal),
         patch(
-            "code_puppy.messaging.pause_controller.get_pause_controller",
+            "spruce_grove.messaging.pause_controller.get_pause_controller",
             return_value=FakePC(),
         ),
     ):

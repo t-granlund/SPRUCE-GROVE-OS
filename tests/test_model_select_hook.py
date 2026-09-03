@@ -10,12 +10,12 @@ from __future__ import annotations
 
 import pytest
 
-from code_puppy.callbacks import (
+from spruce_grove.callbacks import (
     clear_callbacks,
     on_model_select,
     register_callback,
 )
-from code_puppy.model_switching import resolve_run_model_selection
+from spruce_grove.model_switching import resolve_run_model_selection
 
 
 @pytest.fixture(autouse=True)

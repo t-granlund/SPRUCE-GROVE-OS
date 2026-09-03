@@ -14,12 +14,12 @@ from unittest.mock import MagicMock, patch
 
 from termflow.ansi.utils import visible
 
-from code_puppy.command_line.autosave_menu import interactive_autosave_picker
-from code_puppy.command_line.session_browser import (
+from spruce_grove.command_line.autosave_menu import interactive_autosave_picker
+from spruce_grove.command_line.session_browser import (
     _extract_message_content,
     build_session_browser,
 )
-from code_puppy.command_line.session_browser_data import (
+from spruce_grove.command_line.session_browser_data import (
     SessionEntry,
     _get_session_entries,
     _get_session_metadata,
@@ -86,7 +86,7 @@ class TestDisplayResumedHistory:
 
     def test_displays_last_n_messages(self, capsys):
         """Should display the last N messages from history."""
-        from code_puppy.command_line.autosave_menu import display_resumed_history
+        from spruce_grove.command_line.autosave_menu import display_resumed_history
 
         messages = []
         for i in range(5):
@@ -108,12 +108,12 @@ class TestDisplayResumedHistory:
         assert "Session Resumed" in captured.out
 
     def test_empty_history_returns_early(self):
-        from code_puppy.command_line.autosave_menu import display_resumed_history
+        from spruce_grove.command_line.autosave_menu import display_resumed_history
 
         display_resumed_history([])
 
     def test_renders_different_roles_correctly(self, capsys):
-        from code_puppy.command_line.autosave_menu import display_resumed_history
+        from spruce_grove.command_line.autosave_menu import display_resumed_history
 
         sys_msg = MagicMock()
         sys_msg.kind = "request"
@@ -152,7 +152,7 @@ class TestDisplayResumedHistory:
         assert "Tool result" in captured.out or "test_tool" in captured.out
 
     def test_single_system_message_returns_early(self):
-        from code_puppy.command_line.autosave_menu import display_resumed_history
+        from spruce_grove.command_line.autosave_menu import display_resumed_history
 
         mock_msg = MagicMock()
         mock_msg.kind = "request"
@@ -166,7 +166,7 @@ class TestEdgeCasesAndErrorHandling:
 
     def test_with_nonexistent_autosave_dir(self):
         with patch(
-            "code_puppy.command_line.session_browser_data.list_sessions",
+            "spruce_grove.command_line.session_browser_data.list_sessions",
             side_effect=FileNotFoundError(),
         ):
             entries = _get_session_entries(Path("/nonexistent/path"))
@@ -174,11 +174,11 @@ class TestEdgeCasesAndErrorHandling:
 
     def test_with_permission_denied_access(self):
         with patch(
-            "code_puppy.command_line.session_browser_data._get_session_metadata",
+            "spruce_grove.command_line.session_browser_data._get_session_metadata",
             side_effect=PermissionError("Access denied"),
         ):
             with patch(
-                "code_puppy.command_line.session_browser_data.list_sessions",
+                "spruce_grove.command_line.session_browser_data.list_sessions",
                 return_value=["session1"],
             ):
                 entries = _get_session_entries(Path("/protected/path"))
@@ -270,8 +270,8 @@ class TestExtractMessageContent:
 class TestGetSessionEntries:
     """Test the _get_session_entries function."""
 
-    @patch("code_puppy.command_line.session_browser_data.list_sessions")
-    @patch("code_puppy.command_line.session_browser_data._get_session_metadata")
+    @patch("spruce_grove.command_line.session_browser_data.list_sessions")
+    @patch("spruce_grove.command_line.session_browser_data._get_session_metadata")
     def test_handles_invalid_timestamps(self, mock_metadata, mock_list):
         mock_list.return_value = ["invalid_ts", "valid_ts"]
         mock_metadata.side_effect = [
@@ -282,8 +282,8 @@ class TestGetSessionEntries:
         assert result[0][0] == "valid_ts"
         assert result[1][0] == "invalid_ts"
 
-    @patch("code_puppy.command_line.session_browser_data.list_sessions")
-    @patch("code_puppy.command_line.session_browser_data._get_session_metadata")
+    @patch("spruce_grove.command_line.session_browser_data.list_sessions")
+    @patch("spruce_grove.command_line.session_browser_data._get_session_metadata")
     def test_handles_missing_timestamps(self, mock_metadata, mock_list):
         mock_list.return_value = ["no_timestamp", "valid_timestamp"]
         mock_metadata.side_effect = [{}, {"timestamp": "2024-01-01T12:00:00"}]
@@ -291,8 +291,8 @@ class TestGetSessionEntries:
         assert result[0][0] == "valid_timestamp"
         assert result[1][0] == "no_timestamp"
 
-    @patch("code_puppy.command_line.session_browser_data.list_sessions")
-    @patch("code_puppy.command_line.session_browser_data._get_session_metadata")
+    @patch("spruce_grove.command_line.session_browser_data.list_sessions")
+    @patch("spruce_grove.command_line.session_browser_data._get_session_metadata")
     def test_sorts_entries_by_timestamp_desc(self, mock_metadata, mock_list):
         mock_list.return_value = ["session1", "session2", "session3"]
         mock_metadata.side_effect = [
@@ -317,7 +317,7 @@ class TestGetSessionMetadata:
 class TestInteractiveAutosavePicker:
     """Test the interactive_autosave_picker function."""
 
-    @patch("code_puppy.command_line.autosave_menu._get_session_entries")
+    @patch("spruce_grove.command_line.autosave_menu._get_session_entries")
     async def test_returns_none_for_no_sessions(self, mock_entries):
         mock_entries.return_value = []
         result = await interactive_autosave_picker()
@@ -326,7 +326,7 @@ class TestInteractiveAutosavePicker:
     async def test_fires_session_browser_open_hook_with_live_meta(self):
         from unittest.mock import AsyncMock
 
-        from code_puppy.command_line.session_browser import BrowseResult
+        from spruce_grove.command_line.session_browser import BrowseResult
 
         stub_browser = MagicMock()
         stub_browser.run.return_value = BrowseResult(cancelled=True)
@@ -334,16 +334,16 @@ class TestInteractiveAutosavePicker:
         pairs = [("s1", {"timestamp": "2026-01-01T10:00:00"})]
         with (
             patch(
-                "code_puppy.command_line.autosave_menu._get_session_entries",
+                "spruce_grove.command_line.autosave_menu._get_session_entries",
                 return_value=pairs,
             ),
             patch(
-                "code_puppy.command_line.autosave_menu.build_session_browser",
+                "spruce_grove.command_line.autosave_menu.build_session_browser",
                 return_value=stub_browser,
             ),
-            patch("code_puppy.command_line.autosave_menu.menu_session", MagicMock()),
-            patch("code_puppy.command_line.autosave_menu.set_awaiting_user_input"),
-            patch("code_puppy.callbacks.on_session_browser_open", hook),
+            patch("spruce_grove.command_line.autosave_menu.menu_session", MagicMock()),
+            patch("spruce_grove.command_line.autosave_menu.set_awaiting_user_input"),
+            patch("spruce_grove.callbacks.on_session_browser_open", hook),
         ):
             result = await interactive_autosave_picker()
 
@@ -469,7 +469,7 @@ class TestSessionBrowserData:
         ]
         assert derive_titles(history) == ("only prompt", "")
 
-    @patch("code_puppy.command_line.session_browser_data.load_session")
+    @patch("spruce_grove.command_line.session_browser_data.load_session")
     def test_ensure_titles_caches_back_to_sidecar(self, mock_load, tmp_path):
         mock_load.return_value = [
             MockModelMessage(
@@ -489,7 +489,7 @@ class TestSessionBrowserData:
         assert ensure_titles(tmp_path, entry) is False
 
     @patch(
-        "code_puppy.command_line.session_browser_data.load_session",
+        "spruce_grove.command_line.session_browser_data.load_session",
         side_effect=OSError("gone"),
     )
     def test_ensure_titles_tolerates_broken_sessions(self, _mock, tmp_path):
@@ -520,7 +520,7 @@ class TestSessionBrowser:
             _entry(
                 "fix-pyte",
                 ts=stamp(hours=1),
-                scope="/code/code_puppy",
+                scope="/code/spruce_grove",
                 msgs=86,
                 tokens=90211,
                 title="Fix pyte rendering gaps",
@@ -529,7 +529,7 @@ class TestSessionBrowser:
             _entry(
                 "debug-restore",
                 ts=stamp(hours=2),
-                scope="/code/code_puppy",
+                scope="/code/spruce_grove",
                 msgs=43,
                 tokens=51000,
                 title="Debug session restore bug",
@@ -551,7 +551,7 @@ class TestSessionBrowser:
         )
         assert result.session == "debug-restore"
         assert not result.cancelled
-        assert "CODE PUPPY" in output
+        assert "SPRUCE GROVE" in output
         assert "PROJECTS (3)" in output
         assert "Fix pyte rendering gaps" in output
         assert "90k tok" in output
@@ -599,7 +599,7 @@ class TestSessionBrowser:
 
     def test_search_is_global_across_projects(self):
         # 'repl-echo' lives in /code/termflow; the selected project is
-        # /code/code_puppy. A search must still find it.
+        # /code/spruce_grove. A search must still find it.
         browser, result, output, _ = self.drive(
             self.sample_entries(),
             iter(["enter", "/", "e", "c", "h", "o", "enter", "enter"]),
@@ -647,7 +647,7 @@ class TestSessionBrowser:
         # After one 's', sort=msgs -> 'big' first and highlighted.
         assert result.session == "big"
 
-    @patch("code_puppy.session_storage.load_session")
+    @patch("spruce_grove.session_storage.load_session")
     def test_browse_overlay_and_escape(self, mock_load):
         mock_load.return_value = [
             MockModelMessage(
@@ -672,7 +672,7 @@ class TestSessionBrowser:
         ansi[12] = "#123456"
         palette = {"ansi": ansi, "bg": "#010101"}
         with patch(
-            "code_puppy.command_line.tui_style.get_value",
+            "spruce_grove.command_line.tui_style.get_value",
             return_value=json.dumps(palette),
         ):
             _, result, _, raw = self.drive(self.sample_entries(), iter(["escape"]))

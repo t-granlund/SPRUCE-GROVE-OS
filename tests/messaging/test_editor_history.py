@@ -4,12 +4,12 @@ import io
 
 import pytest
 
-from code_puppy.messaging.editor_history import (
+from spruce_grove.messaging.editor_history import (
     HistoryNavigator,
     HistoryStore,
     ReverseSearch,
 )
-from code_puppy.messaging.line_editor import RunningLineEditor
+from spruce_grove.messaging.line_editor import RunningLineEditor
 
 
 class FakeBar(io.StringIO):

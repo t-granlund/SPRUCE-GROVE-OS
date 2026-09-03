@@ -1,4 +1,4 @@
-"""Tests for code_puppy.secret_store -- generic OS keyring wrapper.
+"""Tests for spruce_grove.secret_store -- generic OS keyring wrapper.
 
 Covers the three paths called out in the subtask:
     1. keyring available   -- reads/writes route through the OS keyring
@@ -16,7 +16,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy import secret_store
+from spruce_grove import secret_store
 
 
 def _slice(fb, service=None):
@@ -47,12 +47,12 @@ def _pointer(store, name, service=None):
 def _reset_state():
     """Reset process-global state between tests."""
     secret_store._warned_fallback = False
-    secret_store._service_name = "code-puppy"
+    secret_store._service_name = "spruce-grove"
     secret_store._backend_installed = True  # skip lazy install in these tests
     secret_store._windows_acl_hardened = None
     yield
     secret_store._warned_fallback = False
-    secret_store._service_name = "code-puppy"
+    secret_store._service_name = "spruce-grove"
     secret_store._backend_installed = False
     secret_store._windows_acl_hardened = None
 
@@ -65,7 +65,7 @@ def notices(monkeypatch):
     captured messages.
     """
     captured: list[str] = []
-    import code_puppy.messaging as _msg
+    import spruce_grove.messaging as _msg
 
     monkeypatch.setattr(
         _msg, "emit_warning", lambda m, *a, **k: captured.append(str(m))
@@ -149,7 +149,7 @@ def null_keyring():
 
 class TestServiceName:
     def test_default(self):
-        assert secret_store.get_service_name() == "code-puppy"
+        assert secret_store.get_service_name() == "spruce-grove"
 
     def test_override(self):
         secret_store.configure_service_name("my-custom-distribution")
@@ -164,7 +164,7 @@ class TestServiceName:
         secret_store.configure_service_name("my-custom-distribution")
         secret_store.set_secret("tok", "v")
         assert ("my-custom-distribution", "tok") in store
-        assert ("code-puppy", "tok") not in store
+        assert ("spruce-grove", "tok") not in store
 
 
 # ---------------------------------------------------------------------------
@@ -502,7 +502,7 @@ class TestCrossPlatform:
         """_ensure_backend must not crash when secret_store_backends is
         unimportable (e.g. Windows where fcntl doesn't exist)."""
         secret_store._backend_installed = False
-        with patch.dict("sys.modules", {"code_puppy.secret_store_backends": None}):
+        with patch.dict("sys.modules", {"spruce_grove.secret_store_backends": None}):
             # Should complete without raising.
             secret_store._ensure_backend()
         assert secret_store._backend_installed is True
@@ -719,7 +719,7 @@ class TestFallbackServiceIsolation:
     ):
         """A pre-scoping flat file stays readable under the default service."""
         tmp_fallback.write_text(json.dumps({"legacy": "old"}))
-        assert secret_store.get_service_name() == "code-puppy"
+        assert secret_store.get_service_name() == "spruce-grove"
         assert secret_store.get_secret("legacy") == "old"
 
 
@@ -794,7 +794,7 @@ class TestWindowsHardening:
 class TestNotifyRouting:
     def test_notify_uses_messaging_bus(self, monkeypatch):
         seen = []
-        import code_puppy.messaging as _msg
+        import spruce_grove.messaging as _msg
 
         monkeypatch.setattr(_msg, "emit_warning", lambda m, *a, **k: seen.append(m))
         secret_store._notify("hello human")
@@ -802,7 +802,7 @@ class TestNotifyRouting:
 
     def test_notify_falls_back_to_warnings_when_bus_unavailable(self, monkeypatch):
         """If the bus raises/imports fail, the notice must not be lost."""
-        import code_puppy.messaging as _msg
+        import spruce_grove.messaging as _msg
 
         def boom(*a, **k):
             raise RuntimeError("bus down")

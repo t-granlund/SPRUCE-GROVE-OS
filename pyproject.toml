@@ -3,13 +3,13 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "code-puppy"
+name = "spruce-grove"
 version = "0.0.819"
 description = "Code generation agent"
 readme = "README.md"
 requires-python = ">=3.11,<3.15"
 dependencies = [
-    "code-puppy-core-plugins>=0.0.40",
+    "code-grove-core-plugins>=0.0.40",
     "logfire>=4.0",
     "pydantic-ai-slim[openai,anthropic,mcp]==2.35.0",
     "pydantic-ai-harness==0.23.0",
@@ -73,37 +73,37 @@ HomePage = "https://github.com/mpfaffenberger/code_puppy"
 
 
 [project.scripts]
-code-puppy = "code_puppy.main:main_entry"
-pup = "code_puppy.main:main_entry"
+spruce-grove = "spruce_grove.main:main_entry"
+pup = "spruce_grove.main:main_entry"
 
 [tool.logfire]
 ignore_no_config = true
 
 [tool.hatch.build]
-packages = ["code_puppy"]
+packages = ["spruce_grove"]
 
 [tool.hatch.build.targets.wheel.shared-data]
-"code_puppy/models.json" = "code_puppy/models.json"
-"code_puppy/models_dev_api.json" = "code_puppy/models_dev_api.json"
+"spruce_grove/models.json" = "spruce_grove/models.json"
+"spruce_grove/models_dev_api.json" = "spruce_grove/models_dev_api.json"
 
 [[tool.hatch.build.targets.sdist.include]]
-path = "code_puppy/models.json"
+path = "spruce_grove/models.json"
 
 [[tool.hatch.build.targets.sdist.include]]
-path = "code_puppy/models_dev_api.json"
+path = "spruce_grove/models_dev_api.json"
 
 [tool.ruff.lint.per-file-ignores]
-"code_puppy/main.py" = ["E402"]
-"code_puppy/cli_runner.py" = ["E402"]
-"code_puppy/messaging/__init__.py" = ["E402"]
+"spruce_grove/main.py" = ["E402"]
+"spruce_grove/cli_runner.py" = ["E402"]
+"spruce_grove/messaging/__init__.py" = ["E402"]
 
 [tool.pytest.ini_options]
-addopts = "--cov=code_puppy --cov-report=term-missing"
+addopts = "--cov=spruce_grove --cov-report=term-missing"
 testpaths = ["tests"]
 asyncio_mode = "auto"
 
 [tool.coverage.run]
-omit = ["code_puppy/main.py"]
+omit = ["spruce_grove/main.py"]
 
 [tool.uv]
 python-preference = "only-managed"

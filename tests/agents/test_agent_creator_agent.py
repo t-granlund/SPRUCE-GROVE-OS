@@ -2,7 +2,7 @@
 
 from unittest.mock import patch
 
-from code_puppy.agents.agent_creator_agent import (
+from spruce_grove.agents.agent_creator_agent import (
     AgentCreatorAgent,
     _validate_agent_creation,
 )
@@ -32,18 +32,18 @@ class TestAgentCreatorAgent:
         # Mock the tools function
         mock_tools = ["tool1", "tool2", "tool3"]
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.get_available_tool_names",
+            "spruce_grove.agents.agent_creator_agent.get_available_tool_names",
             lambda: mock_tools,
         )
 
         # Mock other dependencies
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.get_user_agents_directory",
+            "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
             lambda: "/mock/agents/dir",
         )
 
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.ModelFactory.load_config", lambda: {}
+            "spruce_grove.agents.agent_creator_agent.ModelFactory.load_config", lambda: {}
         )
 
         agent = AgentCreatorAgent()
@@ -65,17 +65,17 @@ class TestAgentCreatorAgent:
 
         # Mock all dependencies
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.get_available_tool_names",
+            "spruce_grove.agents.agent_creator_agent.get_available_tool_names",
             lambda: ["tool1"],
         )
 
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.get_user_agents_directory",
+            "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
             lambda: mock_dir,
         )
 
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.ModelFactory.load_config", lambda: {}
+            "spruce_grove.agents.agent_creator_agent.ModelFactory.load_config", lambda: {}
         )
 
         agent = AgentCreatorAgent()
@@ -94,17 +94,17 @@ class TestAgentCreatorAgent:
 
         # Mock all dependencies
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.get_available_tool_names",
+            "spruce_grove.agents.agent_creator_agent.get_available_tool_names",
             lambda: ["tool1"],
         )
 
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.get_user_agents_directory",
+            "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
             lambda: "/mock/agents/dir",
         )
 
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.ModelFactory.load_config",
+            "spruce_grove.agents.agent_creator_agent.ModelFactory.load_config",
             lambda: mock_models_config,
         )
 
@@ -133,7 +133,7 @@ class TestAgentCreatorAgent:
             "delete_snippet",
             "invoke_agent",
         ]
-        mock_agents_dir = "/home/user/.code_puppy/agents"
+        mock_agents_dir = "/home/user/.spruce_grove/agents"
         mock_models_config = {
             "gpt-5": {"type": "OpenAI", "context_length": "128k"},
             "claude-4-sonnet": {"type": "Anthropic", "context_length": "200k"},
@@ -141,17 +141,17 @@ class TestAgentCreatorAgent:
 
         # Mock all dependencies
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.get_available_tool_names",
+            "spruce_grove.agents.agent_creator_agent.get_available_tool_names",
             lambda: mock_tools,
         )
 
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.get_user_agents_directory",
+            "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
             lambda: mock_agents_dir,
         )
 
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.ModelFactory.load_config",
+            "spruce_grove.agents.agent_creator_agent.ModelFactory.load_config",
             lambda: mock_models_config,
         )
 
@@ -190,7 +190,7 @@ class TestAgentCreatorAgent:
     def test_get_available_tools_with_uc_enabled(self):
         """Test that get_available_tools includes UC when enabled."""
         with patch(
-            "code_puppy.config.get_universal_constructor_enabled",
+            "spruce_grove.config.get_universal_constructor_enabled",
             return_value=True,
         ):
             agent = AgentCreatorAgent()
@@ -210,7 +210,7 @@ class TestAgentCreatorAgent:
     def test_get_available_tools_with_uc_disabled(self):
         """Test that get_available_tools excludes UC when disabled."""
         with patch(
-            "code_puppy.config.get_universal_constructor_enabled",
+            "spruce_grove.config.get_universal_constructor_enabled",
             return_value=False,
         ):
             agent = AgentCreatorAgent()
@@ -247,7 +247,7 @@ class TestAgentCreatorAgent:
     def test_validate_agent_creation_not_agents_dir(self, monkeypatch):
         """Test that it ignores files outside the agents directory."""
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.get_user_agents_directory",
+            "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
             lambda: "/mock/agents/dir",
         )
         result = _validate_agent_creation(
@@ -258,7 +258,7 @@ class TestAgentCreatorAgent:
     def test_validate_agent_creation_invalid_json(self, monkeypatch):
         """Test that invalid JSON blocks the tool call."""
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.get_user_agents_directory",
+            "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
             lambda: "/mock/agents/dir",
         )
         result = _validate_agent_creation(
@@ -272,7 +272,7 @@ class TestAgentCreatorAgent:
     def test_validate_agent_creation_validation_error(self, monkeypatch):
         """Test that valid JSON with schema errors blocks the tool call."""
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.get_user_agents_directory",
+            "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
             lambda: "/mock/agents/dir",
         )
         # Valid JSON but missing required fields
@@ -290,11 +290,11 @@ class TestAgentCreatorAgent:
     def test_validate_agent_creation_valid(self, monkeypatch):
         """Test that perfectly valid agent config does not block the tool call."""
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.get_user_agents_directory",
+            "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
             lambda: "/mock/agents/dir",
         )
         monkeypatch.setattr(
-            "code_puppy.agents.agent_creator_agent.get_available_tool_names",
+            "spruce_grove.agents.agent_creator_agent.get_available_tool_names",
             lambda: ["tool1"],
         )
 

@@ -1,8 +1,8 @@
 """Regression tests for JSONAgent's config-load corruption resilience.
 
 Part of the PUP-605 follow-up (Andrew Tilson's review on #757 flagged
-``~/.code_puppy/agents/*.json`` reads at startup as another unbounded-read
-site). ``_load_config`` now delegates to :mod:`code_puppy.atomic_json`,
+``~/.spruce_grove/agents/*.json`` reads at startup as another unbounded-read
+site). ``_load_config`` now delegates to :mod:`spruce_grove.atomic_json`,
 which bounds the read before parsing and raises ``ValueError`` (matching
 the pre-existing public contract) instead of letting a pathological file
 balloon memory.
@@ -12,7 +12,7 @@ import json
 
 import pytest
 
-from code_puppy.agents.json_agent import JSONAgent
+from spruce_grove.agents.json_agent import JSONAgent
 
 VALID_CONFIG = {
     "name": "test-agent",
@@ -52,7 +52,7 @@ def test_oversized_file_raises_value_error_without_full_parse(agent_path, monkey
     """Pins the actual field-report shape this closes off: a pathologically
     large agent file dropped in the agents directory must never reach a
     full in-memory JSON parse."""
-    from code_puppy import atomic_json
+    from spruce_grove import atomic_json
 
     monkeypatch.setattr(atomic_json, "MAX_JSON_BYTES", 1024)
     agent_path.write_text(json.dumps({**VALID_CONFIG, "padding": "x" * 4096}))
@@ -66,7 +66,7 @@ def test_discover_json_agents_skips_corrupt_files_without_raising(
 ):
     """The existing discover_json_agents contract: one bad file must not
     prevent the others from loading."""
-    from code_puppy.agents.json_agent import discover_json_agents
+    from spruce_grove.agents.json_agent import discover_json_agents
 
     good = tmp_path / "good.json"
     good.write_text(json.dumps(VALID_CONFIG))
@@ -74,9 +74,9 @@ def test_discover_json_agents_skips_corrupt_files_without_raising(
     bad.write_text("{not valid json")
 
     monkeypatch.setattr(
-        "code_puppy.config.get_user_agents_directory", lambda: str(tmp_path)
+        "spruce_grove.config.get_user_agents_directory", lambda: str(tmp_path)
     )
-    monkeypatch.setattr("code_puppy.config.get_project_agents_directory", lambda: None)
+    monkeypatch.setattr("spruce_grove.config.get_project_agents_directory", lambda: None)
 
     agents = discover_json_agents()
 
@@ -96,15 +96,15 @@ def test_mcp_servers_null_is_accepted(agent_path):
 
 def test_mcp_servers_null_agent_is_discoverable(tmp_path, monkeypatch):
     """A null-valued agent remains visible during discovery."""
-    from code_puppy.agents.json_agent import discover_json_agents
+    from spruce_grove.agents.json_agent import discover_json_agents
 
     agent_file = tmp_path / "no-bindings.json"
     agent_file.write_text(json.dumps({**VALID_CONFIG, "mcp_servers": None}))
 
     monkeypatch.setattr(
-        "code_puppy.config.get_user_agents_directory", lambda: str(tmp_path)
+        "spruce_grove.config.get_user_agents_directory", lambda: str(tmp_path)
     )
-    monkeypatch.setattr("code_puppy.config.get_project_agents_directory", lambda: None)
+    monkeypatch.setattr("spruce_grove.config.get_project_agents_directory", lambda: None)
 
     agents = discover_json_agents()
 

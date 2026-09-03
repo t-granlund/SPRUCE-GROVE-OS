@@ -1,10 +1,10 @@
-"""Tests for code_puppy/command_line/onboarding_slides.py"""
+"""Tests for spruce_grove/command_line/onboarding_slides.py"""
 
 from unittest.mock import patch
 
 import pytest
 
-MODULE = "code_puppy.command_line.onboarding_slides"
+MODULE = "spruce_grove.command_line.onboarding_slides"
 
 
 def _plain(content):
@@ -13,13 +13,13 @@ def _plain(content):
 
 class TestModelOptions:
     def test_model_options_is_list(self):
-        from code_puppy.command_line.onboarding_slides import MODEL_OPTIONS
+        from spruce_grove.command_line.onboarding_slides import MODEL_OPTIONS
 
         assert isinstance(MODEL_OPTIONS, list)
         assert len(MODEL_OPTIONS) >= 4
 
     def test_model_options_tuples(self):
-        from code_puppy.command_line.onboarding_slides import MODEL_OPTIONS
+        from spruce_grove.command_line.onboarding_slides import MODEL_OPTIONS
 
         for opt in MODEL_OPTIONS:
             assert len(opt) == 3
@@ -28,7 +28,7 @@ class TestModelOptions:
 
 class TestGetNavFooter:
     def test_returns_string(self):
-        from code_puppy.command_line.onboarding_slides import get_nav_footer
+        from spruce_grove.command_line.onboarding_slides import get_nav_footer
 
         content = get_nav_footer()
         result = _plain(content)
@@ -42,8 +42,8 @@ class TestGetGradientBanner:
     def test_narrow_terminal_uses_compact_banner(self, monkeypatch):
         import os
 
-        import code_puppy.command_line.onboarding_slides as mod
-        from code_puppy import platform_utils
+        import spruce_grove.command_line.onboarding_slides as mod
+        from spruce_grove import platform_utils
 
         monkeypatch.setattr(
             platform_utils.shutil,
@@ -57,7 +57,7 @@ class TestGetGradientBanner:
         figlet.assert_called_once_with("PUP", font="ansi_shadow")
 
     def test_with_pyfiglet(self):
-        from code_puppy.command_line.onboarding_slides import get_gradient_banner
+        from spruce_grove.command_line.onboarding_slides import get_gradient_banner
 
         content = get_gradient_banner()
         result = _plain(content)
@@ -67,7 +67,7 @@ class TestGetGradientBanner:
 
     def test_without_pyfiglet(self):
         """Test fallback when pyfiglet is unavailable."""
-        import code_puppy.command_line.onboarding_slides as mod
+        import spruce_grove.command_line.onboarding_slides as mod
 
         # pyfiglet is available in this env, so normal path works
         content = mod.get_gradient_banner()
@@ -77,7 +77,7 @@ class TestGetGradientBanner:
 
 class TestSlideWelcome:
     def test_returns_string(self):
-        from code_puppy.command_line.onboarding_slides import slide_welcome
+        from spruce_grove.command_line.onboarding_slides import slide_welcome
 
         content = slide_welcome()
         result = _plain(content)
@@ -88,7 +88,7 @@ class TestSlideWelcome:
 
 class TestSlideModels:
     def test_with_options(self):
-        from code_puppy.command_line.onboarding_slides import slide_models
+        from spruce_grove.command_line.onboarding_slides import slide_models
 
         options = [
             ("chatgpt", "ChatGPT"),
@@ -103,7 +103,7 @@ class TestSlideModels:
         assert "▶" in result  # selected indicator
 
     def test_claude_selected(self):
-        from code_puppy.command_line.onboarding_slides import slide_models
+        from spruce_grove.command_line.onboarding_slides import slide_models
 
         options = [("chatgpt", "ChatGPT"), ("claude", "Claude")]
         content = slide_models(1, options)
@@ -119,7 +119,7 @@ class TestSlideModels:
         ids=["api_keys", "openrouter"],
     )
     def test_provider_context(self, option, display, expected):
-        from code_puppy.command_line.onboarding_slides import slide_models
+        from spruce_grove.command_line.onboarding_slides import slide_models
 
         options = [(option, display)]
         content = slide_models(0, options)
@@ -127,7 +127,7 @@ class TestSlideModels:
         assert expected in result
 
     def test_skip_context(self):
-        from code_puppy.command_line.onboarding_slides import slide_models
+        from spruce_grove.command_line.onboarding_slides import slide_models
 
         options = [("skip", "Skip")]
         content = slide_models(0, options)
@@ -135,13 +135,13 @@ class TestSlideModels:
         assert "later" in result.lower() or "No worries" in result
 
     def test_empty_options(self):
-        from code_puppy.command_line.onboarding_slides import slide_models
+        from spruce_grove.command_line.onboarding_slides import slide_models
 
         content = slide_models(0, [])
         assert isinstance(content, list)
 
     def test_chatgpt_context(self):
-        from code_puppy.command_line.onboarding_slides import slide_models
+        from spruce_grove.command_line.onboarding_slides import slide_models
 
         options = [("chatgpt", "ChatGPT Plus")]
         content = slide_models(0, options)
@@ -151,7 +151,7 @@ class TestSlideModels:
 
 class TestSlideMcp:
     def test_returns_string(self):
-        from code_puppy.command_line.onboarding_slides import slide_mcp
+        from spruce_grove.command_line.onboarding_slides import slide_mcp
 
         content = slide_mcp()
         result = _plain(content)
@@ -162,18 +162,18 @@ class TestSlideMcp:
 
 class TestSlideUseCases:
     def test_returns_string(self):
-        from code_puppy.command_line.onboarding_slides import slide_use_cases
+        from spruce_grove.command_line.onboarding_slides import slide_use_cases
 
         content = slide_use_cases()
         result = _plain(content)
         assert isinstance(content, list)
         assert "Planning" in result
-        assert "Code Puppy" in result
+        assert "Spruce Grove" in result
 
 
 class TestSlideDone:
     def test_without_oauth(self):
-        from code_puppy.command_line.onboarding_slides import slide_done
+        from spruce_grove.command_line.onboarding_slides import slide_done
 
         content = slide_done(None)
         result = _plain(content)
@@ -182,7 +182,7 @@ class TestSlideDone:
         assert "/tutorial" in result
 
     def test_with_oauth_chatgpt(self):
-        from code_puppy.command_line.onboarding_slides import slide_done
+        from spruce_grove.command_line.onboarding_slides import slide_done
 
         content = slide_done("chatgpt")
         result = _plain(content)
@@ -190,7 +190,7 @@ class TestSlideDone:
         assert "OAuth" in result
 
     def test_with_oauth_claude(self):
-        from code_puppy.command_line.onboarding_slides import slide_done
+        from spruce_grove.command_line.onboarding_slides import slide_done
 
         content = slide_done("claude")
         result = _plain(content)

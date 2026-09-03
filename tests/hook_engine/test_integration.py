@@ -11,12 +11,12 @@ Integration tests for hook_engine covering:
   - __init__ public API
 
 Implementation targets:
-  code_puppy/hook_engine/aliases.py
-  code_puppy/hook_engine/matcher.py  (alias integration)
-  code_puppy/hook_engine/executor.py
-  code_puppy/hook_engine/registry.py
-  code_puppy/hook_engine/engine.py
-  code_puppy/hook_engine/__init__.py
+  spruce_grove/hook_engine/aliases.py
+  spruce_grove/hook_engine/matcher.py  (alias integration)
+  spruce_grove/hook_engine/executor.py
+  spruce_grove/hook_engine/registry.py
+  spruce_grove/hook_engine/engine.py
+  spruce_grove/hook_engine/__init__.py
 """
 
 import json
@@ -24,18 +24,18 @@ import os
 
 import pytest
 
-from code_puppy.hook_engine import EventData, HookConfig, HookEngine
-from code_puppy.hook_engine.engine import validate_config_file
-from code_puppy.hook_engine.executor import (
+from spruce_grove.hook_engine import EventData, HookConfig, HookEngine
+from spruce_grove.hook_engine.engine import validate_config_file
+from spruce_grove.hook_engine.executor import (
     _build_environment,
     _build_stdin_payload,
     execute_hooks_parallel,
     format_execution_summary,
     get_failed_results,
 )
-from code_puppy.hook_engine.matcher import matches
-from code_puppy.hook_engine.models import ExecutionResult
-from code_puppy.hook_engine.registry import (
+from spruce_grove.hook_engine.matcher import matches
+from spruce_grove.hook_engine.models import ExecutionResult
+from spruce_grove.hook_engine.registry import (
     build_registry_from_config,
     get_registry_stats,
 )
@@ -48,7 +48,7 @@ from code_puppy.hook_engine.registry import (
 class TestCrossProviderMatching:
     """
     Verifies that a hook configured with a Claude Code tool name ("Bash") fires
-    correctly when code_puppy calls the equivalent internal tool
+    correctly when spruce_grove calls the equivalent internal tool
     ("agent_run_shell_command"), and vice-versa.
     """
 
@@ -926,36 +926,36 @@ class TestOnceReset:
 
 class TestPublicAPI:
     def test_hook_engine_importable(self):
-        from code_puppy.hook_engine import HookEngine
+        from spruce_grove.hook_engine import HookEngine
 
         assert HookEngine is not None
 
     def test_hook_config_importable(self):
-        from code_puppy.hook_engine import HookConfig
+        from spruce_grove.hook_engine import HookConfig
 
         assert HookConfig is not None
 
     def test_event_data_importable(self):
-        from code_puppy.hook_engine import EventData
+        from spruce_grove.hook_engine import EventData
 
         assert EventData is not None
 
     def test_execution_result_importable(self):
-        from code_puppy.hook_engine import ExecutionResult
+        from spruce_grove.hook_engine import ExecutionResult
 
         assert ExecutionResult is not None
 
     def test_process_event_result_importable(self):
-        from code_puppy.hook_engine import ProcessEventResult
+        from spruce_grove.hook_engine import ProcessEventResult
 
         assert ProcessEventResult is not None
 
     def test_aliases_module_importable(self):
-        from code_puppy.hook_engine import aliases
+        from spruce_grove.hook_engine import aliases
 
         assert aliases is not None
 
     def test_hook_registry_importable(self):
-        from code_puppy.hook_engine import HookRegistry
+        from spruce_grove.hook_engine import HookRegistry
 
         assert HookRegistry is not None

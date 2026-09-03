@@ -35,7 +35,7 @@ __all__ = [
 def live_cli(cli_harness: CliHarness) -> Generator[SpawnResult, None, None]:
     """Spawn the CLI using the caller's environment (for live network tests)."""
     env = os.environ.copy()
-    env.setdefault("CODE_PUPPY_TEST_FAST", "1")
+    env.setdefault("SPRUCE_GROVE_TEST_FAST", "1")
     result = cli_harness.spawn(args=["-i"], env=env)
     try:
         yield result
@@ -44,9 +44,9 @@ def live_cli(cli_harness: CliHarness) -> Generator[SpawnResult, None, None]:
 
 
 def satisfy_initial_prompts(result: SpawnResult, skip_autosave: bool = True) -> None:
-    """Complete the puppy name and owner prompts if they appear; otherwise continue."""
+    """Complete the grove name and owner prompts if they appear; otherwise continue."""
     try:
-        result.child.expect("What should we name the puppy?", timeout=10)
+        result.child.expect("What should we name the grove?", timeout=10)
         result.sendline("IntegrationPup\r")
         result.child.expect("What's your name", timeout=10)
         result.sendline("HarnessTester\r")

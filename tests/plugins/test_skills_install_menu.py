@@ -1,4 +1,4 @@
-"""Tests for code_puppy/plugins/agent_skills/skills_install_menu.py"""
+"""Tests for spruce_grove/plugins/agent_skills/skills_install_menu.py"""
 
 from pathlib import Path
 from unittest.mock import MagicMock, patch

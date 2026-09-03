@@ -3,7 +3,7 @@ from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
 
-from code_puppy.private_inference import (
+from spruce_grove.private_inference import (
     _disable_anthropic_thinking,
     _disable_chat_template_thinking,
     run_private_prompt,
@@ -61,18 +61,18 @@ async def test_private_prompt_builds_one_toolless_request():
 
     with (
         patch(
-            "code_puppy.private_inference.ModelFactory.load_config",
+            "spruce_grove.private_inference.ModelFactory.load_config",
             return_value={"private-model": {}},
         ),
         patch(
-            "code_puppy.private_inference.ModelFactory.get_model",
+            "spruce_grove.private_inference.ModelFactory.get_model",
             return_value=model,
         ) as get_model,
         patch(
-            "code_puppy.private_inference.make_model_settings",
+            "spruce_grove.private_inference.make_model_settings",
             return_value=settings,
         ) as make_settings,
-        patch("code_puppy.private_inference.Agent", agent_factory),
+        patch("spruce_grove.private_inference.Agent", agent_factory),
     ):
         result = await run_private_prompt(
             model_name="private-model",
@@ -113,8 +113,8 @@ async def test_private_prompt_builds_one_toolless_request():
 @pytest.mark.asyncio
 async def test_private_prompt_rejects_unknown_model_before_agent_creation():
     with (
-        patch("code_puppy.private_inference.ModelFactory.load_config", return_value={}),
-        patch("code_puppy.private_inference.Agent") as agent_factory,
+        patch("spruce_grove.private_inference.ModelFactory.load_config", return_value={}),
+        patch("spruce_grove.private_inference.Agent") as agent_factory,
         pytest.raises(ValueError, match="Unknown private-inference model"),
     ):
         await run_private_prompt(

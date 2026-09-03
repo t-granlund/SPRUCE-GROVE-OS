@@ -5,7 +5,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy.tools.skills_tools import (
+from spruce_grove.tools.skills_tools import (
     register_activate_skill,
     register_list_or_search_skills,
 )
@@ -41,7 +41,7 @@ class TestActivateSkill:
     async def test_no_plugin(self):
         fn = _register_and_get(register_activate_skill)
         with patch(
-            "code_puppy.tools.skills_tools.get_skill_provider", return_value=None
+            "spruce_grove.tools.skills_tools.get_skill_provider", return_value=None
         ):
             result = await fn(MagicMock(), skill_name="test")
         assert result.error == "Skills integration is unavailable."
@@ -51,7 +51,7 @@ class TestActivateSkill:
         fn = _register_and_get(register_activate_skill)
         provider.is_enabled.return_value = False
         with patch(
-            "code_puppy.tools.skills_tools.get_skill_provider", return_value=provider
+            "spruce_grove.tools.skills_tools.get_skill_provider", return_value=provider
         ):
             result = await fn(MagicMock(), skill_name="test")
         assert "disabled" in result.error
@@ -61,7 +61,7 @@ class TestActivateSkill:
         fn = _register_and_get(register_activate_skill)
         provider.find_enabled_skill_path.side_effect = RuntimeError("boom")
         with patch(
-            "code_puppy.tools.skills_tools.get_skill_provider", return_value=provider
+            "spruce_grove.tools.skills_tools.get_skill_provider", return_value=provider
         ):
             result = await fn(MagicMock(), skill_name="test")
         assert result.error == "Failed to discover skills: boom"
@@ -70,7 +70,7 @@ class TestActivateSkill:
     async def test_skill_not_found(self, provider):
         fn = _register_and_get(register_activate_skill)
         with patch(
-            "code_puppy.tools.skills_tools.get_skill_provider", return_value=provider
+            "spruce_grove.tools.skills_tools.get_skill_provider", return_value=provider
         ):
             result = await fn(MagicMock(), skill_name="missing")
         assert "not found or disabled" in result.error
@@ -80,7 +80,7 @@ class TestActivateSkill:
         fn = _register_and_get(register_activate_skill)
         provider.find_enabled_skill_path.return_value = Path("/skill")
         with patch(
-            "code_puppy.tools.skills_tools.get_skill_provider", return_value=provider
+            "spruce_grove.tools.skills_tools.get_skill_provider", return_value=provider
         ):
             result = await fn(MagicMock(), skill_name="test")
         assert result.error == "Failed to load content for skill 'test'"
@@ -93,10 +93,10 @@ class TestActivateSkill:
         provider.get_skill_resources.return_value = [Path("/skill/reference.md")]
         with (
             patch(
-                "code_puppy.tools.skills_tools.get_skill_provider",
+                "spruce_grove.tools.skills_tools.get_skill_provider",
                 return_value=provider,
             ),
-            patch("code_puppy.tools.skills_tools.get_message_bus") as bus,
+            patch("spruce_grove.tools.skills_tools.get_message_bus") as bus,
         ):
             result = await fn(MagicMock(), skill_name="test")
         assert result.error is None
@@ -110,7 +110,7 @@ class TestListOrSearchSkills:
     async def test_no_plugin(self):
         fn = _register_and_get(register_list_or_search_skills)
         with patch(
-            "code_puppy.tools.skills_tools.get_skill_provider", return_value=None
+            "spruce_grove.tools.skills_tools.get_skill_provider", return_value=None
         ):
             result = await fn(MagicMock())
         assert result.error == "Skills integration is unavailable."
@@ -120,7 +120,7 @@ class TestListOrSearchSkills:
         fn = _register_and_get(register_list_or_search_skills)
         provider.is_enabled.return_value = False
         with patch(
-            "code_puppy.tools.skills_tools.get_skill_provider", return_value=provider
+            "spruce_grove.tools.skills_tools.get_skill_provider", return_value=provider
         ):
             result = await fn(MagicMock())
         assert "disabled" in result.error
@@ -130,7 +130,7 @@ class TestListOrSearchSkills:
         fn = _register_and_get(register_list_or_search_skills)
         provider.list_enabled_skills.side_effect = RuntimeError("boom")
         with patch(
-            "code_puppy.tools.skills_tools.get_skill_provider", return_value=provider
+            "spruce_grove.tools.skills_tools.get_skill_provider", return_value=provider
         ):
             result = await fn(MagicMock())
         assert result.error == "Failed to discover skills: boom"
@@ -150,10 +150,10 @@ class TestListOrSearchSkills:
         ]
         with (
             patch(
-                "code_puppy.tools.skills_tools.get_skill_provider",
+                "spruce_grove.tools.skills_tools.get_skill_provider",
                 return_value=provider,
             ),
-            patch("code_puppy.tools.skills_tools.get_message_bus") as bus,
+            patch("spruce_grove.tools.skills_tools.get_message_bus") as bus,
         ):
             result = await fn(MagicMock())
         assert result.error is None
@@ -168,7 +168,7 @@ class TestListOrSearchSkills:
             ("x", "Handles authentication", [], "auth", 1),
             ("x", "desc", ["database"], "database", 1),
             ("x", "desc", [], "zzzzz", 0),
-            ("code-puppy", "architecture", [], "code puppy architecture", 1),
+            ("spruce-grove", "architecture", [], "spruce grove architecture", 1),
         ],
     )
     @pytest.mark.anyio
@@ -188,10 +188,10 @@ class TestListOrSearchSkills:
         ]
         with (
             patch(
-                "code_puppy.tools.skills_tools.get_skill_provider",
+                "spruce_grove.tools.skills_tools.get_skill_provider",
                 return_value=provider,
             ),
-            patch("code_puppy.tools.skills_tools.get_message_bus"),
+            patch("spruce_grove.tools.skills_tools.get_message_bus"),
         ):
             result = await fn(MagicMock(), query=query)
         assert result.total_count == expected_count

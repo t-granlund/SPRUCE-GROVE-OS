@@ -17,16 +17,16 @@ import time
 import pytest
 from rich.console import Console
 
-from code_puppy.messaging.message_queue import (
+from spruce_grove.messaging.message_queue import (
     MessageQueue,
     MessageType,
     UIMessage,
 )
-from code_puppy.messaging.pause_controller import (
+from spruce_grove.messaging.pause_controller import (
     get_pause_controller,
     reset_pause_controller,
 )
-from code_puppy.messaging.renderers import (
+from spruce_grove.messaging.renderers import (
     _BUFFER_FLUSH_INDICATOR_THRESHOLD,
     SynchronousInteractiveRenderer,
 )

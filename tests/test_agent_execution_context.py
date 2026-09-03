@@ -6,7 +6,7 @@ import asyncio
 
 import pytest
 
-from code_puppy.agent_execution_context import (
+from spruce_grove.agent_execution_context import (
     executing_agent_context,
     get_executing_agent,
 )

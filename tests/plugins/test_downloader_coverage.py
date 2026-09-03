@@ -1,4 +1,4 @@
-"""100% coverage tests for code_puppy/plugins/agent_skills/downloader.py."""
+"""100% coverage tests for spruce_grove/plugins/agent_skills/downloader.py."""
 
 from __future__ import annotations
 

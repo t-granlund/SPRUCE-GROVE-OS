@@ -107,7 +107,7 @@ class TestStartCallbackServer:
 
 
 class TestAwaitCallback:
-    @patch("code_puppy.tools.common.should_suppress_browser", return_value=True)
+    @patch("spruce_grove.tools.common.should_suppress_browser", return_value=True)
     @patch(f"{MOD}.read_available_stdin_line")
     @patch(f"{MOD}.build_authorization_url", return_value="https://auth.example.com")
     @patch(
@@ -149,7 +149,7 @@ class TestAwaitCallback:
         assert _await_callback(ctx) is None
         server.shutdown.assert_called_once()
 
-    @patch("code_puppy.tools.common.should_suppress_browser", return_value=True)
+    @patch("spruce_grove.tools.common.should_suppress_browser", return_value=True)
     @patch(f"{MOD}.emit_error")
     @patch(f"{MOD}.emit_info")
     @patch(f"{MOD}.CLAUDE_CODE_OAUTH_CONFIG", {"callback_timeout": 0.1})
@@ -170,7 +170,7 @@ class TestAwaitCallback:
         assert _await_callback(ctx) is None
 
     @patch("webbrowser.open")
-    @patch("code_puppy.tools.common.should_suppress_browser", return_value=False)
+    @patch("spruce_grove.tools.common.should_suppress_browser", return_value=False)
     @patch(f"{MOD}.emit_error")
     @patch(f"{MOD}.emit_info")
     @patch(f"{MOD}.CLAUDE_CODE_OAUTH_CONFIG", {"callback_timeout": 5})
@@ -196,7 +196,7 @@ class TestAwaitCallback:
         ctx.state = "the_state"
         assert _await_callback(ctx) == "the_code"
 
-    @patch("code_puppy.tools.common.should_suppress_browser", return_value=True)
+    @patch("spruce_grove.tools.common.should_suppress_browser", return_value=True)
     @patch(f"{MOD}.emit_error")
     @patch(f"{MOD}.emit_info")
     @patch(f"{MOD}.CLAUDE_CODE_OAUTH_CONFIG", {"callback_timeout": 5})
@@ -221,7 +221,7 @@ class TestAwaitCallback:
         ctx.state = "s"
         assert _await_callback(ctx) is None
 
-    @patch("code_puppy.tools.common.should_suppress_browser", return_value=True)
+    @patch("spruce_grove.tools.common.should_suppress_browser", return_value=True)
     @patch(f"{MOD}.emit_error")
     @patch(f"{MOD}.emit_info")
     @patch(f"{MOD}.CLAUDE_CODE_OAUTH_CONFIG", {"callback_timeout": 5})
@@ -528,7 +528,7 @@ def _patch_model_deps():
     @contextlib.contextmanager
     def _ctx():
         with (
-            patch("code_puppy.claude_cache_client.ClaudeCacheAsyncClient"),
+            patch("spruce_grove.claude_cache_client.ClaudeCacheAsyncClient"),
             patch(f"{MOD}.AsyncAnthropic", create=True),
             patch(f"{MOD}.AnthropicModel", create=True),
             patch(f"{MOD}.AnthropicProvider", create=True),
@@ -552,7 +552,7 @@ class TestCreateClaudeCodeModel:
             patch("anthropic.AsyncAnthropic") as mock_async_cls,
             patch("pydantic_ai.models.anthropic.AnthropicModel"),
             patch("pydantic_ai.providers.anthropic.AnthropicProvider"),
-            patch("code_puppy.claude_cache_client.ClaudeCacheAsyncClient"),
+            patch("spruce_grove.claude_cache_client.ClaudeCacheAsyncClient"),
         ):
             mock_anthropic = MagicMock()
             mock_anthropic.api_key = None
@@ -563,15 +563,15 @@ class TestCreateClaudeCodeModel:
 
     @patch(f"{MOD}.get_valid_access_token", return_value="refreshed_token")
     @patch(
-        "code_puppy.model_factory.get_custom_config",
+        "spruce_grove.model_factory.get_custom_config",
         return_value=("https://api.example.com", {}, None, "old_key", None),
     )
     @patch(
-        "code_puppy.config.get_effective_model_settings",
+        "spruce_grove.config.get_effective_model_settings",
         return_value={"interleaved_thinking": True},
     )
-    @patch("code_puppy.http_utils.get_cert_bundle_path", return_value="/ca.pem")
-    @patch("code_puppy.http_utils.get_http2", return_value=False)
+    @patch("spruce_grove.http_utils.get_cert_bundle_path", return_value="/ca.pem")
+    @patch("spruce_grove.http_utils.get_http2", return_value=False)
     def test_oauth_model_refreshes_token(
         self, mock_h2, mock_cert, mock_settings, mock_custom, mock_token
     ):
@@ -586,10 +586,10 @@ class TestCreateClaudeCodeModel:
 
     @patch(f"{MOD}.get_valid_access_token", return_value=None)
     @patch(
-        "code_puppy.model_factory.get_custom_config",
+        "spruce_grove.model_factory.get_custom_config",
         return_value=("https://api.example.com", {}, None, None, None),
     )
-    @patch("code_puppy.config.get_effective_model_settings", return_value={})
+    @patch("spruce_grove.config.get_effective_model_settings", return_value={})
     @patch(f"{MOD}.emit_warning")
     def test_no_api_key(self, mock_warn, mock_settings, mock_custom, mock_token):
         model_config = {"name": "claude-4", "oauth_source": "claude-code-plugin"}
@@ -597,7 +597,7 @@ class TestCreateClaudeCodeModel:
         assert result is None
 
     @patch(
-        "code_puppy.model_factory.get_custom_config",
+        "spruce_grove.model_factory.get_custom_config",
         return_value=(
             "https://api.example.com",
             {"anthropic-beta": "existing-beta"},
@@ -607,10 +607,10 @@ class TestCreateClaudeCodeModel:
         ),
     )
     @patch(
-        "code_puppy.config.get_effective_model_settings",
+        "spruce_grove.config.get_effective_model_settings",
         return_value={"interleaved_thinking": False},
     )
-    @patch("code_puppy.http_utils.get_http2", return_value=True)
+    @patch("spruce_grove.http_utils.get_http2", return_value=True)
     def test_interleaved_thinking_false_strips_beta(
         self, mock_h2, mock_settings, mock_custom
     ):
@@ -619,7 +619,7 @@ class TestCreateClaudeCodeModel:
         assert result is not None
 
     @patch(
-        "code_puppy.model_factory.get_custom_config",
+        "spruce_grove.model_factory.get_custom_config",
         return_value=(
             "https://api.example.com",
             {"anthropic-beta": "interleaved-thinking-2025-05-14"},
@@ -629,10 +629,10 @@ class TestCreateClaudeCodeModel:
         ),
     )
     @patch(
-        "code_puppy.config.get_effective_model_settings",
+        "spruce_grove.config.get_effective_model_settings",
         return_value={"interleaved_thinking": False},
     )
-    @patch("code_puppy.http_utils.get_http2", return_value=False)
+    @patch("spruce_grove.http_utils.get_http2", return_value=False)
     def test_strip_interleaved_thinking_leaves_empty(
         self, mock_h2, mock_settings, mock_custom
     ):
@@ -641,21 +641,21 @@ class TestCreateClaudeCodeModel:
         assert result is not None
 
     @patch(
-        "code_puppy.model_factory.get_custom_config",
+        "spruce_grove.model_factory.get_custom_config",
         return_value=("https://api.example.com", {}, "/cert", "key123", None),
     )
     @patch(
-        "code_puppy.config.get_effective_model_settings",
+        "spruce_grove.config.get_effective_model_settings",
         return_value={"interleaved_thinking": False},
     )
-    @patch("code_puppy.http_utils.get_http2", return_value=False)
+    @patch("spruce_grove.http_utils.get_http2", return_value=False)
     def test_no_beta_no_interleaved(self, mock_h2, mock_settings, mock_custom):
         model_config = {"name": "claude-4", "context_length": 100000}
         result = self._call("test-model", model_config)
         assert result is not None
 
     @patch(
-        "code_puppy.model_factory.get_custom_config",
+        "spruce_grove.model_factory.get_custom_config",
         return_value=(
             "https://api.example.com",
             {"anthropic-beta": "some-other-beta"},
@@ -665,38 +665,38 @@ class TestCreateClaudeCodeModel:
         ),
     )
     @patch(
-        "code_puppy.config.get_effective_model_settings",
+        "spruce_grove.config.get_effective_model_settings",
         return_value={"interleaved_thinking": True},
     )
-    @patch("code_puppy.http_utils.get_http2", return_value=False)
+    @patch("spruce_grove.http_utils.get_http2", return_value=False)
     def test_existing_beta_adds_interleaved(self, mock_h2, mock_settings, mock_custom):
         model_config = {"name": "claude-4", "context_length": 1_000_000}
         result = self._call("test-model", model_config)
         assert result is not None
 
     @patch(
-        "code_puppy.model_factory.get_custom_config",
+        "spruce_grove.model_factory.get_custom_config",
         return_value=("https://api.example.com", {}, "/cert", "key123", None),
     )
     @patch(
-        "code_puppy.config.get_effective_model_settings",
+        "spruce_grove.config.get_effective_model_settings",
         return_value={"interleaved_thinking": True},
     )
-    @patch("code_puppy.http_utils.get_http2", return_value=False)
+    @patch("spruce_grove.http_utils.get_http2", return_value=False)
     def test_1m_context_no_existing_beta(self, mock_h2, mock_settings, mock_custom):
         model_config = {"name": "claude-4", "context_length": 1_000_000}
         result = self._call("test-model", model_config)
         assert result is not None
 
     @patch(
-        "code_puppy.model_factory.get_custom_config",
+        "spruce_grove.model_factory.get_custom_config",
         return_value=("https://api.example.com", {}, "/cert", "key123", None),
     )
     @patch(
-        "code_puppy.config.get_effective_model_settings",
+        "spruce_grove.config.get_effective_model_settings",
         return_value={"interleaved_thinking": False},
     )
-    @patch("code_puppy.http_utils.get_http2", return_value=False)
+    @patch("spruce_grove.http_utils.get_http2", return_value=False)
     def test_1m_context_no_beta_no_interleaved(
         self, mock_h2, mock_settings, mock_custom
     ):
@@ -834,7 +834,7 @@ class TestAgentRunEnd:
 
 class TestCallbackRegistration:
     def test_callbacks_registered(self):
-        from code_puppy.callbacks import get_callbacks, register_callback
+        from spruce_grove.callbacks import get_callbacks, register_callback
 
         from code_puppy_core_plugins.claude_code_oauth.register_callbacks import (
             _custom_help,

@@ -5,8 +5,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-import code_puppy.status_display
-from code_puppy.status_display import CURRENT_TOKEN_RATE, StatusDisplay
+import spruce_grove.status_display
+from spruce_grove.status_display import CURRENT_TOKEN_RATE, StatusDisplay
 
 
 class TestStatusDisplay:
@@ -72,7 +72,7 @@ class TestStatusDisplay:
         assert rate > 0
         assert rate > 5.0  # Should be higher than the previous rate component
         # Global rate should be updated - check from module namespace
-        assert code_puppy.status_display.CURRENT_TOKEN_RATE == rate
+        assert spruce_grove.status_display.CURRENT_TOKEN_RATE == rate
 
     def test_calculate_rate_negative_rates_handled(self, status_display):
         """Test that negative rates are clamped to 0."""
@@ -83,14 +83,14 @@ class TestStatusDisplay:
 
         rate = status_display._calculate_rate()
         assert rate >= 0
-        assert code_puppy.status_display.CURRENT_TOKEN_RATE >= 0
+        assert spruce_grove.status_display.CURRENT_TOKEN_RATE >= 0
 
     def test_update_rate_from_sse(self, status_display):
         """Test updating token rate from SSE stream data."""
         status_display.update_rate_from_sse(completion_tokens=100, completion_time=2.0)
 
         assert status_display.current_rate == 50  # 100/2 = 50
-        assert code_puppy.status_display.CURRENT_TOKEN_RATE == 50
+        assert spruce_grove.status_display.CURRENT_TOKEN_RATE == 50
 
     def test_update_rate_from_sse_with_smoothing(self, status_display):
         """Test SSE rate updates with smoothing."""
@@ -114,14 +114,14 @@ class TestStatusDisplay:
     def test_get_current_rate_static(self):
         """Test static method for getting current rate."""
         # Set global rate
-        import code_puppy.status_display
+        import spruce_grove.status_display
 
         original_rate = CURRENT_TOKEN_RATE
         try:
-            code_puppy.status_display.CURRENT_TOKEN_RATE = 42.0
+            spruce_grove.status_display.CURRENT_TOKEN_RATE = 42.0
             assert StatusDisplay.get_current_rate() == 42.0
         finally:
-            code_puppy.status_display.CURRENT_TOKEN_RATE = original_rate
+            spruce_grove.status_display.CURRENT_TOKEN_RATE = original_rate
 
     def test_update_token_count_first_update(self, status_display):
         """Test token count update on first call."""
@@ -238,7 +238,7 @@ class TestStatusDisplay:
         """Test starting the status display."""
         assert not status_display.is_active
 
-        with patch("code_puppy.status_display.asyncio.create_task") as mock_create_task:
+        with patch("spruce_grove.status_display.asyncio.create_task") as mock_create_task:
             mock_task = MagicMock()
             mock_create_task.return_value = mock_task
 
@@ -255,7 +255,7 @@ class TestStatusDisplay:
     @pytest.mark.asyncio
     async def test_start_already_active(self, status_display):
         """Test starting when already active."""
-        with patch("code_puppy.status_display.asyncio.create_task") as mock_create_task:
+        with patch("spruce_grove.status_display.asyncio.create_task") as mock_create_task:
             mock_task = MagicMock()
             mock_create_task.return_value = mock_task
 
@@ -269,11 +269,11 @@ class TestStatusDisplay:
     @pytest.mark.asyncio
     async def test_stop_after_start(self, status_display):
         """Test stopping the status display after starting."""
-        with patch("code_puppy.status_display.asyncio.create_task") as mock_create_task:
+        with patch("spruce_grove.status_display.asyncio.create_task") as mock_create_task:
             mock_task = MagicMock()
             mock_create_task.return_value = mock_task
 
-            with patch("code_puppy.messaging.emit_info") as mock_emit_info:
+            with patch("spruce_grove.messaging.emit_info") as mock_emit_info:
                 status_display.start()
                 status_display.stop()
 
@@ -290,7 +290,7 @@ class TestStatusDisplay:
                 # State should be reset
                 assert status_display.start_time is None
                 assert status_display.token_count == 0
-                assert code_puppy.status_display.CURRENT_TOKEN_RATE == 0.0
+                assert spruce_grove.status_display.CURRENT_TOKEN_RATE == 0.0
 
     def test_stop_without_start(self, status_display):
         """Test stopping when not active."""
@@ -302,7 +302,7 @@ class TestStatusDisplay:
     @pytest.mark.asyncio
     async def test_stop_with_cancellation(self, status_display):
         """Test stopping handles task cancellation properly."""
-        with patch("code_puppy.status_display.asyncio.create_task") as mock_create_task:
+        with patch("spruce_grove.status_display.asyncio.create_task") as mock_create_task:
             mock_task = MagicMock()
             mock_create_task.return_value = mock_task
 
@@ -322,7 +322,7 @@ class TestStatusDisplay:
         status_display.token_count = 50
         status_display.start_time = 1.0
 
-        with patch("code_puppy.messaging.emit_info") as mock_emit_info:
+        with patch("spruce_grove.messaging.emit_info") as mock_emit_info:
             status_display.stop()
 
             # Should have called emit_info
@@ -332,9 +332,9 @@ class TestStatusDisplay:
     async def test_update_display_integration(self, status_display):
         """Test the display update loop (integration test)."""
         with (
-            patch("code_puppy.status_display.asyncio.create_task"),
-            patch("code_puppy.status_display.Live") as mock_live,
-            patch("code_puppy.messaging.emit_info") as mock_emit_info,
+            patch("spruce_grove.status_display.asyncio.create_task"),
+            patch("spruce_grove.status_display.Live") as mock_live,
+            patch("spruce_grove.messaging.emit_info") as mock_emit_info,
         ):
             mock_live_instance = MagicMock()
             mock_live.return_value.__enter__.return_value = mock_live_instance
@@ -371,8 +371,8 @@ class TestStatusDisplay:
         # Should have variety (not all the same)
         assert len(set(messages)) > 1
 
-        # Should be puppy-themed
-        puppy_terms = ["puppy", "paws", "tail", "barking", "panting"]
+        # Should be grove-themed
+        puppy_terms = ["grove", "paws", "tail", "barking", "panting"]
         combined_text = " ".join(messages).lower()
         has_puppy_theme = any(term in combined_text for term in puppy_terms)
         assert has_puppy_theme
@@ -426,7 +426,7 @@ class TestStatusDisplay:
     def test_global_rate_reset_on_stop(self, status_display):
         """Test that global rate is reset to 0 on stop."""
         # Need to start the display first for stop() to work properly
-        with patch("code_puppy.status_display.asyncio.create_task") as mock_create_task:
+        with patch("spruce_grove.status_display.asyncio.create_task") as mock_create_task:
             mock_task = MagicMock()
             mock_create_task.return_value = mock_task
             status_display.start()
@@ -437,7 +437,7 @@ class TestStatusDisplay:
         status_display.stop()
 
         # Global rate should be reset
-        assert code_puppy.status_display.CURRENT_TOKEN_RATE == 0.0
+        assert spruce_grove.status_display.CURRENT_TOKEN_RATE == 0.0
 
     def test_panel_styling(self, status_display):
         """Test that status panel has appropriate styling."""
@@ -451,7 +451,7 @@ class TestStatusDisplay:
         assert panel.padding == (1, 2)
 
         # Check title styling exists
-        assert panel.title == "[bold blue]Code Puppy Status[/bold blue]"
+        assert panel.title == "[bold blue]Spruce Grove Status[/bold blue]"
 
     def test_memory_efficiency(self, status_display):
         """Test that status display doesn't accumulate memory unnecessarily."""
@@ -481,7 +481,7 @@ class TestToolPauseExclusion:
 
     def test_pause_resume_accumulates_paused_total(self, status_display):
         """Pausing then resuming should accumulate the elapsed tool time."""
-        with patch("code_puppy.status_display.time.time") as mock_time:
+        with patch("spruce_grove.status_display.time.time") as mock_time:
             mock_time.side_effect = [100.0, 105.0]  # pause start, resume
             status_display.pause_for_tool()
             status_display.resume_after_tool()
@@ -490,7 +490,7 @@ class TestToolPauseExclusion:
 
     def test_pause_is_idempotent(self, status_display):
         """A second pause while already paused must not move the start marker."""
-        with patch("code_puppy.status_display.time.time") as mock_time:
+        with patch("spruce_grove.status_display.time.time") as mock_time:
             mock_time.side_effect = [100.0, 200.0]  # only first should be used
             status_display.pause_for_tool()
             status_display.pause_for_tool()
@@ -504,14 +504,14 @@ class TestToolPauseExclusion:
 
     def test_current_paused_total_includes_in_progress(self, status_display):
         """In-progress pauses should be reflected in the running total."""
-        with patch("code_puppy.status_display.time.time") as mock_time:
+        with patch("spruce_grove.status_display.time.time") as mock_time:
             mock_time.side_effect = [100.0, 108.0]  # pause start, "now"
             status_display.pause_for_tool()
             assert status_display._current_paused_total() == pytest.approx(8.0)
 
     def test_context_manager_excludes_tool_time(self, status_display):
         """The tool_execution context manager should pause/resume cleanly."""
-        with patch("code_puppy.status_display.time.time") as mock_time:
+        with patch("spruce_grove.status_display.time.time") as mock_time:
             mock_time.side_effect = [100.0, 103.0]
             with status_display.tool_execution():
                 pass
@@ -521,18 +521,18 @@ class TestToolPauseExclusion:
     def test_rate_excludes_tool_time(self, status_display):
         """Tool time inside an interval should not deflate the computed rate."""
         # Baseline at t=100 with 0 tokens.
-        with patch("code_puppy.status_display.time.time") as mock_time:
+        with patch("spruce_grove.status_display.time.time") as mock_time:
             mock_time.return_value = 100.0
             status_display.update_token_count(0)
 
         # A tool ran for 9s in the middle of the interval.
-        with patch("code_puppy.status_display.time.time") as mock_time:
+        with patch("spruce_grove.status_display.time.time") as mock_time:
             mock_time.side_effect = [101.0, 110.0]  # tool start, tool end
             status_display.pause_for_tool()
             status_display.resume_after_tool()
 
         # 10 tokens arrive at t=111. Active time = 11 - 9 paused = 2s => 5 t/s raw.
-        with patch("code_puppy.status_display.time.time") as mock_time:
+        with patch("spruce_grove.status_display.time.time") as mock_time:
             mock_time.return_value = 111.0
             status_display.token_count = 10
             rate = status_display._calculate_rate()
@@ -544,9 +544,9 @@ class TestToolPauseExclusion:
         status_display.start_time = 1.0
         status_display.token_count = 100
         status_display._paused_total = 6.0  # 6 seconds spent in tools
-        with patch("code_puppy.status_display.time.time") as mock_time:
+        with patch("spruce_grove.status_display.time.time") as mock_time:
             mock_time.return_value = 11.0  # 10s wall clock, 4s active
-            with patch("code_puppy.messaging.emit_info") as mock_emit:
+            with patch("spruce_grove.messaging.emit_info") as mock_emit:
                 status_display._emit_final_stats()
         msg = mock_emit.call_args[0][0]
         assert "in 4.0s" in msg

@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy.command_line.agent_menu import (
+from spruce_grove.command_line.agent_menu import (
     PAGE_SIZE,
     _agent_items,
     _get_agent_entries,
@@ -34,8 +34,8 @@ class TestPageSizeConstant:
 class TestGetAgentEntries:
     """Test the _get_agent_entries function."""
 
-    @patch("code_puppy.command_line.agent_menu.get_agent_descriptions")
-    @patch("code_puppy.command_line.agent_menu.get_available_agents")
+    @patch("spruce_grove.command_line.agent_menu.get_agent_descriptions")
+    @patch("spruce_grove.command_line.agent_menu.get_available_agents")
     def test_returns_empty_list_when_no_agents(self, mock_available, mock_descriptions):
         """Test that empty list is returned when no agents are available."""
         mock_available.return_value = {}
@@ -45,24 +45,24 @@ class TestGetAgentEntries:
 
         assert result == []
 
-    @patch("code_puppy.command_line.agent_menu.get_agent_descriptions")
-    @patch("code_puppy.command_line.agent_menu.get_available_agents")
+    @patch("spruce_grove.command_line.agent_menu.get_agent_descriptions")
+    @patch("spruce_grove.command_line.agent_menu.get_available_agents")
     def test_returns_single_agent(self, mock_available, mock_descriptions):
         """Test that single agent is returned correctly."""
-        mock_available.return_value = {"code_puppy": "Code Puppy 🐶"}
-        mock_descriptions.return_value = {"code_puppy": "A friendly coding assistant."}
+        mock_available.return_value = {"spruce_grove": "Spruce Grove 🐶"}
+        mock_descriptions.return_value = {"spruce_grove": "A friendly coding assistant."}
 
         result = _get_agent_entries()
 
         assert len(result) == 1
         assert result[0] == (
-            "code_puppy",
-            "Code Puppy 🐶",
+            "spruce_grove",
+            "Spruce Grove 🐶",
             "A friendly coding assistant.",
         )
 
-    @patch("code_puppy.command_line.agent_menu.get_agent_descriptions")
-    @patch("code_puppy.command_line.agent_menu.get_available_agents")
+    @patch("spruce_grove.command_line.agent_menu.get_agent_descriptions")
+    @patch("spruce_grove.command_line.agent_menu.get_available_agents")
     def test_returns_multiple_agents_sorted(self, mock_available, mock_descriptions):
         """Test that multiple agents are returned sorted alphabetically."""
         mock_available.return_value = {
@@ -84,8 +84,8 @@ class TestGetAgentEntries:
         assert result[1][0] == "beta_agent"
         assert result[2][0] == "zebra_agent"
 
-    @patch("code_puppy.command_line.agent_menu.get_agent_descriptions")
-    @patch("code_puppy.command_line.agent_menu.get_available_agents")
+    @patch("spruce_grove.command_line.agent_menu.get_agent_descriptions")
+    @patch("spruce_grove.command_line.agent_menu.get_available_agents")
     def test_handles_missing_description(self, mock_available, mock_descriptions):
         """Test that missing descriptions get default value."""
         mock_available.return_value = {"test_agent": "Test Agent"}
@@ -96,8 +96,8 @@ class TestGetAgentEntries:
         assert len(result) == 1
         assert result[0] == ("test_agent", "Test Agent", "No description available")
 
-    @patch("code_puppy.command_line.agent_menu.get_agent_descriptions")
-    @patch("code_puppy.command_line.agent_menu.get_available_agents")
+    @patch("spruce_grove.command_line.agent_menu.get_agent_descriptions")
+    @patch("spruce_grove.command_line.agent_menu.get_available_agents")
     def test_handles_extra_descriptions(self, mock_available, mock_descriptions):
         """Test that extra descriptions (without matching agents) are ignored."""
         mock_available.return_value = {"agent1": "Agent One"}
@@ -111,8 +111,8 @@ class TestGetAgentEntries:
         assert len(result) == 1
         assert result[0][0] == "agent1"
 
-    @patch("code_puppy.command_line.agent_menu.get_agent_descriptions")
-    @patch("code_puppy.command_line.agent_menu.get_available_agents")
+    @patch("spruce_grove.command_line.agent_menu.get_agent_descriptions")
+    @patch("spruce_grove.command_line.agent_menu.get_available_agents")
     def test_sorts_case_insensitive(self, mock_available, mock_descriptions):
         """Test that sorting is case-insensitive."""
         mock_available.return_value = {
@@ -133,8 +133,8 @@ class TestGetAgentEntries:
         assert result[1][0] == "Mixed_Agent"
         assert result[2][0] == "UPPER_AGENT"
 
-    @patch("code_puppy.command_line.agent_menu.get_agent_descriptions")
-    @patch("code_puppy.command_line.agent_menu.get_available_agents")
+    @patch("spruce_grove.command_line.agent_menu.get_agent_descriptions")
+    @patch("spruce_grove.command_line.agent_menu.get_available_agents")
     def test_returns_more_than_page_size(self, mock_available, mock_descriptions):
         """Test handling of more agents than PAGE_SIZE."""
         # Create 15 agents (more than PAGE_SIZE of 10)
@@ -156,7 +156,7 @@ class TestGetAgentEntries:
 class TestAgentItems:
     """Test the _agent_items row builder."""
 
-    @patch("code_puppy.command_line.agent_menu._get_pinned_model")
+    @patch("spruce_grove.command_line.agent_menu._get_pinned_model")
     def test_labels_and_markers(self, mock_pinned):
         mock_pinned.return_value = None
         entries = [
@@ -170,13 +170,13 @@ class TestAgentItems:
         assert items[0].description == ""
         assert "(current)" in items[1].description
 
-    @patch("code_puppy.command_line.agent_menu._get_pinned_model")
+    @patch("spruce_grove.command_line.agent_menu._get_pinned_model")
     def test_pinned_model_marker(self, mock_pinned):
         mock_pinned.return_value = "gpt-5"
         items = _agent_items([("a", "A", "desc")], current_agent_name="")
         assert "-> gpt-5" in items[0].description
 
-    @patch("code_puppy.command_line.agent_menu._get_pinned_model")
+    @patch("spruce_grove.command_line.agent_menu._get_pinned_model")
     def test_display_names_are_sanitized(self, mock_pinned):
         mock_pinned.return_value = None
         items = _agent_items([("a", "Agent \U0001f436 One", "d")], "")
@@ -186,8 +186,8 @@ class TestAgentItems:
 class TestRenderAgentDetails:
     """Test the ANSI preview pane."""
 
-    @patch("code_puppy.command_line.agent_menu.get_bound_servers")
-    @patch("code_puppy.command_line.agent_menu._get_pinned_model")
+    @patch("spruce_grove.command_line.agent_menu.get_bound_servers")
+    @patch("spruce_grove.command_line.agent_menu._get_pinned_model")
     def test_renders_core_fields(self, mock_pinned, mock_bound):
         mock_pinned.return_value = None
         mock_bound.return_value = {}
@@ -201,8 +201,8 @@ class TestRenderAgentDetails:
         assert "Does things." in details
         assert "Currently Active" in details
 
-    @patch("code_puppy.command_line.agent_menu.get_bound_servers")
-    @patch("code_puppy.command_line.agent_menu._get_pinned_model")
+    @patch("spruce_grove.command_line.agent_menu.get_bound_servers")
+    @patch("spruce_grove.command_line.agent_menu._get_pinned_model")
     def test_renders_pinned_and_bindings(self, mock_pinned, mock_bound):
         mock_pinned.return_value = "gpt-5"
         mock_bound.return_value = {
@@ -215,8 +215,8 @@ class TestRenderAgentDetails:
         assert "2 bound (1 auto-start)" in details
         assert "Not active" in details
 
-    @patch("code_puppy.command_line.agent_menu.get_bound_servers")
-    @patch("code_puppy.command_line.agent_menu._get_pinned_model")
+    @patch("spruce_grove.command_line.agent_menu.get_bound_servers")
+    @patch("spruce_grove.command_line.agent_menu._get_pinned_model")
     def test_long_description_is_wrapped(self, mock_pinned, mock_bound):
         mock_pinned.return_value = None
         mock_bound.return_value = {}
@@ -236,11 +236,11 @@ class TestBuildAgentMenu:
         pending = {"action": None}
         with (
             patch(
-                "code_puppy.command_line.agent_menu._get_pinned_model",
+                "spruce_grove.command_line.agent_menu._get_pinned_model",
                 return_value=None,
             ),
             patch(
-                "code_puppy.command_line.agent_menu.get_bound_servers",
+                "spruce_grove.command_line.agent_menu.get_bound_servers",
                 return_value={},
             ),
         ):

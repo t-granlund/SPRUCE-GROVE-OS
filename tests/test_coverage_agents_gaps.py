@@ -1,4 +1,4 @@
-"""Coverage tests for agents & small gaps (code_puppy-ont).
+"""Coverage tests for agents & small gaps (spruce_grove-ont).
 
 Targeted tests to reach 100% on specific missed lines.
 """
@@ -16,7 +16,7 @@ import pytest
 
 
 _REVIEWER_AGENTS = [
-    ("code_puppy.agents.agent_qa_kitten", "QualityAssuranceKittenAgent"),
+    ("spruce_grove.agents.agent_qa_kitten", "QualityAssuranceKittenAgent"),
 ]
 
 
@@ -40,7 +40,7 @@ def test_reviewer_agent_tools_and_prompt(module_path, class_name):
 
 class TestPlanningAgent:
     def test_tools_and_prompt(self):
-        from code_puppy.agents.agent_planning import PlanningAgent
+        from spruce_grove.agents.agent_planning import PlanningAgent
 
         agent = PlanningAgent()
         tools = agent.get_available_tools()
@@ -54,7 +54,7 @@ class TestPlanningAgent:
 
 class TestCodePuppyAgentTools:
     def test_get_available_tools(self):
-        from code_puppy.agents.agent_code_puppy import CodePuppyAgent
+        from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
 
         agent = CodePuppyAgent()
         tools = agent.get_available_tools()
@@ -63,8 +63,8 @@ class TestCodePuppyAgentTools:
         assert "delete_snippet" in tools
         assert "invoke_agent" in tools
 
-    def test_default_code_puppy_does_not_get_model_override_tools(self):
-        from code_puppy.agents.agent_code_puppy import CodePuppyAgent
+    def test_default_spruce_grove_does_not_get_model_override_tools(self):
+        from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
 
         agent = CodePuppyAgent()
         tools = agent.get_available_tools()
@@ -78,10 +78,10 @@ class TestCodePuppyAgentTools:
 
     def test_prompt_waits_for_gating_background_processes(self, monkeypatch):
         """The relentless background vigil is EXTREME-agency wording."""
-        from code_puppy.agents import agent_code_puppy
+        from spruce_grove.agents import agent_spruce_grove
 
-        monkeypatch.setattr(agent_code_puppy, "get_agency_level", lambda: "extreme")
-        prompt = agent_code_puppy.CodePuppyAgent().get_system_prompt()
+        monkeypatch.setattr(agent_spruce_grove, "get_agency_level", lambda: "extreme")
+        prompt = agent_spruce_grove.CodePuppyAgent().get_system_prompt()
 
         assert "do not stop and force the user to reprompt you" in prompt
         assert "wait 60 seconds and check its progress" in prompt
@@ -95,12 +95,12 @@ class TestCodePuppyAgentTools:
 class TestDisplaySubagentSkip:
     def test_skips_when_subagent_not_verbose(self):
         """Early return for subagent without verbose: nothing renders."""
-        from code_puppy.tools.display import display_non_streamed_result
+        from spruce_grove.tools.display import display_non_streamed_result
 
         with (
-            patch("code_puppy.tools.display.is_subagent", return_value=True),
-            patch("code_puppy.tools.display.get_subagent_verbose", return_value=False),
-            patch("code_puppy.tools.display.Console") as mock_console_cls,
+            patch("spruce_grove.tools.display.is_subagent", return_value=True),
+            patch("spruce_grove.tools.display.get_subagent_verbose", return_value=False),
+            patch("spruce_grove.tools.display.Console") as mock_console_cls,
         ):
             display_non_streamed_result("hello")
             mock_console_cls.assert_not_called()  # Should have returned early
@@ -113,42 +113,42 @@ class TestDisplaySubagentSkip:
 
 class TestInitVersionFallback:
     def test_version_fallback_on_exception(self):
-        """The Code Puppy version keeps its development fallback on lookup errors."""
+        """The Spruce Grove version keeps its development fallback on lookup errors."""
         with patch(
             "importlib.metadata.version", side_effect=Exception("nope")
         ) as mock_version:
             # Re-exec the module code
             import importlib
 
-            import code_puppy
+            import spruce_grove
 
-            importlib.reload(code_puppy)
-            assert code_puppy.__version__ == "0.0.0-dev"
-            mock_version.assert_called_once_with("code-puppy")
+            importlib.reload(spruce_grove)
+            assert spruce_grove.__version__ == "0.0.0-dev"
+            mock_version.assert_called_once_with("spruce-grove")
 
     def test_version_fallback_on_empty(self):
-        """The Code Puppy version keeps its development fallback when empty."""
+        """The Spruce Grove version keeps its development fallback when empty."""
         with patch("importlib.metadata.version", return_value="") as mock_version:
             import importlib
 
-            import code_puppy
+            import spruce_grove
 
-            importlib.reload(code_puppy)
-            assert code_puppy.__version__ == "0.0.0-dev"
-            mock_version.assert_called_once_with("code-puppy")
+            importlib.reload(spruce_grove)
+            assert spruce_grove.__version__ == "0.0.0-dev"
+            mock_version.assert_called_once_with("spruce-grove")
 
     @pytest.mark.parametrize("metadata_version", ["0.0.2", "  1.2.3rc1+build.5  "])
     def test_core_plugins_version_uses_installed_distribution_metadata(
         self, metadata_version
     ):
-        import code_puppy
+        import spruce_grove
 
         with patch(
             "importlib.metadata.version", return_value=metadata_version
         ) as mock_version:
-            assert code_puppy.get_core_plugins_version() == metadata_version.strip()
+            assert spruce_grove.get_core_plugins_version() == metadata_version.strip()
 
-        mock_version.assert_called_once_with("code-puppy-core-plugins")
+        mock_version.assert_called_once_with("code-grove-core-plugins")
 
     @pytest.mark.parametrize(
         "metadata_version",
@@ -165,42 +165,42 @@ class TestInitVersionFallback:
     def test_core_plugins_version_rejects_empty_or_malformed_metadata(
         self, metadata_version
     ):
-        import code_puppy
+        import spruce_grove
 
         with patch("importlib.metadata.version", return_value=metadata_version):
-            assert code_puppy.get_core_plugins_version() is None
+            assert spruce_grove.get_core_plugins_version() is None
 
     def test_core_plugins_version_handles_normalization_failure(self):
-        import code_puppy
+        import spruce_grove
 
         class BrokenVersion(str):
             def strip(self):
                 raise RuntimeError("broken metadata")
 
         with patch("importlib.metadata.version", return_value=BrokenVersion("1.2.3")):
-            assert code_puppy.get_core_plugins_version() is None
+            assert spruce_grove.get_core_plugins_version() is None
 
     def test_core_plugins_version_handles_missing_distribution(self):
-        import code_puppy
+        import spruce_grove
 
         with patch(
             "importlib.metadata.version",
-            side_effect=PackageNotFoundError("code-puppy-core-plugins"),
+            side_effect=PackageNotFoundError("code-grove-core-plugins"),
         ):
-            assert code_puppy.get_core_plugins_version() is None
+            assert spruce_grove.get_core_plugins_version() is None
 
     @pytest.mark.parametrize("metadata_version", [" 1.2.3 ", object()])
-    def test_code_puppy_version_preserves_truthy_metadata(self, metadata_version):
+    def test_spruce_grove_version_preserves_truthy_metadata(self, metadata_version):
         import importlib
 
-        import code_puppy
+        import spruce_grove
 
         try:
             with patch("importlib.metadata.version", return_value=metadata_version):
-                importlib.reload(code_puppy)
-                assert code_puppy.__version__ is metadata_version
+                importlib.reload(spruce_grove)
+                assert spruce_grove.__version__ is metadata_version
         finally:
-            importlib.reload(code_puppy)
+            importlib.reload(spruce_grove)
 
 
 # =============================================================================
@@ -211,7 +211,7 @@ class TestInitVersionFallback:
 class TestMainModule:
     def test_main_module_importable(self):
         """Cover the import of __main__ (lines 7-10 minus __name__ guard)."""
-        import code_puppy.__main__  # noqa: F401
+        import spruce_grove.__main__  # noqa: F401
         # The if __name__ == '__main__' guard won't fire, but the import covers lines 7-8
 
 
@@ -223,13 +223,13 @@ class TestMainModule:
 class TestSpinnerShimGaps:
     def test_format_context_info_zero_capacity(self):
         """capacity <= 0 returns empty."""
-        from code_puppy.messaging.spinner import format_context_info
+        from spruce_grove.messaging.spinner import format_context_info
 
         assert format_context_info(100, 0, 0.0) == ""
         assert format_context_info(100, -1, 0.0) == ""
 
     def test_format_context_info_normal(self):
-        from code_puppy.messaging.spinner import format_context_info
+        from spruce_grove.messaging.spinner import format_context_info
 
         result = format_context_info(5000, 10000, 0.5)
         assert "5k" in result
@@ -244,7 +244,7 @@ class TestSpinnerShimGaps:
 class TestAskUserQuestionModelsGaps:
     def test_timeout_response(self):
         """Cover lines 57-59: timeout_response classmethod."""
-        from code_puppy.tools.ask_user_question.models import AskUserQuestionOutput
+        from spruce_grove.tools.ask_user_question.models import AskUserQuestionOutput
 
         resp = AskUserQuestionOutput.timeout_response(30)
         assert resp.timed_out is True
@@ -261,17 +261,17 @@ class TestAskUserQuestionModelsGaps:
 class TestAskUserRegistrationGap:
     def test_handler_called(self):
         """Cover line 87: the actual handler invocation."""
-        from code_puppy.tools.ask_user_question.models import AskUserQuestionOutput
+        from spruce_grove.tools.ask_user_question.models import AskUserQuestionOutput
 
         mock_output = AskUserQuestionOutput(cancelled=True)
 
         with patch(
-            "code_puppy.tools.ask_user_question.registration._ask_user_question_impl",
+            "spruce_grove.tools.ask_user_question.registration._ask_user_question_impl",
             return_value=mock_output,
         ) as mock_impl:
             # We need to register the tool on a real agent, or just call the inner function
             # Simplest: import and call the impl wrapper directly
-            from code_puppy.tools.ask_user_question.registration import (
+            from spruce_grove.tools.ask_user_question.registration import (
                 register_ask_user_question,
             )
 
@@ -312,7 +312,7 @@ class TestAsyncLifecycleGaps:
     @pytest.mark.asyncio
     async def test_start_server_timeout(self):
         """Cover lines 99-103: timeout waiting for server to start."""
-        from code_puppy.mcp_.async_lifecycle import AsyncServerLifecycleManager
+        from spruce_grove.mcp_.async_lifecycle import AsyncServerLifecycleManager
 
         manager = AsyncServerLifecycleManager()
         mock_server = MagicMock()
@@ -337,7 +337,7 @@ class TestAsyncLifecycleGaps:
     @pytest.mark.asyncio
     async def test_start_server_task_fails_during_startup(self):
         """Cover the task.done() + exception path after timeout."""
-        from code_puppy.mcp_.async_lifecycle import AsyncServerLifecycleManager
+        from spruce_grove.mcp_.async_lifecycle import AsyncServerLifecycleManager
 
         manager = AsyncServerLifecycleManager()
         mock_server = MagicMock()

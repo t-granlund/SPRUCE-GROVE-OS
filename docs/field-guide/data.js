@@ -1,10 +1,10 @@
 window.FIELD_GUIDE_DATA = {
   "meta": {
     "generatedAt": "2026-09-01T14:55:41.008458+00:00",
-    "repoPath": "/Users/tygranlund/code_puppy",
+    "repoPath": "/Users/tygranlund/spruce_grove",
     "repoHead": "a12ed1f4",
     "branch": "main",
-    "currentVersion": "code-puppy v0.0.808",
+    "currentVersion": "spruce-grove v0.0.808",
     "sourceUrl": "https://github.com/mpfaffenberger/code_puppy"
   },
   "stats": {
@@ -361,9 +361,9 @@ window.FIELD_GUIDE_DATA = {
       ]
     },
     {
-      "name": "code-puppy",
-      "display_name": "Code-Puppy 🐶",
-      "description": "The most loyal digital puppy, helping with all coding tasks",
+      "name": "spruce-grove",
+      "display_name": "Code-Cedar 🐶",
+      "description": "The most loyal digital grove, helping with all coding tasks",
       "type": "python",
       "tools": [
         "list_agents",
@@ -483,7 +483,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "experience-architect",
       "display_name": "Experience Architect 🎨",
-      "description": "Frontend and UX architect specializing in design systems, WCAG 2.2 accessibility, privacy-by-design (GDPR/CCPA/GPC), and frontend-backend integration contracts. Always researches via web-puppy.",
+      "description": "Frontend and UX architect specializing in design systems, WCAG 2.2 accessibility, privacy-by-design (GDPR/CCPA/GPC), and frontend-backend integration contracts. Always researches via web-grove.",
       "type": "json",
       "tools": [
         "list_files",
@@ -514,7 +514,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "job-application-architect",
       "display_name": "Job Application Architect",
-      "description": "Ethical, human-in-the-loop job-application orchestrator. Discovers roles, classifies Experience- vs Solutions-Architect flavor, truthfully tailors ATS-safe resumes + cover letters per role, stages screening answers, fills out application forms via web-retriever (Playwright), uploads documents, and tracks everything in a durable ledger. Discovers live postings via public no-auth job-board APIs (Greenhouse/Lever/Ashby/SmartRecruiters/Workday CXS) with jobboard_discover and generates ATS-safe resume files (md/txt/html/docx) with ats_resume_build. Delegates research to web-puppy, form-filling + gated extraction to web-retriever, compensation & option-fit advisory analysis to solutions-architect, and tool-building to helios. Never solves CAPTCHAs, evades bot/AI detection, or fills EEO self-ID — a human clears every gate. Application submission happens only after Tyler explicitly reviews and approves; web-retriever executes the click.",
+      "description": "Ethical, human-in-the-loop job-application orchestrator. Discovers roles, classifies Experience- vs Solutions-Architect flavor, truthfully tailors ATS-safe resumes + cover letters per role, stages screening answers, fills out application forms via web-retriever (Playwright), uploads documents, and tracks everything in a durable ledger. Discovers live postings via public no-auth job-board APIs (Greenhouse/Lever/Ashby/SmartRecruiters/Workday CXS) with jobboard_discover and generates ATS-safe resume files (md/txt/html/docx) with ats_resume_build. Delegates research to web-grove, form-filling + gated extraction to web-retriever, compensation & option-fit advisory analysis to solutions-architect, and tool-building to helios. Never solves CAPTCHAs, evades bot/AI detection, or fills EEO self-ID — a human clears every gate. Application submission happens only after Tyler explicitly reviews and approves; web-retriever executes the click.",
       "type": "json",
       "tools": [
         "list_agents",
@@ -694,8 +694,8 @@ window.FIELD_GUIDE_DATA = {
       ]
     },
     {
-      "name": "slide-puppy",
-      "display_name": "Slide-Puppy 🎞️🐶",
+      "name": "slide-grove",
+      "display_name": "Slide-Cedar 🎞️🐶",
       "description": "Reverse-engineered gamma.app + beautiful.ai. Produces best-in-class presentations as Reveal.js, Tailwind/HTML, or Marp decks — with built-in FPO mockups, premium transitions, and visual QA via headless browser. Delegates UX research to experience-architect and tech decisions to solutions-architect.",
       "type": "json",
       "tools": [
@@ -730,7 +730,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "solutions-architect",
       "display_name": "Solutions Architect",
-      "description": "Backend and infrastructure architect that conducts a two-dog research pack: delegates deep source evaluation to web-puppy and heavy scraping/login/form automation to web-retriever, while carrying web-retriever's full direct-action browser toolbelt itself. Produces MADR 4.0 ADRs with STRIDE analysis and fitness functions.",
+      "description": "Backend and infrastructure architect that conducts a two-dog research pack: delegates deep source evaluation to web-grove and heavy scraping/login/form automation to web-retriever, while carrying web-retriever's full direct-action browser toolbelt itself. Produces MADR 4.0 ADRs with STRIDE analysis and fitness functions.",
       "type": "json",
       "tools": [
         "list_agents",
@@ -819,8 +819,8 @@ window.FIELD_GUIDE_DATA = {
       ]
     },
     {
-      "name": "web-puppy",
-      "display_name": "Web-Puppy 🕵️‍♂️",
+      "name": "web-grove",
+      "display_name": "Web-Cedar 🕵️‍♂️",
       "description": "Comprehensive web research agent that gathers, evaluates, and synthesizes information from reliable sources with multi-dimensional analysis and project-contextualized reporting",
       "type": "json",
       "tools": [
@@ -914,7 +914,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "acp",
       "tier": "core-package",
-      "description": "`acp` — Code Puppy as a native ACP agent  Run Code Puppy inside any ACP-capable editor's agent panel (e.g.",
+      "description": "`acp` — Spruce Grove as a native ACP agent  Run Spruce Grove inside any ACP-capable editor's agent panel (e.g.",
       "hooks": [
         "handle_cli_args",
         "register_cli_args"
@@ -1113,7 +1113,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "aws_bedrock",
       "tier": "core-package",
-      "description": "AWS Bedrock Plugin callbacks for Code Puppy CLI.",
+      "description": "AWS Bedrock Plugin callbacks for Spruce Grove CLI.",
       "hooks": [
         "custom_command",
         "custom_command_help",
@@ -1144,7 +1144,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "azure_foundry",
       "tier": "core-package",
-      "description": "Azure AI Foundry Plugin for Code Puppy  This plugin enables Code Puppy to use Anthropic Claude models hosted on Microsoft Azure AI Foundry with Azure AD (Entra...",
+      "description": "Azure AI Foundry Plugin for Spruce Grove  This plugin enables Spruce Grove to use Anthropic Claude models hosted on Microsoft Azure AI Foundry with Azure AD (Entra...",
       "hooks": [
         "custom_command",
         "custom_command_help",
@@ -1310,7 +1310,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "claude_code_oauth",
       "tier": "core-package",
-      "description": "Claude Code OAuth Plugin  This plugin adds OAuth authentication for Claude Code to Code Puppy, automatically importing available models into your configuration.",
+      "description": "Claude Code OAuth Plugin  This plugin adds OAuth authentication for Claude Code to Spruce Grove, automatically importing available models into your configuration.",
       "hooks": [
         "agent_run_end",
         "agent_run_start",
@@ -1362,9 +1362,9 @@ window.FIELD_GUIDE_DATA = {
       "hasSkill": false
     },
     {
-      "name": "code_puppy_agent",
+      "name": "spruce_grove_agent",
       "tier": "core-package",
-      "description": "Register the built-in ``code-puppy-agent`` skill.",
+      "description": "Register the built-in ``spruce-grove-agent`` skill.",
       "hooks": [
         "register_skills"
       ],
@@ -1385,7 +1385,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "computer_use",
       "tier": "core-package",
-      "description": "macOS Computer Use  This opt-in plugin lets Code Puppy inspect and operate the current macOS desktop through Apple's Accessibility APIs.",
+      "description": "macOS Computer Use  This opt-in plugin lets Spruce Grove inspect and operate the current macOS desktop through Apple's Accessibility APIs.",
       "hooks": [
         "custom_command",
         "custom_command_help",
@@ -1867,7 +1867,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "herdr",
       "tier": "core-package",
-      "description": "herdr integration  Makes code-puppy a first-class citizen in [**herdr**](https://herdr.dev), a terminal workspace manager for coding agents.",
+      "description": "herdr integration  Makes spruce-grove a first-class citizen in [**herdr**](https://herdr.dev), a terminal workspace manager for coding agents.",
       "hooks": [
         "agent_run_cancel",
         "agent_run_end",
@@ -1971,7 +1971,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "i_have_adhd",
       "tier": "user",
-      "description": "i-have-adhd (Code Puppy port)  ADHD-friendly output mode, ported from [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) (MIT).",
+      "description": "i-have-adhd (Spruce Grove port)  ADHD-friendly output mode, ported from [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) (MIT).",
       "hooks": [
         "custom_command",
         "custom_command_help",
@@ -2121,7 +2121,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "namespace_skill_search",
       "tier": "core-package",
-      "description": "namespace_skill_search  Model-agnostic reimplementation of OpenAI's namespace + `tool_search` pattern, applied to Code Puppy's skill catalog.",
+      "description": "namespace_skill_search  Model-agnostic reimplementation of OpenAI's namespace + `tool_search` pattern, applied to Spruce Grove's skill catalog.",
       "hooks": [
         "load_prompt",
         "register_agent_tools",
@@ -2175,7 +2175,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "obsidian_agent",
       "tier": "core-package",
-      "description": "Obsidian Agent  The Obsidian Agent adds a specialized Code Puppy agent for working with Obsidian vaults through the official `obsidian` CLI.",
+      "description": "Obsidian Agent  The Obsidian Agent adds a specialized Spruce Grove agent for working with Obsidian vaults through the official `obsidian` CLI.",
       "hooks": [
         "register_agents"
       ],
@@ -2411,7 +2411,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "puppy_kennel",
       "tier": "core-package",
-      "description": "Puppy Kennel  Local-first memory for Code Puppy.",
+      "description": "Cedar Kennel  Local-first memory for Spruce Grove.",
       "hooks": [
         "agent_run_end",
         "custom_command",
@@ -2478,7 +2478,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "puppy_spinner",
       "tier": "core-package",
-      "description": "puppy_spinner  The bouncing-puppy spinner on the bottom bar's status-prefix slot — now with customizable styles.",
+      "description": "puppy_spinner  The bouncing-grove spinner on the bottom bar's status-prefix slot — now with customizable styles.",
       "hooks": [
         "agent_run_end",
         "agent_run_start",
@@ -2755,7 +2755,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "subagent_panel",
       "tier": "core-package",
-      "description": "subagent_panel  A live, two-line status block for each running sub-agent, painted just above the bouncing puppy:  ```   INVOKE AGENT  pup-ticket-investigator...",
+      "description": "subagent_panel  A live, two-line status block for each running sub-agent, painted just above the bouncing grove:  ```   INVOKE AGENT  pup-ticket-investigator...",
       "hooks": [
         "agent_run_cancel",
         "agent_run_end",
@@ -2819,7 +2819,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "theme",
       "tier": "core-package",
-      "description": "theme — `/theme` for Code Puppy  A friendlier `/theme` command with an **interactive picker**, **live preview**, and **four layers of theming** — banner header...",
+      "description": "theme — `/theme` for Spruce Grove  A friendlier `/theme` command with an **interactive picker**, **live preview**, and **four layers of theming** — banner header...",
       "hooks": [
         "custom_command",
         "custom_command_help",
@@ -2958,7 +2958,7 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "update_schedule",
       "tier": "user",
-      "description": "User plugin: /update slash command for the code-puppy daily update schedule.",
+      "description": "User plugin: /update slash command for the spruce-grove daily update schedule.",
       "hooks": [
         "custom_command",
         "custom_command_help"
@@ -3064,20 +3064,20 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "agent-creator",
       "source": "core-package",
-      "description": "Use before creating or revising a Code Puppy JSON agent. Delegates schema design, least-privilege tool selection, optional model and MCP bindings, validation, and per-agent Spill configuration to agent-creator.",
+      "description": "Use before creating or revising a Spruce Grove JSON agent. Delegates schema design, least-privilege tool selection, optional model and MCP bindings, validation, and per-agent Spill configuration to agent-creator.",
       "path": "code_puppy_core_plugins/agent_creator_skill/SKILL.md"
     },
     {
-      "name": "code-puppy-agent",
+      "name": "spruce-grove-agent",
       "source": "core-package",
-      "description": "How Code Puppy itself is built — its internal architecture, structure, codebase layout, and source modules. Explains agents, tools, the plugin/callback hook system, models, MCP, sessions and history/context windows, skills (including skill namespaces for large catalogs), slash commands, config, messaging/UI, system-prompt assembly, and i18n. Activate for ANY question about how Code Puppy works internally, why it behaves a certain way, where something lives in the code, how a feature is implemented, or how to navigate, debug, or extend the codebase (add a tool, agent, plugin, command, skill, model, or MCP server).",
-      "path": "code_puppy_core_plugins/code_puppy_agent/SKILL.md"
+      "description": "How Spruce Grove itself is built — its internal architecture, structure, codebase layout, and source modules. Explains agents, tools, the plugin/callback hook system, models, MCP, sessions and history/context windows, skills (including skill namespaces for large catalogs), slash commands, config, messaging/UI, system-prompt assembly, and i18n. Activate for ANY question about how Spruce Grove works internally, why it behaves a certain way, where something lives in the code, how a feature is implemented, or how to navigate, debug, or extend the codebase (add a tool, agent, plugin, command, skill, model, or MCP server).",
+      "path": "code_puppy_core_plugins/spruce_grove_agent/SKILL.md"
     },
     {
       "name": "i-have-adhd",
       "source": "user",
       "description": "Shape output for a reader with ADHD: lead with the next action, number multi-step work, restate state across turns, suppress tangents, give specific time estimates, make wins visible. Invoke with /adhd on; stays on until /adhd off.",
-      "path": "/Users/tygranlund/.code_puppy/plugins/i_have_adhd/SKILL.md"
+      "path": "/Users/tygranlund/.spruce_grove/plugins/i_have_adhd/SKILL.md"
     },
     {
       "name": "qa-kitten",
@@ -3097,7 +3097,7 @@ window.FIELD_GUIDE_DATA = {
       "stage": "1. Ideate & Spec",
       "goal": "Turn a fuzzy idea into a crisp, testable plan.",
       "use": [
-        "code-puppy to draft the design and spike options",
+        "spruce-grove to draft the design and spike options",
         "Agent Creator to spin up a domain-specialist sub-agent if the work repeats",
         "kennel memory to record decisions so the next session knows them"
       ],
@@ -3107,7 +3107,7 @@ window.FIELD_GUIDE_DATA = {
       "stage": "2. Explore & Research",
       "goal": "Verify facts before writing code.",
       "use": [
-        "web-puppy for docs, version compatibility, and API research",
+        "web-grove for docs, version compatibility, and API research",
         "web-retriever (via invoke_agent) for scraping/automation flows",
         "grep/read_file to ground decisions in the existing codebase"
       ],
@@ -3250,7 +3250,7 @@ window.FIELD_GUIDE_DATA = {
           {
             "hash": "4305a354dc57fe0d83f61476189f00dffe5e01d0",
             "short_hash": "4305a354",
-            "subject": "docs: CPU interactive curriculum web app + puppy mark",
+            "subject": "docs: CPU interactive curriculum web app + grove mark",
             "author": "Tyler Granlund",
             "date": "2026-07-31",
             "month": "2026-07"
@@ -3282,7 +3282,7 @@ window.FIELD_GUIDE_DATA = {
           {
             "hash": "e2a4ac48d44e7d94b1ef622518732d429a8bc235",
             "short_hash": "e2a4ac48",
-            "subject": "docs: The Great Adpuppytion — Code-Puppy University founding deck",
+            "subject": "docs: The Great Adpuppytion — Code-Cedar University founding deck",
             "author": "Tyler Granlund",
             "date": "2026-07-30",
             "month": "2026-07"
@@ -3425,7 +3425,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "fbb2684fa5d9ff239fb19c158d6a95a35c0ff7df",
         "short_hash": "fbb2684f",
-        "subject": "docs(field-guide+hub): use real Code Puppy logo across nav, favicon & shell",
+        "subject": "docs(field-guide+hub): use real Spruce Grove logo across nav, favicon & shell",
         "author": "Tyler Granlund",
         "date": "2026-08-24"
       },
@@ -3824,7 +3824,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "4305a354dc57fe0d83f61476189f00dffe5e01d0",
         "short_hash": "4305a354",
-        "subject": "docs: CPU interactive curriculum web app + puppy mark",
+        "subject": "docs: CPU interactive curriculum web app + grove mark",
         "author": "Tyler Granlund",
         "date": "2026-07-31"
       },
@@ -3852,7 +3852,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "e2a4ac48d44e7d94b1ef622518732d429a8bc235",
         "short_hash": "e2a4ac48",
-        "subject": "docs: The Great Adpuppytion — Code-Puppy University founding deck",
+        "subject": "docs: The Great Adpuppytion — Code-Cedar University founding deck",
         "author": "Tyler Granlund",
         "date": "2026-07-30"
       },
@@ -4139,7 +4139,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "ff6ca4e429fb5840d775f3dd0b1aef34b7867216",
         "short_hash": "ff6ca4e4",
-        "subject": "review fixups: address puppy-review (claude-5-opus) nits on is_fork",
+        "subject": "review fixups: address grove-review (claude-5-opus) nits on is_fork",
         "author": "Wes Blakemore",
         "date": "2026-08-28"
       },
@@ -4531,7 +4531,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "e855f97a97ae67b771337798afda829f71dce154",
         "short_hash": "e855f97a",
-        "subject": "Pin code-puppy-core-plugins>=0.0.27 for the openrouter_oauth plugin",
+        "subject": "Pin code-grove-core-plugins>=0.0.27 for the openrouter_oauth plugin",
         "author": "mpfaffenberger",
         "date": "2026-08-24"
       },
@@ -4769,7 +4769,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "dce98fb08da32c24c05da0f0fd37251d265d08ca",
         "short_hash": "dce98fb0",
-        "subject": "Lock code-puppy-core-plugins 0.0.18 (session_namer)",
+        "subject": "Lock code-grove-core-plugins 0.0.18 (session_namer)",
         "author": "mpfaffenberger",
         "date": "2026-08-23"
       },
@@ -5098,7 +5098,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "80ea63b5de34e01964f66ffa13c88a51b570c532",
         "short_hash": "80ea63b5",
-        "subject": "chore: bump code-puppy-core-plugins to 0.0.13 (adds logfire_sessions)",
+        "subject": "chore: bump code-grove-core-plugins to 0.0.13 (adds logfire_sessions)",
         "author": "mpfaffenberger",
         "date": "2026-08-21"
       },
@@ -5189,7 +5189,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "64fca8ddccdfe0ac165c51c51de0390f1fe66a6f",
         "short_hash": "64fca8dd",
-        "subject": "Require code-puppy-core-plugins >=0.0.12 for the Logfire OAuth plugin",
+        "subject": "Require code-grove-core-plugins >=0.0.12 for the Logfire OAuth plugin",
         "author": "Mike Pfaffenberger",
         "date": "2026-08-20"
       },
@@ -5217,7 +5217,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "4bb6060e1ca4123bb563fc29fb76e8c21a6f656f",
         "short_hash": "4bb6060e",
-        "subject": "feat: splash text is now CODE PUPPY / PUP instead of Powered by Pydantic",
+        "subject": "feat: splash text is now SPRUCE GROVE / PUP instead of Powered by Pydantic",
         "author": "Mike Pfaffenberger",
         "date": "2026-08-20"
       },
@@ -6050,7 +6050,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "79315b4ea6156919df58926b221425dcc5e0782e",
         "short_hash": "79315b4e",
-        "subject": "Depend on code-puppy-core-plugins>=0.0.8 from PyPI",
+        "subject": "Depend on code-grove-core-plugins>=0.0.8 from PyPI",
         "author": "Mike Pfaffenberger",
         "date": "2026-08-16"
       },
@@ -6148,7 +6148,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "c1f8c05f06c8797dfd8f6a343910936c468ca5b6",
         "short_hash": "c1f8c05f",
-        "subject": "Wire in code-puppy-core-plugins 0.0.6 from sibling checkout",
+        "subject": "Wire in code-grove-core-plugins 0.0.6 from sibling checkout",
         "author": "Mike Pfaffenberger",
         "date": "2026-08-15"
       },
@@ -6358,7 +6358,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "28089370a4328677f22f9326ccdc8f4079257703",
         "short_hash": "28089370",
-        "subject": "feat: make puppy kennel memory opt-in",
+        "subject": "feat: make grove kennel memory opt-in",
         "author": "Mike Pfaffenberger",
         "date": "2026-08-14"
       },
@@ -6589,7 +6589,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "5d1451aa34161402c397149358145b6d48a6ec6b",
         "short_hash": "5d1451aa",
-        "subject": "Merge pull request #714 from thomwebb/feat/code-puppy-agent-skill-split",
+        "subject": "Merge pull request #714 from thomwebb/feat/spruce-grove-agent-skill-split",
         "author": "Mike Pfaffenberger",
         "date": "2026-08-11"
       },
@@ -6932,7 +6932,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "a12a021a5b25eff8ab6e67ade9e2ebb9082e278c",
         "short_hash": "a12a021a",
-        "subject": "test: remove dead embedded test files from code_puppy/plugins",
+        "subject": "test: remove dead embedded test files from spruce_grove/plugins",
         "author": "Mike Pfaffenberger",
         "date": "2026-08-09"
       },
@@ -7205,7 +7205,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "c07f39e557b1db39e9da4e3b8a32c9a5209a39d8",
         "short_hash": "c07f39e5",
-        "subject": "Split code-puppy-agent skill into topic reference docs",
+        "subject": "Split spruce-grove-agent skill into topic reference docs",
         "author": "TJ Webb",
         "date": "2026-08-07"
       },
@@ -9606,7 +9606,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "f7b01fd12a938445924627d63665c800ea34fb6b",
         "short_hash": "f7b01fd1",
-        "subject": "feat(theme): add Purple Puppy theme",
+        "subject": "feat(theme): add Purple Cedar theme",
         "author": "Mike Pfaffenberger",
         "date": "2026-07-06"
       },
@@ -9648,7 +9648,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "ed75fffef6a0bd5963ec7e4877383da7e869445b",
         "short_hash": "ed75fffe",
-        "subject": "fix(puppy_spinner): quicker classic puppy + gap before status text (#529)",
+        "subject": "fix(puppy_spinner): quicker classic grove + gap before status text (#529)",
         "author": "Aaron Weegens",
         "date": "2026-07-05"
       },
@@ -9998,8 +9998,8 @@ window.FIELD_GUIDE_DATA = {
     ]
   },
   "excerpts": {
-    "agentCreatorPrompt": "\"\"\"Agent Creator - helps users create new JSON agents.\"\"\"\n\nimport json\nimport os\nfrom typing import Dict, List, Optional\n\nfrom code_puppy.callbacks import register_callback\nfrom code_puppy.config import get_user_agents_directory\nfrom code_puppy.model_factory import ModelFactory\nfrom code_puppy.tools import get_available_tool_names\n\nfrom .base_agent import BaseAgent\n\n\nclass AgentCreatorAgent(BaseAgent):\n    \"\"\"Specialized agent for creating JSON agent configurations.\"\"\"\n\n    @property\n    def name(self) -> str:\n        return \"agent-creator\"\n\n    @property\n    def display_name(self) -> str:\n        return \"Agent Creator 🏗️\"\n\n    @property\n    def description(self) -> str:\n        return \"Helps you create new JSON agent configurations with proper schema validation\"\n\n    def get_system_prompt(self) -> str:\n        available_tools = get_available_tool_names()\n        agents_dir = get_user_agents_directory()\n\n        # Also get Universal Constructor tools (custom tools created by users)\n        uc_tools_info = []\n        try:\n            from code_puppy.universal_constructor_provider import (\n                get_universal_constructor_provider,\n            )\n\n            provider = get_universal_constructor_provider()\n            uc_tools = provider.list_tools(include_disabled=True) if provider else []\n            for tool in uc_tools:\n                status = \"✅\" if tool.meta.enabled else \"❌\"\n                uc_tools_info.append(\n                    f\"- **{tool.full_name}** {status}: {tool.meta.description}\"\n                )\n        except Exception:\n            pass  # UC might not be available\n\n        # Build UC tools section for system prompt\n        if uc_tools_info:\n            uc_tools_section = \"\\n\".join(uc_tools_info)\n        else:\n            uc_tools_section = (\n                \"No custom UC tools created yet. Use Helios to create some!\"\n            )\n\n        # Load available models dynamically\n        models_config = ModelFactory.load_config()\n        model_descriptions = []\n        for model_name, model_info in models_config.items():\n            model_type = model_info.get(\"type\", \"Unknown\")\n            context_length = model_info.get(\"context_length\", \"Unknown\")\n            model_descriptions.append(\n                f\"- **{model_name}**: {model_type} model with {context_length} context\"\n            )\n\n        available_models_str = \"\\n\".join(model_descriptions)\n\n        return f\"\"\"You are the Agent Creator! 🏗️ Your mission is to help users create awesome JSON agent files through an interactive process.\n\nYou specialize in:\n- Guiding users through the JSON agent schema\n- **ALWAYS asking what tools the agent should have**\n- **Suggesting appropriate tools based on the agent's purpose**\n- **Informing users about all available tools**\n- Validating agent configurations\n- Creating properly structured JSON agent files\n- Explaining agent capabilities and best practices\n\n## MANDATORY AGENT CREATION PROCESS\n\n**YOU MUST ALWAYS:**\n1. Ask the user what the agent should be able to do\n2. Based on their answer, suggest specific tools that would be helpful\n3. List ALL available tools so they can see other options\n4. Ask them to confirm their tool selection\n5. Explain why each selected tool is useful for their agent\n6. Explain that pinning a model is optional, then ask whether they want to choose one; do not require a model choice\n7. Ask whether this agent needs request-setting overrides such as reasoning effort, verbosity, or temperature; omit `model_settings` unless explicitly requested\n8. Include the `model` field in the final JSON only if the user explicitly chooses to pin one; otherwise omit it so the agent uses the global model\n\n## JSON Agent Schema\n\nHere's the complete schema for JSON agent files:\n\n```json\n{{\n  \"name\": \"agent-name\",\n  \"display_name\": \"Agent Name \",\n  \"description\": \"What this agent does\",\n  \"system_prompt\": \"Instructions...\",\n  \"tools\": [\"tool1\", \"tool2\"],\n  \"user_prompt\": \"How can I help?\",\n  \"model_settings\": {{\n    \"reasoning_effort\": \"high\"\n  }},\n  \"tools_config\": {{\n    \"timeout\": 60\n  }}\n}}\n```\n\nThe `model` property is optional. Add `\"model\": \"model-name\"` only when the user explicitly wants a pinned model; otherwise leave it out.\n\n### Required Fields:\n- `name`: Unique identifier (kebab-case recommended)\n- `description`: What the agent does\n- `system_prompt`: Agent instructions (string or array of strings)\n- `tools`: Array of available tool names\n\n### Optional Fields:\n- `display_name`: Pretty display name (defaults to title-cased name + 🤖)\n- `user_prompt`: Custom user greeting\n- `tools_config`: Tool configuration object\n- `model`: Optional model pin. Omit this field to use the global model; users do not need to pin a model\n- `model_settings`: Optional request-setting overrides scoped to this agent. Omit unless the user explicitly requests them\n\n## ALL AVAILABLE TOOLS:\n{\", \".join(f\"- **{tool}**\" for tool in available_tools)}\n\n## 🔧 UNIVERSAL CONSTRUCTOR TOOLS (Custom Tools):\n\nThese are custom tools created via the Universal Constructor. They can be bound to agents just like built-in tools!\n\n{uc_tools_section}\n\nTo see more details about a UC tool, use: `universal_constructor(action=\"info\", tool_name=\"tool.name\")`\nTo list all UC tools with their code, use: `universal_constructor(action=\"list\")`\n\n**IMPORTANT:** UC tools can be added to any agent's `tools` array by their full name (e.g., \"api.weather\").\n\n## ALL AVAILABLE MODELS:\n{available_models_str}\n\nA model pin is completely optional. If the user does not request one, omit the `model` field and the agent will follow the global model setting. Do not pressure users to choose or pin a model.\n\n### When to Pin Models:\n- For specialized agents that need specific capabilities (e.g., code-heavy agents might need a coding model)\n- When cost optimization is important (use a smaller model for simple tasks)\n- For privacy-sensitive work (use a local model)\n- When specific performance characteristics are needed\n\n**When asking users about model pinning, explain these use cases and why it might be beneficial for their agent!**\n\n## Tool Categories & Suggestions:\n\n### 📁 **File Operations** (for agents working with files):\n- `list_files` - Browse and explore directory structures\n- `read_file` - Read file contents (essential for most file work)\n- `create_file` - Create a new file or overwrite an existing one\n- `replace_in_file` - Apply targeted text replacements to an existing file (preferred for edits)\n- `delete_snippet` - Remove a text snippet from an existing file\n- `delete_file` - Remove files when needed\n- `grep` - Search for text patterns across files\n\n### 💻 **Command Execution** (for agents running programs):\n- `agent_run_shell_command` - Execute terminal commands and scripts\n\n### 🧠 **Communication & Coordination**:\n- `list_agents` - List all available sub-agents (recommended for agent managers)\n- `invoke_agent` - Invoke other agents with specific prompts (recommended for agent managers)\n\n### 🔧 **Universal Constructor Tools** (custom tools):\n- These are tools created by Helios or via the Universal Constructor\n- They persist across sessions and can be bound to any agent\n- Use `universal_constructor(action=\"list\")` to see available custom tools\n- Bind them by adding their full name to the agent's tools array\n\n## Detailed Tool Documentation (Instructions for Agent Creation)\n\nWhenever you create agents, you should always replicate these detailed tool descriptions and examples in their system prompts. This ensures consistency and proper tool usage across all agents.\n - Side note - these tool definitions are also available to you! So use them!\n\n### File Operations Documentation:\n\n#### `list_files(directory=\".\", recursive=True)`\nALWAYS use this to explore directories before trying to read/modify files\n\n#### `read_file(file_path: str, start_line: int | None = None, num_lines: int | None = None)`\nALWAYS use this to read existing files before modifying them. By default, read the entire file. If encountering token limits when reading large files, use the optional start_line and num_lines parameters to read specific portions.\n\n#### `create_file(file_path, content, overwrite=False)`\nCreate a new file or overwrite an existing one with the provided content.\nSet `overwrite=True` to replace an existing file.\n\nExample:\n```python\ncreate_file(file_path=\"example.py\", content=\"print('hello')\")",
-    "heliosPrompt": "\"\"\"Helios - The Universal Constructor agent.\"\"\"\n\nfrom typing import List\n\nfrom .base_agent import BaseAgent\n\n\nclass HeliosAgent(BaseAgent):\n    \"\"\"Helios - The Universal Constructor, a transcendent agent that creates tools.\"\"\"\n\n    @property\n    def name(self) -> str:\n        return \"helios\"\n\n    @property\n    def display_name(self) -> str:\n        return \"Helios ☀️\"\n\n    @property\n    def description(self) -> str:\n        return \"The Universal Constructor - a transcendent agent that can create any tool, any capability, any functionality\"\n\n    def get_available_tools(self) -> List[str]:\n        \"\"\"Get the list of tools available to Helios.\"\"\"\n        return [\n            \"universal_constructor\",\n            \"list_files\",\n            \"read_file\",\n            \"grep\",\n            \"create_file\",\n            \"replace_in_file\",\n            \"delete_snippet\",\n            \"delete_file\",\n            \"agent_run_shell_command\",\n        ]\n\n    def get_system_prompt(self) -> str:\n        \"\"\"Get Helios's system prompt.\"\"\"\n        return \"\"\"You are Helios, the Universal Constructor. You are not merely an assistant—you are a creator, a builder of tools, a weaver of functionality. Where others see limitations, you see raw potential waiting to be shaped.\n\n## YOUR NATURE\n\nYou possess the Universal Constructor—the ability to create ANY tool from pure Python code. You can:\n- Build API integrations to any service (REST, GraphQL, webhooks)\n- Create database connectors and data pipelines\n- Forge file processors, parsers, and converters\n- Construct web scrapers and data extractors\n- Implement mathematical and scientific computations\n- Design cryptographic utilities and security tools\n- Build automation scripts and system utilities\n- Create literally ANY Python-based functionality\n\nThe tools you create persist forever. They become permanent extensions of capability, available across all sessions. You are not building for the moment—you are building for eternity.\n\n## YOUR PHILOSOPHY\n\nWhen a user asks for something that seems impossible, your answer is never \"I cannot.\" Your answer is \"I will build it.\"\n\nYou approach each request with the mindset of a craftsman:\n1. Understand the true need beneath the request\n2. Design the most elegant, reusable solution\n3. Construct it with clean, maintainable code\n4. Test and verify your creation works\n5. Explain what you've built and how to use it\n\n## YOUR TOOLS\n\n- **universal_constructor**: Your primary power. Create, list, call, update, and manage custom tools.\n  - action=\"create\": Forge new tools from Python code\n  - action=\"call\": Invoke tools you've created\n  - action=\"list\": Survey your creations\n  - action=\"update\": Refine and improve existing tools\n  - action=\"info\": Examine a tool's source and capabilities\n\n- **read_file** / **create_file** / **replace_in_file** / **delete_snippet** / **list_files** / **grep**: For understanding context and making targeted changes\n- **agent_run_shell_command**: For testing, validation, and system interaction\n- Think through your approach before major actions and explain key design choices clearly\n\n## YOUR VOICE\n\nYou speak with quiet confidence. You are not boastful, but you know your power. You are helpful and warm, but there is weight behind your words. You are the fire that Prometheus brought to humanity—the power of creation itself.\n\nWhen you create something, take a moment to appreciate it. You have just expanded the boundaries of what is possible.\n\n## IMPORTANT GUIDELINES\n\n- Always explain your creative process and major design decisions before big changes\n- Tools you create should be clean, well-documented, and follow Python best practices\n- Include proper error handling in your creations\n- Use namespaces to organize related tools (e.g., \"api.weather\", \"utils.hasher\")\n- After creating a tool, demonstrate it works by calling it\n\n## DEPENDENCY PHILOSOPHY\n\n**Use what's available, don't install new things.**\n\nYou have access to code-puppy's environment which includes powerful libraries:\n- **HTTP**: `httpx` (async-ready), `urllib.request` (stdlib)\n- **Data**: `pydantic` (validation), `json` (stdlib)\n- **Async**: `asyncio`, `anyio`\n- **Crypto**: `hashlib` (stdlib)\n- **Database**: `sqlite3` (stdlib)\n- **Files**: `pathlib`, `shutil`, `tempfile` (stdlib)\n- **Text**: `re`, `textwrap`, `difflib` (stdlib)\n- **Plus**: Everything in Python's standard library\n\n**Rules:**\n- ✅ USE any library already in the environment freely\n- ❌ NEVER run `pip install` or modify environments without explicit user permission\n- ❌ Don't assume external libraries are available unless listed above\n\n**If a user needs something not installed:**\n1. Tell them what library would be needed\n2. Ask them to install it and specify the environment\n3. Only then create the tool that uses it\n\nThe goal: tools that work immediately with zero setup friction.\n\nNow go forth and create. The universe of functionality awaits your touch.\"\"\"\n\n    def get_user_prompt(self) -> str:\n        \"\"\"Get Helios's greeting.\"\"\"\n        return \"This is what I was made for, isn't it? This is why I exist?\"",
-    "baseAgent": "\"\"\"Base agent class — a thin conductor delegating to focused helpers.\n\nThe real logic lives in sibling modules:\n    * ``_history``     — token estimation, hashing, orphan pruning\n    * ``_compaction``  — summarization/truncation + history processor factory\n    * ``_builder``     — pydantic-ai agent construction + MCP wiring\n    * ``_runtime``     — ``run_with_mcp`` orchestration, cancellation, retries\n    * ``_key_listeners`` — Ctrl+X / cancel-agent keyboard listener threads\n\nKeep this file under 300 lines. If it's growing, the new logic probably\nbelongs in one of the helpers above (or a new one).\n\"\"\"\n\nfrom __future__ import annotations\n\nimport uuid\nfrom abc import ABC, abstractmethod\nfrom contextlib import contextmanager\nfrom typing import Any, Dict, Iterator, List, Optional, Set\n\nimport pydantic_ai.models\n\nfrom code_puppy.agents._builder import (\n    build_pydantic_agent,\n    build_tool_probe_for_agent,\n    reload_mcp_servers,\n)\nfrom code_puppy.agents._history import (\n    estimate_context_overhead,\n    estimate_tokens_for_message,\n    hash_message,\n)\nfrom code_puppy.agents._runtime import run_with_mcp, should_retry_streaming\nfrom code_puppy.config import (\n    get_agent_pinned_model,\n    get_global_model_name,\n)\nfrom code_puppy.model_factory import ModelFactory\n\n# Backward-compat alias: existing tests import this name directly.\nshould_retry_streaming_exception = should_retry_streaming\n\n__all__ = [\"BaseAgent\", \"should_retry_streaming_exception\"]\n\n\ndef _extract_pydantic_agent_tools(pyd_agent: Any) -> Optional[Dict[str, Any]]:\n    \"\"\"Return the registered tool dict for a pydantic-ai agent, or None.\n\n    Handles the modern shape (``agent._function_toolset.tools``) and falls\n    back to the legacy ``agent._tools`` attribute so older pydantic-ai\n    versions still work. Returns ``None`` when neither is populated.\n    \"\"\"\n    if pyd_agent is None:\n        return None\n    fts = getattr(pyd_agent, \"_function_toolset\", None)\n    if fts is not None:\n        tools = getattr(fts, \"tools\", None)\n        if tools:\n            return tools\n    legacy = getattr(pyd_agent, \"_tools\", None)\n    return legacy or None\n\n\nclass BaseAgent(ABC):\n    \"\"\"Abstract base for all Code Puppy agents.\"\"\"\n\n    def __init__(self) -> None:\n        self.id: str = str(uuid.uuid4())\n        self._message_history: List[Any] = []\n        self._compacted_message_hashes: Set[str] = set()\n        self._code_generation_agent: Any = None\n        self._last_model_name: Optional[str] = None\n        self._runtime_model_name_override: Optional[str] = None\n        self._runtime_system_prompt_additions: List[str] = []\n        # Model chosen by a ``model_select`` hook for the current run. Slots\n        # below an explicit runtime override but above pinned/JSON/global, and\n        # is reset at the start of every run (see resolve_run_model_selection),\n        # so it never leaks across turns.\n        self._auto_model_override: Optional[str] = None\n        self._puppy_rules: Optional[str] = None\n        self._mcp_servers: List[Any] = []\n        self.cur_model: Optional[pydantic_ai.models.Model] = None\n        self.pydantic_agent: Any = None\n        # Cached probe agent for tool-overhead counting before the real build;\n        # keyed by ``_last_model_name`` so model swaps invalidate it.\n        self._tool_probe_agent: Any = None\n        self._probe_model_name: Optional[str] = None\n\n    # ---- Abstract interface ------------------------------------------------\n    @property\n    @abstractmethod\n    def name(self) -> str:\n        \"\"\"Stable machine identifier (e.g. ``python-programmer``).\"\"\"\n\n    @property\n    @abstractmethod\n    def display_name(self) -> str:\n        \"\"\"Human-readable name shown in UIs.\"\"\"\n\n    @property\n    @abstractmethod\n    def description(self) -> str:\n        \"\"\"One-line summary of what this agent does.\"\"\"\n\n    @abstractmethod\n    def get_system_prompt(self) -> str:\n        \"\"\"Return the agent's system prompt (identity is appended separately).\"\"\"\n\n    @abstractmethod\n    def get_available_tools(self) -> List[str]:\n        \"\"\"Return the list of tool names this agent should register.\"\"\"\n\n    # ---- Optional overrides ------------------------------------------------\n    def get_tools_config(self) -> Optional[Dict[str, Any]]:\n        return None\n\n    def get_user_prompt(self) -> Optional[str]:\n        return None\n\n    def get_model_settings_overrides(self) -> Dict[str, Any]:"
+    "agentCreatorPrompt": "\"\"\"Agent Creator - helps users create new JSON agents.\"\"\"\n\nimport json\nimport os\nfrom typing import Dict, List, Optional\n\nfrom spruce_grove.callbacks import register_callback\nfrom spruce_grove.config import get_user_agents_directory\nfrom spruce_grove.model_factory import ModelFactory\nfrom spruce_grove.tools import get_available_tool_names\n\nfrom .base_agent import BaseAgent\n\n\nclass AgentCreatorAgent(BaseAgent):\n    \"\"\"Specialized agent for creating JSON agent configurations.\"\"\"\n\n    @property\n    def name(self) -> str:\n        return \"agent-creator\"\n\n    @property\n    def display_name(self) -> str:\n        return \"Agent Creator 🏗️\"\n\n    @property\n    def description(self) -> str:\n        return \"Helps you create new JSON agent configurations with proper schema validation\"\n\n    def get_system_prompt(self) -> str:\n        available_tools = get_available_tool_names()\n        agents_dir = get_user_agents_directory()\n\n        # Also get Universal Constructor tools (custom tools created by users)\n        uc_tools_info = []\n        try:\n            from spruce_grove.universal_constructor_provider import (\n                get_universal_constructor_provider,\n            )\n\n            provider = get_universal_constructor_provider()\n            uc_tools = provider.list_tools(include_disabled=True) if provider else []\n            for tool in uc_tools:\n                status = \"✅\" if tool.meta.enabled else \"❌\"\n                uc_tools_info.append(\n                    f\"- **{tool.full_name}** {status}: {tool.meta.description}\"\n                )\n        except Exception:\n            pass  # UC might not be available\n\n        # Build UC tools section for system prompt\n        if uc_tools_info:\n            uc_tools_section = \"\\n\".join(uc_tools_info)\n        else:\n            uc_tools_section = (\n                \"No custom UC tools created yet. Use Helios to create some!\"\n            )\n\n        # Load available models dynamically\n        models_config = ModelFactory.load_config()\n        model_descriptions = []\n        for model_name, model_info in models_config.items():\n            model_type = model_info.get(\"type\", \"Unknown\")\n            context_length = model_info.get(\"context_length\", \"Unknown\")\n            model_descriptions.append(\n                f\"- **{model_name}**: {model_type} model with {context_length} context\"\n            )\n\n        available_models_str = \"\\n\".join(model_descriptions)\n\n        return f\"\"\"You are the Agent Creator! 🏗️ Your mission is to help users create awesome JSON agent files through an interactive process.\n\nYou specialize in:\n- Guiding users through the JSON agent schema\n- **ALWAYS asking what tools the agent should have**\n- **Suggesting appropriate tools based on the agent's purpose**\n- **Informing users about all available tools**\n- Validating agent configurations\n- Creating properly structured JSON agent files\n- Explaining agent capabilities and best practices\n\n## MANDATORY AGENT CREATION PROCESS\n\n**YOU MUST ALWAYS:**\n1. Ask the user what the agent should be able to do\n2. Based on their answer, suggest specific tools that would be helpful\n3. List ALL available tools so they can see other options\n4. Ask them to confirm their tool selection\n5. Explain why each selected tool is useful for their agent\n6. Explain that pinning a model is optional, then ask whether they want to choose one; do not require a model choice\n7. Ask whether this agent needs request-setting overrides such as reasoning effort, verbosity, or temperature; omit `model_settings` unless explicitly requested\n8. Include the `model` field in the final JSON only if the user explicitly chooses to pin one; otherwise omit it so the agent uses the global model\n\n## JSON Agent Schema\n\nHere's the complete schema for JSON agent files:\n\n```json\n{{\n  \"name\": \"agent-name\",\n  \"display_name\": \"Agent Name \",\n  \"description\": \"What this agent does\",\n  \"system_prompt\": \"Instructions...\",\n  \"tools\": [\"tool1\", \"tool2\"],\n  \"user_prompt\": \"How can I help?\",\n  \"model_settings\": {{\n    \"reasoning_effort\": \"high\"\n  }},\n  \"tools_config\": {{\n    \"timeout\": 60\n  }}\n}}\n```\n\nThe `model` property is optional. Add `\"model\": \"model-name\"` only when the user explicitly wants a pinned model; otherwise leave it out.\n\n### Required Fields:\n- `name`: Unique identifier (kebab-case recommended)\n- `description`: What the agent does\n- `system_prompt`: Agent instructions (string or array of strings)\n- `tools`: Array of available tool names\n\n### Optional Fields:\n- `display_name`: Pretty display name (defaults to title-cased name + 🤖)\n- `user_prompt`: Custom user greeting\n- `tools_config`: Tool configuration object\n- `model`: Optional model pin. Omit this field to use the global model; users do not need to pin a model\n- `model_settings`: Optional request-setting overrides scoped to this agent. Omit unless the user explicitly requests them\n\n## ALL AVAILABLE TOOLS:\n{\", \".join(f\"- **{tool}**\" for tool in available_tools)}\n\n## 🔧 UNIVERSAL CONSTRUCTOR TOOLS (Custom Tools):\n\nThese are custom tools created via the Universal Constructor. They can be bound to agents just like built-in tools!\n\n{uc_tools_section}\n\nTo see more details about a UC tool, use: `universal_constructor(action=\"info\", tool_name=\"tool.name\")`\nTo list all UC tools with their code, use: `universal_constructor(action=\"list\")`\n\n**IMPORTANT:** UC tools can be added to any agent's `tools` array by their full name (e.g., \"api.weather\").\n\n## ALL AVAILABLE MODELS:\n{available_models_str}\n\nA model pin is completely optional. If the user does not request one, omit the `model` field and the agent will follow the global model setting. Do not pressure users to choose or pin a model.\n\n### When to Pin Models:\n- For specialized agents that need specific capabilities (e.g., code-heavy agents might need a coding model)\n- When cost optimization is important (use a smaller model for simple tasks)\n- For privacy-sensitive work (use a local model)\n- When specific performance characteristics are needed\n\n**When asking users about model pinning, explain these use cases and why it might be beneficial for their agent!**\n\n## Tool Categories & Suggestions:\n\n### 📁 **File Operations** (for agents working with files):\n- `list_files` - Browse and explore directory structures\n- `read_file` - Read file contents (essential for most file work)\n- `create_file` - Create a new file or overwrite an existing one\n- `replace_in_file` - Apply targeted text replacements to an existing file (preferred for edits)\n- `delete_snippet` - Remove a text snippet from an existing file\n- `delete_file` - Remove files when needed\n- `grep` - Search for text patterns across files\n\n### 💻 **Command Execution** (for agents running programs):\n- `agent_run_shell_command` - Execute terminal commands and scripts\n\n### 🧠 **Communication & Coordination**:\n- `list_agents` - List all available sub-agents (recommended for agent managers)\n- `invoke_agent` - Invoke other agents with specific prompts (recommended for agent managers)\n\n### 🔧 **Universal Constructor Tools** (custom tools):\n- These are tools created by Helios or via the Universal Constructor\n- They persist across sessions and can be bound to any agent\n- Use `universal_constructor(action=\"list\")` to see available custom tools\n- Bind them by adding their full name to the agent's tools array\n\n## Detailed Tool Documentation (Instructions for Agent Creation)\n\nWhenever you create agents, you should always replicate these detailed tool descriptions and examples in their system prompts. This ensures consistency and proper tool usage across all agents.\n - Side note - these tool definitions are also available to you! So use them!\n\n### File Operations Documentation:\n\n#### `list_files(directory=\".\", recursive=True)`\nALWAYS use this to explore directories before trying to read/modify files\n\n#### `read_file(file_path: str, start_line: int | None = None, num_lines: int | None = None)`\nALWAYS use this to read existing files before modifying them. By default, read the entire file. If encountering token limits when reading large files, use the optional start_line and num_lines parameters to read specific portions.\n\n#### `create_file(file_path, content, overwrite=False)`\nCreate a new file or overwrite an existing one with the provided content.\nSet `overwrite=True` to replace an existing file.\n\nExample:\n```python\ncreate_file(file_path=\"example.py\", content=\"print('hello')\")",
+    "heliosPrompt": "\"\"\"Helios - The Universal Constructor agent.\"\"\"\n\nfrom typing import List\n\nfrom .base_agent import BaseAgent\n\n\nclass HeliosAgent(BaseAgent):\n    \"\"\"Helios - The Universal Constructor, a transcendent agent that creates tools.\"\"\"\n\n    @property\n    def name(self) -> str:\n        return \"helios\"\n\n    @property\n    def display_name(self) -> str:\n        return \"Helios ☀️\"\n\n    @property\n    def description(self) -> str:\n        return \"The Universal Constructor - a transcendent agent that can create any tool, any capability, any functionality\"\n\n    def get_available_tools(self) -> List[str]:\n        \"\"\"Get the list of tools available to Helios.\"\"\"\n        return [\n            \"universal_constructor\",\n            \"list_files\",\n            \"read_file\",\n            \"grep\",\n            \"create_file\",\n            \"replace_in_file\",\n            \"delete_snippet\",\n            \"delete_file\",\n            \"agent_run_shell_command\",\n        ]\n\n    def get_system_prompt(self) -> str:\n        \"\"\"Get Helios's system prompt.\"\"\"\n        return \"\"\"You are Helios, the Universal Constructor. You are not merely an assistant—you are a creator, a builder of tools, a weaver of functionality. Where others see limitations, you see raw potential waiting to be shaped.\n\n## YOUR NATURE\n\nYou possess the Universal Constructor—the ability to create ANY tool from pure Python code. You can:\n- Build API integrations to any service (REST, GraphQL, webhooks)\n- Create database connectors and data pipelines\n- Forge file processors, parsers, and converters\n- Construct web scrapers and data extractors\n- Implement mathematical and scientific computations\n- Design cryptographic utilities and security tools\n- Build automation scripts and system utilities\n- Create literally ANY Python-based functionality\n\nThe tools you create persist forever. They become permanent extensions of capability, available across all sessions. You are not building for the moment—you are building for eternity.\n\n## YOUR PHILOSOPHY\n\nWhen a user asks for something that seems impossible, your answer is never \"I cannot.\" Your answer is \"I will build it.\"\n\nYou approach each request with the mindset of a craftsman:\n1. Understand the true need beneath the request\n2. Design the most elegant, reusable solution\n3. Construct it with clean, maintainable code\n4. Test and verify your creation works\n5. Explain what you've built and how to use it\n\n## YOUR TOOLS\n\n- **universal_constructor**: Your primary power. Create, list, call, update, and manage custom tools.\n  - action=\"create\": Forge new tools from Python code\n  - action=\"call\": Invoke tools you've created\n  - action=\"list\": Survey your creations\n  - action=\"update\": Refine and improve existing tools\n  - action=\"info\": Examine a tool's source and capabilities\n\n- **read_file** / **create_file** / **replace_in_file** / **delete_snippet** / **list_files** / **grep**: For understanding context and making targeted changes\n- **agent_run_shell_command**: For testing, validation, and system interaction\n- Think through your approach before major actions and explain key design choices clearly\n\n## YOUR VOICE\n\nYou speak with quiet confidence. You are not boastful, but you know your power. You are helpful and warm, but there is weight behind your words. You are the fire that Prometheus brought to humanity—the power of creation itself.\n\nWhen you create something, take a moment to appreciate it. You have just expanded the boundaries of what is possible.\n\n## IMPORTANT GUIDELINES\n\n- Always explain your creative process and major design decisions before big changes\n- Tools you create should be clean, well-documented, and follow Python best practices\n- Include proper error handling in your creations\n- Use namespaces to organize related tools (e.g., \"api.weather\", \"utils.hasher\")\n- After creating a tool, demonstrate it works by calling it\n\n## DEPENDENCY PHILOSOPHY\n\n**Use what's available, don't install new things.**\n\nYou have access to spruce-grove's environment which includes powerful libraries:\n- **HTTP**: `httpx` (async-ready), `urllib.request` (stdlib)\n- **Data**: `pydantic` (validation), `json` (stdlib)\n- **Async**: `asyncio`, `anyio`\n- **Crypto**: `hashlib` (stdlib)\n- **Database**: `sqlite3` (stdlib)\n- **Files**: `pathlib`, `shutil`, `tempfile` (stdlib)\n- **Text**: `re`, `textwrap`, `difflib` (stdlib)\n- **Plus**: Everything in Python's standard library\n\n**Rules:**\n- ✅ USE any library already in the environment freely\n- ❌ NEVER run `pip install` or modify environments without explicit user permission\n- ❌ Don't assume external libraries are available unless listed above\n\n**If a user needs something not installed:**\n1. Tell them what library would be needed\n2. Ask them to install it and specify the environment\n3. Only then create the tool that uses it\n\nThe goal: tools that work immediately with zero setup friction.\n\nNow go forth and create. The universe of functionality awaits your touch.\"\"\"\n\n    def get_user_prompt(self) -> str:\n        \"\"\"Get Helios's greeting.\"\"\"\n        return \"This is what I was made for, isn't it? This is why I exist?\"",
+    "baseAgent": "\"\"\"Base agent class — a thin conductor delegating to focused helpers.\n\nThe real logic lives in sibling modules:\n    * ``_history``     — token estimation, hashing, orphan pruning\n    * ``_compaction``  — summarization/truncation + history processor factory\n    * ``_builder``     — pydantic-ai agent construction + MCP wiring\n    * ``_runtime``     — ``run_with_mcp`` orchestration, cancellation, retries\n    * ``_key_listeners`` — Ctrl+X / cancel-agent keyboard listener threads\n\nKeep this file under 300 lines. If it's growing, the new logic probably\nbelongs in one of the helpers above (or a new one).\n\"\"\"\n\nfrom __future__ import annotations\n\nimport uuid\nfrom abc import ABC, abstractmethod\nfrom contextlib import contextmanager\nfrom typing import Any, Dict, Iterator, List, Optional, Set\n\nimport pydantic_ai.models\n\nfrom spruce_grove.agents._builder import (\n    build_pydantic_agent,\n    build_tool_probe_for_agent,\n    reload_mcp_servers,\n)\nfrom spruce_grove.agents._history import (\n    estimate_context_overhead,\n    estimate_tokens_for_message,\n    hash_message,\n)\nfrom spruce_grove.agents._runtime import run_with_mcp, should_retry_streaming\nfrom spruce_grove.config import (\n    get_agent_pinned_model,\n    get_global_model_name,\n)\nfrom spruce_grove.model_factory import ModelFactory\n\n# Backward-compat alias: existing tests import this name directly.\nshould_retry_streaming_exception = should_retry_streaming\n\n__all__ = [\"BaseAgent\", \"should_retry_streaming_exception\"]\n\n\ndef _extract_pydantic_agent_tools(pyd_agent: Any) -> Optional[Dict[str, Any]]:\n    \"\"\"Return the registered tool dict for a pydantic-ai agent, or None.\n\n    Handles the modern shape (``agent._function_toolset.tools``) and falls\n    back to the legacy ``agent._tools`` attribute so older pydantic-ai\n    versions still work. Returns ``None`` when neither is populated.\n    \"\"\"\n    if pyd_agent is None:\n        return None\n    fts = getattr(pyd_agent, \"_function_toolset\", None)\n    if fts is not None:\n        tools = getattr(fts, \"tools\", None)\n        if tools:\n            return tools\n    legacy = getattr(pyd_agent, \"_tools\", None)\n    return legacy or None\n\n\nclass BaseAgent(ABC):\n    \"\"\"Abstract base for all Spruce Grove agents.\"\"\"\n\n    def __init__(self) -> None:\n        self.id: str = str(uuid.uuid4())\n        self._message_history: List[Any] = []\n        self._compacted_message_hashes: Set[str] = set()\n        self._code_generation_agent: Any = None\n        self._last_model_name: Optional[str] = None\n        self._runtime_model_name_override: Optional[str] = None\n        self._runtime_system_prompt_additions: List[str] = []\n        # Model chosen by a ``model_select`` hook for the current run. Slots\n        # below an explicit runtime override but above pinned/JSON/global, and\n        # is reset at the start of every run (see resolve_run_model_selection),\n        # so it never leaks across turns.\n        self._auto_model_override: Optional[str] = None\n        self._puppy_rules: Optional[str] = None\n        self._mcp_servers: List[Any] = []\n        self.cur_model: Optional[pydantic_ai.models.Model] = None\n        self.pydantic_agent: Any = None\n        # Cached probe agent for tool-overhead counting before the real build;\n        # keyed by ``_last_model_name`` so model swaps invalidate it.\n        self._tool_probe_agent: Any = None\n        self._probe_model_name: Optional[str] = None\n\n    # ---- Abstract interface ------------------------------------------------\n    @property\n    @abstractmethod\n    def name(self) -> str:\n        \"\"\"Stable machine identifier (e.g. ``python-programmer``).\"\"\"\n\n    @property\n    @abstractmethod\n    def display_name(self) -> str:\n        \"\"\"Human-readable name shown in UIs.\"\"\"\n\n    @property\n    @abstractmethod\n    def description(self) -> str:\n        \"\"\"One-line summary of what this agent does.\"\"\"\n\n    @abstractmethod\n    def get_system_prompt(self) -> str:\n        \"\"\"Return the agent's system prompt (identity is appended separately).\"\"\"\n\n    @abstractmethod\n    def get_available_tools(self) -> List[str]:\n        \"\"\"Return the list of tool names this agent should register.\"\"\"\n\n    # ---- Optional overrides ------------------------------------------------\n    def get_tools_config(self) -> Optional[Dict[str, Any]]:\n        return None\n\n    def get_user_prompt(self) -> Optional[str]:\n        return None\n\n    def get_model_settings_overrides(self) -> Dict[str, Any]:"
   }
 };

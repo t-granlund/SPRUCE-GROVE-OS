@@ -1,4 +1,4 @@
-"""Tests targeting remaining uncovered lines in code_puppy/agents/ (non-base_agent)."""
+"""Tests targeting remaining uncovered lines in spruce_grove/agents/ (non-base_agent)."""
 
 import json
 from unittest.mock import MagicMock, patch
@@ -26,7 +26,7 @@ def _test_reviewer_agent(module_path, class_name):
 
 
 def test_qa_kitten():
-    from code_puppy.agents.agent_qa_kitten import QualityAssuranceKittenAgent
+    from spruce_grove.agents.agent_qa_kitten import QualityAssuranceKittenAgent
 
     agent = QualityAssuranceKittenAgent()
     tools = agent.get_available_tools()
@@ -56,7 +56,7 @@ def test_qa_kitten():
 
 
 def test_web_retriever():
-    from code_puppy.agents.agent_web_retriever import WebRetrieverAgent
+    from spruce_grove.agents.agent_web_retriever import WebRetrieverAgent
 
     agent = WebRetrieverAgent()
     tools = agent.get_available_tools()
@@ -104,18 +104,18 @@ def test_web_retriever():
     assert "plaintext passwords" in lowered
 
 
-def test_code_puppy_prompt_omits_web_retriever_guidance():
-    """Keep web-retriever routing policy out of Code Puppy's prompt."""
-    from code_puppy.agents.agent_code_puppy import CodePuppyAgent
+def test_spruce_grove_prompt_omits_web_retriever_guidance():
+    """Keep web-retriever routing policy out of Spruce Grove's prompt."""
+    from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
 
     prompt = CodePuppyAgent().get_system_prompt()
     assert "web-retriever" not in prompt
     assert "simple one-shot HTTP request" not in prompt
 
 
-def test_code_puppy_prompt_requires_autonomous_task_completion():
+def test_spruce_grove_prompt_requires_autonomous_task_completion():
     """Routine next steps must not be bounced back to the user for approval."""
-    from code_puppy.agents.agent_code_puppy import CodePuppyAgent
+    from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
 
     prompt = " ".join(CodePuppyAgent().get_system_prompt().split())
 
@@ -124,12 +124,12 @@ def test_code_puppy_prompt_requires_autonomous_task_completion():
     assert "an irreversible action requiring approval" in prompt
 
 
-def test_code_puppy_prompt_reflects_low_agency(monkeypatch):
+def test_spruce_grove_prompt_reflects_low_agency(monkeypatch):
     """LOW agency swaps the relentless bullets for step-at-a-time check-ins."""
-    from code_puppy.agents import agent_code_puppy
+    from spruce_grove.agents import agent_spruce_grove
 
-    monkeypatch.setattr(agent_code_puppy, "get_agency_level", lambda: "low")
-    prompt = " ".join(agent_code_puppy.CodePuppyAgent().get_system_prompt().split())
+    monkeypatch.setattr(agent_spruce_grove, "get_agency_level", lambda: "low")
+    prompt = " ".join(agent_spruce_grove.CodePuppyAgent().get_system_prompt().split())
 
     assert "LOW agency" in prompt
     assert "ask the user before continuing" in prompt
@@ -137,24 +137,24 @@ def test_code_puppy_prompt_reflects_low_agency(monkeypatch):
     assert "Be as agentic as possible" not in prompt
 
 
-def test_code_puppy_prompt_reflects_medium_agency(monkeypatch):
+def test_spruce_grove_prompt_reflects_medium_agency(monkeypatch):
     """MEDIUM agency proceeds on routine work but checks in at milestones."""
-    from code_puppy.agents import agent_code_puppy
+    from spruce_grove.agents import agent_spruce_grove
 
-    monkeypatch.setattr(agent_code_puppy, "get_agency_level", lambda: "medium")
-    prompt = " ".join(agent_code_puppy.CodePuppyAgent().get_system_prompt().split())
+    monkeypatch.setattr(agent_spruce_grove, "get_agency_level", lambda: "medium")
+    prompt = " ".join(agent_spruce_grove.CodePuppyAgent().get_system_prompt().split())
 
     assert "MEDIUM agency" in prompt
     assert "check in at major milestones" in prompt
     assert "Be as agentic as possible" not in prompt
 
 
-def test_code_puppy_prompt_reflects_high_agency(monkeypatch):
+def test_spruce_grove_prompt_reflects_high_agency(monkeypatch):
     """HIGH agency keeps autonomy but drops the background-gating relentlessness."""
-    from code_puppy.agents import agent_code_puppy
+    from spruce_grove.agents import agent_spruce_grove
 
-    monkeypatch.setattr(agent_code_puppy, "get_agency_level", lambda: "high")
-    prompt = " ".join(agent_code_puppy.CodePuppyAgent().get_system_prompt().split())
+    monkeypatch.setattr(agent_spruce_grove, "get_agency_level", lambda: "high")
+    prompt = " ".join(agent_spruce_grove.CodePuppyAgent().get_system_prompt().split())
 
     assert "Complete the requested task autonomously" in prompt
     assert "Continue autonomously unless user input is definitively required" in prompt
@@ -163,7 +163,7 @@ def test_code_puppy_prompt_reflects_high_agency(monkeypatch):
 
 def test_planning_agent_routes_scraping_but_allows_direct_curl():
     """Keep the same scraping/fetch boundary in planning guidance."""
-    from code_puppy.agents.agent_planning import PlanningAgent
+    from spruce_grove.agents.agent_planning import PlanningAgent
 
     prompt = PlanningAgent().get_system_prompt()
     assert "web-retriever" in prompt
@@ -173,9 +173,9 @@ def test_planning_agent_routes_scraping_but_allows_direct_curl():
 @pytest.mark.parametrize(
     ("module_path", "cls_name"),
     [
-        pytest.param("code_puppy.agents.agent_helios", "HeliosAgent", id="helios"),
+        pytest.param("spruce_grove.agents.agent_helios", "HeliosAgent", id="helios"),
         pytest.param(
-            "code_puppy.agents.agent_code_puppy", "CodePuppyAgent", id="code_puppy"
+            "spruce_grove.agents.agent_spruce_grove", "CodePuppyAgent", id="spruce_grove"
         ),
     ],
 )
@@ -196,7 +196,7 @@ def test_agent_has_tools_and_prompt(module_path, cls_name):
 
 
 def test_planning_agent():
-    from code_puppy.agents.agent_planning import PlanningAgent
+    from spruce_grove.agents.agent_planning import PlanningAgent
 
     agent = PlanningAgent()
     tools = agent.get_available_tools()
@@ -206,28 +206,28 @@ def test_planning_agent():
     assert len(prompt) > 100
 
 
-def test_code_puppy_prompt_allows_callback_additions():
-    from code_puppy.agents.agent_code_puppy import CodePuppyAgent
+def test_spruce_grove_prompt_allows_callback_additions():
+    from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
 
     agent = CodePuppyAgent()
     # ``load_prompt`` fragments now live in get_full_system_prompt (BaseAgent),
     # not in the authored get_system_prompt.
-    with patch("code_puppy.callbacks.on_load_prompt", return_value=["extra"]):
+    with patch("spruce_grove.callbacks.on_load_prompt", return_value=["extra"]):
         prompt = agent.get_full_system_prompt()
         assert "extra" in prompt
 
 
-def test_code_puppy_authored_prompt_excludes_runtime_additions():
+def test_spruce_grove_authored_prompt_excludes_runtime_additions():
     """Authored prompt must NOT contain load_prompt fragments or the identity.
 
     Regression for the clone bug: cloning persists get_system_prompt(), so
     runtime-only metadata (kennel memory, live timestamps) and the per-instance
     identity ID must stay out of it.
     """
-    from code_puppy.agents.agent_code_puppy import CodePuppyAgent
+    from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
 
     agent = CodePuppyAgent()
-    with patch("code_puppy.callbacks.on_load_prompt", return_value=["SECRET-RUNTIME"]):
+    with patch("spruce_grove.callbacks.on_load_prompt", return_value=["SECRET-RUNTIME"]):
         authored = agent.get_system_prompt()
     assert "SECRET-RUNTIME" not in authored
     assert agent.get_identity() not in authored
@@ -240,7 +240,7 @@ def test_code_puppy_authored_prompt_excludes_runtime_additions():
 
 def test_creator_agent_get_system_prompt_with_uc_tools():
     """Cover UC tools loading in get_system_prompt."""
-    from code_puppy.agents.agent_creator_agent import AgentCreatorAgent
+    from spruce_grove.agents.agent_creator_agent import AgentCreatorAgent
 
     agent = AgentCreatorAgent()
 
@@ -262,7 +262,7 @@ def test_creator_agent_get_system_prompt_with_uc_tools():
 
 def test_creator_agent_get_system_prompt_uc_import_error():
     """Cover ImportError branch for UC tools."""
-    from code_puppy.agents.agent_creator_agent import AgentCreatorAgent
+    from spruce_grove.agents.agent_creator_agent import AgentCreatorAgent
 
     agent = AgentCreatorAgent()
 
@@ -276,12 +276,12 @@ def test_creator_agent_get_system_prompt_uc_import_error():
 
 def test_creator_validate_agent_json_valid():
     """Cover validate_agent_json with valid config."""
-    from code_puppy.agents.agent_creator_agent import AgentCreatorAgent
+    from spruce_grove.agents.agent_creator_agent import AgentCreatorAgent
 
     agent = AgentCreatorAgent()
 
     with patch(
-        "code_puppy.agents.agent_creator_agent.get_available_tool_names",
+        "spruce_grove.agents.agent_creator_agent.get_available_tool_names",
         return_value=["list_files", "read_file"],
     ):
         errors = agent.validate_agent_json(
@@ -297,7 +297,7 @@ def test_creator_validate_agent_json_valid():
 
 def test_creator_validate_agent_json_missing_fields():
     """Cover missing required fields."""
-    from code_puppy.agents.agent_creator_agent import AgentCreatorAgent
+    from spruce_grove.agents.agent_creator_agent import AgentCreatorAgent
 
     agent = AgentCreatorAgent()
     errors = agent.validate_agent_json({})
@@ -306,12 +306,12 @@ def test_creator_validate_agent_json_missing_fields():
 
 def test_creator_validate_agent_json_bad_name():
     """Cover name validation: spaces, empty."""
-    from code_puppy.agents.agent_creator_agent import AgentCreatorAgent
+    from spruce_grove.agents.agent_creator_agent import AgentCreatorAgent
 
     agent = AgentCreatorAgent()
 
     with patch(
-        "code_puppy.agents.agent_creator_agent.get_available_tool_names",
+        "spruce_grove.agents.agent_creator_agent.get_available_tool_names",
         return_value=["list_files"],
     ):
         # Space in name
@@ -339,12 +339,12 @@ def test_creator_validate_agent_json_bad_name():
 
 def test_creator_validate_agent_json_bad_tools():
     """Cover tools validation: not a list, invalid tools."""
-    from code_puppy.agents.agent_creator_agent import AgentCreatorAgent
+    from spruce_grove.agents.agent_creator_agent import AgentCreatorAgent
 
     agent = AgentCreatorAgent()
 
     with patch(
-        "code_puppy.agents.agent_creator_agent.get_available_tool_names",
+        "spruce_grove.agents.agent_creator_agent.get_available_tool_names",
         return_value=["list_files"],
     ):
         # tools not a list
@@ -372,12 +372,12 @@ def test_creator_validate_agent_json_bad_tools():
 
 def test_creator_validate_agent_json_bad_prompt():
     """Cover system_prompt validation: not string/list, bad list items."""
-    from code_puppy.agents.agent_creator_agent import AgentCreatorAgent
+    from spruce_grove.agents.agent_creator_agent import AgentCreatorAgent
 
     agent = AgentCreatorAgent()
 
     with patch(
-        "code_puppy.agents.agent_creator_agent.get_available_tool_names",
+        "spruce_grove.agents.agent_creator_agent.get_available_tool_names",
         return_value=["list_files"],
     ):
         # prompt is number
@@ -405,11 +405,11 @@ def test_creator_validate_agent_json_bad_prompt():
 
 def test_creator_get_agent_file_path():
     """Cover get_agent_file_path."""
-    from code_puppy.agents.agent_creator_agent import AgentCreatorAgent
+    from spruce_grove.agents.agent_creator_agent import AgentCreatorAgent
 
     agent = AgentCreatorAgent()
     with patch(
-        "code_puppy.agents.agent_creator_agent.get_user_agents_directory",
+        "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
         return_value="/tmp/agents",
     ):
         path = agent.get_agent_file_path("my-agent")
@@ -418,17 +418,17 @@ def test_creator_get_agent_file_path():
 
 def test_creator_create_agent_json_success(tmp_path):
     """Cover create_agent_json success path."""
-    from code_puppy.agents.agent_creator_agent import AgentCreatorAgent
+    from spruce_grove.agents.agent_creator_agent import AgentCreatorAgent
 
     agent = AgentCreatorAgent()
 
     with (
         patch(
-            "code_puppy.agents.agent_creator_agent.get_available_tool_names",
+            "spruce_grove.agents.agent_creator_agent.get_available_tool_names",
             return_value=["list_files"],
         ),
         patch(
-            "code_puppy.agents.agent_creator_agent.get_user_agents_directory",
+            "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
             return_value=str(tmp_path),
         ),
     ):
@@ -447,18 +447,18 @@ def test_creator_create_agent_json_success(tmp_path):
 
 def test_creator_create_agent_json_already_exists(tmp_path):
     """Cover create_agent_json when file exists."""
-    from code_puppy.agents.agent_creator_agent import AgentCreatorAgent
+    from spruce_grove.agents.agent_creator_agent import AgentCreatorAgent
 
     agent = AgentCreatorAgent()
     (tmp_path / "existing.json").write_text("{}")
 
     with (
         patch(
-            "code_puppy.agents.agent_creator_agent.get_available_tool_names",
+            "spruce_grove.agents.agent_creator_agent.get_available_tool_names",
             return_value=["list_files"],
         ),
         patch(
-            "code_puppy.agents.agent_creator_agent.get_user_agents_directory",
+            "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
             return_value=str(tmp_path),
         ),
     ):
@@ -476,7 +476,7 @@ def test_creator_create_agent_json_already_exists(tmp_path):
 
 def test_creator_create_agent_json_validation_error():
     """Cover create_agent_json with validation errors."""
-    from code_puppy.agents.agent_creator_agent import AgentCreatorAgent
+    from spruce_grove.agents.agent_creator_agent import AgentCreatorAgent
 
     agent = AgentCreatorAgent()
     success, msg = agent.create_agent_json({})
@@ -486,17 +486,17 @@ def test_creator_create_agent_json_validation_error():
 
 def test_creator_create_agent_json_write_failure(tmp_path):
     """Cover create_agent_json write failure."""
-    from code_puppy.agents.agent_creator_agent import AgentCreatorAgent
+    from spruce_grove.agents.agent_creator_agent import AgentCreatorAgent
 
     agent = AgentCreatorAgent()
 
     with (
         patch(
-            "code_puppy.agents.agent_creator_agent.get_available_tool_names",
+            "spruce_grove.agents.agent_creator_agent.get_available_tool_names",
             return_value=["list_files"],
         ),
         patch(
-            "code_puppy.agents.agent_creator_agent.get_user_agents_directory",
+            "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
             return_value=str(tmp_path),
         ),
         patch("builtins.open", side_effect=PermissionError("denied")),
@@ -514,7 +514,7 @@ def test_creator_create_agent_json_write_failure(tmp_path):
 
 
 def test_creator_get_user_prompt():
-    from code_puppy.agents.agent_creator_agent import AgentCreatorAgent
+    from spruce_grove.agents.agent_creator_agent import AgentCreatorAgent
 
     agent = AgentCreatorAgent()
     prompt = agent.get_user_prompt()
@@ -540,7 +540,7 @@ def test_creator_get_user_prompt():
 def test_agent_manager_is_process_alive(side_effect, expected):
     import sys
 
-    from code_puppy.agents.agent_manager import _is_process_alive
+    from spruce_grove.agents.agent_manager import _is_process_alive
 
     if sys.platform == "win32":
         pytest.skip("Unix-only")
@@ -551,7 +551,7 @@ def test_agent_manager_is_process_alive(side_effect, expected):
 
 def test_agent_manager_discover_agents_error():
     """Cover error loading agent sub-packages (lines 267-279)."""
-    from code_puppy.agents.agent_manager import _discover_agents
+    from spruce_grove.agents.agent_manager import _discover_agents
 
     # Should not raise even with import errors
     with patch("importlib.import_module", side_effect=Exception("boom")):
@@ -562,7 +562,7 @@ def test_next_clone_index():
     """Cover _next_clone_index (line 585)."""
     from pathlib import Path
 
-    from code_puppy.agents.agent_manager import _next_clone_index
+    from spruce_grove.agents.agent_manager import _next_clone_index
 
     # No existing clones
     with patch("pathlib.Path.exists", return_value=False):
@@ -578,9 +578,9 @@ def test_next_clone_index():
 
 def test_clone_agent_failure():
     """Cover clone_agent failure paths (lines 673-674)."""
-    from code_puppy.agents.agent_manager import clone_agent
+    from spruce_grove.agents.agent_manager import clone_agent
 
-    with patch("code_puppy.agents.agent_manager.emit_warning"):
+    with patch("spruce_grove.agents.agent_manager.emit_warning"):
         result = clone_agent("totally-nonexistent-agent-xyz")
         # Should return None for nonexistent agent
         assert result is None
@@ -593,8 +593,8 @@ def test_clone_class_agent_does_not_bake_runtime_metadata(tmp_path):
     baked in runtime ``load_prompt`` fragments (kennel memory, live
     timestamps/CWD) and the per-instance identity ID into the static JSON.
     """
-    import code_puppy.agents.agent_manager as am
-    from code_puppy.agents.agent_code_puppy import CodePuppyAgent
+    import spruce_grove.agents.agent_manager as am
+    from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
 
     captured = {}
 
@@ -604,14 +604,14 @@ def test_clone_class_agent_does_not_bake_runtime_metadata(tmp_path):
 
     with (
         patch.object(am, "_discover_agents"),
-        patch.dict(am._AGENT_REGISTRY, {"code-puppy": CodePuppyAgent}, clear=True),
+        patch.dict(am._AGENT_REGISTRY, {"spruce-grove": CodePuppyAgent}, clear=True),
         patch(
-            "code_puppy.config.get_user_agents_directory",
+            "spruce_grove.config.get_user_agents_directory",
             return_value=str(tmp_path),
         ),
-        patch("code_puppy.config.get_agent_pinned_model", return_value=None),
+        patch("spruce_grove.config.get_agent_pinned_model", return_value=None),
         patch(
-            "code_puppy.callbacks.on_load_prompt",
+            "spruce_grove.callbacks.on_load_prompt",
             return_value=["KENNEL-SECRET-BLOCK"],
         ),
         patch.object(am, "atomic_write_text", side_effect=fake_atomic_write),
@@ -619,9 +619,9 @@ def test_clone_class_agent_does_not_bake_runtime_metadata(tmp_path):
         patch.object(am, "emit_warning"),
         patch.object(am, "_filter_available_tools", side_effect=lambda t: t),
     ):
-        clone_name = am.clone_agent("code-puppy")
+        clone_name = am.clone_agent("spruce-grove")
 
-    assert clone_name == "code-puppy-clone-1"
+    assert clone_name == "spruce-grove-clone-1"
     config = json.loads(captured["content"])
     # Runtime-only metadata must not be frozen into the clone definition.
     assert "KENNEL-SECRET-BLOCK" not in config["system_prompt"]
@@ -636,17 +636,17 @@ def test_clone_class_agent_does_not_bake_runtime_metadata(tmp_path):
 
 def test_fire_stream_event_import_error():
     """Cover ImportError branch in _fire_stream_event."""
-    from code_puppy.agents.event_stream_handler import _fire_stream_event
+    from spruce_grove.agents.event_stream_handler import _fire_stream_event
 
-    with patch("code_puppy.callbacks.on_stream_event", side_effect=ImportError):
+    with patch("spruce_grove.callbacks.on_stream_event", side_effect=ImportError):
         _fire_stream_event("test", {})  # Should not raise
 
 
 def test_fire_stream_event_exception():
     """Cover Exception branch in _fire_stream_event."""
-    from code_puppy.agents.event_stream_handler import _fire_stream_event
+    from spruce_grove.agents.event_stream_handler import _fire_stream_event
 
-    with patch("code_puppy.callbacks.on_stream_event", side_effect=Exception("boom")):
+    with patch("spruce_grove.callbacks.on_stream_event", side_effect=Exception("boom")):
         _fire_stream_event("test", {})  # Should not raise
 
 
@@ -657,7 +657,7 @@ def test_fire_stream_event_exception():
 
 def _make_json_agent(tmp_path, config):
     """Helper to create a JSONAgent from a dict config."""
-    from code_puppy.agents.json_agent import JSONAgent
+    from spruce_grove.agents.json_agent import JSONAgent
 
     path = tmp_path / f"{config['name']}.json"
     path.write_text(json.dumps(config))
@@ -736,7 +736,7 @@ def test_json_agent_get_user_prompt(tmp_path):
 
 def test_subagent_fire_callback_no_loop():
     """Cover RuntimeError branch (no event loop) in _fire_callback."""
-    from code_puppy.agents.subagent_stream_handler import _fire_callback
+    from spruce_grove.agents.subagent_stream_handler import _fire_callback
 
     # Called outside async context - should not raise
     _fire_callback("test", {}, None)
@@ -744,9 +744,9 @@ def test_subagent_fire_callback_no_loop():
 
 def test_subagent_fire_callback_import_error():
     """Cover ImportError branch in _fire_callback."""
-    from code_puppy.agents.subagent_stream_handler import _fire_callback
+    from spruce_grove.agents.subagent_stream_handler import _fire_callback
 
-    with patch("code_puppy.callbacks.on_stream_event", side_effect=ImportError):
+    with patch("spruce_grove.callbacks.on_stream_event", side_effect=ImportError):
         _fire_callback("test", {}, None)
 
 
@@ -754,5 +754,5 @@ def test_subagent_stream_handler_module():
     """Verify the module is importable."""
     import importlib
 
-    mod = importlib.import_module("code_puppy.agents.subagent_stream_handler")
+    mod = importlib.import_module("spruce_grove.agents.subagent_stream_handler")
     assert hasattr(mod, "_fire_callback")

@@ -1,6 +1,6 @@
 """Tests for ask-user-question theme callback integration."""
 
-from code_puppy.tools.ask_user_question.theme import RichColors, get_rich_colors
+from spruce_grove.tools.ask_user_question.theme import RichColors, get_rich_colors
 
 
 def test_rich_colors_use_muted_role_from_termflow_palette(monkeypatch):
@@ -8,7 +8,7 @@ def test_rich_colors_use_muted_role_from_termflow_palette(monkeypatch):
         grey = "#93a1a1"
 
     monkeypatch.setattr(
-        "code_puppy.command_line.tui_style.menu_style",
+        "spruce_grove.command_line.tui_style.menu_style",
         lambda: FakeStyle(),
     )
 
@@ -26,7 +26,7 @@ def test_rich_colors_preserve_named_color(monkeypatch):
         grey = "ansired"
 
     monkeypatch.setattr(
-        "code_puppy.command_line.tui_style.menu_style",
+        "spruce_grove.command_line.tui_style.menu_style",
         lambda: FakeStyle(),
     )
 
@@ -38,7 +38,7 @@ def test_rich_colors_preserve_defaults_for_empty_grey(monkeypatch):
         grey = ""
 
     monkeypatch.setattr(
-        "code_puppy.command_line.tui_style.menu_style",
+        "spruce_grove.command_line.tui_style.menu_style",
         lambda: FakeStyle(),
     )
 
@@ -47,7 +47,7 @@ def test_rich_colors_preserve_defaults_for_empty_grey(monkeypatch):
 
 def test_rich_colors_preserve_defaults_without_plugin_style(monkeypatch):
     monkeypatch.setattr(
-        "code_puppy.command_line.tui_style.menu_style",
+        "spruce_grove.command_line.tui_style.menu_style",
         lambda: None,
     )
 

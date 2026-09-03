@@ -62,12 +62,12 @@ def _fake_load_model_with_fallback(*_args, **_kwargs):
 
 
 def test_build_pydantic_agent_sets_logical_agent_name():
-    """Main agent path: spans must read 'invoke_agent code-puppy', not
+    """Main agent path: spans must read 'invoke_agent spruce-grove', not
     'invoke_agent pydantic_agent' (the inferred frame-variable name)."""
-    from code_puppy.agents import _builder
+    from spruce_grove.agents import _builder
 
     cfg = _FakeAgentConfig()
-    cfg.name = "code-puppy"
+    cfg.name = "spruce-grove"
 
     with (
         patch.object(
@@ -76,18 +76,18 @@ def test_build_pydantic_agent_sets_logical_agent_name():
         patch.object(_builder.ModelFactory, "load_config", staticmethod(dict)),
         patch.object(_builder, "load_mcp_servers", lambda **k: []),
         patch.object(_builder, "make_model_settings", lambda *a, **k: None),
-        patch("code_puppy.tools.register_tools_for_agent", lambda *a, **k: None),
+        patch("spruce_grove.tools.register_tools_for_agent", lambda *a, **k: None),
     ):
         built = _builder.build_pydantic_agent(cfg)
 
-    assert built.name == "code-puppy"
+    assert built.name == "spruce-grove"
 
 
 @pytest.mark.asyncio
 async def test_invoke_agent_impl_sets_subagent_name():
     """Sub-agent path: every delegate must carry its own logical name so
     parallel invocations don't all render as 'invoke_agent temp_agent'."""
-    from code_puppy.tools import subagent_invocation as si
+    from spruce_grove.tools import subagent_invocation as si
 
     cfg = _FakeAgentConfig()
     captured = {}
@@ -97,13 +97,13 @@ async def test_invoke_agent_impl_sets_subagent_name():
         return pydantic_agent
 
     with (
-        patch("code_puppy.agents.agent_manager.load_agent", return_value=cfg),
+        patch("spruce_grove.agents.agent_manager.load_agent", return_value=cfg),
         patch(
-            "code_puppy.agents._builder.load_model_with_fallback",
+            "spruce_grove.agents._builder.load_model_with_fallback",
             _fake_load_model_with_fallback,
         ),
-        patch("code_puppy.model_factory.make_model_settings", lambda *a, **k: None),
-        patch("code_puppy.config.get_value", return_value="true"),  # no MCP
+        patch("spruce_grove.model_factory.make_model_settings", lambda *a, **k: None),
+        patch("spruce_grove.config.get_value", return_value="true"),  # no MCP
         patch.object(si, "on_wrap_pydantic_agent", capture_wrap),
     ):
         out = await si._invoke_agent_impl(

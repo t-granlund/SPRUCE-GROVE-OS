@@ -35,12 +35,12 @@ import pytest
 from pydantic_ai.messages import ModelResponse, TextPart
 from pydantic_ai.usage import RequestUsage, RunUsage
 
-from code_puppy.agent_execution_context import get_executing_agent
-from code_puppy.tools.subagent_invocation import (
+from spruce_grove.agent_execution_context import get_executing_agent
+from spruce_grove.tools.subagent_invocation import (
     register_invoke_agent,
     register_invoke_agent_with_model,
 )
-from code_puppy.tools.subagent_usage_metrics import (
+from spruce_grove.tools.subagent_usage_metrics import (
     _extract_token_buckets,
     _extract_usage_metrics,
     _safe_usage_metrics,
@@ -167,105 +167,105 @@ async def _run_invoke(
         p = stack.enter_context
         p(
             patch(
-                "code_puppy.tools.subagent_invocation.generate_group_id",
+                "spruce_grove.tools.subagent_invocation.generate_group_id",
                 return_value="test-group",
             )
         )
-        p(patch("code_puppy.tools.subagent_invocation.get_message_bus"))
+        p(patch("spruce_grove.tools.subagent_invocation.get_message_bus"))
         p(
             patch(
-                "code_puppy.tools.subagent_invocation.get_session_context",
+                "spruce_grove.tools.subagent_invocation.get_session_context",
                 return_value="parent",
             )
         )
-        p(patch("code_puppy.tools.subagent_invocation.set_session_context"))
-        p(patch("code_puppy.tools.subagent_invocation.emit_info"))
-        p(patch("code_puppy.tools.subagent_invocation.emit_error"))
-        p(patch("code_puppy.tools.subagent_invocation.emit_success"))
-        mock_warning = p(patch("code_puppy.tools.subagent_invocation.emit_warning"))
+        p(patch("spruce_grove.tools.subagent_invocation.set_session_context"))
+        p(patch("spruce_grove.tools.subagent_invocation.emit_info"))
+        p(patch("spruce_grove.tools.subagent_invocation.emit_error"))
+        p(patch("spruce_grove.tools.subagent_invocation.emit_success"))
+        mock_warning = p(patch("spruce_grove.tools.subagent_invocation.emit_warning"))
         mock_save = p(
-            patch("code_puppy.tools.subagent_invocation._save_session_history")
+            patch("spruce_grove.tools.subagent_invocation._save_session_history")
         )
         if capture is not None:
             capture["warning"] = mock_warning
             capture["save"] = mock_save
         p(
             patch(
-                "code_puppy.tools.subagent_invocation._load_session_history",
+                "spruce_grove.tools.subagent_invocation._load_session_history",
                 return_value=[],
             )
         )
         p(
             patch(
-                "code_puppy.tools.subagent_invocation._generate_session_hash_suffix",
+                "spruce_grove.tools.subagent_invocation._generate_session_hash_suffix",
                 return_value="abc123",
             )
         )
         p(
             patch(
-                "code_puppy.agents.agent_manager.load_agent",
+                "spruce_grove.agents.agent_manager.load_agent",
                 return_value=agent_config,
             )
         )
         p(
             patch(
-                "code_puppy.model_factory.ModelFactory.load_config",
+                "spruce_grove.model_factory.ModelFactory.load_config",
                 return_value={"default-model": {}, "override-model": {}},
             )
         )
-        p(patch("code_puppy.model_factory.ModelFactory.get_model"))
-        p(patch("code_puppy.model_factory.make_model_settings"))
-        p(patch("code_puppy.agents._builder.load_puppy_rules", return_value=None))
-        p(patch("code_puppy.callbacks.on_load_prompt", return_value=[]))
-        mock_prepare = p(patch("code_puppy.model_utils.prepare_prompt_for_model"))
+        p(patch("spruce_grove.model_factory.ModelFactory.get_model"))
+        p(patch("spruce_grove.model_factory.make_model_settings"))
+        p(patch("spruce_grove.agents._builder.load_puppy_rules", return_value=None))
+        p(patch("spruce_grove.callbacks.on_load_prompt", return_value=[]))
+        mock_prepare = p(patch("spruce_grove.model_utils.prepare_prompt_for_model"))
         mock_prepare.return_value = MagicMock(
             instructions="prepared instructions", user_prompt="prepared prompt"
         )
         p(
             patch(
-                "code_puppy.agents._builder.autostart_bound_servers_async",
+                "spruce_grove.agents._builder.autostart_bound_servers_async",
                 new=AsyncMock(),
             )
         )
         # Disable MCP so no manager/servers are touched.
-        p(patch("code_puppy.config.get_value", return_value="true"))
-        p(patch("code_puppy.config.get_output_level", return_value="medium"))
+        p(patch("spruce_grove.config.get_value", return_value="true"))
+        p(patch("spruce_grove.config.get_output_level", return_value="medium"))
         p(
             patch(
-                "code_puppy.agents._compaction.make_history_processor",
+                "spruce_grove.agents._compaction.make_history_processor",
                 return_value=lambda messages: messages,
             )
         )
         p(
             patch(
-                "code_puppy.tools.subagent_invocation.Agent",
+                "spruce_grove.tools.subagent_invocation.Agent",
                 return_value=mock_temp_agent,
             )
         )
-        p(patch("code_puppy.tools.register_tools_for_agent"))
+        p(patch("spruce_grove.tools.register_tools_for_agent"))
         p(
             patch(
-                "code_puppy.tools.subagent_invocation.on_wrap_pydantic_agent",
+                "spruce_grove.tools.subagent_invocation.on_wrap_pydantic_agent",
                 side_effect=lambda _cfg, agent, **_kwargs: agent,
             )
         )
         p(
             patch(
-                "code_puppy.tools.subagent_invocation.on_agent_run_context",
+                "spruce_grove.tools.subagent_invocation.on_agent_run_context",
                 return_value=[],
             )
         )
         # Pass-through retry: run once, no backoff, so failures propagate fast.
         p(
             patch(
-                "code_puppy.agents.retry_profiles.make_streaming_retry",
+                "spruce_grove.agents.retry_profiles.make_streaming_retry",
                 new=_passthrough_retry,
             )
         )
         if perf is not None:
             p(
                 patch(
-                    "code_puppy.tools.subagent_invocation.time.perf_counter",
+                    "spruce_grove.tools.subagent_invocation.time.perf_counter",
                     side_effect=perf,
                 )
             )
@@ -605,7 +605,7 @@ class TestNoAggregateTotalIsReported:
         assert set(_extract_usage_metrics(None)) == self._EXPECTED_KEYS
 
     def test_output_type_has_no_total_field(self):
-        from code_puppy.tools.agent_tools import AgentInvokeWithModelOutput
+        from spruce_grove.tools.agent_tools import AgentInvokeWithModelOutput
 
         assert "total_tokens" not in AgentInvokeWithModelOutput.model_fields
 
@@ -773,7 +773,7 @@ class TestInvokeAgentUnaffected:
 
     @pytest.mark.asyncio
     async def test_success_returns_plain_agent_invoke_output(self):
-        from code_puppy.tools.agent_tools import (
+        from spruce_grove.tools.agent_tools import (
             AgentInvokeOutput,
             AgentInvokeWithModelOutput,
         )
@@ -800,7 +800,7 @@ class TestInvokeAgentUnaffected:
 
     @pytest.mark.asyncio
     async def test_error_path_returns_plain_agent_invoke_output(self):
-        from code_puppy.tools.agent_tools import AgentInvokeWithModelOutput
+        from spruce_grove.tools.agent_tools import AgentInvokeWithModelOutput
 
         out = await _run_invoke(run_raises=True, use_default=True)
 
@@ -813,7 +813,7 @@ class TestInvokeAgentUnaffected:
         """invoke_agent must not pay for timing/usage instrumentation at all."""
         usage = _usage(input_tokens=1, output_tokens=1, requests=1)
         with patch(
-            "code_puppy.tools.subagent_invocation.time.perf_counter"
+            "spruce_grove.tools.subagent_invocation.time.perf_counter"
         ) as mock_perf:
             out = await _run_invoke(usage=usage, use_default=True)
 
@@ -833,7 +833,7 @@ class TestCancellationPersistence:
 
     @pytest.mark.asyncio
     async def test_cancellation_saves_partial_and_reraises(self):
-        from code_puppy.tools.subagent_invocation import drain_interrupted_subagents
+        from spruce_grove.tools.subagent_invocation import drain_interrupted_subagents
 
         drain_interrupted_subagents()  # isolate module-level queue
         cap = {}
@@ -902,7 +902,7 @@ class TestCancellationPersistence:
     @pytest.mark.asyncio
     async def test_ordinary_failure_still_returns_error_output(self):
         """Non-cancellation crashes keep the existing failure-result contract."""
-        from code_puppy.tools.subagent_invocation import drain_interrupted_subagents
+        from spruce_grove.tools.subagent_invocation import drain_interrupted_subagents
 
         drain_interrupted_subagents()  # isolate module-level queue
         cap = {}

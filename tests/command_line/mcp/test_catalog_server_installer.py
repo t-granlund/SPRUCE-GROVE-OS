@@ -1,12 +1,12 @@
-"""Tests for code_puppy/command_line/mcp/catalog_server_installer.py"""
+"""Tests for spruce_grove/command_line/mcp/catalog_server_installer.py"""
 
 import os
 from unittest.mock import MagicMock, patch
 
 import pytest
 
-MODULE = "code_puppy.command_line.mcp.catalog_server_installer"
-UTILS = "code_puppy.command_line.mcp.utils"
+MODULE = "spruce_grove.command_line.mcp.catalog_server_installer"
+UTILS = "spruce_grove.command_line.mcp.utils"
 
 
 # ---------------------------------------------------------------------------
@@ -56,7 +56,7 @@ class FakeServerWithArgs(FakeServer):
 
 class TestGetEnvVarHint:
     def test_known_var(self):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             get_env_var_hint,
         )
 
@@ -64,7 +64,7 @@ class TestGetEnvVarHint:
         assert "github" in hint.lower()
 
     def test_unknown_var(self):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             get_env_var_hint,
         )
 
@@ -81,7 +81,7 @@ class TestPromptForServerConfig:
     @patch(f"{MODULE}.emit_info")
     @patch(f"{UTILS}.find_server_id_by_name", return_value=None)
     def test_default_name(self, mock_find, mock_info, mock_input):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             prompt_for_server_config,
         )
 
@@ -93,7 +93,7 @@ class TestPromptForServerConfig:
     @patch(f"{MODULE}.emit_info")
     @patch(f"{UTILS}.find_server_id_by_name", return_value=None)
     def test_custom_name(self, mock_find, mock_info, mock_input):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             prompt_for_server_config,
         )
 
@@ -107,7 +107,7 @@ class TestPromptForServerConfig:
     @patch(f"{MODULE}.emit_info")
     @patch(f"{MODULE}.emit_warning")
     def test_name_input_aborted(self, mock_warn, mock_info, mock_input, exc):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             prompt_for_server_config,
         )
 
@@ -126,7 +126,7 @@ class TestPromptForServerConfig:
     def test_existing_server_override(
         self, mock_find, mock_warn, mock_info, mock_input, response, succeeds
     ):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             prompt_for_server_config,
         )
 
@@ -147,19 +147,19 @@ class TestPromptForServerConfig:
     def test_existing_server_override_aborted(
         self, mock_find, mock_warn, mock_info, mock_input, exc
     ):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             prompt_for_server_config,
         )
 
         mock_input.side_effect = ["my-server", exc]
         assert prompt_for_server_config(MagicMock(), FakeServer()) is None
 
-    @patch("code_puppy.config.set_config_value")
+    @patch("spruce_grove.config.set_config_value")
     @patch(f"{MODULE}.safe_input")
     @patch(f"{MODULE}.emit_info")
     @patch(f"{UTILS}.find_server_id_by_name", return_value=None)
     def test_env_vars_already_set(self, mock_find, mock_info, mock_input, mock_set_cfg):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             prompt_for_server_config,
         )
 
@@ -170,12 +170,12 @@ class TestPromptForServerConfig:
         assert result["env_vars"]["MY_TOKEN"] == "abc"
         assert result["env_vars"]["GITHUB_TOKEN"] == "def"
 
-    @patch("code_puppy.config.set_config_value")
+    @patch("spruce_grove.config.set_config_value")
     @patch(f"{MODULE}.safe_input")
     @patch(f"{MODULE}.emit_info")
     @patch(f"{UTILS}.find_server_id_by_name", return_value=None)
     def test_env_vars_prompted(self, mock_find, mock_info, mock_input, mock_set_cfg):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             prompt_for_server_config,
         )
 
@@ -191,7 +191,7 @@ class TestPromptForServerConfig:
         assert result is not None
         assert result["env_vars"]["MY_TOKEN"] == "token123"
 
-    @patch("code_puppy.config.set_config_value")
+    @patch("spruce_grove.config.set_config_value")
     @patch(f"{MODULE}.safe_input")
     @patch(f"{MODULE}.emit_info")
     @patch(f"{MODULE}.emit_warning")
@@ -199,7 +199,7 @@ class TestPromptForServerConfig:
     def test_env_vars_interrupt(
         self, mock_find, mock_warn, mock_info, mock_input, mock_set_cfg
     ):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             prompt_for_server_config,
         )
 
@@ -216,7 +216,7 @@ class TestPromptForServerConfig:
     @patch(f"{MODULE}.emit_info")
     @patch(f"{UTILS}.find_server_id_by_name", return_value=None)
     def test_cmd_args_with_defaults(self, mock_find, mock_info, mock_input):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             prompt_for_server_config,
         )
 
@@ -233,7 +233,7 @@ class TestPromptForServerConfig:
     @patch(f"{MODULE}.emit_info")
     @patch(f"{UTILS}.find_server_id_by_name", return_value=None)
     def test_cmd_args_custom_value(self, mock_find, mock_info, mock_input):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             prompt_for_server_config,
         )
 
@@ -249,7 +249,7 @@ class TestPromptForServerConfig:
     def test_cmd_args_required_missing(
         self, mock_find, mock_warn, mock_info, mock_input
     ):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             prompt_for_server_config,
         )
 
@@ -265,21 +265,21 @@ class TestPromptForServerConfig:
     @patch(f"{MODULE}.emit_warning")
     @patch(f"{UTILS}.find_server_id_by_name", return_value=None)
     def test_cmd_args_interrupt(self, mock_find, mock_warn, mock_info, mock_input):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             prompt_for_server_config,
         )
 
         mock_input.side_effect = ["", KeyboardInterrupt]
         assert prompt_for_server_config(MagicMock(), FakeServerWithArgs()) is None
 
-    @patch("code_puppy.config.set_config_value")
+    @patch("spruce_grove.config.set_config_value")
     @patch(f"{MODULE}.safe_input")
     @patch(f"{MODULE}.emit_info")
     @patch(f"{UTILS}.find_server_id_by_name", return_value=None)
     def test_env_var_empty_value_skipped(
         self, mock_find, mock_info, mock_input, mock_set_cfg
     ):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             prompt_for_server_config,
         )
 
@@ -299,13 +299,13 @@ class TestPromptForServerConfig:
 
 class TestInstallCatalogServer:
     @patch(
-        "code_puppy.command_line.mcp.wizard_utils.install_server_from_catalog",
+        "spruce_grove.command_line.mcp.wizard_utils.install_server_from_catalog",
         return_value=True,
     )
     @patch(f"{MODULE}.emit_info")
     @patch(f"{MODULE}.emit_success")
     def test_success(self, mock_success, mock_info, mock_install):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             install_catalog_server,
         )
 
@@ -315,13 +315,13 @@ class TestInstallCatalogServer:
         mock_success.assert_called()
 
     @patch(
-        "code_puppy.command_line.mcp.wizard_utils.install_server_from_catalog",
+        "spruce_grove.command_line.mcp.wizard_utils.install_server_from_catalog",
         return_value=False,
     )
     @patch(f"{MODULE}.emit_info")
     @patch(f"{MODULE}.emit_warning")
     def test_failure(self, mock_warn, mock_info, mock_install):
-        from code_puppy.command_line.mcp.catalog_server_installer import (
+        from spruce_grove.command_line.mcp.catalog_server_installer import (
             install_catalog_server,
         )
 
@@ -338,7 +338,7 @@ class TestInstallCatalogServer:
 
 class TestEnvVarHints:
     def test_hints_dict(self):
-        from code_puppy.command_line.mcp.catalog_server_installer import ENV_VAR_HINTS
+        from spruce_grove.command_line.mcp.catalog_server_installer import ENV_VAR_HINTS
 
         assert isinstance(ENV_VAR_HINTS, dict)
         assert len(ENV_VAR_HINTS) > 0

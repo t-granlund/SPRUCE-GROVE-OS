@@ -11,7 +11,7 @@ from unittest.mock import AsyncMock, Mock, patch
 import httpx2 as httpx
 import pytest
 
-from code_puppy.chatgpt_codex_client import (
+from spruce_grove.chatgpt_codex_client import (
     ChatGPTCodexAsyncClient,
     _is_reasoning_model,
     create_codex_async_client,
@@ -904,21 +904,21 @@ class TestMergeOutputItems:
         return reasoning, message
 
     def test_stream_wins_when_envelope_is_subset(self):
-        from code_puppy.chatgpt_codex_client import _merge_output_items
+        from spruce_grove.chatgpt_codex_client import _merge_output_items
 
         reasoning, message = self._items()
         merged = _merge_output_items([message], [reasoning, message])
         assert merged == [reasoning, message]
 
     def test_empty_envelope_returns_stream(self):
-        from code_puppy.chatgpt_codex_client import _merge_output_items
+        from spruce_grove.chatgpt_codex_client import _merge_output_items
 
         reasoning, message = self._items()
         merged = _merge_output_items([], [reasoning, message])
         assert merged == [reasoning, message]
 
     def test_dropped_stream_event_recovered_from_envelope(self):
-        from code_puppy.chatgpt_codex_client import _merge_output_items
+        from spruce_grove.chatgpt_codex_client import _merge_output_items
 
         reasoning, message = self._items()
         extra = {"type": "function_call", "id": "fc_1", "call_id": "call_1"}
@@ -927,7 +927,7 @@ class TestMergeOutputItems:
         assert merged == [reasoning, message, extra]
 
     def test_streamed_twin_replaces_envelope_copy(self):
-        from code_puppy.chatgpt_codex_client import _merge_output_items
+        from spruce_grove.chatgpt_codex_client import _merge_output_items
 
         reasoning, message = self._items()
         stale = {"type": "message", "id": "msg_1", "role": "assistant", "old": True}

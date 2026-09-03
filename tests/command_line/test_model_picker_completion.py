@@ -5,15 +5,15 @@ from unittest.mock import call, patch
 import pytest
 from termflow.tui.completion import Document
 
-from code_puppy.command_line.model_picker_completion import ModelSelectionMenu
+from spruce_grove.command_line.model_picker_completion import ModelSelectionMenu
 
 
 class TestLoadModelNames:
     def test_returns_model_list(self):
-        from code_puppy.command_line.model_picker_completion import load_model_names
+        from spruce_grove.command_line.model_picker_completion import load_model_names
 
         with patch(
-            "code_puppy.command_line.model_picker_completion._load_models_config",
+            "spruce_grove.command_line.model_picker_completion._load_models_config",
             return_value={"gpt-4": {}, "claude-3": {}},
         ):
             result = load_model_names()
@@ -23,10 +23,10 @@ class TestLoadModelNames:
 
 class TestGetActiveModel:
     def test_returns_model_name(self):
-        from code_puppy.command_line.model_picker_completion import get_active_model
+        from spruce_grove.command_line.model_picker_completion import get_active_model
 
         with patch(
-            "code_puppy.command_line.model_picker_completion.get_global_model_name",
+            "spruce_grove.command_line.model_picker_completion.get_global_model_name",
             return_value="gpt-4",
         ):
             assert get_active_model() == "gpt-4"
@@ -34,10 +34,10 @@ class TestGetActiveModel:
 
 class TestSetActiveModel:
     def test_delegates_to_set_model(self):
-        from code_puppy.command_line.model_picker_completion import set_active_model
+        from spruce_grove.command_line.model_picker_completion import set_active_model
 
         with patch(
-            "code_puppy.command_line.model_picker_completion.set_model_and_reload_agent"
+            "spruce_grove.command_line.model_picker_completion.set_model_and_reload_agent"
         ) as mock_set:
             set_active_model("gpt-4")
             mock_set.assert_called_once_with("gpt-4")
@@ -50,10 +50,10 @@ class TestModelNameCompleter:
         return Document(text=text, cursor_position=cursor_pos)
 
     def test_no_trigger(self):
-        from code_puppy.command_line.model_picker_completion import ModelNameCompleter
+        from spruce_grove.command_line.model_picker_completion import ModelNameCompleter
 
         with patch(
-            "code_puppy.command_line.model_picker_completion._load_models_config",
+            "spruce_grove.command_line.model_picker_completion._load_models_config",
             return_value={"gpt-4": {}},
         ):
             c = ModelNameCompleter(trigger="/model")
@@ -61,18 +61,18 @@ class TestModelNameCompleter:
             assert completions == []
 
     def test_shows_all_models(self):
-        from code_puppy.command_line.model_picker_completion import ModelNameCompleter
+        from spruce_grove.command_line.model_picker_completion import ModelNameCompleter
 
         with (
             patch(
-                "code_puppy.command_line.model_picker_completion._load_models_config",
+                "spruce_grove.command_line.model_picker_completion._load_models_config",
                 return_value={
                     "gpt-4": {"description": "Fast all-round model"},
                     "claude-3": {"description": "Deep reasoning model"},
                 },
             ),
             patch(
-                "code_puppy.command_line.model_picker_completion.get_active_model",
+                "spruce_grove.command_line.model_picker_completion.get_active_model",
                 return_value="gpt-4",
             ),
         ):
@@ -88,15 +88,15 @@ class TestModelNameCompleter:
             assert "Deep reasoning model" in metas["claude-3"]
 
     def test_uses_fallback_description_when_missing(self):
-        from code_puppy.command_line.model_picker_completion import ModelNameCompleter
+        from spruce_grove.command_line.model_picker_completion import ModelNameCompleter
 
         with (
             patch(
-                "code_puppy.command_line.model_picker_completion._load_models_config",
+                "spruce_grove.command_line.model_picker_completion._load_models_config",
                 return_value={"gpt-4": {}, "claude-3": {"description": ""}},
             ),
             patch(
-                "code_puppy.command_line.model_picker_completion.get_active_model",
+                "spruce_grove.command_line.model_picker_completion.get_active_model",
                 return_value="gpt-4",
             ),
         ):
@@ -110,15 +110,15 @@ class TestModelNameCompleter:
             assert "No description available." in metas["claude-3"]
 
     def test_filters_by_prefix(self):
-        from code_puppy.command_line.model_picker_completion import ModelNameCompleter
+        from spruce_grove.command_line.model_picker_completion import ModelNameCompleter
 
         with (
             patch(
-                "code_puppy.command_line.model_picker_completion._load_models_config",
+                "spruce_grove.command_line.model_picker_completion._load_models_config",
                 return_value={"gpt-4": {}, "claude-3": {}},
             ),
             patch(
-                "code_puppy.command_line.model_picker_completion.get_active_model",
+                "spruce_grove.command_line.model_picker_completion.get_active_model",
                 return_value="gpt-4",
             ),
         ):
@@ -132,7 +132,7 @@ class TestModelNameCompleter:
         stacks (the persistent prompt caches its stack for the whole
         session) were built before the add -- completions must reflect the
         config as of *each keystroke*, not as of construction time."""
-        from code_puppy.command_line.model_picker_completion import ModelNameCompleter
+        from spruce_grove.command_line.model_picker_completion import ModelNameCompleter
 
         before_add = {"gpt-4o": {}, "claude-3": {}}
         after_add = {**before_add, "xai-grok-4": {}}
@@ -148,11 +148,11 @@ class TestModelNameCompleter:
 
         with (
             patch(
-                "code_puppy.command_line.model_picker_completion._load_models_config",
+                "spruce_grove.command_line.model_picker_completion._load_models_config",
                 side_effect=_load,
             ),
             patch(
-                "code_puppy.command_line.model_picker_completion.get_active_model",
+                "spruce_grove.command_line.model_picker_completion.get_active_model",
                 return_value="gpt-4o",
             ),
         ):
@@ -194,7 +194,7 @@ class TestFindMatchingModel:
         ],
     )
     def test_find_matching_model(self, query, models, expected):
-        from code_puppy.command_line.model_picker_completion import (
+        from spruce_grove.command_line.model_picker_completion import (
             _find_matching_model,
         )
 
@@ -203,17 +203,17 @@ class TestFindMatchingModel:
 
 class TestUpdateModelInInput:
     def test_model_command(self):
-        from code_puppy.command_line.model_picker_completion import (
+        from spruce_grove.command_line.model_picker_completion import (
             update_model_in_input,
         )
 
         with (
             patch(
-                "code_puppy.command_line.model_picker_completion._load_models_config",
+                "spruce_grove.command_line.model_picker_completion._load_models_config",
                 return_value={"gpt-4": {}},
             ),
             patch(
-                "code_puppy.command_line.model_picker_completion.set_model_and_reload_agent"
+                "spruce_grove.command_line.model_picker_completion.set_model_and_reload_agent"
             ) as mock_set,
         ):
             result = update_model_in_input("/model gpt-4")
@@ -222,24 +222,24 @@ class TestUpdateModelInInput:
             assert result is not None  # Empty string after strip
 
     def test_m_command(self):
-        from code_puppy.command_line.model_picker_completion import (
+        from spruce_grove.command_line.model_picker_completion import (
             update_model_in_input,
         )
 
         with (
             patch(
-                "code_puppy.command_line.model_picker_completion._load_models_config",
+                "spruce_grove.command_line.model_picker_completion._load_models_config",
                 return_value={"gpt-4": {}},
             ),
             patch(
-                "code_puppy.command_line.model_picker_completion.set_model_and_reload_agent"
+                "spruce_grove.command_line.model_picker_completion.set_model_and_reload_agent"
             ) as mock_set,
         ):
             update_model_in_input("/m gpt-4")
             mock_set.assert_called_once_with("gpt-4")
 
     def test_no_model_command(self):
-        from code_puppy.command_line.model_picker_completion import (
+        from spruce_grove.command_line.model_picker_completion import (
             update_model_in_input,
         )
 
@@ -247,12 +247,12 @@ class TestUpdateModelInInput:
 
     @pytest.mark.parametrize("cmd", ["/model xyz", "/m xyz"], ids=["model", "m"])
     def test_command_no_match(self, cmd):
-        from code_puppy.command_line.model_picker_completion import (
+        from spruce_grove.command_line.model_picker_completion import (
             update_model_in_input,
         )
 
         with patch(
-            "code_puppy.command_line.model_picker_completion._load_models_config",
+            "spruce_grove.command_line.model_picker_completion._load_models_config",
             return_value={"gpt-4": {}},
         ):
             assert update_model_in_input(cmd) is None
@@ -263,17 +263,17 @@ class TestUpdateModelInInput:
         ids=["model", "m"],
     )
     def test_command_with_trailing_text(self, cmd):
-        from code_puppy.command_line.model_picker_completion import (
+        from spruce_grove.command_line.model_picker_completion import (
             update_model_in_input,
         )
 
         with (
             patch(
-                "code_puppy.command_line.model_picker_completion._load_models_config",
+                "spruce_grove.command_line.model_picker_completion._load_models_config",
                 return_value={"gpt-4": {}},
             ),
             patch(
-                "code_puppy.command_line.model_picker_completion.set_model_and_reload_agent"
+                "spruce_grove.command_line.model_picker_completion.set_model_and_reload_agent"
             ),
         ):
             result = update_model_in_input(cmd)
@@ -292,7 +292,7 @@ class TestModelSelectionMenu:
         script = iter(keys)
         out = StringIO()
         with patch(
-            "code_puppy.command_line.model_picker_completion.get_active_model",
+            "spruce_grove.command_line.model_picker_completion.get_active_model",
             return_value=active,
         ):
             menu_obj = ModelSelectionMenu(model_names=models or self.MODELS)
@@ -355,11 +355,11 @@ class TestModelSelectionMenuKeybindings:
         script = iter(["ctrl-e"])
         with (
             patch(
-                "code_puppy.command_line.model_picker_completion.get_active_model",
+                "spruce_grove.command_line.model_picker_completion.get_active_model",
                 return_value="m1",
             ),
             patch(
-                "code_puppy.command_line.model_picker_completion.required_env_var_for_model",
+                "spruce_grove.command_line.model_picker_completion.required_env_var_for_model",
                 return_value="API_KEY",
             ),
         ):
@@ -380,11 +380,11 @@ class TestModelSelectionMenuKeybindings:
         script = iter(["ctrl-e", "escape"])
         with (
             patch(
-                "code_puppy.command_line.model_picker_completion.get_active_model",
+                "spruce_grove.command_line.model_picker_completion.get_active_model",
                 return_value="m1",
             ),
             patch(
-                "code_puppy.command_line.model_picker_completion.required_env_var_for_model",
+                "spruce_grove.command_line.model_picker_completion.required_env_var_for_model",
                 return_value=None,
             ),
         ):
@@ -404,7 +404,7 @@ class TestModelSelectionMenuKeybindings:
 
         script = iter(["e", "escape"])
         with patch(
-            "code_puppy.command_line.model_picker_completion.get_active_model",
+            "spruce_grove.command_line.model_picker_completion.get_active_model",
             return_value="alpha",
         ):
             menu_obj = ModelSelectionMenu(model_names=["alpha", "beta"])
@@ -423,17 +423,17 @@ class TestModelSelectionMenuKeybindings:
 class TestInteractiveModelPicker:
     @pytest.mark.asyncio
     async def test_sets_awaiting_user_input_around_picker(self):
-        from code_puppy.command_line.model_picker_completion import (
+        from spruce_grove.command_line.model_picker_completion import (
             interactive_model_picker,
         )
 
         with (
             patch(
-                "code_puppy.command_line.model_picker_completion.ModelSelectionMenu.run_async",
+                "spruce_grove.command_line.model_picker_completion.ModelSelectionMenu.run_async",
                 return_value="gpt-4",
             ) as mock_run,
             patch(
-                "code_puppy.tools.command_runner.set_awaiting_user_input"
+                "spruce_grove.tools.command_runner.set_awaiting_user_input"
             ) as mock_set,
         ):
             result = await interactive_model_picker()

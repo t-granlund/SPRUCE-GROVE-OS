@@ -54,7 +54,7 @@ def _run_coro(coro):
 
 
 def test_agent_menu_keybindings():
-    import code_puppy.command_line.agent_menu as am
+    import spruce_grove.command_line.agent_menu as am
     from io import StringIO
 
     # Create enough entries for multiple pages (PAGE_SIZE=10)
@@ -83,35 +83,35 @@ def test_agent_menu_keybindings():
 
     with (
         patch(
-            "code_puppy.command_line.agent_menu._get_agent_entries",
+            "spruce_grove.command_line.agent_menu._get_agent_entries",
             return_value=entries,
         ),
         patch(
-            "code_puppy.command_line.agent_menu.build_agent_menu",
+            "spruce_grove.command_line.agent_menu.build_agent_menu",
             side_effect=headless_build,
         ),
-        patch("code_puppy.command_line.agent_menu.set_awaiting_user_input"),
+        patch("spruce_grove.command_line.agent_menu.set_awaiting_user_input"),
         patch(
-            "code_puppy.command_line.agent_menu._select_pinned_model",
+            "spruce_grove.command_line.agent_menu._select_pinned_model",
             new_callable=AsyncMock,
             return_value=None,
         ),
-        patch("code_puppy.command_line.agent_menu.clone_agent", return_value=None),
+        patch("spruce_grove.command_line.agent_menu.clone_agent", return_value=None),
         patch(
-            "code_puppy.command_line.agent_menu.is_clone_agent_name", return_value=True
+            "spruce_grove.command_line.agent_menu.is_clone_agent_name", return_value=True
         ),
         patch(
-            "code_puppy.command_line.agent_menu.delete_clone_agent", return_value=True
+            "spruce_grove.command_line.agent_menu.delete_clone_agent", return_value=True
         ),
         patch(
-            "code_puppy.command_line.agent_menu.get_current_agent", return_value=None
+            "spruce_grove.command_line.agent_menu.get_current_agent", return_value=None
         ),
         patch(
-            "code_puppy.command_line.agent_menu._get_pinned_model", return_value=None
+            "spruce_grove.command_line.agent_menu._get_pinned_model", return_value=None
         ),
-        patch("code_puppy.command_line.agent_menu.get_bound_servers", return_value={}),
-        patch("code_puppy.command_line.agent_menu.emit_warning"),
-        patch("code_puppy.command_line.agent_menu.emit_info"),
+        patch("spruce_grove.command_line.agent_menu.get_bound_servers", return_value={}),
+        patch("spruce_grove.command_line.agent_menu.emit_warning"),
+        patch("spruce_grove.command_line.agent_menu.emit_info"),
     ):
         result = asyncio.run(am.interactive_agent_picker())
 

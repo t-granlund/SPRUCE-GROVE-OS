@@ -10,8 +10,8 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy.command_line import add_model_menu as amm
-from code_puppy.models_dev_parser import ModelInfo, ProviderInfo
+from spruce_grove.command_line import add_model_menu as amm
+from spruce_grove.models_dev_parser import ModelInfo, ProviderInfo
 
 
 def make_provider(**kw):
@@ -324,7 +324,7 @@ class TestProviderCredentialFlowHook:
             monkeypatch.setenv(env_var, "oauth-minted")
             return True
 
-        with patch("code_puppy.callbacks.on_provider_credential_flow", fake_hook):
+        with patch("spruce_grove.callbacks.on_provider_credential_flow", fake_hook):
             # No keys scripted: reaching the TextInput would blow up the test.
             assert amm.prompt_for_credentials(make_provider(), **self._keys()) is True
 
@@ -332,7 +332,7 @@ class TestProviderCredentialFlowHook:
         monkeypatch.delenv("ACME_API_KEY", raising=False)
         with (
             patch(
-                "code_puppy.callbacks.on_provider_credential_flow",
+                "spruce_grove.callbacks.on_provider_credential_flow",
                 lambda **kw: True,  # lies: never actually sets the env var
             ),
             patch.object(amm, "set_config_value") as mock_set,
@@ -350,7 +350,7 @@ class TestProviderCredentialFlowHook:
         monkeypatch.delenv("ACME_API_KEY", raising=False)
         with (
             patch(
-                "code_puppy.callbacks.on_provider_credential_flow",
+                "spruce_grove.callbacks.on_provider_credential_flow",
                 lambda **kw: False,
             ),
             patch.object(amm, "set_config_value") as mock_set,
@@ -365,7 +365,7 @@ class TestProviderCredentialFlowHook:
         assert os.environ.pop("ACME_API_KEY") == "sk"
 
     def test_on_provider_credential_flow_short_circuits(self):
-        from code_puppy import callbacks
+        from spruce_grove import callbacks
 
         calls = []
 
@@ -392,7 +392,7 @@ class TestProviderCredentialFlowHook:
             callbacks.unregister_callback("provider_credential_flow", second)
 
     def test_on_provider_credential_flow_isolates_errors(self):
-        from code_puppy import callbacks
+        from spruce_grove import callbacks
 
         def boom(**kw):
             raise RuntimeError("kaboom")
@@ -414,7 +414,7 @@ class TestProviderCredentialFlowHook:
             callbacks.unregister_callback("provider_credential_flow", fine)
 
     def test_on_provider_credential_flow_no_callbacks(self):
-        from code_puppy import callbacks
+        from spruce_grove import callbacks
 
         assert (
             callbacks.on_provider_credential_flow(

@@ -13,7 +13,7 @@ import os
 
 import pytest
 
-from code_puppy.messaging.line_editor import RunningLineEditor
+from spruce_grove.messaging.line_editor import RunningLineEditor
 
 
 class FakeBar:
@@ -199,7 +199,7 @@ def test_read_chunk_returns_all_available_bytes():
     go — the buffered TextIOWrapper.read(1) stranded the tail."""
     import codecs
 
-    from code_puppy.agents._key_listeners import _read_chunk
+    from spruce_grove.agents._key_listeners import _read_chunk
 
     r, w = os.pipe()
     try:
@@ -214,7 +214,7 @@ def test_read_chunk_returns_all_available_bytes():
 def test_read_chunk_reassembles_split_utf8():
     import codecs
 
-    from code_puppy.agents._key_listeners import _read_chunk
+    from spruce_grove.agents._key_listeners import _read_chunk
 
     r, w = os.pipe()
     try:
@@ -233,7 +233,7 @@ def test_read_chunk_reassembles_split_utf8():
 def test_read_chunk_eof_returns_none():
     import codecs
 
-    from code_puppy.agents._key_listeners import _read_chunk
+    from spruce_grove.agents._key_listeners import _read_chunk
 
     r, w = os.pipe()
     os.close(w)
@@ -249,7 +249,7 @@ def test_posix_listener_no_longer_uses_buffered_stdin_read():
     to TextIOWrapper reads."""
     import inspect
 
-    from code_puppy.agents import _key_listeners
+    from spruce_grove.agents import _key_listeners
 
     # The read loop lives in _posix_read_session (supervisor only restarts sessions);
     # check both so a future refactor can't sneak a buffered read into either.
@@ -266,14 +266,14 @@ def test_posix_listener_no_longer_uses_buffered_stdin_read():
 
 
 def test_persistent_editor_history_is_file_backed(monkeypatch, tmp_path):
-    from code_puppy import config as cp_config
-    from code_puppy.messaging import bottom_bar as bottom_bar_mod
-    import code_puppy.messaging.run_ui as run_ui_mod
+    from spruce_grove import config as cp_config
+    from spruce_grove.messaging import bottom_bar as bottom_bar_mod
+    import spruce_grove.messaging.run_ui as run_ui_mod
 
     history_file = str(tmp_path / "command_history.txt")
     monkeypatch.setattr(cp_config, "COMMAND_HISTORY_FILE", history_file)
     # Seed an entry the way the classic prompt would have written it.
-    from code_puppy.messaging.editor_history import HistoryStore
+    from spruce_grove.messaging.editor_history import HistoryStore
 
     HistoryStore(history_file).append("seeded entry")
 

@@ -4,7 +4,7 @@ Covers:
 - A cancelled run terminates cleanly: no cancel-scope ``RuntimeError``
   propagates to the caller (pydantic-ai 1.92+ fixed stream teardown on
   cancel upstream, #5313; the Phase C proof-of-death gate then deleted
-  code_puppy's cancel-scope suppression entirely).
+  spruce_grove's cancel-scope suppression entirely).
 - Cancel-scope ``RuntimeError``s now propagate like any other error —
   no silent suppression.
 - A cancelled run's partial work is preserved: pydantic-ai v2 attaches a
@@ -22,8 +22,8 @@ from typing import Any
 
 import pytest
 
-from code_puppy.agents import _runtime
-from code_puppy.callbacks import _callbacks, clear_callbacks
+from spruce_grove.agents import _runtime
+from spruce_grove.callbacks import _callbacks, clear_callbacks
 
 
 class HangingPydanticAgent:

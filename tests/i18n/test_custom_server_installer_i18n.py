@@ -6,7 +6,7 @@ custom_server_installer.py depends on.
 
 import pytest
 
-from code_puppy.i18n import catalog, pseudo, translate
+from spruce_grove.i18n import catalog, pseudo, translate
 
 
 @pytest.fixture(autouse=True)

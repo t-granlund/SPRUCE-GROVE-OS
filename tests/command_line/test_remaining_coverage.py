@@ -23,7 +23,7 @@ from unittest.mock import MagicMock, mock_open, patch
 
 def test_clipboard_binary_content_import_failure():
     """Cover lines 37-39: BinaryContent ImportError fallback."""
-    mod_name = "code_puppy.command_line.clipboard"
+    mod_name = "spruce_grove.command_line.clipboard"
     saved = sys.modules.pop(mod_name, None)
     try:
         with patch.dict(sys.modules, {"pydantic_ai": None}):
@@ -37,14 +37,14 @@ def test_clipboard_binary_content_import_failure():
         else:
             saved = importlib.import_module(mod_name)
         # See note above: keep the package attribute in sync too.
-        import code_puppy.command_line as _pkg
+        import spruce_grove.command_line as _pkg
 
         _pkg.clipboard = saved
 
 
 def test_clipboard_pil_import_failure():
     """Cover lines 27-30: PIL ImportError fallback."""
-    mod_name = "code_puppy.command_line.clipboard"
+    mod_name = "spruce_grove.command_line.clipboard"
     saved = sys.modules.pop(mod_name, None)
     try:
         with patch.dict(
@@ -62,21 +62,21 @@ def test_clipboard_pil_import_failure():
             saved = importlib.import_module(mod_name)
         # ALSO restore the package attribute: ``import a.b`` rebinds it every import,
         # so string-target monkeypatches would otherwise hit the throwaway module.
-        import code_puppy.command_line as _pkg
+        import spruce_grove.command_line as _pkg
 
         _pkg.clipboard = saved
 
 
 def test_command_handler_markdown_import_failure():
     """Cover lines 241-242: MarkdownCommandResult ImportError fallback."""
-    from code_puppy.command_line.command_handler import handle_command
+    from spruce_grove.command_line.command_handler import handle_command
 
     mock_context = MagicMock()
     mock_context.current_agent = MagicMock()
 
     # Patch callbacks at the source module level
     with patch(
-        "code_puppy.callbacks.on_custom_command", return_value=["some result"]
+        "spruce_grove.callbacks.on_custom_command", return_value=["some result"]
     ) as _mock_cb:
         with patch.dict(
             sys.modules,
@@ -91,7 +91,7 @@ def test_command_handler_markdown_import_failure():
 
 def test_config_commands_set_no_key():
     """Cover config_commands line 258: /set with no arguments."""
-    from code_puppy.command_line.config_commands import handle_set_command
+    from spruce_grove.command_line.config_commands import handle_set_command
 
     # "/set =value" -> key="" (empty after split on =) -> "You must supply a key."
     result = handle_set_command("/set =value")
@@ -101,7 +101,7 @@ def test_config_commands_set_no_key():
 def test_config_pin_json_agent_reload_failure():
     """Cover lines 395-396: reload failure after pin."""
 
-    from code_puppy.command_line.config_commands import handle_pin_model_command
+    from spruce_grove.command_line.config_commands import handle_pin_model_command
 
     mock_agent = MagicMock()
     mock_agent.name = "myagent"
@@ -109,20 +109,20 @@ def test_config_pin_json_agent_reload_failure():
 
     with (
         patch(
-            "code_puppy.command_line.model_picker_completion.load_model_names",
+            "spruce_grove.command_line.model_picker_completion.load_model_names",
             return_value=["gpt-4"],
         ),
         patch(
-            "code_puppy.agents.json_agent.discover_json_agents",
+            "spruce_grove.agents.json_agent.discover_json_agents",
             return_value={"myagent": "/path"},
         ),
         patch(
-            "code_puppy.agents.agent_manager.get_agent_descriptions", return_value={}
+            "spruce_grove.agents.agent_manager.get_agent_descriptions", return_value={}
         ),
-        patch("code_puppy.messaging.emit_info"),
-        patch("code_puppy.messaging.emit_success"),
-        patch("code_puppy.messaging.emit_warning") as _mock_warn,
-        patch("code_puppy.agents.get_current_agent", return_value=mock_agent),
+        patch("spruce_grove.messaging.emit_info"),
+        patch("spruce_grove.messaging.emit_success"),
+        patch("spruce_grove.messaging.emit_warning") as _mock_warn,
+        patch("spruce_grove.agents.get_current_agent", return_value=mock_agent),
         patch("builtins.open", mock_open(read_data="{}")),
         patch("json.load", return_value={}),
         patch("json.dump"),
@@ -134,24 +134,24 @@ def test_config_pin_json_agent_reload_failure():
 def test_config_pin_list_json_agents_with_pinned():
     """Cover lines 450, 495-497: show JSON agents with pinned models."""
 
-    from code_puppy.command_line.config_commands import handle_pin_model_command
+    from spruce_grove.command_line.config_commands import handle_pin_model_command
 
     _agent_config = {"model": "gpt-4"}
 
     with (
         patch(
-            "code_puppy.command_line.model_picker_completion.load_model_names",
+            "spruce_grove.command_line.model_picker_completion.load_model_names",
             return_value=["gpt-4"],
         ),
         patch(
-            "code_puppy.agents.json_agent.discover_json_agents",
+            "spruce_grove.agents.json_agent.discover_json_agents",
             return_value={"myagent": "/path/agent.json"},
         ),
         patch(
-            "code_puppy.agents.agent_manager.get_agent_descriptions", return_value={}
+            "spruce_grove.agents.agent_manager.get_agent_descriptions", return_value={}
         ),
-        patch("code_puppy.messaging.emit_info") as _mock_info,
-        patch("code_puppy.messaging.emit_warning"),
+        patch("spruce_grove.messaging.emit_info") as _mock_info,
+        patch("spruce_grove.messaging.emit_warning"),
     ):
         result = handle_pin_model_command("/pin_model")
         assert result is True
@@ -159,10 +159,10 @@ def test_config_pin_list_json_agents_with_pinned():
 
 def test_core_commands_shlex_fallback():
     """Cover core_commands lines 62-64: shlex.split ValueError."""
-    from code_puppy.command_line.core_commands import handle_cd_command
+    from spruce_grove.command_line.core_commands import handle_cd_command
 
     # Unbalanced quotes will cause shlex.split to fail, triggering fallback
-    with patch("code_puppy.command_line.core_commands.emit_error"):
+    with patch("spruce_grove.command_line.core_commands.emit_error"):
         result = handle_cd_command("/cd 'unclosed")
         assert result is True
 
@@ -171,14 +171,14 @@ def test_file_path_completion_permission_error():
     """Cover lines 72-73: exception handling."""
     from termflow.tui.completion import Document
 
-    from code_puppy.command_line.file_path_completion import FilePathCompleter
+    from spruce_grove.command_line.file_path_completion import FilePathCompleter
 
     completer = FilePathCompleter()
     doc = Document("@somefile", cursor_position=len("@somefile"))
     event = MagicMock()
 
     with patch(
-        "code_puppy.command_line.file_path_completion.glob.glob",
+        "spruce_grove.command_line.file_path_completion.glob.glob",
         side_effect=PermissionError("denied"),
     ):
         results = list(completer.get_completions(doc, event))
@@ -187,7 +187,7 @@ def test_file_path_completion_permission_error():
 
 def test_load_context_completion_exception():
     """Cover lines 50-52: exception path in get_completions."""
-    from code_puppy.command_line.load_context_completion import LoadContextCompleter
+    from spruce_grove.command_line.load_context_completion import LoadContextCompleter
 
     completer = LoadContextCompleter()
     doc = MagicMock()
@@ -196,7 +196,7 @@ def test_load_context_completion_exception():
     complete_event = MagicMock()
 
     # Make Path(...).exists() raise to trigger the except Exception branch
-    with patch("code_puppy.command_line.load_context_completion.Path") as mock_path:
+    with patch("spruce_grove.command_line.load_context_completion.Path") as mock_path:
         mock_path.return_value.__truediv__ = MagicMock(
             side_effect=PermissionError("denied")
         )
@@ -206,7 +206,7 @@ def test_load_context_completion_exception():
 
 def test_sanitize_for_encoding_unicode_error():
     """Cover lines 81-83: UnicodeEncodeError fallback in _sanitize_for_encoding."""
-    from code_puppy.command_line.completers import (
+    from spruce_grove.command_line.completers import (
         _sanitize_for_encoding,
     )
 
@@ -222,7 +222,7 @@ def test_uc_menu_delete_tool():
     import os
     import tempfile
 
-    from code_puppy.command_line.uc_menu import _delete_tool
+    from spruce_grove.command_line.uc_menu import _delete_tool
     from code_puppy_core_plugins.universal_constructor.models import (
         ToolMeta,
         UCToolInfo,
@@ -253,7 +253,7 @@ def test_uc_menu_delete_tool():
                 "code_puppy_core_plugins.universal_constructor.USER_UC_DIR",
                 Path(tmpdir),
             ),
-            patch("code_puppy.command_line.uc_menu.emit_success"),
+            patch("spruce_grove.command_line.uc_menu.emit_success"),
         ):
             result = _delete_tool(tool)
             assert result is True
@@ -262,7 +262,7 @@ def test_uc_menu_delete_tool():
 
 def test_uc_menu_delete_tool_exception():
     """Cover _delete_tool exception handling."""
-    from code_puppy.command_line.uc_menu import _delete_tool
+    from spruce_grove.command_line.uc_menu import _delete_tool
     from code_puppy_core_plugins.universal_constructor.models import (
         ToolMeta,
         UCToolInfo,
@@ -278,8 +278,8 @@ def test_uc_menu_delete_tool_exception():
         docstring="test",
     )
     with (
-        patch("code_puppy.command_line.uc_menu.Path") as mock_path,
-        patch("code_puppy.command_line.uc_menu.emit_error"),
+        patch("spruce_grove.command_line.uc_menu.Path") as mock_path,
+        patch("spruce_grove.command_line.uc_menu.emit_error"),
     ):
         mock_path.return_value.exists.return_value = True
         mock_path.return_value.unlink.side_effect = Exception("perm denied")
@@ -289,7 +289,7 @@ def test_uc_menu_delete_tool_exception():
 
 def test_uc_menu_highlight_source_lines():
     """Highlighting flows through the theme-aware termflow highlighter."""
-    from code_puppy.command_line.uc_menu import highlight_source_lines
+    from spruce_grove.command_line.uc_menu import highlight_source_lines
 
     lines = highlight_source_lines(["def hello(x):", "    return x + 1", ""])
     assert len(lines) == 3
@@ -297,7 +297,7 @@ def test_uc_menu_highlight_source_lines():
 
 
 def test_uc_menu_tool_details_with_author():
-    from code_puppy.command_line.uc_menu import tool_details
+    from spruce_grove.command_line.uc_menu import tool_details
     from code_puppy_core_plugins.universal_constructor.models import (
         ToolMeta,
         UCToolInfo,
@@ -328,7 +328,7 @@ def test_uc_menu_toggle_tool_meta_not_found():
     """Cover lines 115-116: TOOL_META not found in file."""
     import tempfile
 
-    from code_puppy.command_line.uc_menu import _toggle_tool_enabled
+    from spruce_grove.command_line.uc_menu import _toggle_tool_enabled
     from code_puppy_core_plugins.universal_constructor.models import (
         ToolMeta,
         UCToolInfo,
@@ -350,7 +350,7 @@ def test_uc_menu_toggle_tool_meta_not_found():
             function_name="test",
             docstring="test",
         )
-        with patch("code_puppy.command_line.uc_menu.emit_error"):
+        with patch("spruce_grove.command_line.uc_menu.emit_error"):
             result = _toggle_tool_enabled(tool)
             assert result is False
     import os

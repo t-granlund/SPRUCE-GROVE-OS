@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from code_puppy.tools.apply_patch import (
+from spruce_grove.tools.apply_patch import (
     PatchError,
     _apply_changes,
     _diff_operation,

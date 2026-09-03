@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import json
 
-from code_puppy.agents._runtime import _is_retryable_one, should_retry_streaming
+from spruce_grove.agents._runtime import _is_retryable_one, should_retry_streaming
 
 
 def _malformed_sse_json_decode_error() -> json.JSONDecodeError:

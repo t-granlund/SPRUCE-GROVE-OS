@@ -5,9 +5,9 @@ import subprocess
 import sys
 import time
 
-from code_puppy.tools import command_runner
-from code_puppy.tools.command_runner import run_shell_command_streaming
-from code_puppy.tools.shell_backgrounding import (
+from spruce_grove.tools import command_runner
+from spruce_grove.tools.command_runner import run_shell_command_streaming
+from spruce_grove.tools.shell_backgrounding import (
     DivertLog,
     request_background_all,
 )
@@ -83,7 +83,7 @@ def test_foreground_limit_auto_backgrounds_instead_of_killing(monkeypatch):
     process = _spawn_slow_process()
     command_runner._register_process(process)
     result = None
-    monkeypatch.setattr("code_puppy.config.get_command_timeout_seconds", lambda: 0)
+    monkeypatch.setattr("spruce_grove.config.get_command_timeout_seconds", lambda: 0)
 
     try:
         result = run_shell_command_streaming(

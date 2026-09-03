@@ -2,7 +2,7 @@
 
 from unittest.mock import patch
 
-from code_puppy.tools.ask_user_question.models import AskUserQuestionOutput
+from spruce_grove.tools.ask_user_question.models import AskUserQuestionOutput
 
 
 class TestDemoTuiMain:
@@ -11,10 +11,10 @@ class TestDemoTuiMain:
             answers=[], cancelled=True, error=None, timed_out=False
         )
         with patch(
-            "code_puppy.tools.ask_user_question.demo_tui.ask_user_question",
+            "spruce_grove.tools.ask_user_question.demo_tui.ask_user_question",
             return_value=mock_output,
         ) as mock_ask:
-            from code_puppy.tools.ask_user_question.demo_tui import main
+            from spruce_grove.tools.ask_user_question.demo_tui import main
 
             main()
             mock_ask.assert_called_once()

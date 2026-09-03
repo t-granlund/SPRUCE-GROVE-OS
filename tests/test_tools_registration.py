@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy.tools import (
+from spruce_grove.tools import (
     REMOVED_LEGACY_TOOLS,
     TOOL_REGISTRY,
     get_available_tool_names,
@@ -173,7 +173,7 @@ class TestRemovedReasoningToolBehavior:
 
     def testhas_extended_thinking_active_none_model(self):
         """Returns False when model_name is None and global model is None."""
-        with patch("code_puppy.config.get_global_model_name", return_value=None):
+        with patch("spruce_grove.config.get_global_model_name", return_value=None):
             assert has_extended_thinking_active(None) is False
 
     def testhas_extended_thinking_active_non_anthropic_model(self):
@@ -194,7 +194,7 @@ class TestRemovedReasoningToolBehavior:
             ("claude-sonnet-4-20250514", {}, True),
         ],
     )
-    @patch("code_puppy.config.get_effective_model_settings")
+    @patch("spruce_grove.config.get_effective_model_settings")
     def test_has_extended_thinking_active(
         self, mock_settings, model, setting, expected
     ):
@@ -207,7 +207,7 @@ class TestRemovedReasoningToolBehavior:
         assert "agent_share_your_reasoning" in TOOL_REGISTRY
         assert "agent_share_your_reasoning" not in REMOVED_LEGACY_TOOLS
 
-    @patch("code_puppy.tools.emit_warning")
+    @patch("spruce_grove.tools.emit_warning")
     def test_legacy_reasoning_tool_can_be_registered_without_warning(
         self, mock_warning
     ):

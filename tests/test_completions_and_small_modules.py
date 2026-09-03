@@ -25,21 +25,21 @@ class TestLoadCatalogSkillIds:
     """Cover lines 26-32."""
 
     def test_success(self):
-        from code_puppy.command_line.skills_completion import load_catalog_skill_ids
+        from spruce_grove.command_line.skills_completion import load_catalog_skill_ids
 
         provider = MagicMock()
         provider.get_catalog_skill_ids.return_value = ["skill-1"]
         with patch(
-            "code_puppy.command_line.skills_completion.get_skill_provider",
+            "spruce_grove.command_line.skills_completion.get_skill_provider",
             return_value=provider,
         ):
             assert load_catalog_skill_ids() == ["skill-1"]
 
     def test_exception(self):
-        from code_puppy.command_line.skills_completion import load_catalog_skill_ids
+        from spruce_grove.command_line.skills_completion import load_catalog_skill_ids
 
         with patch(
-            "code_puppy.command_line.skills_completion.get_skill_provider",
+            "spruce_grove.command_line.skills_completion.get_skill_provider",
             side_effect=RuntimeError("boom"),
         ):
             assert load_catalog_skill_ids() == []
@@ -49,7 +49,7 @@ class TestSkillsCompleterGetCompletions:
     """Cover lines 62-71, 78-160."""
 
     def setup_method(self):
-        from code_puppy.command_line.skills_completion import SkillsCompleter
+        from spruce_grove.command_line.skills_completion import SkillsCompleter
 
         self.completer = SkillsCompleter()
 
@@ -101,7 +101,7 @@ class TestSkillsCompleterGetCompletions:
 
     def test_get_skill_ids_caches(self):
         with patch(
-            "code_puppy.command_line.skills_completion.load_catalog_skill_ids",
+            "spruce_grove.command_line.skills_completion.load_catalog_skill_ids",
             return_value=["s1"],
         ):
             result = self.completer._get_skill_ids()
@@ -111,7 +111,7 @@ class TestSkillsCompleterGetCompletions:
 
     def test_get_skill_ids_none_returns_empty(self):
         with patch(
-            "code_puppy.command_line.skills_completion.load_catalog_skill_ids",
+            "spruce_grove.command_line.skills_completion.load_catalog_skill_ids",
             return_value=None,
         ):
             result = self.completer._get_skill_ids()
@@ -125,7 +125,7 @@ class TestFilePathCompleterMissedLines:
     """Cover lines 33, 41, 53, 56, 58-62."""
 
     def setup_method(self):
-        from code_puppy.command_line.file_path_completion import FilePathCompleter
+        from spruce_grove.command_line.file_path_completion import FilePathCompleter
 
         self.completer = FilePathCompleter()
 
@@ -208,12 +208,12 @@ class TestLoadContextCompletionException:
     """Cover lines 50-52."""
 
     def test_exception_in_glob_silently_ignored(self):
-        from code_puppy.command_line.load_context_completion import LoadContextCompleter
+        from spruce_grove.command_line.load_context_completion import LoadContextCompleter
 
         completer = LoadContextCompleter()
         # Make contexts_dir.exists() raise
         with patch(
-            "code_puppy.command_line.load_context_completion.CONFIG_DIR",
+            "spruce_grove.command_line.load_context_completion.CONFIG_DIR",
             "/nonexistent/x/y/z",
         ):
             with patch("pathlib.Path.exists", side_effect=PermissionError("nope")):
@@ -229,21 +229,21 @@ class TestModelSwitching:
     """Cover lines 14-15, 37-38, 44, 62-63."""
 
     def test_get_effective_agent_model_success(self):
-        from code_puppy.model_switching import _get_effective_agent_model
+        from spruce_grove.model_switching import _get_effective_agent_model
 
         agent = MagicMock()
         agent.get_model_name.return_value = "gpt-4"
         assert _get_effective_agent_model(agent) == "gpt-4"
 
     def test_get_effective_agent_model_exception(self):
-        from code_puppy.model_switching import _get_effective_agent_model
+        from spruce_grove.model_switching import _get_effective_agent_model
 
         agent = MagicMock()
         agent.get_model_name.side_effect = Exception("fail")
         assert _get_effective_agent_model(agent) is None
 
     def test_refresh_context_status_uses_effective_model_capacity(self):
-        from code_puppy.model_switching import _refresh_context_status
+        from spruce_grove.model_switching import _refresh_context_status
 
         agent = MagicMock()
         agent._get_model_context_length.return_value = 1_050_000
@@ -252,20 +252,20 @@ class TestModelSwitching:
         agent._estimate_context_overhead.return_value = 2_000
 
         with patch(
-            "code_puppy.messaging.spinner.update_spinner_context"
+            "spruce_grove.messaging.spinner.update_spinner_context"
         ) as update_status:
             _refresh_context_status(agent)
 
         update_status.assert_called_once_with("32k/1.1M tokens (3%)")
 
     def test_refresh_context_status_clears_stale_value_on_failure(self):
-        from code_puppy.model_switching import _refresh_context_status
+        from spruce_grove.model_switching import _refresh_context_status
 
         agent = MagicMock()
         agent._get_model_context_length.side_effect = RuntimeError("missing config")
 
         with patch(
-            "code_puppy.messaging.spinner.update_spinner_context"
+            "spruce_grove.messaging.spinner.update_spinner_context"
         ) as update_status:
             _refresh_context_status(agent)
 
@@ -273,7 +273,7 @@ class TestModelSwitching:
 
     def _run(self, model_name, agent=None):
         """Helper to call set_model_and_reload_agent with proper patches."""
-        from code_puppy.model_switching import set_model_and_reload_agent
+        from spruce_grove.model_switching import set_model_and_reload_agent
 
         warns = []
         infos = []
@@ -284,11 +284,11 @@ class TestModelSwitching:
         def fake_info(msg):
             infos.append(msg)
 
-        with patch("code_puppy.model_switching.set_model_name"):
-            with patch("code_puppy.messaging.emit_warning", fake_warn):
-                with patch("code_puppy.messaging.emit_info", fake_info):
+        with patch("spruce_grove.model_switching.set_model_name"):
+            with patch("spruce_grove.messaging.emit_warning", fake_warn):
+                with patch("spruce_grove.messaging.emit_info", fake_info):
                     with patch(
-                        "code_puppy.agents.get_current_agent", return_value=agent
+                        "spruce_grove.agents.get_current_agent", return_value=agent
                     ):
                         set_model_and_reload_agent(model_name)
 
@@ -308,7 +308,7 @@ class TestModelSwitching:
     def test_reload_refreshes_context_status(self):
         agent = MagicMock()
         agent.get_model_name.return_value = "model-x"
-        with patch("code_puppy.model_switching._refresh_context_status") as refresh:
+        with patch("spruce_grove.model_switching._refresh_context_status") as refresh:
             self._run("model-x", agent=agent)
         refresh.assert_called_once_with(agent)
 
@@ -346,7 +346,7 @@ class TestMarkdownPatches:
         from rich.console import Console
         from rich.text import Text
 
-        from code_puppy.messaging.markdown_patches import LeftJustifiedHeading
+        from spruce_grove.messaging.markdown_patches import LeftJustifiedHeading
 
         heading = LeftJustifiedHeading.__new__(LeftJustifiedHeading)
         heading.tag = "h1"
@@ -363,7 +363,7 @@ class TestMarkdownPatches:
         from rich.console import Console
         from rich.text import Text
 
-        from code_puppy.messaging.markdown_patches import LeftJustifiedHeading
+        from spruce_grove.messaging.markdown_patches import LeftJustifiedHeading
 
         heading = LeftJustifiedHeading.__new__(LeftJustifiedHeading)
         heading.tag = "h2"
@@ -375,7 +375,7 @@ class TestMarkdownPatches:
 
     def test_patch_idempotent(self):
         """Line 51: second call is no-op."""
-        from code_puppy.messaging import markdown_patches
+        from spruce_grove.messaging import markdown_patches
 
         markdown_patches._patched = False
         markdown_patches.patch_markdown()
@@ -391,7 +391,7 @@ class TestErrorLoggingRotation:
     """Cover lines 29-32."""
 
     def test_rotate_log_when_too_large(self):
-        from code_puppy.error_logging import MAX_LOG_SIZE, _rotate_log_if_needed
+        from spruce_grove.error_logging import MAX_LOG_SIZE, _rotate_log_if_needed
 
         with tempfile.TemporaryDirectory() as tmpdir:
             log_file = os.path.join(tmpdir, "errors.log")
@@ -401,18 +401,18 @@ class TestErrorLoggingRotation:
             with open(log_file, "w") as f:
                 f.write("x" * (MAX_LOG_SIZE + 1))
 
-            with patch("code_puppy.error_logging.ERROR_LOG_FILE", log_file):
+            with patch("spruce_grove.error_logging.ERROR_LOG_FILE", log_file):
                 _rotate_log_if_needed()
             assert os.path.exists(rotated_file)
             assert not os.path.exists(log_file)
 
     def test_rotate_log_oserror_caught(self):
         """Lines 31-32: OSError in rotation is silently caught."""
-        from code_puppy.error_logging import _rotate_log_if_needed
+        from spruce_grove.error_logging import _rotate_log_if_needed
 
-        with patch("code_puppy.error_logging.os.path.exists", return_value=True):
+        with patch("spruce_grove.error_logging.os.path.exists", return_value=True):
             with patch(
-                "code_puppy.error_logging.os.path.getsize",
+                "spruce_grove.error_logging.os.path.getsize",
                 side_effect=OSError("disk error"),
             ):
                 _rotate_log_if_needed()  # Should not raise

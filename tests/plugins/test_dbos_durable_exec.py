@@ -15,7 +15,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from code_puppy.callbacks import (
+from spruce_grove.callbacks import (
     clear_callbacks,
     count_callbacks,
     get_callbacks,
@@ -375,7 +375,7 @@ def clean_callbacks():
     for p, funcs in saved.items():
         clear_callbacks(p)
         for f in funcs:
-            from code_puppy.callbacks import register_callback as _reg
+            from spruce_grove.callbacks import register_callback as _reg
 
             _reg(p, f)
 

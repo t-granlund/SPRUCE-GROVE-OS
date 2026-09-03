@@ -7,8 +7,8 @@ import subprocess
 
 import pytest
 
-from code_puppy.hook_engine.executor import _substitute_variables
-from code_puppy.hook_engine.models import EventData
+from spruce_grove.hook_engine.executor import _substitute_variables
+from spruce_grove.hook_engine.models import EventData
 
 
 def _event(tool_args):

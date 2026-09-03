@@ -15,13 +15,13 @@ from pydantic_ai import PartStartEvent, RunContext
 from pydantic_ai.messages import TextPart
 from rich.console import Console
 
-from code_puppy.agents import _runtime
-from code_puppy.agents.event_stream_handler import (
+from spruce_grove.agents import _runtime
+from spruce_grove.agents.event_stream_handler import (
     event_stream_handler,
     set_streaming_console,
 )
-from code_puppy.callbacks import _callbacks, clear_callbacks
-from code_puppy.messaging.pause_controller import (
+from spruce_grove.callbacks import _callbacks, clear_callbacks
+from spruce_grove.messaging.pause_controller import (
     get_pause_controller,
     reset_pause_controller,
 )
@@ -97,7 +97,7 @@ async def test_event_stream_handler_pause_gates_rendering_and_resumes():
     with contextlib.nullcontext():
         with contextlib.nullcontext():
             with patch(
-                "code_puppy.agents.event_stream_handler.get_banner_color",
+                "spruce_grove.agents.event_stream_handler.get_banner_color",
                 return_value="blue",
             ):
                 with patch("termflow.Parser"):
@@ -129,10 +129,10 @@ async def test_pause_timeout_auto_resumes_and_warns(monkeypatch):
         warnings.append(msg)
 
     # Patch the lazily-imported emit_warning the handler resolves.
-    monkeypatch.setattr("code_puppy.messaging.emit_warning", _capture)
+    monkeypatch.setattr("spruce_grove.messaging.emit_warning", _capture)
     # Force a tiny max-pause via the config getter the handler uses.
     monkeypatch.setattr(
-        "code_puppy.config.get_value",
+        "spruce_grove.config.get_value",
         lambda key, default=None: "0.1" if key == "max_pause_seconds" else default,
     )
 
@@ -150,7 +150,7 @@ async def test_pause_timeout_auto_resumes_and_warns(monkeypatch):
     with contextlib.nullcontext():
         with contextlib.nullcontext():
             with patch(
-                "code_puppy.agents.event_stream_handler.get_banner_color",
+                "spruce_grove.agents.event_stream_handler.get_banner_color",
                 return_value="blue",
             ):
                 with patch("termflow.Parser"):
@@ -180,9 +180,9 @@ async def test_pause_timeout_rearms_while_slash_drain_active(monkeypatch):
     def _capture(msg: str, *_a, **_k) -> None:
         warnings.append(msg)
 
-    monkeypatch.setattr("code_puppy.messaging.emit_warning", _capture)
+    monkeypatch.setattr("spruce_grove.messaging.emit_warning", _capture)
     monkeypatch.setattr(
-        "code_puppy.config.get_value",
+        "spruce_grove.config.get_value",
         lambda key, default=None: "0.05" if key == "max_pause_seconds" else default,
     )
 
@@ -193,7 +193,7 @@ async def test_pause_timeout_rearms_while_slash_drain_active(monkeypatch):
         calls["n"] += 1
         return calls["n"] <= 2
 
-    monkeypatch.setattr("code_puppy.messaging.run_ui.is_draining", fake_is_draining)
+    monkeypatch.setattr("spruce_grove.messaging.run_ui.is_draining", fake_is_draining)
 
     console = Console(file=StringIO(), force_terminal=False, width=80)
     set_streaming_console(console)
@@ -206,7 +206,7 @@ async def test_pause_timeout_rearms_while_slash_drain_active(monkeypatch):
         yield ev
 
     with patch(
-        "code_puppy.agents.event_stream_handler.get_banner_color",
+        "spruce_grove.agents.event_stream_handler.get_banner_color",
         return_value="blue",
     ):
         with patch("termflow.Parser"):

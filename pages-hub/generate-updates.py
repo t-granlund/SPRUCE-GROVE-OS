@@ -12,7 +12,7 @@ Auto-managed regions:
   minor-list     - recent minor enhancements (feat/refactor/perf/docs buckets)
   fixes-list     - recent bug fixes (fix bucket)
 
-Run by ~/.code_puppy/scripts/update-code-puppy.sh after field-guide regen,
+Run by ~/.spruce_grove/scripts/update-code-grove.sh after field-guide regen,
 or manually: uv run python pages-hub/generate-updates.py
 """
 

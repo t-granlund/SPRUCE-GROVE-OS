@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Last Two Months — Code Puppy Release Observatory</title>
+<title>Last Two Months — Spruce Grove Release Observatory</title>
 <link rel="icon" type="image/png" href="../assets/favicon_white.png" />
-<meta name="description" content="Curated deep-dives on the notable Code Puppy updates of the last two months — what each is, what it does, and why it matters — plus a full index of every minor change and bug fix." />
+<meta name="description" content="Curated deep-dives on the notable Spruce Grove updates of the last two months — what each is, what it does, and why it matters — plus a full index of every minor change and bug fix." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -108,10 +108,10 @@
 <body>
 
 <main class="wrap">
-  <header class="hero"><img class="watermark" src="../assets/code_puppy_logo_white.png" alt="" aria-hidden="true" />
+  <header class="hero"><img class="watermark" src="../assets/spruce_grove_logo_white.png" alt="" aria-hidden="true" />
     <span class="kicker">Release Observatory</span>
     <h1>The last two months, <em>curated.</em></h1>
-    <p class="lede">Everything notable that shipped in code-puppy over the past 60 days, with plain-language breakdowns of what it is, what it does, and why it matters — plus a complete index of the smaller work.</p>
+    <p class="lede">Everything notable that shipped in spruce-grove over the past 60 days, with plain-language breakdowns of what it is, what it does, and why it matters — plus a complete index of the smaller work.</p>
     <div class="statline">
       <!-- AUTO-BEGIN:stats -->
       <div class="s"><div class="n">952</div><div class="t">commits</div></div>
@@ -147,16 +147,16 @@
     <article class="deep">
       <div class="head"><h3>Entry-point plugin discovery</h3><span class="meta"><span class="hash">7f5ba17</span> · 2026-08-14 · feat</span></div>
       <dl class="qa">
-        <dt class="q-what">What it is</dt><dd>Plugins can now register themselves through Python package entry points, not just by living in a directory. The loader discovers installed distributions advertising the <code>code_puppy.plugins</code> group at import time.</dd>
-        <dt class="q-do">What it does</dt><dd>Lets plugin authors ship their work as a normal <code>pip</code>-installable package; the moment the package lands in the environment, it appears in code-puppy alongside user-dir plugins without any config editing.</dd>
-        <dt class="q-why">Why it matters</dt><dd>It turns a fork-and-pray ecosystem into a real distribution model. Upstream used this to extract the built-in plugin suite into <code>code-puppy-core-plugins</code> on PyPI &mdash; and it means any team can ship an internal plugin bundle the same way.</dd>
+        <dt class="q-what">What it is</dt><dd>Plugins can now register themselves through Python package entry points, not just by living in a directory. The loader discovers installed distributions advertising the <code>spruce_grove.plugins</code> group at import time.</dd>
+        <dt class="q-do">What it does</dt><dd>Lets plugin authors ship their work as a normal <code>pip</code>-installable package; the moment the package lands in the environment, it appears in spruce-grove alongside user-dir plugins without any config editing.</dd>
+        <dt class="q-why">Why it matters</dt><dd>It turns a fork-and-pray ecosystem into a real distribution model. Upstream used this to extract the built-in plugin suite into <code>code-grove-core-plugins</code> on PyPI &mdash; and it means any team can ship an internal plugin bundle the same way.</dd>
       </dl>
     </article>
 
     <article class="deep">
       <div class="head"><h3>Installed core-plugin version surfaced at startup</h3><span class="meta"><span class="hash">0dd7f79</span> · 2026-08-15 · feat</span></div>
       <dl class="qa">
-        <dt class="q-what">What it is</dt><dd>The CLI now prints the version of the installed <code>code-puppy-core-plugins</code> package on startup, alongside the app version.</dd>
+        <dt class="q-what">What it is</dt><dd>The CLI now prints the version of the installed <code>code-grove-core-plugins</code> package on startup, alongside the app version.</dd>
         <dt class="q-do">What it does</dt><dd>Shows two independent numbers in the startup banner: the app version and the version of the companion plugins package, since they rev separately after the plugin-extraction refactor.</dd>
         <dt class="q-why">Why it matters</dt><dd>Eliminates the whole class of "why does that plugin behave differently for you" confusion. When the core repo and the plugin package drift, the drift is now visible in the first line of output instead of manifesting as a phantom bug.</dd>
       </dl>
@@ -165,9 +165,9 @@
     <article class="deep">
       <div class="head"><h3>Project-tier plugin trust gate hardened</h3><span class="meta"><span class="hash">beeab61</span> · 2026-08-10 · fix</span></div>
       <dl class="qa">
-        <dt class="q-what">What it is</dt><dd>When code-puppy is launched from a directory containing its own <code>.code_puppy/plugins</code>, those plugins now load only after explicit trust approval &mdash; and running from <code>~</code> no longer accidentally treats your personal plugins as untrusted project code.</dd>
+        <dt class="q-what">What it is</dt><dd>When spruce-grove is launched from a directory containing its own <code>.spruce_grove/plugins</code>, those plugins now load only after explicit trust approval &mdash; and running from <code>~</code> no longer accidentally treats your personal plugins as untrusted project code.</dd>
         <dt class="q-do">What it does</dt><dd>Adds a guard that returns <code>None</code> from <code>get_project_plugins_directory()</code> when the resolved path equals the user plugins dir, so the trust-gate applies only to actual repo-bundled code, never to your own home-profile plugins.</dd>
-        <dt class="q-why">Why it matters</dt><dd>Closes a security hole where checking out an arbitrary repo and running code-puppy in it would auto-load that repo's plugins without consent. Malicious repos can't inject behavior just by containing a plugins directory.</dd>
+        <dt class="q-why">Why it matters</dt><dd>Closes a security hole where checking out an arbitrary repo and running spruce-grove in it would auto-load that repo's plugins without consent. Malicious repos can't inject behavior just by containing a plugins directory.</dd>
       </dl>
     </article>
   </section>
@@ -182,7 +182,7 @@
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>Session and state persistence moved off <code>pickle</code> (Python-specific, version-fragile, unsafe to deserialize) and onto a versioned JSON envelope format with explicit schema migration.</dd>
         <dt class="q-do">What it does</dt><dd>Every persisted record now carries its own <code>format_version</code> and deserializes through a whole-tree migrator that validates on read and can roll forward old formats without breaking.</dd>
-        <dt class="q-why">Why it matters</dt><dd>Pickles from an old code-puppy version routinely crashed new versions in place. Versioned JSON survives upgrades, is human-inspectable, can be diffed, and removes an entire class of RCE risk from tampered state files.</dd>
+        <dt class="q-why">Why it matters</dt><dd>Pickles from an old spruce-grove version routinely crashed new versions in place. Versioned JSON survives upgrades, is human-inspectable, can be diffed, and removes an entire class of RCE risk from tampered state files.</dd>
       </dl>
     </article>
 
@@ -208,7 +208,7 @@
   <!-- ================= AGENTS ================= -->
   <section class="g" id="agents">
     <h2><svg class="si" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M12 8V4H8"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>Agents & Orchestration <span class="tag">3 headliners</span></h2>
-    <p class="secintro">The core promise of code-puppy is that delegation is cheap and safe. These changes made the recursion bounded, the failures recoverable, and the prompts identity-stable.</p>
+    <p class="secintro">The core promise of spruce-grove is that delegation is cheap and safe. These changes made the recursion bounded, the failures recoverable, and the prompts identity-stable.</p>
 
     <article class="deep">
       <div class="head"><h3>Bounded sub-agent recursion depth</h3><span class="meta"><span class="hash">350c5c66</span> · 2026-07-21 · feat</span></div>
@@ -426,7 +426,7 @@
           <li><span class="h">a12ed1f4</span><span class="d">· 08-27</span> · regenerate + post-update leftovers (2026-08-27 15:34)</li>
           <li><span class="h">4d567a57</span><span class="d">· 08-27</span> · regenerate + post-update leftovers (2026-08-27 14:13)</li>
           <li><span class="h">7f761e0c</span><span class="d">· 08-27</span> · format provider edit tools</li>
-          <li><span class="h">fbb2684f</span><span class="d">· 08-24</span> · use real Code Puppy logo across nav, favicon &amp; shell</li>
+          <li><span class="h">fbb2684f</span><span class="d">· 08-24</span> · use real Spruce Grove logo across nav, favicon &amp; shell</li>
           <li><span class="h">644a9782</span><span class="d">· 08-24</span> · regenerate + post-update leftovers (2026-08-24 10:56)</li>
           <li><span class="h">53520c15</span><span class="d">· 08-24</span> · document provider-specific edit tools</li>
           <li><span class="h">9a1a2399</span><span class="d">· 08-24</span> · format agent manager i18n changes</li>
@@ -477,7 +477,7 @@
 
 <footer>
   <div class="wrap inner">
-    <span> Release Observatory &mdash; rebuilt daily from the code_puppy changelog</span>
+    <span> Release Observatory &mdash; rebuilt daily from the spruce_grove changelog</span>
     <span><a href="../index.html">Back to hub</a> · <a href="../field-guide/">Field guide</a> · <a href="../flat/">Flat file</a></span>
   </div>
 </footer>

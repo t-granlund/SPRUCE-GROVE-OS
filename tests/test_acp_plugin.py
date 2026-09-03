@@ -110,7 +110,7 @@ class FakeAgent:
 
     async def run_with_mcp(self, prompt: str, **_: Any) -> Any:
         if self._stream:
-            from code_puppy import callbacks
+            from spruce_grove import callbacks
 
             delta = SimpleNamespace(content_delta="Hello ")
             await callbacks.on_stream_event(
@@ -118,7 +118,7 @@ class FakeAgent:
             )
         usage = SimpleNamespace(input_tokens=12, output_tokens=8, total_tokens=20)
         # pydantic-ai 1.107.5+/v2: ``result.usage`` is a property, not a method.
-        return SimpleNamespace(output="Hello puppy", usage=usage)
+        return SimpleNamespace(output="Hello grove", usage=usage)
 
 
 def _update_types(conn: FakeConnection) -> List[str]:
@@ -134,10 +134,10 @@ async def wired_agent(monkeypatch):
     ``asyncio.get_running_loop()`` succeeds.
     """
     monkeypatch.setattr(
-        "code_puppy.agents.agent_manager.get_current_agent_name", lambda: "code-puppy"
+        "spruce_grove.agents.agent_manager.get_current_agent_name", lambda: "spruce-grove"
     )
     monkeypatch.setattr(
-        "code_puppy.agents.agent_manager.load_agent",
+        "spruce_grove.agents.agent_manager.load_agent",
         lambda name: FakeAgent(stream=True),
     )
     conn = FakeConnection()
@@ -204,7 +204,7 @@ async def test_initialize_returns_versioned_capabilities(wired_agent):
     agent, _ = wired_agent
     resp = await agent.initialize(protocol_version=1, client_capabilities=None)
     assert resp.protocol_version == 1
-    assert resp.agent_info.name == "code-puppy"
+    assert resp.agent_info.name == "spruce-grove"
     assert resp.agent_capabilities.load_session is True
 
 
@@ -223,7 +223,7 @@ async def test_new_session_and_prompt_streams(wired_agent):
 
 @pytest.mark.asyncio
 async def test_new_session_resets_model_fallback_warnings(wired_agent, monkeypatch):
-    """``_warned_model_fallbacks``'s shared/unscoped bucket (code_puppy/
+    """``_warned_model_fallbacks``'s shared/unscoped bucket (spruce_grove/
     agents/_builder.py) backs the main-agent-build warning, which -- unlike
     sub-agent invocation's own per-session-scoped warnings -- has no
     per-session identity of its own. Every new/loaded/forked session must
@@ -234,7 +234,7 @@ async def test_new_session_resets_model_fallback_warnings(wired_agent, monkeypat
     agent, _ = wired_agent
     calls = []
     monkeypatch.setattr(
-        "code_puppy.agents._builder.reset_model_fallback_warnings",
+        "spruce_grove.agents._builder.reset_model_fallback_warnings",
         lambda **kwargs: calls.append(kwargs),
     )
 
@@ -258,7 +258,7 @@ async def test_close_session_purges_its_own_fallback_warning_bucket(
     agent, _ = wired_agent
     calls = []
     monkeypatch.setattr(
-        "code_puppy.agents._builder.reset_model_fallback_warnings",
+        "spruce_grove.agents._builder.reset_model_fallback_warnings",
         lambda **kwargs: calls.append(kwargs),
     )
 
@@ -287,7 +287,7 @@ async def test_prompt_absorbs_history_for_memory_and_persistence(monkeypatch):
     )
 
     monkeypatch.setattr(
-        "code_puppy.agents.agent_manager.get_current_agent_name", lambda: "code-puppy"
+        "spruce_grove.agents.agent_manager.get_current_agent_name", lambda: "spruce-grove"
     )
 
     class MemAgent:
@@ -311,7 +311,7 @@ async def test_prompt_absorbs_history_for_memory_and_persistence(monkeypatch):
             return SimpleNamespace(all_messages=lambda: new, usage=None, output="reply")
 
     monkeypatch.setattr(
-        "code_puppy.agents.agent_manager.load_agent", lambda name: MemAgent()
+        "spruce_grove.agents.agent_manager.load_agent", lambda name: MemAgent()
     )
     conn = FakeConnection()
     agent = CodePuppyAgent()
@@ -386,10 +386,10 @@ async def test_prompt_reports_token_usage(wired_agent):
 @pytest.mark.asyncio
 async def test_prompt_final_fallback_when_no_stream(monkeypatch):
     monkeypatch.setattr(
-        "code_puppy.agents.agent_manager.get_current_agent_name", lambda: "code-puppy"
+        "spruce_grove.agents.agent_manager.get_current_agent_name", lambda: "spruce-grove"
     )
     monkeypatch.setattr(
-        "code_puppy.agents.agent_manager.load_agent",
+        "spruce_grove.agents.agent_manager.load_agent",
         lambda name: FakeAgent(stream=False),
     )
     conn = FakeConnection()
@@ -404,7 +404,7 @@ async def test_prompt_final_fallback_when_no_stream(monkeypatch):
             if getattr(u, "session_update", None) == "agent_message_chunk"
         ]
         assert len(chunks) == 1
-        assert chunks[0].content.text == "Hello puppy"
+        assert chunks[0].content.text == "Hello grove"
     finally:
         permissions.uninstall()
         io_delegation.uninstall()
@@ -434,7 +434,7 @@ async def test_list_and_close_session(wired_agent):
 @pytest.mark.asyncio
 async def test_cancel_stops_run(monkeypatch):
     monkeypatch.setattr(
-        "code_puppy.agents.agent_manager.get_current_agent_name", lambda: "code-puppy"
+        "spruce_grove.agents.agent_manager.get_current_agent_name", lambda: "spruce-grove"
     )
 
     class SlowAgent:
@@ -445,7 +445,7 @@ async def test_cancel_stops_run(monkeypatch):
             return SimpleNamespace(output="never")
 
     monkeypatch.setattr(
-        "code_puppy.agents.agent_manager.load_agent", lambda name: SlowAgent()
+        "spruce_grove.agents.agent_manager.load_agent", lambda name: SlowAgent()
     )
     conn = FakeConnection()
     agent = CodePuppyAgent()
@@ -481,7 +481,7 @@ async def test_close_session_waits_for_in_flight_run_before_purging(monkeypatch)
     has actually finished, not merely been asked to stop.
     """
     monkeypatch.setattr(
-        "code_puppy.agents.agent_manager.get_current_agent_name", lambda: "code-puppy"
+        "spruce_grove.agents.agent_manager.get_current_agent_name", lambda: "spruce-grove"
     )
     run_finished = asyncio.Event()
 
@@ -498,7 +498,7 @@ async def test_close_session_waits_for_in_flight_run_before_purging(monkeypatch)
                 run_finished.set()
 
     monkeypatch.setattr(
-        "code_puppy.agents.agent_manager.load_agent", lambda name: SlowAgent()
+        "spruce_grove.agents.agent_manager.load_agent", lambda name: SlowAgent()
     )
     conn = FakeConnection()
     agent = CodePuppyAgent()
@@ -562,7 +562,7 @@ async def test_tool_call_kind_locations_and_correlation():
 # Approval-backend seam (core: tools.common)
 # --------------------------------------------------------------------------- #
 def test_approval_backend_sync_overrides_stdin():
-    from code_puppy.tools import common
+    from spruce_grove.tools import common
 
     seen = []
 
@@ -582,7 +582,7 @@ def test_approval_backend_sync_overrides_stdin():
 
 @pytest.mark.asyncio
 async def test_approval_backend_async_runs_in_executor():
-    from code_puppy.tools import common
+    from spruce_grove.tools import common
 
     def backend(title, message, preview):
         return False, None
@@ -598,7 +598,7 @@ async def test_approval_backend_async_runs_in_executor():
 @pytest.mark.asyncio
 async def test_approval_backend_async_preserves_acp_run_context():
     """Async approval dispatch must retain the ACP session for client routing."""
-    from code_puppy.tools import common
+    from spruce_grove.tools import common
 
     seen = []
 
@@ -646,7 +646,7 @@ async def test_ask_client_allow_and_deny():
 @pytest.mark.asyncio
 async def test_shell_hook_gates_through_client(monkeypatch):
     # The client-dialog edge only applies in non-yolo mode (yolo defaults ON).
-    monkeypatch.setattr("code_puppy.config.get_yolo_mode", lambda: False)
+    monkeypatch.setattr("spruce_grove.config.get_yolo_mode", lambda: False)
     loop = asyncio.get_event_loop()
 
     deny = FakeConnection(DeniedOutcome(outcome="cancelled"))
@@ -676,7 +676,7 @@ async def test_shell_hook_yolo_mode_does_not_prompt(monkeypatch):
     Matches the file-permission edge (which skips its prompt in yolo mode), so
     ACP + yolo doesn't silently auto-approve writes yet prompt for every shell.
     """
-    monkeypatch.setattr("code_puppy.config.get_yolo_mode", lambda: True)
+    monkeypatch.setattr("spruce_grove.config.get_yolo_mode", lambda: True)
     # A connection that would DENY if asked -- proves we never ask.
     deny = FakeConnection(DeniedOutcome(outcome="cancelled"))
     state.set_connection(deny, asyncio.get_event_loop())
@@ -719,7 +719,7 @@ async def test_file_approval_bridges_worker_thread_to_client():
 # I/O delegation — core seams
 # --------------------------------------------------------------------------- #
 def test_write_project_file_delegates_then_falls_back(tmp_path):
-    from code_puppy.tools import common, io_backends
+    from spruce_grove.tools import common, io_backends
 
     writes = []
 
@@ -743,8 +743,8 @@ def test_write_project_file_delegates_then_falls_back(tmp_path):
 
 
 def test_read_file_uses_backend_with_slicing():
-    from code_puppy.tools import io_backends
-    from code_puppy.tools.file_operations import _read_file
+    from spruce_grove.tools import io_backends
+    from spruce_grove.tools.file_operations import _read_file
 
     class _FS:
         def read_text_file(self, path, line=None, limit=None):
@@ -771,7 +771,7 @@ def test_read_file_uses_backend_with_slicing():
 # I/O delegation — client-delegated backends (capability-gated)
 # --------------------------------------------------------------------------- #
 def test_io_delegation_install_is_capability_gated():
-    from code_puppy.tools import io_backends
+    from spruce_grove.tools import io_backends
 
     io_delegation.install(ClientCapabilities())
     assert io_backends.get_filesystem_backend() is None
@@ -1246,7 +1246,7 @@ async def test_slash_command_handled_not_modelled(wired_agent, monkeypatch):
         return True  # handled; nothing to feed the model
 
     monkeypatch.setattr(
-        "code_puppy.command_line.command_handler.handle_command", fake_handle
+        "spruce_grove.command_line.command_handler.handle_command", fake_handle
     )
     resp = await agent.prompt(
         [SimpleNamespace(type="text", text="/help")], new.session_id
@@ -1282,7 +1282,7 @@ async def test_slash_command_string_result_runs_model(wired_agent, monkeypatch):
         return "expanded prompt for the model"
 
     monkeypatch.setattr(
-        "code_puppy.command_line.command_handler.handle_command", fake_handle
+        "spruce_grove.command_line.command_handler.handle_command", fake_handle
     )
 
     captured = {}
@@ -1310,7 +1310,7 @@ async def test_slash_command_sentinel_not_modelled(wired_agent, monkeypatch):
     new = await agent.new_session(cwd="/tmp")
 
     monkeypatch.setattr(
-        "code_puppy.command_line.command_handler.handle_command",
+        "spruce_grove.command_line.command_handler.handle_command",
         lambda cmd: "__AUTOSAVE_LOAD__",
     )
 
@@ -1362,10 +1362,10 @@ async def test_set_config_option_toggles_streaming(wired_agent, monkeypatch):
     agent, _ = wired_agent
     written = {}
     monkeypatch.setattr(
-        "code_puppy.config.set_config_value",
+        "spruce_grove.config.set_config_value",
         lambda k, v: written.__setitem__(k, v),
     )
-    monkeypatch.setattr("code_puppy.config.get_enable_streaming", lambda: False)
+    monkeypatch.setattr("spruce_grove.config.get_enable_streaming", lambda: False)
     new = await agent.new_session(cwd="/tmp")
     # Streaming is an On/Off select (Zed only renders selects), so the value is
     # the string "off", not a bool.
@@ -1383,11 +1383,11 @@ async def test_set_config_model_rebinds_model(wired_agent, monkeypatch):
     agent, _ = wired_agent
     picked = {}
     monkeypatch.setattr(
-        "code_puppy.command_line.model_picker_completion.load_model_names",
+        "spruce_grove.command_line.model_picker_completion.load_model_names",
         lambda: ["gpt-9"],
     )
     monkeypatch.setattr(
-        "code_puppy.config.set_model_name", lambda m: picked.__setitem__("m", m)
+        "spruce_grove.config.set_model_name", lambda m: picked.__setitem__("m", m)
     )
     new = await agent.new_session(cwd="/tmp")
     agent._sessions[new.session_id].agent.set_message_history(["keep-me"])
@@ -1399,11 +1399,11 @@ async def test_set_config_model_rebinds_model(wired_agent, monkeypatch):
 
 @pytest.mark.asyncio
 async def test_set_session_mode_is_noop(wired_agent, monkeypatch):
-    """session/set_mode never switches models (Code Puppy has no modes)."""
+    """session/set_mode never switches models (Spruce Grove has no modes)."""
     agent, _ = wired_agent
     called = {}
     monkeypatch.setattr(
-        "code_puppy.config.set_model_name", lambda m: called.__setitem__("m", m)
+        "spruce_grove.config.set_model_name", lambda m: called.__setitem__("m", m)
     )
     new = await agent.new_session(cwd="/tmp")
     await agent.set_session_mode("anything", new.session_id)
@@ -1415,10 +1415,10 @@ def test_config_options_expose_model_select(monkeypatch):
     from code_puppy_core_plugins.acp import session_config
 
     monkeypatch.setattr(
-        "code_puppy.command_line.model_picker_completion.load_model_names",
+        "spruce_grove.command_line.model_picker_completion.load_model_names",
         lambda: ["alpha", "beta"],
     )
-    monkeypatch.setattr("code_puppy.config.get_global_model_name", lambda: "beta")
+    monkeypatch.setattr("spruce_grove.config.get_global_model_name", lambda: "beta")
     opts = session_config.config_options()
     model_opt = next(o for o in opts if o.id == "model")
     assert model_opt.category == "model"
@@ -1426,7 +1426,7 @@ def test_config_options_expose_model_select(monkeypatch):
     assert [o.value for o in model_opt.options] == ["alpha", "beta"]
     assert model_opt.current_value == "beta"
     # A current model outside the list falls back to the first offered.
-    monkeypatch.setattr("code_puppy.config.get_global_model_name", lambda: "gone")
+    monkeypatch.setattr("spruce_grove.config.get_global_model_name", lambda: "gone")
     opts2 = session_config.config_options()
     assert next(o for o in opts2 if o.id == "model").current_value == "alpha"
 
@@ -1509,7 +1509,7 @@ async def test_run_context_shared_with_child_task():
 
 def test_bridge_unregister_removes_callbacks():
     """``EventBridge.unregister`` leaves the callback registry as it found it."""
-    from code_puppy import callbacks
+    from spruce_grove import callbacks
 
     phases = ("stream_event", "pre_tool_call", "post_tool_call")
     before = {p: callbacks.count_callbacks(p) for p in phases}
@@ -1524,7 +1524,7 @@ def test_bridge_unregister_removes_callbacks():
 # CR follow-ups: core seams + hardened behaviors
 # --------------------------------------------------------------------------- #
 def test_resolve_path_honors_working_directory_contextvar():
-    from code_puppy.tools import common
+    from spruce_grove.tools import common
 
     token = common.set_working_directory("/work/base")
     try:
@@ -1540,7 +1540,7 @@ def test_resolve_path_honors_working_directory_contextvar():
 
 
 def test_write_project_file_rejects_non_utf8_over_backend():
-    from code_puppy.tools import common, io_backends
+    from spruce_grove.tools import common, io_backends
 
     class _FS:
         def read_text_file(self, path, line=None, limit=None):
@@ -1558,7 +1558,7 @@ def test_write_project_file_rejects_non_utf8_over_backend():
 
 
 def test_approval_backend_precedence_sync():
-    from code_puppy.tools import common
+    from spruce_grove.tools import common
 
     calls = []
 
@@ -1577,7 +1577,7 @@ def test_approval_backend_precedence_sync():
 
 @pytest.mark.asyncio
 async def test_approval_backend_precedence_async():
-    from code_puppy.tools import common
+    from spruce_grove.tools import common
 
     def backend(title, message, preview):
         return False, None
@@ -1594,7 +1594,7 @@ async def test_approval_backend_precedence_async():
 
 @pytest.mark.asyncio
 async def test_execute_via_backend_maps_result():
-    from code_puppy.tools import command_runner, io_backends
+    from spruce_grove.tools import command_runner, io_backends
 
     class _Exec:
         async def run(self, command, cwd, timeout):
@@ -1616,10 +1616,10 @@ async def test_execute_via_backend_maps_result():
 async def test_set_config_model_reattaches_mcp(wired_agent, monkeypatch):
     agent, _ = wired_agent
     monkeypatch.setattr(
-        "code_puppy.command_line.model_picker_completion.load_model_names",
+        "spruce_grove.command_line.model_picker_completion.load_model_names",
         lambda: ["gpt-9"],
     )
-    monkeypatch.setattr("code_puppy.config.set_model_name", lambda m: None)
+    monkeypatch.setattr("spruce_grove.config.set_model_name", lambda m: None)
     reattached = {}
     monkeypatch.setattr(
         "code_puppy_core_plugins.acp.mcp_config.attach",

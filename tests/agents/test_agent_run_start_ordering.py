@@ -16,9 +16,9 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from code_puppy.agent_execution_context import get_executing_agent
-from code_puppy.agents.agent_code_puppy import CodePuppyAgent
-from code_puppy.callbacks import (
+from spruce_grove.agent_execution_context import get_executing_agent
+from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
+from spruce_grove.callbacks import (
     clear_callbacks,
     register_callback,
     unregister_callback,

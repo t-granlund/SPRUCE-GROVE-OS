@@ -7,9 +7,9 @@ autouse fixture here replaces all nine per-file copies.
 
 import pytest
 
-from code_puppy.i18n import catalog, translate
+from spruce_grove.i18n import catalog, translate
 
-_LOCALE_ENV_VARS = ("CODE_PUPPY_LOCALE", "LC_ALL", "LC_MESSAGES", "LANG", "LANGUAGE")
+_LOCALE_ENV_VARS = ("SPRUCE_GROVE_LOCALE", "LC_ALL", "LC_MESSAGES", "LANG", "LANGUAGE")
 
 
 @pytest.fixture(autouse=True)

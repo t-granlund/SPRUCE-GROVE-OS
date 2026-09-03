@@ -2,7 +2,7 @@
 
 import os
 
-from code_puppy import config as cp_config
+from spruce_grove import config as cp_config
 
 
 def _snapshot_env():
@@ -18,13 +18,13 @@ def test_dotenv_only_loads_known_api_keys(tmp_path, monkeypatch):
     """A .env in the working directory hydrates known API keys but nothing else.
 
     Only allowlisted API-key names are imported; unrelated names such as base
-    URLs or CODE_PUPPY_* toggles in the .env must not reach the environment.
+    URLs or SPRUCE_GROVE_* toggles in the .env must not reach the environment.
     """
     env_file = tmp_path / ".env"
     env_file.write_text(
         "ANTHROPIC_API_KEY=key-from-dotenv\n"
         "ANTHROPIC_BASE_URL=http://example.invalid\n"
-        "CODE_PUPPY_DISABLE_RETRY_TRANSPORT=1\n"
+        "SPRUCE_GROVE_DISABLE_RETRY_TRANSPORT=1\n"
     )
 
     monkeypatch.chdir(tmp_path)
@@ -33,7 +33,7 @@ def test_dotenv_only_loads_known_api_keys(tmp_path, monkeypatch):
     try:
         os.environ.pop("ANTHROPIC_API_KEY", None)
         os.environ.pop("ANTHROPIC_BASE_URL", None)
-        os.environ.pop("CODE_PUPPY_DISABLE_RETRY_TRANSPORT", None)
+        os.environ.pop("SPRUCE_GROVE_DISABLE_RETRY_TRANSPORT", None)
 
         cp_config.load_api_keys_to_environment()
 
@@ -42,7 +42,7 @@ def test_dotenv_only_loads_known_api_keys(tmp_path, monkeypatch):
 
         # Non-allowlisted names never enter the environment via the .env.
         assert os.environ.get("ANTHROPIC_BASE_URL") != "http://example.invalid"
-        assert "CODE_PUPPY_DISABLE_RETRY_TRANSPORT" not in os.environ
+        assert "SPRUCE_GROVE_DISABLE_RETRY_TRANSPORT" not in os.environ
     finally:
         _restore_env(snapshot)
 
@@ -50,7 +50,7 @@ def test_dotenv_only_loads_known_api_keys(tmp_path, monkeypatch):
 def test_dotenv_does_not_import_endpoints(tmp_path, monkeypatch):
     """An endpoint in the project .env must not import: it can redirect requests.
 
-    ``AZURE_OPENAI_ENDPOINT`` still hydrates from the user's own puppy.cfg
+    ``AZURE_OPENAI_ENDPOINT`` still hydrates from the user's own grove.cfg
     (see ``cfg_only_names``), but a repo-local .env supplying it would let the
     project point Azure traffic at an arbitrary host.
     """
@@ -79,7 +79,7 @@ def test_dotenv_does_not_import_custom_endpoint_headers(tmp_path, monkeypatch):
     api_key vars hydrate from a project .env, never header vars.
     """
     monkeypatch.setattr(
-        "code_puppy.provider_credentials._load_merged_model_config",
+        "spruce_grove.provider_credentials._load_merged_model_config",
         lambda: {
             "custom-model": {
                 "provider": "custom",

@@ -1,7 +1,7 @@
-"""Generate the Code Puppy Field Guide data file from the live repo.
+"""Generate the Spruce Grove Field Guide data file from the live repo.
 
 Usage:
-    cd /Users/tygranlund/code_puppy
+    cd /Users/tygranlund/spruce_grove
     python docs/generate-field-guide.py
 
 Outputs:
@@ -30,14 +30,14 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 DOCS_DIR = REPO_ROOT / "docs"
 OUTPUT_DIR = DOCS_DIR / "field-guide"
 OUTPUT_FILE = OUTPUT_DIR / "data.js"
-USER_PLUGINS_DIR = Path.home() / ".code_puppy" / "plugins"
+USER_PLUGINS_DIR = Path.home() / ".spruce_grove" / "plugins"
 
 
 def _find_installed_core_plugins_dir() -> Path | None:
     """Locate the installed code_puppy_core_plugins package.
 
     Upstream moved builtin plugins out of this repo into the
-    ``code-puppy-core-plugins`` companion package (visible in site-packages
+    ``code-grove-core-plugins`` companion package (visible in site-packages
     of the uv tool install). Guide completeness depends on scanning it.
     """
     try:
@@ -47,7 +47,7 @@ def _find_installed_core_plugins_dir() -> Path | None:
                 "tool",
                 "run",
                 "--from",
-                "code-puppy",
+                "spruce-grove",
                 "python",
                 "-c",
                 "import code_puppy_core_plugins, pathlib; "
@@ -66,7 +66,7 @@ def _find_installed_core_plugins_dir() -> Path | None:
         pass
     # Last-ditch: glob the known uv tools layout.
     uv_site = Path.home() / ".local" / "share" / "uv" / "tools"
-    for candidate in sorted(uv_site.glob("code-puppy/lib/*/site-packages/code_puppy_core_plugins")):
+    for candidate in sorted(uv_site.glob("spruce-grove/lib/*/site-packages/code_puppy_core_plugins")):
         if candidate.is_dir():
             return candidate
     return None
@@ -109,7 +109,7 @@ def _get_current_version() -> str:
             ["/opt/homebrew/bin/uv", "tool", "list"], check=False
         )
         for line in version.splitlines():
-            if line.startswith("code-puppy"):
+            if line.startswith("spruce-grove"):
                 return line.strip()
     except Exception:
         pass
@@ -154,7 +154,7 @@ def _get_tools() -> list[dict]:
     """Discover tools from the live TOOL_REGISTRY, with summaries."""
     sys.path.insert(0, str(REPO_ROOT))
     try:
-        from code_puppy.tools import get_available_tool_names
+        from spruce_grove.tools import get_available_tool_names
 
         names = sorted(get_available_tool_names())
     except Exception as exc:
@@ -199,11 +199,11 @@ def _get_agents() -> list[dict]:
     seen_names: set[str] = set()
 
     # Built-in Python agents
-    agents_dir = REPO_ROOT / "code_puppy" / "agents"
+    agents_dir = REPO_ROOT / "spruce_grove" / "agents"
     for file in sorted(agents_dir.glob("agent_*.py")):
         modname = file.stem
         try:
-            module = __import__(f"code_puppy.agents.{modname}", fromlist=["*"])
+            module = __import__(f"spruce_grove.agents.{modname}", fromlist=["*"])
             for attr_name in dir(module):
                 attr = getattr(module, attr_name)
                 if (
@@ -228,7 +228,7 @@ def _get_agents() -> list[dict]:
             print(f"Warning: could not load agent {modname}: {exc}")
 
     # JSON agents from user config
-    user_agents_dir = Path.home() / ".code_puppy" / "agents"
+    user_agents_dir = Path.home() / ".spruce_grove" / "agents"
     if user_agents_dir.exists():
         for json_file in sorted(user_agents_dir.glob("*.json")):
             try:
@@ -373,7 +373,7 @@ def _get_plugins() -> list[dict]:
         else:
             existing["tier"] = f"{existing['tier']} (also in {tier})"
 
-    repo_plugins = REPO_ROOT / "code_puppy" / "plugins"
+    repo_plugins = REPO_ROOT / "spruce_grove" / "plugins"
     if repo_plugins.is_dir():
         for item in sorted(repo_plugins.iterdir()):
             absorb(item, "builtin")
@@ -415,11 +415,11 @@ def _get_skills() -> list[dict]:
     skills: list[dict] = []
     seen: set[str] = set()
 
-    roots: list[Path] = [REPO_ROOT / "code_puppy" / "plugins"]
+    roots: list[Path] = [REPO_ROOT / "spruce_grove" / "plugins"]
     core_pkg = _find_installed_core_plugins_dir()
     if core_pkg is not None:
         roots.append(core_pkg)
-    roots.append(Path.home() / ".code_puppy" / "skills")
+    roots.append(Path.home() / ".spruce_grove" / "skills")
     roots.append(USER_PLUGINS_DIR)
 
     paths: list[Path] = []
@@ -471,14 +471,14 @@ def _get_skills() -> list[dict]:
     return sorted(skills, key=lambda s: s["name"])
 
 
-# The agentic SDLC lifecycle: which puppy power to reach for at each stage,
+# The agentic SDLC lifecycle: which grove power to reach for at each stage,
 # in plain language. Data-driven so the frontend just renders it.
 SDLC_STAGES: list[dict] = [
     {
         "stage": "1. Ideate & Spec",
         "goal": "Turn a fuzzy idea into a crisp, testable plan.",
         "use": [
-            "code-puppy to draft the design and spike options",
+            "spruce-grove to draft the design and spike options",
             "Agent Creator to spin up a domain-specialist sub-agent if the work repeats",
             "kennel memory to record decisions so the next session knows them",
         ],
@@ -488,7 +488,7 @@ SDLC_STAGES: list[dict] = [
         "stage": "2. Explore & Research",
         "goal": "Verify facts before writing code.",
         "use": [
-            "web-puppy for docs, version compatibility, and API research",
+            "web-grove for docs, version compatibility, and API research",
             "web-retriever (via invoke_agent) for scraping/automation flows",
             "grep/read_file to ground decisions in the existing codebase",
         ],
@@ -660,13 +660,13 @@ def main() -> None:
         "changelog": changelog_data,
         "excerpts": {
             "agentCreatorPrompt": _get_file_excerpt(
-                "code_puppy/agents/agent_creator_agent.py", 200
+                "spruce_grove/agents/agent_creator_agent.py", 200
             ),
             "heliosPrompt": _get_file_excerpt(
-                "code_puppy/agents/agent_helios.py", 180
+                "spruce_grove/agents/agent_helios.py", 180
             ),
             "baseAgent": _get_file_excerpt(
-                "code_puppy/agents/base_agent.py", 120
+                "spruce_grove/agents/base_agent.py", 120
             ),
         },
     }

@@ -39,7 +39,7 @@ def clean_state():
 @pytest.fixture
 def bar(monkeypatch):
     fake = FakeBar()
-    monkeypatch.setattr("code_puppy.messaging.bottom_bar.get_bottom_bar", lambda: fake)
+    monkeypatch.setattr("spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake)
     return fake
 
 
@@ -146,7 +146,7 @@ def test_push_panel_force_bypasses_throttle(bar):
 
 def test_push_panel_never_raises_without_bar(monkeypatch):
     monkeypatch.setattr(
-        "code_puppy.messaging.bottom_bar.get_bottom_bar",
+        "spruce_grove.messaging.bottom_bar.get_bottom_bar",
         lambda: (_ for _ in ()).throw(RuntimeError("no bar")),
     )
     state.register("sid-1", "worker", "gpt-5.4")
@@ -159,7 +159,7 @@ def test_push_panel_never_raises_without_bar(monkeypatch):
 
 
 def test_tear_down_live_panels_clears_panel(bar):
-    from code_puppy.tools.command_runner import _tear_down_live_panels
+    from spruce_grove.tools.command_runner import _tear_down_live_panels
 
     state.register("sid-1", "worker", "gpt-5.4")
     rc._push_panel(force=True)
@@ -168,10 +168,10 @@ def test_tear_down_live_panels_clears_panel(bar):
 
 
 def test_tear_down_live_panels_never_raises(monkeypatch):
-    from code_puppy.tools.command_runner import _tear_down_live_panels
+    from spruce_grove.tools.command_runner import _tear_down_live_panels
 
     monkeypatch.setattr(
-        "code_puppy.messaging.bottom_bar.get_bottom_bar",
+        "spruce_grove.messaging.bottom_bar.get_bottom_bar",
         lambda: (_ for _ in ()).throw(RuntimeError("boom")),
     )
     _tear_down_live_panels()  # must not raise

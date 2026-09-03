@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock, Mock, patch
 import httpx2
 import pytest
 
-from code_puppy.claude_cache_client import ClaudeCacheAsyncClient
+from spruce_grove.claude_cache_client import ClaudeCacheAsyncClient
 
 
 def _create_jwt(iat: float | None = None, exp: float | None = None) -> str:

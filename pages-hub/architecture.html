@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Architecture — Code Puppy Self-Healing Pipeline</title>
+<title>Architecture — Spruce Grove Self-Healing Pipeline</title>
 <meta name="description" content="Interactive system architecture: the update pipeline, Tyler's fork layer, update_schedule end to end, and the full plugin/agent/skill/tool inventory." />
 <link rel="icon" type="image/png" href="../assets/favicon_white.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -141,7 +141,7 @@
 </head>
 <body>
 
-<header class="hero"><img class="watermark" src="../assets/code_puppy_logo_white.png" alt="" aria-hidden="true" />
+<header class="hero"><img class="watermark" src="../assets/spruce_grove_logo_white.png" alt="" aria-hidden="true" />
   <span class="kicker">Internal Training · System Architecture</span>
   <h1>The machine, <span class="g">explained.</span></h1>
   <p>Left to right: how one Mac stays current, tested, published, and documented — and everything living inside it.</p>
@@ -157,7 +157,7 @@
     <div class="node" data-d="launchd" data-ic="clock:cyan"><span class="n-open">+</span><div class="n-k">Schedule</div><div class="n-t">launchd</div><div class="n-d">Ad-hoc via /update now (launchd plist paused).</div></div>
     <div class="arrow"></div>
     <div class="fanwrap" style="flex:0 0 auto">
-      <div class="n-k" style="font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--peri);margin-bottom:10px">update-code-puppy.sh — stage train</div>
+      <div class="n-k" style="font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--peri);margin-bottom:10px">update-code-grove.sh — stage train</div>
       <div class="stagetrain">
         <div class="node" data-d="s1" data-ic="archive:cyan" style="min-width:140px"><span class="n-open">+</span><div class="n-k" style="color:var(--peri)">01</div><div class="n-t">Snapshot</div></div>
         <div class="arrow" style="width:18px"></div>
@@ -174,17 +174,17 @@
     </div>
     <div class="arrow"></div>
     <div class="cluster">
-      <div class="node" data-d="fork" data-ic="fork:peri"><span class="n-open">+</span><div class="n-k">Publish · public</div><div class="n-t">t-granlund/code_puppy</div><div class="n-d">Fork + this site</div></div>
+      <div class="node" data-d="fork" data-ic="fork:peri"><span class="n-open">+</span><div class="n-k">Publish · public</div><div class="n-t">t-granlund/spruce_grove</div><div class="n-d">Fork + this site</div></div>
       <div class="node" data-d="mirror" data-ic="database:peri"><span class="n-open">+</span><div class="n-k">Publish · private</div><div class="n-t">Multi-Agent-Orch-CLI</div><div class="n-d">Insurance mirror</div></div>
-      <div class="node" data-d="profile" data-ic="archive:mint"><span class="n-open">+</span><div class="n-k">Backup · private</div><div class="n-t">profile-backup</div><div class="n-d">~/.code_puppy whitelist</div></div>
+      <div class="node" data-d="profile" data-ic="archive:mint"><span class="n-open">+</span><div class="n-k">Backup · private</div><div class="n-t">profile-backup</div><div class="n-d">~/.spruce_grove whitelist</div></div>
     </div>
   </div>
 
   <div class="lbl"><span class="dotc" style="background:var(--mint)"></span>update_schedule, end to end</div>
   <div class="lane">
-    <div class="node" data-d="e2e-plist" data-ic="calendar:peri"><span class="n-open">+</span><div class="n-k">Trigger</div><div class="n-t">com.code-puppy.daily-update.plist</div><div class="n-d">StartCalendarInterval ×3</div></div>
+    <div class="node" data-d="e2e-plist" data-ic="calendar:peri"><span class="n-open">+</span><div class="n-k">Trigger</div><div class="n-t">com.spruce-grove.daily-update.plist</div><div class="n-d">StartCalendarInterval ×3</div></div>
     <div class="arrow"></div>
-    <div class="node" data-d="e2e-script" data-ic="terminal:peri"><span class="n-open">+</span><div class="n-k">Work</div><div class="n-t">update-code-puppy.sh</div><div class="n-d">The six-stage train above</div></div>
+    <div class="node" data-d="e2e-script" data-ic="terminal:peri"><span class="n-open">+</span><div class="n-k">Work</div><div class="n-t">update-code-grove.sh</div><div class="n-d">The six-stage train above</div></div>
     <div class="arrow"></div>
     <div class="node" data-d="e2e-plugin" data-ic="layers:peri"><span class="n-open">+</span><div class="n-k">Watchdog</div><div class="n-t">register_callbacks.py</div><div class="n-d">User plugin, loaded every session</div></div>
     <div class="arrow"></div>
@@ -224,7 +224,7 @@
 
 <footer>
   <p>Interactive architecture of a live system. Structural nodes are hand-curated; the inventory streams from the field-guide data regenerated on every update run — it cannot go stale.</p>
-  <p style="text-align:right">code_puppy · internal reference</p>
+  <p style="text-align:right">spruce_grove · internal reference</p>
 </footer>
 
 <script>
@@ -233,44 +233,44 @@ const D = {
   machine: {k:'Host', t:"Tyler's Mac", b:`
     <p>The entire lifecycle executes locally in the user GUI session — no servers, no daemons outside launchd.</p>
     <div class="mini-h">Layout</div>
-    <div class="kv"><b>~/code_puppy</b><span>working clone · 4 remotes (origin upstream, myfork, private, +profile git inside ~/.code_puppy)</span></div>
-    <div class="kv"><b>~/.code_puppy</b><span>profile: agents, plugins, kennel memory, config (whitelisted backup)</span></div>
-    <div class="kv"><b>uv tool install</b><span>code-puppy v0.0.768 at ~/.local/share/uv/tools/code-puppy</span></div>
-    <div class="kv"><b>launchd gui domain</b><span>~/Library/LaunchAgents/com.code-puppy.daily-update.plist</span></div>`},
+    <div class="kv"><b>~/spruce_grove</b><span>working clone · 4 remotes (origin upstream, myfork, private, +profile git inside ~/.spruce_grove)</span></div>
+    <div class="kv"><b>~/.spruce_grove</b><span>profile: agents, plugins, kennel memory, config (whitelisted backup)</span></div>
+    <div class="kv"><b>uv tool install</b><span>spruce-grove v0.0.768 at ~/.local/share/uv/tools/spruce-grove</span></div>
+    <div class="kv"><b>launchd gui domain</b><span>~/Library/LaunchAgents/com.spruce-grove.daily-update.plist</span></div>`},
   launchd: {k:'Schedule', t:'launchd — paused (ad-hoc)', b:`
     <p>Calendar-interval agent in the per-user GUI domain. Currently paused (plist renamed .paused). Updates run ad-hoc via /update now, which fires the pipeline script directly.</p>
     <div class="kv"><b>intervals</b><span>Ad-hoc (launchd paused)</span></div>
     <div class="kv"><b>last state</b><span>plist paused, not loaded</span></div>
-    <div class="kv"><b>logs</b><span>~/.code_puppy/logs/update-code-puppy.log</span></div>`},
+    <div class="kv"><b>logs</b><span>~/.spruce_grove/logs/update-code-grove.log</span></div>`},
   s1: {k:'Stage 01', t:'Snapshot', b:`<p>Creates a <code>backup/pre-update-*</code> branch, then auto-commits any dirty-tree leftovers. A pull can never be blocked and work can never be lost — the guard that used to deadlock the whole updater.</p>`},
-  s2: {k:'Stage 02', t:'Sync', b:`<p>Fetches upstream <code>mpfaffenberger/code_puppy</code> and rebases local main on top. Fork-only commits ride cleanly over every upstream drop.</p>`},
+  s2: {k:'Stage 02', t:'Sync', b:`<p>Fetches upstream <code>mpfaffenberger/spruce_grove</code> and rebases local main on top. Fork-only commits ride cleanly over every upstream drop.</p>`},
   s3: {k:'Stage 03 · the gate', t:'Cross-Check', b:`<p>Runs the full <b>7,311-test</b> suite against the merged tree <em>before anything is installed</em>. Any failure triggers a hard reset to the pre-sync SHA.</p><p>Broken upstream code never reaches the tool install. This stage is the entire reason the machine can be trusted to run unattended.</p>`},
   s4: {k:'Stage 04', t:'Install + Regenerate', b:`<p><code>uv tool install --reinstall .</code> from local source, then regenerates the field guide and the release observatory's auto regions, consuming artifacts into a commit so the next run starts clean.</p>`},
   s5: {k:'Stage 05', t:'Publish via GitHub CLI', b:`<p>Pushes to the public fork and private mirror. Diverged remotes are reconciled automatically (rebase onto remote, falling back to --force-with-lease, which refuses if anyone else pushed). A failed publish drops a <code>.pending-publish</code> marker that the next run retries.</p>`},
   s6: {k:'Stage 06', t:'Maintain', b:`<p>Snapshots the whitelisted profile to the private backup repo, prunes old safety branches to the newest two, posts an osascript desktop notification, exits clean.</p>`},
-  fork: {k:'Publish · public', t:'t-granlund/code_puppy', b:`
+  fork: {k:'Publish · public', t:'t-granlund/spruce_grove', b:`
     <p>The public mirror and the origin of this site. Public visibility is what unlocks free GitHub Pages.</p>
-    <div class="kv"><b>Pages</b><span>t-granlund.github.io/code_puppy</span></div>
+    <div class="kv"><b>Pages</b><span>t-granlund.github.io/spruce_grove</span></div>
     <div class="kv"><b>build_type</b><span>workflow (upload + deploy actions)</span></div>`},
   mirror: {k:'Publish · private', t:'Multi-Agent-Orch-CLI', b:`<p>The insurance mirror — untouchable fallback if the public upstream ever disappears. Exact replica of local main, reconciled by force-with-lease.</p>`},
-  profile: {k:'Backup · private', t:'code-puppy-profile-backup', b:`<p>Whitelisted snapshot of <code>~/.code_puppy</code> on every run — agents, plugins, kennel memory, config, OAuth material. ~72 files, ~8MB of a 26GB profile. The part no upstream can rebuild.</p>`},
+  profile: {k:'Backup · private', t:'spruce-grove-profile-backup', b:`<p>Whitelisted snapshot of <code>~/.spruce_grove</code> on every run — agents, plugins, kennel memory, config, OAuth material. ~72 files, ~8MB of a 26GB profile. The part no upstream can rebuild.</p>`},
   'e2e-plist': {k:'Trigger', t:'The plist (paused)', b:`
-    <div class="kv"><b>Label</b><span>com.code-puppy.daily-update</span></div>
-    <div class="kv"><b>Program</b><span>/bin/bash update-code-puppy.sh</span></div>
+    <div class="kv"><b>Label</b><span>com.spruce-grove.daily-update</span></div>
+    <div class="kv"><b>Program</b><span>/bin/bash update-code-grove.sh</span></div>
     <div class="kv"><b>PATH</b><span>pinned: uv, gh, git all absolute</span></div>
     <div class="kv"><b>RunAtLoad</b><span>false — pure calendar cadence</span></div>
     <p>Currently paused (plist renamed .paused). The update_schedule plugin runs the pipeline script directly via /update now instead of launchd.</p>`},
-  'e2e-script': {k:'Work', t:'The script', b:`<p>~/.code_puppy/scripts/update-code-puppy.sh — every stage aborts safely: rebase conflicts abort with nothing installed, test failures roll back, publish failures mark-and-retry. /update now fires this script directly (no launchd needed).</p>`},
+  'e2e-script': {k:'Work', t:'The script', b:`<p>~/.spruce_grove/scripts/update-code-grove.sh — every stage aborts safely: rebase conflicts abort with nothing installed, test failures roll back, publish failures mark-and-retry. /update now fires this script directly (no launchd needed).</p>`},
   'e2e-plugin': {k:'Watchdog', t:'The plugin inside every session', b:`
-    <p>Lives at ~/.code_puppy/plugins/update_schedule and registers two callbacks:</p>
+    <p>Lives at ~/.spruce_grove/plugins/update_schedule and registers two callbacks:</p>
     <div class="kv"><b>custom_command</b><span>/update now · status · log · enable · disable</span></div>
     <div class="kv"><b>custom_command_help</b><span>registers the /update slash command in help</span></div>`},
-  'e2e-trust': {k:'Gate', t:'Trust store', b:`<p>Every edit to the plugin changes its content hash; code-puppy refuses to load it until re-trusted. The gate stores SHA-256 over every plugin file in <code>trusted_plugins.json</code>. (Last refresh: after the schedule/status upgrades.)</p>`},
-  'e2e-notify': {k:'Surface', t:'Where you see it', b:`<p>Desktop notifications on success/failure, <code>/update status</code> inside code-puppy (schedule, publish state, tree cleanliness), and the raw log tail. Silence means it ran, passed tests, published, and backed up.</p>`},
+  'e2e-trust': {k:'Gate', t:'Trust store', b:`<p>Every edit to the plugin changes its content hash; spruce-grove refuses to load it until re-trusted. The gate stores SHA-256 over every plugin file in <code>trusted_plugins.json</code>. (Last refresh: after the schedule/status upgrades.)</p>`},
+  'e2e-notify': {k:'Surface', t:'Where you see it', b:`<p>Desktop notifications on success/failure, <code>/update status</code> inside spruce-grove (schedule, publish state, tree cleanliness), and the raw log tail. Silence means it ran, passed tests, published, and backed up.</p>`},
   'f-site': {k:'Feature · fork-only', t:'This public site', b:`<p>Hub + interactive field guide + evergreen observatory + this page + offline flat file, deployed by .github/workflows/pages.yml on every docs-touching push. Upload/deploy actions only — configure-pages dropped after a week of codeload 429s.</p>`},
   'f-observatory': {k:'Feature · fork-only', t:'Evergreen observatory', b:`<p>pages-hub/generate-updates.py rewrites AUTO-marked regions of the observatory from fresh changelog data on every run — stats, auto-detected new-feature cards, minor/fix lists. Idempotent by construction; curated deep-dives stay hand-authored.</p>`},
   'f-pipeline': {k:'Feature · fork-only', t:'Self-healing updater v2', b:`<p>The six-stage train itself — snapshot → sync → test gate → install/regen → publish → maintain — plus publish-backlog markers, fork-divergence recovery, profile backup, and branch pruning. None of this exists upstream.</p>`},
-  'f-guide': {k:'Feature · fork-only', t:'Deep field-guide introspection', b:`<p>The guide scans the installed code-puppy-core-plugins package and the user plugin tier — not just the repo — with tier badges, hook extraction, and an SDLC lifecycle map (commits e45d7700, 9ac17179 and friends).</p>`},
+  'f-guide': {k:'Feature · fork-only', t:'Deep field-guide introspection', b:`<p>The guide scans the installed code-grove-core-plugins package and the user plugin tier — not just the repo — with tier badges, hook extraction, and an SDLC lifecycle map (commits e45d7700, 9ac17179 and friends).</p>`},
   'f-commits': {k:'Ledger · origin/main..main', t:'Fork-only commits (top of 29)', b:`
     <span class="commit"><b>db7c3770</b>feat(brand): site-wide periwinkle/cyan/mint system</span>
     <span class="commit"><b>41a7d07f</b>feat(pages): architecture diagram page</span>
@@ -279,7 +279,7 @@ const D = {
     <span class="commit"><b>a58d48ab</b>ci(pages): Pages workflow v1</span>
     <span class="commit"><b>b4e2519e</b>ci(pages): drop configure-pages flake</span>
     <span class="commit"><b>e45d7700</b>feat(field-guide): core-plugins + user scan</span>
-    <span class="commit"><b>4f892564</b>docs: CPU curriculum web app + puppy mark</span>
+    <span class="commit"><b>4f892564</b>docs: CPU curriculum web app + grove mark</span>
     <span class="commit"><b>0307f32a</b>docs: sovereignty playbook</span>
     <span class="commit"><b>7252ee53</b>docs: profile backup automation</span>
     <p style="margin-top:10px">…plus recurring <code>docs(field-guide+observatory): regenerate</code> commits the pipeline writes itself.</p>`},

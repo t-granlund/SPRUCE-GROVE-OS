@@ -296,7 +296,7 @@ class TestInstallPromptPatch:
     def test_idempotent(self):
         """Calling install_prompt_patch() twice must not double-wrap."""
         from code_puppy_core_plugins.statusline import prompt_patch
-        import code_puppy.command_line.completers as ptc
+        import spruce_grove.command_line.completers as ptc
 
         # Clean slate
         if hasattr(ptc, prompt_patch._PATCH_ATTR):
@@ -320,7 +320,7 @@ class TestInstallPromptPatch:
     def test_patch_replaces_function(self):
         """After install, get_prompt_with_active_model should be a new callable."""
         from code_puppy_core_plugins.statusline import prompt_patch
-        import code_puppy.command_line.completers as ptc
+        import spruce_grove.command_line.completers as ptc
 
         if hasattr(ptc, prompt_patch._PATCH_ATTR):
             delattr(ptc, prompt_patch._PATCH_ATTR)
@@ -785,7 +785,7 @@ class TestCrossPlatform:
         """Output containing umlauts must be returned without raising."""
         from code_puppy_core_plugins.statusline.runner import _run_command_blocking
 
-        umlaut_output = "🐶 code-puppy [model] erklärenstraße 0%ctx"
+        umlaut_output = "🐶 spruce-grove [model] erklärenstraße 0%ctx"
 
         mock_proc = MagicMock()
         mock_proc.stdout = umlaut_output

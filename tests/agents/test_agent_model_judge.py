@@ -1,6 +1,6 @@
-from code_puppy.agents.agent_model_judge import ModelJudgeAgent
-from code_puppy.agents.base_agent import BaseAgent
-from code_puppy.tools import TOOL_REGISTRY
+from spruce_grove.agents.agent_model_judge import ModelJudgeAgent
+from spruce_grove.agents.base_agent import BaseAgent
+from spruce_grove.tools import TOOL_REGISTRY
 
 
 class TestAgentContract:

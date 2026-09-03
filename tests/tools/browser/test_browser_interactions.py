@@ -11,7 +11,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from code_puppy.tools.browser import browser_interactions as interactions
+from spruce_grove.tools.browser import browser_interactions as interactions
 
 MOD = interactions.__name__
 

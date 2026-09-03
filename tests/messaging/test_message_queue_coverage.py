@@ -12,7 +12,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy.messaging.message_queue import (
+from spruce_grove.messaging.message_queue import (
     MessageQueue,
     MessageType,
     UIMessage,
@@ -287,7 +287,7 @@ class TestPromptRequestResponse:
 class TestGlobalQueueFunctions:
     def test_get_global_queue_creates_queue(self):
         # Reset global state for test
-        import code_puppy.messaging.message_queue as mq_module
+        import spruce_grove.messaging.message_queue as mq_module
 
         original_queue = mq_module._global_queue
         mq_module._global_queue = None
@@ -309,7 +309,7 @@ class TestGlobalQueueFunctions:
         assert queue1 is queue2
 
     def test_get_buffered_startup_messages(self):
-        import code_puppy.messaging.message_queue as mq_module
+        import spruce_grove.messaging.message_queue as mq_module
 
         original_queue = mq_module._global_queue
 
@@ -456,9 +456,9 @@ class TestEmitHelperFunctions:
 class TestEmitPrompt:
     def test_emit_prompt(self):
         with patch(
-            "code_puppy.command_line.utils.safe_input", return_value="user input"
+            "spruce_grove.command_line.utils.safe_input", return_value="user input"
         ) as mock_input:
-            from code_puppy.messaging.message_queue import emit_prompt
+            from spruce_grove.messaging.message_queue import emit_prompt
 
             result = emit_prompt("Enter something:")
 

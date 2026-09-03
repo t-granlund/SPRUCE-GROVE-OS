@@ -8,8 +8,8 @@ Claude models stays inside the model's training distribution.
 
 import inspect
 
-from code_puppy.tools import file_modifications
-from code_puppy.tools.file_modifications import (
+from spruce_grove.tools import file_modifications
+from spruce_grove.tools.file_modifications import (
     _find_actual_string,
     _normalize_quotes,
     _preserve_quote_style,

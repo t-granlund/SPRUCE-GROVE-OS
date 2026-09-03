@@ -131,7 +131,7 @@ class TestWiggumCommand:
 
     def test_wiggum_command_registered(self):
         """The /wiggum command should be registered."""
-        from code_puppy.command_line.command_registry import get_command
+        from spruce_grove.command_line.command_registry import get_command
 
         cmd = get_command("wiggum")
 
@@ -141,7 +141,7 @@ class TestWiggumCommand:
 
     def test_wiggum_stop_command_registered(self):
         """The /wiggum_stop command should be registered with aliases."""
-        from code_puppy.command_line.command_registry import get_command
+        from spruce_grove.command_line.command_registry import get_command
 
         cmd = get_command("wiggum_stop")
 
@@ -152,7 +152,7 @@ class TestWiggumCommand:
 
     def test_wiggum_command_without_prompt_returns_true(self):
         """Calling /wiggum without a prompt should show help and return True."""
-        from code_puppy.command_line.command_registry import get_command
+        from spruce_grove.command_line.command_registry import get_command
         from code_puppy_core_plugins.wiggum.state import is_active
 
         cmd = get_command("wiggum")
@@ -163,7 +163,7 @@ class TestWiggumCommand:
 
     def test_wiggum_command_with_prompt_returns_prompt(self):
         """Calling /wiggum with a prompt should return the prompt for execution."""
-        from code_puppy.command_line.command_registry import get_command
+        from spruce_grove.command_line.command_registry import get_command
         from code_puppy_core_plugins.wiggum.state import (
             get_prompt,
             is_active,
@@ -178,7 +178,7 @@ class TestWiggumCommand:
 
     def test_wiggum_stop_command_when_active(self):
         """Calling /wiggum_stop when active should stop wiggum mode."""
-        from code_puppy.command_line.command_registry import get_command
+        from spruce_grove.command_line.command_registry import get_command
         from code_puppy_core_plugins.wiggum.state import is_active, start
 
         start("test prompt")
@@ -192,7 +192,7 @@ class TestWiggumCommand:
 
     def test_wiggum_stop_command_when_inactive(self):
         """Calling /wiggum_stop when inactive should just return True."""
-        from code_puppy.command_line.command_registry import get_command
+        from spruce_grove.command_line.command_registry import get_command
         from code_puppy_core_plugins.wiggum.state import is_active
 
         assert not is_active()
@@ -205,7 +205,7 @@ class TestWiggumCommand:
 
     def test_wiggum_stop_alias_ws(self):
         """The /ws alias should work for wiggum_stop."""
-        from code_puppy.command_line.command_registry import get_command
+        from spruce_grove.command_line.command_registry import get_command
 
         cmd = get_command("ws")
 

@@ -1,4 +1,4 @@
-/* Code Puppy — app-shell injector (shared).
+/* Spruce Grove — app-shell injector (shared).
    Renders the collapsible sidebar + mobile topbar around existing content
    WITHOUT requiring each page to hand-maintain nav markup.
    Requires: assets/tokens.css, assets/sidebar.css, assets/sidebar.js loaded;
@@ -33,12 +33,12 @@
       '<span class="lbl">' + item.label + "</span></a></li>";
   }
 
-  var logo = '<img src="' + assets + 'code_puppy_logo_white.png" alt="Code Puppy logo" width="30" height="30" />';
+  var logo = '<img src="' + assets + 'spruce_grove_logo_white.png" alt="Spruce Grove logo" width="30" height="30" />';
 
   var sidebar =
     '<aside class="sb" aria-label="Primary navigation">' +
     '  <div class="sb-head">' +
-    '    <a class="brand" href="' + base + 'index.html">' + logo + '<span class="t">Code Puppy</span></a>' +
+    '    <a class="brand" href="' + base + 'index.html">' + logo + '<span class="t">Spruce Grove</span></a>' +
     '    <button class="sb-toggle" type="button" data-sb-collapse aria-label="Collapse sidebar" aria-expanded="true" title="Collapse sidebar">' + I("menu", 16) + "</button>" +
     '    <button class="sb-toggle sb-close" type="button" data-sb-close aria-label="Close navigation">' + I("x", 16) + "</button>" +
     "  </div>" +
@@ -57,7 +57,7 @@
   var topbar =
     '<header class="sb-topbar">' +
     '  <button class="sb-burger" type="button" aria-label="Open navigation" aria-expanded="false">' + I("menu", 20) + "</button>" +
-    '  <a class="brand" href="' + base + 'index.html"><img src="' + assets + 'code_puppy_logo_white.png" alt="Code Puppy logo" width="26" height="26" /><span>Code Puppy</span></a>' +
+    '  <a class="brand" href="' + base + 'index.html"><img src="' + assets + 'spruce_grove_logo_white.png" alt="Spruce Grove logo" width="26" height="26" /><span>Spruce Grove</span></a>' +
     '  <span class="spacer"></span>' +
     '  <a class="sb-link" style="padding:8px 11px" href="' + account.href + '" target="_blank" rel="noopener" aria-label="GitHub repository">' + I("github", 16) + '<span class="lbl">GitHub</span></a>' +
     "</header>";

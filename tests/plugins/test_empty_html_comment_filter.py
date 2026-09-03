@@ -97,7 +97,7 @@ def test_part_indexes_keep_independent_state() -> None:
 
 
 def test_callback_runner_chains_filters_and_ignores_failures() -> None:
-    from code_puppy import callbacks
+    from spruce_grove import callbacks
 
     def uppercase(text: str, **_kwargs) -> str:
         return text.upper()
@@ -126,12 +126,12 @@ async def test_event_stream_filters_split_comment_in_both_render_paths(
     from pydantic_ai import PartDeltaEvent, PartEndEvent, PartStartEvent
     from pydantic_ai.messages import ThinkingPart, ThinkingPartDelta
 
-    from code_puppy.agents.smooth_stream import ThinkingStreamSmoother
+    from spruce_grove.agents.smooth_stream import ThinkingStreamSmoother
 
-    handler = importlib.import_module("code_puppy.agents.event_stream_handler")
+    handler = importlib.import_module("spruce_grove.agents.event_stream_handler")
 
     plugin = _plugin_module()
-    from code_puppy import callbacks
+    from spruce_grove import callbacks
 
     # Test isolation clears global callbacks between tests, so mirror plugin load.
     callbacks.register_callback(

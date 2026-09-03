@@ -10,11 +10,11 @@ class TestGetLinuxClipboardImage:
     """Tests for _get_linux_clipboard_image."""
 
     def test_generic_exception(self):
-        from code_puppy.command_line.clipboard import _get_linux_clipboard_image
+        from spruce_grove.command_line.clipboard import _get_linux_clipboard_image
 
         with (
             patch(
-                "code_puppy.command_line.clipboard._check_linux_clipboard_tool",
+                "spruce_grove.command_line.clipboard._check_linux_clipboard_tool",
                 return_value="xclip",
             ),
             patch("subprocess.run", side_effect=RuntimeError("oops")),
@@ -22,20 +22,20 @@ class TestGetLinuxClipboardImage:
             assert _get_linux_clipboard_image() is None
 
     def test_returns_none_when_no_tool(self):
-        from code_puppy.command_line.clipboard import _get_linux_clipboard_image
+        from spruce_grove.command_line.clipboard import _get_linux_clipboard_image
 
         with patch(
-            "code_puppy.command_line.clipboard._check_linux_clipboard_tool",
+            "spruce_grove.command_line.clipboard._check_linux_clipboard_tool",
             return_value=None,
         ):
             assert _get_linux_clipboard_image() is None
 
     def test_timeout_expired(self):
-        from code_puppy.command_line.clipboard import _get_linux_clipboard_image
+        from spruce_grove.command_line.clipboard import _get_linux_clipboard_image
 
         with (
             patch(
-                "code_puppy.command_line.clipboard._check_linux_clipboard_tool",
+                "spruce_grove.command_line.clipboard._check_linux_clipboard_tool",
                 return_value="wl-paste",
             ),
             patch("subprocess.run", side_effect=subprocess.TimeoutExpired("cmd", 10)),
@@ -44,12 +44,12 @@ class TestGetLinuxClipboardImage:
 
     @pytest.mark.parametrize("tool", ["wl-paste", "xclip"])
     def test_linux_tool_success(self, tool):
-        from code_puppy.command_line.clipboard import _get_linux_clipboard_image
+        from spruce_grove.command_line.clipboard import _get_linux_clipboard_image
 
         mock_result = MagicMock(returncode=0, stdout=b"pngdata")
         with (
             patch(
-                "code_puppy.command_line.clipboard._check_linux_clipboard_tool",
+                "spruce_grove.command_line.clipboard._check_linux_clipboard_tool",
                 return_value=tool,
             ),
             patch("subprocess.run", return_value=mock_result),
@@ -61,12 +61,12 @@ class TestGetPendingImagesNoBinaryContent:
     """Test get_pending_images when BinaryContent unavailable."""
 
     def test_returns_empty_list(self):
-        from code_puppy.command_line.clipboard import ClipboardAttachmentManager
+        from spruce_grove.command_line.clipboard import ClipboardAttachmentManager
 
         manager = ClipboardAttachmentManager()
         manager.add_image(b"data")
 
-        with patch("code_puppy.command_line.clipboard.BINARY_CONTENT_AVAILABLE", False):
+        with patch("spruce_grove.command_line.clipboard.BINARY_CONTENT_AVAILABLE", False):
             assert manager.get_pending_images() == []
 
 
@@ -75,12 +75,12 @@ class TestHasImageInClipboard:
 
     def test_returns_bool(self):
         """Test that function always returns a boolean."""
-        from code_puppy.command_line.clipboard import has_image_in_clipboard
+        from spruce_grove.command_line.clipboard import has_image_in_clipboard
 
         # Mock to prevent actual clipboard access
         with (
-            patch("code_puppy.command_line.clipboard.PIL_AVAILABLE", True),
-            patch("code_puppy.command_line.clipboard.ImageGrab") as mock_grab,
+            patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", True),
+            patch("spruce_grove.command_line.clipboard.ImageGrab") as mock_grab,
         ):
             mock_grab.grabclipboard.return_value = None
             result = has_image_in_clipboard()
@@ -89,12 +89,12 @@ class TestHasImageInClipboard:
 
     def test_returns_false_on_clipboard_error(self):
         """Test that function returns False on clipboard access error."""
-        from code_puppy.command_line.clipboard import has_image_in_clipboard
+        from spruce_grove.command_line.clipboard import has_image_in_clipboard
 
         with (
-            patch("code_puppy.command_line.clipboard.PIL_AVAILABLE", True),
-            patch("code_puppy.command_line.clipboard.sys.platform", "darwin"),
-            patch("code_puppy.command_line.clipboard.ImageGrab") as mock_grab,
+            patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", True),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "darwin"),
+            patch("spruce_grove.command_line.clipboard.ImageGrab") as mock_grab,
         ):
             mock_grab.grabclipboard.side_effect = Exception("Clipboard error")
             result = has_image_in_clipboard()
@@ -104,10 +104,10 @@ class TestHasImageInClipboard:
     def test_returns_false_when_pil_unavailable_non_linux(self):
         """Test that function returns False when PIL is not available."""
         with (
-            patch("code_puppy.command_line.clipboard.PIL_AVAILABLE", False),
-            patch("code_puppy.command_line.clipboard.sys.platform", "darwin"),
+            patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", False),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "darwin"),
         ):
-            from code_puppy.command_line.clipboard import has_image_in_clipboard
+            from spruce_grove.command_line.clipboard import has_image_in_clipboard
 
             result = has_image_in_clipboard()
 
@@ -118,24 +118,24 @@ class TestHasImageLinuxEdgeCases:
     """Tests for has_image_in_clipboard Linux edge cases."""
 
     def test_linux_no_tool_returns_false(self):
-        from code_puppy.command_line.clipboard import has_image_in_clipboard
+        from spruce_grove.command_line.clipboard import has_image_in_clipboard
 
         with (
-            patch("code_puppy.command_line.clipboard.sys.platform", "linux"),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "linux"),
             patch(
-                "code_puppy.command_line.clipboard._check_linux_clipboard_tool",
+                "spruce_grove.command_line.clipboard._check_linux_clipboard_tool",
                 return_value=None,
             ),
         ):
             assert has_image_in_clipboard() is False
 
     def test_linux_timeout_returns_false(self):
-        from code_puppy.command_line.clipboard import has_image_in_clipboard
+        from spruce_grove.command_line.clipboard import has_image_in_clipboard
 
         with (
-            patch("code_puppy.command_line.clipboard.sys.platform", "linux"),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "linux"),
             patch(
-                "code_puppy.command_line.clipboard._check_linux_clipboard_tool",
+                "spruce_grove.command_line.clipboard._check_linux_clipboard_tool",
                 return_value="wl-paste",
             ),
             patch("subprocess.run", side_effect=subprocess.TimeoutExpired("cmd", 5)),
@@ -144,25 +144,25 @@ class TestHasImageLinuxEdgeCases:
 
     def test_linux_unknown_tool_returns_false(self):
         """Test fallthrough return False for unknown tool type."""
-        from code_puppy.command_line.clipboard import has_image_in_clipboard
+        from spruce_grove.command_line.clipboard import has_image_in_clipboard
 
         with (
-            patch("code_puppy.command_line.clipboard.sys.platform", "linux"),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "linux"),
             patch(
-                "code_puppy.command_line.clipboard._check_linux_clipboard_tool",
+                "spruce_grove.command_line.clipboard._check_linux_clipboard_tool",
                 return_value="unknown-tool",
             ),
         ):
             assert has_image_in_clipboard() is False
 
     def test_linux_xclip_has_image(self):
-        from code_puppy.command_line.clipboard import has_image_in_clipboard
+        from spruce_grove.command_line.clipboard import has_image_in_clipboard
 
         mock_result = MagicMock(stdout="image/png\ntext/plain", returncode=0)
         with (
-            patch("code_puppy.command_line.clipboard.sys.platform", "linux"),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "linux"),
             patch(
-                "code_puppy.command_line.clipboard._check_linux_clipboard_tool",
+                "spruce_grove.command_line.clipboard._check_linux_clipboard_tool",
                 return_value="xclip",
             ),
             patch("subprocess.run", return_value=mock_result),
@@ -183,7 +183,7 @@ class TestImageResizing:
     )
     def test_large_image_triggers_resize(self, width, height):
         """Test that large images trigger resize."""
-        from code_puppy.command_line.clipboard import _resize_image_if_needed
+        from spruce_grove.command_line.clipboard import _resize_image_if_needed
 
         mock_image = MagicMock()
         mock_image.width = width
@@ -203,7 +203,7 @@ class TestImageResizing:
         resized_mock = MagicMock()
         mock_image.resize.return_value = resized_mock
 
-        with patch("code_puppy.command_line.clipboard.Image") as mock_image_module:
+        with patch("spruce_grove.command_line.clipboard.Image") as mock_image_module:
             mock_image_module.Image = type(mock_image)
             mock_image_module.Resampling.LANCZOS = "lanczos"
             result = _resize_image_if_needed(mock_image, 10 * 1024 * 1024)  # 10MB limit
@@ -225,7 +225,7 @@ class TestLinuxClipboardSupport:
     )
     def test_check_linux_clipboard_tool(self, wl_runs, xclip_runs, expected):
         """Test Linux clipboard tool detection (wl-paste, then xclip, then none)."""
-        from code_puppy.command_line.clipboard import _check_linux_clipboard_tool
+        from spruce_grove.command_line.clipboard import _check_linux_clipboard_tool
 
         def run_side_effect(cmd, **kwargs):
             if cmd[0] == "wl-paste":
@@ -241,16 +241,16 @@ class TestLinuxClipboardSupport:
 
     def test_has_image_on_linux_checks_mime_types(self):
         """Test that Linux image detection checks MIME types."""
-        from code_puppy.command_line.clipboard import has_image_in_clipboard
+        from spruce_grove.command_line.clipboard import has_image_in_clipboard
 
         mock_result = MagicMock()
         mock_result.stdout = "image/png\ntext/plain"
         mock_result.returncode = 0
 
         with (
-            patch("code_puppy.command_line.clipboard.sys.platform", "linux"),
+            patch("spruce_grove.command_line.clipboard.sys.platform", "linux"),
             patch(
-                "code_puppy.command_line.clipboard._check_linux_clipboard_tool",
+                "spruce_grove.command_line.clipboard._check_linux_clipboard_tool",
                 return_value="wl-paste",
             ),
             patch("subprocess.run", return_value=mock_result),
@@ -267,7 +267,7 @@ class TestSecurityFeatures:
         """Test SEC-CLIP-001: ValueError raised when limit exceeded."""
         import pytest
 
-        from code_puppy.command_line.clipboard import (
+        from spruce_grove.command_line.clipboard import (
             MAX_PENDING_IMAGES,
             ClipboardAttachmentManager,
         )

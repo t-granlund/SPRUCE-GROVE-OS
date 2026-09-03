@@ -13,10 +13,10 @@ from unittest.mock import patch
 
 import pytest
 
-import code_puppy.messaging.run_ui as run_ui_mod
-from code_puppy.agents import _key_listeners
-from code_puppy.messaging import bottom_bar as bottom_bar_mod
-from code_puppy.messaging.pause_controller import (
+import spruce_grove.messaging.run_ui as run_ui_mod
+from spruce_grove.agents import _key_listeners
+from spruce_grove.messaging import bottom_bar as bottom_bar_mod
+from spruce_grove.messaging.pause_controller import (
     get_pause_controller,
     reset_pause_controller,
 )
@@ -288,38 +288,38 @@ def test_cancel_hotkey_flips_across_two_runs():
 
 
 def test_classic_env_flag_selects_old_path(monkeypatch):
-    from code_puppy.cli_runner import _use_persistent_prompt
+    from spruce_grove.cli_runner import _use_persistent_prompt
 
     monkeypatch.setattr("sys.stdin", FakeTTY())
     monkeypatch.setattr("sys.stdout", FakeTTY())
-    with patch.dict(os.environ, {"CODE_PUPPY_CLASSIC_PROMPT": "1"}):
+    with patch.dict(os.environ, {"SPRUCE_GROVE_CLASSIC_PROMPT": "1"}):
         assert _use_persistent_prompt() is False
 
 
 def test_no_tui_env_selects_old_path(monkeypatch):
-    from code_puppy.cli_runner import _use_persistent_prompt
+    from spruce_grove.cli_runner import _use_persistent_prompt
 
     monkeypatch.setattr("sys.stdin", FakeTTY())
     monkeypatch.setattr("sys.stdout", FakeTTY())
-    with patch.dict(os.environ, {"CODE_PUPPY_NO_TUI": "1"}):
+    with patch.dict(os.environ, {"SPRUCE_GROVE_NO_TUI": "1"}):
         assert _use_persistent_prompt() is False
 
 
 def test_non_tty_selects_old_path(monkeypatch):
-    from code_puppy.cli_runner import _use_persistent_prompt
+    from spruce_grove.cli_runner import _use_persistent_prompt
 
     monkeypatch.setattr("sys.stdin", FakePipe())
     monkeypatch.setattr("sys.stdout", FakePipe())
     with patch.dict(os.environ, {}, clear=False):
-        os.environ.pop("CODE_PUPPY_CLASSIC_PROMPT", None)
+        os.environ.pop("SPRUCE_GROVE_CLASSIC_PROMPT", None)
         assert _use_persistent_prompt() is False
 
 
 def test_tty_without_flags_selects_new_path(monkeypatch):
-    from code_puppy.cli_runner import _use_persistent_prompt
+    from spruce_grove.cli_runner import _use_persistent_prompt
 
     monkeypatch.setattr("sys.stdin", FakeTTY())
     monkeypatch.setattr("sys.stdout", FakeTTY())
-    monkeypatch.delenv("CODE_PUPPY_CLASSIC_PROMPT", raising=False)
-    monkeypatch.delenv("CODE_PUPPY_NO_TUI", raising=False)
+    monkeypatch.delenv("SPRUCE_GROVE_CLASSIC_PROMPT", raising=False)
+    monkeypatch.delenv("SPRUCE_GROVE_NO_TUI", raising=False)
     assert _use_persistent_prompt() is True

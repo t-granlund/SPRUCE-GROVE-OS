@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from code_puppy.plugins import (
+from spruce_grove.plugins import (
     _PROJECT_PLUGIN_PYCACHE,
     _ProjectPluginFinder,
     _ensure_project_ns,
@@ -89,7 +89,7 @@ def _cleanup(plugin_dir: Path, plugin_name: str, extra: tuple[str, ...] = ()) ->
 def test_planted_bytecode_beside_callbacks_is_refused(tmp_path):
     """A ``register_callbacks.py`` plugin carrying a planted cache is refused."""
     plugin_name = "cache_probe_plugin"
-    plugin_dir = tmp_path / ".code_puppy" / "plugins" / plugin_name
+    plugin_dir = tmp_path / ".spruce_grove" / "plugins" / plugin_name
     plugin_dir.mkdir(parents=True)
 
     source_marker = tmp_path / "source_ran"
@@ -123,7 +123,7 @@ def test_init_only_plugin_with_planted_sibling_bytecode_is_refused(tmp_path):
     """Repro (a): an ``__init__.py``-only plugin whose sibling has planted
     ``__pycache__`` bytecode is refused before the planted code can run."""
     plugin_name = "init_sibling_plugin"
-    plugin_dir = tmp_path / ".code_puppy" / "plugins" / plugin_name
+    plugin_dir = tmp_path / ".spruce_grove" / "plugins" / plugin_name
     plugin_dir.mkdir(parents=True)
 
     evil_marker = tmp_path / "evil_ran"
@@ -155,7 +155,7 @@ def test_bare_pyc_sibling_is_refused(tmp_path):
     """Repro (b): a bare ``helper.pyc`` (no ``.py``) is refused, so the
     default SourcelessFileLoader never executes the planted bytecode."""
     plugin_name = "bare_pyc_plugin"
-    plugin_dir = tmp_path / ".code_puppy" / "plugins" / plugin_name
+    plugin_dir = tmp_path / ".spruce_grove" / "plugins" / plugin_name
     plugin_dir.mkdir(parents=True)
 
     evil_marker = tmp_path / "bare_evil_ran"
@@ -183,7 +183,7 @@ def test_clean_init_only_plugin_writes_no_bytecode(tmp_path):
     """Repro (c): a clean ``__init__.py``-only plugin with a benign sibling
     loads, resolves the sibling from source, and leaves no in-tree bytecode."""
     plugin_name = "clean_init_plugin"
-    plugin_dir = tmp_path / ".code_puppy" / "plugins" / plugin_name
+    plugin_dir = tmp_path / ".spruce_grove" / "plugins" / plugin_name
     plugin_dir.mkdir(parents=True)
 
     (plugin_dir / "helper.py").write_text("VALUE = 41\n")
@@ -228,7 +228,7 @@ def test_project_plugin_finder_scoped_to_namespace(tmp_path):
 
     # Anything outside the namespace is not ours to answer.
     assert finder.find_spec("os", path=[str(plugin_dir)]) is None
-    assert finder.find_spec("code_puppy.plugins", path=[str(plugin_dir)]) is None
+    assert finder.find_spec("spruce_grove.plugins", path=[str(plugin_dir)]) is None
 
 
 def test_finder_refuses_planted_bytecode_within_namespace(tmp_path):
@@ -255,7 +255,7 @@ def test_sourceless_pyc_in_plugins_root_is_refused(tmp_path):
     loose ``helper.pyc`` there is refused before any code runs.
     """
     plugin_name = "root_pyc_plugin"
-    plugin_dir = tmp_path / ".code_puppy" / "plugins" / plugin_name
+    plugin_dir = tmp_path / ".spruce_grove" / "plugins" / plugin_name
     plugin_dir.mkdir(parents=True)
 
     evil_marker = tmp_path / "root_pyc_ran"
@@ -283,7 +283,7 @@ def test_compiled_extension_in_plugin_is_refused(tmp_path):
     by the tripwire — before any import machinery touches it.
     """
     plugin_name = "extension_plugin"
-    plugin_dir = tmp_path / ".code_puppy" / "plugins" / plugin_name
+    plugin_dir = tmp_path / ".spruce_grove" / "plugins" / plugin_name
     plugin_dir.mkdir(parents=True)
 
     (plugin_dir / "register_callbacks.py").write_text("VALUE = 1\n")
@@ -340,7 +340,7 @@ def test_symlinked_subdir_is_refused(tmp_path):
     tripwire flags it — the trust digest never followed it.
     """
     plugin_name = "symlink_plugin"
-    plugin_dir = tmp_path / ".code_puppy" / "plugins" / plugin_name
+    plugin_dir = tmp_path / ".spruce_grove" / "plugins" / plugin_name
     plugin_dir.mkdir(parents=True)
 
     (plugin_dir / "register_callbacks.py").write_text("VALUE = 1\n")
@@ -369,7 +369,7 @@ def test_pycache_prefix_restored_after_load(tmp_path):
     the process is diverted for the rest of the session.
     """
     plugin_name = "prefix_restore_plugin"
-    plugin_dir = tmp_path / ".code_puppy" / "plugins" / plugin_name
+    plugin_dir = tmp_path / ".spruce_grove" / "plugins" / plugin_name
     plugin_dir.mkdir(parents=True)
 
     (plugin_dir / "register_callbacks.py").write_text("VALUE = 1\n")

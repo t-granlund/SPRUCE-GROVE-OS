@@ -64,7 +64,7 @@ class TestArchetypes:
             )
 
     def test_images_only_in_split_or_stage(self, slides):
-        # slide 50 exception: the brand logo on a STATEMENT is the Code-Puppy
+        # slide 50 exception: the brand logo on a STATEMENT is the Code-Cedar
         # era reveal — a typographic object, not an image (no .duo by design)
         LOGO_EXCEPTION = {50}
         for i, s in enumerate(slides, 1):
@@ -72,7 +72,7 @@ class TestArchetypes:
             if not imgs:
                 continue
             if i in LOGO_EXCEPTION:
-                assert all("code-puppy-" in (im.get("src") or "") for im in imgs)
+                assert all("spruce-grove-" in (im.get("src") or "") for im in imgs)
                 continue
             assert classes_of(s) & {"split", "stage"} or s.select(".split"), (
                 f"slide {i}: image outside SPLIT/STAGE archetype"

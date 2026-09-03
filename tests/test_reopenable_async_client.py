@@ -9,7 +9,7 @@ from unittest.mock import AsyncMock, Mock, patch
 import httpx
 import pytest
 
-from code_puppy.reopenable_async_client import ReopenableAsyncClient
+from spruce_grove.reopenable_async_client import ReopenableAsyncClient
 
 
 def test_init_defaults_and_kwargs():

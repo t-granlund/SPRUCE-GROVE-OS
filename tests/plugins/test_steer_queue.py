@@ -10,7 +10,7 @@ from __future__ import annotations
 from unittest.mock import patch
 
 import pytest
-from code_puppy.messaging.pause_controller import (
+from spruce_grove.messaging.pause_controller import (
     PauseController,
     reset_pause_controller,
 )
@@ -252,19 +252,19 @@ def test_steer_at_idle_warns_and_does_not_queue():
     warnings = []
     with (
         patch.object(rc, "_emit_warning", warnings.append),
-        patch("code_puppy.messaging.run_ui.is_run_active", return_value=False),
+        patch("spruce_grove.messaging.run_ui.is_run_active", return_value=False),
     ):
         assert rc._handle_steer("/steer do a thing") is True
     assert warnings, "expected an idle warning"
-    from code_puppy.messaging.pause_controller import get_pause_controller
+    from spruce_grove.messaging.pause_controller import get_pause_controller
 
     assert get_pause_controller().has_pending_steer() is False
 
 
 def test_steer_mid_run_lands_in_now_queue():
-    with patch("code_puppy.messaging.run_ui.is_run_active", return_value=True):
+    with patch("spruce_grove.messaging.run_ui.is_run_active", return_value=True):
         assert rc._handle_steer("/steer focus please") is True
-    from code_puppy.messaging.pause_controller import get_pause_controller
+    from spruce_grove.messaging.pause_controller import get_pause_controller
 
     assert get_pause_controller().drain_pending_steer_now() == ["focus please"]
 
@@ -288,7 +288,7 @@ class FakeBar:
 
 def test_suffix_updates_and_clears(monkeypatch):
     fake = FakeBar()
-    monkeypatch.setattr("code_puppy.messaging.bottom_bar.get_bottom_bar", lambda: fake)
+    monkeypatch.setattr("spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake)
     rc._update_status_suffix(3)
     rc._update_status_suffix(0)
     assert fake.suffixes == [" (3 pending)", ""]
@@ -296,9 +296,9 @@ def test_suffix_updates_and_clears(monkeypatch):
 
 def test_startup_wires_listener_end_to_end(monkeypatch):
     fake = FakeBar()
-    monkeypatch.setattr("code_puppy.messaging.bottom_bar.get_bottom_bar", lambda: fake)
+    monkeypatch.setattr("spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake)
     rc._on_startup()
-    from code_puppy.messaging.pause_controller import get_pause_controller
+    from spruce_grove.messaging.pause_controller import get_pause_controller
 
     pc = get_pause_controller()
     pc.request_steer("queued thing", mode="queue")
@@ -309,9 +309,9 @@ def test_startup_wires_listener_end_to_end(monkeypatch):
 def test_startup_wires_steer_listener_for_now_mode(monkeypatch):
     """/steer (now-mode) should tag the bar from submit until drain."""
     fake = FakeBar()
-    monkeypatch.setattr("code_puppy.messaging.bottom_bar.get_bottom_bar", lambda: fake)
+    monkeypatch.setattr("spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake)
     rc._on_startup()
-    from code_puppy.messaging.pause_controller import get_pause_controller
+    from spruce_grove.messaging.pause_controller import get_pause_controller
 
     pc = get_pause_controller()
     pc.request_steer("focus on the tests", mode="now")

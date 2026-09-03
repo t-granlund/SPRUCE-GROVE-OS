@@ -1,4 +1,4 @@
-"""Tests for code_puppy.agents._compaction (pydantic-ai-harness backed).
+"""Tests for spruce_grove.agents._compaction (pydantic-ai-harness backed).
 
 Covers:
 - build_compaction_strategy() — config → FallbackCompaction wiring
@@ -37,8 +37,8 @@ from pydantic_ai_harness.compaction import (
     SummarizingCompaction,
 )
 
-from code_puppy.agents import _compaction
-from code_puppy.agents._compaction import (
+from spruce_grove.agents import _compaction
+from spruce_grove.agents._compaction import (
     build_compaction_strategy,
     compact,
     make_history_processor,
@@ -509,7 +509,7 @@ class TestMakeHistoryProcessor:
         """A short prompt whose hash was recorded as compacted must still be
         appended when it is the newest incoming message."""
         agent = _FakeAgent(model_max=1_000_000)
-        from code_puppy.agents._history import hash_message
+        from spruce_grove.agents._history import hash_message
 
         newest = _user_msg("yes")
         agent._compacted_message_hashes.add(hash_message(newest))

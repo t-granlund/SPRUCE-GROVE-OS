@@ -1,10 +1,10 @@
-"""Tests for the static i18n extraction audit (code_puppy.i18n.audit)."""
+"""Tests for the static i18n extraction audit (spruce_grove.i18n.audit)."""
 
 import ast
 
 import pytest
 
-from code_puppy.i18n import audit
+from spruce_grove.i18n import audit
 
 
 def _kinds(source: str):
@@ -198,7 +198,7 @@ def test_audits_the_real_package_without_error():
     """
     import os
 
-    from code_puppy import i18n
+    from spruce_grove import i18n
 
     root = os.path.dirname(os.path.dirname(os.path.abspath(i18n.__file__)))
     report = audit.audit_tree(root)

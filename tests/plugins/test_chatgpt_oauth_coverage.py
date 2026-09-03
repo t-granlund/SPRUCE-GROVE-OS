@@ -262,10 +262,10 @@ class TestCreateChatgptOauthModel:
                 },
             ),
             patch(
-                "code_puppy.http_utils.get_cert_bundle_path",
+                "spruce_grove.http_utils.get_cert_bundle_path",
                 return_value=None,
             ),
-            patch("code_puppy.chatgpt_codex_client.create_codex_async_client"),
+            patch("spruce_grove.chatgpt_codex_client.create_codex_async_client"),
             patch("pydantic_ai.providers.openai.OpenAIProvider"),
             patch(
                 "pydantic_ai.models.openai.OpenAIResponsesModel",

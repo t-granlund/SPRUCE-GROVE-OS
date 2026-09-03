@@ -13,8 +13,8 @@ import pytest
 # Add the project root to Python path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from code_puppy.callbacks import on_file_permission
-from code_puppy.tools.file_modifications import (
+from spruce_grove.callbacks import on_file_permission
+from spruce_grove.tools.file_modifications import (
     _delete_file,
     delete_snippet_from_file,
     replace_in_file,
@@ -40,7 +40,7 @@ class TestFilePermissions(unittest.TestCase):
 
     def test_prompt_for_file_permission_granted(self):
         """Test that permission is granted when user enters 'y'."""
-        from code_puppy.callbacks import _callbacks
+        from spruce_grove.callbacks import _callbacks
 
         # Create a mock callback that returns True
         def mock_callback(
@@ -67,7 +67,7 @@ class TestFilePermissions(unittest.TestCase):
 
     def test_prompt_for_file_permission_denied(self):
         """Test that permission is denied when user enters 'n'."""
-        from code_puppy.callbacks import _callbacks
+        from spruce_grove.callbacks import _callbacks
 
         # Create a mock callback that returns False
         def mock_callback(
@@ -95,7 +95,7 @@ class TestFilePermissions(unittest.TestCase):
     def test_prompt_for_file_permission_no_plugins(self):
         """Test that permission is automatically granted when no plugins registered."""
         # Temporarily unregister plugins
-        from code_puppy.callbacks import _callbacks
+        from spruce_grove.callbacks import _callbacks
 
         original_callbacks = _callbacks["file_permission"].copy()
         _callbacks["file_permission"] = []
@@ -107,7 +107,7 @@ class TestFilePermissions(unittest.TestCase):
             # Restore callbacks
             _callbacks["file_permission"] = original_callbacks
 
-    @patch("code_puppy.callbacks.on_file_permission")
+    @patch("spruce_grove.callbacks.on_file_permission")
     def test_write_to_file_with_permission_denied(self, mock_permission):
         """Test write_to_file when permission is denied."""
         mock_permission.return_value = [False]
@@ -121,7 +121,7 @@ class TestFilePermissions(unittest.TestCase):
         self.assertTrue(result["user_rejection"])
         self.assertEqual(result["rejection_type"], "explicit_user_denial")
 
-    @patch("code_puppy.callbacks.on_file_permission")
+    @patch("spruce_grove.callbacks.on_file_permission")
     def test_write_to_file_with_permission_granted(self, mock_permission):
         """Test write_to_file when permission is granted."""
         mock_permission.return_value = [True]
@@ -137,7 +137,7 @@ class TestFilePermissions(unittest.TestCase):
             content = f.read()
         self.assertEqual(content, "New content")
 
-    @patch("code_puppy.config.get_yolo_mode")
+    @patch("spruce_grove.config.get_yolo_mode")
     def test_write_to_file_in_yolo_mode(self, mock_yolo):
         """Test write_to_file in yolo mode (no permission prompt)."""
         mock_yolo.return_value = True
@@ -153,7 +153,7 @@ class TestFilePermissions(unittest.TestCase):
             content = f.read()
         self.assertEqual(content, "Yolo content")
 
-    @patch("code_puppy.callbacks.on_file_permission")
+    @patch("spruce_grove.callbacks.on_file_permission")
     def test_delete_snippet_with_permission_denied(self, mock_permission):
         """Test delete_snippet_from_file when permission is denied."""
         mock_permission.return_value = [False]
@@ -167,7 +167,7 @@ class TestFilePermissions(unittest.TestCase):
         self.assertTrue(result["user_rejection"])
         self.assertEqual(result["rejection_type"], "explicit_user_denial")
 
-    @patch("code_puppy.callbacks.on_file_permission")
+    @patch("spruce_grove.callbacks.on_file_permission")
     def test_replace_in_file_with_permission_denied(self, mock_permission):
         """Test replace_in_file when permission is denied."""
         mock_permission.return_value = [False]
@@ -182,7 +182,7 @@ class TestFilePermissions(unittest.TestCase):
         self.assertTrue(result["user_rejection"])
         self.assertEqual(result["rejection_type"], "explicit_user_denial")
 
-    @patch("code_puppy.callbacks.on_file_permission")
+    @patch("spruce_grove.callbacks.on_file_permission")
     def test_delete_file_with_permission_denied(self, mock_permission):
         """Test _delete_file when permission is denied."""
         mock_permission.return_value = [False]
@@ -206,7 +206,7 @@ if __name__ == "__main__":
 
 @pytest.fixture(autouse=True)
 def _clear_file_permission_callbacks():
-    from code_puppy.callbacks import clear_callbacks
+    from spruce_grove.callbacks import clear_callbacks
 
     clear_callbacks("file_permission")
     yield
@@ -215,8 +215,8 @@ def _clear_file_permission_callbacks():
 
 @pytest.mark.asyncio
 async def test_write_to_file_async_with_async_permission_granted(tmp_path):
-    from code_puppy.callbacks import register_callback
-    from code_puppy.tools.file_modifications import write_to_file_async
+    from spruce_grove.callbacks import register_callback
+    from spruce_grove.tools.file_modifications import write_to_file_async
 
     target = tmp_path / "allowed.txt"
 
@@ -241,8 +241,8 @@ async def test_write_to_file_async_with_async_permission_granted(tmp_path):
 
 @pytest.mark.asyncio
 async def test_write_to_file_async_with_async_permission_denied(tmp_path):
-    from code_puppy.callbacks import register_callback
-    from code_puppy.tools.file_modifications import write_to_file_async
+    from spruce_grove.callbacks import register_callback
+    from spruce_grove.tools.file_modifications import write_to_file_async
 
     target = tmp_path / "denied.txt"
     target.write_text("original")
@@ -268,8 +268,8 @@ async def test_write_to_file_async_with_async_permission_denied(tmp_path):
 
 @pytest.mark.asyncio
 async def test_write_to_file_async_false_denies_even_with_true_and_none(tmp_path):
-    from code_puppy.callbacks import register_callback
-    from code_puppy.tools.file_modifications import write_to_file_async
+    from spruce_grove.callbacks import register_callback
+    from spruce_grove.tools.file_modifications import write_to_file_async
 
     target = tmp_path / "mixed.txt"
     target.write_text("original")
@@ -316,8 +316,8 @@ async def test_write_to_file_async_false_denies_even_with_true_and_none(tmp_path
 
 @pytest.mark.asyncio
 async def test_write_to_file_async_none_only_does_not_deny(tmp_path):
-    from code_puppy.callbacks import register_callback
-    from code_puppy.tools.file_modifications import write_to_file_async
+    from spruce_grove.callbacks import register_callback
+    from spruce_grove.tools.file_modifications import write_to_file_async
 
     target = tmp_path / "none.txt"
 
@@ -342,8 +342,8 @@ async def test_write_to_file_async_none_only_does_not_deny(tmp_path):
 @pytest.mark.asyncio
 async def test_write_to_file_async_uses_backend_off_event_loop(tmp_path):
     """Synchronous filesystem backends must run from a worker thread."""
-    from code_puppy.tools.file_modifications import write_to_file_async
-    from code_puppy.tools.io_backends import set_filesystem_backend
+    from spruce_grove.tools.file_modifications import write_to_file_async
+    from spruce_grove.tools.io_backends import set_filesystem_backend
 
     class LoopGuardBackend:
         def exists(self, path):
@@ -370,8 +370,8 @@ async def test_write_to_file_async_uses_backend_off_event_loop(tmp_path):
 @pytest.mark.asyncio
 async def test_delete_file_async_uses_backend_off_event_loop(tmp_path):
     """Async deletes must not bridge a backend read from the event loop."""
-    from code_puppy.tools.file_modifications import _delete_file_async
-    from code_puppy.tools.io_backends import set_filesystem_backend
+    from spruce_grove.tools.file_modifications import _delete_file_async
+    from spruce_grove.tools.io_backends import set_filesystem_backend
 
     class LoopGuardBackend:
         def exists(self, path):
@@ -400,8 +400,8 @@ async def test_delete_file_async_uses_backend_off_event_loop(tmp_path):
 
 @pytest.mark.asyncio
 async def test_replace_and_delete_async_permission_paths(tmp_path):
-    from code_puppy.callbacks import register_callback
-    from code_puppy.tools.file_modifications import (
+    from spruce_grove.callbacks import register_callback
+    from spruce_grove.tools.file_modifications import (
         _delete_file_async,
         delete_snippet_from_file_async,
         replace_in_file_async,

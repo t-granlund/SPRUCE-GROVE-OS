@@ -1,4 +1,4 @@
-# TTFT profile: where a cold `code-puppy -p hi` spends its time
+# TTFT profile: where a cold `spruce-grove -p hi` spends its time
 
 Measured on macOS / Python 3.14 / pydantic-ai 2.35 against
 `claude-code-claude-fable-5-1`, stdout piped. Numbers are typical of ~10
@@ -34,12 +34,12 @@ The overhead is everything *around* the stream.
 | 75–170ms good wifi, up to **5s** bad | `httpx.get(pypi.org)` on the startup critical path, 5s timeout, headless too. | Fetch runs on a daemon thread; result lands on the message bus when it arrives (`version_checker.py`). |
 | **~1.2s on every exit** | `reset_unix_terminal()` shelled out to `reset(1)`; `tset` sleeps one second by design (a settling delay for hardware terminals), and with `capture_output=True` its escape codes never reached the terminal anyway — a one-second no-op in `main_entry`'s `finally`. | `stty sane` + targeted escape codes (soft reset, attrs off, cursor visible, alt-screen off, mouse tracking off), skipped entirely off-tty (`terminal_utils.py`). Deliberately not RIS: `reset(1)`'s full init clears the screen. |
 | ~170ms (anthropic) + ~200ms (openai) | `model_factory.py` and `provider_identity.py` imported both vendor SDKs at module scope. `agents/_runtime.py` imported both for `isinstance` checks. | Function-local imports per provider branch; `_sdk_exception()` peeks `sys.modules` (an SDK exception can only exist if the SDK is loaded). `ZaiChatModel` moved to `zai_model.py`. |
-| ~54ms pre-request, then 10–20 reads per streamed chunk | `config.get_value()` re-read and re-parsed `puppy.cfg` on every call — 388 times for one "hi". | Parser cached on `(path, inode, mtime_ns, size)`; `mutate_config`'s atomic replace rolls the key (`config.py`). |
+| ~54ms pre-request, then 10–20 reads per streamed chunk | `config.get_value()` re-read and re-parsed `grove.cfg` on every call — 388 times for one "hi". | Parser cached on `(path, inode, mtime_ns, size)`; `mutate_config`'s atomic replace rolls the key (`config.py`). |
 
 ## Result
 
 Cold `-p hi` on a TTY: **~4.5s wall, of which ~3s is Anthropic**
-(TTFB + generation). Code-puppy overhead went from ~3.3s to ~1.1s:
+(TTFB + generation). Code-grove overhead went from ~3.3s to ~1.1s:
 ~0.9s to get the request out, ~0.5s of *intended* typewriter catch-up,
 ~0.2s exit. `openai`/`anthropic` no longer load at startup at all
 (fixed in `code_puppy_core_plugins` ollama + here; needs the plugin

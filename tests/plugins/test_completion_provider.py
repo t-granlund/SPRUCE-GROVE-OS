@@ -2,8 +2,8 @@
 
 from termflow.tui.completion import Completer, Completion, Document
 
-from code_puppy import callbacks
-from code_puppy.messaging.editor_completion import build_completer
+from spruce_grove import callbacks
+from spruce_grove.messaging.editor_completion import build_completer
 
 
 class PluginCompleter(Completer):

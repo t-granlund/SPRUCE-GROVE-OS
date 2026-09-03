@@ -5,9 +5,9 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy.command_line import help_overlay
-from code_puppy.command_line.help_catalog import HelpEntry, HelpSection
-from code_puppy.command_line.help_overlay import (
+from spruce_grove.command_line import help_overlay
+from spruce_grove.command_line.help_catalog import HelpEntry, HelpSection
+from spruce_grove.command_line.help_overlay import (
     _build_pager,
     _column_width,
     _render_sheet_text,
@@ -70,7 +70,7 @@ def test_render_sheet_text_omits_trailing_column_for_entries_without_right():
 def test_pager_paints_sheet_and_all_close_keys_work():
     for close_key in ("tab", "q", "escape", "enter", "ctrl-c"):
         result, out = _drive(_sections(), [close_key])
-        assert "CODE PUPPY -- HELP" in out
+        assert "SPRUCE GROVE -- HELP" in out
         assert "KEYBINDINGS" in out
 
 
@@ -94,11 +94,11 @@ def test_show_help_overlay_builds_sections_and_runs_the_pager():
 
     with (
         patch(
-            "code_puppy.command_line.help_overlay.build_help_sections",
+            "spruce_grove.command_line.help_overlay.build_help_sections",
             return_value=_sections(),
         ) as mock_build,
         patch(
-            "code_puppy.command_line.help_overlay._build_pager",
+            "spruce_grove.command_line.help_overlay._build_pager",
             return_value=FakePager(),
         ) as mock_pager,
     ):
@@ -116,7 +116,7 @@ def test_show_help_overlay_is_a_noop_while_already_running():
     assert acquired, "test setup: lock should have been free"
     try:
         with patch(
-            "code_puppy.command_line.help_overlay.build_help_sections"
+            "spruce_grove.command_line.help_overlay.build_help_sections"
         ) as mock_build:
             show_help_overlay()  # lock is "held" -- must return immediately
         mock_build.assert_not_called()
@@ -131,11 +131,11 @@ def test_show_help_overlay_releases_the_lock_after_a_normal_run():
 
     with (
         patch(
-            "code_puppy.command_line.help_overlay.build_help_sections",
+            "spruce_grove.command_line.help_overlay.build_help_sections",
             return_value=_sections(),
         ),
         patch(
-            "code_puppy.command_line.help_overlay._build_pager",
+            "spruce_grove.command_line.help_overlay._build_pager",
             return_value=FakePager(),
         ),
     ):
@@ -144,11 +144,11 @@ def test_show_help_overlay_releases_the_lock_after_a_normal_run():
     # A second call right after must be able to acquire the lock and run.
     with (
         patch(
-            "code_puppy.command_line.help_overlay.build_help_sections",
+            "spruce_grove.command_line.help_overlay.build_help_sections",
             return_value=_sections(),
         ) as mock_build,
         patch(
-            "code_puppy.command_line.help_overlay._build_pager",
+            "spruce_grove.command_line.help_overlay._build_pager",
             return_value=FakePager(),
         ),
     ):
@@ -159,7 +159,7 @@ def test_show_help_overlay_releases_the_lock_after_a_normal_run():
 def test_show_help_overlay_releases_the_lock_even_if_catalog_build_fails():
     """Also proves a raising catalog build never propagates out to the REPL."""
     with patch(
-        "code_puppy.command_line.help_overlay.build_help_sections",
+        "spruce_grove.command_line.help_overlay.build_help_sections",
         side_effect=RuntimeError("boom"),
     ):
         show_help_overlay()
@@ -176,11 +176,11 @@ def test_show_help_overlay_survives_a_crashing_pager():
 
     with (
         patch(
-            "code_puppy.command_line.help_overlay.build_help_sections",
+            "spruce_grove.command_line.help_overlay.build_help_sections",
             return_value=_sections(),
         ),
         patch(
-            "code_puppy.command_line.help_overlay._build_pager",
+            "spruce_grove.command_line.help_overlay._build_pager",
             return_value=ExplodingPager(),
         ),
     ):

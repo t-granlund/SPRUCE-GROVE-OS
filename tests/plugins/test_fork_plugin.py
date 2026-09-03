@@ -11,10 +11,10 @@ import pytest
 from rich.console import Console, Group
 from rich.text import Text
 
-from code_puppy.messaging.messages import MessageLevel
+from spruce_grove.messaging.messages import MessageLevel
 from code_puppy_core_plugins.fork import register_callbacks as rc
 
-_AGENTS = {"code-puppy": "the default pup", "qa-kitten": "meow"}
+_AGENTS = {"spruce-grove": "the default pup", "qa-kitten": "meow"}
 
 
 @pytest.fixture(autouse=True)
@@ -31,15 +31,15 @@ def fresh_forks():
 def fake_agent_manager():
     with (
         patch(
-            "code_puppy.agents.agent_manager.get_available_agents",
+            "spruce_grove.agents.agent_manager.get_available_agents",
             return_value=dict(_AGENTS),
         ),
         patch(
-            "code_puppy.agents.agent_manager.get_current_agent_name",
-            return_value="code-puppy",
+            "spruce_grove.agents.agent_manager.get_current_agent_name",
+            return_value="spruce-grove",
         ),
         patch(
-            "code_puppy.agents.agent_manager.get_current_agent",
+            "spruce_grove.agents.agent_manager.get_current_agent",
             return_value=SimpleNamespace(get_message_history=lambda: []),
         ),
     ):
@@ -169,7 +169,7 @@ def test_fork_cancel_unknown_id_warns():
 
 
 def test_started_message_is_rich_and_theme_aware():
-    from code_puppy.messaging.rich_renderer import DEFAULT_STYLES
+    from spruce_grove.messaging.rich_renderer import DEFAULT_STYLES
 
     with patch.dict(
         DEFAULT_STYLES,
@@ -191,7 +191,7 @@ def test_response_message_identifies_fork_and_renders_markdown():
     output = StringIO()
     console = Console(file=output, force_terminal=False, width=100)
 
-    with patch("code_puppy.config.get_banner_color", return_value="dark_orange3"):
+    with patch("spruce_grove.config.get_banner_color", return_value="dark_orange3"):
         message = rc._response_message(7, "qa-kitten", "**did the thing**")
         console.print(message)
 
@@ -208,7 +208,7 @@ async def test_fork_success_emits_response_and_completion_banner():
     infos, responses, successes = [], [], []
     with (
         patch(
-            "code_puppy.tools.subagent_invocation._invoke_agent_impl",
+            "spruce_grove.tools.subagent_invocation._invoke_agent_impl",
             new=_fake_impl(),
         ),
         patch.object(rc, "_emit_info", infos.append),
@@ -239,10 +239,10 @@ async def test_fork_publishes_completion_lifecycle_event():
 
     with (
         patch(
-            "code_puppy.tools.subagent_invocation._invoke_agent_impl",
+            "spruce_grove.tools.subagent_invocation._invoke_agent_impl",
             new=_fake_impl(),
         ),
-        patch("code_puppy.callbacks.on_post_tool_call", new=capture),
+        patch("spruce_grove.callbacks.on_post_tool_call", new=capture),
         patch.object(rc, "_emit_info"),
         patch.object(rc, "_emit_success"),
     ):
@@ -264,7 +264,7 @@ async def test_fork_publishes_completion_lifecycle_event():
 async def test_fork_defaults_to_current_agent():
     with (
         patch(
-            "code_puppy.tools.subagent_invocation._invoke_agent_impl",
+            "spruce_grove.tools.subagent_invocation._invoke_agent_impl",
             new=_fake_impl(),
         ),
         patch.object(rc, "_emit_info"),
@@ -274,7 +274,7 @@ async def test_fork_defaults_to_current_agent():
         await _wait_for_forks()
 
     record = next(iter(rc._forks.values()))
-    assert record.agent_name == "code-puppy"
+    assert record.agent_name == "spruce-grove"
     assert record.prompt == "summarize the repo"
 
 
@@ -282,7 +282,7 @@ async def test_fork_reports_result_error_as_failure():
     errors = []
     with (
         patch(
-            "code_puppy.tools.subagent_invocation._invoke_agent_impl",
+            "spruce_grove.tools.subagent_invocation._invoke_agent_impl",
             new=_fake_impl(error="model exploded\ntraceback junk"),
         ),
         patch.object(rc, "_emit_info"),
@@ -312,7 +312,7 @@ async def test_fork_reports_crash_as_failure():
 
     errors = []
     with (
-        patch("code_puppy.tools.subagent_invocation._invoke_agent_impl", new=boom),
+        patch("spruce_grove.tools.subagent_invocation._invoke_agent_impl", new=boom),
         patch.object(rc, "_emit_info"),
         patch.object(rc, "_emit_error", errors.append),
     ):
@@ -341,7 +341,7 @@ async def test_fork_cancel_running_fork():
 
     warnings = []
     with (
-        patch("code_puppy.tools.subagent_invocation._invoke_agent_impl", new=slow),
+        patch("spruce_grove.tools.subagent_invocation._invoke_agent_impl", new=slow),
         patch.object(rc, "_emit_info"),
         patch.object(rc, "_emit_warning", warnings.append),
     ):
@@ -360,7 +360,7 @@ async def test_fork_cancel_finished_fork_is_noop():
     infos = []
     with (
         patch(
-            "code_puppy.tools.subagent_invocation._invoke_agent_impl",
+            "spruce_grove.tools.subagent_invocation._invoke_agent_impl",
             new=_fake_impl(),
         ),
         patch.object(rc, "_emit_info", infos.append),
@@ -381,7 +381,7 @@ async def test_fork_cancel_finished_fork_is_noop():
 
 
 def test_seed_fork_session_returns_none_for_empty_history():
-    assert rc._seed_fork_session("code-puppy", "do stuff") is None
+    assert rc._seed_fork_session("spruce-grove", "do stuff") is None
 
 
 def test_seed_fork_session_persists_point_in_time_copy():
@@ -398,10 +398,10 @@ def test_seed_fork_session_persists_point_in_time_copy():
 
     with (
         patch(
-            "code_puppy.agents.agent_manager.get_current_agent",
+            "spruce_grove.agents.agent_manager.get_current_agent",
             return_value=SimpleNamespace(get_message_history=lambda: history),
         ),
-        patch("code_puppy.tools.agent_tools._save_session_history", new=fake_save),
+        patch("spruce_grove.tools.agent_tools._save_session_history", new=fake_save),
     ):
         session_id = rc._seed_fork_session("qa-kitten", "test the login page")
 
@@ -419,12 +419,12 @@ def test_seed_fork_session_survives_snapshot_failure():
     warnings = []
     with (
         patch(
-            "code_puppy.agents.agent_manager.get_current_agent",
+            "spruce_grove.agents.agent_manager.get_current_agent",
             side_effect=RuntimeError("no agent for you"),
         ),
         patch.object(rc, "_emit_warning", warnings.append),
     ):
-        assert rc._seed_fork_session("code-puppy", "do stuff") is None
+        assert rc._seed_fork_session("spruce-grove", "do stuff") is None
     assert any("fresh context" in str(m) for m in warnings)
 
 
@@ -432,11 +432,11 @@ async def test_fork_passes_seeded_session_to_invocation():
     calls = []
     with (
         patch(
-            "code_puppy.tools.subagent_invocation._invoke_agent_impl",
+            "spruce_grove.tools.subagent_invocation._invoke_agent_impl",
             new=_fake_impl(calls=calls),
         ),
         patch.object(
-            rc, "_seed_fork_session", return_value="code-puppy-fork-abc123"
+            rc, "_seed_fork_session", return_value="spruce-grove-fork-abc123"
         ) as seed,
         patch.object(rc, "_emit_info"),
         patch.object(rc, "_emit_success"),
@@ -444,12 +444,12 @@ async def test_fork_passes_seeded_session_to_invocation():
         rc._handle_fork("/fork continue our work")
         await _wait_for_forks()
 
-    seed.assert_called_once_with("code-puppy", "continue our work")
+    seed.assert_called_once_with("spruce-grove", "continue our work")
     assert calls == [
         {
-            "agent_name": "code-puppy",
+            "agent_name": "spruce-grove",
             "prompt": "continue our work",
-            "session_id": "code-puppy-fork-abc123",
+            "session_id": "spruce-grove-fork-abc123",
             "model_name": None,
         }
     ]
@@ -459,7 +459,7 @@ async def test_fork_with_no_history_starts_fresh():
     calls = []
     with (
         patch(
-            "code_puppy.tools.subagent_invocation._invoke_agent_impl",
+            "spruce_grove.tools.subagent_invocation._invoke_agent_impl",
             new=_fake_impl(calls=calls),
         ),
         patch.object(rc, "_emit_info"),
@@ -487,7 +487,7 @@ async def test_forks_lists_records_in_a_table():
     emitted = []
     with (
         patch(
-            "code_puppy.tools.subagent_invocation._invoke_agent_impl",
+            "spruce_grove.tools.subagent_invocation._invoke_agent_impl",
             new=_fake_impl(),
         ),
         patch.object(rc, "_emit_info", emitted.append),

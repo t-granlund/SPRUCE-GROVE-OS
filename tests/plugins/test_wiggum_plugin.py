@@ -116,11 +116,11 @@ def test_judges_command_invokes_menu():
 def test_goal_command_has_puppy_themed_aliases():
     """`/kibble` and `/chow` must resolve to the same CommandInfo as `/goal`.
 
-    These are puppy-themed aliases for /goal so users can pick whichever
+    These are grove-themed aliases for /goal so users can pick whichever
     feels most natural. They MUST share the same handler so behavior is
     identical \u2014 if they ever diverge, that's a bug.
     """
-    from code_puppy.command_line.command_registry import get_all_commands
+    from spruce_grove.command_line.command_registry import get_all_commands
 
     # Importing the plugin module triggers @register_command via side-effect.
     import code_puppy_core_plugins.wiggum.register_callbacks  # noqa: F401

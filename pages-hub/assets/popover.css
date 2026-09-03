@@ -1,4 +1,4 @@
-/* Code Puppy — popover dialog (WCAG 2.2 AAA, works with popover.js). */
+/* Spruce Grove — popover dialog (WCAG 2.2 AAA, works with popover.js). */
 
 .bbpop-overlay {
   position: fixed; inset: 0; z-index: 600;

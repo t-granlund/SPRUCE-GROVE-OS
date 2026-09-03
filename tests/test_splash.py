@@ -1,10 +1,10 @@
-"""Tests for the import-time neon splash (code_puppy/splash.py)."""
+"""Tests for the import-time neon splash (spruce_grove/splash.py)."""
 
 import io
 import re
 import time
 
-from code_puppy import splash
+from spruce_grove import splash
 
 ANSI_RE = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]")
 
@@ -20,37 +20,37 @@ class TestGating:
         assert isinstance(result, splash._NullSplash)
 
     def test_headless_argv_gets_null_splash(self, monkeypatch):
-        monkeypatch.setattr("sys.argv", ["code-puppy", "-p", "do the thing"])
+        monkeypatch.setattr("sys.argv", ["spruce-grove", "-p", "do the thing"])
         result = splash.start_splash(stream=FakeTty())
         assert isinstance(result, splash._NullSplash)
         result.stop()  # must be a harmless no-op
 
     def test_interactive_argv_wants_splash(self, monkeypatch):
-        monkeypatch.setattr("sys.argv", ["code-puppy", "-i"])
-        monkeypatch.delenv("CODE_PUPPY_NO_SPLASH", raising=False)
+        monkeypatch.setattr("sys.argv", ["spruce-grove", "-i"])
+        monkeypatch.delenv("SPRUCE_GROVE_NO_SPLASH", raising=False)
         monkeypatch.delenv("NO_COLOR", raising=False)
-        assert splash._wants_splash(["code-puppy", "-i"]) is True
+        assert splash._wants_splash(["spruce-grove", "-i"]) is True
 
     def test_env_kill_switch(self, monkeypatch):
-        monkeypatch.setenv("CODE_PUPPY_NO_SPLASH", "1")
-        assert splash._wants_splash(["code-puppy"]) is False
+        monkeypatch.setenv("SPRUCE_GROVE_NO_SPLASH", "1")
+        assert splash._wants_splash(["spruce-grove"]) is False
 
     def test_no_color_respected(self, monkeypatch):
-        monkeypatch.delenv("CODE_PUPPY_NO_SPLASH", raising=False)
+        monkeypatch.delenv("SPRUCE_GROVE_NO_SPLASH", raising=False)
         monkeypatch.setenv("NO_COLOR", "1")
-        assert splash._wants_splash(["code-puppy"]) is False
+        assert splash._wants_splash(["spruce-grove"]) is False
 
     def test_dumb_term_skipped(self, monkeypatch):
-        monkeypatch.delenv("CODE_PUPPY_NO_SPLASH", raising=False)
+        monkeypatch.delenv("SPRUCE_GROVE_NO_SPLASH", raising=False)
         monkeypatch.delenv("NO_COLOR", raising=False)
         monkeypatch.setenv("TERM", "dumb")
-        assert splash._wants_splash(["code-puppy"]) is False
+        assert splash._wants_splash(["spruce-grove"]) is False
 
     def test_terminal_too_small_for_pyramid_gets_null_splash(self, monkeypatch):
         import os
 
-        monkeypatch.setattr("sys.argv", ["code-puppy"])
-        monkeypatch.delenv("CODE_PUPPY_NO_SPLASH", raising=False)
+        monkeypatch.setattr("sys.argv", ["spruce-grove"])
+        monkeypatch.delenv("SPRUCE_GROVE_NO_SPLASH", raising=False)
         monkeypatch.delenv("NO_COLOR", raising=False)
         monkeypatch.setenv("TERM", "xterm-256color")
         monkeypatch.setattr(
@@ -103,7 +103,7 @@ class TestFrame:
         import pyfiglet
 
         for text, baked in (
-            ("CODE PUPPY", splash._BANNER_FULL),
+            ("SPRUCE GROVE", splash._BANNER_FULL),
             ("PUP", splash._BANNER_COMPACT),
         ):
             rendered = pyfiglet.figlet_format(text, font="ansi_shadow", width=300)

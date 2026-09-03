@@ -1,4 +1,4 @@
-"""Tests for the project-plugin trust store (code_puppy.plugins.trust)."""
+"""Tests for the project-plugin trust store (spruce_grove.plugins.trust)."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from code_puppy.plugins import trust
+from spruce_grove.plugins import trust
 
 
 @pytest.fixture(autouse=True)
@@ -17,7 +17,7 @@ def _isolated_store(tmp_path: Path, monkeypatch):
 
 @pytest.fixture()
 def plugin_dir(tmp_path: Path) -> Path:
-    d = tmp_path / "proj" / ".code_puppy" / "plugins" / "my_plugin"
+    d = tmp_path / "proj" / ".spruce_grove" / "plugins" / "my_plugin"
     d.mkdir(parents=True)
     (d / "register_callbacks.py").write_text("# hello\n")
     return d

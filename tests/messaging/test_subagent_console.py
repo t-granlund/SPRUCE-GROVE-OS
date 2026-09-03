@@ -1,4 +1,4 @@
-"""Tests for code_puppy.messaging.subagent_console."""
+"""Tests for spruce_grove.messaging.subagent_console."""
 
 import time
 from io import StringIO
@@ -7,7 +7,7 @@ from unittest.mock import MagicMock
 import pytest
 from rich.console import Console
 
-from code_puppy.messaging.subagent_console import (
+from spruce_grove.messaging.subagent_console import (
     STATUS_STYLES,
     AgentState,
     SubAgentConsoleManager,

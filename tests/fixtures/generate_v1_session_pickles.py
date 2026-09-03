@@ -54,7 +54,7 @@ def build_history() -> list:
         ModelRequest(
             parts=[
                 SystemPromptPart(
-                    content="You are Biscuit, a digital puppy.", timestamp=TS
+                    content="You are Biscuit, a digital grove.", timestamp=TS
                 ),
                 UserPromptPart(
                     content=[
@@ -71,7 +71,7 @@ def build_history() -> list:
                 TextPart(content="Looks like a PNG. Let me grep around."),
                 ToolCallPart(
                     tool_name="grep",
-                    args={"search_string": "puppy"},
+                    args={"search_string": "grove"},
                     tool_call_id="call_1",
                 ),
             ],

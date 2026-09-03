@@ -1,4 +1,4 @@
-"""Full coverage tests for code_puppy/gemini_model.py."""
+"""Full coverage tests for spruce_grove/gemini_model.py."""
 
 import uuid
 from datetime import datetime
@@ -20,7 +20,7 @@ from pydantic_ai.messages import (
 from pydantic_ai.models import ModelRequestParameters
 from pydantic_ai.tools import ToolDefinition
 
-from code_puppy.gemini_model import (
+from spruce_grove.gemini_model import (
     BYPASS_THOUGHT_SIGNATURE,
     GeminiModel,
     GeminiStreamingResponse,

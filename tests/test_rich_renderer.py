@@ -15,24 +15,24 @@ from rich.rule import Rule
 from rich.text import Text
 
 ROOT = Path(__file__).resolve().parents[1]
-MESSAGING_PATH = ROOT / "code_puppy" / "messaging"
-TOOLS_PATH = ROOT / "code_puppy" / "tools"
+MESSAGING_PATH = ROOT / "spruce_grove" / "messaging"
+TOOLS_PATH = ROOT / "spruce_grove" / "tools"
 
-messaging_pkg = types.ModuleType("code_puppy.messaging")
+messaging_pkg = types.ModuleType("spruce_grove.messaging")
 messaging_pkg.__path__ = [str(MESSAGING_PATH)]
-sys.modules.setdefault("code_puppy.messaging", messaging_pkg)
+sys.modules.setdefault("spruce_grove.messaging", messaging_pkg)
 
-tools_pkg = types.ModuleType("code_puppy.tools")
+tools_pkg = types.ModuleType("spruce_grove.tools")
 tools_pkg.__path__ = [str(TOOLS_PATH)]
-sys.modules.setdefault("code_puppy.tools", tools_pkg)
+sys.modules.setdefault("spruce_grove.tools", tools_pkg)
 
-common_stub = types.ModuleType("code_puppy.tools.common")
+common_stub = types.ModuleType("spruce_grove.tools.common")
 common_stub.stream_diff_ansi_lines = lambda diff_text: iter(diff_text.split("\n"))
-sys.modules.setdefault("code_puppy.tools.common", common_stub)
+sys.modules.setdefault("spruce_grove.tools.common", common_stub)
 
-from code_puppy.messaging import rich_renderer as rich_renderer_module  # noqa: E402
-from code_puppy.messaging.bus import MessageBus  # noqa: E402
-from code_puppy.messaging.messages import (  # noqa: E402
+from spruce_grove.messaging import rich_renderer as rich_renderer_module  # noqa: E402
+from spruce_grove.messaging.bus import MessageBus  # noqa: E402
+from spruce_grove.messaging.messages import (  # noqa: E402
     AgentReasoningMessage,
     ConfirmationRequest,
     DiffLine,
@@ -56,7 +56,7 @@ from code_puppy.messaging.messages import (  # noqa: E402
     UserInputRequest,
     VersionCheckMessage,
 )
-from code_puppy.messaging.rich_renderer import RichConsoleRenderer  # noqa: E402
+from spruce_grove.messaging.rich_renderer import RichConsoleRenderer  # noqa: E402
 
 
 def _make_renderer() -> tuple[RichConsoleRenderer, Mock]:

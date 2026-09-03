@@ -1,10 +1,10 @@
-"""Tests for code_puppy/command_line/mcp/custom_server_form.py"""
+"""Tests for spruce_grove/command_line/mcp/custom_server_form.py"""
 
 import json
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-MODULE = "code_puppy.command_line.mcp.custom_server_form"
+MODULE = "spruce_grove.command_line.mcp.custom_server_form"
 
 
 # ---------------------------------------------------------------------------
@@ -14,19 +14,19 @@ MODULE = "code_puppy.command_line.mcp.custom_server_form"
 
 class TestModuleConstants:
     def test_server_types(self):
-        from code_puppy.command_line.mcp.custom_server_form import SERVER_TYPES
+        from spruce_grove.command_line.mcp.custom_server_form import SERVER_TYPES
 
         assert SERVER_TYPES == ["stdio", "http", "sse"]
 
     def test_custom_server_examples_keys(self):
-        from code_puppy.command_line.mcp.custom_server_form import (
+        from spruce_grove.command_line.mcp.custom_server_form import (
             CUSTOM_SERVER_EXAMPLES,
         )
 
         assert set(CUSTOM_SERVER_EXAMPLES.keys()) == {"stdio", "http", "sse"}
 
     def test_examples_are_valid_json(self):
-        from code_puppy.command_line.mcp.custom_server_form import (
+        from spruce_grove.command_line.mcp.custom_server_form import (
             CUSTOM_SERVER_EXAMPLES,
         )
 
@@ -35,7 +35,7 @@ class TestModuleConstants:
             assert isinstance(parsed, dict)
 
     def test_server_type_descriptions(self):
-        from code_puppy.command_line.mcp.custom_server_form import (
+        from spruce_grove.command_line.mcp.custom_server_form import (
             SERVER_TYPE_DESCRIPTIONS,
         )
 
@@ -51,7 +51,7 @@ class TestModuleConstants:
 
 class TestCustomServerFormInit:
     def test_default_init(self):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         mgr = MagicMock()
         form = CustomServerForm(mgr)
@@ -64,7 +64,7 @@ class TestCustomServerFormInit:
         assert form.status_is_error is False
 
     def test_edit_mode_init(self):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         mgr = MagicMock()
         cfg = {"command": "npx", "args": ["-y", "test"]}
@@ -81,13 +81,13 @@ class TestCustomServerFormInit:
         assert json.loads(form.json_config) == cfg
 
     def test_edit_mode_unknown_type_defaults_to_zero(self):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         form = CustomServerForm(MagicMock(), existing_type="unknown")
         assert form.selected_type_idx == 0
 
     def test_no_existing_config_uses_example(self):
-        from code_puppy.command_line.mcp.custom_server_form import (
+        from spruce_grove.command_line.mcp.custom_server_form import (
             CUSTOM_SERVER_EXAMPLES,
             CustomServerForm,
         )
@@ -103,7 +103,7 @@ class TestCustomServerFormInit:
 
 class TestGetCurrentType:
     def test_returns_correct_type(self):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         form = CustomServerForm(MagicMock())
         form.selected_type_idx = 2
@@ -117,7 +117,7 @@ class TestGetCurrentType:
 
 class TestValidateServerName:
     def _make_form(self):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         return CustomServerForm(MagicMock())
 
@@ -147,7 +147,7 @@ class TestValidateServerName:
 
 class TestValidateJson:
     def _make_form(self):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         return CustomServerForm(MagicMock())
 
@@ -204,7 +204,7 @@ class TestValidateJson:
 
 class TestFormPreview:
     def test_preview_shows_values_and_valid_json(self):
-        from code_puppy.command_line.mcp.custom_server_form import (
+        from spruce_grove.command_line.mcp.custom_server_form import (
             CustomServerForm,
             form_preview,
         )
@@ -217,7 +217,7 @@ class TestFormPreview:
         assert "valid" in text
 
     def test_preview_shows_json_error(self):
-        from code_puppy.command_line.mcp.custom_server_form import (
+        from spruce_grove.command_line.mcp.custom_server_form import (
             CustomServerForm,
             form_preview,
         )
@@ -228,7 +228,7 @@ class TestFormPreview:
         assert "Invalid JSON" in text
 
     def test_preview_shows_status_message(self):
-        from code_puppy.command_line.mcp.custom_server_form import (
+        from spruce_grove.command_line.mcp.custom_server_form import (
             CustomServerForm,
             form_preview,
         )
@@ -246,7 +246,7 @@ class TestFormPreview:
 
 class TestInstallServer:
     def _make_form(self):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         form = CustomServerForm(MagicMock())
         return form
@@ -265,7 +265,7 @@ class TestInstallServer:
         assert form.status_is_error is True
 
     def test_install_new_server_success(self, tmp_path):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         mcp_file = tmp_path / "mcp_servers.json"
         mgr = MagicMock()
@@ -274,14 +274,14 @@ class TestInstallServer:
         form.server_name = "my-server"
         form.json_config = json.dumps({"command": "npx", "args": []})
 
-        with patch("code_puppy.config.MCP_SERVERS_FILE", str(mcp_file)):
+        with patch("spruce_grove.config.MCP_SERVERS_FILE", str(mcp_file)):
             assert form._install_server() is True
 
         data = json.loads(mcp_file.read_text())
         assert "my-server" in data["mcp_servers"]
 
     def test_install_new_server_register_fails(self, tmp_path):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         mcp_file = tmp_path / "mcp_servers.json"
         mgr = MagicMock()
@@ -290,12 +290,12 @@ class TestInstallServer:
         form.server_name = "my-server"
         form.json_config = json.dumps({"command": "npx"})
 
-        with patch("code_puppy.config.MCP_SERVERS_FILE", str(mcp_file)):
+        with patch("spruce_grove.config.MCP_SERVERS_FILE", str(mcp_file)):
             assert form._install_server() is False
         assert form.status_is_error is True
 
     def test_install_edit_mode_existing_found(self, tmp_path):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         mcp_file = tmp_path / "mcp_servers.json"
         mcp_file.write_text(json.dumps({"mcp_servers": {"old": {}}}))
@@ -313,11 +313,11 @@ class TestInstallServer:
         form.server_name = "new-name"
         form.json_config = json.dumps({"command": "npx"})
 
-        with patch("code_puppy.config.MCP_SERVERS_FILE", str(mcp_file)):
+        with patch("spruce_grove.config.MCP_SERVERS_FILE", str(mcp_file)):
             assert form._install_server() is True
 
     def test_install_edit_mode_existing_not_found(self, tmp_path):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         mcp_file = tmp_path / "mcp_servers.json"
         mgr = MagicMock()
@@ -331,11 +331,11 @@ class TestInstallServer:
         form.server_name = "my-server"
         form.json_config = json.dumps({"command": "npx"})
 
-        with patch("code_puppy.config.MCP_SERVERS_FILE", str(mcp_file)):
+        with patch("spruce_grove.config.MCP_SERVERS_FILE", str(mcp_file)):
             assert form._install_server() is True
 
     def test_install_edit_mode_update_fails(self, tmp_path):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         mcp_file = tmp_path / "mcp_servers.json"
         mcp_file.write_text(json.dumps({"mcp_servers": {}}))
@@ -352,7 +352,7 @@ class TestInstallServer:
         form.server_name = "my-server"
         form.json_config = json.dumps({"command": "npx"})
 
-        with patch("code_puppy.config.MCP_SERVERS_FILE", str(mcp_file)):
+        with patch("spruce_grove.config.MCP_SERVERS_FILE", str(mcp_file)):
             assert form._install_server() is False
 
     def test_install_exception_during_save(self, tmp_path):
@@ -360,7 +360,7 @@ class TestInstallServer:
         mcp_servers.json blows up -- the underlying I/O failure modes
         themselves are covered by test_atomic_io.py / test_atomic_json.py,
         this just pins _install_server's own error handling."""
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         mcp_file = tmp_path / "mcp_servers.json"
         mgr = MagicMock()
@@ -369,9 +369,9 @@ class TestInstallServer:
         form.server_name = "my-server"
         form.json_config = json.dumps({"command": "npx"})
 
-        with patch("code_puppy.config.MCP_SERVERS_FILE", str(mcp_file)):
+        with patch("spruce_grove.config.MCP_SERVERS_FILE", str(mcp_file)):
             with patch(
-                "code_puppy.command_line.mcp.mcp_servers_store.upsert_mcp_server",
+                "spruce_grove.command_line.mcp.mcp_servers_store.upsert_mcp_server",
                 side_effect=PermissionError("no access"),
             ):
                 assert form._install_server() is False
@@ -379,7 +379,7 @@ class TestInstallServer:
 
     def test_install_edit_mode_name_changed_removes_old(self, tmp_path):
         """When editing and name changes, old entry should be removed from persisted file."""
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         mcp_file = tmp_path / "mcp_servers.json"
         mcp_file.write_text(json.dumps({"mcp_servers": {"old-name": {}}}))
@@ -396,7 +396,7 @@ class TestInstallServer:
         form.server_name = "new-name"
         form.json_config = json.dumps({"command": "npx"})
 
-        with patch("code_puppy.config.MCP_SERVERS_FILE", str(mcp_file)):
+        with patch("spruce_grove.config.MCP_SERVERS_FILE", str(mcp_file)):
             assert form._install_server() is True
 
         data = json.loads(mcp_file.read_text())
@@ -424,7 +424,7 @@ def _keys(*keys):
 
 class TestFormWidgets:
     def test_form_menu_lists_fields(self):
-        from code_puppy.command_line.mcp.custom_server_form import (
+        from spruce_grove.command_line.mcp.custom_server_form import (
             CustomServerForm,
             build_form_menu,
         )
@@ -435,7 +435,7 @@ class TestFormWidgets:
         assert result.item.value == "name"
 
     def test_name_editor_updates_form(self):
-        from code_puppy.command_line.mcp.custom_server_form import (
+        from spruce_grove.command_line.mcp.custom_server_form import (
             CustomServerForm,
             run_name_editor,
         )
@@ -445,7 +445,7 @@ class TestFormWidgets:
         assert form.server_name == "srv"
 
     def test_name_editor_escape_keeps_value(self):
-        from code_puppy.command_line.mcp.custom_server_form import (
+        from spruce_grove.command_line.mcp.custom_server_form import (
             CustomServerForm,
             run_name_editor,
         )
@@ -455,7 +455,7 @@ class TestFormWidgets:
         assert form.server_name == "keep-me"
 
     def test_type_menu_swaps_example_json(self):
-        from code_puppy.command_line.mcp.custom_server_form import (
+        from spruce_grove.command_line.mcp.custom_server_form import (
             CUSTOM_SERVER_EXAMPLES,
             CustomServerForm,
             run_type_menu,
@@ -467,7 +467,7 @@ class TestFormWidgets:
         assert form.json_config == CUSTOM_SERVER_EXAMPLES["http"]
 
     def test_type_menu_never_clobbers_user_json(self):
-        from code_puppy.command_line.mcp.custom_server_form import (
+        from spruce_grove.command_line.mcp.custom_server_form import (
             CustomServerForm,
             run_type_menu,
         )
@@ -481,7 +481,7 @@ class TestFormWidgets:
         assert form.json_config == original  # user config untouched
 
     def test_json_fallback_editor_reformats(self):
-        from code_puppy.command_line.mcp.custom_server_form import (
+        from spruce_grove.command_line.mcp.custom_server_form import (
             CustomServerForm,
             run_json_fallback_editor,
         )
@@ -496,7 +496,7 @@ class TestFormWidgets:
 
 class TestEditJsonInEditor:
     def test_editor_roundtrip(self, monkeypatch, tmp_path):
-        from code_puppy.command_line.mcp import custom_server_form as csf
+        from spruce_grove.command_line.mcp import custom_server_form as csf
 
         def fake_call(cmd):
             Path(cmd[-1]).write_text('{"command": "edited"}')
@@ -507,7 +507,7 @@ class TestEditJsonInEditor:
         assert csf.edit_json_in_editor("{}") == '{"command": "edited"}'
 
     def test_editor_failure_returns_none(self, monkeypatch):
-        from code_puppy.command_line.mcp import custom_server_form as csf
+        from spruce_grove.command_line.mcp import custom_server_form as csf
 
         monkeypatch.setattr(csf.subprocess, "call", lambda cmd: 1)
         assert csf.edit_json_in_editor("{}") is None
@@ -515,7 +515,7 @@ class TestEditJsonInEditor:
 
 class TestRunFormFlow:
     def _flow(self, form, menu_scripts, **kwargs):
-        from code_puppy.command_line.mcp.custom_server_form import (
+        from spruce_grove.command_line.mcp.custom_server_form import (
             build_form_menu,
             run_form_flow,
         )
@@ -530,20 +530,20 @@ class TestRunFormFlow:
         return run_form_flow(form, menu_factory=factory, **kwargs)
 
     def test_cancel_via_escape(self):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         form = CustomServerForm(MagicMock())
         assert self._flow(form, [["escape"]]) is False
         assert form.result == "cancelled"
 
     def test_cancel_menu_entry(self):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         form = CustomServerForm(MagicMock())
         assert self._flow(form, [["end", "enter"]]) is False  # last item = Cancel
 
     def test_save_success_installs(self):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         form = CustomServerForm(MagicMock())
         form.server_name = "srv"
@@ -556,7 +556,7 @@ class TestRunFormFlow:
         assert form.result == "installed"
 
     def test_save_failure_reopens_menu(self):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         form = CustomServerForm(MagicMock())
         with patch.object(CustomServerForm, "_install_server", return_value=False):
@@ -564,7 +564,7 @@ class TestRunFormFlow:
         assert result is False
 
     def test_edit_name_then_save(self):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         form = CustomServerForm(MagicMock())
         with patch.object(CustomServerForm, "_install_server", return_value=True):
@@ -577,7 +577,7 @@ class TestRunFormFlow:
         assert form.server_name == "typed"
 
     def test_json_editor_fallback_used_when_editor_unavailable(self):
-        from code_puppy.command_line.mcp.custom_server_form import CustomServerForm
+        from spruce_grove.command_line.mcp.custom_server_form import CustomServerForm
 
         form = CustomServerForm(MagicMock())
         fallback_called = []
@@ -592,14 +592,14 @@ class TestRunFormFlow:
 
 class TestRunCustomServerForm:
     def test_delegates_and_reports(self):
-        from code_puppy.command_line.mcp import custom_server_form as csf
+        from spruce_grove.command_line.mcp import custom_server_form as csf
 
         mgr = MagicMock()
         with (
             patch.object(csf, "run_form_flow", return_value=True) as mock_flow,
-            patch("code_puppy.command_line.menu_session.menu_session") as mock_session,
+            patch("spruce_grove.command_line.menu_session.menu_session") as mock_session,
             patch(
-                "code_puppy.command_line.mcp_binding_menu.prompt_bind_after_install_sync",
+                "spruce_grove.command_line.mcp_binding_menu.prompt_bind_after_install_sync",
                 create=True,  # only the async variant exists; the call site
                 # swallows the ImportError (same as the old implementation)
             ) as mock_bind,
@@ -612,11 +612,11 @@ class TestRunCustomServerForm:
         mock_bind.assert_called_once()
 
     def test_returns_false_on_cancel(self):
-        from code_puppy.command_line.mcp import custom_server_form as csf
+        from spruce_grove.command_line.mcp import custom_server_form as csf
 
         with (
             patch.object(csf, "run_form_flow", return_value=False),
-            patch("code_puppy.command_line.menu_session.menu_session") as mock_session,
+            patch("spruce_grove.command_line.menu_session.menu_session") as mock_session,
         ):
             mock_session.return_value.__enter__ = lambda s: None
             mock_session.return_value.__exit__ = lambda s, *a: False

@@ -1,7 +1,7 @@
 """Tests for the scoped unattended-run system instruction."""
 
-from code_puppy.agents.base_agent import BaseAgent
-from code_puppy.cli_runner import _HEADLESS_AUTONOMY_PROMPT
+from spruce_grove.agents.base_agent import BaseAgent
+from spruce_grove.cli_runner import _HEADLESS_AUTONOMY_PROMPT
 
 
 class _TestAgent(BaseAgent):
@@ -25,7 +25,7 @@ class _TestAgent(BaseAgent):
 
 
 def test_headless_autonomy_prompt_is_scoped_to_the_run(monkeypatch):
-    monkeypatch.setattr("code_puppy.callbacks.on_load_prompt", lambda: [])
+    monkeypatch.setattr("spruce_grove.callbacks.on_load_prompt", lambda: [])
     agent = _TestAgent()
 
     assert _HEADLESS_AUTONOMY_PROMPT not in agent.get_full_system_prompt()

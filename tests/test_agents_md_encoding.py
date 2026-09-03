@@ -9,8 +9,8 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy.agents import _builder
-from code_puppy.agents._builder import _read_rules_text, load_puppy_rules
+from spruce_grove.agents import _builder
+from spruce_grove.agents._builder import _read_rules_text, load_puppy_rules
 
 
 @pytest.mark.parametrize(

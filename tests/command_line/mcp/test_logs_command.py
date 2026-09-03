@@ -1,18 +1,18 @@
-"""Tests for code_puppy/command_line/mcp/logs_command.py"""
+"""Tests for spruce_grove/command_line/mcp/logs_command.py"""
 
 from unittest.mock import MagicMock, patch
 
 import pytest
 
-MODULE = "code_puppy.command_line.mcp.logs_command"
-UTILS = "code_puppy.command_line.mcp.utils"
+MODULE = "spruce_grove.command_line.mcp.logs_command"
+UTILS = "spruce_grove.command_line.mcp.utils"
 
 
 def _make_cmd():
     """Create a LogsCommand with mocked manager."""
-    with patch("code_puppy.command_line.mcp.base.get_mcp_manager") as mock_mgr:
+    with patch("spruce_grove.command_line.mcp.base.get_mcp_manager") as mock_mgr:
         mock_mgr.return_value = MagicMock()
-        from code_puppy.command_line.mcp.logs_command import LogsCommand
+        from spruce_grove.command_line.mcp.logs_command import LogsCommand
 
         cmd = LogsCommand()
     return cmd

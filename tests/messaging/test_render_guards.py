@@ -5,8 +5,8 @@ from io import StringIO
 
 from rich.console import Console
 
-from code_puppy.messaging.message_queue import MessageQueue, MessageType, UIMessage
-from code_puppy.messaging.renderers import (
+from spruce_grove.messaging.message_queue import MessageQueue, MessageType, UIMessage
+from spruce_grove.messaging.renderers import (
     SynchronousInteractiveRenderer,
     _print_message,
 )
@@ -41,7 +41,7 @@ def test_consume_thread_survives_render_exception(capsys):
 
 def test_print_message_survives_bar_notify_failure(monkeypatch):
     """A broken bottom bar must never break transcript printing."""
-    import code_puppy.messaging.bottom_bar as bb
+    import spruce_grove.messaging.bottom_bar as bb
 
     class ExplodingBar:
         def notify_transcript_output(self):

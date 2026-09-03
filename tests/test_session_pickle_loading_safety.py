@@ -9,7 +9,7 @@ callable.
 
 import pickle
 
-from code_puppy.session_surrogate_unpickler import (
+from spruce_grove.session_surrogate_unpickler import (
     is_surrogate,
     load_surrogate_pickle,
 )
@@ -60,7 +60,7 @@ def test_blocked_builtins_namespace_accessors():
     import builtins
     import io
 
-    from code_puppy.session_surrogate_unpickler import SurrogateBase, SurrogateUnpickler
+    from spruce_grove.session_surrogate_unpickler import SurrogateBase, SurrogateUnpickler
 
     for name in ("globals", "locals", "vars", "getattr"):
         unpickler = SurrogateUnpickler(io.BytesIO(b""))
@@ -108,7 +108,7 @@ def test_dateutil_tz_reexports_are_surrogates():
     import os
     import sys
 
-    from code_puppy.session_surrogate_unpickler import SurrogateBase, SurrogateUnpickler
+    from spruce_grove.session_surrogate_unpickler import SurrogateBase, SurrogateUnpickler
 
     unpickler = SurrogateUnpickler(io.BytesIO(b""))
     for name, real in (("os", os), ("sys", sys)):
@@ -126,7 +126,7 @@ def test_exit_quit_help_do_not_resolve_to_real_callables():
     import builtins
     import io
 
-    from code_puppy.session_surrogate_unpickler import SurrogateBase, SurrogateUnpickler
+    from spruce_grove.session_surrogate_unpickler import SurrogateBase, SurrogateUnpickler
 
     for name in ("exit", "quit", "help"):
         unpickler = SurrogateUnpickler(io.BytesIO(b""))

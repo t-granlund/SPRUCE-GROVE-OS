@@ -2,7 +2,7 @@
 
 from unittest.mock import patch
 
-from code_puppy import plugins
+from spruce_grove import plugins
 
 
 class FakeEntryPoint:

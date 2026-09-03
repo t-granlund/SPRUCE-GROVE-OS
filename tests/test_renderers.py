@@ -12,8 +12,8 @@ import pytest
 from rich.console import Console
 from rich.text import Text
 
-from code_puppy.messaging.message_queue import MessageQueue, MessageType, UIMessage
-from code_puppy.messaging.renderers import InteractiveRenderer, MessageRenderer
+from spruce_grove.messaging.message_queue import MessageQueue, MessageType, UIMessage
+from spruce_grove.messaging.renderers import InteractiveRenderer, MessageRenderer
 
 
 class TestMessageRenderer:

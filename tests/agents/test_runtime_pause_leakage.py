@@ -12,9 +12,9 @@ from typing import Any, List
 
 import pytest
 
-from code_puppy.agents import _runtime
-from code_puppy.callbacks import _callbacks, clear_callbacks
-from code_puppy.messaging.pause_controller import (
+from spruce_grove.agents import _runtime
+from spruce_grove.callbacks import _callbacks, clear_callbacks
+from spruce_grove.messaging.pause_controller import (
     get_pause_controller,
     reset_pause_controller,
 )
@@ -104,7 +104,7 @@ async def test_stale_now_steer_becomes_queued_turn_at_run_start(
     """A ``/steer`` that missed the prior run is preserved as a queued turn."""
     infos: List[str] = []
     monkeypatch.setattr(
-        "code_puppy.agents._run_signals.emit_info",
+        "spruce_grove.agents._run_signals.emit_info",
         lambda msg, *_a, **_k: infos.append(msg),
     )
 
@@ -158,7 +158,7 @@ async def test_clean_state_at_run_start_emits_no_warning(
     """
     warnings: List[str] = []
     monkeypatch.setattr(
-        "code_puppy.agents._run_signals.emit_warning",
+        "spruce_grove.agents._run_signals.emit_warning",
         lambda msg, *_a, **_k: warnings.append(msg),
     )
 
@@ -191,7 +191,7 @@ async def test_steer_drained_on_cancel(_isolated_runtime, monkeypatch):
     infos: List[str] = []
     # ``drain_pause_state_on_cancel`` lives in _run_signals.
     monkeypatch.setattr(
-        "code_puppy.agents._run_signals.emit_info",
+        "spruce_grove.agents._run_signals.emit_info",
         lambda msg, *_a, **_k: infos.append(msg),
     )
 
@@ -224,7 +224,7 @@ async def test_paused_state_cleared_on_cancel(_isolated_runtime, monkeypatch):
     so the NEXT run isn't frozen.
     """
     monkeypatch.setattr(
-        "code_puppy.agents._run_signals.emit_info", lambda *_a, **_k: None
+        "spruce_grove.agents._run_signals.emit_info", lambda *_a, **_k: None
     )
 
     pc = get_pause_controller()
@@ -265,7 +265,7 @@ def test_steer_queued_mid_run_is_injected_via_history_processor():
 
     from pydantic_ai.messages import ModelRequest, UserPromptPart
 
-    from code_puppy.agents._steer_processor import make_steer_history_processor
+    from spruce_grove.agents._steer_processor import make_steer_history_processor
 
     agent = Mock()
     agent._message_history = []
@@ -292,7 +292,7 @@ def test_steer_processor_is_wired_into_builder_after_compaction():
     """
     import inspect
 
-    from code_puppy.agents import _builder
+    from spruce_grove.agents import _builder
 
     src = inspect.getsource(_builder)
     # Both processors must be referenced in the builder.

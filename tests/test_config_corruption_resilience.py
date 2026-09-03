@@ -1,4 +1,4 @@
-"""Regression tests for code_puppy.config_file's corruption tolerance.
+"""Regression tests for spruce_grove.config_file's corruption tolerance.
 
 Background: a user hit an uncaught ``MemoryError`` bubbling out of
 ``configparser.ConfigParser().read(CONFIG_FILE)`` deep inside a startup
@@ -7,7 +7,7 @@ at a fix (catch-and-quarantine around a raw ``config.read()``) survived an
 adversarial review that found it would misclassify transient I/O errors as
 corruption, race with concurrent processes between read and quarantine, and
 let same-instant quarantine attempts clobber each other. This suite pins the
-hardened design in :mod:`code_puppy.config_file`:
+hardened design in :mod:`spruce_grove.config_file`:
 
 * reads are byte-bounded, so a pathological file can never balloon memory;
 * only confirmed parse/decode/oversize corruption is quarantined;
@@ -26,8 +26,8 @@ from unittest.mock import patch
 import configparser
 import pytest
 
-from code_puppy import atomic_io, config as cp_config
-from code_puppy import config_file
+from spruce_grove import atomic_io, config as cp_config
+from spruce_grove import config_file
 
 
 @pytest.fixture
@@ -35,7 +35,7 @@ def cfg_path(tmp_path, monkeypatch):
     """Point CONFIG_FILE at a real (temp) path so os.link/replace behave."""
     cfg_dir = tmp_path / "cfgdir"
     cfg_dir.mkdir()
-    path = cfg_dir / "puppy.cfg"
+    path = cfg_dir / "grove.cfg"
     monkeypatch.setattr(cp_config, "CONFIG_FILE", str(path))
     return path
 
@@ -67,15 +67,15 @@ class TestLoadConfigCorruption:
         assert glob.glob(f"{cfg_path}.corrupted-*")
 
     def test_utf8_bom_is_accepted_without_quarantine(self, cfg_path):
-        cfg_path.write_bytes("[puppy]\nowner_name = María\n".encode("utf-8-sig"))
+        cfg_path.write_bytes("[grove]\nowner_name = María\n".encode("utf-8-sig"))
 
         config = config_file.load_config(str(cfg_path))
 
-        assert config.get("puppy", "owner_name") == "María"
+        assert config.get("grove", "owner_name") == "María"
         assert not glob.glob(f"{cfg_path}.corrupted-*")
 
     def test_windows_locale_encoded_config_is_accepted(self, cfg_path, monkeypatch):
-        cfg_path.write_bytes("[puppy]\nowner_name = María\n".encode("cp1252"))
+        cfg_path.write_bytes("[grove]\nowner_name = María\n".encode("cp1252"))
         monkeypatch.setattr(config_file.os, "name", "nt", raising=False)
         monkeypatch.setattr(
             config_file.locale,
@@ -85,11 +85,11 @@ class TestLoadConfigCorruption:
 
         config = config_file.load_config(str(cfg_path))
 
-        assert config.get("puppy", "owner_name") == "María"
+        assert config.get("grove", "owner_name") == "María"
         assert not glob.glob(f"{cfg_path}.corrupted-*")
 
     def test_windows_locale_fallback_logs_warning(self, cfg_path, monkeypatch, caplog):
-        cfg_path.write_bytes("[puppy]\nowner_name = María\n".encode("cp1252"))
+        cfg_path.write_bytes("[grove]\nowner_name = María\n".encode("cp1252"))
         monkeypatch.setattr(config_file.os, "name", "nt", raising=False)
         monkeypatch.setattr(
             config_file.locale,
@@ -119,11 +119,11 @@ class TestLoadConfigCorruption:
         assert glob.glob(f"{cfg_path}.corrupted-*")
 
     def test_healthy_config_is_left_untouched(self, cfg_path):
-        cfg_path.write_text("[puppy]\npuppy_name = leoncito\n")
+        cfg_path.write_text("[grove]\npuppy_name = leoncito\n")
 
         config = config_file.load_config(str(cfg_path))
 
-        assert config.get("puppy", "puppy_name") == "leoncito"
+        assert config.get("grove", "puppy_name") == "leoncito"
         assert not glob.glob(f"{cfg_path}.corrupted-*")
 
     def test_missing_file_returns_empty_config_without_error(self, cfg_path):
@@ -158,7 +158,7 @@ class TestOversizedConfigIsBoundedNotBallooned:
         pathological file into memory. This directly targets the field
         report's failure mode: stdlib configparser's buffered readline
         ballooning memory on a giant unterminated line. The bound now lives
-        in the shared ``code_puppy.atomic_io`` primitive."""
+        in the shared ``spruce_grove.atomic_io`` primitive."""
         monkeypatch.setattr(config_file, "MAX_CONFIG_BYTES", 1024)
         cfg_path.write_bytes(b"y" * (5 * 1024 * 1024))
         # Make the pre-flight os.path.getsize check lie about the size so
@@ -189,7 +189,7 @@ class TestOversizedConfigIsBoundedNotBallooned:
                 return _TrackingFile(real_open(path, mode))
             return real_open(path, mode)
 
-        with patch("code_puppy.atomic_io.open", _tracking_open, create=True):
+        with patch("spruce_grove.atomic_io.open", _tracking_open, create=True):
             config_file.load_config(str(cfg_path))
 
         assert captured_sizes, "expected the bounded read to be exercised"
@@ -248,7 +248,7 @@ class TestTransientIoErrorsPropagate:
     failure was one of the reviewer's HIGH findings."""
 
     def test_permission_error_on_read_propagates_and_is_not_quarantined(self, cfg_path):
-        cfg_path.write_text("[puppy]\npuppy_name = leoncito\n")
+        cfg_path.write_text("[grove]\npuppy_name = leoncito\n")
 
         with patch("builtins.open", side_effect=PermissionError("locked by AV")):
             with pytest.raises(PermissionError):
@@ -260,7 +260,7 @@ class TestTransientIoErrorsPropagate:
 
     def test_get_value_does_not_swallow_transient_os_errors(self, cfg_path):
         """Public accessors should not pretend a disk hiccup means 'no value'."""
-        cfg_path.write_text("[puppy]\npuppy_name = leoncito\n")
+        cfg_path.write_text("[grove]\npuppy_name = leoncito\n")
 
         with patch("builtins.open", side_effect=OSError("device not ready")):
             with pytest.raises(OSError):
@@ -283,12 +283,12 @@ class TestRecoveryTocTou:
             # before we acquired the lock for the confirming re-read.
             return original_read_unlocked(path)
 
-        cfg_path.write_text("[puppy]\npuppy_name = fixed-by-another-process\n")
+        cfg_path.write_text("[grove]\npuppy_name = fixed-by-another-process\n")
 
         with patch.object(config_file, "_read_unlocked", side_effect=_fake_read):
             config = config_file.load_config(str(cfg_path))
 
-        assert config.get("puppy", "puppy_name") == "fixed-by-another-process"
+        assert config.get("grove", "puppy_name") == "fixed-by-another-process"
         assert not glob.glob(f"{cfg_path}.corrupted-*")
         assert cfg_path.exists()
 
@@ -304,24 +304,24 @@ class TestAtomicWriteAndLocking:
         assert cp_config.get_value("active_theme") == "dracula"
 
     def test_write_failure_never_touches_the_original_file(self, cfg_path):
-        cfg_path.write_text("[puppy]\npuppy_name = leoncito\n")
+        cfg_path.write_text("[grove]\npuppy_name = leoncito\n")
 
         with patch("os.fsync", side_effect=OSError("disk full")):
             with pytest.raises(OSError):
                 cp_config.set_config_value("active_theme", "dracula")
 
         # Original content must be intact -- no partial/truncated write.
-        assert cfg_path.read_text() == "[puppy]\npuppy_name = leoncito\n"
+        assert cfg_path.read_text() == "[grove]\npuppy_name = leoncito\n"
         # And no stray temp files left behind in the config directory.
         leftovers = [
-            f for f in os.listdir(cfg_path.parent) if f.startswith(".puppy.cfg-")
+            f for f in os.listdir(cfg_path.parent) if f.startswith(".grove.cfg-")
         ]
         assert leftovers == []
 
     def test_concurrent_mutations_do_not_lose_updates(self, cfg_path):
         """Two threads racing set_config_value must not stomp each other --
         this is what the shared cross-process lock in mutate_config buys us."""
-        cfg_path.write_text("[puppy]\npuppy_name = leoncito\n")
+        cfg_path.write_text("[grove]\npuppy_name = leoncito\n")
 
         def _writer(key, value):
             cp_config.set_config_value(key, value)
@@ -340,7 +340,7 @@ class TestAtomicWriteAndLocking:
 
     def test_reset_value_skips_write_when_key_absent(self, cfg_path):
         """mutate_config's False-return short-circuit must avoid a no-op write."""
-        cfg_path.write_text("[puppy]\npuppy_name = leoncito\n")
+        cfg_path.write_text("[grove]\npuppy_name = leoncito\n")
         original_mtime_ns = os.stat(cfg_path).st_mtime_ns
         time.sleep(0.01)
 
@@ -349,7 +349,7 @@ class TestAtomicWriteAndLocking:
         assert os.stat(cfg_path).st_mtime_ns == original_mtime_ns
 
     def test_lock_timeout_raises_rather_than_hanging_forever(self, cfg_path):
-        cfg_path.write_text("[puppy]\npuppy_name = leoncito\n")
+        cfg_path.write_text("[grove]\npuppy_name = leoncito\n")
 
         with patch.object(config_file, "_LOCK_TIMEOUT_SECONDS", 0.2):
             with config_file._config_lock(str(cfg_path)):

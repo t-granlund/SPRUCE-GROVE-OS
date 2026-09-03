@@ -6,7 +6,7 @@ from typing import Any
 
 import pytest
 
-from code_puppy.tools import file_permission_state as fps
+from spruce_grove.tools import file_permission_state as fps
 
 
 @pytest.fixture(autouse=True)
@@ -80,7 +80,7 @@ class TestProviderDelegation:
         assert fps.get_last_user_feedback() is None
 
     def test_registration_captures_plugin_loading_owner(self):
-        from code_puppy.callbacks import clear_loading_context, set_loading_context
+        from spruce_grove.callbacks import clear_loading_context, set_loading_context
 
         set_loading_context("permission-plugin")
         try:
@@ -96,7 +96,7 @@ class TestProviderLifecycle:
         state["diff_shown"] = True
         state["feedback"] = "stale feedback"
         monkeypatch.setattr(
-            "code_puppy.plugins.config.get_disabled_plugins",
+            "spruce_grove.plugins.config.get_disabled_plugins",
             lambda: {"permission-plugin"},
         )
 

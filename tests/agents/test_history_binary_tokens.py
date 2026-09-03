@@ -1,4 +1,4 @@
-"""Token estimation for binary attachments in code_puppy.agents._history.
+"""Token estimation for binary attachments in spruce_grove.agents._history.
 
 The estimator reduces a BinaryContent to a 16-hex-char digest for hashing, so
 without a separate charge a full-page screenshot scores about as much as the
@@ -15,7 +15,7 @@ from PIL import Image
 from pydantic_ai import BinaryContent
 from pydantic_ai.messages import ModelRequest, UserPromptPart
 
-from code_puppy.agents._history import (
+from spruce_grove.agents._history import (
     _BINARY_CONTENT_FALLBACK_TOKENS,
     estimate_binary_content_tokens,
     estimate_tokens_for_message,
@@ -81,7 +81,7 @@ def test_non_image_binary_uses_fallback():
 
 def test_text_only_message_estimate_is_unchanged():
     # Guard against the binary charge leaking into ordinary messages.
-    message = ModelRequest(parts=[UserPromptPart(content="hello puppy")])
+    message = ModelRequest(parts=[UserPromptPart(content="hello grove")])
     assert estimate_tokens_for_message(message) == 12
 
 

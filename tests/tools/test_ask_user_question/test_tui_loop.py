@@ -10,9 +10,9 @@ from __future__ import annotations
 import re
 from io import StringIO
 
-from code_puppy.tools.ask_user_question.models import Question
-from code_puppy.tools.ask_user_question.terminal_ui import QuestionUIState
-from code_puppy.tools.ask_user_question.tui_loop import QuestionTUI, run_question_tui
+from spruce_grove.tools.ask_user_question.models import Question
+from spruce_grove.tools.ask_user_question.terminal_ui import QuestionUIState
+from spruce_grove.tools.ask_user_question.tui_loop import QuestionTUI, run_question_tui
 
 
 _ANSI_RE = re.compile(r"\x1b\[[0-9;]*[a-zA-Z]")
@@ -224,7 +224,7 @@ class TestAsyncEntry:
     def test_run_question_tui_seam(self, monkeypatch):
         import asyncio
 
-        from code_puppy.tools.ask_user_question import tui_loop
+        from spruce_grove.tools.ask_user_question import tui_loop
 
         class FakeTUI:
             def __init__(self, state, **kwargs):

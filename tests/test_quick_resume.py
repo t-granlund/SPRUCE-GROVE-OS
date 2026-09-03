@@ -9,9 +9,9 @@ import argparse
 
 import pytest
 
-from code_puppy.cli_runner import apply_quick_resume
-from code_puppy.command_line.session_commands import _parse_quick_resume_target
-from code_puppy.config import get_quick_resume_location
+from spruce_grove.cli_runner import apply_quick_resume
+from spruce_grove.command_line.session_commands import _parse_quick_resume_target
+from spruce_grove.config import get_quick_resume_location
 
 
 @pytest.mark.parametrize(
@@ -45,7 +45,7 @@ def _args(**kwargs):
 
 
 def test_git_branch_provider_returns_first_detected_branch(monkeypatch):
-    from code_puppy import callbacks
+    from spruce_grove import callbacks
 
     monkeypatch.setattr(
         callbacks,
@@ -57,7 +57,7 @@ def test_git_branch_provider_returns_first_detected_branch(monkeypatch):
 
 
 def test_git_branch_provider_safely_defaults_to_none(monkeypatch):
-    from code_puppy import callbacks
+    from spruce_grove import callbacks
 
     monkeypatch.setattr(callbacks, "_trigger_callbacks_sync", lambda phase, cwd: [])
 
@@ -66,17 +66,17 @@ def test_git_branch_provider_safely_defaults_to_none(monkeypatch):
 
 def test_get_quick_resume_location_uses_registered_branch_provider(monkeypatch):
     """Git scopes retain branch-specific quick-resume keys via the plugin seam."""
-    monkeypatch.setattr("code_puppy.config._detect_git_toplevel", lambda path: "/repo")
+    monkeypatch.setattr("spruce_grove.config._detect_git_toplevel", lambda path: "/repo")
     branch = "feature/statusline-decoupling"
-    monkeypatch.setattr("code_puppy.callbacks.get_git_branch", lambda cwd: branch)
+    monkeypatch.setattr("spruce_grove.callbacks.get_git_branch", lambda cwd: branch)
 
     assert get_quick_resume_location("/repo") == ("/repo", branch)
 
 
 def test_get_quick_resume_location_without_branch_provider(monkeypatch):
     """Quick-resume safely falls back to an unbranched Git scope."""
-    monkeypatch.setattr("code_puppy.config._detect_git_toplevel", lambda path: "/repo")
-    monkeypatch.setattr("code_puppy.callbacks.get_git_branch", lambda cwd: None)
+    monkeypatch.setattr("spruce_grove.config._detect_git_toplevel", lambda path: "/repo")
+    monkeypatch.setattr("spruce_grove.callbacks.get_git_branch", lambda cwd: None)
 
     assert get_quick_resume_location("/repo") == ("/repo", None)
 
@@ -98,11 +98,11 @@ def test_apply_quick_resume_explicit_resume_wins():
 def test_apply_quick_resume_sets_resume_on_hit(monkeypatch):
     """A resolvable scope populates args.resume with the pickle path."""
     monkeypatch.setattr(
-        "code_puppy.config.get_quick_resume_location",
+        "spruce_grove.config.get_quick_resume_location",
         lambda target: ("/repo", "main"),
     )
     monkeypatch.setattr(
-        "code_puppy.config.resolve_quick_resume_pickle",
+        "spruce_grove.config.resolve_quick_resume_pickle",
         lambda target: "/auto/auto_session_X.pkl",
     )
     args = _args(quick_resume=".")
@@ -113,11 +113,11 @@ def test_apply_quick_resume_sets_resume_on_hit(monkeypatch):
 def test_apply_quick_resume_graceful_miss(monkeypatch):
     """No matching session -> returns False and leaves resume unset."""
     monkeypatch.setattr(
-        "code_puppy.config.get_quick_resume_location",
+        "spruce_grove.config.get_quick_resume_location",
         lambda target: ("/repo", None),
     )
     monkeypatch.setattr(
-        "code_puppy.config.resolve_quick_resume_pickle",
+        "spruce_grove.config.resolve_quick_resume_pickle",
         lambda target: None,
     )
     args = _args(quick_resume="/some/where")

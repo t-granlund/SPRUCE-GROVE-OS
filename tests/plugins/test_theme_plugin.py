@@ -78,7 +78,7 @@ class TestThemeCatalog:
         assert "sunset" in names
         assert "vaporwave" in names
         assert "bubblegum-pink" in names
-        assert "purple-puppy" in names
+        assert "purple-grove" in names
         assert "catppuccin-mocha" in names
         assert "tokyo-night" in names
         assert "green-screen" in names
@@ -92,7 +92,7 @@ class TestThemeCatalog:
     def test_menu_by_index_maps_strings(self):
         assert MENU_BY_INDEX["1"] == "ocean"
         assert MENU_BY_INDEX["5"] == "bubblegum-pink"
-        assert MENU_BY_INDEX["6"] == "purple-puppy"
+        assert MENU_BY_INDEX["6"] == "purple-grove"
         assert MENU_BY_INDEX["7"] == "catppuccin-mocha"
         assert MENU_BY_INDEX["10"] == "green-screen"
         assert MENU_BY_INDEX["12"] == "solarized-light"
@@ -102,8 +102,8 @@ class TestThemeCatalog:
         assert MENU_BY_NAME["mocha"] is CURATED_THEMES["catppuccin-mocha"]
         assert MENU_BY_NAME["bubblegum"] is CURATED_THEMES["bubblegum-pink"]
         assert MENU_BY_NAME["pink"] is CURATED_THEMES["bubblegum-pink"]
-        assert MENU_BY_NAME["puppy"] is CURATED_THEMES["purple-puppy"]
-        assert MENU_BY_NAME["purple"] is CURATED_THEMES["purple-puppy"]
+        assert MENU_BY_NAME["grove"] is CURATED_THEMES["purple-grove"]
+        assert MENU_BY_NAME["purple"] is CURATED_THEMES["purple-grove"]
         assert MENU_BY_NAME["tokyo"] is CURATED_THEMES["tokyo-night"]
         assert MENU_BY_NAME["green"] is CURATED_THEMES["green-screen"]
         assert MENU_BY_NAME["crt"] is CURATED_THEMES["green-screen"]
@@ -143,7 +143,7 @@ class TestColorsFor:
         assert a != b
 
     def test_default_returns_factory_colors(self):
-        from code_puppy.config import DEFAULT_BANNER_COLORS
+        from spruce_grove.config import DEFAULT_BANNER_COLORS
 
         m = colors_for("default")
         assert m == dict(DEFAULT_BANNER_COLORS)
@@ -614,7 +614,7 @@ class TestRegisterCallbacks:
         default = RenderStyle.default()
         with (
             patch(
-                "code_puppy.config.get_value",
+                "spruce_grove.config.get_value",
                 return_value="green-screen",
             ),
             patch(
@@ -639,7 +639,7 @@ class TestRegisterCallbacks:
 
         default = RenderStyle.default()
         with patch(
-            "code_puppy.config.get_value",
+            "spruce_grove.config.get_value",
             return_value="default",
         ):
             assert _termflow_style(default) is default
@@ -673,7 +673,7 @@ class TestRegisterCallbacks:
         mock_merge.assert_called_once_with("input-style")
 
     def test_prompt_toolkit_style_shim_reports_real_callback_name(self):
-        """code_puppy.callbacks logs callback.__name__ on failure; the shim
+        """spruce_grove.callbacks logs callback.__name__ on failure; the shim
         preserves the real symbol name so error output stays useful."""
         from code_puppy_core_plugins.theme.register_callbacks import (
             _prompt_toolkit_style,
@@ -688,7 +688,7 @@ class TestRegisterCallbacks:
 
         with (
             patch(
-                "code_puppy.config.get_value",
+                "spruce_grove.config.get_value",
                 return_value=None,
             ),
             patch("code_puppy_core_plugins.theme.themes.apply") as mock_apply,
@@ -705,7 +705,7 @@ class TestRegisterCallbacks:
             patch(
                 "code_puppy_core_plugins.theme.osc_palette.apply_palette"
             ) as mock_osc_apply,
-            patch("code_puppy.config.set_config_value") as mock_set,
+            patch("spruce_grove.config.set_config_value") as mock_set,
         ):
             _apply_default_theme_on_first_run()
 
@@ -722,8 +722,8 @@ class TestRegisterCallbacks:
 
         with (
             patch(
-                "code_puppy.config.get_value",
-                return_value="purple-puppy",
+                "spruce_grove.config.get_value",
+                return_value="purple-grove",
             ),
             patch("code_puppy_core_plugins.theme.themes.apply") as mock_apply,
         ):
@@ -738,7 +738,7 @@ class TestRegisterCallbacks:
 
         with (
             patch(
-                "code_puppy.config.get_value",
+                "spruce_grove.config.get_value",
                 return_value=None,
             ),
             patch(
@@ -746,7 +746,7 @@ class TestRegisterCallbacks:
                 return_value={"bg": "#123456"},
             ),
             patch("code_puppy_core_plugins.theme.themes.apply") as mock_apply,
-            patch("code_puppy.config.set_config_value") as mock_set,
+            patch("spruce_grove.config.set_config_value") as mock_set,
         ):
             _apply_default_theme_on_first_run()
 
@@ -767,7 +767,7 @@ class TestRegisterCallbacks:
     def test_handle_theme_show(self):
         from code_puppy_core_plugins.theme.register_callbacks import _handle_theme
 
-        with patch("code_puppy.messaging.emit_info") as mock_info:
+        with patch("spruce_grove.messaging.emit_info") as mock_info:
             result = _handle_theme("/theme show", "theme")
         assert result is True
         assert mock_info.called
@@ -775,7 +775,7 @@ class TestRegisterCallbacks:
     def test_handle_theme_unknown_warns(self):
         from code_puppy_core_plugins.theme.register_callbacks import _handle_theme
 
-        with patch("code_puppy.messaging.emit_warning") as mock_warn:
+        with patch("spruce_grove.messaging.emit_warning") as mock_warn:
             result = _handle_theme("/theme bogus_theme", "theme")
         assert result is True
         assert mock_warn.called
@@ -788,8 +788,8 @@ class TestRegisterCallbacks:
             patch("code_puppy_core_plugins.theme.content_styles.apply_content_styles"),
             patch("code_puppy_core_plugins.theme.rich_themes.apply_remap"),
             patch("code_puppy_core_plugins.theme.osc_palette.apply_palette"),
-            patch("code_puppy.config.set_config_value"),
-            patch("code_puppy.messaging.emit_info"),
+            patch("spruce_grove.config.set_config_value"),
+            patch("spruce_grove.messaging.emit_info"),
         ):
             result = _handle_theme("/theme ocean", "theme")
         assert result is True
@@ -803,7 +803,7 @@ class TestRegisterCallbacks:
                 "code_puppy_core_plugins.theme.register_callbacks._run_interactive_picker",
                 return_value=None,
             ),
-            patch("code_puppy.messaging.emit_info") as mock_info,
+            patch("spruce_grove.messaging.emit_info") as mock_info,
         ):
             result = _handle_theme("/theme", "theme")
         assert result is True

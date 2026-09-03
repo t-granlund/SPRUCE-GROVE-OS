@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 
 from termflow.tui.completion import Document
 
-from code_puppy.command_line.file_path_completion import FilePathCompleter
+from spruce_grove.command_line.file_path_completion import FilePathCompleter
 
 
 class TestFilePathCompleter:

@@ -162,7 +162,7 @@ class TestPerformPrune:
         with (
             patch.dict(
                 sys.modules,
-                {"code_puppy.agents.agent_manager": _agent_manager_module(agent)},
+                {"spruce_grove.agents.agent_manager": _agent_manager_module(agent)},
             ),
             patch(
                 "code_puppy_core_plugins.prune.register_callbacks.emit_warning"
@@ -178,7 +178,7 @@ class TestPerformPrune:
         with (
             patch.dict(
                 sys.modules,
-                {"code_puppy.agents.agent_manager": _agent_manager_module(agent)},
+                {"spruce_grove.agents.agent_manager": _agent_manager_module(agent)},
             ),
             patch(
                 "code_puppy_core_plugins.prune.register_callbacks.emit_info"
@@ -199,7 +199,7 @@ class TestPerformPrune:
         with (
             patch.dict(
                 sys.modules,
-                {"code_puppy.agents.agent_manager": _agent_manager_module(agent)},
+                {"spruce_grove.agents.agent_manager": _agent_manager_module(agent)},
             ),
             patch(
                 "code_puppy_core_plugins.prune.register_callbacks.emit_info"
@@ -221,7 +221,7 @@ class TestPerformPrune:
         with (
             patch.dict(
                 sys.modules,
-                {"code_puppy.agents.agent_manager": _agent_manager_module(agent)},
+                {"spruce_grove.agents.agent_manager": _agent_manager_module(agent)},
             ),
             patch(
                 "code_puppy_core_plugins.prune.register_callbacks.emit_info"
@@ -244,7 +244,7 @@ class TestPerformPrune:
         with (
             patch.dict(
                 sys.modules,
-                {"code_puppy.agents.agent_manager": _agent_manager_module(agent)},
+                {"spruce_grove.agents.agent_manager": _agent_manager_module(agent)},
             ),
             patch("code_puppy_core_plugins.prune.register_callbacks.emit_success"),
             patch("code_puppy_core_plugins.prune.register_callbacks.emit_info"),
@@ -273,7 +273,7 @@ class TestPerformPrune:
         with (
             patch.dict(
                 sys.modules,
-                {"code_puppy.agents.agent_manager": _agent_manager_module(agent)},
+                {"spruce_grove.agents.agent_manager": _agent_manager_module(agent)},
             ),
             patch("code_puppy_core_plugins.prune.register_callbacks.emit_success"),
             patch("code_puppy_core_plugins.prune.register_callbacks.emit_info"),
@@ -314,7 +314,7 @@ class TestPerformPrune:
         with (
             patch.dict(
                 sys.modules,
-                {"code_puppy.agents.agent_manager": _agent_manager_module(agent)},
+                {"spruce_grove.agents.agent_manager": _agent_manager_module(agent)},
             ),
             patch("code_puppy_core_plugins.prune.register_callbacks.emit_success"),
             patch("code_puppy_core_plugins.prune.register_callbacks.emit_info"),
@@ -335,7 +335,7 @@ class TestPerformPrune:
         with (
             patch.dict(
                 sys.modules,
-                {"code_puppy.agents.agent_manager": _agent_manager_module(agent)},
+                {"spruce_grove.agents.agent_manager": _agent_manager_module(agent)},
             ),
             patch(
                 "code_puppy_core_plugins.prune.register_callbacks.emit_error"
@@ -359,7 +359,7 @@ class TestHandlePruneCommand:
         with (
             patch.dict(
                 sys.modules,
-                {"code_puppy.agents.agent_manager": _agent_manager_module(agent)},
+                {"spruce_grove.agents.agent_manager": _agent_manager_module(agent)},
             ),
             patch(
                 "code_puppy_core_plugins.prune.register_callbacks.emit_info"
@@ -377,11 +377,11 @@ class TestHandlePruneCommand:
         """
         agent = MagicMock()
         agent.get_message_history.return_value = [_system_msg()]
-        agent.get_full_system_prompt.return_value = "you are a puppy"
+        agent.get_full_system_prompt.return_value = "you are a grove"
         with (
             patch.dict(
                 sys.modules,
-                {"code_puppy.agents.agent_manager": _agent_manager_module(agent)},
+                {"spruce_grove.agents.agent_manager": _agent_manager_module(agent)},
             ),
             patch(
                 "code_puppy_core_plugins.prune.register_callbacks.emit_info"
@@ -396,7 +396,7 @@ class TestHandlePruneCommand:
             get_current_agent=MagicMock(side_effect=RuntimeError("kaboom"))
         )
         with (
-            patch.dict(sys.modules, {"code_puppy.agents.agent_manager": bad_manager}),
+            patch.dict(sys.modules, {"spruce_grove.agents.agent_manager": bad_manager}),
             patch(
                 "code_puppy_core_plugins.prune.register_callbacks.emit_error"
             ) as mock_error,

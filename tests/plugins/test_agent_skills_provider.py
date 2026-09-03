@@ -5,7 +5,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy.callbacks import clear_callbacks, register_callback
+from spruce_grove.callbacks import clear_callbacks, register_callback
 from code_puppy_core_plugins.agent_skills.provider import AgentSkillsProvider
 
 

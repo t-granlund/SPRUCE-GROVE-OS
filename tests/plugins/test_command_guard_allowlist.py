@@ -18,7 +18,7 @@ import asyncio
 
 import pytest
 
-from code_puppy import config
+from spruce_grove import config
 from code_puppy_core_plugins.destructive_command_guard import (
     register_callbacks as dcg,
 )

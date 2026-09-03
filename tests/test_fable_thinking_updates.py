@@ -12,18 +12,18 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy import config as cp_config
-from code_puppy.claude_cache_client import (
+from spruce_grove import config as cp_config
+from spruce_grove.claude_cache_client import (
     THINKING_DISPLAY_UPDATES_BETA,
     ClaudeCacheAsyncClient,
     _enforce_thinking_display_summary,
 )
-from code_puppy.command_line.model_settings_defs import (
+from spruce_grove.command_line.model_settings_defs import (
     SETTING_DEFINITIONS,
     _get_setting_choices,
     _supports_setting,
 )
-from code_puppy.model_utils import (
+from spruce_grove.model_utils import (
     THINKING_DISPLAY_CHOICES,
     get_anthropic_thinking_display_choices,
     resolve_anthropic_thinking_payload,
@@ -183,7 +183,7 @@ class TestThinkingDisplayModelSetting:
     def test_supported_by_model_name(self, model_name, expected):
         mock_config = {model_name: {}}
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config",
+            "spruce_grove.model_factory.ModelFactory.load_config",
             return_value=mock_config,
         ):
             assert (
@@ -195,7 +195,7 @@ class TestThinkingDisplayModelSetting:
         # Alias says nothing; the config's real model ID does.
         mock_config = {"fable": {"name": "claude-fable-5-1"}}
         with patch(
-            "code_puppy.model_factory.ModelFactory.load_config",
+            "spruce_grove.model_factory.ModelFactory.load_config",
             return_value=mock_config,
         ):
             assert cp_config.model_supports_setting("fable", "thinking_display")

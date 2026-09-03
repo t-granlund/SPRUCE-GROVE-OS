@@ -354,7 +354,7 @@ class TestCallbackHandler:
                 callback_handler.do_GET()
 
                 mock_failure.assert_called_once_with(
-                    404, "Callback endpoint not found for the puppy parade."
+                    404, "Callback endpoint not found for the grove parade."
                 )
                 mock_shutdown.assert_called_once()
 
@@ -457,7 +457,7 @@ class TestCallbackHandler:
                 callback_handler.do_GET()
 
                 mock_failure.assert_called_once_with(
-                    500, "Unable to persist auth file — a puppy probably chewed it."
+                    500, "Unable to persist auth file — a grove probably chewed it."
                 )
                 mock_shutdown.assert_called_once()
 
@@ -593,7 +593,7 @@ class TestRunOAuthFlow:
         warning_calls = [call[0][0] for call in mock_warning.call_args_list]
         assert "Existing ChatGPT tokens will be overwritten." in warning_calls
 
-    @patch("code_puppy.tools.common.should_suppress_browser", return_value=True)
+    @patch("spruce_grove.tools.common.should_suppress_browser", return_value=True)
     @patch("code_puppy_core_plugins.chatgpt_oauth.oauth_flow.load_stored_tokens")
     @patch("code_puppy_core_plugins.chatgpt_oauth.oauth_flow._OAuthServer")
     @patch("code_puppy_core_plugins.chatgpt_oauth.oauth_flow.emit_warning")
@@ -723,8 +723,8 @@ class TestRunOAuthFlow:
 
     @patch("code_puppy_core_plugins.chatgpt_oauth.oauth_flow.load_stored_tokens")
     @patch("code_puppy_core_plugins.chatgpt_oauth.oauth_flow._OAuthServer")
-    @patch("code_puppy.messaging.emit_error")
-    @patch("code_puppy.messaging.emit_info")
+    @patch("spruce_grove.messaging.emit_error")
+    @patch("spruce_grove.messaging.emit_info")
     def test_authentication_timeout(
         self, mock_info, mock_error, mock_server_class, mock_load_tokens
     ):
@@ -754,8 +754,8 @@ class TestRunOAuthFlow:
 
     @patch("code_puppy_core_plugins.chatgpt_oauth.oauth_flow.load_stored_tokens")
     @patch("code_puppy_core_plugins.chatgpt_oauth.oauth_flow._OAuthServer")
-    @patch("code_puppy.messaging.emit_error")
-    @patch("code_puppy.messaging.emit_info")
+    @patch("spruce_grove.messaging.emit_error")
+    @patch("spruce_grove.messaging.emit_info")
     def test_tokens_cannot_be_loaded_after_success(
         self, mock_info, mock_error, mock_server_class, mock_load_tokens
     ):
@@ -776,8 +776,8 @@ class TestRunOAuthFlow:
 
     @patch("code_puppy_core_plugins.chatgpt_oauth.oauth_flow.load_stored_tokens")
     @patch("code_puppy_core_plugins.chatgpt_oauth.oauth_flow._OAuthServer")
-    @patch("code_puppy.messaging.emit_warning")
-    @patch("code_puppy.messaging.emit_info")
+    @patch("spruce_grove.messaging.emit_warning")
+    @patch("spruce_grove.messaging.emit_info")
     def test_no_api_key_obtained(
         self, mock_info, mock_warning, mock_server_class, mock_load_tokens
     ):
@@ -813,8 +813,8 @@ class TestRunOAuthFlow:
     @patch("code_puppy_core_plugins.chatgpt_oauth.oauth_flow.load_stored_tokens")
     @patch("code_puppy_core_plugins.chatgpt_oauth.oauth_flow._OAuthServer")
     @patch("webbrowser.open")
-    @patch("code_puppy.messaging.emit_warning")
-    @patch("code_puppy.messaging.emit_info")
+    @patch("spruce_grove.messaging.emit_warning")
+    @patch("spruce_grove.messaging.emit_info")
     def test_browser_auto_open(
         self,
         mock_info,
@@ -857,8 +857,8 @@ class TestRunOAuthFlow:
     @patch("code_puppy_core_plugins.chatgpt_oauth.oauth_flow.load_stored_tokens")
     @patch("code_puppy_core_plugins.chatgpt_oauth.oauth_flow._OAuthServer")
     @patch("webbrowser.open")
-    @patch("code_puppy.messaging.emit_warning")
-    @patch("code_puppy.messaging.emit_info")
+    @patch("spruce_grove.messaging.emit_warning")
+    @patch("spruce_grove.messaging.emit_info")
     def test_browser_open_failure(
         self,
         mock_info,
@@ -948,7 +948,7 @@ class TestRunOAuthFlowBrowserPaths:
             with patch("time.sleep"):
                 with patch("webbrowser.open", return_value=True) as mock_wb:
                     with patch(
-                        "code_puppy.tools.common.should_suppress_browser",
+                        "spruce_grove.tools.common.should_suppress_browser",
                         return_value=False,
                     ):
                         run_oauth_flow()
@@ -977,7 +977,7 @@ class TestRunOAuthFlowBrowserPaths:
             with patch("time.sleep"):
                 with patch("webbrowser.open", return_value=False):
                     with patch(
-                        "code_puppy.tools.common.should_suppress_browser",
+                        "spruce_grove.tools.common.should_suppress_browser",
                         return_value=False,
                     ):
                         run_oauth_flow()
@@ -1008,7 +1008,7 @@ class TestRunOAuthFlowBrowserPaths:
             with patch("time.sleep"):
                 with patch("webbrowser.open", side_effect=Exception("no browser")):
                     with patch(
-                        "code_puppy.tools.common.should_suppress_browser",
+                        "spruce_grove.tools.common.should_suppress_browser",
                         return_value=False,
                     ):
                         run_oauth_flow()

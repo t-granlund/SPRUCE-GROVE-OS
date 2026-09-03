@@ -4,14 +4,14 @@ from unittest.mock import MagicMock, mock_open, patch
 
 import pytest
 
-from code_puppy.model_factory import ModelFactory
+from spruce_grove.model_factory import ModelFactory
 
 
 class TestModelFactoryBasics:
     """Test core functionality of ModelFactory."""
 
-    @patch("code_puppy.model_factory.pathlib.Path.exists", return_value=False)
-    @patch("code_puppy.model_factory.callbacks.get_callbacks", return_value=[])
+    @patch("spruce_grove.model_factory.pathlib.Path.exists", return_value=False)
+    @patch("spruce_grove.model_factory.callbacks.get_callbacks", return_value=[])
     def test_load_config_basic(self, mock_callbacks, mock_exists):
         """Test basic config loading from models.json."""
         test_config = {
@@ -35,8 +35,8 @@ class TestModelFactoryBasics:
         "code_puppy_core_plugins.claude_code_oauth.utils.load_claude_models_filtered",
         return_value={},
     )
-    @patch("code_puppy.model_factory.pathlib.Path")
-    @patch("code_puppy.model_factory.callbacks.get_callbacks", return_value=[])
+    @patch("spruce_grove.model_factory.pathlib.Path")
+    @patch("spruce_grove.model_factory.callbacks.get_callbacks", return_value=[])
     def test_load_config_with_extra_models(
         self,
         mock_callbacks,
@@ -107,8 +107,8 @@ class TestModelFactoryBasics:
         "code_puppy_core_plugins.claude_code_oauth.utils.load_claude_models_filtered",
         return_value={},
     )
-    @patch("code_puppy.model_factory.pathlib.Path")
-    @patch("code_puppy.model_factory.callbacks.get_callbacks", return_value=[])
+    @patch("spruce_grove.model_factory.pathlib.Path")
+    @patch("spruce_grove.model_factory.callbacks.get_callbacks", return_value=[])
     def test_load_config_invalid_json(
         self,
         mock_callbacks,
@@ -217,8 +217,8 @@ class TestModelFactoryBasics:
         config = {"gpt-4": {"type": "openai", "name": "gpt-4"}}
 
         # Mock get_api_key to return None (simulating missing API key)
-        with patch("code_puppy.model_factory.get_api_key", return_value=None):
-            with patch("code_puppy.model_factory.emit_warning") as mock_warn:
+        with patch("spruce_grove.model_factory.get_api_key", return_value=None):
+            with patch("spruce_grove.model_factory.emit_warning") as mock_warn:
                 model = ModelFactory.get_model("gpt-4", config)
                 assert model is None
                 mock_warn.assert_called_once()
@@ -299,7 +299,7 @@ class TestModelFactoryBasics:
         }
 
         with patch.dict(os.environ, {}, clear=True):
-            with patch("code_puppy.model_factory.emit_warning") as mock_warn:
+            with patch("spruce_grove.model_factory.emit_warning") as mock_warn:
                 model = ModelFactory.get_model("custom-model", config)
 
                 # Model should still be created but with empty header value
@@ -341,19 +341,19 @@ class TestModelFactoryBasics:
             assert model1.model_name == model2.model_name
 
     @patch(
-        "code_puppy.model_factory.callbacks.get_callbacks",
+        "spruce_grove.model_factory.callbacks.get_callbacks",
         return_value=["test_callback"],
     )
     @patch(
-        "code_puppy.model_factory.callbacks.on_load_model_config",
+        "spruce_grove.model_factory.callbacks.on_load_model_config",
         return_value=[{"test": "config"}],
     )
     @patch(
-        "code_puppy.model_factory.callbacks.on_load_models_config",
+        "spruce_grove.model_factory.callbacks.on_load_models_config",
         return_value=[],
     )
     @patch("builtins.open", new_callable=mock_open, read_data="{}")
-    @patch("code_puppy.model_factory.pathlib.Path.exists", return_value=False)
+    @patch("spruce_grove.model_factory.pathlib.Path.exists", return_value=False)
     def test_load_config_with_callbacks(
         self,
         mock_exists,

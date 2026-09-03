@@ -12,7 +12,7 @@ from __future__ import annotations
 import json
 from unittest.mock import patch
 
-from code_puppy.plugins import config as pc
+from spruce_grove.plugins import config as pc
 from code_puppy_core_plugins.plugin_list.plugins_menu import PluginsMenu
 
 _FAKE_LOADED = {
@@ -26,7 +26,7 @@ _FAKE_LOADED = {
 
 
 def test_is_builtin_plugin_filesystem_truth():
-    assert pc.is_builtin_plugin("plugin_list")  # ships in code_puppy/plugins/
+    assert pc.is_builtin_plugin("plugin_list")  # ships in spruce_grove/plugins/
     assert not pc.is_builtin_plugin("convo_namer")  # user-tier name
     assert not pc.is_builtin_plugin("does_not_exist")
 
@@ -56,7 +56,7 @@ def test_builtin_disable_refused_when_locked():
 
 def test_builtin_reenable_always_allowed_when_locked():
     # A builtin somehow already in the disabled set must be recoverable.
-    from code_puppy.config import set_value
+    from spruce_grove.config import set_value
 
     set_value("disabled_plugins", json.dumps(["plugin_list"]))
     pc.set_lock_builtin_plugins(True)
@@ -69,7 +69,7 @@ def test_builtin_reenable_always_allowed_when_locked():
 
 def test_menu_shows_all_when_unlocked():
     pc.set_lock_builtin_plugins(False)
-    with patch("code_puppy.plugins.get_loaded_plugins", return_value=_FAKE_LOADED):
+    with patch("spruce_grove.plugins.get_loaded_plugins", return_value=_FAKE_LOADED):
         menu = PluginsMenu()
     tiers = {e.tier for e in menu.plugins}
     assert "builtin" in tiers and "user" in tiers
@@ -78,7 +78,7 @@ def test_menu_shows_all_when_unlocked():
 
 def test_menu_hides_builtins_when_locked():
     pc.set_lock_builtin_plugins(True)
-    with patch("code_puppy.plugins.get_loaded_plugins", return_value=_FAKE_LOADED):
+    with patch("spruce_grove.plugins.get_loaded_plugins", return_value=_FAKE_LOADED):
         menu = PluginsMenu()
     names = {e.name for e in menu.plugins}
     assert names == {"convo_namer"}
@@ -88,7 +88,7 @@ def test_menu_hides_builtins_when_locked():
 
 def test_menu_renders_managed_note_when_locked():
     pc.set_lock_builtin_plugins(True)
-    with patch("code_puppy.plugins.get_loaded_plugins", return_value=_FAKE_LOADED):
+    with patch("spruce_grove.plugins.get_loaded_plugins", return_value=_FAKE_LOADED):
         menu = PluginsMenu()
         text = "".join(seg for _, seg in menu._render_list())
     assert "3 builtin plugins are managed and hidden" in text
@@ -98,7 +98,7 @@ def test_menu_toggle_does_not_flag_changed_on_refusal():
     """Selecting a builtin (only possible if lock flips mid-session) and
     toggling must not falsely set the restart-needed flag."""
     pc.set_lock_builtin_plugins(False)
-    with patch("code_puppy.plugins.get_loaded_plugins", return_value=_FAKE_LOADED):
+    with patch("spruce_grove.plugins.get_loaded_plugins", return_value=_FAKE_LOADED):
         menu = PluginsMenu()
         # Force selection onto a builtin, then lock and toggle.
         builtin_idx = next(i for i, e in enumerate(menu.plugins) if e.tier == "builtin")

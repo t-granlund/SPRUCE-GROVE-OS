@@ -25,7 +25,7 @@ from pydantic_ai.messages import (
 )
 from rich.console import Console
 
-from code_puppy.agents.event_stream_handler import (
+from spruce_grove.agents.event_stream_handler import (
     event_stream_handler,
     get_streaming_console,
     set_streaming_console,
@@ -166,7 +166,7 @@ class TestEventStreamHandler:
         with contextlib.nullcontext():
             with contextlib.nullcontext():
                 with patch(
-                    "code_puppy.agents.event_stream_handler.get_banner_color",
+                    "spruce_grove.agents.event_stream_handler.get_banner_color",
                     return_value="blue",
                 ):
                     await event_stream_handler(mock_ctx, event_stream())
@@ -195,7 +195,7 @@ class TestEventStreamHandler:
         with contextlib.nullcontext():
             with contextlib.nullcontext():
                 with patch(
-                    "code_puppy.agents.event_stream_handler.get_banner_color",
+                    "spruce_grove.agents.event_stream_handler.get_banner_color",
                     return_value="blue",
                 ):
                     with patch("termflow.Parser"):
@@ -222,7 +222,7 @@ class TestEventStreamHandler:
         with contextlib.nullcontext():
             with contextlib.nullcontext():
                 with patch(
-                    "code_puppy.agents.event_stream_handler.get_banner_color",
+                    "spruce_grove.agents.event_stream_handler.get_banner_color",
                     return_value="blue",
                 ):
                     await event_stream_handler(mock_ctx, event_stream())
@@ -256,7 +256,7 @@ class TestEventStreamHandler:
         with contextlib.nullcontext():
             with contextlib.nullcontext():
                 with patch(
-                    "code_puppy.agents.event_stream_handler.get_banner_color",
+                    "spruce_grove.agents.event_stream_handler.get_banner_color",
                     return_value="blue",
                 ):
                     with patch("termflow.Parser") as mock_parser_cls:
@@ -361,7 +361,7 @@ class TestEventStreamHandler:
         with contextlib.nullcontext():
             with contextlib.nullcontext():
                 with patch(
-                    "code_puppy.agents.event_stream_handler.get_banner_color",
+                    "spruce_grove.agents.event_stream_handler.get_banner_color",
                     return_value="blue",
                 ):
                     await event_stream_handler(mock_ctx, event_stream())
@@ -422,7 +422,7 @@ class TestEventStreamHandler:
         with contextlib.nullcontext():
             with contextlib.nullcontext():
                 with patch(
-                    "code_puppy.agents.event_stream_handler.get_banner_color",
+                    "spruce_grove.agents.event_stream_handler.get_banner_color",
                     return_value="blue",
                 ):
                     with patch("termflow.Parser") as mock_parser_cls:
@@ -503,7 +503,7 @@ class TestEventStreamHandler:
         with contextlib.nullcontext():
             with contextlib.nullcontext():
                 with patch(
-                    "code_puppy.agents.event_stream_handler.get_banner_color",
+                    "spruce_grove.agents.event_stream_handler.get_banner_color",
                     return_value="blue",
                 ):
                     await event_stream_handler(mock_ctx, event_stream())
@@ -527,7 +527,7 @@ class TestEventStreamHandler:
         with contextlib.nullcontext():
             with contextlib.nullcontext():
                 with patch(
-                    "code_puppy.agents.event_stream_handler.get_banner_color",
+                    "spruce_grove.agents.event_stream_handler.get_banner_color",
                     return_value="blue",
                 ):
                     with patch("termflow.Parser") as mock_parser_cls:
@@ -558,7 +558,7 @@ class TestEventStreamHandler:
         with contextlib.nullcontext():
             with contextlib.nullcontext():
                 with patch(
-                    "code_puppy.agents.event_stream_handler.get_banner_color",
+                    "spruce_grove.agents.event_stream_handler.get_banner_color",
                     return_value="blue",
                 ):
                     with patch("termflow.Parser") as mock_parser_cls:
@@ -597,7 +597,7 @@ class TestEventStreamHandler:
         with contextlib.nullcontext():
             with contextlib.nullcontext():
                 with patch(
-                    "code_puppy.agents.event_stream_handler.get_banner_color",
+                    "spruce_grove.agents.event_stream_handler.get_banner_color",
                     return_value="blue",
                 ):
                     with patch("termflow.Parser") as mock_parser_cls:
@@ -627,11 +627,11 @@ class TestSubAgentSuppression:
         self, mock_ctx, monkeypatch
     ):
         """Sub-agent with verbose=False suppresses output."""
-        from code_puppy.tools.subagent_context import subagent_context
+        from spruce_grove.tools.subagent_context import subagent_context
 
         # Mock verbose to be False (default)
         monkeypatch.setattr(
-            "code_puppy.agents.event_stream_handler.get_subagent_verbose",
+            "spruce_grove.agents.event_stream_handler.get_subagent_verbose",
             lambda: False,
         )
 
@@ -663,11 +663,11 @@ class TestSubAgentSuppression:
     @pytest.mark.asyncio
     async def test_subagent_shows_output_when_verbose_true(self, mock_ctx, monkeypatch):
         """Sub-agent with verbose=True does NOT suppress output."""
-        from code_puppy.tools.subagent_context import subagent_context
+        from spruce_grove.tools.subagent_context import subagent_context
 
         # Mock verbose to be True (verbose mode enabled)
         monkeypatch.setattr(
-            "code_puppy.agents.event_stream_handler.get_subagent_verbose",
+            "spruce_grove.agents.event_stream_handler.get_subagent_verbose",
             lambda: True,
         )
 
@@ -687,7 +687,7 @@ class TestSubAgentSuppression:
             with contextlib.nullcontext():
                 with contextlib.nullcontext():
                     with patch(
-                        "code_puppy.agents.event_stream_handler.get_banner_color",
+                        "spruce_grove.agents.event_stream_handler.get_banner_color",
                         return_value="blue",
                     ):
                         with patch("termflow.Parser") as mock_parser_cls:
@@ -706,7 +706,7 @@ class TestSubAgentSuppression:
         """Main agent output is never suppressed regardless of verbose setting."""
         # Mock verbose to be False
         monkeypatch.setattr(
-            "code_puppy.agents.event_stream_handler.get_subagent_verbose",
+            "spruce_grove.agents.event_stream_handler.get_subagent_verbose",
             lambda: False,
         )
 
@@ -725,7 +725,7 @@ class TestSubAgentSuppression:
         with contextlib.nullcontext():
             with contextlib.nullcontext():
                 with patch(
-                    "code_puppy.agents.event_stream_handler.get_banner_color",
+                    "spruce_grove.agents.event_stream_handler.get_banner_color",
                     return_value="blue",
                 ):
                     with patch("termflow.Parser") as mock_parser_cls:
@@ -742,11 +742,11 @@ class TestSubAgentSuppression:
     @pytest.mark.asyncio
     async def test_suppression_works_with_tool_calls(self, mock_ctx, monkeypatch):
         """Test that suppression also works for tool call parts."""
-        from code_puppy.tools.subagent_context import subagent_context
+        from spruce_grove.tools.subagent_context import subagent_context
 
         # Mock verbose to be False
         monkeypatch.setattr(
-            "code_puppy.agents.event_stream_handler.get_subagent_verbose",
+            "spruce_grove.agents.event_stream_handler.get_subagent_verbose",
             lambda: False,
         )
 
@@ -773,11 +773,11 @@ class TestSubAgentSuppression:
     @pytest.mark.asyncio
     async def test_suppression_consumes_all_events(self, mock_ctx, monkeypatch):
         """Test that suppression still consumes all events from the stream."""
-        from code_puppy.tools.subagent_context import subagent_context
+        from spruce_grove.tools.subagent_context import subagent_context
 
         # Mock verbose to be False
         monkeypatch.setattr(
-            "code_puppy.agents.event_stream_handler.get_subagent_verbose",
+            "spruce_grove.agents.event_stream_handler.get_subagent_verbose",
             lambda: False,
         )
 

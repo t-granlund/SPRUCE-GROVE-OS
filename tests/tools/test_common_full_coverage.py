@@ -1,4 +1,4 @@
-"""Full coverage tests for code_puppy/tools/common.py.
+"""Full coverage tests for spruce_grove/tools/common.py.
 
 Targets all uncovered lines to reach 100% coverage.
 """
@@ -23,7 +23,7 @@ class TestShouldSuppressBrowser:
         monkeypatch.delenv("CI", raising=False)
         monkeypatch.delenv("BROWSER_HEADLESS", raising=False)
         monkeypatch.delenv("PYTEST_CURRENT_TEST", raising=False)
-        from code_puppy.tools.common import should_suppress_browser
+        from spruce_grove.tools.common import should_suppress_browser
 
         assert should_suppress_browser() is True
 
@@ -32,7 +32,7 @@ class TestShouldSuppressBrowser:
         monkeypatch.setenv("BROWSER_HEADLESS", "true")
         monkeypatch.delenv("CI", raising=False)
         monkeypatch.delenv("PYTEST_CURRENT_TEST", raising=False)
-        from code_puppy.tools.common import should_suppress_browser
+        from spruce_grove.tools.common import should_suppress_browser
 
         assert should_suppress_browser() is True
 
@@ -41,7 +41,7 @@ class TestShouldSuppressBrowser:
         monkeypatch.delenv("BROWSER_HEADLESS", raising=False)
         monkeypatch.setenv("CI", "true")
         monkeypatch.delenv("PYTEST_CURRENT_TEST", raising=False)
-        from code_puppy.tools.common import should_suppress_browser
+        from spruce_grove.tools.common import should_suppress_browser
 
         assert should_suppress_browser() is True
 
@@ -50,7 +50,7 @@ class TestShouldSuppressBrowser:
         monkeypatch.delenv("BROWSER_HEADLESS", raising=False)
         monkeypatch.delenv("CI", raising=False)
         monkeypatch.setenv("PYTEST_CURRENT_TEST", "something")
-        from code_puppy.tools.common import should_suppress_browser
+        from spruce_grove.tools.common import should_suppress_browser
 
         assert should_suppress_browser() is True
 
@@ -59,7 +59,7 @@ class TestShouldSuppressBrowser:
         monkeypatch.delenv("BROWSER_HEADLESS", raising=False)
         monkeypatch.delenv("CI", raising=False)
         monkeypatch.delenv("PYTEST_CURRENT_TEST", raising=False)
-        from code_puppy.tools.common import should_suppress_browser
+        from spruce_grove.tools.common import should_suppress_browser
 
         assert should_suppress_browser() is False
 
@@ -71,44 +71,44 @@ class TestShouldSuppressBrowser:
 
 class TestShouldIgnorePath:
     def test_git_directory(self):
-        from code_puppy.tools.common import should_ignore_path
+        from spruce_grove.tools.common import should_ignore_path
 
         assert should_ignore_path(".git") is True
         assert should_ignore_path("project/.git/config") is True
 
     def test_node_modules(self):
-        from code_puppy.tools.common import should_ignore_path
+        from spruce_grove.tools.common import should_ignore_path
 
         assert should_ignore_path("node_modules/foo/bar.js") is True
 
     def test_pycache(self):
-        from code_puppy.tools.common import should_ignore_path
+        from spruce_grove.tools.common import should_ignore_path
 
         assert should_ignore_path("__pycache__/foo.pyc") is True
 
     def test_normal_file_not_ignored(self):
-        from code_puppy.tools.common import should_ignore_path
+        from spruce_grove.tools.common import should_ignore_path
 
         assert should_ignore_path("src/main.py") is False
 
     def test_png_file_ignored(self):
-        from code_puppy.tools.common import should_ignore_path
+        from spruce_grove.tools.common import should_ignore_path
 
         assert should_ignore_path("assets/logo.png") is True
 
     def test_sqlite_ignored(self):
-        from code_puppy.tools.common import should_ignore_path
+        from spruce_grove.tools.common import should_ignore_path
 
         assert should_ignore_path("data/db.sqlite3") is True
 
     def test_double_star_pattern_with_subpath(self):
-        from code_puppy.tools.common import should_ignore_path
+        from spruce_grove.tools.common import should_ignore_path
 
         assert should_ignore_path("foo/bar/.idea/workspace.xml") is True
 
     def test_valueerror_fallback_to_fnmatch(self):
         """Test that ValueError in pathlib.match falls back to fnmatch."""
-        from code_puppy.tools.common import should_ignore_path
+        from spruce_grove.tools.common import should_ignore_path
 
         # Just ensure the function completes without error on a normal path
         result = should_ignore_path("normal/path/file.txt")
@@ -116,7 +116,7 @@ class TestShouldIgnorePath:
 
     def test_valueerror_branch_matching(self):
         """Force ValueError in Path.match to exercise fnmatch fallback."""
-        from code_puppy.tools.common import should_ignore_path
+        from spruce_grove.tools.common import should_ignore_path
 
         orig_match = Path.match
 
@@ -132,7 +132,7 @@ class TestShouldIgnorePath:
 
     def test_valueerror_branch_no_match(self):
         """Force ValueError with non-matching path."""
-        from code_puppy.tools.common import should_ignore_path
+        from spruce_grove.tools.common import should_ignore_path
 
         orig_match = Path.match
 
@@ -150,32 +150,32 @@ class TestShouldIgnorePath:
 
 class TestShouldIgnoreDirPath:
     def test_git_dir(self):
-        from code_puppy.tools.common import should_ignore_dir_path
+        from spruce_grove.tools.common import should_ignore_dir_path
 
         assert should_ignore_dir_path(".git") is True
 
     def test_node_modules_dir(self):
-        from code_puppy.tools.common import should_ignore_dir_path
+        from spruce_grove.tools.common import should_ignore_dir_path
 
         assert should_ignore_dir_path("node_modules") is True
 
     def test_normal_dir_not_ignored(self):
-        from code_puppy.tools.common import should_ignore_dir_path
+        from spruce_grove.tools.common import should_ignore_dir_path
 
         assert should_ignore_dir_path("src") is False
 
     def test_venv_dir(self):
-        from code_puppy.tools.common import should_ignore_dir_path
+        from spruce_grove.tools.common import should_ignore_dir_path
 
         assert should_ignore_dir_path("project/.venv") is True
 
     def test_deep_nested_cache(self):
-        from code_puppy.tools.common import should_ignore_dir_path
+        from spruce_grove.tools.common import should_ignore_dir_path
 
         assert should_ignore_dir_path("a/b/c/.cache/d") is True
 
     def test_valueerror_branch(self):
-        from code_puppy.tools.common import should_ignore_dir_path
+        from spruce_grove.tools.common import should_ignore_dir_path
 
         orig_match = Path.match
 
@@ -196,22 +196,22 @@ class TestShouldIgnoreDirPath:
 
 class TestTermflowDiffAdapters:
     def test_renderer_uses_explicit_colors(self):
-        from code_puppy.tools.common import _termflow_diff_renderer
+        from spruce_grove.tools.common import _termflow_diff_renderer
 
         renderer = _termflow_diff_renderer("#002200", "#220000")
         assert renderer.theme.addition == "#002200"
         assert renderer.theme.deletion == "#220000"
 
     def test_renderer_defaults_come_from_config(self):
-        from code_puppy.tools.common import _termflow_diff_renderer
+        from spruce_grove.tools.common import _termflow_diff_renderer
 
         with (
             patch(
-                "code_puppy.config.get_diff_addition_color",
+                "spruce_grove.config.get_diff_addition_color",
                 return_value="#0a0b0c",
             ),
             patch(
-                "code_puppy.config.get_diff_deletion_color",
+                "spruce_grove.config.get_diff_deletion_color",
                 return_value="#0d0e0f",
             ),
         ):
@@ -220,11 +220,11 @@ class TestTermflowDiffAdapters:
         assert renderer.theme.deletion == "#0d0e0f"
 
     def test_highlighter_flows_through_theme_callback(self):
-        from code_puppy.tools.common import _termflow_diff_renderer
+        from spruce_grove.tools.common import _termflow_diff_renderer
 
         sentinel = object()
         with patch(
-            "code_puppy.callbacks.on_termflow_highlighter",
+            "spruce_grove.callbacks.on_termflow_highlighter",
             return_value=sentinel,
         ):
             renderer = _termflow_diff_renderer("#002200", "#220000")
@@ -233,7 +233,7 @@ class TestTermflowDiffAdapters:
 
 class TestStreamDiffAnsiLines:
     def test_yields_lines_without_headers(self):
-        from code_puppy.tools.common import stream_diff_ansi_lines
+        from spruce_grove.tools.common import stream_diff_ansi_lines
 
         diff = "--- a/f.py\n+++ b/f.py\n@@ -1 +1 @@\n-old\n+new"
         lines = list(stream_diff_ansi_lines(diff, "#002200", "#220000"))
@@ -241,7 +241,7 @@ class TestStreamDiffAnsiLines:
         assert not any(line.endswith("\n") for line in lines)
 
     def test_backgrounds_present(self):
-        from code_puppy.tools.common import stream_diff_ansi_lines
+        from spruce_grove.tools.common import stream_diff_ansi_lines
 
         lines = list(stream_diff_ansi_lines("-old\n+new", "#002200", "#220000"))
         joined = "".join(lines)
@@ -249,7 +249,7 @@ class TestStreamDiffAnsiLines:
         assert "\x1b[48;2;34;0;0m" in joined
 
     def test_empty_diff_yields_nothing(self):
-        from code_puppy.tools.common import stream_diff_ansi_lines
+        from spruce_grove.tools.common import stream_diff_ansi_lines
 
         assert list(stream_diff_ansi_lines("")) == []
 
@@ -261,13 +261,13 @@ class TestStreamDiffAnsiLines:
 
 class TestBrightenHex:
     def test_no_change(self):
-        from code_puppy.tools.common import brighten_hex
+        from spruce_grove.tools.common import brighten_hex
 
         result = brighten_hex("#808080", 0.0)
         assert result == "#808080"
 
     def test_brighten(self):
-        from code_puppy.tools.common import brighten_hex
+        from spruce_grove.tools.common import brighten_hex
 
         result = brighten_hex("#808080", 0.5)
         # Should be brighter
@@ -275,31 +275,31 @@ class TestBrightenHex:
         assert len(result) == 7
 
     def test_darken(self):
-        from code_puppy.tools.common import brighten_hex
+        from spruce_grove.tools.common import brighten_hex
 
         result = brighten_hex("#ffffff", -0.5)
         assert result.startswith("#")
 
     def test_clamp_max(self):
-        from code_puppy.tools.common import brighten_hex
+        from spruce_grove.tools.common import brighten_hex
 
         result = brighten_hex("#ffffff", 1.0)
         assert result == "#ffffff"  # clamped to 255
 
     def test_clamp_min(self):
-        from code_puppy.tools.common import brighten_hex
+        from spruce_grove.tools.common import brighten_hex
 
         result = brighten_hex("#000000", -1.0)
         assert result == "#000000"
 
     def test_invalid_hex(self):
-        from code_puppy.tools.common import brighten_hex
+        from spruce_grove.tools.common import brighten_hex
 
         with pytest.raises(ValueError):
             brighten_hex("#ff", 0.5)
 
     def test_with_hash(self):
-        from code_puppy.tools.common import brighten_hex
+        from spruce_grove.tools.common import brighten_hex
 
         result = brighten_hex("#102030", 0.18)
         assert result.startswith("#")
@@ -312,21 +312,21 @@ class TestBrightenHex:
 
 class TestFormatDiffWithColors:
     def test_empty_diff(self):
-        from code_puppy.tools.common import format_diff_with_colors
+        from spruce_grove.tools.common import format_diff_with_colors
 
         result = format_diff_with_colors("")
         assert isinstance(result, Text)
         assert "no diff" in result.plain.lower()
 
     def test_whitespace_only(self):
-        from code_puppy.tools.common import format_diff_with_colors
+        from spruce_grove.tools.common import format_diff_with_colors
 
         result = format_diff_with_colors("   \n  ")
         assert isinstance(result, Text)
         assert "no diff" in result.plain.lower()
 
     def test_real_diff(self):
-        from code_puppy.tools.common import format_diff_with_colors
+        from spruce_grove.tools.common import format_diff_with_colors
 
         diff = "--- a/f.py\n+++ b/f.py\n@@ -1 +1 @@\n-old\n+new"
         result = format_diff_with_colors(diff)
@@ -340,7 +340,7 @@ class TestFormatDiffWithColors:
 
 class TestFindBestWindow:
     def test_exact_match(self):
-        from code_puppy.tools.common import _find_best_window
+        from spruce_grove.tools.common import _find_best_window
 
         haystack = ["line1", "line2", "line3"]
         span, score = _find_best_window(haystack, "line2")
@@ -348,7 +348,7 @@ class TestFindBestWindow:
         assert score > 0.9
 
     def test_no_match(self):
-        from code_puppy.tools.common import _find_best_window
+        from spruce_grove.tools.common import _find_best_window
 
         haystack = ["aaa", "bbb", "ccc"]
         span, score = _find_best_window(haystack, "zzzzzzzzzzzzzzz")
@@ -356,7 +356,7 @@ class TestFindBestWindow:
         assert score < 0.9
 
     def test_multi_line_needle(self):
-        from code_puppy.tools.common import _find_best_window
+        from spruce_grove.tools.common import _find_best_window
 
         haystack = ["def foo():", "    return 1", "", "def bar():"]
         span, score = _find_best_window(haystack, "def foo():\n    return 1")
@@ -371,20 +371,20 @@ class TestFindBestWindow:
 
 class TestGenerateGroupId:
     def test_basic(self):
-        from code_puppy.tools.common import generate_group_id
+        from spruce_grove.tools.common import generate_group_id
 
         gid = generate_group_id("test_tool")
         assert gid.startswith("test_tool_")
         assert len(gid) > len("test_tool_")
 
     def test_with_extra_context(self):
-        from code_puppy.tools.common import generate_group_id
+        from spruce_grove.tools.common import generate_group_id
 
         gid = generate_group_id("edit", "file.py")
         assert gid.startswith("edit_")
 
     def test_uniqueness(self):
-        from code_puppy.tools.common import generate_group_id
+        from spruce_grove.tools.common import generate_group_id
 
         ids = {generate_group_id("tool") for _ in range(100)}
         # Should have many unique IDs (randomness + timestamp)
@@ -398,7 +398,7 @@ class TestGenerateGroupId:
 
 def _drive_selector(choices, keys, preview_callback=None):
     """Build the inline selector and drive it with scripted keys."""
-    from code_puppy.tools.common import _build_arrow_select_menu
+    from spruce_grove.tools.common import _build_arrow_select_menu
 
     script = iter(keys)
     out = StringIO()
@@ -447,7 +447,7 @@ class TestArrowSelectAsync:
 
     @pytest.mark.asyncio
     async def test_async_wrapper_selects_and_cancels(self):
-        from code_puppy.tools import common
+        from spruce_grove.tools import common
 
         def scripted_menu(keys):
             def build(message, choices, preview_callback=None, **overrides):
@@ -461,7 +461,7 @@ class TestArrowSelectAsync:
 
         _original_build = common._build_arrow_select_menu
         with patch(
-            "code_puppy.agents._key_listeners.suspended_key_listener",
+            "spruce_grove.agents._key_listeners.suspended_key_listener",
             nullcontext,
         ):
             with patch.object(
@@ -478,7 +478,7 @@ class TestArrowSelectAsync:
 class TestArrowSelect:
     def test_raises_in_async_context(self):
         """arrow_select raises RuntimeError when called from async context."""
-        from code_puppy.tools.common import arrow_select
+        from spruce_grove.tools.common import arrow_select
 
         async def _inner():
             with pytest.raises(RuntimeError, match="arrow_select_async"):
@@ -487,7 +487,7 @@ class TestArrowSelect:
         asyncio.run(_inner())
 
     def test_sync_selection_and_cancel(self):
-        from code_puppy.tools import common
+        from spruce_grove.tools import common
 
         _original_build = common._build_arrow_select_menu
 
@@ -502,7 +502,7 @@ class TestArrowSelect:
             return build
 
         with patch(
-            "code_puppy.agents._key_listeners.suspended_key_listener",
+            "spruce_grove.agents._key_listeners.suspended_key_listener",
             nullcontext,
         ):
             with patch.object(
@@ -522,18 +522,18 @@ class TestArrowSelect:
 class TestGetUserApproval:
     @pytest.fixture(autouse=True)
     def _interactive_stdin(self):
-        with patch("code_puppy.tools.common.sys.stdin") as mock_stdin:
+        with patch("spruce_grove.tools.common.sys.stdin") as mock_stdin:
             mock_stdin.isatty.return_value = True
             yield mock_stdin
 
     def test_approve(self):
-        from code_puppy.tools.common import get_user_approval
+        from spruce_grove.tools.common import get_user_approval
 
-        with patch("code_puppy.tools.common.arrow_select", return_value="✓ Approve"):
-            with patch("code_puppy.tools.common.Console"):
-                with patch("code_puppy.tools.command_runner.set_awaiting_user_input"):
-                    with patch("code_puppy.tools.common.emit_info"):
-                        with patch("code_puppy.tools.common.emit_success"):
+        with patch("spruce_grove.tools.common.arrow_select", return_value="✓ Approve"):
+            with patch("spruce_grove.tools.common.Console"):
+                with patch("spruce_grove.tools.command_runner.set_awaiting_user_input"):
+                    with patch("spruce_grove.tools.common.emit_info"):
+                        with patch("spruce_grove.tools.common.emit_success"):
                             confirmed, feedback = get_user_approval(
                                 "Test", "content", puppy_name="Biscuit"
                             )
@@ -541,13 +541,13 @@ class TestGetUserApproval:
         assert feedback is None
 
     def test_reject(self):
-        from code_puppy.tools.common import get_user_approval
+        from spruce_grove.tools.common import get_user_approval
 
-        with patch("code_puppy.tools.common.arrow_select", return_value="✗ Reject"):
-            with patch("code_puppy.tools.common.Console"):
-                with patch("code_puppy.tools.command_runner.set_awaiting_user_input"):
-                    with patch("code_puppy.tools.common.emit_info"):
-                        with patch("code_puppy.tools.common.emit_error"):
+        with patch("spruce_grove.tools.common.arrow_select", return_value="✗ Reject"):
+            with patch("spruce_grove.tools.common.Console"):
+                with patch("spruce_grove.tools.command_runner.set_awaiting_user_input"):
+                    with patch("spruce_grove.tools.common.emit_info"):
+                        with patch("spruce_grove.tools.common.emit_error"):
                             confirmed, feedback = get_user_approval(
                                 "Test", "content", puppy_name="Biscuit"
                             )
@@ -555,21 +555,21 @@ class TestGetUserApproval:
         assert feedback is None
 
     def test_reject_with_feedback(self):
-        from code_puppy.tools.common import get_user_approval
+        from spruce_grove.tools.common import get_user_approval
 
         with patch(
-            "code_puppy.tools.common.arrow_select",
+            "spruce_grove.tools.common.arrow_select",
             return_value="💬 Reject with feedback (tell Biscuit what to change)",
         ):
-            with patch("code_puppy.tools.common.Prompt") as MockPrompt:
+            with patch("spruce_grove.tools.common.Prompt") as MockPrompt:
                 MockPrompt.ask.return_value = "fix the thing"
-                with patch("code_puppy.tools.common.Console"):
+                with patch("spruce_grove.tools.common.Console"):
                     with patch(
-                        "code_puppy.tools.command_runner.set_awaiting_user_input"
+                        "spruce_grove.tools.command_runner.set_awaiting_user_input"
                     ):
-                        with patch("code_puppy.tools.common.emit_info"):
-                            with patch("code_puppy.tools.common.emit_error"):
-                                with patch("code_puppy.tools.common.emit_warning"):
+                        with patch("spruce_grove.tools.common.emit_info"):
+                            with patch("spruce_grove.tools.common.emit_error"):
+                                with patch("spruce_grove.tools.common.emit_warning"):
                                     confirmed, feedback = get_user_approval(
                                         "Test", "content", puppy_name="Biscuit"
                                     )
@@ -577,17 +577,17 @@ class TestGetUserApproval:
         assert feedback == "fix the thing"
 
     def test_reject_with_empty_feedback(self):
-        from code_puppy.tools.common import get_user_approval
+        from spruce_grove.tools.common import get_user_approval
 
-        with patch("code_puppy.tools.common.arrow_select", return_value="💬 feedback"):
-            with patch("code_puppy.tools.common.Prompt") as MockPrompt:
+        with patch("spruce_grove.tools.common.arrow_select", return_value="💬 feedback"):
+            with patch("spruce_grove.tools.common.Prompt") as MockPrompt:
                 MockPrompt.ask.return_value = "  "
-                with patch("code_puppy.tools.common.Console"):
+                with patch("spruce_grove.tools.common.Console"):
                     with patch(
-                        "code_puppy.tools.command_runner.set_awaiting_user_input"
+                        "spruce_grove.tools.command_runner.set_awaiting_user_input"
                     ):
-                        with patch("code_puppy.tools.common.emit_info"):
-                            with patch("code_puppy.tools.common.emit_error"):
+                        with patch("spruce_grove.tools.common.emit_info"):
+                            with patch("spruce_grove.tools.common.emit_error"):
                                 confirmed, feedback = get_user_approval(
                                     "Test", "content", puppy_name="Biscuit"
                                 )
@@ -595,43 +595,43 @@ class TestGetUserApproval:
         assert feedback is None
 
     def test_keyboard_interrupt(self):
-        from code_puppy.tools.common import get_user_approval
+        from spruce_grove.tools.common import get_user_approval
 
         with patch(
-            "code_puppy.tools.common.arrow_select", side_effect=KeyboardInterrupt
+            "spruce_grove.tools.common.arrow_select", side_effect=KeyboardInterrupt
         ):
-            with patch("code_puppy.tools.common.Console"):
-                with patch("code_puppy.tools.command_runner.set_awaiting_user_input"):
-                    with patch("code_puppy.tools.common.emit_info"):
-                        with patch("code_puppy.tools.common.emit_error"):
+            with patch("spruce_grove.tools.common.Console"):
+                with patch("spruce_grove.tools.command_runner.set_awaiting_user_input"):
+                    with patch("spruce_grove.tools.common.emit_info"):
+                        with patch("spruce_grove.tools.common.emit_error"):
                             confirmed, feedback = get_user_approval(
                                 "Test", "content", puppy_name="Biscuit"
                             )
         assert confirmed is False
 
     def test_eof_error(self):
-        from code_puppy.tools.common import get_user_approval
+        from spruce_grove.tools.common import get_user_approval
 
-        with patch("code_puppy.tools.common.arrow_select", side_effect=EOFError):
-            with patch("code_puppy.tools.common.Console"):
-                with patch("code_puppy.tools.command_runner.set_awaiting_user_input"):
-                    with patch("code_puppy.tools.common.emit_info"):
-                        with patch("code_puppy.tools.common.emit_error"):
+        with patch("spruce_grove.tools.common.arrow_select", side_effect=EOFError):
+            with patch("spruce_grove.tools.common.Console"):
+                with patch("spruce_grove.tools.command_runner.set_awaiting_user_input"):
+                    with patch("spruce_grove.tools.common.emit_info"):
+                        with patch("spruce_grove.tools.common.emit_error"):
                             confirmed, feedback = get_user_approval(
                                 "Test", "content", puppy_name="Biscuit"
                             )
         assert confirmed is False
 
     def test_with_preview(self):
-        from code_puppy.tools.common import get_user_approval
+        from spruce_grove.tools.common import get_user_approval
 
-        with patch("code_puppy.tools.common.arrow_select", return_value="✓ Approve"):
-            with patch("code_puppy.tools.common.Console"):
-                with patch("code_puppy.tools.command_runner.set_awaiting_user_input"):
-                    with patch("code_puppy.tools.common.emit_info"):
-                        with patch("code_puppy.tools.common.emit_success"):
+        with patch("spruce_grove.tools.common.arrow_select", return_value="✓ Approve"):
+            with patch("spruce_grove.tools.common.Console"):
+                with patch("spruce_grove.tools.command_runner.set_awaiting_user_input"):
+                    with patch("spruce_grove.tools.common.emit_info"):
+                        with patch("spruce_grove.tools.common.emit_success"):
                             with patch(
-                                "code_puppy.tools.common.format_diff_with_colors",
+                                "spruce_grove.tools.common.format_diff_with_colors",
                                 return_value=Text("diff"),
                             ):
                                 confirmed, _ = get_user_approval(
@@ -643,28 +643,28 @@ class TestGetUserApproval:
         assert confirmed is True
 
     def test_with_text_content(self):
-        from code_puppy.tools.common import get_user_approval
+        from spruce_grove.tools.common import get_user_approval
 
-        with patch("code_puppy.tools.common.arrow_select", return_value="✓ Approve"):
-            with patch("code_puppy.tools.common.Console"):
-                with patch("code_puppy.tools.command_runner.set_awaiting_user_input"):
-                    with patch("code_puppy.tools.common.emit_info"):
-                        with patch("code_puppy.tools.common.emit_success"):
+        with patch("spruce_grove.tools.common.arrow_select", return_value="✓ Approve"):
+            with patch("spruce_grove.tools.common.Console"):
+                with patch("spruce_grove.tools.command_runner.set_awaiting_user_input"):
+                    with patch("spruce_grove.tools.common.emit_info"):
+                        with patch("spruce_grove.tools.common.emit_success"):
                             confirmed, _ = get_user_approval(
                                 "Test", Text("rich content"), puppy_name="Biscuit"
                             )
         assert confirmed is True
 
     def test_default_puppy_name(self):
-        from code_puppy.tools.common import get_user_approval
+        from spruce_grove.tools.common import get_user_approval
 
-        with patch("code_puppy.tools.common.arrow_select", return_value="✓ Approve"):
-            with patch("code_puppy.tools.common.Console"):
-                with patch("code_puppy.tools.command_runner.set_awaiting_user_input"):
-                    with patch("code_puppy.tools.common.emit_info"):
-                        with patch("code_puppy.tools.common.emit_success"):
+        with patch("spruce_grove.tools.common.arrow_select", return_value="✓ Approve"):
+            with patch("spruce_grove.tools.common.Console"):
+                with patch("spruce_grove.tools.command_runner.set_awaiting_user_input"):
+                    with patch("spruce_grove.tools.common.emit_info"):
+                        with patch("spruce_grove.tools.common.emit_success"):
                             with patch(
-                                "code_puppy.config.get_puppy_name", return_value="buddy"
+                                "spruce_grove.config.get_puppy_name", return_value="buddy"
                             ):
                                 confirmed, _ = get_user_approval("Test", "content")
         assert confirmed is True
@@ -678,23 +678,23 @@ class TestGetUserApproval:
 class TestGetUserApprovalAsync:
     @pytest.fixture(autouse=True)
     def _interactive_stdin(self):
-        with patch("code_puppy.tools.common.sys.stdin") as mock_stdin:
+        with patch("spruce_grove.tools.common.sys.stdin") as mock_stdin:
             mock_stdin.isatty.return_value = True
             yield mock_stdin
 
     @pytest.mark.asyncio
     async def test_approve(self):
-        from code_puppy.tools.common import get_user_approval_async
+        from spruce_grove.tools.common import get_user_approval_async
 
         with patch(
-            "code_puppy.tools.common.arrow_select_async",
+            "spruce_grove.tools.common.arrow_select_async",
             new_callable=AsyncMock,
             return_value="✓ Approve",
         ):
-            with patch("code_puppy.tools.common.Console"):
-                with patch("code_puppy.tools.command_runner.set_awaiting_user_input"):
-                    with patch("code_puppy.tools.common.emit_info"):
-                        with patch("code_puppy.tools.common.emit_success"):
+            with patch("spruce_grove.tools.common.Console"):
+                with patch("spruce_grove.tools.command_runner.set_awaiting_user_input"):
+                    with patch("spruce_grove.tools.common.emit_info"):
+                        with patch("spruce_grove.tools.common.emit_success"):
                             confirmed, feedback = await get_user_approval_async(
                                 "Test", "content", puppy_name="Biscuit"
                             )
@@ -703,17 +703,17 @@ class TestGetUserApprovalAsync:
 
     @pytest.mark.asyncio
     async def test_reject(self):
-        from code_puppy.tools.common import get_user_approval_async
+        from spruce_grove.tools.common import get_user_approval_async
 
         with patch(
-            "code_puppy.tools.common.arrow_select_async",
+            "spruce_grove.tools.common.arrow_select_async",
             new_callable=AsyncMock,
             return_value="✗ Reject",
         ):
-            with patch("code_puppy.tools.common.Console"):
-                with patch("code_puppy.tools.command_runner.set_awaiting_user_input"):
-                    with patch("code_puppy.tools.common.emit_info"):
-                        with patch("code_puppy.tools.common.emit_error"):
+            with patch("spruce_grove.tools.common.Console"):
+                with patch("spruce_grove.tools.command_runner.set_awaiting_user_input"):
+                    with patch("spruce_grove.tools.common.emit_info"):
+                        with patch("spruce_grove.tools.common.emit_error"):
                             confirmed, _ = await get_user_approval_async(
                                 "Test", "content", puppy_name="Biscuit"
                             )
@@ -721,22 +721,22 @@ class TestGetUserApprovalAsync:
 
     @pytest.mark.asyncio
     async def test_reject_with_feedback(self):
-        from code_puppy.tools.common import get_user_approval_async
+        from spruce_grove.tools.common import get_user_approval_async
 
         with patch(
-            "code_puppy.tools.common.arrow_select_async",
+            "spruce_grove.tools.common.arrow_select_async",
             new_callable=AsyncMock,
             return_value="💬 feedback",
         ):
-            with patch("code_puppy.tools.common.Prompt") as MockPrompt:
+            with patch("spruce_grove.tools.common.Prompt") as MockPrompt:
                 MockPrompt.ask.return_value = "change X"
-                with patch("code_puppy.tools.common.Console"):
+                with patch("spruce_grove.tools.common.Console"):
                     with patch(
-                        "code_puppy.tools.command_runner.set_awaiting_user_input"
+                        "spruce_grove.tools.command_runner.set_awaiting_user_input"
                     ):
-                        with patch("code_puppy.tools.common.emit_info"):
-                            with patch("code_puppy.tools.common.emit_error"):
-                                with patch("code_puppy.tools.common.emit_warning"):
+                        with patch("spruce_grove.tools.common.emit_info"):
+                            with patch("spruce_grove.tools.common.emit_error"):
+                                with patch("spruce_grove.tools.common.emit_warning"):
                                     confirmed, feedback = await get_user_approval_async(
                                         "Test", "content", puppy_name="Biscuit"
                                     )
@@ -745,21 +745,21 @@ class TestGetUserApprovalAsync:
 
     @pytest.mark.asyncio
     async def test_reject_empty_feedback(self):
-        from code_puppy.tools.common import get_user_approval_async
+        from spruce_grove.tools.common import get_user_approval_async
 
         with patch(
-            "code_puppy.tools.common.arrow_select_async",
+            "spruce_grove.tools.common.arrow_select_async",
             new_callable=AsyncMock,
             return_value="💬 feedback",
         ):
-            with patch("code_puppy.tools.common.Prompt") as MockPrompt:
+            with patch("spruce_grove.tools.common.Prompt") as MockPrompt:
                 MockPrompt.ask.return_value = "  "
-                with patch("code_puppy.tools.common.Console"):
+                with patch("spruce_grove.tools.common.Console"):
                     with patch(
-                        "code_puppy.tools.command_runner.set_awaiting_user_input"
+                        "spruce_grove.tools.command_runner.set_awaiting_user_input"
                     ):
-                        with patch("code_puppy.tools.common.emit_info"):
-                            with patch("code_puppy.tools.common.emit_error"):
+                        with patch("spruce_grove.tools.common.emit_info"):
+                            with patch("spruce_grove.tools.common.emit_error"):
                                 confirmed, feedback = await get_user_approval_async(
                                     "Test", "content", puppy_name="Biscuit"
                                 )
@@ -768,17 +768,17 @@ class TestGetUserApprovalAsync:
 
     @pytest.mark.asyncio
     async def test_keyboard_interrupt(self):
-        from code_puppy.tools.common import get_user_approval_async
+        from spruce_grove.tools.common import get_user_approval_async
 
         with patch(
-            "code_puppy.tools.common.arrow_select_async",
+            "spruce_grove.tools.common.arrow_select_async",
             new_callable=AsyncMock,
             side_effect=KeyboardInterrupt,
         ):
-            with patch("code_puppy.tools.common.Console"):
-                with patch("code_puppy.tools.command_runner.set_awaiting_user_input"):
-                    with patch("code_puppy.tools.common.emit_info"):
-                        with patch("code_puppy.tools.common.emit_error"):
+            with patch("spruce_grove.tools.common.Console"):
+                with patch("spruce_grove.tools.command_runner.set_awaiting_user_input"):
+                    with patch("spruce_grove.tools.common.emit_info"):
+                        with patch("spruce_grove.tools.common.emit_error"):
                             confirmed, _ = await get_user_approval_async(
                                 "Test", "content", puppy_name="Biscuit"
                             )
@@ -786,19 +786,19 @@ class TestGetUserApprovalAsync:
 
     @pytest.mark.asyncio
     async def test_with_preview(self):
-        from code_puppy.tools.common import get_user_approval_async
+        from spruce_grove.tools.common import get_user_approval_async
 
         with patch(
-            "code_puppy.tools.common.arrow_select_async",
+            "spruce_grove.tools.common.arrow_select_async",
             new_callable=AsyncMock,
             return_value="✓ Approve",
         ):
-            with patch("code_puppy.tools.common.Console"):
-                with patch("code_puppy.tools.command_runner.set_awaiting_user_input"):
-                    with patch("code_puppy.tools.common.emit_info"):
-                        with patch("code_puppy.tools.common.emit_success"):
+            with patch("spruce_grove.tools.common.Console"):
+                with patch("spruce_grove.tools.command_runner.set_awaiting_user_input"):
+                    with patch("spruce_grove.tools.common.emit_info"):
+                        with patch("spruce_grove.tools.common.emit_success"):
                             with patch(
-                                "code_puppy.tools.common.format_diff_with_colors",
+                                "spruce_grove.tools.common.format_diff_with_colors",
                                 return_value=Text("diff"),
                             ):
                                 confirmed, _ = await get_user_approval_async(
@@ -811,17 +811,17 @@ class TestGetUserApprovalAsync:
 
     @pytest.mark.asyncio
     async def test_with_text_content(self):
-        from code_puppy.tools.common import get_user_approval_async
+        from spruce_grove.tools.common import get_user_approval_async
 
         with patch(
-            "code_puppy.tools.common.arrow_select_async",
+            "spruce_grove.tools.common.arrow_select_async",
             new_callable=AsyncMock,
             return_value="✓ Approve",
         ):
-            with patch("code_puppy.tools.common.Console"):
-                with patch("code_puppy.tools.command_runner.set_awaiting_user_input"):
-                    with patch("code_puppy.tools.common.emit_info"):
-                        with patch("code_puppy.tools.common.emit_success"):
+            with patch("spruce_grove.tools.common.Console"):
+                with patch("spruce_grove.tools.command_runner.set_awaiting_user_input"):
+                    with patch("spruce_grove.tools.common.emit_info"):
+                        with patch("spruce_grove.tools.common.emit_success"):
                             confirmed, _ = await get_user_approval_async(
                                 "Test", Text("rich"), puppy_name="Biscuit"
                             )
@@ -829,19 +829,19 @@ class TestGetUserApprovalAsync:
 
     @pytest.mark.asyncio
     async def test_default_puppy_name(self):
-        from code_puppy.tools.common import get_user_approval_async
+        from spruce_grove.tools.common import get_user_approval_async
 
         with patch(
-            "code_puppy.tools.common.arrow_select_async",
+            "spruce_grove.tools.common.arrow_select_async",
             new_callable=AsyncMock,
             return_value="✓ Approve",
         ):
-            with patch("code_puppy.tools.common.Console"):
-                with patch("code_puppy.tools.command_runner.set_awaiting_user_input"):
-                    with patch("code_puppy.tools.common.emit_info"):
-                        with patch("code_puppy.tools.common.emit_success"):
+            with patch("spruce_grove.tools.common.Console"):
+                with patch("spruce_grove.tools.command_runner.set_awaiting_user_input"):
+                    with patch("spruce_grove.tools.common.emit_info"):
+                        with patch("spruce_grove.tools.common.emit_success"):
                             with patch(
-                                "code_puppy.config.get_puppy_name", return_value="buddy"
+                                "spruce_grove.config.get_puppy_name", return_value="buddy"
                             ):
                                 confirmed, _ = await get_user_approval_async(
                                     "Test", "content"
@@ -856,7 +856,7 @@ class TestGetUserApprovalAsync:
 
 class TestIgnorePatterns:
     def test_ignore_patterns_is_combined(self):
-        from code_puppy.tools.common import (
+        from spruce_grove.tools.common import (
             DIR_IGNORE_PATTERNS,
             FILE_IGNORE_PATTERNS,
             IGNORE_PATTERNS,
@@ -874,6 +874,6 @@ class TestModuleConstants:
     def test_brighten_hex_reexported_from_termflow(self):
         from termflow.diff import brighten_hex as termflow_brighten_hex
 
-        from code_puppy.tools.common import brighten_hex
+        from spruce_grove.tools.common import brighten_hex
 
         assert brighten_hex is termflow_brighten_hex

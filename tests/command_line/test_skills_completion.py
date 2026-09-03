@@ -5,7 +5,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 from termflow.tui.completion import Document
 
-from code_puppy.command_line.skills_completion import (
+from spruce_grove.command_line.skills_completion import (
     SkillsCompleter,
     load_catalog_skill_ids,
 )
@@ -16,21 +16,21 @@ class TestLoadCatalogSkillIds:
         provider = MagicMock()
         provider.get_catalog_skill_ids.return_value = ["test-skill"]
         with patch(
-            "code_puppy.command_line.skills_completion.get_skill_provider",
+            "spruce_grove.command_line.skills_completion.get_skill_provider",
             return_value=provider,
         ):
             assert load_catalog_skill_ids() == ["test-skill"]
 
     def test_no_plugin(self):
         with patch(
-            "code_puppy.command_line.skills_completion.get_skill_provider",
+            "spruce_grove.command_line.skills_completion.get_skill_provider",
             return_value=None,
         ):
             assert load_catalog_skill_ids() == []
 
     def test_provider_failure(self):
         with patch(
-            "code_puppy.command_line.skills_completion.get_skill_provider",
+            "spruce_grove.command_line.skills_completion.get_skill_provider",
             side_effect=RuntimeError("boom"),
         ):
             assert load_catalog_skill_ids() == []
@@ -96,7 +96,7 @@ class TestSkillsCompleter:
         self.completer._skill_ids_cache = None
         self.completer._cache_timestamp = None
         with patch(
-            "code_puppy.command_line.skills_completion.load_catalog_skill_ids",
+            "spruce_grove.command_line.skills_completion.load_catalog_skill_ids",
             return_value=["new"],
         ):
             result = self.completer._get_skill_ids()

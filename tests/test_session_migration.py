@@ -4,7 +4,7 @@ Under the unified-store model, the legacy CONTEXTS_DIR is no longer the
 canonical named-session store; everything lives under AUTOSAVE_DIR. Any
 sessions a user had ``/dump_context``'d into the legacy location are moved
 on first launch via
-:func:`code_puppy.session_migration.sweep_contexts_to_autosaves`,
+:func:`spruce_grove.session_migration.sweep_contexts_to_autosaves`,
 which is what we exercise here.
 
 Why a separate test module vs. tucking it into ``test_session_storage``:
@@ -27,8 +27,8 @@ def sweep_dirs(tmp_path: Path, monkeypatch):
     """Wire AUTOSAVE_DIR + CONTEXTS_DIR to a clean tmp_path layout."""
     contexts = tmp_path / "contexts"
     autosaves = tmp_path / "autosaves"
-    monkeypatch.setattr("code_puppy.config.CONTEXTS_DIR", str(contexts))
-    monkeypatch.setattr("code_puppy.config.AUTOSAVE_DIR", str(autosaves))
+    monkeypatch.setattr("spruce_grove.config.CONTEXTS_DIR", str(contexts))
+    monkeypatch.setattr("spruce_grove.config.AUTOSAVE_DIR", str(autosaves))
     return contexts, autosaves
 
 
@@ -46,7 +46,7 @@ def _write_pair(
 
 class TestSweepContextsToAutosaves:
     def test_noop_when_contexts_missing(self, sweep_dirs):
-        from code_puppy.session_migration import sweep_contexts_to_autosaves
+        from spruce_grove.session_migration import sweep_contexts_to_autosaves
 
         contexts, autosaves = sweep_dirs
         # contexts/ never created
@@ -58,7 +58,7 @@ class TestSweepContextsToAutosaves:
         assert list(autosaves.iterdir()) == [autosaves / ".contexts_sweep_done"]
 
     def test_clean_run_moves_pickle_and_sidecar(self, sweep_dirs):
-        from code_puppy.session_migration import sweep_contexts_to_autosaves
+        from spruce_grove.session_migration import sweep_contexts_to_autosaves
 
         contexts, autosaves = sweep_dirs
         pkl_src, meta_src = _write_pair(contexts, "mywork", contents="payload")
@@ -76,7 +76,7 @@ class TestSweepContextsToAutosaves:
         assert (autosaves / ".contexts_sweep_done").exists()
 
     def test_idempotent_via_sentinel(self, sweep_dirs):
-        from code_puppy.session_migration import sweep_contexts_to_autosaves
+        from spruce_grove.session_migration import sweep_contexts_to_autosaves
 
         contexts, autosaves = sweep_dirs
         _write_pair(contexts, "mywork")
@@ -92,13 +92,13 @@ class TestSweepContextsToAutosaves:
         assert not (autosaves / "second_run_file.pkl").exists()
 
     def test_name_conflict_skips_and_warns(self, sweep_dirs):
-        from code_puppy.session_migration import sweep_contexts_to_autosaves
+        from spruce_grove.session_migration import sweep_contexts_to_autosaves
 
         contexts, autosaves = sweep_dirs
         _write_pair(contexts, "mywork", contents="from-contexts")
         _write_pair(autosaves, "mywork", contents="from-autosaves")
 
-        with patch("code_puppy.messaging.emit_warning") as mock_warn:
+        with patch("spruce_grove.messaging.emit_warning") as mock_warn:
             sweep_contexts_to_autosaves()
 
         # Conflicting source stays put.
@@ -113,7 +113,7 @@ class TestSweepContextsToAutosaves:
 
     def test_per_file_error_does_not_abort(self, sweep_dirs):
         """A single move failure must not stop the sweep for siblings."""
-        from code_puppy.session_migration import sweep_contexts_to_autosaves
+        from spruce_grove.session_migration import sweep_contexts_to_autosaves
 
         contexts, autosaves = sweep_dirs
         _write_pair(contexts, "good_one", contents="ok")
@@ -144,7 +144,7 @@ class TestSweepContextsToAutosaves:
         either roll back the pickle (losing data) or silently strand the
         orphan with no audit trail.
         """
-        from code_puppy.session_migration import sweep_contexts_to_autosaves
+        from spruce_grove.session_migration import sweep_contexts_to_autosaves
 
         contexts, autosaves = sweep_dirs
         _write_pair(contexts, "session_a", contents="payload")
@@ -158,7 +158,7 @@ class TestSweepContextsToAutosaves:
 
         with (
             patch("os.replace", side_effect=fail_only_sidecar),
-            patch("code_puppy.error_logging.log_error_message") as mock_log,
+            patch("spruce_grove.error_logging.log_error_message") as mock_log,
         ):
             sweep_contexts_to_autosaves()
 
@@ -174,7 +174,7 @@ class TestSweepContextsToAutosaves:
 
     def test_sweep_never_raises(self, sweep_dirs):
         """Even an internal explosion must not crash the caller."""
-        from code_puppy.session_migration import sweep_contexts_to_autosaves
+        from spruce_grove.session_migration import sweep_contexts_to_autosaves
 
         contexts, autosaves = sweep_dirs
         _write_pair(contexts, "victim")

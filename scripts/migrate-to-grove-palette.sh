@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────
-# Migrate Code Puppy design tokens to the Granlund-Grove forest palette.
+# Migrate Spruce Grove design tokens to the Granlund-Grove forest palette.
 #
 # Maps the old blue-grey / periwinkle / cyan / mint palette to the grove's
 # warm cedar + forest-green system. Every value is WCAG-AAA verified on
@@ -15,8 +15,8 @@ FILES=(
   pages-hub/assets/tokens.css
   pages-hub/assets/sidebar.css
   pages-hub/assets/popover.css
-  pages-hub/assets/puppy.svg
-  pages-hub/assets/puppy-full.svg
+  pages-hub/assets/grove.svg
+  pages-hub/assets/grove-full.svg
   pages-hub/index.html
   pages-hub/architecture.html
   pages-hub/updates.html

@@ -16,10 +16,10 @@ import httpx2
 import pytest
 from pydantic_ai.exceptions import PydanticAIDeprecationWarning
 
-import code_puppy.http_utils as http_utils
-import code_puppy.httpx2_utils as httpx2_utils
-from code_puppy.http_retry import RetryingSendMixin
-from code_puppy.model_factory import ModelFactory
+import spruce_grove.http_utils as http_utils
+import spruce_grove.httpx2_utils as httpx2_utils
+from spruce_grove.http_retry import RetryingSendMixin
+from spruce_grove.model_factory import ModelFactory
 
 CUSTOM_ENDPOINT = {
     "url": "https://fake.url/v1",
@@ -50,7 +50,7 @@ class TestHttpx2ClientFactory:
             _close_soon(client)
 
     def test_factory_honours_retry_transport_disable(self, monkeypatch):
-        monkeypatch.setenv("CODE_PUPPY_DISABLE_RETRY_TRANSPORT", "true")
+        monkeypatch.setenv("SPRUCE_GROVE_DISABLE_RETRY_TRANSPORT", "true")
         client = httpx2_utils.create_async_client(timeout=60)
         try:
             assert isinstance(client, httpx2.AsyncClient)
@@ -104,7 +104,7 @@ class TestRetryMixinShared:
 
         # Request/transport classes are family-specific, the retry logic is not.
         client = client_cls(transport=family.MockTransport(handler), max_retries=2)
-        with patch("code_puppy.http_retry.asyncio.sleep", new_callable=AsyncMock):
+        with patch("spruce_grove.http_retry.asyncio.sleep", new_callable=AsyncMock):
             response = await client.send(family.Request("GET", "https://fake.url/x"))
         await client.aclose()
 

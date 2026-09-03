@@ -19,7 +19,7 @@ jobs:
               sumIf(count, date >= today() - 30) AS last_month,
               sum(count) AS total
             FROM pypi.pypi_downloads_per_day
-            WHERE project = 'code-puppy'
+            WHERE project = 'spruce-grove'
             FORMAT JSONEachRow")
 
           fmt() { LC_ALL=en_US.UTF-8 printf "%'d" "$1"; }
@@ -37,8 +37,8 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{
               "embeds": [{
-                "title": "🐶 PyPI Download Stats — code-puppy",
-                "url": "https://clickpy.clickhouse.com/dashboard/code-puppy",
+                "title": "🐶 PyPI Download Stats — spruce-grove",
+                "url": "https://clickpy.clickhouse.com/dashboard/spruce-grove",
                 "color": 5793266,
                 "fields": [
                   {

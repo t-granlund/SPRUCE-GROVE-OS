@@ -12,8 +12,8 @@ import pytest
 from pydantic_ai.messages import ModelRequest, SystemPromptPart, UserPromptPart
 from pydantic_ai.models.test import TestModel
 
-from code_puppy.callbacks import clear_callbacks, register_callback
-from code_puppy.model_utils import PreparedPrompt, prepare_prompt_for_model
+from spruce_grove.callbacks import clear_callbacks, register_callback
+from spruce_grove.model_utils import PreparedPrompt, prepare_prompt_for_model
 
 IDENTITY = "You are a very good dog."
 REAL_PROMPT = "Fetch things. Do not eat the couch."

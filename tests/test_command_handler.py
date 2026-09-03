@@ -3,8 +3,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy.command_line.command_handler import handle_command
-from code_puppy.command_line.command_registry import get_command
+from spruce_grove.command_line.command_handler import handle_command
+from spruce_grove.command_line.command_registry import get_command
 
 
 # Function to create a test context with patched messaging functions
@@ -12,11 +12,11 @@ def setup_messaging_mocks():
     """Set up mocks for all the messaging functions and return them in a dictionary."""
     mocks = {}
     patch_targets = [
-        "code_puppy.messaging.emit_info",
-        "code_puppy.messaging.emit_error",
-        "code_puppy.messaging.emit_warning",
-        "code_puppy.messaging.emit_success",
-        "code_puppy.messaging.emit_system_message",
+        "spruce_grove.messaging.emit_info",
+        "spruce_grove.messaging.emit_error",
+        "spruce_grove.messaging.emit_warning",
+        "spruce_grove.messaging.emit_success",
+        "spruce_grove.messaging.emit_system_message",
     ]
 
     for target in patch_targets:
@@ -47,7 +47,7 @@ def test_cd_show_lists_directories():
     mock_emit_info = mocks["emit_info"].start()
 
     try:
-        with patch("code_puppy.command_line.utils.make_directory_table") as mock_table:
+        with patch("spruce_grove.command_line.utils.make_directory_table") as mock_table:
             from rich.table import Table
 
             fake_table = Table()
@@ -73,7 +73,7 @@ def test_cd_valid_change():
             patch("os.path.isdir", return_value=True),
             patch("os.chdir") as mock_chdir,
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=mock_agent,
             ),
         ):
@@ -103,7 +103,7 @@ def test_cd_valid_change_reload_failure_is_nonfatal():
             patch("os.path.isdir", return_value=True),
             patch("os.chdir") as mock_chdir,
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=mock_agent,
             ),
         ):
@@ -143,13 +143,13 @@ def test_cd_invalid_directory():
 def test_m_sets_model():
     # Simplified test - just check that the command handler returns True
     with (
-        patch("code_puppy.messaging.emit_success"),
+        patch("spruce_grove.messaging.emit_success"),
         patch(
-            "code_puppy.command_line.model_picker_completion.update_model_in_input",
+            "spruce_grove.command_line.model_picker_completion.update_model_in_input",
             return_value="some_model",
         ),
         patch(
-            "code_puppy.command_line.model_picker_completion.get_active_model",
+            "spruce_grove.command_line.model_picker_completion.get_active_model",
             return_value="gpt-9001",
         ),
     ):
@@ -164,11 +164,11 @@ def test_m_unrecognized_model_lists_options():
     try:
         with (
             patch(
-                "code_puppy.command_line.model_picker_completion.update_model_in_input",
+                "spruce_grove.command_line.model_picker_completion.update_model_in_input",
                 return_value=None,
             ),
             patch(
-                "code_puppy.command_line.model_picker_completion.load_model_names",
+                "spruce_grove.command_line.model_picker_completion.load_model_names",
                 return_value=["a", "b", "c"],
             ),
         ):
@@ -195,9 +195,9 @@ def test_set_config_value_equals_or_space(command):
 
     try:
         with (
-            patch("code_puppy.config.set_config_value") as mock_set_cfg,
+            patch("spruce_grove.config.set_config_value") as mock_set_cfg,
             patch(
-                "code_puppy.config.get_config_keys", return_value=["pony", "rainbow"]
+                "spruce_grove.config.get_config_keys", return_value=["pony", "rainbow"]
             ),
         ):
             result = handle_command(command)
@@ -218,8 +218,8 @@ def test_set_config_only_key():
 
     try:
         with (
-            patch("code_puppy.config.set_config_value") as mock_set_cfg,
-            patch("code_puppy.config.get_config_keys", return_value=["key"]),
+            patch("spruce_grove.config.set_config_value") as mock_set_cfg,
+            patch("spruce_grove.config.get_config_keys", return_value=["key"]),
         ):
             result = handle_command("/set pony")
             assert result is True
@@ -240,18 +240,18 @@ def test_show_status():
     try:
         with (
             patch(
-                "code_puppy.command_line.model_picker_completion.get_active_model",
+                "spruce_grove.command_line.model_picker_completion.get_active_model",
                 return_value="MODEL-X",
             ),
-            patch("code_puppy.config.get_owner_name", return_value="Ivan"),
-            patch("code_puppy.config.get_puppy_name", return_value="Biscuit"),
-            patch("code_puppy.config.get_yolo_mode", return_value=True),
+            patch("spruce_grove.config.get_owner_name", return_value="Ivan"),
+            patch("spruce_grove.config.get_puppy_name", return_value="Biscuit"),
+            patch("spruce_grove.config.get_yolo_mode", return_value=True),
         ):
             result = handle_command("/show")
             assert result is True
             mock_emit_info.assert_called()
             assert any(
-                "Puppy Status" in str(call)
+                "Cedar Status" in str(call)
                 and "Ivan" in str(call)
                 and "Biscuit" in str(call)
                 and "MODEL-X" in str(call)
@@ -286,7 +286,7 @@ def test_bare_slash_shows_current_model(active_model, command):
 
     try:
         with patch(
-            "code_puppy.command_line.model_picker_completion.get_active_model",
+            "spruce_grove.command_line.model_picker_completion.get_active_model",
             return_value=active_model,
         ):
             result = handle_command(command)
@@ -305,7 +305,7 @@ def test_set_no_args_launches_menu():
     launches the interactive picker. The picker is mocked to None so
     the test just verifies the dispatcher wires through to it."""
     with patch(
-        "code_puppy.command_line.set_menu.interactive_set_picker",
+        "spruce_grove.command_line.set_menu.interactive_set_picker",
         return_value=None,
     ):
         result = handle_command("/set")
@@ -318,7 +318,7 @@ def test_set_missing_key_errors():
 
     try:
         # This will enter the 'else' branch printing 'You must supply a key.'
-        with patch("code_puppy.config.get_config_keys", return_value=["foo", "bar"]):
+        with patch("spruce_grove.config.get_config_keys", return_value=["foo", "bar"]):
             result = handle_command("/set =value")
             assert result is True
             mock_emit_error.assert_called_with("You must supply a key.")
@@ -338,7 +338,7 @@ def test_agent_switch_triggers_autosave_rotation():
     mock_emit_success = mocks["emit_success"].start()
 
     try:
-        current_agent = SimpleNamespace(name="code-puppy", display_name="Code Puppy")
+        current_agent = SimpleNamespace(name="spruce-grove", display_name="Spruce Grove")
         new_agent = SimpleNamespace(
             name="reviewer",
             display_name="Reviewer",
@@ -348,19 +348,19 @@ def test_agent_switch_triggers_autosave_rotation():
 
         with (
             patch(
-                "code_puppy.agents.get_current_agent",
+                "spruce_grove.agents.get_current_agent",
                 side_effect=[current_agent, new_agent],
             ),
             patch(
-                "code_puppy.agents.get_available_agents",
-                return_value={"code-puppy": "Code Puppy", "reviewer": "Reviewer"},
+                "spruce_grove.agents.get_available_agents",
+                return_value={"spruce-grove": "Spruce Grove", "reviewer": "Reviewer"},
             ),
             patch(
-                "code_puppy.command_line.core_commands.finalize_autosave_session",
+                "spruce_grove.command_line.core_commands.finalize_autosave_session",
                 return_value="fresh_id",
             ) as mock_finalize,
             patch(
-                "code_puppy.agents.set_current_agent",
+                "spruce_grove.agents.set_current_agent",
                 return_value=True,
             ) as mock_set,
         ):
@@ -387,24 +387,24 @@ def test_agent_switch_same_agent_skips_rotation():
     mock_emit_info = mocks["emit_info"].start()
 
     try:
-        current_agent = SimpleNamespace(name="code-puppy", display_name="Code Puppy")
+        current_agent = SimpleNamespace(name="spruce-grove", display_name="Spruce Grove")
         with (
             patch(
-                "code_puppy.agents.get_current_agent",
+                "spruce_grove.agents.get_current_agent",
                 return_value=current_agent,
             ),
             patch(
-                "code_puppy.agents.get_available_agents",
-                return_value={"code-puppy": "Code Puppy"},
+                "spruce_grove.agents.get_available_agents",
+                return_value={"spruce-grove": "Spruce Grove"},
             ),
             patch(
-                "code_puppy.command_line.core_commands.finalize_autosave_session",
+                "spruce_grove.command_line.core_commands.finalize_autosave_session",
             ) as mock_finalize,
             patch(
-                "code_puppy.agents.set_current_agent",
+                "spruce_grove.agents.set_current_agent",
             ) as mock_set,
         ):
-            result = handle_command("/agent code-puppy")
+            result = handle_command("/agent spruce-grove")
             assert result is True
             mock_finalize.assert_not_called()
             mock_set.assert_not_called()
@@ -423,14 +423,14 @@ def test_agent_switch_unknown_agent_skips_rotation():
     try:
         with (
             patch(
-                "code_puppy.agents.get_available_agents",
-                return_value={"code-puppy": "Code Puppy"},
+                "spruce_grove.agents.get_available_agents",
+                return_value={"spruce-grove": "Spruce Grove"},
             ),
             patch(
-                "code_puppy.command_line.core_commands.finalize_autosave_session",
+                "spruce_grove.command_line.core_commands.finalize_autosave_session",
             ) as mock_finalize,
             patch(
-                "code_puppy.agents.set_current_agent",
+                "spruce_grove.agents.set_current_agent",
             ) as mock_set,
         ):
             result = handle_command("/agent reviewer")
@@ -477,7 +477,7 @@ def test_tools_file_not_found():
     try:
         # Since we now use tools_content.py, we just verify that tools are displayed
         # without needing to read from a file
-        with patch("code_puppy.tools.tools_content.tools_content", "# Mock content"):
+        with patch("spruce_grove.tools.tools_content.tools_content", "# Mock content"):
             result = handle_command("/tools")
             assert result is True
             mock_emit_info.assert_called_once()
@@ -499,7 +499,7 @@ def test_tools_read_error():
         # Test handling when there's an issue with tools_content - it should still work
         # by falling back to an empty or default string if the imported content fails
         with patch(
-            "code_puppy.command_line.core_commands.tools_content",
+            "spruce_grove.command_line.core_commands.tools_content",
             "# Fallback content",
         ):
             result = handle_command("/tools")
@@ -518,7 +518,7 @@ def test_tools_read_error():
 @pytest.mark.parametrize("command", ["/exit", "/quit"])
 def test_exit_or_quit_command(command):
     """Test that /exit and /quit work and show the Goodbye message."""
-    with patch("code_puppy.messaging.emit_success") as mock_success:
+    with patch("spruce_grove.messaging.emit_success") as mock_success:
         result = handle_command(command)
         assert result is True
         mock_success.assert_called_once_with("Goodbye!")
@@ -535,14 +535,14 @@ class TestRegistryIntegration:
     @pytest.mark.parametrize("command", ["/help", "/h"])
     def test_registry_command_and_alias(self, command):
         """Test that registered /help and its /h alias are executed."""
-        with patch("code_puppy.messaging.emit_info") as mock_emit:
+        with patch("spruce_grove.messaging.emit_info") as mock_emit:
             result = handle_command(command)
             assert result is True
             mock_emit.assert_called()
 
     def test_unregistered_command_shows_warning(self):
         """Test that unregistered commands show warning."""
-        with patch("code_puppy.messaging.emit_warning") as mock_warn:
+        with patch("spruce_grove.messaging.emit_warning") as mock_warn:
             result = handle_command("/totallyfakecommand")
             assert result is True
             mock_warn.assert_called()
@@ -560,11 +560,11 @@ class TestSessionCommand:
         """Test /session shows current session name."""
         with (
             patch(
-                "code_puppy.config.get_current_session_name",
+                "spruce_grove.config.get_current_session_name",
                 return_value="test-session",
             ),
-            patch("code_puppy.config.AUTOSAVE_DIR", "/tmp/autosave"),
-            patch("code_puppy.messaging.emit_info") as mock_emit,
+            patch("spruce_grove.config.AUTOSAVE_DIR", "/tmp/autosave"),
+            patch("spruce_grove.messaging.emit_info") as mock_emit,
         ):
             result = handle_command("/session")
             assert result is True
@@ -576,11 +576,11 @@ class TestSessionCommand:
         """Test /session id shows current session name."""
         with (
             patch(
-                "code_puppy.config.get_current_session_name",
+                "spruce_grove.config.get_current_session_name",
                 return_value="test-session",
             ),
-            patch("code_puppy.config.AUTOSAVE_DIR", "/tmp/autosave"),
-            patch("code_puppy.messaging.emit_info") as mock_emit,
+            patch("spruce_grove.config.AUTOSAVE_DIR", "/tmp/autosave"),
+            patch("spruce_grove.messaging.emit_info") as mock_emit,
         ):
             result = handle_command("/session id")
             assert result is True
@@ -590,10 +590,10 @@ class TestSessionCommand:
         """Test /session new creates new session."""
         with (
             patch(
-                "code_puppy.config.rotate_session_name",
+                "spruce_grove.config.rotate_session_name",
                 return_value="auto_session_new",
             ) as mock_rotate,
-            patch("code_puppy.messaging.emit_success") as mock_success,
+            patch("spruce_grove.messaging.emit_success") as mock_success,
         ):
             result = handle_command("/session new")
             assert result is True
@@ -604,7 +604,7 @@ class TestSessionCommand:
 
     def test_session_invalid_subcommand(self):
         """Test /session with invalid subcommand shows usage."""
-        with patch("code_puppy.messaging.emit_warning") as mock_warn:
+        with patch("spruce_grove.messaging.emit_warning") as mock_warn:
             result = handle_command("/session invalid")
             assert result is True
             mock_warn.assert_called_once()
@@ -615,11 +615,11 @@ class TestSessionCommand:
         """Test /s alias works for /session."""
         with (
             patch(
-                "code_puppy.config.get_current_session_name",
+                "spruce_grove.config.get_current_session_name",
                 return_value="test",
             ),
-            patch("code_puppy.config.AUTOSAVE_DIR", "/tmp"),
-            patch("code_puppy.messaging.emit_info") as mock_emit,
+            patch("spruce_grove.config.AUTOSAVE_DIR", "/tmp"),
+            patch("spruce_grove.messaging.emit_info") as mock_emit,
         ):
             result = handle_command("/s")
             assert result is True
@@ -640,21 +640,21 @@ class TestCompactCommand:
 
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=mock_agent,
             ),
             patch(
-                "code_puppy.config.get_compaction_strategy",
+                "spruce_grove.config.get_compaction_strategy",
                 return_value="summarization",
             ),
-            patch("code_puppy.agents._compaction.build_compaction_strategy"),
-            patch("code_puppy.agents._compaction.resolve_agent_model"),
+            patch("spruce_grove.agents._compaction.build_compaction_strategy"),
+            patch("spruce_grove.agents._compaction.resolve_agent_model"),
             patch(
-                "code_puppy.agents._compaction.run_compaction_sync",
+                "spruce_grove.agents._compaction.run_compaction_sync",
                 return_value=[{"role": "system", "content": "summarized"}],
             ),
-            patch("code_puppy.messaging.emit_info"),
-            patch("code_puppy.messaging.emit_success") as mock_success,
+            patch("spruce_grove.messaging.emit_info"),
+            patch("spruce_grove.messaging.emit_success") as mock_success,
         ):
             result = handle_command("/compact")
             assert result is True
@@ -668,10 +668,10 @@ class TestCompactCommand:
 
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=mock_agent,
             ),
-            patch("code_puppy.messaging.emit_warning") as mock_warn,
+            patch("spruce_grove.messaging.emit_warning") as mock_warn,
         ):
             result = handle_command("/compact")
             assert result is True
@@ -689,20 +689,20 @@ class TestCompactCommand:
 
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=mock_agent,
             ),
             patch(
-                "code_puppy.config.get_compaction_strategy", return_value="truncation"
+                "spruce_grove.config.get_compaction_strategy", return_value="truncation"
             ),
-            patch("code_puppy.agents._compaction.build_compaction_strategy"),
-            patch("code_puppy.agents._compaction.resolve_agent_model"),
+            patch("spruce_grove.agents._compaction.build_compaction_strategy"),
+            patch("spruce_grove.agents._compaction.resolve_agent_model"),
             patch(
-                "code_puppy.agents._compaction.run_compaction_sync",
+                "spruce_grove.agents._compaction.run_compaction_sync",
                 return_value=[{"role": "system", "content": "System"}],
             ) as mock_compact,
-            patch("code_puppy.messaging.emit_info"),
-            patch("code_puppy.messaging.emit_success"),
+            patch("spruce_grove.messaging.emit_info"),
+            patch("spruce_grove.messaging.emit_success"),
         ):
             result = handle_command("/compact")
             assert result is True
@@ -724,18 +724,18 @@ class TestTruncateCommand:
 
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=mock_agent,
             ),
-            patch("code_puppy.agents._compaction.resolve_agent_model"),
+            patch("spruce_grove.agents._compaction.resolve_agent_model"),
             patch(
-                "code_puppy.agents._compaction.run_compaction_sync",
+                "spruce_grove.agents._compaction.run_compaction_sync",
                 return_value=[
                     {"role": "system", "content": "System"},
                     {"role": "user", "content": "3"},
                 ],
             ),
-            patch("code_puppy.messaging.emit_success") as mock_success,
+            patch("spruce_grove.messaging.emit_success") as mock_success,
         ):
             result = handle_command("/truncate 2")
             assert result is True
@@ -744,7 +744,7 @@ class TestTruncateCommand:
 
     def test_truncate_no_argument(self):
         """Test /truncate without argument shows error."""
-        with patch("code_puppy.messaging.emit_error") as mock_error:
+        with patch("spruce_grove.messaging.emit_error") as mock_error:
             result = handle_command("/truncate")
             assert result is True
             mock_error.assert_called_once()
@@ -752,7 +752,7 @@ class TestTruncateCommand:
 
     def test_truncate_invalid_number(self):
         """Test /truncate with non-integer shows error."""
-        with patch("code_puppy.messaging.emit_error") as mock_error:
+        with patch("spruce_grove.messaging.emit_error") as mock_error:
             result = handle_command("/truncate abc")
             assert result is True
             mock_error.assert_called_once()
@@ -760,7 +760,7 @@ class TestTruncateCommand:
 
     def test_truncate_negative_number(self):
         """Test /truncate with negative number shows error."""
-        with patch("code_puppy.messaging.emit_error") as mock_error:
+        with patch("spruce_grove.messaging.emit_error") as mock_error:
             result = handle_command("/truncate -5")
             assert result is True
             mock_error.assert_called_once()
@@ -772,10 +772,10 @@ class TestTruncateCommand:
 
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=mock_agent,
             ),
-            patch("code_puppy.messaging.emit_warning") as mock_warn,
+            patch("spruce_grove.messaging.emit_warning") as mock_warn,
         ):
             result = handle_command("/truncate 10")
             assert result is True
@@ -791,10 +791,10 @@ class TestTruncateCommand:
 
         with (
             patch(
-                "code_puppy.agents.agent_manager.get_current_agent",
+                "spruce_grove.agents.agent_manager.get_current_agent",
                 return_value=mock_agent,
             ),
-            patch("code_puppy.messaging.emit_info") as mock_info,
+            patch("spruce_grove.messaging.emit_info") as mock_info,
         ):
             result = handle_command("/truncate 10")
             assert result is True
@@ -816,7 +816,7 @@ class TestGetCommandsHelp:
 
     def test_help_includes_registered_commands(self):
         """Test that help text includes registered commands."""
-        from code_puppy.command_line.command_handler import get_commands_help
+        from spruce_grove.command_line.command_handler import get_commands_help
 
         help_text = str(get_commands_help())
         assert "help" in help_text.lower() or "Help" in help_text
@@ -824,7 +824,7 @@ class TestGetCommandsHelp:
 
     def test_help_includes_categories(self):
         """Test that help organizes into Built-in and Custom sections."""
-        from code_puppy.command_line.command_handler import get_commands_help
+        from spruce_grove.command_line.command_handler import get_commands_help
 
         help_text = str(get_commands_help())
         # Should have Built-in Commands section
@@ -836,10 +836,10 @@ class TestGetCommandsHelp:
         """Test that help system parses single tuple format."""
         from unittest.mock import patch
 
-        from code_puppy.command_line.command_handler import get_commands_help
+        from spruce_grove.command_line.command_handler import get_commands_help
 
         # Mock a plugin that returns a single tuple
-        with patch("code_puppy.callbacks.on_custom_command_help") as mock_callback:
+        with patch("spruce_grove.callbacks.on_custom_command_help") as mock_callback:
             mock_callback.return_value = [("testcmd", "Test command description")]
             help_text = str(get_commands_help())
             assert "/testcmd" in help_text
@@ -849,10 +849,10 @@ class TestGetCommandsHelp:
         """Test that help system parses list of tuples format."""
         from unittest.mock import patch
 
-        from code_puppy.command_line.command_handler import get_commands_help
+        from spruce_grove.command_line.command_handler import get_commands_help
 
         # Mock a plugin that returns a list of tuples
-        with patch("code_puppy.callbacks.on_custom_command_help") as mock_callback:
+        with patch("spruce_grove.callbacks.on_custom_command_help") as mock_callback:
             mock_callback.return_value = [
                 [("cmd1", "First command"), ("cmd2", "Second command")]
             ]
@@ -866,10 +866,10 @@ class TestGetCommandsHelp:
         """Test that help system parses legacy list of strings format."""
         from unittest.mock import patch
 
-        from code_puppy.command_line.command_handler import get_commands_help
+        from spruce_grove.command_line.command_handler import get_commands_help
 
         # Mock a plugin that returns a list of strings (legacy format)
-        with patch("code_puppy.callbacks.on_custom_command_help") as mock_callback:
+        with patch("spruce_grove.callbacks.on_custom_command_help") as mock_callback:
             mock_callback.return_value = [
                 [
                     "/legacy_cmd - Legacy command description",
@@ -886,10 +886,10 @@ class TestGetCommandsHelp:
         """Test that help system handles multiple plugins with different formats."""
         from unittest.mock import patch
 
-        from code_puppy.command_line.command_handler import get_commands_help
+        from spruce_grove.command_line.command_handler import get_commands_help
 
         # Mock multiple plugins returning different formats
-        with patch("code_puppy.callbacks.on_custom_command_help") as mock_callback:
+        with patch("spruce_grove.callbacks.on_custom_command_help") as mock_callback:
             mock_callback.return_value = [
                 ("tuple_cmd", "Tuple format command"),  # Single tuple
                 [("list_cmd", "List format command")],  # List of tuples
@@ -907,10 +907,10 @@ class TestGetCommandsHelp:
         """Test that help system gracefully ignores invalid formats."""
         from unittest.mock import patch
 
-        from code_puppy.command_line.command_handler import get_commands_help
+        from spruce_grove.command_line.command_handler import get_commands_help
 
         # Mock a plugin that returns invalid formats
-        with patch("code_puppy.callbacks.on_custom_command_help") as mock_callback:
+        with patch("spruce_grove.callbacks.on_custom_command_help") as mock_callback:
             mock_callback.return_value = [
                 None,  # Should be ignored
                 [],  # Empty list, should be ignored
@@ -1004,14 +1004,14 @@ def test_m_command_case_insensitive(
 
     with (
         patch(
-            "code_puppy.command_line.model_picker_completion.load_model_names",
+            "spruce_grove.command_line.model_picker_completion.load_model_names",
             return_value=test_models,
         ),
         patch(
-            "code_puppy.command_line.model_picker_completion.set_active_model"
+            "spruce_grove.command_line.model_picker_completion.set_active_model"
         ) as mock_set_model,
     ):
-        from code_puppy.command_line.model_picker_completion import (
+        from spruce_grove.command_line.model_picker_completion import (
             update_model_in_input,
         )
 
@@ -1037,18 +1037,18 @@ def test_pin_model_command_case_insensitive_agent():
 
     with (
         patch(
-            "code_puppy.command_line.model_picker_completion.load_model_names",
+            "spruce_grove.command_line.model_picker_completion.load_model_names",
             return_value=test_models,
         ),
-        patch("code_puppy.agents.json_agent.discover_json_agents", return_value={}),
+        patch("spruce_grove.agents.json_agent.discover_json_agents", return_value={}),
         patch(
-            "code_puppy.agents.agent_manager.get_agent_descriptions",
+            "spruce_grove.agents.agent_manager.get_agent_descriptions",
             return_value=test_agents,
         ),
-        patch("code_puppy.messaging.emit_success") as mock_emit_success,
-        patch("code_puppy.messaging.emit_error") as mock_emit_error,
+        patch("spruce_grove.messaging.emit_success") as mock_emit_success,
+        patch("spruce_grove.messaging.emit_error") as mock_emit_error,
     ):
-        from code_puppy.command_line.config_commands import handle_pin_model_command
+        from spruce_grove.command_line.config_commands import handle_pin_model_command
 
         result = handle_pin_model_command("/pin_model PYTHON_EXPERT gpt-5")
         assert result is True
@@ -1062,19 +1062,19 @@ def test_pin_model_unpin_case_insensitive():
     test_agents = {"python_expert": "Python Expert", "code_reviewer": "Code Reviewer"}
 
     with (
-        patch("code_puppy.agents.json_agent.discover_json_agents", return_value={}),
+        patch("spruce_grove.agents.json_agent.discover_json_agents", return_value={}),
         patch(
-            "code_puppy.agents.agent_manager.get_agent_descriptions",
+            "spruce_grove.agents.agent_manager.get_agent_descriptions",
             return_value=test_agents,
         ),
-        patch("code_puppy.messaging.emit_success") as mock_emit_success,
-        patch("code_puppy.messaging.emit_error") as mock_emit_error,
+        patch("spruce_grove.messaging.emit_success") as mock_emit_success,
+        patch("spruce_grove.messaging.emit_error") as mock_emit_error,
         patch(
-            "code_puppy.command_line.config_commands.handle_unpin_command",
+            "spruce_grove.command_line.config_commands.handle_unpin_command",
             return_value=True,
         ) as mock_unpin,
     ):
-        from code_puppy.command_line.config_commands import handle_pin_model_command
+        from spruce_grove.command_line.config_commands import handle_pin_model_command
 
         result = handle_pin_model_command("/pin_model python_expert (UNPIN)")
         assert result is True
@@ -1089,15 +1089,15 @@ def test_unpin_command_case_insensitive_agent():
     test_agents = {"python_expert": "Python Expert", "code_reviewer": "Code Reviewer"}
 
     with (
-        patch("code_puppy.agents.json_agent.discover_json_agents", return_value={}),
+        patch("spruce_grove.agents.json_agent.discover_json_agents", return_value={}),
         patch(
-            "code_puppy.agents.agent_manager.get_agent_descriptions",
+            "spruce_grove.agents.agent_manager.get_agent_descriptions",
             return_value=test_agents,
         ),
-        patch("code_puppy.messaging.emit_success") as mock_emit_success,
-        patch("code_puppy.messaging.emit_error") as mock_emit_error,
+        patch("spruce_grove.messaging.emit_success") as mock_emit_success,
+        patch("spruce_grove.messaging.emit_error") as mock_emit_error,
     ):
-        from code_puppy.command_line.config_commands import handle_unpin_command
+        from spruce_grove.command_line.config_commands import handle_unpin_command
 
         result = handle_unpin_command("/unpin PYTHON_EXPERT")
         assert result is True
@@ -1111,15 +1111,15 @@ def test_unpin_command_nonexistent_agent_case_insensitive():
     test_agents = {"python_expert": "Python Expert"}
 
     with (
-        patch("code_puppy.agents.json_agent.discover_json_agents", return_value={}),
+        patch("spruce_grove.agents.json_agent.discover_json_agents", return_value={}),
         patch(
-            "code_puppy.agents.agent_manager.get_agent_descriptions",
+            "spruce_grove.agents.agent_manager.get_agent_descriptions",
             return_value=test_agents,
         ),
-        patch("code_puppy.messaging.emit_success") as mock_emit_success,
-        patch("code_puppy.messaging.emit_error") as mock_emit_error,
+        patch("spruce_grove.messaging.emit_success") as mock_emit_success,
+        patch("spruce_grove.messaging.emit_error") as mock_emit_error,
     ):
-        from code_puppy.command_line.config_commands import handle_unpin_command
+        from spruce_grove.command_line.config_commands import handle_unpin_command
 
         result = handle_unpin_command("/unpin PYTHON_EXPERT")
         assert result is True
@@ -1132,18 +1132,18 @@ def test_pin_model_completion_case_insensitive_agent():
     """Test that pin model completion works case-insensitively for agents."""
     from termflow.tui.completion import Document
 
-    from code_puppy.command_line.pin_command_completion import PinModelCompleter
+    from spruce_grove.command_line.pin_command_completion import PinModelCompleter
 
     test_agents = ["python_expert", "Code_Reviewer", "JavaScript_Expert"]
     test_models = ["gpt-5", "zai-glm-5.1-api"]
 
     with (
         patch(
-            "code_puppy.command_line.pin_command_completion.load_agent_names",
+            "spruce_grove.command_line.pin_command_completion.load_agent_names",
             return_value=test_agents,
         ),
         patch(
-            "code_puppy.command_line.pin_command_completion.load_model_names",
+            "spruce_grove.command_line.pin_command_completion.load_model_names",
             return_value=test_models,
         ),
     ):
@@ -1160,18 +1160,18 @@ def test_pin_model_completion_case_insensitive_model():
     """Test that pin model completion works case-insensitively for models."""
     from termflow.tui.completion import Document
 
-    from code_puppy.command_line.pin_command_completion import PinModelCompleter
+    from spruce_grove.command_line.pin_command_completion import PinModelCompleter
 
     test_agents = ["python_expert", "code_reviewer"]
     test_models = ["gpt-5", "zai-glm-5.1-api"]
 
     with (
         patch(
-            "code_puppy.command_line.pin_command_completion.load_agent_names",
+            "spruce_grove.command_line.pin_command_completion.load_agent_names",
             return_value=test_agents,
         ),
         patch(
-            "code_puppy.command_line.pin_command_completion.load_model_names",
+            "spruce_grove.command_line.pin_command_completion.load_model_names",
             return_value=test_models,
         ),
     ):
@@ -1188,12 +1188,12 @@ def test_unpin_completion_case_insensitive_agent():
     """Test that unpin completion works case-insensitively for agents."""
     from termflow.tui.completion import Document
 
-    from code_puppy.command_line.pin_command_completion import UnpinCompleter
+    from spruce_grove.command_line.pin_command_completion import UnpinCompleter
 
     test_agents = ["python_expert", "Code_Reviewer", "JavaScript_Expert"]
 
     with patch(
-        "code_puppy.command_line.pin_command_completion.load_agent_names",
+        "spruce_grove.command_line.pin_command_completion.load_agent_names",
         return_value=test_agents,
     ):
         completer = UnpinCompleter(trigger="/unpin")

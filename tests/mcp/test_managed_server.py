@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
 import pytest
 
-from code_puppy.mcp_.managed_server import (
+from spruce_grove.mcp_.managed_server import (
     ManagedMCPServer,
     ServerConfig,
     ServerState,
@@ -16,10 +16,10 @@ from code_puppy.mcp_.managed_server import (
     process_tool_call,
 )
 
-TOOLSET = "code_puppy.mcp_.managed_server.MCPToolset"
-SSE_TRANSPORT = "code_puppy.mcp_.managed_server.SSETransport"
-HTTP_TRANSPORT = "code_puppy.mcp_.managed_server.StreamableHttpTransport"
-STDIO = "code_puppy.mcp_.managed_server.BlockingStdioToolset"
+TOOLSET = "spruce_grove.mcp_.managed_server.MCPToolset"
+SSE_TRANSPORT = "spruce_grove.mcp_.managed_server.SSETransport"
+HTTP_TRANSPORT = "spruce_grove.mcp_.managed_server.StreamableHttpTransport"
+STDIO = "spruce_grove.mcp_.managed_server.BlockingStdioToolset"
 
 
 def _sse(inner=None, enabled=True):
@@ -54,7 +54,7 @@ def _http(inner=None, enabled=True):
 
 def _stdio(inner=None, spec=True):
     """Build a stdio-backed server whose blocking toolset is mocked."""
-    from code_puppy.mcp_.blocking_startup import BlockingStdioToolset
+    from spruce_grove.mcp_.blocking_startup import BlockingStdioToolset
 
     mock = MagicMock(spec=BlockingStdioToolset) if spec else MagicMock()
     with patch(STDIO, return_value=mock) as mock_cls:
@@ -390,7 +390,7 @@ class TestCreateServerSSE:
             patch(TOOLSET) as mock_toolset,
             patch(SSE_TRANSPORT) as mock_transport,
             patch(
-                "code_puppy.mcp_.managed_server.create_async_client",
+                "spruce_grove.mcp_.managed_server.create_async_client",
                 return_value=mock_http_client,
             ),
         ):
@@ -466,7 +466,7 @@ class TestCreateServerStdio:
     def test_options_passed_through(self, inner, key, expected):
         # Env assertions ignore the CA-bundle injection (covered below).
         with patch(
-            "code_puppy.mcp_.managed_server.get_cert_bundle_path", return_value=None
+            "spruce_grove.mcp_.managed_server.get_cert_bundle_path", return_value=None
         ):
             _, _, mock_cls = _stdio(inner)
         assert mock_cls.call_args.kwargs[key] == expected
@@ -482,7 +482,7 @@ class TestCreateServerStdio:
         )
         with (
             patch(
-                "code_puppy.mcp_.managed_server.get_cert_bundle_path",
+                "spruce_grove.mcp_.managed_server.get_cert_bundle_path",
                 return_value=ca_bundle,
             ),
             patch(STDIO) as mock_stdio,
@@ -573,7 +573,7 @@ class TestGetHttpClient:
             patch.dict(os.environ, {"TEST_TOKEN": "secret123"}),
             patch(TOOLSET) as mock_toolset,
             patch(SSE_TRANSPORT),
-            patch("code_puppy.mcp_.managed_server.create_async_client") as mock_create,
+            patch("spruce_grove.mcp_.managed_server.create_async_client") as mock_create,
         ):
             mock_toolset.return_value = MagicMock()
             mock_create.return_value = MagicMock()
@@ -592,7 +592,7 @@ class TestGetHttpClient:
         with (
             patch(TOOLSET) as mock_toolset,
             patch(SSE_TRANSPORT),
-            patch("code_puppy.mcp_.managed_server.create_async_client") as mock_create,
+            patch("spruce_grove.mcp_.managed_server.create_async_client") as mock_create,
         ):
             mock_toolset.return_value = MagicMock()
             mock_create.return_value = MagicMock()

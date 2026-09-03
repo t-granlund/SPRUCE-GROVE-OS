@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy.command_line.shell_passthrough import (
+from spruce_grove.command_line.shell_passthrough import (
     _BANNER_NAME,
     SHELL_PASSTHROUGH_PREFIX,
     _format_banner,
@@ -49,7 +49,7 @@ class TestDetectAndExtract:
 
     def test_banner_uses_config_color(self):
         with patch(
-            "code_puppy.command_line.shell_passthrough.get_banner_color",
+            "spruce_grove.command_line.shell_passthrough.get_banner_color",
             return_value="cyan",
         ):
             banner = _format_banner()
@@ -62,8 +62,8 @@ class TestExecute:
     def _console():
         return MagicMock()
 
-    @patch("code_puppy.command_line.shell_passthrough.subprocess.run")
-    @patch("code_puppy.command_line.shell_passthrough._get_console")
+    @patch("spruce_grove.command_line.shell_passthrough.subprocess.run")
+    @patch("spruce_grove.command_line.shell_passthrough._get_console")
     def test_successful_command(self, mock_get_console, mock_run):
         console = self._console()
         mock_get_console.return_value = console
@@ -81,8 +81,8 @@ class TestExecute:
         "command,returncode,expected_text",
         [("!false", 1, "Exit code 1"), ("!nope", 127, "127")],
     )
-    @patch("code_puppy.command_line.shell_passthrough.subprocess.run")
-    @patch("code_puppy.command_line.shell_passthrough._get_console")
+    @patch("spruce_grove.command_line.shell_passthrough.subprocess.run")
+    @patch("spruce_grove.command_line.shell_passthrough._get_console")
     def test_nonzero_exit_code_reported(
         self, mock_get_console, mock_run, command, returncode, expected_text
     ):
@@ -94,8 +94,8 @@ class TestExecute:
 
         assert expected_text in str(console.print.call_args_list[-1])
 
-    @patch("code_puppy.command_line.shell_passthrough.subprocess.run")
-    @patch("code_puppy.command_line.shell_passthrough._get_console")
+    @patch("spruce_grove.command_line.shell_passthrough.subprocess.run")
+    @patch("spruce_grove.command_line.shell_passthrough._get_console")
     def test_keyboard_interrupt(self, mock_get_console, mock_run):
         console = self._console()
         mock_get_console.return_value = console
@@ -105,8 +105,8 @@ class TestExecute:
 
         assert "Interrupted" in str(console.print.call_args_list[-1])
 
-    @patch("code_puppy.command_line.shell_passthrough.subprocess.run")
-    @patch("code_puppy.command_line.shell_passthrough._get_console")
+    @patch("spruce_grove.command_line.shell_passthrough.subprocess.run")
+    @patch("spruce_grove.command_line.shell_passthrough._get_console")
     def test_execution_error_reported(self, mock_get_console, mock_run):
         console = self._console()
         mock_get_console.return_value = console
@@ -116,7 +116,7 @@ class TestExecute:
 
         assert "Shell error" in str(console.print.call_args_list[-1])
 
-    @patch("code_puppy.command_line.shell_passthrough._get_console")
+    @patch("spruce_grove.command_line.shell_passthrough._get_console")
     def test_empty_command_after_bang(self, mock_get_console):
         console = self._console()
         mock_get_console.return_value = console
@@ -125,8 +125,8 @@ class TestExecute:
 
         assert "Empty command" in str(console.print.call_args_list[0])
 
-    @patch("code_puppy.command_line.shell_passthrough.subprocess.run")
-    @patch("code_puppy.command_line.shell_passthrough._get_console")
+    @patch("spruce_grove.command_line.shell_passthrough.subprocess.run")
+    @patch("spruce_grove.command_line.shell_passthrough._get_console")
     def test_rich_markup_escaped_in_command(self, mock_get_console, mock_run):
         console = self._console()
         mock_get_console.return_value = console

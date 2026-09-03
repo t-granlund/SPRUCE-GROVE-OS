@@ -6,8 +6,8 @@ from typing import Any
 
 import pytest
 
-from code_puppy.agents import _runtime
-from code_puppy.callbacks import _callbacks, clear_callbacks, register_callback
+from spruce_grove.agents import _runtime
+from spruce_grove.callbacks import _callbacks, clear_callbacks, register_callback
 
 
 class DummyResult:

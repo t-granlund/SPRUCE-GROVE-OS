@@ -15,8 +15,8 @@ from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
 
-from code_puppy.mcp_.managed_server import ManagedMCPServer, ServerConfig, ServerState
-from code_puppy.mcp_.manager import MCPManager, ServerInfo, get_mcp_manager
+from spruce_grove.mcp_.managed_server import ManagedMCPServer, ServerConfig, ServerState
+from spruce_grove.mcp_.manager import MCPManager, ServerInfo, get_mcp_manager
 
 
 class TestMCPManagerExtended:
@@ -25,16 +25,16 @@ class TestMCPManagerExtended:
     def setup_method(self):
         """Set up fresh manager for each test."""
         # Reset singleton to ensure clean state
-        import code_puppy.mcp_.manager
+        import spruce_grove.mcp_.manager
 
-        code_puppy.mcp_.manager._manager_instance = None
+        spruce_grove.mcp_.manager._manager_instance = None
 
     def test_get_mcp_manager_singleton(self):
         """Test singleton pattern - same instance returned."""
         # Reset singleton first
-        import code_puppy.mcp_.manager
+        import spruce_grove.mcp_.manager
 
-        code_puppy.mcp_.manager._manager_instance = None
+        spruce_grove.mcp_.manager._manager_instance = None
 
         mgr1 = get_mcp_manager()
         mgr2 = get_mcp_manager()
@@ -82,7 +82,7 @@ class TestMCPManagerExtended:
         ):
             # Make ManagedMCPServer creation fail
             with patch(
-                "code_puppy.mcp_.manager.ManagedMCPServer",
+                "spruce_grove.mcp_.manager.ManagedMCPServer",
                 side_effect=Exception("Creation failed"),
             ):
                 config = ServerConfig(
@@ -254,7 +254,7 @@ class TestMCPManagerExtended:
 
         with (
             patch(
-                "code_puppy.mcp_.manager.get_lifecycle_manager",
+                "spruce_grove.mcp_.manager.get_lifecycle_manager",
                 return_value=mock_lifecycle,
             ),
             patch.object(manager.status_tracker, "set_status") as mock_set_status,
@@ -298,7 +298,7 @@ class TestMCPManagerExtended:
 
         with (
             patch(
-                "code_puppy.mcp_.manager.get_lifecycle_manager",
+                "spruce_grove.mcp_.manager.get_lifecycle_manager",
                 return_value=mock_lifecycle,
             ),
             patch.object(manager.status_tracker, "set_status") as mock_set_status,
@@ -353,7 +353,7 @@ class TestMCPManagerExtended:
 
         with (
             patch(
-                "code_puppy.mcp_.manager.get_lifecycle_manager",
+                "spruce_grove.mcp_.manager.get_lifecycle_manager",
                 return_value=mock_lifecycle,
             ),
             patch.object(manager.status_tracker, "set_status") as mock_set_status,
@@ -413,7 +413,7 @@ class TestMCPManagerExtended:
 
         with (
             patch.object(manager.registry, "get", return_value=config),
-            patch("code_puppy.mcp_.manager.ManagedMCPServer") as mock_managed_class,
+            patch("spruce_grove.mcp_.manager.ManagedMCPServer") as mock_managed_class,
             patch.object(manager.status_tracker, "set_status") as mock_set_status,
             patch.object(manager.status_tracker, "record_event"),
         ):
@@ -643,7 +643,7 @@ class TestMCPManagerExtended:
             ),
         ]
 
-        with patch("code_puppy.mcp_.manager.ServerRegistry") as mock_registry_class:
+        with patch("spruce_grove.mcp_.manager.ServerRegistry") as mock_registry_class:
             mock_registry = Mock()
             mock_registry.list_all.return_value = configs
             mock_registry.get_by_name.side_effect = lambda name: next(
@@ -652,10 +652,10 @@ class TestMCPManagerExtended:
             mock_registry_class.return_value = mock_registry
 
             with (
-                patch("code_puppy.mcp_.manager.ManagedMCPServer") as mock_managed_class,
-                patch("code_puppy.mcp_.manager.ServerStatusTracker"),
+                patch("spruce_grove.mcp_.manager.ManagedMCPServer") as mock_managed_class,
+                patch("spruce_grove.mcp_.manager.ServerStatusTracker"),
                 patch(
-                    "code_puppy.config.load_mcp_server_configs",
+                    "spruce_grove.config.load_mcp_server_configs",
                     return_value={
                         "server1": {"type": "stdio", "command": "echo"},
                         "server2": {"type": "sse", "url": "http://localhost:8080"},
@@ -694,7 +694,7 @@ class TestMCPManagerExtended:
             ),
         ]
 
-        with patch("code_puppy.mcp_.manager.ServerRegistry") as mock_registry_class:
+        with patch("spruce_grove.mcp_.manager.ServerRegistry") as mock_registry_class:
             mock_registry = Mock()
             mock_registry.list_all.return_value = configs
             mock_registry.get_by_name.side_effect = lambda name: next(
@@ -710,13 +710,13 @@ class TestMCPManagerExtended:
 
             with (
                 patch(
-                    "code_puppy.mcp_.manager.ManagedMCPServer", side_effect=side_effect
+                    "spruce_grove.mcp_.manager.ManagedMCPServer", side_effect=side_effect
                 ),
                 patch(
-                    "code_puppy.mcp_.manager.ServerStatusTracker"
+                    "spruce_grove.mcp_.manager.ServerStatusTracker"
                 ) as mock_tracker_class,
                 patch(
-                    "code_puppy.config.load_mcp_server_configs",
+                    "spruce_grove.config.load_mcp_server_configs",
                     return_value={
                         "good-server": {"type": "stdio", "command": "echo"},
                         "bad-server": {"type": "stdio", "command": "bad"},
@@ -756,13 +756,13 @@ class TestMCPManagerExtended:
 
         with (
             patch(
-                "code_puppy.config.load_mcp_server_configs", return_value=mock_configs
+                "spruce_grove.config.load_mcp_server_configs", return_value=mock_configs
             ),
             patch(
-                "code_puppy.mcp_.manager.ServerRegistry",
+                "spruce_grove.mcp_.manager.ServerRegistry",
                 return_value=mock_registry_instance,
             ),
-            patch("code_puppy.mcp_.manager.ServerStatusTracker"),
+            patch("spruce_grove.mcp_.manager.ServerStatusTracker"),
         ):
             # Actually instantiate the manager to trigger sync_from_config!
             MCPManager()

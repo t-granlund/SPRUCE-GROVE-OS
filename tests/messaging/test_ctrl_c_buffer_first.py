@@ -9,10 +9,10 @@ import io
 
 import pytest
 
-import code_puppy.messaging.run_ui as run_ui_mod
-from code_puppy.agents._run_signals import sigint_should_cancel
-from code_puppy.messaging import bottom_bar as bottom_bar_mod
-from code_puppy.messaging.line_editor import RunningLineEditor
+import spruce_grove.messaging.run_ui as run_ui_mod
+from spruce_grove.agents._run_signals import sigint_should_cancel
+from spruce_grove.messaging import bottom_bar as bottom_bar_mod
+from spruce_grove.messaging.line_editor import RunningLineEditor
 
 
 class FakeBar:
@@ -130,7 +130,7 @@ def test_is_composing_reverse_search_counts_even_empty():
 
 
 def test_midrun_text_absorbs_clears_and_hints(persistent_ui, monkeypatch):
-    import code_puppy.keymap as keymap
+    import spruce_grove.keymap as keymap
 
     # Pin ctrl+c as the cancel key so the hint text ("press ctrl+c
     # again") is deterministic regardless of the test host's config.
@@ -150,7 +150,7 @@ def test_midrun_text_absorbs_clears_and_hints(persistent_ui, monkeypatch):
 def test_hint_names_remapped_cancel_key(persistent_ui, monkeypatch):
     """With cancel remapped (ctrl+k), the hint must name the REAL cancel
     key — 'press ctrl+c again' would be a lie."""
-    import code_puppy.keymap as keymap
+    import spruce_grove.keymap as keymap
 
     monkeypatch.setattr(keymap, "get_cancel_agent_key", lambda: "ctrl+k")
     monkeypatch.setattr(keymap, "get_cancel_agent_display_name", lambda: "Ctrl+K")
@@ -231,7 +231,7 @@ def test_remapped_hotkey_cancel_is_unconditional(persistent_ui):
     """A remapped cancel hotkey (ctrl+k/ctrl+q) never routes through the
     buffer-first gate — it cancels immediately even while composing,
     without touching typed text. Only raw ^C (and SIGINT) is gated."""
-    from code_puppy.agents import _key_listeners
+    from spruce_grove.agents import _key_listeners
 
     editor, _tty = persistent_ui
     cancels = []
@@ -247,7 +247,7 @@ def test_remapped_hotkey_cancel_is_unconditional(persistent_ui):
 def test_raw_ctrl_c_hotkey_is_buffer_first(persistent_ui):
     """Raw ^C as the cancel char (Windows default) IS gated: composing
     input absorbs the first press; the empty prompt cancels."""
-    from code_puppy.agents import _key_listeners
+    from spruce_grove.agents import _key_listeners
 
     editor, _tty = persistent_ui
     cancels = []
@@ -266,7 +266,7 @@ def test_raw_ctrl_c_hotkey_is_buffer_first(persistent_ui):
 
 def test_shell_tool_sigint_handler_untouched():
     """The shell SIGINT handler interrupts the TOOL — never gated."""
-    from code_puppy.tools import command_runner
+    from spruce_grove.tools import command_runner
 
     src = inspect.getsource(command_runner._shell_sigint_handler)
     assert "absorb_ctrl_c" not in src
@@ -274,7 +274,7 @@ def test_shell_tool_sigint_handler_untouched():
 
 
 def test_runtime_gates_only_the_sigint_cancel_decision():
-    from code_puppy.agents import _runtime
+    from spruce_grove.agents import _runtime
 
     src = inspect.getsource(_runtime)
     # The gate sits in keyboard_interrupt_handler (SIGINT), and the

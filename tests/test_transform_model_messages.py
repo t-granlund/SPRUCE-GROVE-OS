@@ -18,8 +18,8 @@ from pydantic_ai.messages import (
 from pydantic_ai.models.function import FunctionModel
 from pydantic_ai.models.test import TestModel
 
-from code_puppy import callbacks
-from code_puppy.agents._model_message_transform import build_model_message_transform
+from spruce_grove import callbacks
+from spruce_grove.agents._model_message_transform import build_model_message_transform
 
 
 @pytest.fixture(autouse=True)
@@ -60,7 +60,7 @@ async def test_callbacks_compose_in_order_and_isolate_failures():
     callbacks.register_callback("transform_model_messages", third)
     messages: list[ModelMessage] = []
 
-    await callbacks.on_transform_model_messages("code-puppy", messages)
+    await callbacks.on_transform_model_messages("spruce-grove", messages)
 
     assert observed == [["first"]]
     assert _contents(messages) == ["first", "third"]
@@ -111,7 +111,7 @@ async def test_transform_is_after_history_processing_and_request_only():
         FunctionModel(model),
         capabilities=[
             ProcessHistory(process_history),
-            build_model_message_transform("code-puppy"),
+            build_model_message_transform("spruce-grove"),
         ],
     )
 
@@ -121,7 +121,7 @@ async def test_transform_is_after_history_processing_and_request_only():
 
     result = await agent.run("start")
 
-    assert transformed_agents == ["code-puppy", "code-puppy"]
+    assert transformed_agents == ["spruce-grove", "spruce-grove"]
     assert all(messages[0] == "transformed" for messages in model_requests)
     assert "transformed" not in _contents(result.all_messages())
 
@@ -140,13 +140,13 @@ async def test_streaming_uses_the_same_request_only_transform():
     callbacks.register_callback("transform_model_messages", transform)
     agent = Agent(
         TestModel(custom_output_text="done"),
-        capabilities=[build_model_message_transform("code-puppy")],
+        capabilities=[build_model_message_transform("spruce-grove")],
     )
 
     result = await agent.run("start", event_stream_handler=handle_events)
 
     assert called
-    assert set(called) == {"code-puppy"}
+    assert set(called) == {"spruce-grove"}
     assert "transformed" not in _contents(result.all_messages())
 
 
@@ -188,7 +188,7 @@ def _load_test_model(*_args, **_kwargs):
 
 
 async def test_main_agent_construction_installs_transform():
-    from code_puppy.agents import _builder
+    from spruce_grove.agents import _builder
 
     called: list[str | None] = []
     callbacks.register_callback(
@@ -196,25 +196,25 @@ async def test_main_agent_construction_installs_transform():
         lambda agent_name, _messages: called.append(agent_name),
     )
     config = _AgentConfig()
-    config.name = "code-puppy"
+    config.name = "spruce-grove"
     with (
         patch.object(_builder, "load_model_with_fallback", _load_test_model),
         patch.object(_builder.ModelFactory, "load_config", staticmethod(dict)),
         patch.object(_builder, "load_mcp_servers", lambda **_kwargs: []),
         patch.object(_builder, "make_model_settings", lambda *_args, **_kwargs: None),
         patch(
-            "code_puppy.tools.register_tools_for_agent", lambda *_args, **_kwargs: None
+            "spruce_grove.tools.register_tools_for_agent", lambda *_args, **_kwargs: None
         ),
     ):
         agent = _builder.build_pydantic_agent(config)
         await agent.run("start")
 
     assert called
-    assert set(called) == {"code-puppy"}
+    assert set(called) == {"spruce-grove"}
 
 
 async def test_subagent_construction_installs_transform():
-    from code_puppy.tools import subagent_invocation
+    from spruce_grove.tools import subagent_invocation
 
     called: list[str | None] = []
     callbacks.register_callback(
@@ -223,13 +223,13 @@ async def test_subagent_construction_installs_transform():
     )
     config = _AgentConfig()
     with (
-        patch("code_puppy.agents.agent_manager.load_agent", return_value=config),
-        patch("code_puppy.agents._builder.load_model_with_fallback", _load_test_model),
+        patch("spruce_grove.agents.agent_manager.load_agent", return_value=config),
+        patch("spruce_grove.agents._builder.load_model_with_fallback", _load_test_model),
         patch(
-            "code_puppy.model_factory.make_model_settings",
+            "spruce_grove.model_factory.make_model_settings",
             lambda *_args, **_kwargs: None,
         ),
-        patch("code_puppy.config.get_value", return_value="true"),
+        patch("spruce_grove.config.get_value", return_value="true"),
     ):
         result = await subagent_invocation._invoke_agent_impl(
             context=SimpleNamespace(), agent_name="test-agent", prompt="start"

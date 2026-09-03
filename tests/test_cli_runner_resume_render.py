@@ -32,40 +32,40 @@ def _mock_renderer():
 def _base_main_patches():
     """Common patches so main() can run without touching the real system."""
     return {
-        "code_puppy.cli_runner.find_available_port": MagicMock(return_value=8090),
-        "code_puppy.cli_runner.ensure_config_exists": MagicMock(),
-        "code_puppy.cli_runner.validate_cancel_agent_key": MagicMock(),
-        "code_puppy.cli_runner.initialize_command_history_file": MagicMock(),
-        "code_puppy.cli_runner.default_version_mismatch_behavior": MagicMock(),
-        "code_puppy.cli_runner.print_truecolor_warning": MagicMock(),
-        "code_puppy.cli_runner.reset_unix_terminal": MagicMock(),
-        "code_puppy.cli_runner.reset_windows_terminal_ansi": MagicMock(),
-        "code_puppy.cli_runner.reset_windows_terminal_full": MagicMock(),
-        "code_puppy.cli_runner.callbacks": MagicMock(
+        "spruce_grove.cli_runner.find_available_port": MagicMock(return_value=8090),
+        "spruce_grove.cli_runner.ensure_config_exists": MagicMock(),
+        "spruce_grove.cli_runner.validate_cancel_agent_key": MagicMock(),
+        "spruce_grove.cli_runner.initialize_command_history_file": MagicMock(),
+        "spruce_grove.cli_runner.default_version_mismatch_behavior": MagicMock(),
+        "spruce_grove.cli_runner.print_truecolor_warning": MagicMock(),
+        "spruce_grove.cli_runner.reset_unix_terminal": MagicMock(),
+        "spruce_grove.cli_runner.reset_windows_terminal_ansi": MagicMock(),
+        "spruce_grove.cli_runner.reset_windows_terminal_full": MagicMock(),
+        "spruce_grove.cli_runner.callbacks": MagicMock(
             on_startup=AsyncMock(),
             on_shutdown=AsyncMock(),
             on_version_check=AsyncMock(),
             get_callbacks=MagicMock(return_value=[]),
         ),
-        "code_puppy.cli_runner.plugins": MagicMock(),
-        "code_puppy.config.load_api_keys_to_environment": MagicMock(),
+        "spruce_grove.cli_runner.plugins": MagicMock(),
+        "spruce_grove.config.load_api_keys_to_environment": MagicMock(),
     }
 
 
 def _resume_patches(mock_display, agent):
     """Patches that make the -r resume block resolve + load a fake session."""
     return {
-        "code_puppy.session_lifecycle.resolve_or_create_resume_target": MagicMock(
+        "spruce_grove.session_lifecycle.resolve_or_create_resume_target": MagicMock(
             return_value=("my-session", pathlib.Path("/tmp/autosaves"), False)
         ),
-        "code_puppy.session_storage.load_session": MagicMock(
+        "spruce_grove.session_storage.load_session": MagicMock(
             return_value=[MagicMock(), MagicMock()]
         ),
-        "code_puppy.config.pin_current_session_name": MagicMock(),
-        "code_puppy.agents.agent_manager.get_current_agent": MagicMock(
+        "spruce_grove.config.pin_current_session_name": MagicMock(),
+        "spruce_grove.agents.agent_manager.get_current_agent": MagicMock(
             return_value=agent
         ),
-        "code_puppy.command_line.autosave_menu.display_resumed_history": mock_display,
+        "spruce_grove.command_line.autosave_menu.display_resumed_history": mock_display,
     }
 
 
@@ -77,25 +77,25 @@ async def _run_main(argv, extra_patches):
         stack.enter_context(patch("sys.argv", argv))
         stack.enter_context(
             patch(
-                "code_puppy.messaging.SynchronousInteractiveRenderer",
+                "spruce_grove.messaging.SynchronousInteractiveRenderer",
                 return_value=_mock_renderer(),
             )
         )
         stack.enter_context(
             patch(
-                "code_puppy.messaging.RichConsoleRenderer",
+                "spruce_grove.messaging.RichConsoleRenderer",
                 return_value=_mock_renderer(),
             )
         )
         stack.enter_context(
-            patch("code_puppy.messaging.get_global_queue", return_value=MagicMock())
+            patch("spruce_grove.messaging.get_global_queue", return_value=MagicMock())
         )
         stack.enter_context(
-            patch("code_puppy.messaging.get_message_bus", return_value=MagicMock())
+            patch("spruce_grove.messaging.get_message_bus", return_value=MagicMock())
         )
         for target, value in patches.items():
             stack.enter_context(patch(target, value))
-        from code_puppy.cli_runner import main
+        from spruce_grove.cli_runner import main
 
         await main()
 
@@ -111,13 +111,13 @@ async def test_resume_interactive_renders_history():
     mock_stdout.isatty.return_value = True
 
     extra = {
-        "code_puppy.cli_runner.interactive_mode": mock_inter,
+        "spruce_grove.cli_runner.interactive_mode": mock_inter,
         "pyfiglet.figlet_format": MagicMock(return_value="LOGO\n\n"),
         "sys.stdout": mock_stdout,
     }
     extra.update(_resume_patches(mock_display, agent))
 
-    await _run_main(["code-puppy", "-r", "my-session"], extra)
+    await _run_main(["spruce-grove", "-r", "my-session"], extra)
 
     mock_display.assert_called_once()
 
@@ -133,11 +133,11 @@ async def test_resume_headless_skips_history():
     mock_stdout.isatty.return_value = True  # even on a TTY, -p suppresses it
 
     extra = {
-        "code_puppy.cli_runner.execute_single_prompt": mock_exec,
+        "spruce_grove.cli_runner.execute_single_prompt": mock_exec,
         "sys.stdout": mock_stdout,
     }
     extra.update(_resume_patches(mock_display, agent))
 
-    await _run_main(["code-puppy", "-r", "my-session", "-p", "hi"], extra)
+    await _run_main(["spruce-grove", "-r", "my-session", "-p", "hi"], extra)
 
     mock_display.assert_not_called()

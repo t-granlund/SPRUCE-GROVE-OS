@@ -2,7 +2,7 @@ from unittest.mock import MagicMock, patch
 
 import httpx
 
-from code_puppy.version_checker import (
+from spruce_grove.version_checker import (
     default_version_mismatch_behavior,
     fetch_latest_version,
     normalize_version,
@@ -48,7 +48,7 @@ def test_versions_are_equal():
 class TestFetchLatestVersion:
     """Test fetch_latest_version function."""
 
-    @patch("code_puppy.version_checker.httpx.get")
+    @patch("spruce_grove.version_checker.httpx.get")
     def test_fetch_latest_version_success(self, mock_get):
         """Test successful version fetch from PyPI."""
         mock_response = MagicMock()
@@ -63,7 +63,7 @@ class TestFetchLatestVersion:
             "https://pypi.org/pypi/test-package/json", timeout=5.0
         )
 
-    @patch("code_puppy.version_checker.httpx.get")
+    @patch("spruce_grove.version_checker.httpx.get")
     def test_fetch_latest_version_http_error(self, mock_get):
         """Test version fetch with HTTP error."""
         mock_get.side_effect = httpx.HTTPError("Connection failed")
@@ -72,7 +72,7 @@ class TestFetchLatestVersion:
 
         assert version is None
 
-    @patch("code_puppy.version_checker.httpx.get")
+    @patch("spruce_grove.version_checker.httpx.get")
     def test_fetch_latest_version_invalid_json(self, mock_get):
         """Test version fetch with invalid JSON response."""
         mock_response = MagicMock()
@@ -84,7 +84,7 @@ class TestFetchLatestVersion:
 
         assert version is None
 
-    @patch("code_puppy.version_checker.httpx.get")
+    @patch("spruce_grove.version_checker.httpx.get")
     def test_fetch_latest_version_missing_info_key(self, mock_get):
         """Test version fetch with missing 'info' key."""
         mock_response = MagicMock()
@@ -96,7 +96,7 @@ class TestFetchLatestVersion:
 
         assert version is None
 
-    @patch("code_puppy.version_checker.httpx.get")
+    @patch("spruce_grove.version_checker.httpx.get")
     def test_fetch_latest_version_status_error(self, mock_get):
         """Test version fetch with HTTP status error."""
         mock_response = MagicMock()
@@ -113,11 +113,11 @@ class TestFetchLatestVersion:
 class TestDefaultVersionMismatchBehavior:
     """Test default_version_mismatch_behavior function."""
 
-    @patch("code_puppy.version_checker.get_message_bus")
-    @patch("code_puppy.version_checker.emit_success")
-    @patch("code_puppy.version_checker.emit_warning")
-    @patch("code_puppy.version_checker.emit_info")
-    @patch("code_puppy.version_checker.fetch_latest_version")
+    @patch("spruce_grove.version_checker.get_message_bus")
+    @patch("spruce_grove.version_checker.emit_success")
+    @patch("spruce_grove.version_checker.emit_warning")
+    @patch("spruce_grove.version_checker.emit_info")
+    @patch("spruce_grove.version_checker.fetch_latest_version")
     def test_version_mismatch_shows_update_message(
         self, mock_fetch, mock_emit_info, mock_emit_warning, mock_emit_success, mock_bus
     ):
@@ -135,11 +135,11 @@ class TestDefaultVersionMismatchBehavior:
         # Should emit success message about updating
         mock_emit_success.assert_called()
 
-    @patch("code_puppy.version_checker.get_message_bus")
-    @patch("code_puppy.version_checker.emit_success")
-    @patch("code_puppy.version_checker.emit_warning")
-    @patch("code_puppy.version_checker.emit_info")
-    @patch("code_puppy.version_checker.fetch_latest_version")
+    @patch("spruce_grove.version_checker.get_message_bus")
+    @patch("spruce_grove.version_checker.emit_success")
+    @patch("spruce_grove.version_checker.emit_warning")
+    @patch("spruce_grove.version_checker.emit_info")
+    @patch("spruce_grove.version_checker.fetch_latest_version")
     def test_version_match_still_shows_current_version(
         self, mock_fetch, mock_emit_info, mock_emit_warning, mock_emit_success, mock_bus
     ):
@@ -154,11 +154,11 @@ class TestDefaultVersionMismatchBehavior:
         mock_emit_warning.assert_not_called()
         mock_emit_success.assert_not_called()
 
-    @patch("code_puppy.version_checker.get_message_bus")
-    @patch("code_puppy.version_checker.emit_success")
-    @patch("code_puppy.version_checker.emit_warning")
-    @patch("code_puppy.version_checker.emit_info")
-    @patch("code_puppy.version_checker.fetch_latest_version")
+    @patch("spruce_grove.version_checker.get_message_bus")
+    @patch("spruce_grove.version_checker.emit_success")
+    @patch("spruce_grove.version_checker.emit_warning")
+    @patch("spruce_grove.version_checker.emit_info")
+    @patch("spruce_grove.version_checker.fetch_latest_version")
     def test_version_fetch_failure_still_shows_current(
         self, mock_fetch, mock_emit_info, mock_emit_warning, mock_emit_success, mock_bus
     ):
@@ -173,11 +173,11 @@ class TestDefaultVersionMismatchBehavior:
         mock_emit_warning.assert_not_called()
         mock_emit_success.assert_not_called()
 
-    @patch("code_puppy.version_checker.get_message_bus")
-    @patch("code_puppy.version_checker.emit_success")
-    @patch("code_puppy.version_checker.emit_warning")
-    @patch("code_puppy.version_checker.emit_info")
-    @patch("code_puppy.version_checker.fetch_latest_version")
+    @patch("spruce_grove.version_checker.get_message_bus")
+    @patch("spruce_grove.version_checker.emit_success")
+    @patch("spruce_grove.version_checker.emit_warning")
+    @patch("spruce_grove.version_checker.emit_info")
+    @patch("spruce_grove.version_checker.fetch_latest_version")
     def test_update_message_content(
         self, mock_fetch, mock_emit_info, mock_emit_warning, mock_emit_success, mock_bus
     ):
@@ -190,11 +190,11 @@ class TestDefaultVersionMismatchBehavior:
         warning_calls = [str(call) for call in mock_emit_warning.call_args_list]
         assert any("2.5.0" in str(call) for call in warning_calls)
 
-    @patch("code_puppy.version_checker.get_message_bus")
-    @patch("code_puppy.version_checker.emit_success")
-    @patch("code_puppy.version_checker.emit_warning")
-    @patch("code_puppy.version_checker.emit_info")
-    @patch("code_puppy.version_checker.fetch_latest_version")
+    @patch("spruce_grove.version_checker.get_message_bus")
+    @patch("spruce_grove.version_checker.emit_success")
+    @patch("spruce_grove.version_checker.emit_warning")
+    @patch("spruce_grove.version_checker.emit_info")
+    @patch("spruce_grove.version_checker.fetch_latest_version")
     def test_none_current_version_handled_gracefully(
         self, mock_fetch, mock_emit_info, mock_emit_warning, mock_emit_success, mock_bus
     ):

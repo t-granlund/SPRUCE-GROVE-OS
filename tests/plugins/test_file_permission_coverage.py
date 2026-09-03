@@ -209,7 +209,7 @@ class TestPromptForFilePermission:
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.common._get_user_approval_impl",
+                "spruce_grove.tools.common._get_user_approval_impl",
                 side_effect=fake_impl,
             ),
         ):

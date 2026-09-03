@@ -1,11 +1,11 @@
-"""Tests for code_puppy.messaging.bottom_bar - the scroll-region manager."""
+"""Tests for spruce_grove.messaging.bottom_bar - the scroll-region manager."""
 
 import io
 from unittest.mock import patch
 
 import pytest
 
-from code_puppy.messaging.bottom_bar import (
+from spruce_grove.messaging.bottom_bar import (
     RESERVED_ROWS,
     BottomBar,
     get_bottom_bar,
@@ -55,7 +55,7 @@ def drain(stream):
 
 
 def test_prompt_buffer_uses_theme_foreground(bar, tty):
-    with patch("code_puppy.callbacks.on_prompt_text_color", return_value="#6a9955"):
+    with patch("spruce_grove.callbacks.on_prompt_text_color", return_value="#6a9955"):
         bar.start()
         drain(tty)
         bar.set_prompt_text("> ", "puppies", len("puppies"))
@@ -67,7 +67,7 @@ def test_prompt_buffer_uses_theme_foreground(bar, tty):
 
 def test_styled_prefix_restores_theme_foreground_for_user_text(bar, tty):
     theme_sgr = "\x1b[38;2;76;79;105m"
-    with patch("code_puppy.callbacks.on_prompt_text_color", return_value="#4c4f69"):
+    with patch("spruce_grove.callbacks.on_prompt_text_color", return_value="#4c4f69"):
         bar.start()
         drain(tty)
         bar.set_prompt_text(
@@ -1002,12 +1002,12 @@ def test_dormant_transition_restores_cursor(tty):
 def test_swarm_cancel_panel_clear_keeps_cursor_hidden(bar, tty, monkeypatch):
     """Ctrl+C swarm cancel clears panel rows but the RUN CONTINUES — the
     bar stays up and the hardware cursor must stay hidden."""
-    from code_puppy.tools.command_runner import _tear_down_live_panels
+    from spruce_grove.tools.command_runner import _tear_down_live_panels
 
     bar.start()
     bar.set_panel_lines(["worker one"])
     drain(tty)
-    monkeypatch.setattr("code_puppy.messaging.bottom_bar.get_bottom_bar", lambda: bar)
+    monkeypatch.setattr("spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: bar)
     _tear_down_live_panels()
     out = written(tty)
     assert "\x1b[?25h" not in out  # cursor stays hidden

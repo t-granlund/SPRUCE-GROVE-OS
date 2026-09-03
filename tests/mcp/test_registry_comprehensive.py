@@ -12,8 +12,8 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy.mcp_.managed_server import ServerConfig
-from code_puppy.mcp_.registry import ServerRegistry
+from spruce_grove.mcp_.managed_server import ServerConfig
+from spruce_grove.mcp_.registry import ServerRegistry
 
 
 class TestServerRegistryBasic:
@@ -22,7 +22,7 @@ class TestServerRegistryBasic:
     def test_initialization_default_storage(self):
         """Test registry initialization with default storage path."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 assert registry._storage_path == Path(tmpdir) / "mcp_registry.json"
                 assert registry._servers == {}
@@ -36,7 +36,7 @@ class TestServerRegistryBasic:
     def test_register_new_server(self):
         """Test registering a new server."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 config = ServerConfig(
                     id="",
@@ -53,7 +53,7 @@ class TestServerRegistryBasic:
     def test_register_generates_id(self):
         """Test that register generates ID if not provided."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 config = ServerConfig(
                     id="",
@@ -69,7 +69,7 @@ class TestServerRegistryBasic:
     def test_register_duplicate_name_fails(self):
         """Test that registering duplicate name fails."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 config1 = ServerConfig(
                     id="id1",
@@ -93,7 +93,7 @@ class TestServerRegistryBasic:
     def test_register_invalid_config_fails(self):
         """Test that registering invalid config fails."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 # No name
                 config = ServerConfig(
@@ -109,7 +109,7 @@ class TestServerRegistryBasic:
     def test_get_by_id(self):
         """Test retrieving server by ID."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 config = ServerConfig(
                     id="test-id",
@@ -126,14 +126,14 @@ class TestServerRegistryBasic:
     def test_get_nonexistent_returns_none(self):
         """Test getting nonexistent server returns None."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 assert registry.get("nonexistent") is None
 
     def test_get_by_name(self):
         """Test retrieving server by name."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 config = ServerConfig(
                     id="id1",
@@ -150,14 +150,14 @@ class TestServerRegistryBasic:
     def test_get_by_name_nonexistent(self):
         """Test get_by_name with nonexistent name."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 assert registry.get_by_name("nonexistent") is None
 
     def test_list_all(self):
         """Test listing all servers."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 for i in range(3):
                     config = ServerConfig(
@@ -175,7 +175,7 @@ class TestServerRegistryBasic:
     def test_exists(self):
         """Test checking if server exists."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 config = ServerConfig(
                     id="test-id",
@@ -191,7 +191,7 @@ class TestServerRegistryBasic:
     def test_unregister_existing(self):
         """Test unregistering existing server."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 config = ServerConfig(
                     id="test-id",
@@ -208,7 +208,7 @@ class TestServerRegistryBasic:
     def test_unregister_nonexistent(self):
         """Test unregistering nonexistent server."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 result = registry.unregister("nonexistent")
                 assert result is False
@@ -216,7 +216,7 @@ class TestServerRegistryBasic:
     def test_update_existing(self):
         """Test updating existing server."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 config1 = ServerConfig(
                     id="test-id",
@@ -243,7 +243,7 @@ class TestServerRegistryBasic:
     def test_update_nonexistent(self):
         """Test updating nonexistent server."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 config = ServerConfig(
                     id="nonexistent",
@@ -390,7 +390,7 @@ class TestServerRegistryThreadSafety:
     def test_concurrent_register(self):
         """Test concurrent registration of servers."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 results = []
 
@@ -420,7 +420,7 @@ class TestServerRegistryThreadSafety:
     def test_concurrent_read_write(self):
         """Test concurrent reads and writes."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 config = ServerConfig(
                     id="test",
@@ -501,7 +501,7 @@ class TestServerRegistryEdgeCases:
     def test_update_with_duplicate_name(self):
         """Test update fails if new name already exists."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
 
                 # Register two servers
@@ -536,14 +536,14 @@ class TestServerRegistryEdgeCases:
     def test_list_all_empty_registry(self):
         """Test list_all on empty registry."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 assert registry.list_all() == []
 
     def test_list_all_returns_copy(self):
         """Test that list_all returns independent list."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 config = ServerConfig(
                     id="test",
@@ -562,7 +562,7 @@ class TestServerRegistryEdgeCases:
     def test_register_with_headers(self):
         """Test registering HTTP server with custom headers."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 config = ServerConfig(
                     id="test",
@@ -580,7 +580,7 @@ class TestServerRegistryEdgeCases:
     def test_sse_server_registration(self):
         """Test registering SSE server."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("code_puppy.mcp_.registry.config.DATA_DIR", tmpdir):
+            with patch("spruce_grove.mcp_.registry.config.DATA_DIR", tmpdir):
                 registry = ServerRegistry()
                 config = ServerConfig(
                     id="test",

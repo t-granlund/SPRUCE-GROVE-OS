@@ -5,9 +5,9 @@ import httpx
 import httpx2
 import pytest
 
-from code_puppy.model_factory import ModelFactory, make_model_settings
+from spruce_grove.model_factory import ModelFactory, make_model_settings
 
-TEST_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "../code_puppy/models.json")
+TEST_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "../spruce_grove/models.json")
 
 
 def test_ollama_load_model():
@@ -51,7 +51,7 @@ def test_anthropic_cache_settings_use_native_ttls():
 
     with (
         patch.object(ModelFactory, "load_config", return_value=model_configs),
-        patch("code_puppy.config.get_custom_model_settings", return_value={}),
+        patch("spruce_grove.config.get_custom_model_settings", return_value={}),
     ):
         api_key_settings = make_model_settings("anthropic-test")
         oauth_settings = make_model_settings("claude-code-test")
@@ -130,14 +130,14 @@ def test_custom_endpoint_missing_url(model_key, config):
 
 # Additional tests for coverage
 def test_get_custom_config_missing_custom_endpoint():
-    from code_puppy.model_factory import get_custom_config
+    from spruce_grove.model_factory import get_custom_config
 
     with pytest.raises(ValueError):
         get_custom_config({})
 
 
 def test_get_custom_config_missing_url():
-    from code_puppy.model_factory import get_custom_config
+    from spruce_grove.model_factory import get_custom_config
 
     config = {"custom_endpoint": {"headers": {}}}
     with pytest.raises(ValueError):
@@ -180,7 +180,7 @@ def test_custom_openai_happy(monkeypatch):
 
 
 # The factory has two HTTP-client seams. OpenAI-compatible paths must hand pydantic-ai an
-# httpx2 client (legacy httpx is deprecated there); custom_gemini feeds Code Puppy's own
+# httpx2 client (legacy httpx is deprecated there); custom_gemini feeds Spruce Grove's own
 # GeminiModel, which is still typed against legacy httpx.
 _HTTPX2_SEAM = "create_provider_async_client"
 _LEGACY_SEAM = "create_async_client"
@@ -211,7 +211,7 @@ def test_custom_timeout_config(
         }
     }
 
-    with patch(f"code_puppy.model_factory.{client_seam}") as mock_client:
+    with patch(f"spruce_grove.model_factory.{client_seam}") as mock_client:
         mock_client.return_value = client_cls(timeout=600)
         model = ModelFactory.get_model("custom", config)
 
@@ -269,7 +269,7 @@ def test_custom_openai_multiple_system_messages_override(monkeypatch):
 
 def test_custom_openai_explicit_false_stays_false():
     """A JSON ``false`` (Python ``False``) correctly produces ``False``."""
-    from code_puppy.model_factory import _strict_openai_profile
+    from spruce_grove.model_factory import _strict_openai_profile
 
     profile = _strict_openai_profile("m", {"supports_multiple_system_messages": False})
     assert profile.get("openai_chat_supports_multiple_system_messages") is False
@@ -334,7 +334,7 @@ def test_zai_api_merges_system_messages(monkeypatch):
 
 def test_strict_openai_profile_helper():
     """_strict_openai_profile merges thinking tags + multiple-system-messages setting."""
-    from code_puppy.model_factory import _strict_openai_profile
+    from spruce_grove.model_factory import _strict_openai_profile
     from pydantic_ai.profiles.openai import OpenAIModelProfile
 
     # Default: merge is on (False means merge)
@@ -363,7 +363,7 @@ def test_strict_openai_profile_helper():
     assert profile.get("openai_supports_strict_tool_definition") is False
     # Unconditional: the lilac/minimax-m3 config must resolve custom thinking
     # tags, and they must survive the extra-merge.
-    from code_puppy.model_utils import get_thinking_tags
+    from spruce_grove.model_utils import get_thinking_tags
 
     expected_tags = get_thinking_tags(
         "minimax-m3", {"provider": "lilac", "name": "minimax-m3"}
@@ -379,7 +379,7 @@ def test_strict_openai_profile_rejects_non_bool():
     intent (it is truthy); ``bool()``-coercion is no cure since
     ``bool("false")`` is ``True``.
     """
-    from code_puppy.model_factory import _strict_openai_profile
+    from spruce_grove.model_factory import _strict_openai_profile
 
     with pytest.raises(TypeError, match="must be a JSON boolean"):
         _strict_openai_profile("m", {"supports_multiple_system_messages": "false"})
@@ -404,7 +404,7 @@ async def test_wire_format_merges_leading_system_messages():
     from pydantic_ai.models.openai import OpenAIChatModel
     from pydantic_ai.providers.openai import OpenAIProvider
 
-    from code_puppy.model_factory import _strict_openai_profile
+    from spruce_grove.model_factory import _strict_openai_profile
 
     async with httpx2.AsyncClient(base_url="http://localhost:30000") as client:
         provider = OpenAIProvider(api_key="dummy", http_client=client)
@@ -463,10 +463,10 @@ def test_custom_anthropic_timeout_config(monkeypatch):
     }
 
     with (
-        patch("code_puppy.model_factory.ClaudeCacheAsyncClient") as mock_client,
-        patch("code_puppy.model_factory.make_anthropic_provider") as mock_provider,
+        patch("spruce_grove.model_factory.ClaudeCacheAsyncClient") as mock_client,
+        patch("spruce_grove.model_factory.make_anthropic_provider") as mock_provider,
         patch("anthropic.AsyncAnthropic") as mock_anthropic,
-        patch("code_puppy.model_factory.get_http2", return_value=False),
+        patch("spruce_grove.model_factory.get_http2", return_value=False),
     ):
         mock_client.return_value = MagicMock()
         mock_provider.return_value = MagicMock()
@@ -498,12 +498,12 @@ def test_cerebras_timeout_config(monkeypatch):
         }
     }
 
-    with patch(f"code_puppy.model_factory.{_HTTPX2_SEAM}") as mock_client:
+    with patch(f"spruce_grove.model_factory.{_HTTPX2_SEAM}") as mock_client:
         mock_client.return_value = httpx2.AsyncClient(timeout=600)
         model = ModelFactory.get_model("custom", config)
 
     mock_client.assert_called_once_with(
-        headers={"X-Api-Key": "ok", "X-Cerebras-3rd-Party-Integration": "code-puppy"},
+        headers={"X-Api-Key": "ok", "X-Cerebras-3rd-Party-Integration": "spruce-grove"},
         verify=False,
         model_name="cerebras",
         timeout=600,
@@ -515,7 +515,7 @@ def test_anthropic_missing_api_key(monkeypatch):
     config = {"anthropic": {"type": "anthropic", "name": "claude-v2"}}
     if "ANTHROPIC_API_KEY" in os.environ:
         monkeypatch.delenv("ANTHROPIC_API_KEY")
-    with patch("code_puppy.model_factory.emit_warning") as mock_warn:
+    with patch("spruce_grove.model_factory.emit_warning") as mock_warn:
         model = ModelFactory.get_model("anthropic", config)
         assert model is None
         mock_warn.assert_called_once()
@@ -572,14 +572,14 @@ def test_extra_models_json_decode_error(tmp_path, monkeypatch):
 
     # Use an explicit base config: bundled models.json may intentionally be empty.
     monkeypatch.setattr(
-        "code_puppy.model_factory.callbacks.get_callbacks", lambda phase: [object()]
+        "spruce_grove.model_factory.callbacks.get_callbacks", lambda phase: [object()]
     )
     monkeypatch.setattr(
-        "code_puppy.model_factory.callbacks.on_load_model_config",
+        "spruce_grove.model_factory.callbacks.on_load_model_config",
         lambda: [base_config.copy()],
     )
     monkeypatch.setattr(
-        "code_puppy.model_factory.EXTRA_MODELS_FILE", str(extra_models_file)
+        "spruce_grove.model_factory.EXTRA_MODELS_FILE", str(extra_models_file)
     )
 
     # Invalid extra JSON should be ignored without discarding the base config.
@@ -596,14 +596,14 @@ def test_extra_models_exception_handling(tmp_path, monkeypatch, caplog):
 
     # Use an explicit base config: bundled models.json may intentionally be empty.
     monkeypatch.setattr(
-        "code_puppy.model_factory.callbacks.get_callbacks", lambda phase: [object()]
+        "spruce_grove.model_factory.callbacks.get_callbacks", lambda phase: [object()]
     )
     monkeypatch.setattr(
-        "code_puppy.model_factory.callbacks.on_load_model_config",
+        "spruce_grove.model_factory.callbacks.on_load_model_config",
         lambda: [base_config.copy()],
     )
     monkeypatch.setattr(
-        "code_puppy.model_factory.EXTRA_MODELS_FILE", str(extra_models_file)
+        "spruce_grove.model_factory.EXTRA_MODELS_FILE", str(extra_models_file)
     )
 
     with caplog.at_level("WARNING"):
@@ -661,7 +661,7 @@ def test_custom_timeout_precedence(monkeypatch):
         }
     }
 
-    with patch(f"code_puppy.model_factory.{_HTTPX2_SEAM}") as mock_client:
+    with patch(f"spruce_grove.model_factory.{_HTTPX2_SEAM}") as mock_client:
         mock_client.return_value = httpx2.AsyncClient(timeout=300)
         model = ModelFactory.get_model("custom", config)
 

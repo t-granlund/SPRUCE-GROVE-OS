@@ -11,7 +11,7 @@ import pytest
 # Required environment variables for integration tests
 REQUIRED_ENV_VARS = {
     "CI": "Disables Rich Live() display in streaming handler",
-    "CODE_PUPPY_TEST_FAST": "Puts CLI in fast/lean mode for testing",
+    "SPRUCE_GROVE_TEST_FAST": "Puts CLI in fast/lean mode for testing",
 }
 
 
@@ -35,7 +35,7 @@ def _format_skip_reason(missing_vars: list[tuple[str, str]]) -> str:
     var_list = ", ".join(var for var, _ in missing_vars)
     return (
         f"Integration tests require env vars: {var_list}. "
-        f"Run with: CI=1 CODE_PUPPY_TEST_FAST=1 uv run pytest tests/integration/"
+        f"Run with: CI=1 SPRUCE_GROVE_TEST_FAST=1 uv run pytest tests/integration/"
     )
 
 
@@ -80,7 +80,7 @@ def _seed_lilac_model_for_live_tests() -> None:
 
     import json
 
-    from code_puppy import config as cp_config
+    from spruce_grove import config as cp_config
 
     path = cp_config.EXTRA_MODELS_FILE
     try:

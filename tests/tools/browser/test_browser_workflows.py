@@ -14,7 +14,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "code_puppy"))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / "spruce_grove"))
 
 from tools.browser.browser_workflows import (
     get_workflows_directory,
@@ -70,7 +70,7 @@ class TestGetWorkflowsDirectory(BrowserWorkflowsBaseTest):
         """Test that workflows directory is created if it doesn't exist."""
         with tempfile.TemporaryDirectory() as temp_dir:
             # Import the config module that browser_workflows uses
-            from code_puppy.tools.browser import browser_workflows
+            from spruce_grove.tools.browser import browser_workflows
 
             # Patch the DATA_DIR on the already-imported config object
             original_data_dir = browser_workflows.config.DATA_DIR
@@ -90,7 +90,7 @@ class TestGetWorkflowsDirectory(BrowserWorkflowsBaseTest):
         """Test returning existing workflows directory."""
         with tempfile.TemporaryDirectory() as temp_dir:
             # Import the config module that browser_workflows uses
-            from code_puppy.tools.browser import browser_workflows
+            from spruce_grove.tools.browser import browser_workflows
 
             expected_dir = Path(temp_dir) / "browser_workflows"
             expected_dir.mkdir(parents=True, exist_ok=True)
@@ -111,7 +111,7 @@ class TestGetWorkflowsDirectory(BrowserWorkflowsBaseTest):
         """Test that get_workflows_directory returns a Path object."""
         with tempfile.TemporaryDirectory() as temp_dir:
             # Import the config module that browser_workflows uses
-            from code_puppy.tools.browser import browser_workflows
+            from spruce_grove.tools.browser import browser_workflows
 
             # Patch the DATA_DIR on the already-imported config object
             original_data_dir = browser_workflows.config.DATA_DIR

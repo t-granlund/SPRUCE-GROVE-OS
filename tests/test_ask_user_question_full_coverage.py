@@ -7,7 +7,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from code_puppy.tools.ask_user_question.handler import (
+from spruce_grove.tools.ask_user_question.handler import (
     _cancelled_response,
     _format_validation_error,
     _run_interactive_picker,
@@ -53,7 +53,7 @@ class TestCancelledResponse:
 class TestAskUserQuestion:
     def test_subagent_blocked(self):
         with patch(
-            "code_puppy.tools.ask_user_question.handler.is_subagent", return_value=True
+            "spruce_grove.tools.ask_user_question.handler.is_subagent", return_value=True
         ):
             result = ask_user_question(
                 [{"question": "q", "header": "h", "options": [{"label": "a"}]}]
@@ -66,11 +66,11 @@ class TestAskUserQuestion:
         # (2-6 options) to actually reach the autonomous-loop gate.
         with (
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_subagent",
+                "spruce_grove.tools.ask_user_question.handler.is_subagent",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler._autonomous_mode_active",
+                "spruce_grove.tools.ask_user_question.handler._autonomous_mode_active",
                 return_value=True,
             ),
         ):
@@ -88,15 +88,15 @@ class TestAskUserQuestion:
     def test_non_interactive(self):
         with (
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_subagent",
+                "spruce_grove.tools.ask_user_question.handler.is_subagent",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler._autonomous_mode_active",
+                "spruce_grove.tools.ask_user_question.handler._autonomous_mode_active",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_interactive",
+                "spruce_grove.tools.ask_user_question.handler.is_interactive",
                 return_value=False,
             ),
         ):
@@ -114,15 +114,15 @@ class TestAskUserQuestion:
     def test_validation_error(self):
         with (
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_subagent",
+                "spruce_grove.tools.ask_user_question.handler.is_subagent",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler._autonomous_mode_active",
+                "spruce_grove.tools.ask_user_question.handler._autonomous_mode_active",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_interactive",
+                "spruce_grove.tools.ask_user_question.handler.is_interactive",
                 return_value=True,
             ),
         ):
@@ -132,19 +132,19 @@ class TestAskUserQuestion:
     def test_type_error(self):
         with (
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_subagent",
+                "spruce_grove.tools.ask_user_question.handler.is_subagent",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler._autonomous_mode_active",
+                "spruce_grove.tools.ask_user_question.handler._autonomous_mode_active",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_interactive",
+                "spruce_grove.tools.ask_user_question.handler.is_interactive",
                 return_value=True,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler._validate_input",
+                "spruce_grove.tools.ask_user_question.handler._validate_input",
                 side_effect=TypeError("bad"),
             ),
         ):
@@ -154,22 +154,22 @@ class TestAskUserQuestion:
     def test_keyboard_interrupt(self):
         with (
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_subagent",
+                "spruce_grove.tools.ask_user_question.handler.is_subagent",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler._autonomous_mode_active",
+                "spruce_grove.tools.ask_user_question.handler._autonomous_mode_active",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_interactive",
+                "spruce_grove.tools.ask_user_question.handler.is_interactive",
                 return_value=True,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler._validate_input"
+                "spruce_grove.tools.ask_user_question.handler._validate_input"
             ) as mock_val,
             patch(
-                "code_puppy.tools.ask_user_question.handler._run_interactive_picker",
+                "spruce_grove.tools.ask_user_question.handler._run_interactive_picker",
                 side_effect=KeyboardInterrupt,
             ),
         ):
@@ -188,22 +188,22 @@ class TestAskUserQuestion:
     def test_os_error(self):
         with (
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_subagent",
+                "spruce_grove.tools.ask_user_question.handler.is_subagent",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler._autonomous_mode_active",
+                "spruce_grove.tools.ask_user_question.handler._autonomous_mode_active",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_interactive",
+                "spruce_grove.tools.ask_user_question.handler.is_interactive",
                 return_value=True,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler._validate_input"
+                "spruce_grove.tools.ask_user_question.handler._validate_input"
             ) as mock_val,
             patch(
-                "code_puppy.tools.ask_user_question.handler._run_interactive_picker",
+                "spruce_grove.tools.ask_user_question.handler._run_interactive_picker",
                 side_effect=OSError("fail"),
             ),
         ):
@@ -222,22 +222,22 @@ class TestAskUserQuestion:
     def test_timeout(self):
         with (
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_subagent",
+                "spruce_grove.tools.ask_user_question.handler.is_subagent",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler._autonomous_mode_active",
+                "spruce_grove.tools.ask_user_question.handler._autonomous_mode_active",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_interactive",
+                "spruce_grove.tools.ask_user_question.handler.is_interactive",
                 return_value=True,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler._validate_input"
+                "spruce_grove.tools.ask_user_question.handler._validate_input"
             ) as mock_val,
             patch(
-                "code_puppy.tools.ask_user_question.handler._run_interactive_picker",
+                "spruce_grove.tools.ask_user_question.handler._run_interactive_picker",
                 return_value=([], False, True),
             ),
         ):
@@ -256,22 +256,22 @@ class TestAskUserQuestion:
     def test_cancelled(self):
         with (
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_subagent",
+                "spruce_grove.tools.ask_user_question.handler.is_subagent",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler._autonomous_mode_active",
+                "spruce_grove.tools.ask_user_question.handler._autonomous_mode_active",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_interactive",
+                "spruce_grove.tools.ask_user_question.handler.is_interactive",
                 return_value=True,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler._validate_input"
+                "spruce_grove.tools.ask_user_question.handler._validate_input"
             ) as mock_val,
             patch(
-                "code_puppy.tools.ask_user_question.handler._run_interactive_picker",
+                "spruce_grove.tools.ask_user_question.handler._run_interactive_picker",
                 return_value=([], True, False),
             ),
         ):
@@ -288,29 +288,29 @@ class TestAskUserQuestion:
             assert result.cancelled is True
 
     def test_success(self):
-        from code_puppy.tools.ask_user_question.models import QuestionAnswer
+        from spruce_grove.tools.ask_user_question.models import QuestionAnswer
 
         answer = QuestionAnswer(
             question_index=0, question_header="h", selected_options=["a"]
         )
         with (
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_subagent",
+                "spruce_grove.tools.ask_user_question.handler.is_subagent",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler._autonomous_mode_active",
+                "spruce_grove.tools.ask_user_question.handler._autonomous_mode_active",
                 return_value=False,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler.is_interactive",
+                "spruce_grove.tools.ask_user_question.handler.is_interactive",
                 return_value=True,
             ),
             patch(
-                "code_puppy.tools.ask_user_question.handler._validate_input"
+                "spruce_grove.tools.ask_user_question.handler._validate_input"
             ) as mock_val,
             patch(
-                "code_puppy.tools.ask_user_question.handler._run_interactive_picker",
+                "spruce_grove.tools.ask_user_question.handler._run_interactive_picker",
                 return_value=([answer], False, False),
             ),
         ):
