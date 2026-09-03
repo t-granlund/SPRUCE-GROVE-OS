@@ -124,7 +124,7 @@ class TestHandleShowCommand:
                 "spruce_grove.command_line.model_picker_completion.get_active_model",
                 return_value="gpt-5",
             ),
-            patch("spruce_grove.config.get_puppy_name", return_value="Pup"),
+            patch("spruce_grove.config.get_grove_name", return_value="Pup"),
             patch("spruce_grove.config.get_owner_name", return_value="Owner"),
             patch("spruce_grove.config.get_yolo_mode", return_value=yolo),
             patch("spruce_grove.config.get_auto_save_session", return_value=True),

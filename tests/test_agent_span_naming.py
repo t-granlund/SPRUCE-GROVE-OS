@@ -29,7 +29,7 @@ class _FakeAgentConfig:
     def __init__(self):
         self._message_history = []
         self._compacted_message_hashes = set()
-        self._puppy_rules = None
+        self._grove_rules = None
 
     @contextmanager
     def temporary_model_name_override(self, _model_name):

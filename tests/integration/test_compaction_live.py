@@ -1,6 +1,6 @@
 """Live integration tests for message-history compaction.
 
-Drives a REAL ``CodePuppyAgent`` through ``run_with_mcp`` with a pre-populated
+Drives a REAL ``SpruceGroveAgent`` through ``run_with_mcp`` with a pre-populated
 ~180k-token message history, pinned to ``LILAC_MODEL`` (Kimi K2.6, 262k ctx window).
 Compaction MUST fire, the run MUST complete, and history MUST shrink.
 
@@ -294,7 +294,7 @@ def huge_history() -> List[ModelMessage]:
 
 @pytest.fixture
 def pinned_spruce_grove_agent(monkeypatch):
-    """Fresh CodePuppyAgent pinned to ``LILAC_MODEL``.
+    """Fresh SpruceGroveAgent pinned to ``LILAC_MODEL``.
 
     Uses monkeypatch to override the global model getter so we don't touch
     the user's on-disk config during the test run.
@@ -302,7 +302,7 @@ def pinned_spruce_grove_agent(monkeypatch):
     from spruce_grove import config as cp_config
     from spruce_grove.agents import _builder, _compaction, _runtime
     from spruce_grove.agents import base_agent as _base_agent_mod
-    from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
+    from spruce_grove.agents.agent_spruce_grove import SpruceGroveAgent
 
     test_model = LILAC_MODEL
 
@@ -342,7 +342,7 @@ def pinned_spruce_grove_agent(monkeypatch):
         if hasattr(mod, "get_use_dbos"):
             monkeypatch.setattr(mod, "get_use_dbos", lambda: False)
 
-    agent = CodePuppyAgent()
+    agent = SpruceGroveAgent()
     return agent
 
 

@@ -113,7 +113,7 @@ def test_judges_command_invokes_menu():
 # ---------------------------------------------------------------------------
 
 
-def test_goal_command_has_puppy_themed_aliases():
+def test_goal_command_has_grove_themed_aliases():
     """`/kibble` and `/chow` must resolve to the same CommandInfo as `/goal`.
 
     These are grove-themed aliases for /goal so users can pick whichever

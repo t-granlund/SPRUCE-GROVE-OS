@@ -287,7 +287,7 @@ def get_suppress_directory_listing() -> bool:
 
 
 DEFAULT_SECTION = "grove"
-REQUIRED_KEYS = ["puppy_name", "owner_name"]
+REQUIRED_KEYS = ["grove_name", "owner_name"]
 
 # Runtime-only autosave session ID (per-process)
 _CURRENT_AUTOSAVE_ID: Optional[str] = None
@@ -362,7 +362,7 @@ def ensure_config_exists():
         sys.stdout.write("🐾 Let's get your Cedar ready!\n")
         sys.stdout.flush()
         for key in missing:
-            if key == "puppy_name":
+            if key == "grove_name":
                 val = input("What should we name the grove? ").strip()
             elif key == "owner_name":
                 val = input(
@@ -425,8 +425,14 @@ def get_falsy_bool_value(key: str, default_val: bool) -> bool:
     return str(val).strip().lower() in {"0", "false", "no", "off"}
 
 
-def get_puppy_name():
-    return get_value("puppy_name") or "Cedar"
+def get_grove_name():
+    # 'grove_name' is the current key; fall back to the legacy Code Puppy
+    # persisted key so upgraded configs keep their pet name. Default: Cedar.
+    return get_value("grove_name") or get_value("puppy_name") or "Cedar"
+
+
+# Legacy alias: external plugins written against Code Puppy import this name.
+get_puppy_name = get_grove_name
 
 
 def get_owner_name():
@@ -1002,34 +1008,34 @@ def set_summarization_model_name(model: str) -> None:
 # Cedar-token provider hook — lets plugins inject a custom credential
 # backend (e.g. OS keyring) without baking that logic into core.
 # ---------------------------------------------------------------------------
-_puppy_token_getter = None
-_puppy_token_setter = None
+_grove_token_getter = None
+_grove_token_setter = None
 
 
-def register_puppy_token_provider(*, getter, setter) -> None:
-    """Register custom get/set functions for the puppy_token credential.
+def register_grove_token_provider(*, getter, setter) -> None:
+    """Register custom get/set functions for the grove_token credential.
 
     Called by distribution-specific plugins at startup to route token
     storage through the OS keyring or another secure backend.  When no
     provider is registered the default plaintext config-file path is used.
     """
-    global _puppy_token_getter, _puppy_token_setter
-    _puppy_token_getter = getter
-    _puppy_token_setter = setter
+    global _grove_token_getter, _grove_token_setter
+    _grove_token_getter = getter
+    _grove_token_setter = setter
 
 
-def get_puppy_token():
-    """Returns the puppy_token, delegating to a registered provider if set."""
-    if _puppy_token_getter is not None:
-        return _puppy_token_getter()
-    return get_value("puppy_token")
+def get_grove_token():
+    """Returns the grove_token, delegating to a registered provider if set."""
+    if _grove_token_getter is not None:
+        return _grove_token_getter()
+    return get_value("grove_token")
 
 
-def set_puppy_token(token: str):
-    """Sets the puppy_token, delegating to a registered provider if set."""
-    if _puppy_token_setter is not None:
-        return _puppy_token_setter(token)
-    set_config_value("puppy_token", token)
+def set_grove_token(token: str):
+    """Sets the grove_token, delegating to a registered provider if set."""
+    if _grove_token_setter is not None:
+        return _grove_token_setter(token)
+    set_config_value("grove_token", token)
 
 
 def get_temperature() -> Optional[float]:

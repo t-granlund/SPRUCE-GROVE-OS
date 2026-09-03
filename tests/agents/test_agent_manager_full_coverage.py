@@ -847,9 +847,9 @@ class TestLoadAgent:
 
     @patch("spruce_grove.agents.agent_manager._discover_agents")
     def test_fallback_to_spruce_grove(self, mock_discover):
-        from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
+        from spruce_grove.agents.agent_spruce_grove import SpruceGroveAgent
 
-        am._AGENT_REGISTRY["spruce-grove"] = CodePuppyAgent
+        am._AGENT_REGISTRY["spruce-grove"] = SpruceGroveAgent
         agent = am.load_agent("nonexistent")
         assert agent.name == "spruce-grove"
 

@@ -114,22 +114,22 @@ class TestAgentTools:
             assert "User Approval System" in file_permission_text
             assert "user_feedback" in file_permission_text
 
-    def test_invoke_agent_imports_load_puppy_rules_from_builder(self):
-        """Regression: ``load_puppy_rules`` is a free function in ``_builder``,
+    def test_invoke_agent_imports_load_grove_rules_from_builder(self):
+        """Regression: ``load_grove_rules`` is a free function in ``_builder``,
         not a method on the agent config. The previous version of this test
         asserted against a mock method that no longer exists, letting the
         real crash (``AttributeError: 'JSONAgent' object has no attribute
-        'load_puppy_rules'``) ship to prod. Pin the actual contract now.
+        'load_grove_rules'``) ship to prod. Pin the actual contract now.
         """
         from spruce_grove.agents import _builder
         from spruce_grove.agents.base_agent import BaseAgent
 
         # The method must *not* exist on BaseAgent (or subclasses) — otherwise
         # we're back to the stale-caller footgun.
-        assert not hasattr(BaseAgent, "load_puppy_rules")
+        assert not hasattr(BaseAgent, "load_grove_rules")
 
         # The free function is the canonical entry point.
-        assert callable(_builder.load_puppy_rules)
+        assert callable(_builder.load_grove_rules)
 
 
 class TestGenerateSessionHashSuffix:

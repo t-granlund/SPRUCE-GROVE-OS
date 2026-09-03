@@ -132,7 +132,7 @@ class BottomBar(TranscriptGuardMixin, BarPainterMixin):
         self._rows = 0
         self._cols = 0
         self._status = ""
-        self._status_prefix = ""  # animated spinner slot (puppy_spinner)
+        self._status_prefix = ""  # animated spinner slot (grove_spinner)
         self._status_suffix = ""  # trailing slot (steer_queue's '(N queued)')
         self._panel_lines: list[str] = []
         self._popup_lines: list[str] = []  # completion popup (over panel)

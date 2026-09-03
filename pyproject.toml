@@ -4,12 +4,12 @@ build-backend = "hatchling.build"
 
 [project]
 name = "spruce-grove"
-version = "0.0.819"
-description = "Code generation agent"
+version = "0.1.0"
+description = "Spruce Grove OS - an agentic coding CLI distribution inspired by Code Puppy. Together we are better. Always."
 readme = "README.md"
 requires-python = ">=3.11,<3.15"
 dependencies = [
-    "code-grove-core-plugins>=0.0.40",
+    "code-puppy-core-plugins>=0.0.40",
     "logfire>=4.0",
     "pydantic-ai-slim[openai,anthropic,mcp]==2.35.0",
     "pydantic-ai-harness==0.23.0",
@@ -45,7 +45,8 @@ dev-dependencies = [
     "pexpect>=4.9.0",
 ]
 authors = [
-    {name = "Michael Pfaffenberger"}
+    {name = "Tyler Granlund", email = "hello@tylergranlund.com"},
+    {name = "Michael Pfaffenberger"}  # original author of Code Puppy, the project this is inspired by and built from
 ]
 license = {text = "MIT"}
 classifiers = [
@@ -68,13 +69,13 @@ computer-use = [
 ]
 
 [project.urls]
-repository = "https://github.com/mpfaffenberger/code_puppy"
-HomePage = "https://github.com/mpfaffenberger/code_puppy"
+repository = "https://github.com/t-granlund/SPRUCE-GROVE-OS"
+HomePage = "https://tylergranlund.com"
 
 
 [project.scripts]
 spruce-grove = "spruce_grove.main:main_entry"
-pup = "spruce_grove.main:main_entry"
+grove = "spruce_grove.main:main_entry"
 
 [tool.logfire]
 ignore_no_config = true

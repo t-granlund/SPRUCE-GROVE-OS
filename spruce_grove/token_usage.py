@@ -316,7 +316,7 @@ def compute_overhead_breakdown(agent) -> OverheadBreakdown:
     ratios, no per-model multiplier. This keeps ``/context`` consistent
     when switching between models.
     """
-    from spruce_grove.agents._builder import load_puppy_rules
+    from spruce_grove.agents._builder import load_grove_rules
 
     # Resolved system prompt already includes load_prompt plugin fragments
     # (notably kennel memory) — carve those out below to avoid double-counting.
@@ -337,7 +337,7 @@ def compute_overhead_breakdown(agent) -> OverheadBreakdown:
     # AGENTS.md / grove rules — separate bucket so users can see how much of
     # their context budget is being eaten by project rules.
     try:
-        rules = load_puppy_rules() or ""
+        rules = load_grove_rules() or ""
         agents_md_tokens = _raw_estimate_tokens(rules) if rules else 0
     except Exception:
         agents_md_tokens = 0

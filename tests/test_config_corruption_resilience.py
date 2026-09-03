@@ -119,11 +119,11 @@ class TestLoadConfigCorruption:
         assert glob.glob(f"{cfg_path}.corrupted-*")
 
     def test_healthy_config_is_left_untouched(self, cfg_path):
-        cfg_path.write_text("[grove]\npuppy_name = leoncito\n")
+        cfg_path.write_text("[grove]\ngrove_name = leoncito\n")
 
         config = config_file.load_config(str(cfg_path))
 
-        assert config.get("grove", "puppy_name") == "leoncito"
+        assert config.get("grove", "grove_name") == "leoncito"
         assert not glob.glob(f"{cfg_path}.corrupted-*")
 
     def test_missing_file_returns_empty_config_without_error(self, cfg_path):
@@ -248,7 +248,7 @@ class TestTransientIoErrorsPropagate:
     failure was one of the reviewer's HIGH findings."""
 
     def test_permission_error_on_read_propagates_and_is_not_quarantined(self, cfg_path):
-        cfg_path.write_text("[grove]\npuppy_name = leoncito\n")
+        cfg_path.write_text("[grove]\ngrove_name = leoncito\n")
 
         with patch("builtins.open", side_effect=PermissionError("locked by AV")):
             with pytest.raises(PermissionError):
@@ -260,11 +260,11 @@ class TestTransientIoErrorsPropagate:
 
     def test_get_value_does_not_swallow_transient_os_errors(self, cfg_path):
         """Public accessors should not pretend a disk hiccup means 'no value'."""
-        cfg_path.write_text("[grove]\npuppy_name = leoncito\n")
+        cfg_path.write_text("[grove]\ngrove_name = leoncito\n")
 
         with patch("builtins.open", side_effect=OSError("device not ready")):
             with pytest.raises(OSError):
-                cp_config.get_value("puppy_name")
+                cp_config.get_value("grove_name")
 
 
 class TestRecoveryTocTou:
@@ -283,12 +283,12 @@ class TestRecoveryTocTou:
             # before we acquired the lock for the confirming re-read.
             return original_read_unlocked(path)
 
-        cfg_path.write_text("[grove]\npuppy_name = fixed-by-another-process\n")
+        cfg_path.write_text("[grove]\ngrove_name = fixed-by-another-process\n")
 
         with patch.object(config_file, "_read_unlocked", side_effect=_fake_read):
             config = config_file.load_config(str(cfg_path))
 
-        assert config.get("grove", "puppy_name") == "fixed-by-another-process"
+        assert config.get("grove", "grove_name") == "fixed-by-another-process"
         assert not glob.glob(f"{cfg_path}.corrupted-*")
         assert cfg_path.exists()
 
@@ -304,14 +304,14 @@ class TestAtomicWriteAndLocking:
         assert cp_config.get_value("active_theme") == "dracula"
 
     def test_write_failure_never_touches_the_original_file(self, cfg_path):
-        cfg_path.write_text("[grove]\npuppy_name = leoncito\n")
+        cfg_path.write_text("[grove]\ngrove_name = leoncito\n")
 
         with patch("os.fsync", side_effect=OSError("disk full")):
             with pytest.raises(OSError):
                 cp_config.set_config_value("active_theme", "dracula")
 
         # Original content must be intact -- no partial/truncated write.
-        assert cfg_path.read_text() == "[grove]\npuppy_name = leoncito\n"
+        assert cfg_path.read_text() == "[grove]\ngrove_name = leoncito\n"
         # And no stray temp files left behind in the config directory.
         leftovers = [
             f for f in os.listdir(cfg_path.parent) if f.startswith(".grove.cfg-")
@@ -321,7 +321,7 @@ class TestAtomicWriteAndLocking:
     def test_concurrent_mutations_do_not_lose_updates(self, cfg_path):
         """Two threads racing set_config_value must not stomp each other --
         this is what the shared cross-process lock in mutate_config buys us."""
-        cfg_path.write_text("[grove]\npuppy_name = leoncito\n")
+        cfg_path.write_text("[grove]\ngrove_name = leoncito\n")
 
         def _writer(key, value):
             cp_config.set_config_value(key, value)
@@ -340,7 +340,7 @@ class TestAtomicWriteAndLocking:
 
     def test_reset_value_skips_write_when_key_absent(self, cfg_path):
         """mutate_config's False-return short-circuit must avoid a no-op write."""
-        cfg_path.write_text("[grove]\npuppy_name = leoncito\n")
+        cfg_path.write_text("[grove]\ngrove_name = leoncito\n")
         original_mtime_ns = os.stat(cfg_path).st_mtime_ns
         time.sleep(0.01)
 
@@ -349,7 +349,7 @@ class TestAtomicWriteAndLocking:
         assert os.stat(cfg_path).st_mtime_ns == original_mtime_ns
 
     def test_lock_timeout_raises_rather_than_hanging_forever(self, cfg_path):
-        cfg_path.write_text("[grove]\npuppy_name = leoncito\n")
+        cfg_path.write_text("[grove]\ngrove_name = leoncito\n")
 
         with patch.object(config_file, "_LOCK_TIMEOUT_SECONDS", 0.2):
             with config_file._config_lock(str(cfg_path)):

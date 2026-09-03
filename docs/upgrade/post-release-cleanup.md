@@ -4,7 +4,7 @@ Status snapshot after the Phase D.1 dead-code sweep. Everything that was
 unambiguously dead has already been deleted. What remains needs an owner
 decision or manual verification.
 
-## (a) DONE — swept after `code-grove-core-plugins` 0.0.8 shipped to PyPI
+## (a) DONE — swept after `code-puppy-core-plugins` 0.0.8 shipped to PyPI
 
 Verified first that the published 0.0.8 wheel imports none of these
 (runtime code only touches `ClaudeCacheAsyncClient` and
@@ -20,7 +20,7 @@ mocks need updating in the plugins repo, but they do not affect runtime.
 | `CACHE_TTL_1H` constant | deleted |
 | `allow_legacy` kwarg on `load_session` | deleted |
 | `WRITE_LEGACY_PICKLE` flag + dual-write branch | flipped off and deleted (ACP plugin reads JSON since 0.0.7) |
-| Temporary `[tool.uv.sources]` git pin | deleted; dependency floor is now `code-grove-core-plugins>=0.0.8` from PyPI |
+| Temporary `[tool.uv.sources]` git pin | deleted; dependency floor is now `code-puppy-core-plugins>=0.0.8` from PyPI |
 
 ## (b) Deferred — needs an owner decision (potential public plugin API)
 
@@ -48,7 +48,7 @@ plugin surface:
 
 ## (c) Release-ordering checklist — DONE
 
-`code-grove-core-plugins` 0.0.8 is on PyPI; core depends on `>=0.0.8`,
+`code-puppy-core-plugins` 0.0.8 is on PyPI; core depends on `>=0.0.8`,
 the git-source pin is gone, the lockfile resolves from PyPI, and the
 section (a) sweep is complete.
 

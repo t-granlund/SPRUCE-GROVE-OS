@@ -18,7 +18,7 @@ def _get_distribution_version(
 
 def get_core_plugins_version() -> str | None:
     """Return the valid installed official core-plugin bundle version."""
-    detected_version = _get_distribution_version("code-grove-core-plugins")
+    detected_version = _get_distribution_version("code-puppy-core-plugins")
     if not isinstance(detected_version, str):
         return None
 
@@ -33,5 +33,10 @@ def get_core_plugins_version() -> str | None:
     return normalized_version
 
 
-# Biscuit was here! 🐶
+# Planted in the grove. -Cedar
 __version__ = _get_distribution_version("spruce-grove", "0.0.0-dev")
+
+from spruce_grove._spruce_grove_compat import install as _install_legacy_shim
+
+_install_legacy_shim()
+del _install_legacy_shim

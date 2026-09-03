@@ -812,7 +812,7 @@
 [08/20/2026, 18:36:22] 283:    <div class="kv"><b>config self-heal</b><span>forces itself out of disabled_plugins if anything pa[08/20/2026, 18:36:22] rks it there</span></div>`},
 [08/20/2026, 18:36:22] 284:  'e2e-trust': {k:'Gate', t:'Trust store', b:`<p>Every edit to the plugin changes its content hash; c[08/20/2026, 18:36:22] ode-grove refuses to load it until re-trusted. The gate stores SHA-256 over every plugin file in
 [08/20/2026, 18:36:22] <code>trusted_plugins.json</code>. (Last refresh: afte... [truncated]
-[08/20/2026, 18:36:22] 289:  'f-guide': {k:'Feature · fork-only', t:'Deep field-guide introspection', b:`<p>The guide scans the [08/20/2026, 18:36:22] installed code-grove-core-plugins package and the user plugin tier — not just the repo — with tier badges[08/20/2026, 18:36:22] ,
+[08/20/2026, 18:36:22] 289:  'f-guide': {k:'Feature · fork-only', t:'Deep field-guide introspection', b:`<p>The guide scans the [08/20/2026, 18:36:22] installed code-puppy-core-plugins package and the user plugin tier — not just the repo — with tier badges[08/20/2026, 18:36:22] ,
 [08/20/2026, 18:36:22] hook extraction, and an SDLC lifecycle map (... [truncated]
 [08/20/2026, 18:36:22] 297:    <span class="commit"><b>e45d7700</b>feat(field-guide): core-plugins + user scan</span>
 [08/20/2026, 18:36:22] 366:const KIND={p:('plugin'),a:('agent'),t:('tool'),s:('skill')};
@@ -3828,7 +3828,7 @@
 [08/20/2026, 18:50:33]
 [08/20/2026, 18:50:33] -- Logfire observability --
 [08/20/2026, 18:50:33] ============================================
-[08/20/2026, 18:50:33] f0c83031 Require code-grove-core-plugins >=0.0.12 for the Logfire OAuth plugin
+[08/20/2026, 18:50:33] f0c83031 Require code-puppy-core-plugins >=0.0.12 for the Logfire OAuth plugin
 [08/20/2026, 18:50:33] --- top-level contents ---
 [08/20/2026, 18:50:33] total 70632
 [08/20/2026, 18:50:33] drwxr-xr-x  93 tygranlund  staff     2976 Aug 19 09:54 .
@@ -3869,7 +3869,7 @@
 [08/20/2026, 18:50:33] -- Entry-point plugins / core-plugins --
 [08/20/2026, 18:50:33]
 [08/20/2026, 18:50:33] --- git status (if repo) ---
-[08/20/2026, 18:50:33] f0c83031 Require code-grove-core-plugins >=0.0.12 for the Logfire OAuth plugin
+[08/20/2026, 18:50:33] f0c83031 Require code-puppy-core-plugins >=0.0.12 for the Logfire OAuth plugin
 [08/20/2026, 18:50:33]  M SESSION_STATE.md
 [08/20/2026, 18:50:33]  M SUBMISSION_PACKAGE.md
 [08/20/2026, 18:50:33]  M compose_budget_email.applescript

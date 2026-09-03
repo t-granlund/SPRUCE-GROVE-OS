@@ -1248,9 +1248,9 @@ async def run_shell_command(
         # internally, so repeated destructive commands queue instead of vanishing.
 
         # Get grove name for personalized messages
-        from spruce_grove.config import get_puppy_name
+        from spruce_grove.config import get_grove_name
 
-        puppy_name = get_puppy_name().title()
+        grove_name = get_grove_name().title()
 
         # Build panel content
         panel_content = Text()
@@ -1270,7 +1270,7 @@ async def run_shell_command(
             content=panel_content,
             preview=None,
             border_style="dim white",
-            puppy_name=puppy_name,
+            grove_name=grove_name,
         )
 
         if not confirmed:

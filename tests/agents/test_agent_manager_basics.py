@@ -312,7 +312,7 @@ class TestAgentManagerBasics:
         """Test fallback to spruce-grove agent when requested agent not found."""
 
         # Setup registry with only spruce-grove
-        class CodePuppyAgent(MockAgent):
+        class SpruceGroveAgent(MockAgent):
             def __init__(self):
                 super().__init__()
                 self._name = "spruce-grove"
@@ -320,7 +320,7 @@ class TestAgentManagerBasics:
         mock_iter_modules.return_value = [("spruce_grove.agents", "spruce_grove", True)]
 
         mock_module = MagicMock()
-        mock_module.CodePuppyAgent = CodePuppyAgent
+        mock_module.SpruceGroveAgent = SpruceGroveAgent
 
         def mock_import_side_effect(module_name):
             if "spruce_grove" in module_name:

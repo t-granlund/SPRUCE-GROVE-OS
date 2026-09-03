@@ -414,7 +414,7 @@ class TestBundledPalettes:
             _contrast_ratio(color, GREEN_SCREEN["fg"]) >= 4.5 for color in banner_colors
         )
 
-    def test_purple_puppy_muted_text_has_accessible_contrast(self):
+    def test_purple_grove_muted_text_has_accessible_contrast(self):
         """ANSI bright black is muted TUI text and must remain readable."""
         assert _contrast_ratio(PURPLE_PUPPY["bg"], PURPLE_PUPPY["ansi"][8]) >= 4.5
 

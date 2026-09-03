@@ -565,14 +565,14 @@ def _extract_response_text(result: Any) -> str:
 
 def _should_prepend_system_prompt(agent: Any, prompt: str) -> str:
     """Prepend system prompt to user prompt on the first turn (claude-code etc)."""
-    from spruce_grove.agents._builder import load_puppy_rules
+    from spruce_grove.agents._builder import load_grove_rules
     from spruce_grove.model_utils import prepare_prompt_for_model
 
     if agent._message_history:
         return prompt
 
     system_prompt = agent.get_full_system_prompt()
-    rules = load_puppy_rules()
+    rules = load_grove_rules()
     if rules:
         system_prompt += f"\n{rules}"
 

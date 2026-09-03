@@ -1,7 +1,7 @@
 """Tests for the ACP (ACP native agent) plugin, built on the official SDK.
 
 The plugin implements the ``acp`` SDK's ``Agent`` interface, so these tests
-drive ``CodePuppyAgent`` directly and assert on the SDK model objects it emits
+drive ``SpruceGroveAgent`` directly and assert on the SDK model objects it emits
 through a fake ``AgentSideConnection``. No real stdio is bound.
 
 Coverage:
@@ -43,7 +43,7 @@ from code_puppy_core_plugins.acp import (
     permissions,
     state,
 )
-from code_puppy_core_plugins.acp.agent import CodePuppyAgent
+from code_puppy_core_plugins.acp.agent import SpruceGroveAgent
 
 
 # --------------------------------------------------------------------------- #
@@ -127,7 +127,7 @@ def _update_types(conn: FakeConnection) -> List[str]:
 
 @pytest_asyncio.fixture
 async def wired_agent(monkeypatch):
-    """A ``CodePuppyAgent`` connected to a fake connection, with cleanup.
+    """A ``SpruceGroveAgent`` connected to a fake connection, with cleanup.
 
     Async so ``on_connect`` runs *inside* the test's event loop — exactly like
     production (the SDK calls it from within ``run_agent``), so
@@ -141,7 +141,7 @@ async def wired_agent(monkeypatch):
         lambda name: FakeAgent(stream=True),
     )
     conn = FakeConnection()
-    agent = CodePuppyAgent()
+    agent = SpruceGroveAgent()
     agent.on_connect(conn)
     yield agent, conn
     permissions.uninstall()
@@ -314,7 +314,7 @@ async def test_prompt_absorbs_history_for_memory_and_persistence(monkeypatch):
         "spruce_grove.agents.agent_manager.load_agent", lambda name: MemAgent()
     )
     conn = FakeConnection()
-    agent = CodePuppyAgent()
+    agent = SpruceGroveAgent()
     agent.on_connect(conn)
     try:
         new = await agent.new_session(cwd="/tmp")
@@ -393,7 +393,7 @@ async def test_prompt_final_fallback_when_no_stream(monkeypatch):
         lambda name: FakeAgent(stream=False),
     )
     conn = FakeConnection()
-    agent = CodePuppyAgent()
+    agent = SpruceGroveAgent()
     agent.on_connect(conn)
     try:
         new = await agent.new_session(cwd="/tmp")
@@ -448,7 +448,7 @@ async def test_cancel_stops_run(monkeypatch):
         "spruce_grove.agents.agent_manager.load_agent", lambda name: SlowAgent()
     )
     conn = FakeConnection()
-    agent = CodePuppyAgent()
+    agent = SpruceGroveAgent()
     agent.on_connect(conn)
     try:
         new = await agent.new_session(cwd="/tmp")
@@ -501,7 +501,7 @@ async def test_close_session_waits_for_in_flight_run_before_purging(monkeypatch)
         "spruce_grove.agents.agent_manager.load_agent", lambda name: SlowAgent()
     )
     conn = FakeConnection()
-    agent = CodePuppyAgent()
+    agent = SpruceGroveAgent()
     agent.on_connect(conn)
     try:
         new = await agent.new_session(cwd="/tmp")

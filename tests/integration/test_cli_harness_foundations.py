@@ -17,7 +17,7 @@ def test_harness_bootstrap_write_config(
     assert cfg_path.exists(), f"Config not written to {cfg_path}"
     cfg_text = cfg_path.read_text(encoding="utf-8")
     assert "IntegrationPup" in cfg_text
-    assert "CodePuppyTester" in cfg_text
+    assert "SpruceGroveTester" in cfg_text
     assert "lilac-zai-org-glm-5.2" in cfg_text
     cli_harness.cleanup(result)
 

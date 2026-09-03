@@ -450,33 +450,33 @@ class TestNullBackendNoSilentLoss:
     """
 
     def test_set_persists_to_fallback_not_the_void(self, null_keyring, tmp_fallback):
-        secret_store.set_secret("puppy_token", "REAL-TOKEN")
+        secret_store.set_secret("grove_token", "REAL-TOKEN")
         # The null backend's set_password is a no-op; the secret must have
         # landed in the fallback file instead of vanishing.
         assert tmp_fallback.exists()
-        assert _slice(tmp_fallback)["puppy_token"] == "REAL-TOKEN"
+        assert _slice(tmp_fallback)["grove_token"] == "REAL-TOKEN"
 
     def test_set_then_get_roundtrip(self, null_keyring, tmp_fallback):
-        secret_store.set_secret("puppy_token", "REAL-TOKEN")
-        assert secret_store.get_secret("puppy_token") == "REAL-TOKEN"
+        secret_store.set_secret("grove_token", "REAL-TOKEN")
+        assert secret_store.get_secret("grove_token") == "REAL-TOKEN"
 
     def test_keyring_set_not_attempted_when_unavailable(
         self, null_keyring, tmp_fallback
     ):
         # The availability gate must short-circuit before any keyring write,
         # so the null backend's set_password is never even called.
-        secret_store.set_secret("puppy_token", "REAL-TOKEN")
+        secret_store.set_secret("grove_token", "REAL-TOKEN")
         null_keyring.set_password.assert_not_called()
 
     def test_emits_fallback_active_notice(self, null_keyring, tmp_fallback, notices):
-        secret_store.set_secret("puppy_token", "REAL-TOKEN")
+        secret_store.set_secret("grove_token", "REAL-TOKEN")
         assert any("fallback" in m for m in notices)
 
     def test_does_not_scrub_the_fresh_fallback_write(self, null_keyring, tmp_fallback):
         # Regression: the old code took the keyring-success path and scrubbed
         # the fallback -- guaranteeing loss. Ensure the value survives.
-        secret_store.set_secret("puppy_token", "REAL-TOKEN")
-        assert _slice(tmp_fallback).get("puppy_token") == "REAL-TOKEN"
+        secret_store.set_secret("grove_token", "REAL-TOKEN")
+        assert _slice(tmp_fallback).get("grove_token") == "REAL-TOKEN"
 
 
 class TestFailBackendFallsBack:
@@ -487,9 +487,9 @@ class TestFailBackendFallsBack:
     """
 
     def test_set_persists_to_fallback(self, missing_keyring, tmp_fallback):
-        secret_store.set_secret("puppy_token", "REAL-TOKEN")
-        assert _slice(tmp_fallback)["puppy_token"] == "REAL-TOKEN"
-        assert secret_store.get_secret("puppy_token") == "REAL-TOKEN"
+        secret_store.set_secret("grove_token", "REAL-TOKEN")
+        assert _slice(tmp_fallback)["grove_token"] == "REAL-TOKEN"
+        assert secret_store.get_secret("grove_token") == "REAL-TOKEN"
 
 
 # ---------------------------------------------------------------------------

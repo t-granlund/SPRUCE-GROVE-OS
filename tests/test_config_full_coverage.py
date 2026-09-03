@@ -777,10 +777,10 @@ class TestAgentPinnedModels:
 # ---------------------------------------------------------------------------
 # Cedar token
 # ---------------------------------------------------------------------------
-class TestPuppyToken:
+class TestCedarToken:
     def test_get_set(self):
-        cp_config.set_puppy_token("tok123")
-        assert cp_config.get_puppy_token() == "tok123"
+        cp_config.set_grove_token("tok123")
+        assert cp_config.get_grove_token() == "tok123"
 
 
 # ---------------------------------------------------------------------------
@@ -1000,7 +1000,7 @@ class TestEnsureConfigExists:
         monkeypatch.setattr("builtins.input", lambda _: next(inputs))
 
         config = cp_config.ensure_config_exists()
-        assert config["grove"]["puppy_name"] == "TestPup"
+        assert config["grove"]["grove_name"] == "TestPup"
         assert config["grove"]["owner_name"] == "TestOwner"
         assert os.path.exists(cfg_file)
 
@@ -1008,7 +1008,7 @@ class TestEnsureConfigExists:
         cfg_dir = str(tmp_path)
         cfg_file = os.path.join(cfg_dir, "grove.cfg")
         cp = configparser.ConfigParser()
-        cp["grove"] = {"puppy_name": "Buddy", "owner_name": "Alice"}
+        cp["grove"] = {"grove_name": "Buddy", "owner_name": "Alice"}
         with open(cfg_file, "w") as f:
             cp.write(f)
 
@@ -1019,7 +1019,7 @@ class TestEnsureConfigExists:
         monkeypatch.setattr(cp_config, "STATE_DIR", str(tmp_path / "state"))
 
         config = cp_config.ensure_config_exists()
-        assert config["grove"]["puppy_name"] == "Buddy"
+        assert config["grove"]["grove_name"] == "Buddy"
 
     def test_seeds_port_base(self, monkeypatch, tmp_path):
         """Fresh grove.cfg should include port_base so users discover the knob."""

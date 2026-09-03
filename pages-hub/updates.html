@@ -149,14 +149,14 @@
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>Plugins can now register themselves through Python package entry points, not just by living in a directory. The loader discovers installed distributions advertising the <code>spruce_grove.plugins</code> group at import time.</dd>
         <dt class="q-do">What it does</dt><dd>Lets plugin authors ship their work as a normal <code>pip</code>-installable package; the moment the package lands in the environment, it appears in spruce-grove alongside user-dir plugins without any config editing.</dd>
-        <dt class="q-why">Why it matters</dt><dd>It turns a fork-and-pray ecosystem into a real distribution model. Upstream used this to extract the built-in plugin suite into <code>code-grove-core-plugins</code> on PyPI &mdash; and it means any team can ship an internal plugin bundle the same way.</dd>
+        <dt class="q-why">Why it matters</dt><dd>It turns a fork-and-pray ecosystem into a real distribution model. Upstream used this to extract the built-in plugin suite into <code>code-puppy-core-plugins</code> on PyPI &mdash; and it means any team can ship an internal plugin bundle the same way.</dd>
       </dl>
     </article>
 
     <article class="deep">
       <div class="head"><h3>Installed core-plugin version surfaced at startup</h3><span class="meta"><span class="hash">0dd7f79</span> · 2026-08-15 · feat</span></div>
       <dl class="qa">
-        <dt class="q-what">What it is</dt><dd>The CLI now prints the version of the installed <code>code-grove-core-plugins</code> package on startup, alongside the app version.</dd>
+        <dt class="q-what">What it is</dt><dd>The CLI now prints the version of the installed <code>code-puppy-core-plugins</code> package on startup, alongside the app version.</dd>
         <dt class="q-do">What it does</dt><dd>Shows two independent numbers in the startup banner: the app version and the version of the companion plugins package, since they rev separately after the plugin-extraction refactor.</dd>
         <dt class="q-why">Why it matters</dt><dd>Eliminates the whole class of "why does that plugin behave differently for you" confusion. When the core repo and the plugin package drift, the drift is now visible in the first line of output instead of manifesting as a phantom bug.</dd>
       </dl>

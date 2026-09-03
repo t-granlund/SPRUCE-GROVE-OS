@@ -193,7 +193,7 @@ async def _invoke_with_dead_pin(
                 return_value="global-default-model",
             )
         )
-        p(patch("spruce_grove.agents._builder.load_puppy_rules", return_value=None))
+        p(patch("spruce_grove.agents._builder.load_grove_rules", return_value=None))
         p(patch("spruce_grove.callbacks.on_load_prompt", return_value=[]))
         mock_prepare = p(patch("spruce_grove.model_utils.prepare_prompt_for_model"))
         mock_prepare.return_value = MagicMock(

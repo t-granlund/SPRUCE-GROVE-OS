@@ -270,7 +270,7 @@ def test_overhead_breakdown_carves_kennel_memory_out_of_system_prompt():
     with (
         patch.object(mod, "_resolved_system_prompt", return_value=resolved_prompt),
         patch.object(mod, "_kennel_memory_block", return_value=kennel_block),
-        patch("spruce_grove.agents._builder.load_puppy_rules", return_value=""),
+        patch("spruce_grove.agents._builder.load_grove_rules", return_value=""),
         patch.object(mod, "_agent_tools", return_value=None),
         patch.object(mod, "_live_mcp_servers_for", return_value=None),
     ):
@@ -292,7 +292,7 @@ def test_overhead_breakdown_kennel_zero_when_block_empty():
     with (
         patch.object(mod, "_resolved_system_prompt", return_value=resolved_prompt),
         patch.object(mod, "_kennel_memory_block", return_value=""),
-        patch("spruce_grove.agents._builder.load_puppy_rules", return_value=""),
+        patch("spruce_grove.agents._builder.load_grove_rules", return_value=""),
         patch.object(mod, "_agent_tools", return_value=None),
         patch.object(mod, "_live_mcp_servers_for", return_value=None),
     ):
@@ -318,7 +318,7 @@ def test_overhead_breakdown_kennel_clamps_when_block_larger_than_resolved():
     with (
         patch.object(mod, "_resolved_system_prompt", return_value=resolved_prompt),
         patch.object(mod, "_kennel_memory_block", return_value=kennel_block),
-        patch("spruce_grove.agents._builder.load_puppy_rules", return_value=""),
+        patch("spruce_grove.agents._builder.load_grove_rules", return_value=""),
         patch.object(mod, "_agent_tools", return_value=None),
         patch.object(mod, "_live_mcp_servers_for", return_value=None),
     ):

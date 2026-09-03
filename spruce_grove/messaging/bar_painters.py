@@ -294,7 +294,7 @@ class BarPainterMixin:
         """Save cursor, paint the status row (dim — chrome), restore.
 
         The row is ``status_prefix + status``: the prefix is the spinner
-        slot (animated by the puppy_spinner plugin), the status is the
+        slot (animated by the grove_spinner plugin), the status is the
         token/context info — two writers, one row, zero stomping. While
         both slots are empty the row isn't reserved at all, so there is
         nothing to paint.

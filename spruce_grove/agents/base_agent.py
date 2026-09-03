@@ -77,7 +77,7 @@ class BaseAgent(ABC):
         # is reset at the start of every run (see resolve_run_model_selection),
         # so it never leaks across turns.
         self._auto_model_override: Optional[str] = None
-        self._puppy_rules: Optional[str] = None
+        self._grove_rules: Optional[str] = None
         self._mcp_servers: List[Any] = []
         self.cur_model: Optional[pydantic_ai.models.Model] = None
         self.pydantic_agent: Any = None

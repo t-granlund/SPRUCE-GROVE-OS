@@ -336,30 +336,30 @@ def test_set_completer_excludes_model_key(monkeypatch):
     assert completions[0].text == "api_key = test_value"
 
 
-def test_set_completer_excludes_puppy_token(monkeypatch):
-    # Ensure 'puppy_token' is a config key but SetCompleter doesn't offer it
+def test_set_completer_excludes_grove_token(monkeypatch):
+    # Ensure 'grove_token' is a config key but SetCompleter doesn't offer it
     monkeypatch.setattr(
         "spruce_grove.command_line.completers.get_config_keys",
-        lambda: ["puppy_token", "user_name", "temp_dir"],
+        lambda: ["grove_token", "user_name", "temp_dir"],
     )
     monkeypatch.setattr(
         "spruce_grove.command_line.completers.get_value",
-        lambda key: "sensitive_token_value" if key == "puppy_token" else "normal_value",
+        lambda key: "sensitive_token_value" if key == "grove_token" else "normal_value",
     )
     completer = SetCompleter()
 
-    # Test with full "puppy_token" typed
-    doc = Document(text="/set puppy_token", cursor_position=len("/set puppy_token"))
+    # Test with full "grove_token" typed
+    doc = Document(text="/set grove_token", cursor_position=len("/set grove_token"))
     completions = list(completer.get_completions(doc, None))
     assert completions == [], (
-        "SetCompleter should not complete for 'puppy_token' key directly"
+        "SetCompleter should not complete for 'grove_token' key directly"
     )
 
-    # Test with partial "grove" that would match "puppy_token"
+    # Test with partial "grove" that would match "grove_token"
     doc = Document(text="/set grove", cursor_position=len("/set grove"))
     completions = list(completer.get_completions(doc, None))
     assert completions == [], (
-        "SetCompleter should not complete for 'puppy_token' key even partially"
+        "SetCompleter should not complete for 'grove_token' key even partially"
     )
 
     # Ensure other keys are still completed

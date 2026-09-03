@@ -52,11 +52,11 @@ class TestPlanningAgent:
         assert "EXECUTION PLAN" in prompt
 
 
-class TestCodePuppyAgentTools:
+class TestSpruceGroveAgentTools:
     def test_get_available_tools(self):
-        from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
+        from spruce_grove.agents.agent_spruce_grove import SpruceGroveAgent
 
-        agent = CodePuppyAgent()
+        agent = SpruceGroveAgent()
         tools = agent.get_available_tools()
         assert "create_file" in tools
         assert "edit" in tools
@@ -64,9 +64,9 @@ class TestCodePuppyAgentTools:
         assert "invoke_agent" in tools
 
     def test_default_spruce_grove_does_not_get_model_override_tools(self):
-        from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
+        from spruce_grove.agents.agent_spruce_grove import SpruceGroveAgent
 
-        agent = CodePuppyAgent()
+        agent = SpruceGroveAgent()
         tools = agent.get_available_tools()
         prompt = agent.get_system_prompt()
 
@@ -81,7 +81,7 @@ class TestCodePuppyAgentTools:
         from spruce_grove.agents import agent_spruce_grove
 
         monkeypatch.setattr(agent_spruce_grove, "get_agency_level", lambda: "extreme")
-        prompt = agent_spruce_grove.CodePuppyAgent().get_system_prompt()
+        prompt = agent_spruce_grove.SpruceGroveAgent().get_system_prompt()
 
         assert "do not stop and force the user to reprompt you" in prompt
         assert "wait 60 seconds and check its progress" in prompt
@@ -148,7 +148,7 @@ class TestInitVersionFallback:
         ) as mock_version:
             assert spruce_grove.get_core_plugins_version() == metadata_version.strip()
 
-        mock_version.assert_called_once_with("code-grove-core-plugins")
+        mock_version.assert_called_once_with("code-puppy-core-plugins")
 
     @pytest.mark.parametrize(
         "metadata_version",
@@ -185,7 +185,7 @@ class TestInitVersionFallback:
 
         with patch(
             "importlib.metadata.version",
-            side_effect=PackageNotFoundError("code-grove-core-plugins"),
+            side_effect=PackageNotFoundError("code-puppy-core-plugins"),
         ):
             assert spruce_grove.get_core_plugins_version() is None
 

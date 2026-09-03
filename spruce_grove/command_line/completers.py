@@ -18,7 +18,7 @@ from spruce_grove.command_line.completion_cache import TTLCache
 from spruce_grove.command_line.utils import list_directory
 from spruce_grove.config import (
     get_config_keys,
-    get_puppy_name,
+    get_grove_name,
     get_value,
 )
 
@@ -136,7 +136,7 @@ class SetCompleter(Completer):
             )
 
         for key in config_keys:
-            if key in {"model", "puppy_token"} | MODEL_SETTINGS_ONLY_KEYS:
+            if key in {"model", "grove_token"} | MODEL_SETTINGS_ONLY_KEYS:
                 continue
             if key.startswith(text_after_trigger):
                 prev_value = get_value(key)
@@ -395,7 +395,7 @@ def get_prompt_with_active_model(base: str = ">>> ") -> list:
     from spruce_grove.agents.agent_manager import get_current_agent
     from spruce_grove.command_line.model_picker_completion import get_active_model
 
-    grove = get_puppy_name()
+    grove = get_grove_name()
     # When nothing is configured this is None - surface that explicitly as
     # [None] so the user immediately sees they need to /add_model.
     global_model = get_active_model()

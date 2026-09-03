@@ -22,8 +22,8 @@ import pexpect
 import pytest
 
 CONFIG_TEMPLATE: Final[str] = """[grove]
-puppy_name = IntegrationPup
-owner_name = CodePuppyTester
+grove_name = IntegrationPup
+owner_name = SpruceGroveTester
 auto_save_session = true
 max_saved_sessions = 5
 model = lilac-zai-org-glm-5.2

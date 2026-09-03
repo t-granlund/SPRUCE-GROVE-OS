@@ -372,10 +372,10 @@ class TestStatusDisplay:
         assert len(set(messages)) > 1
 
         # Should be grove-themed
-        puppy_terms = ["grove", "paws", "tail", "barking", "panting"]
+        grove_terms = ["grove", "paws", "tail", "barking", "panting"]
         combined_text = " ".join(messages).lower()
-        has_puppy_theme = any(term in combined_text for term in puppy_terms)
-        assert has_puppy_theme
+        has_grove_theme = any(term in combined_text for term in grove_terms)
+        assert has_grove_theme
 
     def test_concurrent_rate_updates(self, status_display):
         """Test handling concurrent rate updates."""

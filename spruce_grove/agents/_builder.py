@@ -137,7 +137,7 @@ def _truncate_agents_md(content: str, source: str, max_chars: int) -> str:
     return content[:max_chars] + notice
 
 
-def load_puppy_rules() -> Optional[str]:
+def load_grove_rules() -> Optional[str]:
     """Load AGENT(S).md from global config dir and/or the current project dir.
 
     Global rules (``~/.spruce_grove/AGENTS.md``) come first; project-local rules
@@ -585,9 +585,9 @@ def _assemble_instructions(agent: Any, resolved_model_name: str) -> PreparedProm
     from spruce_grove.model_utils import prepare_prompt_for_model
 
     instructions = agent.get_full_system_prompt()
-    puppy_rules = load_puppy_rules()
-    if puppy_rules:
-        instructions += f"\n{puppy_rules}"
+    grove_rules = load_grove_rules()
+    if grove_rules:
+        instructions += f"\n{grove_rules}"
 
     if _is_gpt_5_6_family(resolved_model_name):
         if _agent_exposes_tool(agent, "invoke_agent"):
@@ -610,7 +610,7 @@ def build_pydantic_agent(
     Replaces the old ``reload_code_generation_agent`` + ``_create_agent_with_output_type``
     pair. Side effects on ``agent``:
 
-    - ``agent._puppy_rules = None`` (invalidates any cached rules)
+    - ``agent._grove_rules = None`` (invalidates any cached rules)
     - ``agent.cur_model``             ← resolved pydantic-ai model
     - ``agent._last_model_name``      ← resolved model name
     - ``agent.pydantic_agent``        ← the final (possibly plugin-wrapped) agent
@@ -627,7 +627,7 @@ def build_pydantic_agent(
     """
     from spruce_grove.tools import register_tools_for_agent
 
-    agent._puppy_rules = None
+    agent._grove_rules = None
     message_group = message_group or str(uuid.uuid4())
 
     models_config = ModelFactory.load_config()

@@ -106,18 +106,18 @@ def test_web_retriever():
 
 def test_spruce_grove_prompt_omits_web_retriever_guidance():
     """Keep web-retriever routing policy out of Spruce Grove's prompt."""
-    from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
+    from spruce_grove.agents.agent_spruce_grove import SpruceGroveAgent
 
-    prompt = CodePuppyAgent().get_system_prompt()
+    prompt = SpruceGroveAgent().get_system_prompt()
     assert "web-retriever" not in prompt
     assert "simple one-shot HTTP request" not in prompt
 
 
 def test_spruce_grove_prompt_requires_autonomous_task_completion():
     """Routine next steps must not be bounced back to the user for approval."""
-    from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
+    from spruce_grove.agents.agent_spruce_grove import SpruceGroveAgent
 
-    prompt = " ".join(CodePuppyAgent().get_system_prompt().split())
+    prompt = " ".join(SpruceGroveAgent().get_system_prompt().split())
 
     assert "Complete the requested task autonomously" in prompt
     assert "Do not ask for routine permission" in prompt
@@ -129,7 +129,7 @@ def test_spruce_grove_prompt_reflects_low_agency(monkeypatch):
     from spruce_grove.agents import agent_spruce_grove
 
     monkeypatch.setattr(agent_spruce_grove, "get_agency_level", lambda: "low")
-    prompt = " ".join(agent_spruce_grove.CodePuppyAgent().get_system_prompt().split())
+    prompt = " ".join(agent_spruce_grove.SpruceGroveAgent().get_system_prompt().split())
 
     assert "LOW agency" in prompt
     assert "ask the user before continuing" in prompt
@@ -142,7 +142,7 @@ def test_spruce_grove_prompt_reflects_medium_agency(monkeypatch):
     from spruce_grove.agents import agent_spruce_grove
 
     monkeypatch.setattr(agent_spruce_grove, "get_agency_level", lambda: "medium")
-    prompt = " ".join(agent_spruce_grove.CodePuppyAgent().get_system_prompt().split())
+    prompt = " ".join(agent_spruce_grove.SpruceGroveAgent().get_system_prompt().split())
 
     assert "MEDIUM agency" in prompt
     assert "check in at major milestones" in prompt
@@ -154,7 +154,7 @@ def test_spruce_grove_prompt_reflects_high_agency(monkeypatch):
     from spruce_grove.agents import agent_spruce_grove
 
     monkeypatch.setattr(agent_spruce_grove, "get_agency_level", lambda: "high")
-    prompt = " ".join(agent_spruce_grove.CodePuppyAgent().get_system_prompt().split())
+    prompt = " ".join(agent_spruce_grove.SpruceGroveAgent().get_system_prompt().split())
 
     assert "Complete the requested task autonomously" in prompt
     assert "Continue autonomously unless user input is definitively required" in prompt
@@ -175,7 +175,7 @@ def test_planning_agent_routes_scraping_but_allows_direct_curl():
     [
         pytest.param("spruce_grove.agents.agent_helios", "HeliosAgent", id="helios"),
         pytest.param(
-            "spruce_grove.agents.agent_spruce_grove", "CodePuppyAgent", id="spruce_grove"
+            "spruce_grove.agents.agent_spruce_grove", "SpruceGroveAgent", id="spruce_grove"
         ),
     ],
 )
@@ -207,9 +207,9 @@ def test_planning_agent():
 
 
 def test_spruce_grove_prompt_allows_callback_additions():
-    from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
+    from spruce_grove.agents.agent_spruce_grove import SpruceGroveAgent
 
-    agent = CodePuppyAgent()
+    agent = SpruceGroveAgent()
     # ``load_prompt`` fragments now live in get_full_system_prompt (BaseAgent),
     # not in the authored get_system_prompt.
     with patch("spruce_grove.callbacks.on_load_prompt", return_value=["extra"]):
@@ -224,9 +224,9 @@ def test_spruce_grove_authored_prompt_excludes_runtime_additions():
     runtime-only metadata (kennel memory, live timestamps) and the per-instance
     identity ID must stay out of it.
     """
-    from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
+    from spruce_grove.agents.agent_spruce_grove import SpruceGroveAgent
 
-    agent = CodePuppyAgent()
+    agent = SpruceGroveAgent()
     with patch("spruce_grove.callbacks.on_load_prompt", return_value=["SECRET-RUNTIME"]):
         authored = agent.get_system_prompt()
     assert "SECRET-RUNTIME" not in authored
@@ -594,7 +594,7 @@ def test_clone_class_agent_does_not_bake_runtime_metadata(tmp_path):
     timestamps/CWD) and the per-instance identity ID into the static JSON.
     """
     import spruce_grove.agents.agent_manager as am
-    from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
+    from spruce_grove.agents.agent_spruce_grove import SpruceGroveAgent
 
     captured = {}
 
@@ -604,7 +604,7 @@ def test_clone_class_agent_does_not_bake_runtime_metadata(tmp_path):
 
     with (
         patch.object(am, "_discover_agents"),
-        patch.dict(am._AGENT_REGISTRY, {"spruce-grove": CodePuppyAgent}, clear=True),
+        patch.dict(am._AGENT_REGISTRY, {"spruce-grove": SpruceGroveAgent}, clear=True),
         patch(
             "spruce_grove.config.get_user_agents_directory",
             return_value=str(tmp_path),

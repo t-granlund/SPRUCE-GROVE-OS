@@ -51,8 +51,8 @@ from spruce_grove.config import (
     get_owner_name,
     get_pack_agents_enabled,
     get_protected_token_count,
-    get_puppy_name,
-    get_puppy_token,
+    get_grove_name,
+    get_grove_token,
     get_resume_message_count,
     get_retry_main_max_attempts,
     get_retry_main_strategy,
@@ -82,11 +82,11 @@ _IDENTITY = SettingsCategory(
     name="Identity",
     settings=(
         Setting(
-            key="puppy_name",
+            key="grove_name",
             display_name="Cedar Name",
             description="The name of your Spruce Grove agent.",
             type_hint="string",
-            effective_getter=get_puppy_name,
+            effective_getter=get_grove_name,
         ),
         Setting(
             key="owner_name",
@@ -513,11 +513,11 @@ _API_KEYS = SettingsCategory(
     name="API Keys",
     settings=(
         Setting(
-            key="puppy_token",
+            key="grove_token",
             display_name="Cedar Token",
             description="Authentication token for Spruce Grove services.",
             type_hint="string",
-            effective_getter=get_puppy_token,
+            effective_getter=get_grove_token,
             sensitive=True,
         ),
     ),

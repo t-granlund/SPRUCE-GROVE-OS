@@ -1269,8 +1269,8 @@
 [08/24/2026, 11:00:02]  ~ click==8.4.2
 [08/24/2026, 11:00:02]  - spruce-grove==0.0.768 (from file:///Users/tygranlund/spruce_grove)
 [08/24/2026, 11:00:02]  + spruce-grove==0.0.775 (from file:///Users/tygranlund/spruce_grove)
-[08/24/2026, 11:00:02]  - code-grove-core-plugins==0.0.17
-[08/24/2026, 11:00:02]  + code-grove-core-plugins==0.0.18
+[08/24/2026, 11:00:02]  - code-puppy-core-plugins==0.0.17
+[08/24/2026, 11:00:02]  + code-puppy-core-plugins==0.0.18
 [08/24/2026, 11:00:02]  ~ cryptography==50.0.0
 [08/24/2026, 11:00:02]  ~ distro==1.9.0
 [08/24/2026, 11:00:02]  ~ dnspython==2.8.0

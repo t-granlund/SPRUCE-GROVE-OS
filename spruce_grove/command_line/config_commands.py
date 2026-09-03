@@ -42,7 +42,7 @@ def handle_show_command(command: str) -> bool:
         get_effective_temperature,
         get_owner_name,
         get_protected_token_count,
-        get_puppy_name,
+        get_grove_name,
         get_resume_message_count,
         get_temperature,
         get_yolo_mode,
@@ -52,7 +52,7 @@ def handle_show_command(command: str) -> bool:
     )
     from spruce_grove.messaging import emit_info
 
-    puppy_name = get_puppy_name()
+    grove_name = get_grove_name()
     owner_name = get_owner_name()
     model = get_active_model()
     yolo_mode = get_yolo_mode()
@@ -70,7 +70,7 @@ def handle_show_command(command: str) -> bool:
 
     status_msg = f"""[bold magenta]🐶 Cedar Status[/bold magenta]
 
-[bold]puppy_name:[/bold]            [cyan]{puppy_name}[/cyan]
+[bold]grove_name:[/bold]            [cyan]{grove_name}[/cyan]
 [bold]owner_name:[/bold]            [cyan]{owner_name}[/cyan]
 [bold]current_agent:[/bold]         [magenta]{current_agent.display_name}[/magenta]
 [bold]default_agent:[/bold]        [cyan]{default_agent}[/cyan]

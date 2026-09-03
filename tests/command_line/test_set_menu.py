@@ -354,7 +354,7 @@ class TestEntryBuilding:
             entries = _build_entries()
         by_key = {e.setting.key: e for e in entries}
         assert by_key["yolo_mode"].category.name == "Behavior"
-        assert by_key["puppy_name"].category.name == "Identity"
+        assert by_key["grove_name"].category.name == "Identity"
 
     def test_dynamic_keys_land_in_dynamic_category(self):
         with patch(
@@ -458,7 +458,7 @@ class TestRecordResetAndApply:
     def test_apply_and_record_masks_sensitive_value_in_message(self):
         result = PickerResult()
         token_setting = Setting(
-            key="puppy_token",
+            key="grove_token",
             display_name="Cedar Token",
             description="",
             type_hint="string",
@@ -471,7 +471,7 @@ class TestRecordResetAndApply:
             _apply_and_record(result, token_setting, "abcd1234efgh")
         # The recorded *value* stays raw (for downstream reload bookkeeping)
         # but the user-facing message is masked.
-        assert result.changed_settings["puppy_token"] == "abcd1234efgh"
+        assert result.changed_settings["grove_token"] == "abcd1234efgh"
         success_msgs = [
             text for level, text in result.pending_messages if level == "success"
         ]
@@ -546,7 +546,7 @@ class TestHandleSetCommandDispatcher:
             handle_set_command("/set")
         mock_agent.assert_not_called()
 
-    def test_slash_set_puppy_token_masks_value_in_success(self):
+    def test_slash_set_grove_token_masks_value_in_success(self):
         from spruce_grove.command_line.config_commands import handle_set_command
 
         with (
@@ -556,7 +556,7 @@ class TestHandleSetCommandDispatcher:
             patch("spruce_grove.messaging.emit_info"),
         ):
             mock_agent.return_value.reload_code_generation_agent.return_value = None
-            handle_set_command("/set puppy_token abcd1234efgh")
+            handle_set_command("/set grove_token abcd1234efgh")
 
         recorded = [call.args[0] for call in mock_success.call_args_list]
         assert any("abcd...efgh" in m for m in recorded)

@@ -1,6 +1,6 @@
-"""Tests for puppy_spinner customization: catalogue, user file, /spinner.
+"""Tests for grove_spinner customization: catalogue, user file, /spinner.
 
-The animation lifecycle itself is covered by ``test_puppy_spinner.py``;
+The animation lifecycle itself is covered by ``test_grove_spinner.py``;
 this file covers the style layer added around it -- builtin catalogue,
 ``spinners.json`` parsing, persistence, and the ``/spinner`` command.
 """
@@ -12,10 +12,10 @@ import json
 import pytest
 from rich.cells import cell_len
 
-from code_puppy_core_plugins.puppy_spinner import commands as cmds
-from code_puppy_core_plugins.puppy_spinner import picker
-from code_puppy_core_plugins.puppy_spinner import register_callbacks as rc
-from code_puppy_core_plugins.puppy_spinner import spinners as sp
+from code_puppy_core_plugins.grove_spinner import commands as cmds
+from code_puppy_core_plugins.grove_spinner import picker
+from code_puppy_core_plugins.grove_spinner import register_callbacks as rc
+from code_puppy_core_plugins.grove_spinner import spinners as sp
 
 
 @pytest.fixture(autouse=True)
@@ -41,7 +41,7 @@ def _write_user_file(path: str, data) -> None:
 # =========================================================================
 
 
-def test_builtins_include_the_puppy_pack():
+def test_builtins_include_the_grove_pack():
     for name in ("grove", "bone", "zoomies", "paws", "dots"):
         assert name in sp.BUILTIN_SPINNERS
 
@@ -69,7 +69,7 @@ def test_every_builtin_defaults_to_point_two_except_the_classic():
         assert spinner.interval == pytest.approx(expected), spinner.name
 
 
-def test_tick_interval_follows_the_puppy_default():
+def test_tick_interval_follows_the_grove_default():
     """rc sources its fallback tempo from the catalogue, so the grove's
     0.06s default and the tick loop can never disagree.
     """
@@ -108,7 +108,7 @@ def test_aesthetic_drains_to_all_hollow():
 
 
 def test_cli_spinners_pack_has_descriptions():
-    from code_puppy_core_plugins.puppy_spinner.builtin_frames import EXTRA_SPECS
+    from code_puppy_core_plugins.grove_spinner.builtin_frames import EXTRA_SPECS
 
     for name in EXTRA_SPECS:
         assert sp.BUILTIN_SPINNERS[name].description, name
@@ -229,7 +229,7 @@ def test_frameless_entry_for_unknown_name_is_skipped():
     assert "no-such" not in sp.get_catalogue()
 
 
-def test_tick_loop_uses_json_tweak_of_puppy():
+def test_tick_loop_uses_json_tweak_of_grove():
     """A frameless re-speed of the default grove must not route through
     the module constants (source is 'builtin+user', not 'builtin').
     """
@@ -260,7 +260,7 @@ def test_write_template_creates_once():
 # =========================================================================
 
 
-def test_default_active_is_the_puppy():
+def test_default_active_is_the_grove():
     assert sp.get_active_spinner().name == sp.DEFAULT_SPINNER
 
 
@@ -359,7 +359,7 @@ def test_tick_loop_uses_default_module_constants_by_default():
     assert interval == rc._TICK_INTERVAL_S
 
 
-def test_tick_loop_honors_speed_override_on_the_default_puppy():
+def test_tick_loop_honors_speed_override_on_the_default_grove():
     """A custom speed on the stock grove must NOT route through the
     module constants (which would silently drop the override).
     """
@@ -369,7 +369,7 @@ def test_tick_loop_honors_speed_override_on_the_default_puppy():
     assert interval == pytest.approx(0.5)
 
 
-def test_tick_loop_uses_user_override_of_puppy():
+def test_tick_loop_uses_user_override_of_grove():
     _write_user_file(
         sp.USER_SPINNERS_FILE, {"grove": {"frames": ["custom"], "interval": 0.5}}
     )

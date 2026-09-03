@@ -1,4 +1,4 @@
-"""Tests for the puppy_spinner plugin (the resurrected bouncing pup).
+"""Tests for the grove_spinner plugin (the resurrected bouncing pup).
 
 The spinner rides the bottom bar's status-PREFIX slot, refcounted by
 agent_run_start/agent_run_end so nested (sub-agent) runs keep it alive
@@ -11,7 +11,7 @@ import asyncio
 
 import pytest
 
-from code_puppy_core_plugins.puppy_spinner import register_callbacks as rc
+from code_puppy_core_plugins.grove_spinner import register_callbacks as rc
 
 
 class FakeBar:

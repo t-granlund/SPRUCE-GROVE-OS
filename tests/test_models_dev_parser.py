@@ -1021,7 +1021,7 @@ class TestModelsDevRegistrySearch:
         assert len(filtered) == 0
 
 
-class TestConvertToCodePuppyConfig:
+class TestConvertToSpruceGroveConfig:
     """Tests for Spruce Grove configuration conversion."""
 
     @pytest.fixture

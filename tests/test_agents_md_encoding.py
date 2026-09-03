@@ -10,7 +10,7 @@ from unittest.mock import patch
 import pytest
 
 from spruce_grove.agents import _builder
-from spruce_grove.agents._builder import _read_rules_text, load_puppy_rules
+from spruce_grove.agents._builder import _read_rules_text, load_grove_rules
 
 
 @pytest.mark.parametrize(
@@ -57,7 +57,7 @@ def test_read_rules_text_returns_none_for_missing_file(tmp_path):
     assert _read_rules_text(tmp_path / "nope.md") is None
 
 
-def test_load_puppy_rules_survives_utf16_agents_md(tmp_path, monkeypatch):
+def test_load_grove_rules_survives_utf16_agents_md(tmp_path, monkeypatch):
     """End-to-end: a UTF-16 project AGENTS.md must load, not crash."""
     monkeypatch.chdir(tmp_path)
     (tmp_path / "AGENTS.md").write_bytes(
@@ -66,6 +66,6 @@ def test_load_puppy_rules_survives_utf16_agents_md(tmp_path, monkeypatch):
     empty_config = tmp_path / "empty_config"
     empty_config.mkdir()
     with patch.object(_builder, "CONFIG_DIR", str(empty_config)):
-        rules = load_puppy_rules()
+        rules = load_grove_rules()
     assert rules is not None
     assert "utf16 project rules" in rules

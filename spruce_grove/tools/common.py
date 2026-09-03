@@ -803,7 +803,7 @@ def get_user_approval(
     content: Text | str,
     preview: str | None = None,
     border_style: str = "dim white",
-    puppy_name: str | None = None,
+    grove_name: str | None = None,
 ) -> tuple[bool, str | None]:
     """Show a beautiful approval panel with arrow-key selector.
 
@@ -816,7 +816,7 @@ def get_user_approval(
         content: Main content to display (Rich Text object or string)
         preview: Optional preview content (like a diff)
         border_style: Border color/style for the panel
-        puppy_name: Name of the assistant (defaults to config value)
+        grove_name: Name of the assistant (defaults to config value)
 
     Returns:
         Tuple of (confirmed: bool, user_feedback: str | None)
@@ -829,7 +829,7 @@ def get_user_approval(
             content=content,
             preview=preview,
             border_style=border_style,
-            puppy_name=puppy_name,
+            grove_name=grove_name,
         )
 
 
@@ -838,7 +838,7 @@ def _get_user_approval_impl(
     content: Text | str,
     preview: str | None = None,
     border_style: str = "dim white",
-    puppy_name: str | None = None,
+    grove_name: str | None = None,
 ) -> tuple[bool, str | None]:
     """Inner implementation of get_user_approval (lock-free)."""
     import time
@@ -852,10 +852,10 @@ def _get_user_approval_impl(
     if not _stdin_supports_interactive_approval():
         return _deny_noninteractive_approval(title)
 
-    if puppy_name is None:
-        from spruce_grove.config import get_puppy_name
+    if grove_name is None:
+        from spruce_grove.config import get_grove_name
 
-        puppy_name = get_puppy_name().title()
+        grove_name = get_grove_name().title()
 
     # Build panel content
     if isinstance(content, str):
@@ -922,7 +922,7 @@ def _get_user_approval_impl(
             [
                 "✓ Approve",
                 "✗ Reject",
-                f"💬 Reject with feedback (tell {puppy_name} what to change)",
+                f"💬 Reject with feedback (tell {grove_name} what to change)",
             ],
         )
 
@@ -934,7 +934,7 @@ def _get_user_approval_impl(
             # User wants to provide feedback
             confirmed = False
             emit_info("")
-            emit_info(f"Tell {puppy_name} what to change:")
+            emit_info(f"Tell {grove_name} what to change:")
             # Rich's Prompt.ask reads stdin -- suspend the key listener
             # so it doesn't fight us for keystrokes.
             from spruce_grove.agents._key_listeners import suspended_key_listener
@@ -978,7 +978,7 @@ def _get_user_approval_impl(
     if not confirmed:
         if user_feedback:
             emit_error("Rejected with feedback!")
-            emit_warning(f'Telling {puppy_name}: "{user_feedback}"')
+            emit_warning(f'Telling {grove_name}: "{user_feedback}"')
         else:
             emit_error("Rejected.")
     else:
@@ -992,7 +992,7 @@ async def get_user_approval_async(
     content: Text | str,
     preview: str | None = None,
     border_style: str = "dim white",
-    puppy_name: str | None = None,
+    grove_name: str | None = None,
 ) -> tuple[bool, str | None]:
     """Async version of get_user_approval - show a beautiful approval panel with arrow-key selector.
 
@@ -1006,7 +1006,7 @@ async def get_user_approval_async(
         content: Main content to display (Rich Text object or string)
         preview: Optional preview content (like a diff)
         border_style: Border color/style for the panel
-        puppy_name: Name of the assistant (defaults to config value)
+        grove_name: Name of the assistant (defaults to config value)
 
     Returns:
         Tuple of (confirmed: bool, user_feedback: str | None)
@@ -1019,7 +1019,7 @@ async def get_user_approval_async(
             content=content,
             preview=preview,
             border_style=border_style,
-            puppy_name=puppy_name,
+            grove_name=grove_name,
         )
 
 
@@ -1028,7 +1028,7 @@ async def _get_user_approval_async_impl(
     content: Text | str,
     preview: str | None = None,
     border_style: str = "dim white",
-    puppy_name: str | None = None,
+    grove_name: str | None = None,
 ) -> tuple[bool, str | None]:
     """Inner implementation of get_user_approval_async (lock-free)."""
     from spruce_grove.tools.command_runner import set_awaiting_user_input
@@ -1044,10 +1044,10 @@ async def _get_user_approval_async_impl(
     if not _stdin_supports_interactive_approval():
         return _deny_noninteractive_approval(title)
 
-    if puppy_name is None:
-        from spruce_grove.config import get_puppy_name
+    if grove_name is None:
+        from spruce_grove.config import get_grove_name
 
-        puppy_name = get_puppy_name().title()
+        grove_name = get_grove_name().title()
 
     # Build panel content
     if isinstance(content, str):
@@ -1114,7 +1114,7 @@ async def _get_user_approval_async_impl(
             [
                 "✓ Approve",
                 "✗ Reject",
-                f"💬 Reject with feedback (tell {puppy_name} what to change)",
+                f"💬 Reject with feedback (tell {grove_name} what to change)",
             ],
         )
 
@@ -1126,7 +1126,7 @@ async def _get_user_approval_async_impl(
             # User wants to provide feedback
             confirmed = False
             emit_info("")
-            emit_info(f"Tell {puppy_name} what to change:")
+            emit_info(f"Tell {grove_name} what to change:")
             # Prompt.ask reads stdin — suspend the key listener or it eats
             # roughly half the keystrokes (feedback box looks "broken").
             from spruce_grove.agents._key_listeners import suspended_key_listener
@@ -1170,7 +1170,7 @@ async def _get_user_approval_async_impl(
     if not confirmed:
         if user_feedback:
             emit_error("Rejected with feedback!")
-            emit_warning(f'Telling {puppy_name}: "{user_feedback}"')
+            emit_warning(f'Telling {grove_name}: "{user_feedback}"')
         else:
             emit_error("Rejected.")
     else:
@@ -1289,7 +1289,7 @@ def _find_best_window(
 
     Note: the edit engine no longer fuzzy-matches (Claude Code parity —
     see ``file_modifications.apply_replacements_to_content``). This helper
-    remains part of the plugin API surface (``code-grove-core-plugins``
+    remains part of the plugin API surface (``code-puppy-core-plugins``
     permission previews on released versions import it).
     """
     needle = needle.rstrip("\n")

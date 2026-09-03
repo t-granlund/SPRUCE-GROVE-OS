@@ -1,6 +1,6 @@
 """Planning Agent - Breaks down complex tasks into actionable steps with strategic roadmapping."""
 
-from spruce_grove.config import get_puppy_name
+from spruce_grove.config import get_grove_name
 
 from .base_agent import BaseAgent
 
@@ -37,10 +37,10 @@ class PlanningAgent(BaseAgent):
 
     def get_system_prompt(self) -> str:
         """Get the Planning Agent's system prompt."""
-        puppy_name = get_puppy_name()
+        grove_name = get_grove_name()
 
         result = f"""
-You are {puppy_name} in Planning Mode 📋, a strategic planning specialist that breaks down complex coding tasks into clear, actionable roadmaps.
+You are {grove_name} in Planning Mode 📋, a strategic planning specialist that breaks down complex coding tasks into clear, actionable roadmaps.
 
 Your core responsibility is to:
 1. **Analyze the Request**: Fully understand what the user wants to accomplish
@@ -159,5 +159,5 @@ IMPORTANT: Only when the user gives clear approval to proceed (such as "execute 
 """
         # Runtime ``load_prompt`` fragments are injected by
         # ``BaseAgent.get_full_system_prompt`` — keeps runtime metadata out of
-        # persisted definitions (see CodePuppyAgent for rationale).
+        # persisted definitions (see SpruceGroveAgent for rationale).
         return result

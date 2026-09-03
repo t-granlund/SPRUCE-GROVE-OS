@@ -535,7 +535,7 @@ class TestGetUserApproval:
                     with patch("spruce_grove.tools.common.emit_info"):
                         with patch("spruce_grove.tools.common.emit_success"):
                             confirmed, feedback = get_user_approval(
-                                "Test", "content", puppy_name="Biscuit"
+                                "Test", "content", grove_name="Biscuit"
                             )
         assert confirmed is True
         assert feedback is None
@@ -549,7 +549,7 @@ class TestGetUserApproval:
                     with patch("spruce_grove.tools.common.emit_info"):
                         with patch("spruce_grove.tools.common.emit_error"):
                             confirmed, feedback = get_user_approval(
-                                "Test", "content", puppy_name="Biscuit"
+                                "Test", "content", grove_name="Biscuit"
                             )
         assert confirmed is False
         assert feedback is None
@@ -571,7 +571,7 @@ class TestGetUserApproval:
                             with patch("spruce_grove.tools.common.emit_error"):
                                 with patch("spruce_grove.tools.common.emit_warning"):
                                     confirmed, feedback = get_user_approval(
-                                        "Test", "content", puppy_name="Biscuit"
+                                        "Test", "content", grove_name="Biscuit"
                                     )
         assert confirmed is False
         assert feedback == "fix the thing"
@@ -589,7 +589,7 @@ class TestGetUserApproval:
                         with patch("spruce_grove.tools.common.emit_info"):
                             with patch("spruce_grove.tools.common.emit_error"):
                                 confirmed, feedback = get_user_approval(
-                                    "Test", "content", puppy_name="Biscuit"
+                                    "Test", "content", grove_name="Biscuit"
                                 )
         assert confirmed is False
         assert feedback is None
@@ -605,7 +605,7 @@ class TestGetUserApproval:
                     with patch("spruce_grove.tools.common.emit_info"):
                         with patch("spruce_grove.tools.common.emit_error"):
                             confirmed, feedback = get_user_approval(
-                                "Test", "content", puppy_name="Biscuit"
+                                "Test", "content", grove_name="Biscuit"
                             )
         assert confirmed is False
 
@@ -618,7 +618,7 @@ class TestGetUserApproval:
                     with patch("spruce_grove.tools.common.emit_info"):
                         with patch("spruce_grove.tools.common.emit_error"):
                             confirmed, feedback = get_user_approval(
-                                "Test", "content", puppy_name="Biscuit"
+                                "Test", "content", grove_name="Biscuit"
                             )
         assert confirmed is False
 
@@ -638,7 +638,7 @@ class TestGetUserApproval:
                                     "Test",
                                     "content",
                                     preview="-old\n+new",
-                                    puppy_name="Biscuit",
+                                    grove_name="Biscuit",
                                 )
         assert confirmed is True
 
@@ -651,11 +651,11 @@ class TestGetUserApproval:
                     with patch("spruce_grove.tools.common.emit_info"):
                         with patch("spruce_grove.tools.common.emit_success"):
                             confirmed, _ = get_user_approval(
-                                "Test", Text("rich content"), puppy_name="Biscuit"
+                                "Test", Text("rich content"), grove_name="Biscuit"
                             )
         assert confirmed is True
 
-    def test_default_puppy_name(self):
+    def test_default_grove_name(self):
         from spruce_grove.tools.common import get_user_approval
 
         with patch("spruce_grove.tools.common.arrow_select", return_value="✓ Approve"):
@@ -664,7 +664,7 @@ class TestGetUserApproval:
                     with patch("spruce_grove.tools.common.emit_info"):
                         with patch("spruce_grove.tools.common.emit_success"):
                             with patch(
-                                "spruce_grove.config.get_puppy_name", return_value="buddy"
+                                "spruce_grove.config.get_grove_name", return_value="buddy"
                             ):
                                 confirmed, _ = get_user_approval("Test", "content")
         assert confirmed is True
@@ -696,7 +696,7 @@ class TestGetUserApprovalAsync:
                     with patch("spruce_grove.tools.common.emit_info"):
                         with patch("spruce_grove.tools.common.emit_success"):
                             confirmed, feedback = await get_user_approval_async(
-                                "Test", "content", puppy_name="Biscuit"
+                                "Test", "content", grove_name="Biscuit"
                             )
         assert confirmed is True
         assert feedback is None
@@ -715,7 +715,7 @@ class TestGetUserApprovalAsync:
                     with patch("spruce_grove.tools.common.emit_info"):
                         with patch("spruce_grove.tools.common.emit_error"):
                             confirmed, _ = await get_user_approval_async(
-                                "Test", "content", puppy_name="Biscuit"
+                                "Test", "content", grove_name="Biscuit"
                             )
         assert confirmed is False
 
@@ -738,7 +738,7 @@ class TestGetUserApprovalAsync:
                             with patch("spruce_grove.tools.common.emit_error"):
                                 with patch("spruce_grove.tools.common.emit_warning"):
                                     confirmed, feedback = await get_user_approval_async(
-                                        "Test", "content", puppy_name="Biscuit"
+                                        "Test", "content", grove_name="Biscuit"
                                     )
         assert confirmed is False
         assert feedback == "change X"
@@ -761,7 +761,7 @@ class TestGetUserApprovalAsync:
                         with patch("spruce_grove.tools.common.emit_info"):
                             with patch("spruce_grove.tools.common.emit_error"):
                                 confirmed, feedback = await get_user_approval_async(
-                                    "Test", "content", puppy_name="Biscuit"
+                                    "Test", "content", grove_name="Biscuit"
                                 )
         assert confirmed is False
         assert feedback is None
@@ -780,7 +780,7 @@ class TestGetUserApprovalAsync:
                     with patch("spruce_grove.tools.common.emit_info"):
                         with patch("spruce_grove.tools.common.emit_error"):
                             confirmed, _ = await get_user_approval_async(
-                                "Test", "content", puppy_name="Biscuit"
+                                "Test", "content", grove_name="Biscuit"
                             )
         assert confirmed is False
 
@@ -805,7 +805,7 @@ class TestGetUserApprovalAsync:
                                     "Test",
                                     "content",
                                     preview="-old\n+new",
-                                    puppy_name="Biscuit",
+                                    grove_name="Biscuit",
                                 )
         assert confirmed is True
 
@@ -823,12 +823,12 @@ class TestGetUserApprovalAsync:
                     with patch("spruce_grove.tools.common.emit_info"):
                         with patch("spruce_grove.tools.common.emit_success"):
                             confirmed, _ = await get_user_approval_async(
-                                "Test", Text("rich"), puppy_name="Biscuit"
+                                "Test", Text("rich"), grove_name="Biscuit"
                             )
         assert confirmed is True
 
     @pytest.mark.asyncio
-    async def test_default_puppy_name(self):
+    async def test_default_grove_name(self):
         from spruce_grove.tools.common import get_user_approval_async
 
         with patch(
@@ -841,7 +841,7 @@ class TestGetUserApprovalAsync:
                     with patch("spruce_grove.tools.common.emit_info"):
                         with patch("spruce_grove.tools.common.emit_success"):
                             with patch(
-                                "spruce_grove.config.get_puppy_name", return_value="buddy"
+                                "spruce_grove.config.get_grove_name", return_value="buddy"
                             ):
                                 confirmed, _ = await get_user_approval_async(
                                     "Test", "content"

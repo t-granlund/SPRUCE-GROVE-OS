@@ -37,7 +37,7 @@ def _find_installed_core_plugins_dir() -> Path | None:
     """Locate the installed code_puppy_core_plugins package.
 
     Upstream moved builtin plugins out of this repo into the
-    ``code-grove-core-plugins`` companion package (visible in site-packages
+    ``code-puppy-core-plugins`` companion package (visible in site-packages
     of the uv tool install). Guide completeness depends on scanning it.
     """
     try:

@@ -244,7 +244,7 @@ def test_show_status():
                 return_value="MODEL-X",
             ),
             patch("spruce_grove.config.get_owner_name", return_value="Ivan"),
-            patch("spruce_grove.config.get_puppy_name", return_value="Biscuit"),
+            patch("spruce_grove.config.get_grove_name", return_value="Biscuit"),
             patch("spruce_grove.config.get_yolo_mode", return_value=True),
         ):
             result = handle_command("/show")
