@@ -238,7 +238,9 @@ class TestGetClipboardImageAsBinaryContent:
 
     def test_returns_none_when_binary_content_unavailable(self):
         """Test that function returns None when BinaryContent not importable."""
-        with patch("spruce_grove.command_line.clipboard.BINARY_CONTENT_AVAILABLE", False):
+        with patch(
+            "spruce_grove.command_line.clipboard.BINARY_CONTENT_AVAILABLE", False
+        ):
             from spruce_grove.command_line.clipboard import (
                 get_clipboard_image_as_binary_content,
             )
@@ -357,7 +359,8 @@ class TestGetClipboardImageLinux:
             ),
             patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", True),
             patch(
-                "spruce_grove.command_line.clipboard._safe_open_image", return_value=None
+                "spruce_grove.command_line.clipboard._safe_open_image",
+                return_value=None,
             ),
         ):
             assert get_clipboard_image() is None
@@ -406,7 +409,8 @@ class TestGetClipboardImageLinux:
             ),
             patch("spruce_grove.command_line.clipboard.PIL_AVAILABLE", True),
             patch(
-                "spruce_grove.command_line.clipboard._safe_open_image", return_value=None
+                "spruce_grove.command_line.clipboard._safe_open_image",
+                return_value=None,
             ),
         ):
             assert get_clipboard_image() is None

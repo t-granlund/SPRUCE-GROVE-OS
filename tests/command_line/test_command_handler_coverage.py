@@ -42,9 +42,12 @@ class TestGetCommandsHelp:
 
     @patch("spruce_grove.command_line.command_handler._ensure_plugins_loaded")
     @patch(
-        "spruce_grove.command_line.command_registry.get_unique_commands", return_value=[]
+        "spruce_grove.command_line.command_registry.get_unique_commands",
+        return_value=[],
     )
-    @patch("spruce_grove.callbacks.on_custom_command_help", side_effect=Exception("err"))
+    @patch(
+        "spruce_grove.callbacks.on_custom_command_help", side_effect=Exception("err")
+    )
     def test_custom_command_exception(self, mock_custom, mock_cmds, mock_plugins):
         from spruce_grove.command_line.command_handler import get_commands_help
 
@@ -53,7 +56,8 @@ class TestGetCommandsHelp:
 
     @patch("spruce_grove.command_line.command_handler._ensure_plugins_loaded")
     @patch(
-        "spruce_grove.command_line.command_registry.get_unique_commands", return_value=[]
+        "spruce_grove.command_line.command_registry.get_unique_commands",
+        return_value=[],
     )
     @patch("spruce_grove.callbacks.on_custom_command_help")
     def test_custom_command_list_of_strings(self, mock_custom, mock_cmds, mock_plugins):
@@ -65,7 +69,8 @@ class TestGetCommandsHelp:
 
     @patch("spruce_grove.command_line.command_handler._ensure_plugins_loaded")
     @patch(
-        "spruce_grove.command_line.command_registry.get_unique_commands", return_value=[]
+        "spruce_grove.command_line.command_registry.get_unique_commands",
+        return_value=[],
     )
     @patch("spruce_grove.callbacks.on_custom_command_help")
     def test_custom_command_list_of_tuples(self, mock_custom, mock_cmds, mock_plugins):
@@ -77,7 +82,8 @@ class TestGetCommandsHelp:
 
     @patch("spruce_grove.command_line.command_handler._ensure_plugins_loaded")
     @patch(
-        "spruce_grove.command_line.command_registry.get_unique_commands", return_value=[]
+        "spruce_grove.command_line.command_registry.get_unique_commands",
+        return_value=[],
     )
     @patch("spruce_grove.callbacks.on_custom_command_help")
     def test_custom_command_none_entries(self, mock_custom, mock_cmds, mock_plugins):
@@ -89,7 +95,8 @@ class TestGetCommandsHelp:
 
     @patch("spruce_grove.command_line.command_handler._ensure_plugins_loaded")
     @patch(
-        "spruce_grove.command_line.command_registry.get_unique_commands", return_value=[]
+        "spruce_grove.command_line.command_registry.get_unique_commands",
+        return_value=[],
     )
     @patch("spruce_grove.callbacks.on_custom_command_help")
     def test_custom_command_tuple(self, mock_custom, mock_cmds, mock_plugins):

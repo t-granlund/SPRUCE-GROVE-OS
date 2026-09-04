@@ -208,7 +208,9 @@ class TestLoadContextCompletionException:
     """Cover lines 50-52."""
 
     def test_exception_in_glob_silently_ignored(self):
-        from spruce_grove.command_line.load_context_completion import LoadContextCompleter
+        from spruce_grove.command_line.load_context_completion import (
+            LoadContextCompleter,
+        )
 
         completer = LoadContextCompleter()
         # Make contexts_dir.exists() raise

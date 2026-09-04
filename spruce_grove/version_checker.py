@@ -5,7 +5,12 @@ import threading
 import httpx
 
 from spruce_grove.i18n import t
-from spruce_grove.messaging import emit_info, emit_success, emit_warning, get_message_bus
+from spruce_grove.messaging import (
+    emit_info,
+    emit_success,
+    emit_warning,
+    get_message_bus,
+)
 from spruce_grove.messaging.messages import VersionCheckMessage
 
 

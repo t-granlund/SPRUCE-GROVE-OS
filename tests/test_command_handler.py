@@ -47,7 +47,9 @@ def test_cd_show_lists_directories():
     mock_emit_info = mocks["emit_info"].start()
 
     try:
-        with patch("spruce_grove.command_line.utils.make_directory_table") as mock_table:
+        with patch(
+            "spruce_grove.command_line.utils.make_directory_table"
+        ) as mock_table:
             from rich.table import Table
 
             fake_table = Table()
@@ -338,7 +340,9 @@ def test_agent_switch_triggers_autosave_rotation():
     mock_emit_success = mocks["emit_success"].start()
 
     try:
-        current_agent = SimpleNamespace(name="spruce-grove", display_name="Spruce Grove")
+        current_agent = SimpleNamespace(
+            name="spruce-grove", display_name="Spruce Grove"
+        )
         new_agent = SimpleNamespace(
             name="reviewer",
             display_name="Reviewer",
@@ -387,7 +391,9 @@ def test_agent_switch_same_agent_skips_rotation():
     mock_emit_info = mocks["emit_info"].start()
 
     try:
-        current_agent = SimpleNamespace(name="spruce-grove", display_name="Spruce Grove")
+        current_agent = SimpleNamespace(
+            name="spruce-grove", display_name="Spruce Grove"
+        )
         with (
             patch(
                 "spruce_grove.agents.get_current_agent",

@@ -78,7 +78,7 @@ class TestThemeCatalog:
         assert "sunset" in names
         assert "vaporwave" in names
         assert "bubblegum-pink" in names
-        assert "purple-grove" in names
+        assert "purple-puppy" in names
         assert "catppuccin-mocha" in names
         assert "tokyo-night" in names
         assert "green-screen" in names
@@ -92,7 +92,7 @@ class TestThemeCatalog:
     def test_menu_by_index_maps_strings(self):
         assert MENU_BY_INDEX["1"] == "ocean"
         assert MENU_BY_INDEX["5"] == "bubblegum-pink"
-        assert MENU_BY_INDEX["6"] == "purple-grove"
+        assert MENU_BY_INDEX["6"] == "purple-puppy"
         assert MENU_BY_INDEX["7"] == "catppuccin-mocha"
         assert MENU_BY_INDEX["10"] == "green-screen"
         assert MENU_BY_INDEX["12"] == "solarized-light"
@@ -102,8 +102,8 @@ class TestThemeCatalog:
         assert MENU_BY_NAME["mocha"] is CURATED_THEMES["catppuccin-mocha"]
         assert MENU_BY_NAME["bubblegum"] is CURATED_THEMES["bubblegum-pink"]
         assert MENU_BY_NAME["pink"] is CURATED_THEMES["bubblegum-pink"]
-        assert MENU_BY_NAME["grove"] is CURATED_THEMES["purple-grove"]
-        assert MENU_BY_NAME["purple"] is CURATED_THEMES["purple-grove"]
+        assert MENU_BY_NAME["puppy"] is CURATED_THEMES["purple-puppy"]
+        assert MENU_BY_NAME["purple"] is CURATED_THEMES["purple-puppy"]
         assert MENU_BY_NAME["tokyo"] is CURATED_THEMES["tokyo-night"]
         assert MENU_BY_NAME["green"] is CURATED_THEMES["green-screen"]
         assert MENU_BY_NAME["crt"] is CURATED_THEMES["green-screen"]
@@ -723,7 +723,7 @@ class TestRegisterCallbacks:
         with (
             patch(
                 "spruce_grove.config.get_value",
-                return_value="purple-grove",
+                return_value="purple-puppy",
             ),
             patch("code_puppy_core_plugins.theme.themes.apply") as mock_apply,
         ):

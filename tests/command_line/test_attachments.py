@@ -389,7 +389,8 @@ class TestDetectPathTokens:
             return orig(token)
 
         with patch(
-            "spruce_grove.command_line.attachments._is_probable_path", side_effect=patched
+            "spruce_grove.command_line.attachments._is_probable_path",
+            side_effect=patched,
         ):
             detections, _ = _detect_path_tokens(long_path)
             assert detections == []
@@ -427,7 +428,8 @@ class TestDetectPathTokens:
             return orig(token)
 
         with patch(
-            "spruce_grove.command_line.attachments._is_probable_path", side_effect=patched
+            "spruce_grove.command_line.attachments._is_probable_path",
+            side_effect=patched,
         ):
             detections, _ = _detect_path_tokens(prompt)
 

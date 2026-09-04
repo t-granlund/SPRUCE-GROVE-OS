@@ -652,7 +652,9 @@ class TestMCPManagerExtended:
             mock_registry_class.return_value = mock_registry
 
             with (
-                patch("spruce_grove.mcp_.manager.ManagedMCPServer") as mock_managed_class,
+                patch(
+                    "spruce_grove.mcp_.manager.ManagedMCPServer"
+                ) as mock_managed_class,
                 patch("spruce_grove.mcp_.manager.ServerStatusTracker"),
                 patch(
                     "spruce_grove.config.load_mcp_server_configs",
@@ -710,7 +712,8 @@ class TestMCPManagerExtended:
 
             with (
                 patch(
-                    "spruce_grove.mcp_.manager.ManagedMCPServer", side_effect=side_effect
+                    "spruce_grove.mcp_.manager.ManagedMCPServer",
+                    side_effect=side_effect,
                 ),
                 patch(
                     "spruce_grove.mcp_.manager.ServerStatusTracker"

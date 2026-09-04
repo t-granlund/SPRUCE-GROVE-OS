@@ -173,16 +173,19 @@ def mock_emit_info():
             "spruce_grove.command_line.mcp.stop_command.emit_info", side_effect=capture
         ),
         patch(
-            "spruce_grove.command_line.mcp.restart_command.emit_info", side_effect=capture
+            "spruce_grove.command_line.mcp.restart_command.emit_info",
+            side_effect=capture,
         ),
         patch(
             "spruce_grove.command_line.mcp.list_command.emit_info", side_effect=capture
         ),
         patch(
-            "spruce_grove.command_line.mcp.search_command.emit_info", side_effect=capture
+            "spruce_grove.command_line.mcp.search_command.emit_info",
+            side_effect=capture,
         ),
         patch(
-            "spruce_grove.command_line.mcp.status_command.emit_info", side_effect=capture
+            "spruce_grove.command_line.mcp.status_command.emit_info",
+            side_effect=capture,
         ),
     ]
 

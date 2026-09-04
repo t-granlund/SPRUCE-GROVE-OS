@@ -23,7 +23,11 @@ from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional
 
-from spruce_grove.session_storage import SessionMetadata, compute_scope_key, save_session
+from spruce_grove.session_storage import (
+    SessionMetadata,
+    compute_scope_key,
+    save_session,
+)
 
 if TYPE_CHECKING:
     from spruce_grove.agents.base_agent import BaseAgent

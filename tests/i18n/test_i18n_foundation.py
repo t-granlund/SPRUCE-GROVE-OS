@@ -156,7 +156,9 @@ def test_core_plugins_unknown_pseudolocalizes_once():
 def test_missing_param_leaves_placeholder():
     # A DIFFERENT param present -> the forgiving-missing path is exercised and
     # the unknown {name} placeholder is preserved verbatim.
-    assert i18n.t("startup.welcome", unrelated="z") == "Welcome to Spruce Grove, {name}!"
+    assert (
+        i18n.t("startup.welcome", unrelated="z") == "Welcome to Spruce Grove, {name}!"
+    )
 
 
 def test_no_params_leaves_placeholder():
@@ -254,7 +256,8 @@ def test_spanish_catalog_ships_and_resolves():
     translate.set_locale("es")
     assert i18n.t("confirm.yes") == "S\u00ed"
     assert (
-        i18n.t("startup.welcome", name="TJ") == "\u00a1Bienvenido(a) a Spruce Grove, TJ!"
+        i18n.t("startup.welcome", name="TJ")
+        == "\u00a1Bienvenido(a) a Spruce Grove, TJ!"
     )
 
 

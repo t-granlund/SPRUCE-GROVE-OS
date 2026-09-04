@@ -50,7 +50,9 @@ class TestGetAgentEntries:
     def test_returns_single_agent(self, mock_available, mock_descriptions):
         """Test that single agent is returned correctly."""
         mock_available.return_value = {"spruce_grove": "Spruce Grove 🐶"}
-        mock_descriptions.return_value = {"spruce_grove": "A friendly coding assistant."}
+        mock_descriptions.return_value = {
+            "spruce_grove": "A friendly coding assistant."
+        }
 
         result = _get_agent_entries()
 

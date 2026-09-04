@@ -34,7 +34,9 @@ def luminance(rgb):
 
 
 def contrast(fg, bg):
-    l1, l2 = sorted((luminance(hex_to_rgb(fg)), luminance(hex_to_rgb(bg))), reverse=True)
+    l1, l2 = sorted(
+        (luminance(hex_to_rgb(fg)), luminance(hex_to_rgb(bg))), reverse=True
+    )
     return (l1 + 0.05) / (l2 + 0.05)
 
 
@@ -66,7 +68,13 @@ class TestSingleSourceOfTruth:
             )
 
     def test_tokens_defines_type_scale(self, tokens_css):
-        for t in ("--type-mega", "--type-h2", "--type-body", "--type-small", "--type-micro"):
+        for t in (
+            "--type-mega",
+            "--type-h2",
+            "--type-body",
+            "--type-small",
+            "--type-micro",
+        ):
             assert t in tokens_css
 
 

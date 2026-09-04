@@ -203,7 +203,8 @@ async def test_main_agent_construction_installs_transform():
         patch.object(_builder, "load_mcp_servers", lambda **_kwargs: []),
         patch.object(_builder, "make_model_settings", lambda *_args, **_kwargs: None),
         patch(
-            "spruce_grove.tools.register_tools_for_agent", lambda *_args, **_kwargs: None
+            "spruce_grove.tools.register_tools_for_agent",
+            lambda *_args, **_kwargs: None,
         ),
     ):
         agent = _builder.build_pydantic_agent(config)
@@ -224,7 +225,9 @@ async def test_subagent_construction_installs_transform():
     config = _AgentConfig()
     with (
         patch("spruce_grove.agents.agent_manager.load_agent", return_value=config),
-        patch("spruce_grove.agents._builder.load_model_with_fallback", _load_test_model),
+        patch(
+            "spruce_grove.agents._builder.load_model_with_fallback", _load_test_model
+        ),
         patch(
             "spruce_grove.model_factory.make_model_settings",
             lambda *_args, **_kwargs: None,

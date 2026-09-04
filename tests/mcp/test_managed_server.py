@@ -573,7 +573,9 @@ class TestGetHttpClient:
             patch.dict(os.environ, {"TEST_TOKEN": "secret123"}),
             patch(TOOLSET) as mock_toolset,
             patch(SSE_TRANSPORT),
-            patch("spruce_grove.mcp_.managed_server.create_async_client") as mock_create,
+            patch(
+                "spruce_grove.mcp_.managed_server.create_async_client"
+            ) as mock_create,
         ):
             mock_toolset.return_value = MagicMock()
             mock_create.return_value = MagicMock()
@@ -592,7 +594,9 @@ class TestGetHttpClient:
         with (
             patch(TOOLSET) as mock_toolset,
             patch(SSE_TRANSPORT),
-            patch("spruce_grove.mcp_.managed_server.create_async_client") as mock_create,
+            patch(
+                "spruce_grove.mcp_.managed_server.create_async_client"
+            ) as mock_create,
         ):
             mock_toolset.return_value = MagicMock()
             mock_create.return_value = MagicMock()

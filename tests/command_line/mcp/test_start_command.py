@@ -16,7 +16,9 @@ def start_cmd():
 
 class TestStartCommand:
     def test_no_args_shows_usage(self, start_cmd):
-        with patch("spruce_grove.command_line.mcp.start_command.emit_info") as mock_emit:
+        with patch(
+            "spruce_grove.command_line.mcp.start_command.emit_info"
+        ) as mock_emit:
             start_cmd.execute([], group_id="g1")
             assert mock_emit.called
 
@@ -30,7 +32,9 @@ class TestStartCommand:
                 "spruce_grove.command_line.mcp.start_command.find_server_id_by_name",
                 return_value=None,
             ),
-            patch("spruce_grove.command_line.mcp.start_command.suggest_similar_servers"),
+            patch(
+                "spruce_grove.command_line.mcp.start_command.suggest_similar_servers"
+            ),
             patch("spruce_grove.command_line.mcp.start_command.emit_error") as mock_err,
         ):
             start_cmd.execute(["missing"], group_id="g1")

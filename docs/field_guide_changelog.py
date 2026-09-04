@@ -17,7 +17,7 @@ Shape returned by `_get_recent_commits`:
 
 import subprocess
 from collections import defaultdict
-from datetime import datetime, timezone, timedelta
+from datetime import datetime
 from pathlib import Path
 
 
@@ -80,5 +80,8 @@ def _get_recent_commits(_run, repo_root: Path) -> dict:
     return {
         "total_commits": len(commits),
         "releases": releases,
-        "commits": [{k: c[k] for k in ("hash", "short_hash", "subject", "author", "date")} for c in commits],
+        "commits": [
+            {k: c[k] for k in ("hash", "short_hash", "subject", "author", "date")}
+            for c in commits
+        ],
     }

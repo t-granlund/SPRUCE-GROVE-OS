@@ -66,7 +66,9 @@ def _find_installed_core_plugins_dir() -> Path | None:
         pass
     # Last-ditch: glob the known uv tools layout.
     uv_site = Path.home() / ".local" / "share" / "uv" / "tools"
-    for candidate in sorted(uv_site.glob("spruce-grove/lib/*/site-packages/code_puppy_core_plugins")):
+    for candidate in sorted(
+        uv_site.glob("spruce-grove/lib/*/site-packages/code_puppy_core_plugins")
+    ):
         if candidate.is_dir():
             return candidate
     return None
@@ -105,9 +107,7 @@ def _get_git_info() -> dict:
 
 def _get_current_version() -> str:
     try:
-        version = _run(
-            ["/opt/homebrew/bin/uv", "tool", "list"], check=False
-        )
+        version = _run(["/opt/homebrew/bin/uv", "tool", "list"], check=False)
         for line in version.splitlines():
             if line.startswith("spruce-grove"):
                 return line.strip()
@@ -162,8 +162,22 @@ def _get_tools() -> list[dict]:
         return []
 
     categories = {
-        "agent": ["list_agents", "invoke_agent", "invoke_agent_with_model", "list_available_models"],
-        "file": ["list_files", "read_file", "grep", "create_file", "replace_in_file", "delete_snippet", "delete_file", "edit_file"],
+        "agent": [
+            "list_agents",
+            "invoke_agent",
+            "invoke_agent_with_model",
+            "list_available_models",
+        ],
+        "file": [
+            "list_files",
+            "read_file",
+            "grep",
+            "create_file",
+            "replace_in_file",
+            "delete_snippet",
+            "delete_file",
+            "edit_file",
+        ],
         "shell": ["agent_run_shell_command", "agent_share_your_reasoning"],
         "browser": [n for n in names if n.startswith("browser_")],
         "skills": ["activate_skill", "list_or_search_skills"],
@@ -270,9 +284,7 @@ def _scan_plugin_register_callbacks(register_file: Path) -> dict:
     """Statically extract which callbacks a plugin registers in register_callbacks.py."""
     hooks = set()
     try:
-        tree = ast.parse(
-            register_file.read_text(encoding="utf-8", errors="replace")
-        )
+        tree = ast.parse(register_file.read_text(encoding="utf-8", errors="replace"))
     except Exception:
         return {"hooks": []}
 
@@ -281,12 +293,8 @@ def _scan_plugin_register_callbacks(register_file: Path) -> dict:
             continue
         func = node.func
         is_register = (
-            isinstance(func, ast.Name)
-            and func.id == "register_callback"
-        ) or (
-            isinstance(func, ast.Attribute)
-            and func.attr == "register_callback"
-        )
+            isinstance(func, ast.Name) and func.id == "register_callback"
+        ) or (isinstance(func, ast.Attribute) and func.attr == "register_callback")
         if not is_register or not node.args:
             continue
         first = node.args[0]
@@ -330,7 +338,9 @@ def _scan_plugin_dir(item: Path, tier: str) -> dict | None:
     for f in sorted(item.iterdir()):
         if f.is_file() and f.suffix == ".py":
             try:
-                files.append({"name": f.name, "lines": sum(1 for _ in f.open(errors="replace"))})
+                files.append(
+                    {"name": f.name, "lines": sum(1 for _ in f.open(errors="replace"))}
+                )
             except Exception:
                 files.append({"name": f.name, "lines": 0})
 
@@ -380,8 +390,10 @@ def _get_plugins() -> list[dict]:
 
     core_pkg = _find_installed_core_plugins_dir()
     if core_pkg is None:
-        print("Warning: installed code_puppy_core_plugins package not found; "
-              "plugin extraction may be incomplete")
+        print(
+            "Warning: installed code_puppy_core_plugins package not found; "
+            "plugin extraction may be incomplete"
+        )
     else:
         for item in sorted(core_pkg.iterdir()):
             absorb(item, "core-package")
@@ -405,7 +417,7 @@ def _extract_frontmatter(text: str) -> dict:
         if ":" not in line:
             continue
         key, _, value = line.partition(":")
-        meta[key.strip()] = value.strip().strip('"\'')
+        meta[key.strip()] = value.strip().strip("\"'")
     return meta
 
 
@@ -579,7 +591,11 @@ def _write_flat_html(data: dict) -> Path:
 
     html_template = (OUTPUT_DIR / "index.html").read_text()
     app_js = (OUTPUT_DIR / "app.js").read_text()
-    data_js = "window.FIELD_GUIDE_DATA = " + json.dumps(data, indent=2, ensure_ascii=False) + ";\n"
+    data_js = (
+        "window.FIELD_GUIDE_DATA = "
+        + json.dumps(data, indent=2, ensure_ascii=False)
+        + ";\n"
+    )
 
     # Inline data.js
     # NOTE: use a replacement FUNCTION (not a string) for every re.sub below.
@@ -588,25 +604,25 @@ def _write_flat_html(data: dict) -> Path:
     # corrupting embedded script content. A lambda returns the text verbatim.
     html_template = re.sub(
         r'<script\s+src="data\.js"></script>',
-        lambda m: f'<script>\n{_inline_script_block(data_js)}\n</script>',
+        lambda m: f"<script>\n{_inline_script_block(data_js)}\n</script>",
         html_template,
     )
 
     # Inline app.js
     html_template = re.sub(
         r'<script\s+src="app\.js"></script>',
-        lambda m: f'<script>\n{_inline_script_block(app_js)}\n</script>',
+        lambda m: f"<script>\n{_inline_script_block(app_js)}\n</script>",
         html_template,
     )
 
     # Remove external Google Fonts links for a fully offline file
     html_template = re.sub(
-        r'<link[^>]+fonts\.googleapis\.com[^>]*>\n?',
+        r"<link[^>]+fonts\.googleapis\.com[^>]*>\n?",
         "",
         html_template,
     )
     html_template = re.sub(
-        r'<link[^>]+fonts\.gstatic\.com[^>]*>\n?',
+        r"<link[^>]+fonts\.gstatic\.com[^>]*>\n?",
         "",
         html_template,
     )
@@ -665,16 +681,18 @@ def main() -> None:
             "heliosPrompt": _get_file_excerpt(
                 "spruce_grove/agents/agent_helios.py", 180
             ),
-            "baseAgent": _get_file_excerpt(
-                "spruce_grove/agents/base_agent.py", 120
-            ),
+            "baseAgent": _get_file_excerpt("spruce_grove/agents/base_agent.py", 120),
         },
     }
 
     # Clean up ANSI/OSC noise that might leak in from imports
     data = json.loads(_strip_ansi_osc(json.dumps(data)))
 
-    js = "window.FIELD_GUIDE_DATA = " + json.dumps(data, indent=2, ensure_ascii=False) + ";\n"
+    js = (
+        "window.FIELD_GUIDE_DATA = "
+        + json.dumps(data, indent=2, ensure_ascii=False)
+        + ";\n"
+    )
     OUTPUT_FILE.write_text(js)
     print(f"Generated {OUTPUT_FILE} ({len(js):,} chars)")
 

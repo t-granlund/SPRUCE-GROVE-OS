@@ -78,6 +78,8 @@ def test_arm_failure_is_swallowed(monkeypatch):
     def boom():
         raise OSError("disk full of dog hair")
 
-    monkeypatch.setattr("spruce_grove.error_logging._ensure_logs_dir", boom, raising=True)
+    monkeypatch.setattr(
+        "spruce_grove.error_logging._ensure_logs_dir", boom, raising=True
+    )
     sd._on_startup()  # must not raise
     assert sd._dump_file is None

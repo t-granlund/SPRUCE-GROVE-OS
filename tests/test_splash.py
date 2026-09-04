@@ -104,7 +104,7 @@ class TestFrame:
 
         for text, baked in (
             ("SPRUCE GROVE", splash._BANNER_FULL),
-            ("PUP", splash._BANNER_COMPACT),
+            ("GROVE", splash._BANNER_COMPACT),
         ):
             rendered = pyfiglet.figlet_format(text, font="ansi_shadow", width=300)
             lines = [ln.rstrip() for ln in rendered.splitlines()]
@@ -150,13 +150,16 @@ class TestComposeRows:
         rows = [("art", "123")]
         assert splash._center_rows(rows, 2) == rows
 
-    def test_compact_pup_centered_under_pyramid(self):
+    def test_compact_grove_centered_under_pyramid(self):
         rows = splash._compose_rows(70, 50)
         text_lines = [c for k, c in rows if k == "text" and c]
-        expected_pad = (splash._PYRAMID_WIDTH - splash._BANNER_COMPACT_WIDTH) // 2
+        # Centered means left/right margins stay balanced; the figlet glyph
+        # itself may carry a leading space (rounded letters), so compare
+        # margins rather than absolute padding.
         for line in text_lines:
-            assert line.startswith(" " * expected_pad)
-            assert not line.startswith(" " * (expected_pad + 1))
+            left = len(line) - len(line.lstrip())
+            right = len(line) - len(line.rstrip())
+            assert abs(left - right) <= 2, f"off-center banner row: {line!r}"
 
 
 class TestLifecycle:

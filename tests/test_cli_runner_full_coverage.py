@@ -194,10 +194,14 @@ class TestMain:
                 )
             )
             stack.enter_context(
-                patch("spruce_grove.messaging.get_global_queue", return_value=MagicMock())
+                patch(
+                    "spruce_grove.messaging.get_global_queue", return_value=MagicMock()
+                )
             )
             stack.enter_context(
-                patch("spruce_grove.messaging.get_message_bus", return_value=MagicMock())
+                patch(
+                    "spruce_grove.messaging.get_message_bus", return_value=MagicMock()
+                )
             )
             _apply_patches(stack, patches)
             if extra_patches:
@@ -242,7 +246,7 @@ class TestMain:
                 },
             )
 
-        mock_figlet.assert_called_once_with("PUP", font="ansi_shadow")
+        mock_figlet.assert_called_once_with("GROVE", font="ansi_shadow")
 
     @pytest.mark.anyio
     async def test_with_command_args(self):
@@ -488,7 +492,9 @@ class TestMain:
         with (
             patch("sys.argv", ["spruce-grove", "--version"]),
             patch("spruce_grove.cli_runner.callbacks", MagicMock()),
-            patch("spruce_grove.cli_runner.get_core_plugins_version", mock_core_version),
+            patch(
+                "spruce_grove.cli_runner.get_core_plugins_version", mock_core_version
+            ),
             pytest.raises(SystemExit) as exc_info,
         ):
             await main()
@@ -532,10 +538,14 @@ class TestMain:
                 )
             )
             stack.enter_context(
-                patch("spruce_grove.messaging.get_global_queue", return_value=MagicMock())
+                patch(
+                    "spruce_grove.messaging.get_global_queue", return_value=MagicMock()
+                )
             )
             stack.enter_context(
-                patch("spruce_grove.messaging.get_message_bus", return_value=MagicMock())
+                patch(
+                    "spruce_grove.messaging.get_message_bus", return_value=MagicMock()
+                )
             )
             stack.enter_context(
                 patch(
@@ -587,10 +597,14 @@ class TestMain:
                 )
             )
             stack.enter_context(
-                patch("spruce_grove.messaging.get_global_queue", return_value=MagicMock())
+                patch(
+                    "spruce_grove.messaging.get_global_queue", return_value=MagicMock()
+                )
             )
             stack.enter_context(
-                patch("spruce_grove.messaging.get_message_bus", return_value=MagicMock())
+                patch(
+                    "spruce_grove.messaging.get_message_bus", return_value=MagicMock()
+                )
             )
             stack.enter_context(
                 patch(
@@ -1230,9 +1244,9 @@ class TestInteractiveMode:
     @pytest.mark.anyio
     async def test_onboarding_chatgpt(self):
         patches = _interactive_patches()
-        patches["spruce_grove.command_line.onboarding_wizard.should_show_onboarding"] = (
-            MagicMock(return_value=True)
-        )
+        patches[
+            "spruce_grove.command_line.onboarding_wizard.should_show_onboarding"
+        ] = MagicMock(return_value=True)
 
         mock_future = MagicMock()
         mock_future.result.return_value = "chatgpt"
@@ -1261,9 +1275,9 @@ class TestInteractiveMode:
     @pytest.mark.anyio
     async def test_onboarding_claude(self):
         patches = _interactive_patches()
-        patches["spruce_grove.command_line.onboarding_wizard.should_show_onboarding"] = (
-            MagicMock(return_value=True)
-        )
+        patches[
+            "spruce_grove.command_line.onboarding_wizard.should_show_onboarding"
+        ] = MagicMock(return_value=True)
 
         mock_future = MagicMock()
         mock_future.result.return_value = "claude"
@@ -1290,9 +1304,9 @@ class TestInteractiveMode:
     @pytest.mark.parametrize("onboarding_result", ["completed", "skipped"])
     async def test_onboarding_result(self, onboarding_result):
         patches = _interactive_patches()
-        patches["spruce_grove.command_line.onboarding_wizard.should_show_onboarding"] = (
-            MagicMock(return_value=True)
-        )
+        patches[
+            "spruce_grove.command_line.onboarding_wizard.should_show_onboarding"
+        ] = MagicMock(return_value=True)
 
         mock_future = MagicMock()
         mock_future.result.return_value = onboarding_result
@@ -1316,9 +1330,9 @@ class TestInteractiveMode:
     @pytest.mark.anyio
     async def test_onboarding_exception(self):
         patches = _interactive_patches()
-        patches["spruce_grove.command_line.onboarding_wizard.should_show_onboarding"] = (
-            MagicMock(side_effect=RuntimeError("fail"))
-        )
+        patches[
+            "spruce_grove.command_line.onboarding_wizard.should_show_onboarding"
+        ] = MagicMock(side_effect=RuntimeError("fail"))
 
         await _run_interactive(
             _mock_renderer(),
@@ -1505,10 +1519,14 @@ class TestMainWindowsClampAndEdgeCases:
                 )
             )
             stack.enter_context(
-                patch("spruce_grove.messaging.get_global_queue", return_value=MagicMock())
+                patch(
+                    "spruce_grove.messaging.get_global_queue", return_value=MagicMock()
+                )
             )
             stack.enter_context(
-                patch("spruce_grove.messaging.get_message_bus", return_value=MagicMock())
+                patch(
+                    "spruce_grove.messaging.get_message_bus", return_value=MagicMock()
+                )
             )
             stack.enter_context(
                 patch(

@@ -631,7 +631,9 @@ class TestHeadlessSessionPersistence:
                 "spruce_grove.config.get_current_session_name",
                 return_value=generated_name,
             ),
-            patch("spruce_grove.session_lifecycle.persist_named_session") as mock_persist,
+            patch(
+                "spruce_grove.session_lifecycle.persist_named_session"
+            ) as mock_persist,
         ):
             await execute_single_prompt("hi", self._renderer(), session_name=None)
 
@@ -660,7 +662,9 @@ class TestHeadlessSessionPersistence:
                 "spruce_grove.command_line.shell_passthrough.execute_shell_passthrough"
             ) as mock_shell,
             patch("spruce_grove.config.AUTOSAVE_DIR", str(tmp_path)),
-            patch("spruce_grove.session_lifecycle.persist_named_session") as mock_persist,
+            patch(
+                "spruce_grove.session_lifecycle.persist_named_session"
+            ) as mock_persist,
         ):
             await execute_single_prompt("!ls", self._renderer(), session_name="mywork")
 

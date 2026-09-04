@@ -57,7 +57,7 @@ def _assert_golden_history(history: list) -> None:
     assert isinstance(history[1], ModelResponse)
 
     system_part, user_part = history[0].parts
-    assert system_part.content == "You are Biscuit, a digital grove."
+    assert system_part.content == "You are Biscuit, a digital puppy."
     attachment = user_part.content[1]
     assert isinstance(attachment, BinaryContent)
     assert attachment.data == PNG_BYTES  # bytes survive base64 round-trip
@@ -68,7 +68,7 @@ def _assert_golden_history(history: list) -> None:
     assert thinking.signature == "sig-abc123"  # signature survives
     assert text.content == "Looks like a PNG. Let me grep around."
     assert isinstance(tool_call, ToolCallPart)
-    assert tool_call.args == {"search_string": "grove"}
+    assert tool_call.args == {"search_string": "puppy"}
 
     tool_return = history[2].parts[0]
     assert isinstance(tool_return, ToolReturnPart)

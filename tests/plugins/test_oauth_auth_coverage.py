@@ -45,9 +45,19 @@ class TestChatgptTestPlugin:
     """Exercise chatgpt_oauth/test_plugin.py."""
 
     def test_config_paths(self):
-        from code_puppy_core_plugins.chatgpt_oauth.test_plugin import test_config_paths
+        # Spruce Grove variant of the bundle's own test: the path constants
+        # now resolve under the renamed core data dirs.
+        from code_puppy_core_plugins.chatgpt_oauth import config
 
-        test_config_paths()
+        token_path = config.get_token_storage_path()
+        assert token_path.name == "chatgpt_oauth.json"
+        assert "spruce_grove" in str(token_path)
+
+        config_dir = config.get_config_dir()
+        assert config_dir.name in ("spruce_grove", ".spruce_grove")
+
+        chatgpt_models = config.get_chatgpt_models_path()
+        assert chatgpt_models.name == "chatgpt_models.json"
 
     def test_oauth_config(self):
         from code_puppy_core_plugins.chatgpt_oauth.test_plugin import test_oauth_config

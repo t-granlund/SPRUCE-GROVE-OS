@@ -54,9 +54,14 @@ class TestCorrectedFacts:
     def test_cpu_framing_intact(self, slides):
         text = all_text(slides)
         for phrase in (
-            "SPRUCE-GROVE", "UNIVERSITY", "Cedar OS", "two halves of the same future",
-            "The New Medium", "Agentic Craft for Creatives",
-            "Creative Direction for Engineers", "The Rebuild Practice",
+            "SPRUCE-GROVE",
+            "UNIVERSITY",
+            "Cedar OS",
+            "two halves of the same future",
+            "The New Medium",
+            "Agentic Craft for Creatives",
+            "Creative Direction for Engineers",
+            "The Rebuild Practice",
             "Ethics, Consent & Credit",
         ):
             assert phrase in text, f"locked CPU framing missing: {phrase}"
@@ -65,8 +70,18 @@ class TestCorrectedFacts:
 class TestActCoverage:
     def test_act_eyebrows_present(self, slides):
         text = all_text(slides)
-        for act in ("Act I", "Act II", "Act III", "Act IV", "Act V", "Act VI",
-                    "Act VII", "Act VIII", "Act IX", "Act X"):
+        for act in (
+            "Act I",
+            "Act II",
+            "Act III",
+            "Act IV",
+            "Act V",
+            "Act VI",
+            "Act VII",
+            "Act VIII",
+            "Act IX",
+            "Act X",
+        ):
             assert act in text, f"missing {act} marker"
 
 
@@ -82,8 +97,13 @@ class TestWalmartActs:
 
     def test_pack_ladder_intact(self, slides):
         text = all_text(slides)
-        for level in ("L1 · Cedar", "L2 · Good Boy/Girl", "L3 · Top Dog",
-                      "L4 · Alpha", "L5 · Pack Leader"):
+        for level in (
+            "L1 · Cedar",
+            "L2 · Good Boy/Girl",
+            "L3 · Top Dog",
+            "L4 · Alpha",
+            "L5 · Pack Leader",
+        ):
             assert level in text, f"missing ladder rung {level}"
         assert "Wiggum Loop" in text and "Naming Ceremony" in text
 
@@ -100,7 +120,9 @@ class TestWalmartActs:
     def test_franchising_facts(self, slides):
         text = all_text(slides)
         assert "$936B" in text and "IFA" in text
-        assert "Roark" in text and "YEB" in text, "School of Rock: Roark/YEB (not 'W Capital')"
+        assert "Roark" in text and "YEB" in text, (
+            "School of Rock: Roark/YEB (not 'W Capital')"
+        )
         assert "Riverside" in text and "Franworth" in text and "Lash Lounge" in text
 
     def test_verified_corrections_hold(self, slides):

@@ -139,8 +139,12 @@ class TestCleanupSilent:
 
         # Silent mode should not emit warnings
         with (
-            patch("spruce_grove.tools.browser.browser_manager.emit_warning") as mock_warn,
-            patch("spruce_grove.tools.browser.browser_manager.emit_success") as mock_succ,
+            patch(
+                "spruce_grove.tools.browser.browser_manager.emit_warning"
+            ) as mock_warn,
+            patch(
+                "spruce_grove.tools.browser.browser_manager.emit_success"
+            ) as mock_succ,
         ):
             await mgr._cleanup(silent=True)
             mock_warn.assert_not_called()
@@ -158,7 +162,9 @@ class TestCleanupSilent:
         mgr._browser = AsyncMock()
 
         with (
-            patch("spruce_grove.tools.browser.browser_manager.emit_success") as mock_succ,
+            patch(
+                "spruce_grove.tools.browser.browser_manager.emit_success"
+            ) as mock_succ,
             patch("spruce_grove.tools.browser.browser_manager.emit_warning"),
             patch("spruce_grove.tools.browser.browser_manager.emit_info"),
         ):

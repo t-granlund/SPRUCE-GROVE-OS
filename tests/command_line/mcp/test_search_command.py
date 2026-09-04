@@ -97,7 +97,9 @@ class TestSearchCommand:
         mock_catalog.search.return_value = []
 
         with (
-            patch("spruce_grove.command_line.mcp.search_command.emit_info") as _mock_emit,
+            patch(
+                "spruce_grove.command_line.mcp.search_command.emit_info"
+            ) as _mock_emit,
             patch(
                 "spruce_grove.command_line.mcp.search_command.emit_warning"
             ) as mock_warn,
@@ -155,7 +157,9 @@ class TestSearchCommand:
 
     def test_import_error(self, search_cmd):
         with (
-            patch("spruce_grove.command_line.mcp.search_command.emit_info") as _mock_emit,
+            patch(
+                "spruce_grove.command_line.mcp.search_command.emit_info"
+            ) as _mock_emit,
             patch.dict(
                 "sys.modules", {"spruce_grove.mcp_.server_registry_catalog": None}
             ),
@@ -167,7 +171,9 @@ class TestSearchCommand:
         mock_mod.catalog.get_popular.side_effect = Exception("boom")
 
         with (
-            patch("spruce_grove.command_line.mcp.search_command.emit_info") as _mock_emit,
+            patch(
+                "spruce_grove.command_line.mcp.search_command.emit_info"
+            ) as _mock_emit,
             patch.dict(
                 "sys.modules", {"spruce_grove.mcp_.server_registry_catalog": mock_mod}
             ),

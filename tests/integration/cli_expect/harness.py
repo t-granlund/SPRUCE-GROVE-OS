@@ -292,7 +292,9 @@ class CliHarness:
         if write_config:
             # Write config to both XDG config dir and ~/.spruce_grove for compatibility
             (config_dir / "grove.cfg").write_text(CONFIG_TEMPLATE, encoding="utf-8")
-            (spruce_grove_dir / "grove.cfg").write_text(CONFIG_TEMPLATE, encoding="utf-8")
+            (spruce_grove_dir / "grove.cfg").write_text(
+                CONFIG_TEMPLATE, encoding="utf-8"
+            )
 
         # Provision lilac into extra_models.json (models.json ships empty; else the CLI
         # resolves active model to [None]). Idempotent so reused-home spawns can't miss it.

@@ -98,7 +98,8 @@ def test_agent_menu_keybindings():
         ),
         patch("spruce_grove.command_line.agent_menu.clone_agent", return_value=None),
         patch(
-            "spruce_grove.command_line.agent_menu.is_clone_agent_name", return_value=True
+            "spruce_grove.command_line.agent_menu.is_clone_agent_name",
+            return_value=True,
         ),
         patch(
             "spruce_grove.command_line.agent_menu.delete_clone_agent", return_value=True
@@ -109,7 +110,9 @@ def test_agent_menu_keybindings():
         patch(
             "spruce_grove.command_line.agent_menu._get_pinned_model", return_value=None
         ),
-        patch("spruce_grove.command_line.agent_menu.get_bound_servers", return_value={}),
+        patch(
+            "spruce_grove.command_line.agent_menu.get_bound_servers", return_value={}
+        ),
         patch("spruce_grove.command_line.agent_menu.emit_warning"),
         patch("spruce_grove.command_line.agent_menu.emit_info"),
     ):

@@ -110,7 +110,9 @@ class TestInteractiveServerSelection:
 class TestInteractiveGetServerName:
     @patch("spruce_grove.command_line.mcp.wizard_utils.emit_prompt")
     def test_custom_name(self, mock_prompt):
-        from spruce_grove.command_line.mcp.wizard_utils import interactive_get_server_name
+        from spruce_grove.command_line.mcp.wizard_utils import (
+            interactive_get_server_name,
+        )
 
         mock_prompt.return_value = "my-name"
         server = FakeServer()
@@ -119,7 +121,9 @@ class TestInteractiveGetServerName:
 
     @patch("spruce_grove.command_line.mcp.wizard_utils.emit_prompt")
     def test_default_name(self, mock_prompt):
-        from spruce_grove.command_line.mcp.wizard_utils import interactive_get_server_name
+        from spruce_grove.command_line.mcp.wizard_utils import (
+            interactive_get_server_name,
+        )
 
         mock_prompt.return_value = "  "
         server = FakeServer(name="default-name")
@@ -188,7 +192,9 @@ class TestInteractiveConfigureServer:
 class TestInstallServerFromCatalog:
     @patch("spruce_grove.command_line.mcp.wizard_utils.emit_info")
     def test_successful_install(self, mock_info, tmp_path):
-        from spruce_grove.command_line.mcp.wizard_utils import install_server_from_catalog
+        from spruce_grove.command_line.mcp.wizard_utils import (
+            install_server_from_catalog,
+        )
 
         server = FakeServer()
         manager = MagicMock()
@@ -207,7 +213,9 @@ class TestInstallServerFromCatalog:
 
     @patch("spruce_grove.command_line.mcp.wizard_utils.emit_info")
     def test_install_with_existing_file(self, mock_info, tmp_path):
-        from spruce_grove.command_line.mcp.wizard_utils import install_server_from_catalog
+        from spruce_grove.command_line.mcp.wizard_utils import (
+            install_server_from_catalog,
+        )
 
         mcp_file = tmp_path / "mcp_servers.json"
         mcp_file.write_text(json.dumps({"mcp_servers": {"old": {}}}))
@@ -227,7 +235,9 @@ class TestInstallServerFromCatalog:
 
     @patch("spruce_grove.command_line.mcp.wizard_utils.emit_info")
     def test_install_with_env_var_replacement(self, mock_info, tmp_path):
-        from spruce_grove.command_line.mcp.wizard_utils import install_server_from_catalog
+        from spruce_grove.command_line.mcp.wizard_utils import (
+            install_server_from_catalog,
+        )
 
         server = FakeServer()
         server.to_server_config = lambda name, **kw: {
@@ -247,7 +257,9 @@ class TestInstallServerFromCatalog:
     @patch("spruce_grove.command_line.mcp.wizard_utils.emit_info")
     @patch("spruce_grove.command_line.mcp.wizard_utils.emit_error")
     def test_register_fails(self, mock_error, mock_info, tmp_path):
-        from spruce_grove.command_line.mcp.wizard_utils import install_server_from_catalog
+        from spruce_grove.command_line.mcp.wizard_utils import (
+            install_server_from_catalog,
+        )
 
         server = FakeServer()
         manager = MagicMock()
@@ -260,7 +272,9 @@ class TestInstallServerFromCatalog:
 
     @patch("spruce_grove.command_line.mcp.wizard_utils.emit_error")
     def test_exception_during_install(self, mock_error):
-        from spruce_grove.command_line.mcp.wizard_utils import install_server_from_catalog
+        from spruce_grove.command_line.mcp.wizard_utils import (
+            install_server_from_catalog,
+        )
 
         server = FakeServer()
         server.to_server_config = MagicMock(side_effect=Exception("boom"))

@@ -52,7 +52,9 @@ class TestEditCommand:
             patch("os.path.exists", return_value=True),
             patch("builtins.open", mock_open(read_data=json.dumps(data))),
             patch("spruce_grove.command_line.mcp.edit_command.emit_error"),
-            patch("spruce_grove.command_line.mcp.edit_command.emit_warning") as mock_warn,
+            patch(
+                "spruce_grove.command_line.mcp.edit_command.emit_warning"
+            ) as mock_warn,
             patch("spruce_grove.command_line.mcp.edit_command.emit_info") as mock_info,
         ):
             edit_cmd.execute(["missing"], group_id="g1")

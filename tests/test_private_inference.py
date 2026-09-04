@@ -113,7 +113,9 @@ async def test_private_prompt_builds_one_toolless_request():
 @pytest.mark.asyncio
 async def test_private_prompt_rejects_unknown_model_before_agent_creation():
     with (
-        patch("spruce_grove.private_inference.ModelFactory.load_config", return_value={}),
+        patch(
+            "spruce_grove.private_inference.ModelFactory.load_config", return_value={}
+        ),
         patch("spruce_grove.private_inference.Agent") as agent_factory,
         pytest.raises(ValueError, match="Unknown private-inference model"),
     ):

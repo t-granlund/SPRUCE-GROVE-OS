@@ -95,7 +95,9 @@ async def test_click_by_role_success():
         "spruce_grove.tools.browser.browser_semantic_interactions.get_session_browser_manager",
         return_value=manager,
     ):
-        with patch("spruce_grove.tools.browser.browser_semantic_interactions.emit_info"):
+        with patch(
+            "spruce_grove.tools.browser.browser_semantic_interactions.emit_info"
+        ):
             with patch(
                 "spruce_grove.tools.browser.browser_semantic_interactions.emit_success"
             ):
@@ -114,7 +116,9 @@ async def test_click_by_text_no_match_is_deterministic():
         "spruce_grove.tools.browser.browser_semantic_interactions.get_session_browser_manager",
         return_value=manager,
     ):
-        with patch("spruce_grove.tools.browser.browser_semantic_interactions.emit_info"):
+        with patch(
+            "spruce_grove.tools.browser.browser_semantic_interactions.emit_info"
+        ):
             with patch(
                 "spruce_grove.tools.browser.browser_semantic_interactions.emit_error"
             ):
@@ -132,7 +136,9 @@ async def test_set_text_by_label_fills():
         "spruce_grove.tools.browser.browser_semantic_interactions.get_session_browser_manager",
         return_value=manager,
     ):
-        with patch("spruce_grove.tools.browser.browser_semantic_interactions.emit_info"):
+        with patch(
+            "spruce_grove.tools.browser.browser_semantic_interactions.emit_info"
+        ):
             with patch(
                 "spruce_grove.tools.browser.browser_semantic_interactions.emit_success"
             ):
@@ -151,7 +157,9 @@ async def test_semantic_no_page():
         "spruce_grove.tools.browser.browser_semantic_interactions.get_session_browser_manager",
         return_value=manager,
     ):
-        with patch("spruce_grove.tools.browser.browser_semantic_interactions.emit_info"):
+        with patch(
+            "spruce_grove.tools.browser.browser_semantic_interactions.emit_info"
+        ):
             result = await click_by_role("button")
 
     assert result["success"] is False

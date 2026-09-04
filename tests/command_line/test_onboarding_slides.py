@@ -54,7 +54,7 @@ class TestGetGradientBanner:
             content = mod.get_gradient_banner()
 
         assert _plain(content) == "BANNER"
-        figlet.assert_called_once_with("PUP", font="ansi_shadow")
+        figlet.assert_called_once_with("GROVE", font="ansi_shadow")
 
     def test_with_pyfiglet(self):
         from spruce_grove.command_line.onboarding_slides import get_gradient_banner

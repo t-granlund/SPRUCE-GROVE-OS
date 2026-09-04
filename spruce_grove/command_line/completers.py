@@ -240,7 +240,9 @@ class AgentCompleter(Completer):
         start_position = -len(text_after_trigger)
 
         try:
-            from spruce_grove.command_line.pin_command_completion import load_agent_names
+            from spruce_grove.command_line.pin_command_completion import (
+                load_agent_names,
+            )
 
             agent_names = load_agent_names()
         except Exception:

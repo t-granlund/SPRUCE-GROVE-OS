@@ -66,7 +66,9 @@ def test_git_branch_provider_safely_defaults_to_none(monkeypatch):
 
 def test_get_quick_resume_location_uses_registered_branch_provider(monkeypatch):
     """Git scopes retain branch-specific quick-resume keys via the plugin seam."""
-    monkeypatch.setattr("spruce_grove.config._detect_git_toplevel", lambda path: "/repo")
+    monkeypatch.setattr(
+        "spruce_grove.config._detect_git_toplevel", lambda path: "/repo"
+    )
     branch = "feature/statusline-decoupling"
     monkeypatch.setattr("spruce_grove.callbacks.get_git_branch", lambda cwd: branch)
 
@@ -75,7 +77,9 @@ def test_get_quick_resume_location_uses_registered_branch_provider(monkeypatch):
 
 def test_get_quick_resume_location_without_branch_provider(monkeypatch):
     """Quick-resume safely falls back to an unbranched Git scope."""
-    monkeypatch.setattr("spruce_grove.config._detect_git_toplevel", lambda path: "/repo")
+    monkeypatch.setattr(
+        "spruce_grove.config._detect_git_toplevel", lambda path: "/repo"
+    )
     monkeypatch.setattr("spruce_grove.callbacks.get_git_branch", lambda cwd: None)
 
     assert get_quick_resume_location("/repo") == ("/repo", None)

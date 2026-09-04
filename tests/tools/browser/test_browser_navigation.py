@@ -67,7 +67,9 @@ class TestNavigateToUrl:
             return_value=mock_manager,
         ):
             with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
-                with patch("spruce_grove.tools.browser.browser_navigation.emit_success"):
+                with patch(
+                    "spruce_grove.tools.browser.browser_navigation.emit_success"
+                ):
                     result = await navigate_to_url("https://example.com")
 
                     assert result["success"] is True
@@ -205,7 +207,9 @@ class TestGoBack:
             return_value=mock_manager,
         ):
             with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
-                with patch("spruce_grove.tools.browser.browser_navigation.emit_success"):
+                with patch(
+                    "spruce_grove.tools.browser.browser_navigation.emit_success"
+                ):
                     result = await go_back()
 
                     assert result["success"] is True
@@ -228,7 +232,9 @@ class TestGoBack:
             return_value=mock_manager,
         ):
             with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
-                with patch("spruce_grove.tools.browser.browser_navigation.emit_success"):
+                with patch(
+                    "spruce_grove.tools.browser.browser_navigation.emit_success"
+                ):
                     result = await go_back()
 
                     # Should still return success (no-op)
@@ -268,7 +274,9 @@ class TestGoForward:
             return_value=mock_manager,
         ):
             with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
-                with patch("spruce_grove.tools.browser.browser_navigation.emit_success"):
+                with patch(
+                    "spruce_grove.tools.browser.browser_navigation.emit_success"
+                ):
                     result = await go_forward()
 
                     assert result["success"] is True
@@ -293,7 +301,9 @@ class TestReloadPage:
             return_value=mock_manager,
         ):
             with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
-                with patch("spruce_grove.tools.browser.browser_navigation.emit_success"):
+                with patch(
+                    "spruce_grove.tools.browser.browser_navigation.emit_success"
+                ):
                     result = await reload_page()
 
                     assert result["success"] is True
@@ -373,7 +383,9 @@ class TestNavigationIntegration:
             return_value=mock_manager,
         ):
             with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
-                with patch("spruce_grove.tools.browser.browser_navigation.emit_success"):
+                with patch(
+                    "spruce_grove.tools.browser.browser_navigation.emit_success"
+                ):
                     # Navigate
                     nav_result = await navigate_to_url("https://example.com")
                     assert nav_result["success"] is True
@@ -400,7 +412,9 @@ class TestNavigationIntegration:
             return_value=mock_manager,
         ):
             with patch("spruce_grove.tools.browser.browser_navigation.emit_info"):
-                with patch("spruce_grove.tools.browser.browser_navigation.emit_success"):
+                with patch(
+                    "spruce_grove.tools.browser.browser_navigation.emit_success"
+                ):
                     # Navigate to page 1
                     await navigate_to_url("https://page1.com")
 

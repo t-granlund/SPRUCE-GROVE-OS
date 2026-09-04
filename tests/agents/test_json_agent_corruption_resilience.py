@@ -76,7 +76,9 @@ def test_discover_json_agents_skips_corrupt_files_without_raising(
     monkeypatch.setattr(
         "spruce_grove.config.get_user_agents_directory", lambda: str(tmp_path)
     )
-    monkeypatch.setattr("spruce_grove.config.get_project_agents_directory", lambda: None)
+    monkeypatch.setattr(
+        "spruce_grove.config.get_project_agents_directory", lambda: None
+    )
 
     agents = discover_json_agents()
 
@@ -104,7 +106,9 @@ def test_mcp_servers_null_agent_is_discoverable(tmp_path, monkeypatch):
     monkeypatch.setattr(
         "spruce_grove.config.get_user_agents_directory", lambda: str(tmp_path)
     )
-    monkeypatch.setattr("spruce_grove.config.get_project_agents_directory", lambda: None)
+    monkeypatch.setattr(
+        "spruce_grove.config.get_project_agents_directory", lambda: None
+    )
 
     agents = discover_json_agents()
 

@@ -344,7 +344,10 @@ class BaseAgent(ABC):
             return None
 
         async def _warm(server: Any) -> None:
-            from spruce_grove.mcp_.toolset_utils import toolset_is_running, unwrap_toolset
+            from spruce_grove.mcp_.toolset_utils import (
+                toolset_is_running,
+                unwrap_toolset,
+            )
 
             try:
                 leaf = unwrap_toolset(server)

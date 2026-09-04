@@ -17,13 +17,22 @@ class TestRegistrySchema:
 
     def test_component_categories(self, registry):
         cats = set(registry["components"])
-        assert {"typography", "data-viz", "interactive", "structure", "labels", "media"} <= cats
+        assert {
+            "typography",
+            "data-viz",
+            "interactive",
+            "structure",
+            "labels",
+            "media",
+        } <= cats
         for cat, comps in registry["components"].items():
             for name, spec in comps.items():
                 assert spec.get("class"), f"{cat}.{name} missing class"
 
     def test_prompt_guide_nonempty(self, registry):
-        assert len(registry["prompt_guide"]) >= 5, "prompt guide must cover common edits"
+        assert len(registry["prompt_guide"]) >= 5, (
+            "prompt guide must cover common edits"
+        )
 
 
 class TestRegistryMatchesDeck:
@@ -34,7 +43,9 @@ class TestRegistryMatchesDeck:
                     continue  # documented alternate implementation
                 for n in spec.get("slides", []):
                     found = slides[n - 1].select(f".{spec['class']}")
-                    assert found, f"slide {n}: registry says .{spec['class']} lives here"
+                    assert found, (
+                        f"slide {n}: registry says .{spec['class']} lives here"
+                    )
 
     def test_act_classes_match_registry(self, slides, registry):
         for act_id, act in registry["acts"].items():
@@ -52,7 +63,13 @@ class TestRegistryMatchesDeck:
                 )
 
     def test_locks_documented(self, registry):
-        for lock in ("chaplin_verbatim", "brand_tokens", "type_floor", "motion_budget", "factcheck"):
+        for lock in (
+            "chaplin_verbatim",
+            "brand_tokens",
+            "type_floor",
+            "motion_budget",
+            "factcheck",
+        ):
             assert lock in registry["locks"]
 
     def test_motion_slots_agree_with_deck(self, slides, registry):

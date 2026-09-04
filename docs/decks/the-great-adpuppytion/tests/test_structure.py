@@ -105,7 +105,9 @@ class TestSingleHue:
             if i in MULTI_HUE_ALLOWED:
                 continue
             hues = accent_hues(s)
-            assert len(hues) <= 2, f"slide {i}: {sorted(hues)} hues — check DESIGN.md single-hue rule"
+            assert len(hues) <= 2, (
+                f"slide {i}: {sorted(hues)} hues — check DESIGN.md single-hue rule"
+            )
 
 
 class TestEyebrows:
@@ -116,4 +118,6 @@ class TestEyebrows:
                 style = el.get("style", "")
                 m = re.search(r"font-size:\s*([\d.]+)em", style)
                 if m:
-                    assert float(m.group(1)) >= 0.52, f"slide {i}: eyebrow below micro floor"
+                    assert float(m.group(1)) >= 0.52, (
+                        f"slide {i}: eyebrow below micro floor"
+                    )

@@ -304,7 +304,9 @@ class TestEnvironmentWithoutCredentials:
             "spruce_grove.provider_credentials.all_api_key_env_vars",
             lambda: list(catalog_keys),
         )
-        monkeypatch.setattr("spruce_grove.config.set_config_value", lambda *a, **k: None)
+        monkeypatch.setattr(
+            "spruce_grove.config.set_config_value", lambda *a, **k: None
+        )
         monkeypatch.setenv("NEW_CUSTOM_API_KEY", "placeholder")
         assert "NEW_CUSTOM_API_KEY" not in credential_env_var_names()
 

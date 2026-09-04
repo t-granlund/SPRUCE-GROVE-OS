@@ -597,7 +597,9 @@ class TestRunCustomServerForm:
         mgr = MagicMock()
         with (
             patch.object(csf, "run_form_flow", return_value=True) as mock_flow,
-            patch("spruce_grove.command_line.menu_session.menu_session") as mock_session,
+            patch(
+                "spruce_grove.command_line.menu_session.menu_session"
+            ) as mock_session,
             patch(
                 "spruce_grove.command_line.mcp_binding_menu.prompt_bind_after_install_sync",
                 create=True,  # only the async variant exists; the call site
@@ -616,7 +618,9 @@ class TestRunCustomServerForm:
 
         with (
             patch.object(csf, "run_form_flow", return_value=False),
-            patch("spruce_grove.command_line.menu_session.menu_session") as mock_session,
+            patch(
+                "spruce_grove.command_line.menu_session.menu_session"
+            ) as mock_session,
         ):
             mock_session.return_value.__enter__ = lambda s: None
             mock_session.return_value.__exit__ = lambda s, *a: False

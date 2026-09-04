@@ -288,7 +288,9 @@ class FakeBar:
 
 def test_suffix_updates_and_clears(monkeypatch):
     fake = FakeBar()
-    monkeypatch.setattr("spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake)
+    monkeypatch.setattr(
+        "spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake
+    )
     rc._update_status_suffix(3)
     rc._update_status_suffix(0)
     assert fake.suffixes == [" (3 pending)", ""]
@@ -296,7 +298,9 @@ def test_suffix_updates_and_clears(monkeypatch):
 
 def test_startup_wires_listener_end_to_end(monkeypatch):
     fake = FakeBar()
-    monkeypatch.setattr("spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake)
+    monkeypatch.setattr(
+        "spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake
+    )
     rc._on_startup()
     from spruce_grove.messaging.pause_controller import get_pause_controller
 
@@ -309,7 +313,9 @@ def test_startup_wires_listener_end_to_end(monkeypatch):
 def test_startup_wires_steer_listener_for_now_mode(monkeypatch):
     """/steer (now-mode) should tag the bar from submit until drain."""
     fake = FakeBar()
-    monkeypatch.setattr("spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake)
+    monkeypatch.setattr(
+        "spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake
+    )
     rc._on_startup()
     from spruce_grove.messaging.pause_controller import get_pause_controller
 

@@ -82,7 +82,7 @@ class TestResolveModule:
     @pytest.mark.parametrize(
         "tier,template",
         [
-            ("builtin", "spruce_grove.plugins.{name}.register_callbacks"),
+            ("builtin", "code_puppy.plugins.{name}.register_callbacks"),
             ("user", "{name}.register_callbacks"),
             ("project", "project_plugins.{name}.register_callbacks"),
         ],
@@ -106,7 +106,7 @@ class TestGetDescription:
         mod = _fake_module(doc=doc, file="/x/register_callbacks.py")
         monkeypatch.setitem(
             __import__("sys").modules,
-            "spruce_grove.plugins.descplug.register_callbacks",
+            "code_puppy.plugins.descplug.register_callbacks",
             mod,
         )
 
@@ -166,7 +166,7 @@ class TestGetFilePath:
             del mod.__file__
         monkeypatch.setitem(
             __import__("sys").modules,
-            "spruce_grove.plugins.nofile.register_callbacks",
+            "code_puppy.plugins.nofile.register_callbacks",
             mod,
         )
         assert plugin_meta.get_file_path("nofile", "builtin") is None

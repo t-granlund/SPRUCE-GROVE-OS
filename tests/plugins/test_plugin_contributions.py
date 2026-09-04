@@ -353,7 +353,7 @@ def test_registry_commands_attributed_by_handler_module(monkeypatch):
         _FakeCommandInfo(
             "other",
             "Other plugin command",
-            _handler_in("spruce_grove.plugins.elsewhere.register_callbacks"),
+            _handler_in("code_puppy.plugins.elsewhere.register_callbacks"),
         ),
         _FakeCommandInfo(
             "core_cmd",
@@ -391,7 +391,7 @@ def test_get_commands_merges_callback_and_registry(clean_callbacks, monkeypatch)
             _FakeCommandInfo(
                 "decorated",
                 "From the decorator",
-                _handler_in("spruce_grove.plugins.plugA.register_callbacks"),
+                _handler_in("code_puppy.plugins.plugA.register_callbacks"),
             )
         ],
     )
@@ -414,7 +414,7 @@ def test_get_commands_dedupes_across_callback_and_registry(
             _FakeCommandInfo(
                 "dup",
                 "Same command",
-                _handler_in("spruce_grove.plugins.plugA.register_callbacks"),
+                _handler_in("code_puppy.plugins.plugA.register_callbacks"),
             )
         ],
     )
@@ -425,7 +425,7 @@ def test_registry_tools_attributed_by_register_func_module(monkeypatch):
     import spruce_grove.tools as tools_pkg
 
     fake_registry = {
-        "plugA_tool": _handler_in("spruce_grove.plugins.plugA.register_callbacks"),
+        "plugA_tool": _handler_in("code_puppy.plugins.plugA.register_callbacks"),
         "core_tool": _handler_in("spruce_grove.tools.file_operations"),
     }
     monkeypatch.setattr(tools_pkg, "TOOL_REGISTRY", fake_registry, raising=False)
@@ -445,7 +445,7 @@ def test_get_tools_merges_callback_and_registry(clean_callbacks, monkeypatch):
     monkeypatch.setattr(
         tools_pkg,
         "TOOL_REGISTRY",
-        {"direct_tool": _handler_in("spruce_grove.plugins.plugA.register_callbacks")},
+        {"direct_tool": _handler_in("code_puppy.plugins.plugA.register_callbacks")},
         raising=False,
     )
     assert pc.get_tools("plugA") == ["hooked_tool", "direct_tool"]

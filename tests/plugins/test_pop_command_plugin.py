@@ -105,7 +105,10 @@ def test_handle_pop_command_pops_and_prunes_tail_fragments():
     with (
         patch.dict(
             sys.modules,
-            {"spruce_grove.agents.agent_manager": _agent_manager_module(agent)},
+            {
+                "spruce_grove.agents.agent_manager": _agent_manager_module(agent),
+                "code_puppy.agents.agent_manager": _agent_manager_module(agent),
+            },
         ),
         patch(
             "code_puppy_core_plugins.pop_command.register_callbacks.emit_success"
@@ -129,7 +132,10 @@ def test_handle_pop_command_preserves_system_prompt_when_count_too_large():
     with (
         patch.dict(
             sys.modules,
-            {"spruce_grove.agents.agent_manager": _agent_manager_module(agent)},
+            {
+                "spruce_grove.agents.agent_manager": _agent_manager_module(agent),
+                "code_puppy.agents.agent_manager": _agent_manager_module(agent),
+            },
         ),
         patch(
             "code_puppy_core_plugins.pop_command.register_callbacks.emit_warning"
@@ -156,7 +162,10 @@ def test_handle_pop_command_reports_system_only_history():
     with (
         patch.dict(
             sys.modules,
-            {"spruce_grove.agents.agent_manager": _agent_manager_module(agent)},
+            {
+                "spruce_grove.agents.agent_manager": _agent_manager_module(agent),
+                "code_puppy.agents.agent_manager": _agent_manager_module(agent),
+            },
         ),
         patch(
             "code_puppy_core_plugins.pop_command.register_callbacks.emit_warning"

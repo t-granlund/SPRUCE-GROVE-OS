@@ -422,7 +422,9 @@ class TestHandleModelCommand:
 
 class TestHandleModelSettingsCommand:
     def test_interactive_error(self):
-        from spruce_grove.command_line.core_commands import handle_model_settings_command
+        from spruce_grove.command_line.core_commands import (
+            handle_model_settings_command,
+        )
 
         with (
             patch("spruce_grove.tools.command_runner.set_awaiting_user_input"),
@@ -435,7 +437,9 @@ class TestHandleModelSettingsCommand:
             assert handle_model_settings_command("/model_settings") is False
 
     def test_interactive_keyboard_interrupt(self):
-        from spruce_grove.command_line.core_commands import handle_model_settings_command
+        from spruce_grove.command_line.core_commands import (
+            handle_model_settings_command,
+        )
 
         mock_agent = MagicMock()
         with (
@@ -450,7 +454,9 @@ class TestHandleModelSettingsCommand:
             assert handle_model_settings_command("/model_settings") is True
 
     def test_interactive_success(self):
-        from spruce_grove.command_line.core_commands import handle_model_settings_command
+        from spruce_grove.command_line.core_commands import (
+            handle_model_settings_command,
+        )
 
         mock_agent = MagicMock()
         with (
@@ -466,7 +472,9 @@ class TestHandleModelSettingsCommand:
             assert handle_model_settings_command("/model_settings") is True
 
     def test_reload_failure(self):
-        from spruce_grove.command_line.core_commands import handle_model_settings_command
+        from spruce_grove.command_line.core_commands import (
+            handle_model_settings_command,
+        )
 
         mock_agent = MagicMock()
         mock_agent.reload_code_generation_agent.side_effect = Exception("boom")
@@ -482,7 +490,9 @@ class TestHandleModelSettingsCommand:
             assert handle_model_settings_command("/model_settings") is True
 
     def test_show_flag(self):
-        from spruce_grove.command_line.core_commands import handle_model_settings_command
+        from spruce_grove.command_line.core_commands import (
+            handle_model_settings_command,
+        )
 
         with patch(
             "spruce_grove.command_line.model_settings_menu.show_model_settings_summary"
@@ -490,7 +500,9 @@ class TestHandleModelSettingsCommand:
             assert handle_model_settings_command("/model_settings --show") is True
 
     def test_show_flag_with_model(self):
-        from spruce_grove.command_line.core_commands import handle_model_settings_command
+        from spruce_grove.command_line.core_commands import (
+            handle_model_settings_command,
+        )
 
         with patch(
             "spruce_grove.command_line.model_settings_menu.show_model_settings_summary"

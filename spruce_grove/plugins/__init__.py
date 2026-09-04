@@ -181,7 +181,9 @@ def _load_builtin_plugins(
 
             if callbacks_file.exists():
                 try:
-                    module_name = f"spruce_grove.plugins.{plugin_name}.register_callbacks"
+                    module_name = (
+                        f"spruce_grove.plugins.{plugin_name}.register_callbacks"
+                    )
                     set_loading_context(plugin_name)
                     importlib.import_module(module_name)
                     loaded.append(plugin_name)

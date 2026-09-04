@@ -36,7 +36,9 @@ class TestAgentCreatorAgent:
                 "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
                 return_value="/tmp/agents",
             ),
-            patch("spruce_grove.agents.agent_creator_agent.ModelFactory") as mock_factory,
+            patch(
+                "spruce_grove.agents.agent_creator_agent.ModelFactory"
+            ) as mock_factory,
         ):
             mock_factory.load_config.return_value = {
                 "gpt-4": {"type": "openai", "context_length": 128000}
@@ -64,7 +66,9 @@ class TestAgentCreatorAgent:
                 "spruce_grove.agents.agent_creator_agent.get_user_agents_directory",
                 return_value="/tmp",
             ),
-            patch("spruce_grove.agents.agent_creator_agent.ModelFactory") as mock_factory,
+            patch(
+                "spruce_grove.agents.agent_creator_agent.ModelFactory"
+            ) as mock_factory,
             patch(
                 "code_puppy_core_plugins.universal_constructor.registry.get_registry",
                 return_value=mock_registry,

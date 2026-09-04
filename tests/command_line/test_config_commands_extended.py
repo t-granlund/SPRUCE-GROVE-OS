@@ -65,7 +65,9 @@ class TestSetCommand:
     def test_set_command_valid_key_value(self):
         """Test set command with valid key=value pairs."""
         with patch("spruce_grove.config.set_config_value") as mock_set:
-            with patch("spruce_grove.config.get_config_keys", return_value=["test_key"]):
+            with patch(
+                "spruce_grove.config.get_config_keys", return_value=["test_key"]
+            ):
                 with patch("spruce_grove.messaging.emit_success") as mock_success:
                     result = handle_set_command("/set test_key test_value")
                     assert result is True
@@ -76,7 +78,9 @@ class TestSetCommand:
     def test_set_command_empty_value(self):
         """Test set command with empty value."""
         with patch("spruce_grove.config.set_config_value") as mock_set:
-            with patch("spruce_grove.config.get_config_keys", return_value=["test_key"]):
+            with patch(
+                "spruce_grove.config.get_config_keys", return_value=["test_key"]
+            ):
                 with patch("spruce_grove.messaging.emit_success"):
                     result = handle_set_command("/set test_key")
                     assert result is True
@@ -173,7 +177,9 @@ class TestPinModelCommand:
                     "spruce_grove.agents.agent_manager.get_agent_descriptions",
                     return_value=mock_agents,
                 ):
-                    with patch("spruce_grove.config.set_agent_pinned_model") as mock_pin:
+                    with patch(
+                        "spruce_grove.config.set_agent_pinned_model"
+                    ) as mock_pin:
                         with patch("spruce_grove.messaging.emit_success"):
                             result = handle_pin_model_command(
                                 "/pin_model test_agent gpt-4"
@@ -287,7 +293,9 @@ class TestUnpinCommand:
                 "spruce_grove.agents.agent_manager.get_agent_descriptions",
                 return_value=mock_agents,
             ):
-                with patch("spruce_grove.config.clear_agent_pinned_model") as mock_clear:
+                with patch(
+                    "spruce_grove.config.clear_agent_pinned_model"
+                ) as mock_clear:
                     with patch("spruce_grove.messaging.emit_success") as mock_success:
                         result = handle_unpin_command("/unpin test_agent")
                         assert result is True

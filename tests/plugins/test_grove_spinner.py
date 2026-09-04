@@ -11,7 +11,7 @@ import asyncio
 
 import pytest
 
-from code_puppy_core_plugins.grove_spinner import register_callbacks as rc
+from code_puppy_core_plugins.puppy_spinner import register_callbacks as rc
 
 
 class FakeBar:
@@ -39,7 +39,9 @@ def clean_state(monkeypatch):
 @pytest.fixture
 def bar(monkeypatch):
     fake = FakeBar()
-    monkeypatch.setattr("spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake)
+    monkeypatch.setattr(
+        "spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake
+    )
     return fake
 
 
@@ -137,7 +139,9 @@ async def test_run_end_never_goes_negative(bar):
 async def test_inactive_bar_means_no_ticker(monkeypatch):
     """Headless -p mode: the bar refuses to activate, so no animation."""
     fake = FakeBar(active=False)
-    monkeypatch.setattr("spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake)
+    monkeypatch.setattr(
+        "spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake
+    )
     await rc._on_run_start(agent_name="a", model_name="m")
     assert rc._ticker_task is None
     assert fake.prefixes == []
@@ -158,7 +162,9 @@ async def test_broken_bar_never_kills_the_ticker(monkeypatch):
             raise RuntimeError("boom")
 
     fake = ExplodingBar()
-    monkeypatch.setattr("spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake)
+    monkeypatch.setattr(
+        "spruce_grove.messaging.bottom_bar.get_bottom_bar", lambda: fake
+    )
     await rc._on_run_start(agent_name="a", model_name="m")
     await asyncio.sleep(0.03)
     assert rc._ticker_task is not None and not rc._ticker_task.done()

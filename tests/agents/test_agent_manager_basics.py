@@ -213,7 +213,9 @@ class TestAgentManagerBasics:
         self, mock_iter_modules, mock_json_agents
     ):
         """Test that import errors are handled gracefully."""
-        mock_iter_modules.return_value = [("spruce_grove.agents", "broken_agent", False)]
+        mock_iter_modules.return_value = [
+            ("spruce_grove.agents", "broken_agent", False)
+        ]
 
         # Create a side effect that only fails for the broken agent module
         def mock_import_side_effect(module_name):
@@ -312,7 +314,7 @@ class TestAgentManagerBasics:
         """Test fallback to spruce-grove agent when requested agent not found."""
 
         # Setup registry with only spruce-grove
-        class SpruceGroveAgent(MockAgent):
+        class CodePuppyAgent(MockAgent):
             def __init__(self):
                 super().__init__()
                 self._name = "spruce-grove"
@@ -320,7 +322,7 @@ class TestAgentManagerBasics:
         mock_iter_modules.return_value = [("spruce_grove.agents", "spruce_grove", True)]
 
         mock_module = MagicMock()
-        mock_module.SpruceGroveAgent = SpruceGroveAgent
+        mock_module.CodePuppyAgent = CodePuppyAgent
 
         def mock_import_side_effect(module_name):
             if "spruce_grove" in module_name:
@@ -339,7 +341,9 @@ class TestAgentManagerBasics:
 
     def test_refresh_agents(self):
         """Test refreshing agent discovery."""
-        with patch("spruce_grove.agents.agent_manager._discover_agents") as mock_discover:
+        with patch(
+            "spruce_grove.agents.agent_manager._discover_agents"
+        ) as mock_discover:
             refresh_agents()
             mock_discover.assert_called_once()
 

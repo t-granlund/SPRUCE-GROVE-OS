@@ -56,7 +56,8 @@ def test_fork_model_completion_with_prefix():
     from spruce_grove.command_line.model_picker_completion import ModelNameCompleter
 
     document = Document(
-        text="/fork @spruce-grove @codex", cursor_position=len("/fork @spruce-grove @codex")
+        text="/fork @spruce-grove @codex",
+        cursor_position=len("/fork @spruce-grove @codex"),
     )
 
     with (

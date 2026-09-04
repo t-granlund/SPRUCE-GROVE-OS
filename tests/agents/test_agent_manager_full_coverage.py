@@ -520,7 +520,8 @@ class TestCloneHelpers:
 
     def test_filter_available_tools(self):
         with patch(
-            "spruce_grove.tools.get_available_tool_names", return_value=["tool1", "tool3"]
+            "spruce_grove.tools.get_available_tool_names",
+            return_value=["tool1", "tool3"],
         ):
             result = am._filter_available_tools(["tool1", "tool2", "tool3"])
             assert result == ["tool1", "tool3"]
@@ -847,9 +848,9 @@ class TestLoadAgent:
 
     @patch("spruce_grove.agents.agent_manager._discover_agents")
     def test_fallback_to_spruce_grove(self, mock_discover):
-        from spruce_grove.agents.agent_spruce_grove import SpruceGroveAgent
+        from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
 
-        am._AGENT_REGISTRY["spruce-grove"] = SpruceGroveAgent
+        am._AGENT_REGISTRY["spruce-grove"] = CodePuppyAgent
         agent = am.load_agent("nonexistent")
         assert agent.name == "spruce-grove"
 

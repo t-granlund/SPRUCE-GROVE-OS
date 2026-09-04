@@ -634,7 +634,8 @@ class TestValidateModel:
     def test_found(self):
         cp_config._model_validation_cache.clear()
         with patch(
-            "spruce_grove.model_factory.ModelFactory.load_config", return_value={"m": {}}
+            "spruce_grove.model_factory.ModelFactory.load_config",
+            return_value={"m": {}},
         ):
             assert cp_config._validate_model_exists("m") is True
 
@@ -957,7 +958,8 @@ class TestAutosaveSession:
         mock_agent = MagicMock()
         mock_agent.get_message_history.return_value = []
         with patch(
-            "spruce_grove.agents.agent_manager.get_current_agent", return_value=mock_agent
+            "spruce_grove.agents.agent_manager.get_current_agent",
+            return_value=mock_agent,
         ):
             assert cp_config.auto_save_session_if_enabled() is False
 
@@ -971,7 +973,8 @@ class TestAutosaveSession:
         mock_metadata.message_count = 1
         mock_metadata.total_tokens = 100
         with patch(
-            "spruce_grove.agents.agent_manager.get_current_agent", return_value=mock_agent
+            "spruce_grove.agents.agent_manager.get_current_agent",
+            return_value=mock_agent,
         ):
             with patch("spruce_grove.config.save_session", return_value=mock_metadata):
                 with patch("spruce_grove.messaging.emit_info"):

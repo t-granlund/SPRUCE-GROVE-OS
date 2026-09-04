@@ -579,7 +579,9 @@ class TestGetUserApproval:
     def test_reject_with_empty_feedback(self):
         from spruce_grove.tools.common import get_user_approval
 
-        with patch("spruce_grove.tools.common.arrow_select", return_value="💬 feedback"):
+        with patch(
+            "spruce_grove.tools.common.arrow_select", return_value="💬 feedback"
+        ):
             with patch("spruce_grove.tools.common.Prompt") as MockPrompt:
                 MockPrompt.ask.return_value = "  "
                 with patch("spruce_grove.tools.common.Console"):
@@ -664,7 +666,8 @@ class TestGetUserApproval:
                     with patch("spruce_grove.tools.common.emit_info"):
                         with patch("spruce_grove.tools.common.emit_success"):
                             with patch(
-                                "spruce_grove.config.get_grove_name", return_value="buddy"
+                                "spruce_grove.config.get_grove_name",
+                                return_value="buddy",
                             ):
                                 confirmed, _ = get_user_approval("Test", "content")
         assert confirmed is True
@@ -841,7 +844,8 @@ class TestGetUserApprovalAsync:
                     with patch("spruce_grove.tools.common.emit_info"):
                         with patch("spruce_grove.tools.common.emit_success"):
                             with patch(
-                                "spruce_grove.config.get_grove_name", return_value="buddy"
+                                "spruce_grove.config.get_grove_name",
+                                return_value="buddy",
                             ):
                                 confirmed, _ = await get_user_approval_async(
                                     "Test", "content"

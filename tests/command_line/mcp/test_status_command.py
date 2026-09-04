@@ -41,8 +41,12 @@ class TestStatusCommand:
                 "spruce_grove.command_line.mcp.status_command.find_server_id_by_name",
                 return_value=None,
             ),
-            patch("spruce_grove.command_line.mcp.status_command.suggest_similar_servers"),
-            patch("spruce_grove.command_line.mcp.status_command.emit_info") as mock_emit,
+            patch(
+                "spruce_grove.command_line.mcp.status_command.suggest_similar_servers"
+            ),
+            patch(
+                "spruce_grove.command_line.mcp.status_command.emit_info"
+            ) as mock_emit,
         ):
             status_cmd.execute(["missing"], group_id="g1")
             assert "not found" in str(mock_emit.call_args_list)
@@ -65,7 +69,9 @@ class TestStatusCommand:
                 "spruce_grove.command_line.mcp.status_command.find_server_id_by_name",
                 return_value="id1",
             ),
-            patch("spruce_grove.command_line.mcp.status_command.emit_info") as mock_emit,
+            patch(
+                "spruce_grove.command_line.mcp.status_command.emit_info"
+            ) as mock_emit,
             patch("spruce_grove.command_line.mcp.status_command.emit_error"),
             patch("spruce_grove.mcp_.async_lifecycle.get_lifecycle_manager") as mock_lm,
         ):
@@ -80,7 +86,9 @@ class TestStatusCommand:
                 "spruce_grove.command_line.mcp.status_command.find_server_id_by_name",
                 return_value="id1",
             ),
-            patch("spruce_grove.command_line.mcp.status_command.emit_info") as mock_emit,
+            patch(
+                "spruce_grove.command_line.mcp.status_command.emit_info"
+            ) as mock_emit,
         ):
             status_cmd.execute(["myserver"], group_id="g1")
             assert "not found" in str(mock_emit.call_args_list)
@@ -158,7 +166,9 @@ class TestStatusCommand:
                 "spruce_grove.command_line.mcp.status_command.find_server_id_by_name",
                 return_value="id1",
             ),
-            patch("spruce_grove.command_line.mcp.status_command.emit_info") as mock_emit,
+            patch(
+                "spruce_grove.command_line.mcp.status_command.emit_info"
+            ) as mock_emit,
             patch("spruce_grove.command_line.mcp.status_command.emit_error"),
             patch("spruce_grove.mcp_.async_lifecycle.get_lifecycle_manager") as mock_lm,
         ):
@@ -202,7 +212,9 @@ class TestStatusCommand:
                 return_value="id1",
             ),
             patch("spruce_grove.command_line.mcp.status_command.emit_info"),
-            patch("spruce_grove.command_line.mcp.status_command.emit_error") as mock_err,
+            patch(
+                "spruce_grove.command_line.mcp.status_command.emit_error"
+            ) as mock_err,
         ):
             status_cmd.execute(["myserver"], group_id="g1")
             assert "boom" in str(mock_err.call_args)
@@ -213,7 +225,9 @@ class TestStatusCommand:
                 "spruce_grove.command_line.mcp.status_command.find_server_id_by_name",
                 side_effect=RuntimeError("fail"),
             ),
-            patch("spruce_grove.command_line.mcp.status_command.emit_info") as mock_emit,
+            patch(
+                "spruce_grove.command_line.mcp.status_command.emit_info"
+            ) as mock_emit,
         ):
             status_cmd.execute(["srv"], group_id="g1")
             assert any(

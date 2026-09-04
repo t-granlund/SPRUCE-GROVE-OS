@@ -354,7 +354,7 @@ class TestCallbackHandler:
                 callback_handler.do_GET()
 
                 mock_failure.assert_called_once_with(
-                    404, "Callback endpoint not found for the grove parade."
+                    404, "Callback endpoint not found for the puppy parade."
                 )
                 mock_shutdown.assert_called_once()
 
@@ -457,7 +457,7 @@ class TestCallbackHandler:
                 callback_handler.do_GET()
 
                 mock_failure.assert_called_once_with(
-                    500, "Unable to persist auth file — a grove probably chewed it."
+                    500, "Unable to persist auth file — a puppy probably chewed it."
                 )
                 mock_shutdown.assert_called_once()
 

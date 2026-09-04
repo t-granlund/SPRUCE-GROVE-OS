@@ -20,7 +20,11 @@ from typing import Any, List, Optional, Sequence
 from fastmcp.client.transports import StdioTransport
 from pydantic_ai.mcp import MCPToolset
 
-from spruce_grove.mcp_.mcp_logs import get_log_file_path, rotate_log_if_needed, write_log
+from spruce_grove.mcp_.mcp_logs import (
+    get_log_file_path,
+    rotate_log_if_needed,
+    write_log,
+)
 from spruce_grove.messaging import emit_info
 
 

@@ -54,7 +54,7 @@ class TestStartupBannerText:
         assert platform_utils.startup_banner_text(120) == "SPRUCE GROVE"
 
     def test_narrow_terminal_gets_compact_banner(self):
-        assert platform_utils.startup_banner_text(78) == "PUP"
+        assert platform_utils.startup_banner_text(78) == "GROVE"
 
     def test_threshold_matches_baked_figlet_width(self):
         import pyfiglet
@@ -63,7 +63,7 @@ class TestStartupBannerText:
         width = max(len(line.rstrip()) for line in rendered.splitlines())
         assert width == platform_utils._FULL_BANNER_WIDTH
         assert platform_utils.startup_banner_text(width) == "SPRUCE GROVE"
-        assert platform_utils.startup_banner_text(width - 1) == "PUP"
+        assert platform_utils.startup_banner_text(width - 1) == "GROVE"
 
     def test_defaults_to_detected_terminal_width(self, monkeypatch):
         monkeypatch.setattr(
@@ -71,4 +71,4 @@ class TestStartupBannerText:
             "get_terminal_size",
             lambda fallback=(80, 24): os.terminal_size((50, 24)),
         )
-        assert platform_utils.startup_banner_text() == "PUP"
+        assert platform_utils.startup_banner_text() == "GROVE"

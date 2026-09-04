@@ -35,7 +35,9 @@ class TestRestartCommand:
             patch(
                 "spruce_grove.command_line.mcp.restart_command.suggest_similar_servers"
             ),
-            patch("spruce_grove.command_line.mcp.restart_command.emit_info") as mock_emit,
+            patch(
+                "spruce_grove.command_line.mcp.restart_command.emit_info"
+            ) as mock_emit,
         ):
             restart_cmd.execute(["missing"], group_id="g1")
             assert "not found" in str(mock_emit.call_args_list)
@@ -49,7 +51,9 @@ class TestRestartCommand:
                 "spruce_grove.command_line.mcp.restart_command.find_server_id_by_name",
                 return_value="id1",
             ),
-            patch("spruce_grove.command_line.mcp.restart_command.emit_info") as mock_emit,
+            patch(
+                "spruce_grove.command_line.mcp.restart_command.emit_info"
+            ) as mock_emit,
             patch("spruce_grove.agents.get_current_agent", return_value=mock_agent),
         ):
             restart_cmd.execute(["myserver"], group_id="g1")
@@ -71,7 +75,8 @@ class TestRestartCommand:
             ),
             patch("spruce_grove.command_line.mcp.restart_command.emit_info"),
             patch(
-                "spruce_grove.agents.get_current_agent", side_effect=Exception("no agent")
+                "spruce_grove.agents.get_current_agent",
+                side_effect=Exception("no agent"),
             ),
         ):
             # Should not raise - just logs warning
@@ -85,7 +90,9 @@ class TestRestartCommand:
                 "spruce_grove.command_line.mcp.restart_command.find_server_id_by_name",
                 return_value="id1",
             ),
-            patch("spruce_grove.command_line.mcp.restart_command.emit_info") as mock_emit,
+            patch(
+                "spruce_grove.command_line.mcp.restart_command.emit_info"
+            ) as mock_emit,
         ):
             restart_cmd.execute(["myserver"], group_id="g1")
             assert any("Failed to start" in str(c) for c in mock_emit.call_args_list)
@@ -97,7 +104,9 @@ class TestRestartCommand:
                 "spruce_grove.command_line.mcp.restart_command.find_server_id_by_name",
                 return_value="id1",
             ),
-            patch("spruce_grove.command_line.mcp.restart_command.emit_info") as mock_emit,
+            patch(
+                "spruce_grove.command_line.mcp.restart_command.emit_info"
+            ) as mock_emit,
         ):
             restart_cmd.execute(["myserver"], group_id="g1")
             assert any("Failed to reload" in str(c) for c in mock_emit.call_args_list)
@@ -108,7 +117,9 @@ class TestRestartCommand:
                 "spruce_grove.command_line.mcp.restart_command.find_server_id_by_name",
                 side_effect=RuntimeError("boom"),
             ),
-            patch("spruce_grove.command_line.mcp.restart_command.emit_info") as mock_emit,
+            patch(
+                "spruce_grove.command_line.mcp.restart_command.emit_info"
+            ) as mock_emit,
         ):
             restart_cmd.execute(["srv"], group_id="g1")
             assert any("Failed to restart" in str(c) for c in mock_emit.call_args_list)

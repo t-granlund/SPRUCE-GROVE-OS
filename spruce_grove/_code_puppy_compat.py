@@ -35,8 +35,9 @@ _TARGET = "spruce_grove"
 class _CodePuppyAliasLoader(importlib.abc.Loader):
     """Loads a legacy-named module by delegating to its spruce_grove twin."""
 
-    def __init__(self, target_name: str) -> None:
+    def __init__(self, target_name: str, real_spec) -> None:
         self._target_name = target_name
+        self._real_spec = real_spec
 
     def create_module(self, spec):  # noqa: D102 - importlib protocol
         return importlib.import_module(self._target_name)
@@ -47,6 +48,12 @@ class _CodePuppyAliasLoader(importlib.abc.Loader):
         sys.modules[self._legacy_name(self._target_name)] = sys.modules[
             self._target_name
         ]
+        # CPython's module_from_spec overwrites the shared module object's
+        # ``__spec__`` (and ``__loader__``) with our alias spec, which would
+        # break ``importlib.reload()`` and anything inspecting the spec
+        # afterwards. Restore the module's genuine identity.
+        module.__spec__ = self._real_spec
+        module.__loader__ = self._real_spec.loader
 
     @staticmethod
     def _legacy_name(target_name: str) -> str:
@@ -70,7 +77,9 @@ class _CodePuppyAliasFinder(importlib.abc.MetaPathFinder):
         if spec is None:
             return None
         return importlib.util.spec_from_loader(
-            fullname, _CodePuppyAliasLoader(target_name)
+            fullname,
+            _CodePuppyAliasLoader(target_name, spec),
+            is_package=spec.submodule_search_locations is not None,
         )
 
 

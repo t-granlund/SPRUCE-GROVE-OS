@@ -17,7 +17,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 
 from spruce_grove.agent_execution_context import get_executing_agent
-from spruce_grove.agents.agent_spruce_grove import SpruceGroveAgent
+from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
 from spruce_grove.callbacks import (
     clear_callbacks,
     register_callback,
@@ -30,7 +30,7 @@ class TestAgentRunStartOrdering:
 
     @pytest.fixture
     def agent(self):
-        return SpruceGroveAgent()
+        return CodePuppyAgent()
 
     @pytest.fixture(autouse=True)
     def _clean_callbacks(self):

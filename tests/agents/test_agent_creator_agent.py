@@ -43,7 +43,8 @@ class TestAgentCreatorAgent:
         )
 
         monkeypatch.setattr(
-            "spruce_grove.agents.agent_creator_agent.ModelFactory.load_config", lambda: {}
+            "spruce_grove.agents.agent_creator_agent.ModelFactory.load_config",
+            lambda: {},
         )
 
         agent = AgentCreatorAgent()
@@ -75,7 +76,8 @@ class TestAgentCreatorAgent:
         )
 
         monkeypatch.setattr(
-            "spruce_grove.agents.agent_creator_agent.ModelFactory.load_config", lambda: {}
+            "spruce_grove.agents.agent_creator_agent.ModelFactory.load_config",
+            lambda: {},
         )
 
         agent = AgentCreatorAgent()

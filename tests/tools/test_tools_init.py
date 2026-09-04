@@ -64,7 +64,9 @@ class TestLoadPluginTools:
     def test_exception_swallowed(self):
         from spruce_grove.tools import _load_plugin_tools
 
-        with patch("spruce_grove.tools.on_register_tools", side_effect=Exception("boom")):
+        with patch(
+            "spruce_grove.tools.on_register_tools", side_effect=Exception("boom")
+        ):
             _load_plugin_tools()  # should not raise
 
 

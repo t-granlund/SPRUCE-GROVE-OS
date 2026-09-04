@@ -19,7 +19,9 @@ class TestLoadServerNames:
         assert isinstance(result, list)
 
     def test_failure(self):
-        with patch("spruce_grove.mcp_.manager.MCPManager", side_effect=Exception("err")):
+        with patch(
+            "spruce_grove.mcp_.manager.MCPManager", side_effect=Exception("err")
+        ):
             result = load_server_names()
             assert result == []
 

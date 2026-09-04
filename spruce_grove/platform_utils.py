@@ -6,12 +6,12 @@ import os
 import shutil
 import sys
 
-# ``SPRUCE GROVE`` rendered in pyfiglet's ansi_shadow spans 79 columns
+# ``SPRUCE GROVE`` rendered in pyfiglet's ansi_shadow spans 96 columns
 # (pinned by tests/test_platform_utils.py). Baked so banner selection
 # stays import-light -- no pyfiglet needed just to pick a label.
 _FULL_BANNER = "SPRUCE GROVE"
-_FULL_BANNER_WIDTH = 79
-_COMPACT_BANNER = "PUP"
+_FULL_BANNER_WIDTH = 96
+_COMPACT_BANNER = "GROVE"
 
 
 def is_android() -> bool:

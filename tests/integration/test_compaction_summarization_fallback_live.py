@@ -96,11 +96,11 @@ def _require_integration_env_vars():
 
 @pytest.fixture
 def lilac_agent(monkeypatch):
-    """Fresh SpruceGroveAgent pinned to ``LILAC_MODEL`` (Kimi K2.6, 262k ctx)."""
+    """Fresh CodePuppyAgent pinned to ``LILAC_MODEL`` (Kimi K2.6, 262k ctx)."""
     from spruce_grove import config as cp_config
     from spruce_grove.agents import _builder, _compaction, _runtime
     from spruce_grove.agents import base_agent as _base_agent_mod
-    from spruce_grove.agents.agent_spruce_grove import SpruceGroveAgent
+    from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
 
     pinned = LILAC_MODEL
 
@@ -133,7 +133,7 @@ def lilac_agent(monkeypatch):
         if hasattr(mod, "get_use_dbos"):
             monkeypatch.setattr(mod, "get_use_dbos", lambda: False)
 
-    return SpruceGroveAgent()
+    return CodePuppyAgent()
 
 
 # -- The test -----------------------------------------------------------------

@@ -50,7 +50,7 @@ def _load_data() -> dict:
     text = DATA_JS.read_text(encoding="utf-8").strip()
     for prefix in ("window.FIELD_GUIDE_DATA = ", "const FIELD_GUIDE_DATA = "):
         if text.startswith(prefix):
-            text = text[len(prefix):]
+            text = text[len(prefix) :]
             break
     return json.loads(text.strip().rstrip(";\n"))
 
@@ -155,7 +155,9 @@ def _strip_auto_regions(page: str) -> str:
     output as curated on the next run and churn the page non-idempotently."""
     return re.sub(
         r"<!-- AUTO-BEGIN:[a-z-]+ -->.*?<!-- AUTO-END:[a-z-]+ -->",
-        "", page, flags=re.S,
+        "",
+        page,
+        flags=re.S,
     )
 
 
@@ -171,41 +173,58 @@ def main() -> None:
     authored = _strip_auto_regions(page)
     curated = {h[:7] for h in re.findall(r'class="hash">([0-9a-f]{6,10})<', authored)}
     cite_hashes = {
-        h[:7]
-        for h in re.findall(r'class="(?:hash|h)">([0-9a-f]{6,10})<', authored)
+        h[:7] for h in re.findall(r'class="(?:hash|h)">([0-9a-f]{6,10})<', authored)
     }
 
     auto = _auto_cards(buckets, curated)
 
     # Lists skip anything already showcased (curated deep-dive, auto-card, or
     # hand-cited in an earlier list) to avoid duplicate coverage.
-    excluded_from_lists = cite_hashes | {
-        _hash_key(c)
-        for c in buckets.get("feat", [])
-        if _hash_key(c) not in curated and not NOISE_RE.search(c.get("msg") or "")
-    } | curated
+    excluded_from_lists = (
+        cite_hashes
+        | {
+            _hash_key(c)
+            for c in buckets.get("feat", [])
+            if _hash_key(c) not in curated and not NOISE_RE.search(c.get("msg") or "")
+        }
+        | curated
+    )
 
     page = _replace_region(page, "stats", _statline(data, buckets))
     page = _replace_region(page, "auto-features", auto)
-    toc_link = ('      <li><a href="#auto-detected">New Since Last Curation</a></li>'
-                if auto else "")
+    toc_link = (
+        '      <li><a href="#auto-detected">New Since Last Curation</a></li>'
+        if auto
+        else ""
+    )
     page = _replace_region(page, "toc", toc_link)
 
     minor_commits = [c for k in MINOR_KINDS for c in buckets.get(k, [])]
     minor_commits.sort(key=lambda c: c.get("date", ""), reverse=True)
-    page = _replace_region(page, "minor-list",
-                           _list_items(minor_commits, excluded_from_lists, MAX_LIST_ITEMS))
-    page = _replace_region(page, "fixes-list",
-                           _list_items(buckets.get("fix", []), cite_hashes, MAX_LIST_ITEMS))
+    page = _replace_region(
+        page,
+        "minor-list",
+        _list_items(minor_commits, excluded_from_lists, MAX_LIST_ITEMS),
+    )
+    page = _replace_region(
+        page,
+        "fixes-list",
+        _list_items(buckets.get("fix", []), cite_hashes, MAX_LIST_ITEMS),
+    )
 
     UPDATES_HTML.write_text(page, encoding="utf-8")
     auto_n = len(
-        [c for c in buckets.get("feat", [])
-         if _hash_key(c) not in curated and not NOISE_RE.search(c.get("msg") or "")]
+        [
+            c
+            for c in buckets.get("feat", [])
+            if _hash_key(c) not in curated and not NOISE_RE.search(c.get("msg") or "")
+        ]
     )
-    print(f"updates.html regenerated: {len(commits)} commits, "
-          f"{len(buckets.get('feat', []))} feats ({auto_n} auto-detected uncurated), "
-          f"{len(buckets.get('fix', []))} fixes")
+    print(
+        f"updates.html regenerated: {len(commits)} commits, "
+        f"{len(buckets.get('feat', []))} feats ({auto_n} auto-detected uncurated), "
+        f"{len(buckets.get('fix', []))} fixes"
+    )
 
 
 if __name__ == "__main__":

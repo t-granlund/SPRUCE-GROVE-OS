@@ -54,9 +54,9 @@ class TestPlanningAgent:
 
 class TestSpruceGroveAgentTools:
     def test_get_available_tools(self):
-        from spruce_grove.agents.agent_spruce_grove import SpruceGroveAgent
+        from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
 
-        agent = SpruceGroveAgent()
+        agent = CodePuppyAgent()
         tools = agent.get_available_tools()
         assert "create_file" in tools
         assert "edit" in tools
@@ -64,9 +64,9 @@ class TestSpruceGroveAgentTools:
         assert "invoke_agent" in tools
 
     def test_default_spruce_grove_does_not_get_model_override_tools(self):
-        from spruce_grove.agents.agent_spruce_grove import SpruceGroveAgent
+        from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
 
-        agent = SpruceGroveAgent()
+        agent = CodePuppyAgent()
         tools = agent.get_available_tools()
         prompt = agent.get_system_prompt()
 
@@ -81,7 +81,7 @@ class TestSpruceGroveAgentTools:
         from spruce_grove.agents import agent_spruce_grove
 
         monkeypatch.setattr(agent_spruce_grove, "get_agency_level", lambda: "extreme")
-        prompt = agent_spruce_grove.SpruceGroveAgent().get_system_prompt()
+        prompt = agent_spruce_grove.CodePuppyAgent().get_system_prompt()
 
         assert "do not stop and force the user to reprompt you" in prompt
         assert "wait 60 seconds and check its progress" in prompt
@@ -99,7 +99,9 @@ class TestDisplaySubagentSkip:
 
         with (
             patch("spruce_grove.tools.display.is_subagent", return_value=True),
-            patch("spruce_grove.tools.display.get_subagent_verbose", return_value=False),
+            patch(
+                "spruce_grove.tools.display.get_subagent_verbose", return_value=False
+            ),
             patch("spruce_grove.tools.display.Console") as mock_console_cls,
         ):
             display_non_streamed_result("hello")

@@ -66,7 +66,9 @@ class TestGetPendingImagesNoBinaryContent:
         manager = ClipboardAttachmentManager()
         manager.add_image(b"data")
 
-        with patch("spruce_grove.command_line.clipboard.BINARY_CONTENT_AVAILABLE", False):
+        with patch(
+            "spruce_grove.command_line.clipboard.BINARY_CONTENT_AVAILABLE", False
+        ):
             assert manager.get_pending_images() == []
 
 

@@ -47,6 +47,11 @@ Lineage of this repository:
 
 - Logo/brand imagery still shows the puppy — design refresh pending
   (brand tokens: see BRAND.md).
+- The external `code-puppy-core-plugins` bundle still owns several runtime
+  details: skill dirs (`~/.code_puppy/skills`), plugin-list labels, theme
+  names (`purple-puppy` et al.), spinner pack names, the ACP server name
+  (`code-puppy`), and its own playful strings ("puppy parade"). Long-term
+  fix: vendor/fork the bundle as a `spruce-grove-core-plugins` package.
 - Upstream docs under `docs/`, `pages-hub/`, `changelog/` were renamed
   mechanically; prose is ~95% correct but pass-by-pass cleanup is welcome.
 - `version_checker` queries PyPI for `spruce-grove` (not yet published);
@@ -55,3 +60,13 @@ Lineage of this repository:
   planned per project formatting policy (none allowed in source for now).
 - i18n non-English catalogs lag the English msgid changes until the next
   catalog regen (`docs/I18N.md` workflow).
+
+## Validation status (at rebuild completion)
+
+- `uv lock` + `uv sync`: clean (code-puppy -> spruce-grove 0.1.0 in lock).
+- `ruff check` + `ruff format`: clean.
+- Full test suite: **7700 passed, 32 skipped, 0 failed**.
+- CLI smoke: `uv run spruce-grove --help` exits 0 with branded help.
+- Compact startup banner changed from "PUP" to "GROVE"; full banner art
+  regenerated for "SPRUCE GROVE" (96 cols); splash palette recolored from
+  puppy-magenta to spruce-canopy greens with cedar core.

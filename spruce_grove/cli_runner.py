@@ -156,7 +156,9 @@ def apply_quick_resume(args) -> bool:
 async def main():
     """Main async entry point for Spruce Grove CLI."""
     install_httpcore2_shutdown_filter()
-    parser = argparse.ArgumentParser(description="Spruce Grove - A code generation agent")
+    parser = argparse.ArgumentParser(
+        description="Spruce Grove - A code generation agent"
+    )
     parser.add_argument(
         "--version",
         "-v",

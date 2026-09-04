@@ -53,7 +53,8 @@ class TestCancelledResponse:
 class TestAskUserQuestion:
     def test_subagent_blocked(self):
         with patch(
-            "spruce_grove.tools.ask_user_question.handler.is_subagent", return_value=True
+            "spruce_grove.tools.ask_user_question.handler.is_subagent",
+            return_value=True,
         ):
             result = ask_user_question(
                 [{"question": "q", "header": "h", "options": [{"label": "a"}]}]

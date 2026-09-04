@@ -1,6 +1,6 @@
 """Live integration tests for message-history compaction.
 
-Drives a REAL ``SpruceGroveAgent`` through ``run_with_mcp`` with a pre-populated
+Drives a REAL ``CodePuppyAgent`` through ``run_with_mcp`` with a pre-populated
 ~180k-token message history, pinned to ``LILAC_MODEL`` (Kimi K2.6, 262k ctx window).
 Compaction MUST fire, the run MUST complete, and history MUST shrink.
 
@@ -294,7 +294,7 @@ def huge_history() -> List[ModelMessage]:
 
 @pytest.fixture
 def pinned_spruce_grove_agent(monkeypatch):
-    """Fresh SpruceGroveAgent pinned to ``LILAC_MODEL``.
+    """Fresh CodePuppyAgent pinned to ``LILAC_MODEL``.
 
     Uses monkeypatch to override the global model getter so we don't touch
     the user's on-disk config during the test run.
@@ -302,7 +302,7 @@ def pinned_spruce_grove_agent(monkeypatch):
     from spruce_grove import config as cp_config
     from spruce_grove.agents import _builder, _compaction, _runtime
     from spruce_grove.agents import base_agent as _base_agent_mod
-    from spruce_grove.agents.agent_spruce_grove import SpruceGroveAgent
+    from spruce_grove.agents.agent_spruce_grove import CodePuppyAgent
 
     test_model = LILAC_MODEL
 
@@ -342,7 +342,7 @@ def pinned_spruce_grove_agent(monkeypatch):
         if hasattr(mod, "get_use_dbos"):
             monkeypatch.setattr(mod, "get_use_dbos", lambda: False)
 
-    agent = SpruceGroveAgent()
+    agent = CodePuppyAgent()
     return agent
 
 
@@ -514,7 +514,9 @@ async def test_live_compaction_summarization_strategy(
 
 
 @pytest.mark.asyncio
-async def test_live_no_compaction_under_threshold(pinned_spruce_grove_agent, monkeypatch):
+async def test_live_no_compaction_under_threshold(
+    pinned_spruce_grove_agent, monkeypatch
+):
     """Small history + high threshold → compaction must NOT fire, run succeeds."""
     from spruce_grove.agents import _compaction
     from spruce_grove.agents._history import estimate_tokens_for_message

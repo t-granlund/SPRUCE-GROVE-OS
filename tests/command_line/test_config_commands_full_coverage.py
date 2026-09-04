@@ -146,7 +146,8 @@ class TestHandleShowCommand:
             ),
             patch("spruce_grove.config.get_value"),
             patch(
-                "spruce_grove.keymap.get_cancel_agent_display_name", return_value="ctrl+c"
+                "spruce_grove.keymap.get_cancel_agent_display_name",
+                return_value="ctrl+c",
             ),
             patch("spruce_grove.messaging.emit_info"),
         ]
@@ -204,7 +205,9 @@ class TestHandleUnpinCommand:
         mock_agent = MagicMock()
         mock_agent.name = "spruce-grove"
         with (
-            patch("spruce_grove.agents.json_agent.discover_json_agents", return_value={}),
+            patch(
+                "spruce_grove.agents.json_agent.discover_json_agents", return_value={}
+            ),
             patch(
                 "spruce_grove.agents.agent_manager.get_agent_descriptions",
                 return_value={"spruce-grove": "desc"},

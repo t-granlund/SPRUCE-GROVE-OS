@@ -12,10 +12,10 @@ import json
 import pytest
 from rich.cells import cell_len
 
-from code_puppy_core_plugins.grove_spinner import commands as cmds
-from code_puppy_core_plugins.grove_spinner import picker
-from code_puppy_core_plugins.grove_spinner import register_callbacks as rc
-from code_puppy_core_plugins.grove_spinner import spinners as sp
+from code_puppy_core_plugins.puppy_spinner import commands as cmds
+from code_puppy_core_plugins.puppy_spinner import picker
+from code_puppy_core_plugins.puppy_spinner import register_callbacks as rc
+from code_puppy_core_plugins.puppy_spinner import spinners as sp
 
 
 @pytest.fixture(autouse=True)
@@ -42,7 +42,7 @@ def _write_user_file(path: str, data) -> None:
 
 
 def test_builtins_include_the_grove_pack():
-    for name in ("grove", "bone", "zoomies", "paws", "dots"):
+    for name in ("puppy", "bone", "zoomies", "paws", "dots"):
         assert name in sp.BUILTIN_SPINNERS
 
 
@@ -108,7 +108,7 @@ def test_aesthetic_drains_to_all_hollow():
 
 
 def test_cli_spinners_pack_has_descriptions():
-    from code_puppy_core_plugins.grove_spinner.builtin_frames import EXTRA_SPECS
+    from code_puppy_core_plugins.puppy_spinner.builtin_frames import EXTRA_SPECS
 
     for name in EXTRA_SPECS:
         assert sp.BUILTIN_SPINNERS[name].description, name
@@ -233,20 +233,20 @@ def test_tick_loop_uses_json_tweak_of_grove():
     """A frameless re-speed of the default grove must not route through
     the module constants (source is 'builtin+user', not 'builtin').
     """
-    _write_user_file(sp.USER_SPINNERS_FILE, {"grove": {"interval": 0.4}})
+    _write_user_file(sp.USER_SPINNERS_FILE, {"puppy": {"interval": 0.4}})
     sp.invalidate_cache()
     frames, interval = rc._current_frames_and_interval()
-    assert frames == sp.BUILTIN_SPINNERS["grove"].frames
+    assert frames == sp.BUILTIN_SPINNERS["puppy"].frames
     assert interval == pytest.approx(0.4)
 
 
 def test_user_spinner_overrides_builtin_in_catalogue():
     _write_user_file(
-        sp.USER_SPINNERS_FILE, {"grove": {"frames": ["custom"], "interval": 0.5}}
+        sp.USER_SPINNERS_FILE, {"puppy": {"frames": ["custom"], "interval": 0.5}}
     )
     catalogue = sp.get_catalogue()
-    assert catalogue["grove"].source == "user"
-    assert catalogue["grove"].frames == ("custom",)
+    assert catalogue["puppy"].source == "user"
+    assert catalogue["puppy"].frames == ("custom",)
 
 
 def test_write_template_creates_once():
@@ -371,7 +371,7 @@ def test_tick_loop_honors_speed_override_on_the_default_grove():
 
 def test_tick_loop_uses_user_override_of_grove():
     _write_user_file(
-        sp.USER_SPINNERS_FILE, {"grove": {"frames": ["custom"], "interval": 0.5}}
+        sp.USER_SPINNERS_FILE, {"puppy": {"frames": ["custom"], "interval": 0.5}}
     )
     sp.invalidate_cache()
     frames, interval = rc._current_frames_and_interval()
@@ -446,7 +446,7 @@ def test_help_entries_advertise_the_command():
 # =========================================================================
 
 
-def _menu_text(entries, selected, page, active="grove"):
+def _menu_text(entries, selected, page, active="puppy"):
     fragments = picker._format_menu(entries, selected, page, active)
     return "".join(text for _, text in fragments)
 

@@ -238,7 +238,9 @@ class TestStatusDisplay:
         """Test starting the status display."""
         assert not status_display.is_active
 
-        with patch("spruce_grove.status_display.asyncio.create_task") as mock_create_task:
+        with patch(
+            "spruce_grove.status_display.asyncio.create_task"
+        ) as mock_create_task:
             mock_task = MagicMock()
             mock_create_task.return_value = mock_task
 
@@ -255,7 +257,9 @@ class TestStatusDisplay:
     @pytest.mark.asyncio
     async def test_start_already_active(self, status_display):
         """Test starting when already active."""
-        with patch("spruce_grove.status_display.asyncio.create_task") as mock_create_task:
+        with patch(
+            "spruce_grove.status_display.asyncio.create_task"
+        ) as mock_create_task:
             mock_task = MagicMock()
             mock_create_task.return_value = mock_task
 
@@ -269,7 +273,9 @@ class TestStatusDisplay:
     @pytest.mark.asyncio
     async def test_stop_after_start(self, status_display):
         """Test stopping the status display after starting."""
-        with patch("spruce_grove.status_display.asyncio.create_task") as mock_create_task:
+        with patch(
+            "spruce_grove.status_display.asyncio.create_task"
+        ) as mock_create_task:
             mock_task = MagicMock()
             mock_create_task.return_value = mock_task
 
@@ -302,7 +308,9 @@ class TestStatusDisplay:
     @pytest.mark.asyncio
     async def test_stop_with_cancellation(self, status_display):
         """Test stopping handles task cancellation properly."""
-        with patch("spruce_grove.status_display.asyncio.create_task") as mock_create_task:
+        with patch(
+            "spruce_grove.status_display.asyncio.create_task"
+        ) as mock_create_task:
             mock_task = MagicMock()
             mock_create_task.return_value = mock_task
 
@@ -426,7 +434,9 @@ class TestStatusDisplay:
     def test_global_rate_reset_on_stop(self, status_display):
         """Test that global rate is reset to 0 on stop."""
         # Need to start the display first for stop() to work properly
-        with patch("spruce_grove.status_display.asyncio.create_task") as mock_create_task:
+        with patch(
+            "spruce_grove.status_display.asyncio.create_task"
+        ) as mock_create_task:
             mock_task = MagicMock()
             mock_create_task.return_value = mock_task
             status_display.start()

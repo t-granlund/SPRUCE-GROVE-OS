@@ -289,7 +289,9 @@ def handle_command(command: str):
             )
         else:
             # Show current model ONLY here
-            from spruce_grove.command_line.model_picker_completion import get_active_model
+            from spruce_grove.command_line.model_picker_completion import (
+                get_active_model,
+            )
 
             current_model = get_active_model()
             emit_info(

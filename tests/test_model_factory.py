@@ -7,7 +7,9 @@ import pytest
 
 from spruce_grove.model_factory import ModelFactory, make_model_settings
 
-TEST_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "../spruce_grove/models.json")
+TEST_CONFIG_PATH = os.path.join(
+    os.path.dirname(__file__), "../spruce_grove/models.json"
+)
 
 
 def test_ollama_load_model():
