@@ -10,14 +10,22 @@ Visual and verbal identity, shared with the granlund-grove design system
 Name derivation, per truth-for-truth's-sake: "granlund" maps to "spruce
 grove" in Swedish. Say that, nothing fancier.
 
-## Color tokens (semantic, OKLCH in the source design system)
+## Color tokens (source of truth: granlund-grove `src/styles.css`)
 
-| Token | Role | Where |
+| Token | OKLCH | Role |
 |---|---|---|
-| charcoal | base background | TUI chrome, docs dark mode |
-| spruce-deep | primary brand | headers, accents, active states |
-| cedar | warm accent | highlights, persona markers (Cedar) |
-| mist | text/borders | body copy, dividers |
+| charcoal | `oklch(0.18 0.012 150)` | base background |
+| spruce-deep | `oklch(0.22 0.03 158)` | deep brand layer |
+| spruce | `oklch(0.32 0.045 158)` | primary brand |
+| moss | `oklch(0.45 0.06 155)` | accent green |
+| cedar | `oklch(0.78 0.12 55)` | warm accent, persona markers |
+| bark | `oklch(0.32 0.025 60)` | earthy neutral |
+| stone | `oklch(0.85 0.012 90)` | soft UI text |
+| mist | `oklch(0.94 0.008 100)` | foreground/typography |
+
+Terminal splash truecolor mapping: halo `#2D4F3A` (45/79/58) -> glow
+`#588F5E` (88/143/94) -> cedar core `#D2A069` (210/160/105), mist crest
+`#F0E1C8` (240/225/200). ANSI fallback: 32 -> 92 -> 93.
 
 ## Typography
 
