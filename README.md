@@ -1,5 +1,9 @@
 # SPRUCE GROVE OS
 
+<p align="center">
+  <img src="logos/spruce_grove_logo_withback.jpeg" alt="The Spruce Grove mark - three geometric spruces in brand greens on charcoal" width="260">
+</p>
+
 **gran · lund · sv. · spruce grove** — an agentic coding CLI grown in the grove.
 
 > Together we are better. Always.
