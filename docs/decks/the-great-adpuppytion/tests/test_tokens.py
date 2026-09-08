@@ -7,7 +7,7 @@ BRAND = {
     "--cp-ink-900": "#0b0f14",
     "--cp-text": "#e8eef4",
     "--cp-text-soft": "#9fb0c3",
-    "--cp-text-muted": "#6b7d91",
+    "--cp-text-muted": "#7f92a6",
     "--cp-gold": "#f5b94d",
     "--cp-sky": "#6cb6ff",
     "--cp-mint": "#4cc46a",
@@ -99,9 +99,12 @@ class TestContrast:
         assert contrast(BRAND["--cp-text"], self.CANVAS) >= 4.5
         assert contrast(BRAND["--cp-text-soft"], self.CANVAS) >= 4.5
 
-    def test_muted_large_only(self):
-        # muted is eyebrows/attribution micro text — keep ≥ 3.0 (large/non-essential)
-        assert contrast(BRAND["--cp-text-muted"], self.CANVAS) >= 3.0
+    def test_muted_meets_aa_everywhere(self):
+        # muted sits on canvas AND card surfaces (e.g. ladder crits, captions),
+        # so it must clear AA 4.5:1 on every surface it can touch
+        assert contrast(BRAND["--cp-text-muted"], self.CANVAS) >= 4.5
+        assert contrast(BRAND["--cp-text-muted"], "#151e28") >= 4.5
+        assert contrast(BRAND["--cp-text-muted"], "#111821") >= 4.5
 
     def test_accents_on_canvas(self):
         for name in ("--cp-gold", "--cp-sky", "--cp-mint", "--cp-violet", "--cp-coral"):

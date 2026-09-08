@@ -3,6 +3,9 @@
 **Last saved:** 2026-07-30 (evening) by code-puppy-8aaf0e
 **Status:** v2.1 — DS "Cornerstone+" refactored into token/component architecture,
 42-test compliance suite green, headless QA re-verified post-refactor.
+**Derivative:** `leather-apron-club/` (2026-09-03) — full Spruce-Grove reimagining
+for the Leather Apron Club founding meeting (Fri 09.11 · Bentonville Barber Co.).
+33 slides / 6 acts / Junto ethos / Sept 3 receipts. See its README.
 
 ## How to resume
 

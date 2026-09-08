@@ -51,7 +51,8 @@ The whisper. Context + evidence: Gorky, Chaplin backstory, personas, consent.
   (quote block OR image, never both).
 - Artifact is borderless: a 1px accent rule + whitespace, not a card.
 - Images: duotone-treated (ink + act accent), 40–50% column, subtle mask.
-- Body text floor: 0.62em @30px base ≈ 19px. No 0.5em body text anywhere.
+- Body text floor: `--type-small` (0.66em @30px base ≈ 20px) — no reading text below it.
+  `--type-micro` (0.52em) is eyebrows/attributions ONLY.
 
 ### 3 · STAGE
 The artifact IS the slide. Timeline, sine wave, terminal, stat wall.
@@ -85,6 +86,18 @@ charter commitments.
 
 Rule: within a slide, only the act color + neutral ink. The v1 sin
 (five hues on one slide) is banned.
+
+## Accessibility (WCAG 2.2 AA baseline)
+
+- **Contrast:** `--cp-text`/`--cp-text-soft` are AAA on every surface (≥7.5:1).
+  `--cp-text-muted` (#7f92a6) clears AA 4.5:1 on canvas, elevated, AND card
+  surfaces — it may sit on any of them. All five accent hues are ≥7:1 on canvas.
+  Encoded in `tests/test_tokens.py::TestContrast`.
+- **Motion:** `prefers-reduced-motion: reduce` renders all artifacts fully-formed
+  (sine drawn, terminal typed, caret static — no blink loop) in theme.css §6 and
+  university.css. The blinking caret is the only looping animation in the DS.
+- **Structure:** ledger tables use `scope="col"` headers; the university app has
+  visible `:focus-visible` rings and reduced-motion-aware smooth scrolling.
 
 ## Type scale (@ 30px Reveal base)
 

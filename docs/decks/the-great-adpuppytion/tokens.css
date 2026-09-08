@@ -16,7 +16,7 @@
 
   --cp-text: #e8eef4;
   --cp-text-soft: #9fb0c3;
-  --cp-text-muted: #6b7d91;
+  --cp-text-muted: #7f92a6;  /* AA-pass on canvas, elevated AND card surfaces (≥5.2:1) */
 
   --cp-gold: #f5b94d;   /* creator / brand primary */
   --cp-sky: #6cb6ff;    /* builder / technical */

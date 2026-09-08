@@ -162,7 +162,7 @@
   font-family: var(--display); font-size: 1.5em; font-weight: 700;
   color: var(--node, var(--ink-primary)); display: block; margin-bottom: 0.2em;
 }
-.rail .node p { font-size: 0.62em; line-height: 1.45; color: var(--ink-soft); margin: 0 0 0.4em; }
+.rail .node p { font-size: var(--type-small); line-height: 1.45; color: var(--ink-soft); margin: 0 0 0.4em; }
 .rail .node strong { color: var(--ink-primary); }
 
 /* 4.5 data-viz: stat wall (numbers + hairlines, no boxes) */
@@ -181,7 +181,7 @@
 /* 4.7 terminal (self-typing — motion slot #2) */
 .termmock {
   background: var(--cp-ink-950); border: 1px solid var(--line);
-  border-radius: 12px; font-family: var(--mono); font-size: 0.62em;
+  border-radius: 12px; font-family: var(--mono); font-size: var(--type-small);
   padding: 1.2em 1.4em; line-height: 1.75; color: var(--ink-soft);
 }
 .termmock .prompt { color: var(--accent-creator); }
@@ -236,3 +236,13 @@
 .reveal .progress { color: var(--act, var(--accent-creator)); height: 4px; }
 .reveal .slides section .fragment.fade-up { transform: translateY(24px); }
 .reveal .slides section .fragment.fade-up.visible { transform: translateY(0); }
+
+/* ──────────── 6 · REDUCED MOTION (WCAG 2.2 §2.2.2/2.3.3) ────────────
+   With reduce: artifacts render fully-formed — sine drawn, terminal
+   typed, caret static — and nothing blinks or loops forever.        */
+@media (prefers-reduced-motion: reduce) {
+  .reveal .present .sinewrap .draw { animation: none; stroke-dashoffset: 0; }
+  .reveal .present .termmock .line { animation: none; width: auto; }
+  .reveal .termmock .caret::after { animation: none; }
+  .reveal .slides section .fragment.fade-up.visible { transform: none; }
+}

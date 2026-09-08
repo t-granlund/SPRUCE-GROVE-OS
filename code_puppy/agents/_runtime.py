@@ -30,6 +30,11 @@ from typing import Any, Callable, Iterator, List, Optional, Sequence, Type, Unio
 import httpcore
 import httpx
 
+try:  # pragma: no cover - httpx2 ships with the pydantic-ai 2.x provider stack
+    import httpx2
+except ImportError:  # pragma: no cover - legacy installs without httpx2
+    httpx2 = None  # type: ignore[assignment]
+
 try:  # pragma: no cover - mcp version dependent
     from mcp.shared.exceptions import McpError
 except ImportError:  # newer mcp SDKs renamed McpError -> MCPError
@@ -136,6 +141,16 @@ _RETRYABLE_SNIPPETS = (
 # Transport failures worth a silent retry, by umbrella base class (not each
 # subclass) so any dropped-socket guise or timeout is covered. A flaky
 # VPN/WiFi blip is recoverable, never fatal.
+#
+# ``httpx2`` (pydantic-ai 2.x provider clients) is a *parallel* exception
+# hierarchy -- ``httpx2.ReadTimeout`` does NOT subclass ``httpx.ReadTimeout``
+# or anything else in ``httpx``/``httpcore``. Mid-stream errors from an
+# OpenAI-compatible provider (e.g. a stalled gateway sitting silent past the
+# read timeout) therefore slipped past every isinstance branch below on an
+# EMPTY message (no snippet to match) and died as a fatal 60-line traceback.
+# Real-world casualty: ``syn:large:vision`` hung 38 min mid-turn, the 1800s
+# read timeout fired, and the whole run crashed instead of retrying. List the
+# httpx2 umbrellas explicitly so both HTTP families retry identically.
 _RETRYABLE_EXCEPTIONS: tuple = (
     httpx.NetworkError,
     httpx.TimeoutException,
@@ -143,6 +158,14 @@ _RETRYABLE_EXCEPTIONS: tuple = (
     httpcore.NetworkError,
     httpcore.TimeoutException,
     httpcore.RemoteProtocolError,
+) + (
+    (
+        httpx2.NetworkError,
+        httpx2.TimeoutException,
+        httpx2.RemoteProtocolError,
+    )
+    if httpx2 is not None
+    else ()
 )
 
 
@@ -785,23 +808,18 @@ async def _run_with_mcp_impl(
         # honoured), built once so a run has consistent backoff behaviour.
         from code_puppy.agents.retry_profiles import make_streaming_retry
 
-        _main_retry = make_streaming_retry(
-            "main",
-            agent.get_model_name(),
-            # Completed steps are checkpointed into _message_history, so a
-            # growing history means real progress → refresh the budget.
-            progress_fn=lambda: len(agent._message_history or []),
-        )
+        from code_puppy.agents.retry_checkpoint import RetryCheckpoint, resumable_call
 
-        @_main_retry
-        async def _call() -> Any:
-            return await pydantic_agent.run(
-                prompt_to_use,
-                message_history=agent._message_history,
-                usage_limits=usage_limits,
-                event_stream_handler=stream_handler,
-                **kwargs,
-            )
+        checkpoint = RetryCheckpoint(agent)
+        _main_retry = make_streaming_retry(
+            "main", agent.get_model_name(), progress_fn=checkpoint.progress
+        )
+        run_options = dict(
+            usage_limits=usage_limits, event_stream_handler=stream_handler, **kwargs
+        )
+        _call = _main_retry(
+            resumable_call(agent, pydantic_agent, prompt_to_use, **run_options)
+        )
 
         async def _call_with_exception_recovery() -> Any:
             """Run ``_call`` and let plugins request one exception retry."""
@@ -832,17 +850,10 @@ async def _run_with_mcp_impl(
         # (before every model call); ``queue``-mode ones drain between runs
         # below — additive, won't interrupt in-progress work.
         async def _follow_up_run(follow_up_prompt: Any) -> Any:
-            @_main_retry
-            async def _call_follow_up() -> Any:
-                return await pydantic_agent.run(
-                    follow_up_prompt,
-                    message_history=agent._message_history,
-                    usage_limits=usage_limits,
-                    event_stream_handler=stream_handler,
-                    **kwargs,
-                )
-
-            return await _call_follow_up()
+            call = _main_retry(
+                resumable_call(agent, pydantic_agent, follow_up_prompt, **run_options)
+            )
+            return await call()
 
         hook_retries_used = 0
         queued_steers_used = 0

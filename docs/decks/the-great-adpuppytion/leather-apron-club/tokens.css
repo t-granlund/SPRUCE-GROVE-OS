@@ -1,0 +1,86 @@
+/* ============================================================
+   TOKENS — THE LEATHER APRON CLUB deck
+   DS "Cornerstone+" forked onto the SPRUCE GROVE system
+   (granlund-grove: Nordic forest dark, oklch, verbatim from
+   granlund-grove/src/styles.css). Single source of truth.
+   ============================================================ */
+
+:root {
+  /* ── 1 · BRAND PRIMITIVES (spruce grove field palette) ── */
+  --lac-night-950: oklch(0.14 0.010 150);   /* deepest forest — term bg */
+  --lac-night-900: oklch(0.18 0.012 150);   /* canvas                   */
+  --lac-night-800: oklch(0.22 0.014 155);   /* card                     */
+  --lac-spruce:    oklch(0.32 0.045 158);   /* structural line          */
+  --lac-bark:      oklch(0.32 0.025 60);    /* warm shadow              */
+
+  --lac-mist:   oklch(0.94 0.012 90);   /* primary ink   */
+  --lac-stone:  oklch(0.85 0.012 90);   /* body ink      */
+  --lac-muted:  oklch(0.72 0.018 110);  /* muted ink     */
+
+  --lac-cedar:  oklch(0.78 0.12 55);    /* founder gold — apron, creed, ask */
+  --lac-grove:  oklch(0.72 0.09 155);   /* grove green (moss, brightened for text) */
+  --lac-moss:   oklch(0.45 0.06 155);   /* moss — fills only, never text */
+  --lac-frost:  oklch(0.80 0.06 210);   /* glacier — present-day, receipts */
+  --lac-ember:  oklch(0.72 0.13 40);    /* alarm — the machine age */
+
+  /* ── 2 · SEMANTIC SURFACES & INK ── */
+  --surface-canvas: var(--lac-night-900);
+  --surface-card: var(--lac-night-800);
+  --surface-term: var(--lac-night-950);
+  --line: oklch(0.3 0.018 150 / 0.6);
+  --line-strong: var(--lac-spruce);
+  --ink-primary: var(--lac-mist);
+  --ink-soft: var(--lac-stone);
+  --ink-muted: var(--lac-muted);
+
+  /* ── 3 · ROLE ACCENTS ── */
+  --accent-founder: var(--lac-cedar);
+  --accent-grove: var(--lac-grove);
+  --accent-frost: var(--lac-frost);
+  --accent-ember: var(--lac-ember);
+
+  /* ── 4 · ACT → HUE MAP (one hue per slide) ── */
+  --act-0: var(--accent-founder);  /* cold open           */
+  --act-1: var(--accent-grove);    /* 1727 · the Junto    */
+  --act-2: var(--accent-ember);    /* the machine age     */
+  --act-3: var(--accent-founder);  /* 1940 · Chaplin      */
+  --act-4: var(--accent-frost);    /* the proof (receipts)*/
+  --act-5: var(--accent-founder);  /* the club            */
+  --act-6: var(--accent-founder);  /* the ask (sequenced) */
+
+  /* ── 5 · TYPE FAMILIES (spruce grove DS) ── */
+  --serif: "Fraunces", Georgia, serif;            /* display + sacred text */
+  --sans: "Inter", -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", Menlo, monospace;
+
+  /* ── 6 · TYPE SCALE (@ 30px Reveal base) ── */
+  --type-mega: 3.4em;
+  --type-mega-max: 4.2em;
+  --type-h1: 2.6em;
+  --type-h2: 1.9em;
+  --type-h3: 1.3em;
+  --type-body: 0.85em;
+  --type-small: 0.66em;   /* reading-text floor */
+  --type-micro: 0.52em;   /* eyebrows/attributions ONLY */
+  --type-quote: 1.1em;
+  --type-chaplin: 1.5em;
+  --type-stat: 4.2em;
+
+  /* ── 7 · SPACE & GEOMETRY ── */
+  --margin-frame: 8%;
+  --radius-card: 14px;
+  --radius-media: 10px;
+  --radius-pill: 999px;
+  --gap-grid: 0.8em;
+  --statement-height: 92vh;
+
+  /* ── 8 · MOTION BUDGET (wow is scarcity: 2 moments, total) ── */
+  --motion-fade: slow;
+  --motion-autoanimate: 0.9s;
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-draw: 1.8s;        /* tree-mark stroke-draw — slot 1 */
+  --motion-type-step: 0.7s;   /* terminal line cadence — slot 2 */
+
+  /* ── 9 · GLOW ── */
+  --glow-node: 14px;
+}
