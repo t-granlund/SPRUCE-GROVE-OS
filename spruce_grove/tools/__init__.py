@@ -3,36 +3,63 @@ import sys
 
 from spruce_grove.callbacks import on_register_agent_tools, on_register_tools
 from spruce_grove.messaging import emit_warning
-from spruce_grove.tools.agent_tools import register_list_agents
-from spruce_grove.tools.subagent_invocation import (
-    register_invoke_agent,
-    register_invoke_agent_with_model,
-)
-from spruce_grove.tools.ask_user_question import register_ask_user_question
+from spruce_grove.tools._lazy import lazy_registration
 
-from spruce_grove.tools.command_runner import (
-    register_agent_run_shell_command,
-    register_agent_share_your_reasoning,
+register_list_agents = lazy_registration(
+    "spruce_grove.tools.agent_tools", "register_list_agents"
 )
-from spruce_grove.tools.display import (
-    display_non_streamed_result as display_non_streamed_result,
+register_invoke_agent = lazy_registration(
+    "spruce_grove.tools.subagent_invocation", "register_invoke_agent"
 )
-from spruce_grove.tools.file_modifications import (
-    register_create_file,
-    register_delete_file,
-    register_delete_snippet,
-    register_edit_file,
-    register_claude_edit,
-    register_replace_in_file,
+register_invoke_agent_with_model = lazy_registration(
+    "spruce_grove.tools.subagent_invocation", "register_invoke_agent_with_model"
 )
-from spruce_grove.tools.apply_patch import register_apply_patch
-from spruce_grove.tools.file_operations import (
-    register_grep,
-    register_list_files,
-    register_read_file,
+register_ask_user_question = lazy_registration(
+    "spruce_grove.tools.ask_user_question", "register_ask_user_question"
 )
-from spruce_grove.tools.image_tools import register_load_image
-from spruce_grove.tools.model_tools import register_list_available_models
+register_agent_run_shell_command = lazy_registration(
+    "spruce_grove.tools.command_runner", "register_agent_run_shell_command"
+)
+register_agent_share_your_reasoning = lazy_registration(
+    "spruce_grove.tools.command_runner", "register_agent_share_your_reasoning"
+)
+display_non_streamed_result = lazy_registration(
+    "spruce_grove.tools.display", "display_non_streamed_result"
+)
+register_create_file = lazy_registration(
+    "spruce_grove.tools.file_modifications", "register_create_file"
+)
+register_delete_file = lazy_registration(
+    "spruce_grove.tools.file_modifications", "register_delete_file"
+)
+register_delete_snippet = lazy_registration(
+    "spruce_grove.tools.file_modifications", "register_delete_snippet"
+)
+register_edit_file = lazy_registration(
+    "spruce_grove.tools.file_modifications", "register_edit_file"
+)
+register_claude_edit = lazy_registration(
+    "spruce_grove.tools.file_modifications", "register_claude_edit"
+)
+register_replace_in_file = lazy_registration(
+    "spruce_grove.tools.file_modifications", "register_replace_in_file"
+)
+register_apply_patch = lazy_registration(
+    "spruce_grove.tools.apply_patch", "register_apply_patch"
+)
+register_grep = lazy_registration("spruce_grove.tools.file_operations", "register_grep")
+register_list_files = lazy_registration(
+    "spruce_grove.tools.file_operations", "register_list_files"
+)
+register_read_file = lazy_registration(
+    "spruce_grove.tools.file_operations", "register_read_file"
+)
+register_load_image = lazy_registration(
+    "spruce_grove.tools.image_tools", "register_load_image"
+)
+register_list_available_models = lazy_registration(
+    "spruce_grove.tools.model_tools", "register_list_available_models"
+)
 
 # Map of tool names to their individual registration functions
 TOOL_REGISTRY = {
@@ -68,7 +95,7 @@ def _load_browser_tool_registry() -> dict[str, object]:
     if sys.platform == "android":
         return {}
 
-    from spruce_grove.tools.browser.tool_registry import BROWSER_TOOL_REGISTRY
+    from spruce_grove.tools._browser_registry import BROWSER_TOOL_REGISTRY
 
     return BROWSER_TOOL_REGISTRY
 

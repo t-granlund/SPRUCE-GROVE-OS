@@ -15,12 +15,25 @@ with scripted keys.
 import os
 from typing import Callable, List, Optional, Tuple
 
+<<<<<<< HEAD:spruce_grove/command_line/add_model_menu.py
 from spruce_grove import atomic_json
 from spruce_grove.config import EXTRA_MODELS_FILE, set_config_value
 from spruce_grove.i18n import t
 from spruce_grove.messaging import emit_error, emit_info, emit_warning
 from spruce_grove.models_dev_parser import ModelInfo, ModelsDevRegistry, ProviderInfo
 from spruce_grove.provider_credentials import (
+=======
+from spruce_grove import atomic_json
+from spruce_grove.config import (
+    EXTRA_MODELS_FILE,
+    MAX_OUTPUT_TOKENS_SETTING,
+    set_config_value,
+)
+from spruce_grove.i18n import t
+from spruce_grove.messaging import emit_error, emit_info, emit_warning
+from spruce_grove.models_dev_parser import ModelInfo, ModelsDevRegistry, ProviderInfo
+from spruce_grove.provider_credentials import (
+>>>>>>> sync/upstream-v0.0.830:spruce_grove/command_line/add_model_menu.py
     credential_display,
     save_credential,
 )
@@ -192,6 +205,10 @@ def build_model_config(model: ModelInfo, provider: ProviderInfo) -> dict:
 
     if model.context_length and model.context_length > 0:
         config["context_length"] = model.context_length
+    # models.dev ``limit.output`` -> the default ``max_tokens`` for this model
+    # (see config.get_model_max_output_tokens).
+    if model.max_output and model.max_output > 0:
+        config[MAX_OUTPUT_TOKENS_SETTING] = model.max_output
 
     if model_type == "anthropic":
         config["supported_settings"] = [
@@ -215,9 +232,14 @@ def build_model_config(model: ModelInfo, provider: ProviderInfo) -> dict:
     return config
 
 
+def extra_model_key(provider_id: str, model_id: str) -> str:
+    """The ``extra_models.json`` key ``/add_model`` assigns to a catalog model."""
+    return f"{provider_id}-{model_id}".replace("/", "-").replace(":", "-")
+
+
 def add_model_to_extra_config(model: ModelInfo, provider: ProviderInfo) -> bool:
     """Add a model to extra_models.json (locked, atomic read-modify-write)."""
-    model_key = f"{provider.id}-{model.model_id}".replace("/", "-").replace(":", "-")
+    model_key = extra_model_key(provider.id, model.model_id)
     already_present = False
 
     def _mutate(current):

@@ -178,7 +178,7 @@ def test_file_path_completion_permission_error():
     event = MagicMock()
 
     with patch(
-        "spruce_grove.command_line.file_path_completion.glob.glob",
+        "spruce_grove.command_line.file_path_completion.os.scandir",
         side_effect=PermissionError("denied"),
     ):
         results = list(completer.get_completions(doc, event))

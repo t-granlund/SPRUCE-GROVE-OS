@@ -7,7 +7,7 @@
 :root {
   --ink-950: #06090d; --ink-900: #0b0f14; --ink-800: #111821;
   --ink-700: #151e28; --ink-600: #233040; --ink-500: #334459;
-  --text: #e8eef4; --text-soft: #9fb0c3; --text-muted: #6b7d91;
+  --text: #e8eef4; --text-soft: #9fb0c3; --text-muted: #7f92a6; /* mirror of tokens.css §1 (AA on all surfaces) */
   --gold: #f5b94d; --sky: #6cb6ff; --mint: #4cc46a;
   --violet: #b692f6; --coral: #ff7b72;
   --sans: "Inter", system-ui, sans-serif;
@@ -58,6 +58,11 @@ body {
   transition: color 0.2s;
 }
 .navlinks a:hover { color: var(--gold); }
+
+/* visible focus for every interactive element (WCAG 2.4.7) */
+a:focus-visible {
+  outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 2px;
+}
 
 /* ── hero ── */
 .hero { padding: 7rem 4vw 4rem; max-width: 1200px; margin: 0 auto; }
@@ -190,4 +195,10 @@ body {
   .ladder { grid-template-columns: 1fr; }
   .rung { min-height: 0; }
   .tracks, .beyond-grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none; transition: none; }
+  .whycard:hover, .school:hover, .rung:hover { transform: none; }
 }

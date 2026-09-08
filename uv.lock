@@ -402,15 +402,15 @@ wheels = [
 
 [[package]]
 name = "code-puppy-core-plugins"
-version = "0.0.40"
+version = "0.0.46"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx" },
     { name = "pydantic-ai-slim", extra = ["anthropic", "mcp", "openai"] },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e5/e3/00b151a1b81c8c7051413b2579b2a869d4320965549684be3608a91e5ac4/code_puppy_core_plugins-0.0.40.tar.gz", hash = "sha256:86b7f6df4bf1a040a47c2bbe3b408ec7b5c62e1d5c396ab4758939e6dcf80760", size = 537831, upload-time = "2026-09-03T10:48:25.488Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/a4/25/81baf25ac4fb15fe6d1d15e1f153e9af412643b441cce3141c4d353bbf2d/code_puppy_core_plugins-0.0.46.tar.gz", hash = "sha256:1f374e989750e0fea89a65d2d924f84ce2f508da15d3419b4ecfb357bfd70c09", size = 549193, upload-time = "2026-09-08T14:04:11.465Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f0/26/9c5823ab7ed8bbf4127c7f47f0b6c1f02b8d9439076875c11ef66d7139ed/code_puppy_core_plugins-0.0.40-py3-none-any.whl", hash = "sha256:b95cfcbc6573f431f04adf47e63d67e49752e98a6602a9e0722820c9b5aa173d", size = 727052, upload-time = "2026-09-03T10:48:24.143Z" },
+    { url = "https://files.pythonhosted.org/packages/c2/fa/e81e298616310727dfeae96e88b2afcb59d2d520d5a9bc9144541050b430/code_puppy_core_plugins-0.0.46-py3-none-any.whl", hash = "sha256:852762dc347cc8163ebcc146572c15ae36de90a914b0c024aa7ba2178cf582c5", size = 745656, upload-time = "2026-09-08T14:04:10.112Z" },
 ]
 
 [[package]]
@@ -2632,7 +2632,7 @@ requires-dist = [
     { name = "azure-identity", specifier = ">=1.15.0" },
     { name = "boto3", specifier = ">=1.43.9" },
     { name = "boto3", marker = "extra == 'bedrock'", specifier = ">=1.35.0" },
-    { name = "code-puppy-core-plugins", specifier = ">=0.0.40" },
+    { name = "code-puppy-core-plugins", specifier = ">=0.0.45" },
     { name = "dbos", marker = "extra == 'durable'", specifier = ">=2.11.0" },
     { name = "httpx", extras = ["http2"], specifier = ">=0.24.1" },
     { name = "httpx2", specifier = ">=2.7" },
