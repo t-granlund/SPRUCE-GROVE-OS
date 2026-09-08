@@ -10,8 +10,8 @@ from unittest.mock import patch
 
 import pytest
 
-import code_puppy.config as cp_config
-from code_puppy.model_factory import ModelFactory, make_model_settings
+import spruce_grove.config as cp_config
+from spruce_grove.model_factory import ModelFactory, make_model_settings
 
 MODEL = "acme-large"
 

@@ -2,12 +2,12 @@
 
 import pytest
 
-from code_puppy.messaging.bar_rendering import (
+from spruce_grove.messaging.bar_rendering import (
     _prompt_visual_rows,
     count_prompt_rows,
     render_prompt_block,
 )
-from code_puppy.messaging.editor_completion import should_autotrigger
+from spruce_grove.messaging.editor_completion import should_autotrigger
 
 
 def test_layout_shared_by_count_and_paint_and_bounded_to_latest():

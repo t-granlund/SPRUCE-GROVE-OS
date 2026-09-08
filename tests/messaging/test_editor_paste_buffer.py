@@ -5,8 +5,8 @@ from unittest.mock import Mock
 
 import pytest
 
-from code_puppy.messaging.editor_paste import PASTE_END, PasteBuffer
-from code_puppy.messaging.line_editor import RunningLineEditor
+from spruce_grove.messaging.editor_paste import PASTE_END, PasteBuffer
+from spruce_grove.messaging.line_editor import RunningLineEditor
 
 
 @pytest.mark.parametrize("chunk_size", [1, 2, 5, 6, 7, 4096])

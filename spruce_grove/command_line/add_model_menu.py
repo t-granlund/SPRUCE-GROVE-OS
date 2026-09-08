@@ -15,14 +15,6 @@ with scripted keys.
 import os
 from typing import Callable, List, Optional, Tuple
 
-<<<<<<< HEAD:spruce_grove/command_line/add_model_menu.py
-from spruce_grove import atomic_json
-from spruce_grove.config import EXTRA_MODELS_FILE, set_config_value
-from spruce_grove.i18n import t
-from spruce_grove.messaging import emit_error, emit_info, emit_warning
-from spruce_grove.models_dev_parser import ModelInfo, ModelsDevRegistry, ProviderInfo
-from spruce_grove.provider_credentials import (
-=======
 from spruce_grove import atomic_json
 from spruce_grove.config import (
     EXTRA_MODELS_FILE,
@@ -33,7 +25,6 @@ from spruce_grove.i18n import t
 from spruce_grove.messaging import emit_error, emit_info, emit_warning
 from spruce_grove.models_dev_parser import ModelInfo, ModelsDevRegistry, ProviderInfo
 from spruce_grove.provider_credentials import (
->>>>>>> sync/upstream-v0.0.830:spruce_grove/command_line/add_model_menu.py
     credential_display,
     save_credential,
 )

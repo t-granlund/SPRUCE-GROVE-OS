@@ -6,8 +6,8 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from pydantic_ai.messages import ModelRequest, ModelResponse, TextPart, UserPromptPart
 
-from code_puppy.agents.retry_checkpoint import RetryCheckpoint, resumable_call
-from code_puppy.agents._runtime import streaming_retry
+from spruce_grove.agents.retry_checkpoint import RetryCheckpoint, resumable_call
+from spruce_grove.agents._runtime import streaming_retry
 
 
 async def test_repeated_failures_exhaust_budget_without_duplicate_prompts():
@@ -23,11 +23,11 @@ async def test_repeated_failures_exhaust_budget_without_duplicate_prompts():
     checkpoint = RetryCheckpoint(agent)
     call = resumable_call(agent, SimpleNamespace(run=run), "continue")
     with (
-        patch("code_puppy.agents._runtime.should_retry_streaming", return_value=True),
-        patch("code_puppy.agents._runtime.asyncio.sleep", new_callable=AsyncMock),
-        patch("code_puppy.error_logging.log_error"),
-        patch("code_puppy.agents._runtime.emit_warning") as warning,
-        patch("code_puppy.agents._runtime.emit_error"),
+        patch("spruce_grove.agents._runtime.should_retry_streaming", return_value=True),
+        patch("spruce_grove.agents._runtime.asyncio.sleep", new_callable=AsyncMock),
+        patch("spruce_grove.error_logging.log_error"),
+        patch("spruce_grove.agents._runtime.emit_warning") as warning,
+        patch("spruce_grove.agents._runtime.emit_error"),
     ):
         wrapped = streaming_retry(
             max_attempts=5,

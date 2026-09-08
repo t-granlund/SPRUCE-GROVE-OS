@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from code_puppy import config, shared_credentials as shared
-from code_puppy.config_file import load_config
+from spruce_grove import config, shared_credentials as shared
+from spruce_grove.config_file import load_config
 
 
 @pytest.fixture
@@ -16,7 +16,7 @@ def store(monkeypatch, tmp_path):
     monkeypatch.setattr(shared.secret_store, "get_secret", values.get)
     monkeypatch.setattr(shared.secret_store, "set_secret", values.__setitem__)
     monkeypatch.setattr(
-        "code_puppy.provider_credentials.credential_env_var_names",
+        "spruce_grove.provider_credentials.credential_env_var_names",
         lambda: {"CUSTOM_AUTH"},
     )
     return values

@@ -4,8 +4,8 @@ import json
 
 import pytest
 
-from code_puppy.command_line.refresh_models import refresh_extra_models
-from code_puppy.models_dev_parser import ModelInfo
+from spruce_grove.command_line.refresh_models import refresh_extra_models
+from spruce_grove.models_dev_parser import ModelInfo
 
 
 class FakeRegistry:

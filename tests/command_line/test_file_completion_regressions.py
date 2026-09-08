@@ -8,10 +8,10 @@ import threading
 import pytest
 from termflow.tui.completion import Document
 
-from code_puppy.command_line import file_index as fi
-from code_puppy.command_line.file_path_completion import FilePathCompleter
-from code_puppy.file_completion_io import read_paths
-from code_puppy.file_completion_tokens import active_reference
+from spruce_grove.command_line import file_index as fi
+from spruce_grove.command_line.file_path_completion import FilePathCompleter
+from spruce_grove.file_completion_io import read_paths
+from spruce_grove.file_completion_tokens import active_reference
 
 
 @pytest.mark.parametrize(
@@ -117,7 +117,7 @@ def test_rg_null_records_ignore_rules_and_path_cap(tmp_path):
 
 
 def test_top_results_are_bounded_and_ranked(monkeypatch, tmp_path):
-    from code_puppy.command_line.file_path_completion import _fuzzy_completions
+    from spruce_grove.command_line.file_path_completion import _fuzzy_completions
 
     monkeypatch.chdir(tmp_path)
     paths = [f"src/{i}/target.py" for i in range(1000)] + ["target"]
@@ -131,7 +131,7 @@ def test_top_results_are_bounded_and_ranked(monkeypatch, tmp_path):
 
 def test_byte_cap_and_timeout(monkeypatch, tmp_path):
     import sys
-    from code_puppy import file_completion_io as io
+    from spruce_grove import file_completion_io as io
 
     if os.name == "nt":
         pytest.skip("executable-script fixture is POSIX only")

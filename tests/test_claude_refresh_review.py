@@ -6,8 +6,8 @@ from unittest.mock import AsyncMock, patch
 import httpx2
 import pytest
 
-from code_puppy import callbacks
-from code_puppy.claude_cache_client import ClaudeCacheAsyncClient
+from spruce_grove import callbacks
+from spruce_grove.claude_cache_client import ClaudeCacheAsyncClient
 
 
 @pytest.mark.asyncio
@@ -179,8 +179,8 @@ async def test_rate_limit_body_and_headers_are_logged():
         return httpx2.Response(200, json={})
 
     with (
-        patch("code_puppy.error_logging.log_error_message") as log_message,
-        patch("code_puppy.claude_cache_client.asyncio.sleep", AsyncMock()),
+        patch("spruce_grove.error_logging.log_error_message") as log_message,
+        patch("spruce_grove.claude_cache_client.asyncio.sleep", AsyncMock()),
     ):
         async with ClaudeCacheAsyncClient(
             transport=httpx2.MockTransport(transport)

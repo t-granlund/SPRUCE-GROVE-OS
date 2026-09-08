@@ -12,19 +12,11 @@ from spruce_grove.command_line.model_picker_completion import (
     interactive_model_picker,
     update_model_in_input,
 )
-<<<<<<< HEAD:spruce_grove/command_line/core_commands.py
-from spruce_grove.command_line.utils import make_directory_table
-from spruce_grove.config import finalize_autosave_session
-from spruce_grove.i18n import t
-from spruce_grove.messaging import emit_error, emit_info
-from spruce_grove.tools.tools_content import tools_content
-=======
 from spruce_grove.command_line.utils import make_directory_table
 from spruce_grove.config import finalize_autosave_session
 from spruce_grove.i18n import t
 from spruce_grove.messaging import emit_error, emit_info, emit_warning
 from spruce_grove.tools.tools_content import tools_content
->>>>>>> sync/upstream-v0.0.830:spruce_grove/command_line/core_commands.py
 
 
 # Import get_commands_help from command_handler to avoid circular imports

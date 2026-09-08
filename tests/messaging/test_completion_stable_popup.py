@@ -3,7 +3,7 @@
 import io
 from unittest.mock import Mock
 
-from code_puppy.messaging.bottom_bar import BottomBar
+from spruce_grove.messaging.bottom_bar import BottomBar
 from tests.messaging.test_editor_completion import make_engine, settle
 
 

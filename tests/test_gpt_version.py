@@ -9,9 +9,9 @@ from unittest.mock import patch
 
 import pytest
 
-from code_puppy.config import model_supports_setting
-from code_puppy.model_factory import ModelFactory, make_model_settings
-from code_puppy.model_utils import (
+from spruce_grove.config import model_supports_setting
+from spruce_grove.model_factory import ModelFactory, make_model_settings
+from spruce_grove.model_utils import (
     get_gpt_version,
     is_gpt_reasoning_model,
     supports_gpt_responses_controls,
@@ -96,7 +96,7 @@ def test_gpt6_astra_oauth_gets_full_responses_reasoning_settings():
     }
     with (
         patch.object(ModelFactory, "load_config", return_value=config),
-        patch("code_puppy.config.get_custom_model_settings", return_value={}),
+        patch("spruce_grove.config.get_custom_model_settings", return_value={}),
     ):
         settings = make_model_settings("codex-gpt-6-astra", max_tokens=4096)
 
