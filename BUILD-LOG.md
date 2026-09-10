@@ -258,3 +258,31 @@ everywhere Tyler works. Close reason annotated on the bead.
 ATAP 302 into its app portal, annotated on the item); headless dispatch True/None for
 /whatever; emitted markdown asserted >=10 rows, >=10 URLs, all hosts official
 (irs.gov / arkansas.gov / bentonvillear.com), banner present.
+
+---
+
+## 11. 2026-09-10 -- Creative cohort scaffolds + grove_site_core media block (sg-5al.5)
+
+**What shipped (user tier, uncommitted):** `~/.spruce_grove/plugins/creative_scaffold/`
+-- `/creative-scaffold [fpv|artisans|all]` with two profile datasets ("Full Send Aerial"
+FPV portfolio, "The Squiggle Shop" artisan storefront). New core surfaces:
+`grove_site_core/cli.py` (shared command plumbing -- the DRY extraction the 80% reuse
+contract demanded), `builder.py` media block (https iframe embed + vanilla-JS lightbox,
+injected ONLY when a profile has media -- no-media profiles stay byte-identical clean).
+
+**Reuse audit (the acceptance number):** barber 85.4%, creative 80.3% shared
+rendering+cli path -- target >=80% BOTH cohorts. Barber plugin slimmed onto the shared
+cli (barber repo commit 0a0586b; -56 lines).
+
+**Verification evidence (fresh):**
+- ruff clean across core lib + both plugins (2 intentional documented noqa: E402 on
+  the sys.path plugin-lib bootstrap).
+- Headless dispatch: /barber-scaffold, /bbc-scaffold, /creative-scaffold all|fpv|bogus
+  (gentle usage on bogus, no crash), unknown /whatever passes through.
+- Render asserts: barber contains brand + zero media markup; fpv has iframe embed +
+  data-lb gallery + #lb overlay; artisans gallery has lightbox; FPO tiles are inline
+  SVG data URIs (zero network fetches).
+- Media-block regression risk closed: no-media profiles remain iframe/lightbox-free.
+
+**Notes:** FPV checklist carries FAA Part 107 official source; showreel embed is an
+explicit REPLACE-WITH-SHOWREEL placeholder flagged on its first gate row.
