@@ -219,7 +219,9 @@
     <section id="ladder">
       <div class="sec-h"><span class="ic" data-ic="layers"></span><h2>The pecking order — least to most invasive</h2></div>
       <p class="sec-sub">Each rung costs more than the one below it. <strong>"Invasiveness"</strong> = how much of the forked tree we modify and how
-        much it hurts every future <code>git merge</code> with upstream. The unwritten rule of the whole ladder: <em>upstream syncs are the tax; scope is the payer.</em></p>
+        much it hurts every future <code>git merge</code> with upstream. The unwritten rule of the whole ladder: <em>upstream syncs are the tax; scope is the payer.</em>
+        Live queue: <code>bd ready</code> (Dolt-backed beads, fork-excluded so the roadmap stays local); acceptance gates: four LLM judges
+        (<code>tests_green</code>, <code>lint_format</code>, <code>brand_merge_guard</code>, <code>privacy_provenance_guard</code>) in <code>~/.spruce_grove/judges.json</code>, fanned out by <code>/goal</code> after every iteration.</p>
       <div class="legend">
         <span><span class="dot" style="background:var(--BB-mint)"></span>done / safe</span>
         <span><span class="dot" style="background:var(--BB-peri)"></span>next up</span>

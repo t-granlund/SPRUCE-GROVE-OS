@@ -63,3 +63,8 @@ wedge_soak.log
 MASTER-MASTER-PROMPT.m4a
 MASTER-MASTER-PROMPT.txt
 MASTER-MASTER-PROMPT.srt
+
+# Beads / Dolt files (added by bd init)
+.dolt/
+*.db
+.beads-credential-key
