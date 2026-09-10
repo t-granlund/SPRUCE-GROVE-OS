@@ -73,7 +73,9 @@ check_imports() {
     block "$f" "bare legacy-namespace import (grep: $PUPPY_RE); route via spruce_grove._code_puppy_compat instead"
 }
 
+all_mode=0
 if [[ "${1:-}" == "--all" ]]; then
+    all_mode=1
     shift
     while IFS= read -r f; do
         check_path "$f"
@@ -89,5 +91,8 @@ fi
 if [[ "$fail" -ne 0 ]]; then
     printf 'brand-personal-guard: commit blocked. Fix the files above and stage again.\n' >&2
     exit 1
+fi
+if [[ "$all_mode" -eq 1 ]]; then
+    printf '\033[32mbrand-personal-guard: OK -- no legacy-namespace leaks, no private files tracked (GRANDFATHERED empty)\033[0m\n'
 fi
 exit 0
