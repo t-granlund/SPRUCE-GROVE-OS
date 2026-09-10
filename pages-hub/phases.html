@@ -278,7 +278,9 @@
         <p class="desc"><strong>The ladder's original calibration was wrong:</strong> this rung is already climbed. The fork's package <em>is</em>
           <code>spruce_grove</code> — imports, layout, tests, docs. The 55% sync-tax mortgage is already being paid (see the "pure-brand resolutions" merge),
           and past Tyler decided it was worth it. What remains isn't escalation, just <strong>merge discipline</strong>: keep upstream syncs branded consistently
-          and never let <code>code_puppy</code> imports leak back in.</p>
+          and never let <code>code_puppy</code> imports leak back in. <strong>Loop closed Sept 10</strong> (bead 5al.8, commit <code>54cdf13</code>): the last
+          four grandfathered legacy imports were rerouted to the grove namespace and the guard ratchet's GRANDFATHERED list is empty — the merge guard is now
+          zero-tolerance, and <code>--all</code> prints green.</p>
         <div class="meter-row"><div class="meter"><i style="width:55%"></i></div><span class="meter-cap">invasiveness 55%</span></div>
         <div class="alpha"><span><b>Blast radius:</b> whole tree</span><span><b>Sync tax:</b> high &amp; permanent</span><span><b>Depends on:</b> L2 proven insufficient; bandwidth for a flag-day</span></div>
       </div>
@@ -321,11 +323,37 @@
           <strong>Closed Sept 10:</strong> all three files (<code>.m4a</code>, <code>.txt</code>, <code>.srt</code>) are now covered by <code>.gitignore</code>
           and no longer appear in <code>git status</code>. They still live on disk locally, just never on GitHub.</p>
         <ul>
-          <li><strong>Merge guard active (Sept 10):</strong> <code>scripts/brand_personal_guard.sh</code> blocks legacy-namespace imports and private-file staging at commit time; 4 pre-existing leaks grandfathered with a ratchet (removal: bead SPRUCE-GROVE-OS-5al.8). Proof: 3 deliberately-failing commits, all rejected.</li>
+          <li><strong>Merge guard active (Sept 10):</strong> <code>scripts/brand_personal_guard.sh</code> blocks legacy-namespace imports and private-file staging at commit time; the 4 pre-existing leaks were removed the same day (bead 5al.8, commit <code>54cdf13</code>) — GRANDFATHERED is empty and the ratchet is gone. Proof: 3 deliberately-failing commits, all rejected.</li>
           <li><strong>Trust model stays the bouncer:</strong> cohort plugins (L3) load through the SHA-256 trust gate — no exceptions for friends.</li>
           <li><strong>Privacy posture:</strong> this dashboard shows project signal only; personal health and family details from the memo stay local and unpublished.</li>
           <li><strong>Attribution is non-negotiable:</strong> upstream is mpfaffenberger/code_puppy; the grove is a rebrand riding on their harness. PROVENANCE.md says so plainly.</li>
         </ul>
+      </div>
+    </section>
+
+    <section id="next">
+      <div class="sec-h"><span class="ic" data-ic="flag"></span><h2>Next steps — the queue in order</h2></div>
+      <p class="sec-sub">State reconciled Sept 10 (19:05Z): L0–L2 and L4 done, L3 the active frontier, beads 5al.1–.5 + .8 + .9 shipped.
+        What actually happens next, cheapest first:</p>
+      <div class="pipe">
+        <div class="step"><div class="num">01 · owner errand · ~15 min</div><div class="t">Upgrade the judge harness runtime</div>
+          <p>The running <code>/goal</code> harness is the installed legacy <code>code-puppy</code> 0.0.830 — it predates the 5al.9
+          <code>tolerant_openai</code> fix and reads the all-disabled <code>~/.code_puppy/judges.json</code>, which is why judges still
+          abstain. Install a build cut from this repo, then re-run one <code>/goal</code> cycle: the four judges flip from ABSTAIN to
+          real PASS/FAIL verdicts (gap G2, <code>docs/judge-abstain-remediation.md</code>).</p></div>
+        <div class="step"><div class="num">02 · owner errand · ~10 min · optional</div><div class="t">Sit on the PyPI name</div>
+          <p>All three spellings (<code>spruce-grove</code>, <code>sprucegrove</code>, <code>spruce_grove</code>) still probe HTTP 404
+          (eleven probes Sept 10, last 17:35Z). Decision stands: source-only until an external install request or the L5 release
+          pipeline forces it — but the namespace claim itself is irreversible-free and cheap.</p></div>
+        <div class="step"><div class="num">03 · active frontier · L3</div><div class="t">More cohort plugins</div>
+          <p>Bricks shipped: <code>/junto</code>, barber scaffold, backoffice checklist, creative scaffolds (barber/artisans/FPV).
+          The contract is reuse — keep feeding profiles into <code>grove_site_core</code> (currently 87–92% shared-path reuse) instead
+          of forking per-person code. Zero core edits, trust gate stays the bouncer.</p></div>
+        <div class="step"><div class="num">04 · next bead · P3</div><div class="t">Desktop shell (SPRUCE-GROVE-OS-5al.6)</div>
+          <p>Tauri 2 shell consuming the groomed CLI as a library — rung L5. Mockingbird is the reference shape: separate repo,
+          SQLite, local models, zero telemetry. Starts once L3 feels stable.</p></div>
+        <div class="step"><div class="num">05 · parked · P4</div><div class="t">Bootable OS spin (5al.7)</div>
+          <p>The north star stays parked. Revisit only when the desktop app has real users asking for it.</p></div>
       </div>
     </section>
 
