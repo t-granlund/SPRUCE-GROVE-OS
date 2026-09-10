@@ -509,3 +509,53 @@ Every claim below is backed by a run in this window.
 Docs: phases.html PyPI probe count line bumped 6 -> 7 to match reality; all ladder statuses
 re-read and remain honest (L1/L2/L4 done Sept 10, L3 active frontier). No `git push`
 performed; local commits only.
+
+---
+
+## 17. 2026-09-10 17:17Z-17:20Z -- Sixth sprint re-verification (judge remediation: same ABSTAIN endpoint error, round six)
+
+Judge note repeated the ABSTAIN endpoint error (synthetic completions
+`metadata.weight_versions` validation -- an endpoint-side fault, not a repo defect), so the
+full loop was executed fresh a sixth time in the mandated order (.1, .3, .2, .4, .5) by
+code-puppy-d74801. All five beads remain CLOSED from the original passes; `bd update --claim`
+refuses closed beads, so fresh evidence was appended as timestamped comments on each bead.
+Every claim below is backed by a run in this window.
+
+- **.1 merge guard:** whole-tree audit `scripts/brand_personal_guard.sh --all` **exit 0**
+  (17:17:19Z). Fake-commit ceremony: staged `import code_puppy` in
+  `spruce_grove/_tmp_fake_leak.py` REJECTED (beads->guard chain, HEAD unchanged at d81e6f4;
+  17:17:30Z); staged `MASTER-MASTER-PROMPT-fake-delete-me.txt` REJECTED (**true commit exit
+  1**; 17:17:41Z); both fakes reverted+deleted, `git status` clean. Guardrails pytest slice
+  `tests/test_callbacks_fail_closed.py tests/plugins/test_plugin_trust.py -q`: **39 passed
+  in 1.78s** (17:17:59Z). `ruff check scripts/` All checks passed; `ruff format --check
+  scripts/` 5 files clean (17:18:03Z).
+- **.3 barber scaffold:** `scripts/verify_5al3_barber_scaffold.py` -> **10/10 PASS** headless
+  (17:18:33Z; `/barber-scaffold` + alias `/bbc-scaffold` build `site-out/{index,checklist}.html`;
+  bogus profile writes nothing; idempotent rebuild; grove token + Bentonville Barber Company
+  brand asserts). Token provenance re-read: `grove_site_core/tokens.py` header cites
+  pages-hub `assets/tokens.css`. Trust ceremony re-read: plugin README "What you are being
+  asked to trust" -- plain-language for a non-dev. Barber repo HEAD 1258237, tree clean;
+  ruff check+format clean on plugin + shared grove_site_core + verifier (6 files, 17:18:38Z).
+- **.2 registry decision:** DECISION STANDS -- stay source-only, publish deferred with
+  explicit re-triggers. Fresh live probe 17:18:52Z: `spruce-grove`, `sprucegrove`,
+  `spruce_grove` on pypi.org ALL **HTTP 404** (8th probe Sept 10, still unclaimed, no squat).
+  No dist/build/*.egg-info artifacts; no publish/twine/upload commits (full-history grep:
+  docs mentions only); no tokens minted or used -- decision bead, not a release.
+- **.4 back-office:** `scripts/verify_5al4_backoffice.py` -> **10/10 PASS** (17:19:25-38Z):
+  NOT-LEGAL-ADVICE + NOT-TAX-ADVICE banner up top; 12 gates >= required 10; 12/12 official
+  IRS/AR-state/city URLs, one per gate; non-backoffice commands pass through None. Fresh
+  live sweep: 12/12 alive (8x 200, 3x 301 canonical incl. IRS EIN page + DFA sales-tax +
+  DFA income-tax + bentonvillear.com, documented ATAP 302 into the login portal). ruff
+  check+format clean on plugin + verifier (2 files).
+- **.5 creative scaffolds:** `scripts/verify_5al5_creative_scaffolds.py` -> **11/11 PASS**
+  (17:19:53Z): `/creative-scaffold all` builds `site-out/fpv` + `site-out/artisans` (2 pages
+  each + checklists); lazy https youtube-nocookie iframe embed; click-to-zoom lightbox
+  (`img[data-lb]` + `data-full`); `#0E130F` grove tokens; offline FPO inline SVG tiles.
+  Reuse audit (AST-statement basis): barber **91.7%**, creative **87.3%** shared
+  grove_site_core path -- both >= the 80% contract, zero fork of .3. ruff check+format
+  clean across creative + backoffice + barber plugins + shared grove_site_core + 3
+  verifiers (10 files, 17:20:14Z).
+
+Docs: phases.html PyPI probe count line bumped 7 -> 8 (fresh 17:18Z probe cited); all
+ladder statuses re-read and remain honest (L1/L2/L4 done Sept 10, L3 active frontier). No
+`git push` performed; local commits only.
