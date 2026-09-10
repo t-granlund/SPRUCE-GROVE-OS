@@ -370,3 +370,47 @@ plugin verifiers are now committed for re-runs: `scripts/verify_5al3_barber_scaf
   check + format clean; the three new verify scripts lint + format clean.
 
 No `git push` performed; everything is local commits only.
+
+---
+
+## 14. 2026-09-10 17:01Z-17:07Z -- Third sprint re-verification (judge remediation: endpoint error re-run)
+
+Judge note was an ABSTAIN endpoint error (synthetic completions `metadata.weight_versions`
+validation), so the full loop was re-executed fresh in the mandated order (.1, .3, .2, .4, .5)
+by code-puppy-d74801. Every claim below is backed by a run in this window; each bead carries
+the fresh comment.
+
+- **.1 merge guard:** whole-tree audit `scripts/brand_personal_guard.sh --all` exit 0.
+  Fake-commit ceremony re-run with honest exit codes: staged `import code_puppy` inside
+  `spruce_grove/` REJECTED (**true commit exit 1**, beads->guard chain, HEAD unchanged
+  at bfa95af); staged `MASTER-MASTER-PROMPT-fake-delete-me.txt` REJECTED (**exit 1**);
+  both fakes reverted, tree clean. Guardrails pytest slice
+  `tests/test_callbacks_fail_closed.py tests/plugins/test_plugin_trust.py -q`: **39 passed
+  in 1.66s**. `uv run ruff check .` All checks passed; `ruff format --check .` 657 files clean.
+- **.3 barber scaffold:** `scripts/verify_5al3_barber_scaffold.py` -> **10/10 PASS** headless
+  (bogus profile writes nothing; `/barber-scaffold` + alias `/bbc-scaffold` build
+  `site-out/{index,checklist}.html`; `#0E130F` token + brand name; idempotent rebuild).
+  Token lineage re-checked this run: all 16 `pages-hub/assets/tokens.css` hex values present
+  in the shared `grove_site_core` lib (superset with 2 derived accents). Trust README
+  re-reviewed: plain-language exactly-what-it-does / never-does + `/plugins revoke` escape
+  hatch. ruff check/format clean on the plugin dir + verifier (6 ruff findings elsewhere in
+  the barber repo are in untracked mock-up files, not the deliverable). Barber repo HEAD
+  1258237, tree clean; zero core edits.
+- **.2 registry decision:** DECISION STANDS -- stay source-only, publish deferred with
+  explicit re-triggers. Fresh live probe 17:03:57Z: `spruce-grove`, `sprucegrove`,
+  `spruce_grove` on pypi.org ALL HTTP 404 (unclaimed, no squat). No publish, no upload,
+  no tokens -- decision bead, not a release.
+- **.4 back-office:** `scripts/verify_5al4_backoffice.py` -> **10/10 PASS**: banner
+  NOT-LEGAL-ADVICE + NOT-TAX-ADVICE up top; 12 gates >= required 10; 12/12 items carry an
+  official IRS/AR-state/city URL. Fresh live GET sweep this run: 12/12 alive (8x 200;
+  301s to canonical for EIN page + DFA x2 + bentonvillear.com; ATAP documented 302 into
+  the login app). ruff clean on plugin + verifier.
+- **.5 creative scaffolds:** `scripts/verify_5al5_creative_scaffolds.py` -> **11/11 PASS**:
+  `/creative-scaffold all` builds `site-out/fpv` + `site-out/artisans` (2 pages each +
+  checklists); lazy https youtube-nocookie embed; click-to-zoom lightbox
+  (`img[data-lb]` + `data-full`); artisans FPO tiles are offline inline SVG. Reuse audit
+  (AST-statement basis): barber **91.7%**, creative **87.3%** shared grove_site_core path --
+  both >= the 80% contract, zero fork of .3. ruff clean on plugin, shared lib, verifier.
+
+Docs: phases.html statuses re-read and remain honest (all shipped Sept 10); PyPI probe
+count line bumped 2 -> 5 to match reality. No `git push` performed; local commits only.
