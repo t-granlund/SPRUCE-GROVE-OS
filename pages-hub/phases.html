@@ -316,6 +316,7 @@
           <strong>Closed Sept 10:</strong> all three files (<code>.m4a</code>, <code>.txt</code>, <code>.srt</code>) are now covered by <code>.gitignore</code>
           and no longer appear in <code>git status</code>. They still live on disk locally, just never on GitHub.</p>
         <ul>
+          <li><strong>Merge guard active (Sept 10):</strong> <code>scripts/brand_personal_guard.sh</code> blocks legacy-namespace imports and private-file staging at commit time; 4 pre-existing leaks grandfathered with a ratchet (removal: bead SPRUCE-GROVE-OS-5al.8). Proof: 3 deliberately-failing commits, all rejected.</li>
           <li><strong>Trust model stays the bouncer:</strong> cohort plugins (L3) load through the SHA-256 trust gate — no exceptions for friends.</li>
           <li><strong>Privacy posture:</strong> this dashboard shows project signal only; personal health and family details from the memo stay local and unpublished.</li>
           <li><strong>Attribution is non-negotiable:</strong> upstream is mpfaffenberger/code_puppy; the grove is a rebrand riding on their harness. PROVENANCE.md says so plainly.</li>

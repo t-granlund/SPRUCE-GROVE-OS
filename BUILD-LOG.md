@@ -167,3 +167,31 @@ cp docs/field-guide-flat.html  /tmp/bbsite/flat/index.html
 
 ---
 *Generated 2026-08-17 · commit `e861349e` · maintained by the update pipeline + manual curation.*
+
+---
+
+## 7. 2026-09-10 -- Merge-discipline + privacy guard (sg-5al.1)
+
+**What shipped:** `scripts/brand_personal_guard.sh` (tracked), registered in
+`lefthook.yml` pre-commit commands; locally chained into `.beads/hooks/pre-commit`
+(beads owns `core.hooksPath` since the bd init -- the chain runs guard first, then
+the beads-managed block).
+
+**Guard law:**
+- NEW bare `import code_puppy` / `from code_puppy` in `spruce_grove/` core = blocked
+  (the `_code_puppy_compat.py` shim is the only legal sponsor).
+- Staging anything in the MASTER-MASTER-PROMPT family or raw `.m4a` = blocked
+  (public repo; private stays local).
+- RATCHET: git-init-day audit found 4 pre-existing legacy imports
+  (gemini_model.py, tools/browser/tool_registry.py, agents/_runtime.py,
+  agents/_builder.py). Grandfathered by exact line-match vs HEAD; any growth
+  inside them blocks. Removal follow-up: bead SPRUCE-GROVE-OS-5al.8.
+
+**Verification evidence (fresh, this session):**
+- Negative 1/3: commit with fake `import code_puppy.config` in a new file -> exit 1, blocked.
+- Negative 2/3: commit staging `DEMO-MASTER-MASTER-PROMPT-notes.m4a` -> exit 1, blocked.
+- Negative 3/3: commit appending a second legacy import to grandfathered
+  `gemini_model.py` -> exit 1, blocked ("new bare legacy import in grandfathered file").
+- Positive: `bash scripts/brand_personal_guard.sh --all` -> WHOLE-TREE AUDIT: GREEN.
+- Note: lefthook binary is not installed on this machine; enforcement comes from the
+  beads-hook chain locally and from lefthook.yml wherever `lefthook install` has run.

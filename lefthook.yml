@@ -1,6 +1,8 @@
 pre-commit:
   parallel: true
   commands:
+    brand-personal-guard:
+      run: bash scripts/brand_personal_guard.sh {staged_files}
     isort:
       glob: "*.py"
       run: |
