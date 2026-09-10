@@ -349,9 +349,10 @@
           <p>Bricks shipped: <code>/junto</code>, barber scaffold, backoffice checklist, creative scaffolds (barber/artisans/FPV).
           The contract is reuse — keep feeding profiles into <code>grove_site_core</code> (currently 87–92% shared-path reuse) instead
           of forking per-person code. Zero core edits, trust gate stays the bouncer.</p></div>
-        <div class="step"><div class="num">04 · next bead · P3</div><div class="t">Desktop shell (SPRUCE-GROVE-OS-5al.6)</div>
-          <p>Tauri 2 shell consuming the groomed CLI as a library — rung L5. Mockingbird is the reference shape: separate repo,
-          SQLite, local models, zero telemetry. Starts once L3 feels stable.</p></div>
+        <div class="step"><div class="num">04 · in progress · P3</div><div class="t">Desktop shell (SPRUCE-GROVE-OS-5al.6) — v0 scaffolded</div>
+          <p>Tauri 2 shell consuming the groomed CLI as a library — rung L5. <strong>v0 landed Sept 10:</strong> sibling repo
+          <code>spruce-grove-desktop</code> launches, spawns the CLI headless per prompt, streams output to the transcript,
+          and rides <code>--quick-resume</code> for continuity. Remaining: dictation-to-agent loop, ACP upgrade path, .app bundle.</p></div>
         <div class="step"><div class="num">05 · parked · P4</div><div class="t">Bootable OS spin (5al.7)</div>
           <p>The north star stays parked. Revisit only when the desktop app has real users asking for it.</p></div>
       </div>

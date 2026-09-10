@@ -839,3 +839,33 @@ defect; the live gate flips only when the harness runtime carries the 5al.9 fix
 (install a code-puppy build cut from this repo / a release containing
 `tolerant_openai`) and reads the `~/.spruce_grove` judge config. Recorded as
 the G2 next-action in `docs/judge-abstain-remediation.md`.
+
+---
+
+## 25. 2026-09-10 19:40Z-19:52Z -- Bead 5al.6 claimed: desktop shell v0 scaffolded and launched
+
+Phases-dashboard alignment first (commit `a719a63`): pages-hub/phases.html now
+carries true state -- 5al.8 closure on rung L4 + the merge-guard bullet, the
+G2 judge-block caveat on the acceptance-gates line, and a new "Next steps --
+the queue in order" section (harness-install errand, optional PyPI claim, L3
+cohort plugins, 5al.6 desktop, 5al.7 parked).
+
+Then the frontier bead itself (claimed 19:40Z): new sibling repo
+`/Users/tygranlund/spruce-grove-desktop` created per the bead's separate-repo
+law (fork diff untouched). v0 architecture: Tauri 2 + static webview (no
+bundler, `withGlobalTauri`), four Rust commands (`grove_default_cwd`,
+`grove_version`, `grove_send`, `grove_cancel`). Every prompt spawns the groomed
+CLI headless (`-p`, `--disable-ask-user-question`) in the chosen working dir,
+streams stdout/stderr as per-line window events, and keeps conversation
+continuity via `--quick-resume` on turns 2+. CLI resolution: `GROVE_CLI` env
+var -> fork venv binary -> PATH. ANSI escape stripper written as a proper
+CSI/OSC parser with 3 unit tests (the naive first draft would have shipped a
+bug; tests caught it pre-launch). Evidence: `cargo build` + `cargo test` (3/3)
++ `cargo fmt --check` green; `node --check` on the webview JS; app launched via
+`tauri dev` and confirmed as a live foreground process (2+ min uptime); the
+bridge's CLI-resolution path verified with `spruce-grove --version`. GUI
+screenshot verification unavailable from the sandboxed session (screen-recording
+and accessibility bindings blocked) -- flagged in the bead for one human glance.
+Commit `77895cb` in the new repo (no push). Acceptance gaps recorded on 5al.6:
+dictation-to-agent loop (UI carries an honest disabled placeholder), ACP upgrade
+path, .app bundle build.
