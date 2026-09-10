@@ -318,3 +318,55 @@ whole ladder got re-exercised end-to-end after the fact:
 
 All five beads carry the fresh evidence as comments; statuses on this page were already
 honest and unchanged.
+
+---
+
+## 13. 2026-09-10 -- Second sprint re-verification (judge remediation, full fresh evidence)
+
+All five beads re-exercised end-to-end in the mandated order (.1, .3, .2, .4, .5); every
+claim below is backed by a fresh run from this session (16:41Z-16:49Z), and the three
+plugin verifiers are now committed for re-runs: `scripts/verify_5al3_barber_scaffold.py`,
+`scripts/verify_5al4_backoffice.py`, `scripts/verify_5al5_creative_scaffolds.py`.
+
+- **.1 merge guard:** fake-commit ceremony re-run -- staged `import code_puppy` inside
+  `spruce_grove/` REJECTED (commit exit 1, beads->guard chain), staged
+  `MASTER-MASTER-PROMPT-fake-delete-me.txt` REJECTED (exit 1); both fakes reverted,
+  tree clean. Whole-tree audit `scripts/brand_personal_guard.sh --all` exit 0.
+  Guardrails pytest slice `tests/test_callbacks_fail_closed.py tests/plugins/test_plugin_trust.py`:
+  **39 passed**. `uv run ruff check .` clean; `uv run ruff format --check .` now fully
+  green (654 files) after normalizing the one pre-existing nit in
+  `spruce_grove/tools/_browser_registry.py` inherited from upstream-sync merge c9ccc28
+  (pure line-wrap formatting, zero semantics; import smoke-tested).
+- **.3 barber scaffold:** `verify_5al3_barber_scaffold.py` -- **10/10 PASS** headless:
+  unknown profile writes nothing, `/barber-scaffold` + alias `/bbc-scaffold` build
+  `site-out/{index.html,checklist.html}`, granlund-grove token `#0E130F` rendered,
+  brand name rendered, rebuild idempotent (2 pages stable). Token lineage 7/7 exact
+  match against `pages-hub/assets/tokens.css` (--BB-bg/bg-elev/bg-card/panel/t1/t2/t3).
+  Trust README (`.../barber_scaffold/README.md`) reviewed: plain-language
+  what-it-does / what-it-never-does so a non-dev can accept at `/plugins` confidently.
+- **.2 registry decision:** DECISION STANDS -- stay source-only, publish deferred with
+  explicit re-triggers. Live re-probe 16:46:20Z: `pypi.org/pypi/spruce-grove/json`,
+  `.../sprucegrove`, `.../spruce_grove` ALL HTTP 404 (name unclaimed, no squat).
+  No publish, no upload, no tokens -- it is a decision bead, not a release.
+- **.4 back-office:** `verify_5al4_backoffice.py` -- **10/10 PASS**: non-backoffice
+  commands pass through, `BACK-OFFICE-CHECKLIST.md` written with NOT-LEGAL-ADVICE +
+  NOT-TAX-ADVICE banner up top, 12 gates >= the required 10, 12/12 items carry an
+  official IRS/state/city URL. Fresh live URL sweep: 12/12 alive (8x 200, EIN page +
+  DFA x2 + bentonvillear.com now 301 to canonical pages, ATAP its documented 302
+  into the login app -- note the portal 404s HEAD requests, so the sweep is GET-based).
+- **.5 creative scaffolds:** `verify_5al5_creative_scaffolds.py` -- **11/11 PASS**:
+  `/creative-scaffold all` builds `site-out/fpv` + `site-out/artisans` (2 pages each),
+  FPV render has lazy-loading https youtube-nocookie iframe embed +
+  click-to-zoom lightbox (`img[data-lb]` + `data-full`), artisans FPO tiles are
+  offline inline SVG data URIs, grove tokens rendered both profiles. Reuse audit
+  (AST-statement basis, shared grove_site_core vs plugin): barber **91.7%**,
+  creative **87.3%** -- both >= the 80% contract, zero code forking. Bug found and
+  fixed mid-verification: first sweep run showed an apparent reuse regression, root
+  cause was LOC-vs-AST metric mismatch in my script, not the code -- scripts record
+  the documented AST basis now.
+- **ruff gates (whole repo + cohort surface):** `uv run ruff check .` All checks
+  passed! + `uv run ruff format --check .` 654 files clean; `grove_site_core` lib and
+  all three cohort plugins (barber_scaffold / backoffice / creative_scaffold)
+  check + format clean; the three new verify scripts lint + format clean.
+
+No `git push` performed; everything is local commits only.

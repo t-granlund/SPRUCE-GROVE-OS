@@ -79,7 +79,8 @@ BROWSER_TOOL_REGISTRY = {
         "spruce_grove.tools.browser.browser_interactions", "register_click_element"
     ),
     "browser_double_click": lazy_registration(
-        "spruce_grove.tools.browser.browser_interactions", "register_double_click_element"
+        "spruce_grove.tools.browser.browser_interactions",
+        "register_double_click_element",
     ),
     "browser_hover": lazy_registration(
         "spruce_grove.tools.browser.browser_interactions", "register_hover_element"
@@ -118,10 +119,12 @@ BROWSER_TOOL_REGISTRY = {
         "spruce_grove.tools.browser.browser_scripts", "register_wait_for_element"
     ),
     "browser_highlight_element": lazy_registration(
-        "spruce_grove.tools.browser.browser_scripts", "register_browser_highlight_element"
+        "spruce_grove.tools.browser.browser_scripts",
+        "register_browser_highlight_element",
     ),
     "browser_clear_highlights": lazy_registration(
-        "spruce_grove.tools.browser.browser_scripts", "register_browser_clear_highlights"
+        "spruce_grove.tools.browser.browser_scripts",
+        "register_browser_clear_highlights",
     ),
     "browser_screenshot_analyze": lazy_registration(
         "spruce_grove.tools.browser.browser_screenshot",
