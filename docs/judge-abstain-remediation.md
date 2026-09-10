@@ -75,12 +75,12 @@ Tests and proof:
 
 ## Final Review Checklist
 
-- [ ] `spruce_grove/tolerant_openai.py` uses only the documented `_validate_completion` hook; strict path unchanged on success
-- [ ] Wrapper wired only into the `custom_openai` branch; first-party OpenAI remains strict
-- [ ] Unrelated `ValidationError`s still propagate (no error masking)
-- [ ] `tests/test_tolerant_openai.py` passes (9 tests)
-- [ ] Strict-env proof recorded: stock model reproduces the byte-exact error under 2.33.0; tolerant model passes
+- [x] `spruce_grove/tolerant_openai.py` uses only the documented `_validate_completion` hook; strict path unchanged on success
+- [x] Wrapper wired only into the `custom_openai` branch; first-party OpenAI remains strict
+- [x] Unrelated `ValidationError`s still propagate (no error masking)
+- [x] `tests/test_tolerant_openai.py` passes (9 tests, plus 101-test regression slice green)
+- [x] Strict-env proof recorded: stock model reproduces the byte-exact error under 2.33.0; tolerant model passes
 - [ ] G2: next /goal cycle shows a non-ABSTAIN verdict from the [default] judge
 - [ ] G3: judges.json placeholders resolved via /judges (user ceremony)
 - [ ] G4/G5: monitoring owners acknowledged; wrapper extended only on observed failure
-- [ ] BUILD-LOG.md carries the 5al.9 fix entry and the pending live-confirmation note
+- [x] BUILD-LOG.md carries the 5al.9 fix entry and the pending live-confirmation note
