@@ -43,12 +43,9 @@ check_path() {
 # legacy namespace before the guard existed. The guard's job is ratchet, not
 # retroactive execution: these must shrink over time, never grow. New files
 # get no mercy; new imports in these files get no mercy either.
-GRANDFATHERED='
-spruce_grove/gemini_model.py
-spruce_grove/tools/browser/tool_registry.py
-spruce_grove/agents/_runtime.py
-spruce_grove/agents/_builder.py
-'
+# Emptied by sg-5al.8 (all four rerouted to spruce_grove.*); keep this EMPTY.
+GRANDFATHERED=''
+
 
 check_imports() {
     local f="$1"

@@ -808,7 +808,7 @@ async def _run_with_mcp_impl(
         # honoured), built once so a run has consistent backoff behaviour.
         from spruce_grove.agents.retry_profiles import make_streaming_retry
 
-        from code_puppy.agents.retry_checkpoint import RetryCheckpoint, resumable_call
+        from spruce_grove.agents.retry_checkpoint import RetryCheckpoint, resumable_call
 
         checkpoint = RetryCheckpoint(agent)
         _main_retry = make_streaming_retry(

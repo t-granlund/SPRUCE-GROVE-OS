@@ -38,7 +38,7 @@ from pydantic_ai.settings import ModelSettings
 from pydantic_ai.tools import ToolDefinition
 from pydantic_ai.usage import RequestUsage
 
-from code_puppy.steer_metadata import is_steer_request
+from spruce_grove.steer_metadata import is_steer_request
 
 logger = logging.getLogger(__name__)
 
