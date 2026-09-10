@@ -336,11 +336,11 @@
       <p class="sec-sub">State reconciled Sept 10 (19:05Z): L0–L2 and L4 done, L3 the active frontier, beads 5al.1–.5 + .8 + .9 shipped.
         What actually happens next, cheapest first:</p>
       <div class="pipe">
-        <div class="step"><div class="num">01 · owner errand · ~15 min</div><div class="t">Upgrade the judge harness runtime</div>
-          <p>The running <code>/goal</code> harness is the installed legacy <code>code-puppy</code> 0.0.830 — it predates the 5al.9
-          <code>tolerant_openai</code> fix and reads the all-disabled <code>~/.code_puppy/judges.json</code>, which is why judges still
-          abstain. Install a build cut from this repo, then re-run one <code>/goal</code> cycle: the four judges flip from ABSTAIN to
-          real PASS/FAIL verdicts (gap G2, <code>docs/judge-abstain-remediation.md</code>).</p></div>
+        <div class="step"><div class="num">01 · install done · owner finish</div><div class="t">Boot /goal cycles on spruce-grove</div>
+          <p><strong>Done Sept 10:</strong> <code>spruce-grove</code>/<code>grove</code> 0.1.0 installed to PATH from this repo —
+          tolerant wrapper verified in the install, DATA_DIR grove-side, plugin bundle resolved. Remaining: export
+          <code>SYNTHETIC_API_KEY</code> in the launch environment and run <code>/goal</code> cycles via <code>spruce-grove</code>
+          (not legacy <code>code-puppy</code>) — the four judges flip from ABSTAIN to real PASS/FAIL verdicts (gap G2).</p></div>
         <div class="step"><div class="num">02 · owner errand · ~10 min · optional</div><div class="t">Sit on the PyPI name</div>
           <p>All three spellings (<code>spruce-grove</code>, <code>sprucegrove</code>, <code>spruce_grove</code>) still probe HTTP 404
           (eleven probes Sept 10, last 17:35Z). Decision stands: source-only until an external install request or the L5 release

@@ -869,3 +869,38 @@ and accessibility bindings blocked) -- flagged in the bead for one human glance.
 Commit `77895cb` in the new repo (no push). Acceptance gaps recorded on 5al.6:
 dictation-to-agent loop (UI carries an honest disabled placeholder), ACP upgrade
 path, .app bundle build.
+
+---
+
+## 26. 2026-09-10 20:05Z-21:10Z -- uvx boot proven; fork is standalone; ~/code_puppy demoted to reference
+
+Question from Tyler: can we boot the `uvx spruce-grove` instance and operate
+away from the `~/code_puppy` checkout entirely. Answer, verified step by step:
+
+- **Independence audit:** zero references to `/Users/tygranlund/code_puppy`
+  anywhere in fork code/scripts; no legacy `~/.code_puppy` data-dir fallbacks
+  in `spruce_grove/config.py`. The source tree was already standalone.
+- **uvx boot:** `uvx --from /Users/tygranlund/SPRUCE-GROVE-OS spruce-grove
+  --version` built the wheel (111 packages) and printed 0.1.0 in ~7s.
+- **Persistent install:** `uv tool install --from .../SPRUCE-GROVE-OS
+  spruce-grove` put `spruce-grove` + `grove` on `~/.local/bin`. The installed
+  env carries `tolerant_openai.py` (5al.9 fix now lives in the bootable
+  harness), resolves DATA_DIR to `~/.spruce_grove` (4 named judges will load),
+  keeps the `code_puppy` -> `spruce_grove` compat shim aliasing correctly, and
+  pulls `code_puppy_core_plugins` 0.0.48 from PyPI.
+- **First real boot:** headless `-p` run completed the first-boot config
+  ceremony (grove.cfg written: grove_name Junto, owner Tyler), reached the
+  model layer (default `syn:large:text` from grove `extra_models.json`), and
+  got a honest 401 -- `SYNTHETIC_API_KEY` is absent from shell env, keychain,
+  rc files, and both extra_models copies (env-refs only, zero inline keys).
+  The key is the one owner secret errand left before cycles flip. Bonus
+  live datapoint: the version check hit PyPI 404 for `spruce-grove` --
+  the unclaimed-name errand is still open.
+
+Consequence: `~/code_puppy` (upstream checkout) is now reference-only. The
+installed `code-puppy` 0.0.830 tool remains the /goal harness until cycles
+are launched via `spruce-grove` instead -- with the key exported, the G2
+judge gate should finally show real verdicts. Refresh ritual after fork
+changes: `uv tool install --reinstall --force --from ~/SPRUCE-GROVE-OS
+spruce-grove`. Docs synced: gap G2 row + phases.html next-steps 01 +
+this log. All commits local, no push.
