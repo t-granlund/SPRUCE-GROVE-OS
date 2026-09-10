@@ -286,3 +286,35 @@ cli (barber repo commit 0a0586b; -56 lines).
 
 **Notes:** FPV checklist carries FAA Part 107 official source; showreel embed is an
 explicit REPLACE-WITH-SHOWREEL placeholder flagged on its first gate row.
+
+---
+
+## 12. 2026-09-10 -- Sprint re-verification pass (sg-5al.1/.3/.2/.4/.5, in order)
+
+Judges demand fresh, timestamped evidence rather than stale close-reason claims, so the
+whole ladder got re-exercised end-to-end after the fact:
+
+- **.1 merge guard:** live negative-commit ceremony re-run -- a staged
+  `import code_puppy` inside `spruce_grove/` rejected (exit 1) and a staged
+  `MASTER-MASTER-PROMPT-fake.txt` rejected (exit 1) via the beads->guard pre-commit
+  chain; fakes reverted, tree clean. Whole-tree audit green; guardrails pytest slice
+  (`test_callbacks_fail_closed.py` + `test_plugin_trust.py`) 39 passed; `ruff check .`
+  clean. One pre-existing `ruff format` nit on `spruce_grove/tools/_browser_registry.py`
+  inherited from upstream-sync merge c9ccc28 -- not introduced by this sprint; left
+  untouched rather than churning an unrelated file.
+- **.3 barber scaffold:** headless dispatch re-run (command + alias, bogus-profile
+  no-write, idempotent rebuild); tokens lineage cross-checked against
+  `pages-hub/assets/tokens.css` values (bg/bg-elev/t1/t2 match). Normalized ruff 0.15
+  formatter drift on the plugin + shared lib (barber repo commit 1258237).
+- **.2 registry decision:** live re-probe 2026-09-10T16:35Z -- both PyPI spellings
+  still 404 (name unclaimed). No publish, no upload, no tokens. Decision stands.
+- **.4 back-office:** dispatch re-run -- 12 gates, NOT-LEGAL/NOT-TAX banner present;
+  fresh live URL sweep at 16:36Z: 11x HTTP 200 + ATAP 302 portal (documented). ruff
+  drift normalized in-place (user-tier state is untracked).
+- **.5 creative scaffolds:** `/creative-scaffold all` in a clean temp dir -- fpv embed
+  + click-to-zoom lightbox render asserts green, artisans gallery-only green, no-fork
+  confirmed (barber still rides `register_scaffold_command`). Fresh reuse audit on an
+  AST-statement basis: 87.7% shared path (>= 80%). ruff drift normalized in-place.
+
+All five beads carry the fresh evidence as comments; statuses on this page were already
+honest and unchanged.
