@@ -960,3 +960,29 @@ notes the desktop dictation-to-agent loop now has a working CLI reference to
 port. Bead `SPRUCE-GROVE-OS-0ub` closed with this log. Deliberately YAGNI'd:
 a VU meter in the window (needs a second avfoundation tap on the same mic --
 usually a device-busy collision) -- noted here instead of a bead.
+
+---
+
+## 28. 2026-09-10 23:45Z-00:00Z -- user-tier plugins versioned: user-plugins/ is now the canonical copy
+
+Found while asking "what now": all four user-tier plugins (junto, backoffice,
+creative_scaffold, mockingbird) plus the shared grove_site_core lib lived only
+in ~/.spruce_grove/ -- zero version control, one dead disk from gone. The
+build-log documented them lovingly; the code itself was homeless. Fixed:
+
+- `user-plugins/` in-repo is now the **canonical copy** (13 files, ~1.6k lines,
+  bytecode-free): the four plugins + `_lib/grove_site_core/` (467 ln shared
+  scaffold renderer the cohort plugins bootstrap onto sys.path). `_` prefix
+  mirrors the loader's own skip-convention for support dirs.
+- `scripts/install-user-plugins.sh` deploys repo -> ~/.spruce_grove (copy-only,
+  never deletes, honors SPRUCE_PLUGINS_DIR/SPRUCE_LIB_DIR overrides; restart
+  the session after -- plugins load at startup).
+- user-plugins/README.md carries the ritual + a plugin/bead table.
+- Read all three pre-existing plugins before vendoring: no secrets, just
+  granlund-branding and bead references (they are public-facing grove
+  artifacts -- phases.html already brags about them).
+- Verified: installer run for real (4 plugins + lib), user tier reloads intact
+  after the round-trip, ruff clean across user-plugins/ and scripts/.
+
+Ritual from here: edit in user-plugins/, run the installer, restart session.
+Live-dir edits are now backports, not the source of truth.
