@@ -346,13 +346,15 @@
           (eleven probes Sept 10, last 17:35Z). Decision stands: source-only until an external install request or the L5 release
           pipeline forces it — but the namespace claim itself is irreversible-free and cheap.</p></div>
         <div class="step"><div class="num">03 · active frontier · L3</div><div class="t">More cohort plugins</div>
-          <p>Bricks shipped: <code>/junto</code>, barber scaffold, backoffice checklist, creative scaffolds (barber/artisans/FPV).
+          <p>Bricks shipped: <code>/junto</code>, barber scaffold, backoffice checklist, creative scaffolds (barber/artisans/FPV),
+          and the <strong>Mockingbird voice plugin</strong> (<code>/rec</code> — mic → whisper-cli → review/edit → send-as-prompt, Sept 10).
           The contract is reuse — keep feeding profiles into <code>grove_site_core</code> (currently 87–92% shared-path reuse) instead
           of forking per-person code. Zero core edits, trust gate stays the bouncer.</p></div>
         <div class="step"><div class="num">04 · in progress · P3</div><div class="t">Desktop shell (SPRUCE-GROVE-OS-5al.6) — v0 scaffolded</div>
           <p>Tauri 2 shell consuming the groomed CLI as a library — rung L5. <strong>v0 landed Sept 10:</strong> sibling repo
           <code>spruce-grove-desktop</code> launches, spawns the CLI headless per prompt, streams output to the transcript,
-          and rides <code>--quick-resume</code> for continuity. Remaining: dictation-to-agent loop, ACP upgrade path, .app bundle.</p></div>
+          and rides <code>--quick-resume</code> for continuity. Remaining: ACP upgrade path, .app bundle;
+          the dictation-to-agent loop now has a working CLI reference (the Mockingbird <code>/rec</code> plugin, Sept 10) to port into the shell.</p></div>
         <div class="step"><div class="num">05 · parked · P4</div><div class="t">Bootable OS spin (5al.7)</div>
           <p>The north star stays parked. Revisit only when the desktop app has real users asking for it.</p></div>
       </div>

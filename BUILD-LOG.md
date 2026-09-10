@@ -904,3 +904,59 @@ judge gate should finally show real verdicts. Refresh ritual after fork
 changes: `uv tool install --reinstall --force --from ~/SPRUCE-GROVE-OS
 spruce-grove`. Docs synced: gap G2 row + phases.html next-steps 01 +
 this log. All commits local, no push.
+
+---
+
+## 27. 2026-09-10 21:45Z-23:40Z -- first official feature: the Mockingbird voice plugin (/rec) -- voice-first pillar realized in the CLI
+
+The feature was specified by voice, recorded at Bentonville Fire Department
+Station 4 on the iPhone, and transcribed through the very rig it asked for:
+Mockingbird's pipeline (ffmpeg -> whisper-cli, `large-v3-turbo-q5_0`, Metal)
+chewed the 64-second memo in 3.5s and returned the spec verbatim -- "/rec or
+maybe /r ... pops up a recording window ... pause, edit, adapt ... record
+against it, analyze it, adjust it, re-record ... then send it through, and
+your prompt should be dissected and applied against the existing directory."
+The transcript + SRT are kept at `~/.spruce_grove/mockingbird/station4-source/`.
+
+What shipped -- `~/.spruce_grove/plugins/mockingbird/`, user tier, structured
+exactly like a `code_puppy_core_plugins` builtin (thin `register_callbacks.py`
++ sibling modules) so it can graduate to the official pack unchanged. Zero
+core edits, per the golden rule:
+
+- `recorder.py` (304 ln) -- segmented ffmpeg/avfoundation capture; pause =
+  gracefully finalize the current segment ('q' on ffmpeg stdin, then
+  terminate/kill ladder), resume = new segment; stop = lossless PCM->PCM
+  concat into one 16 kHz mono master.wav. Mic discovery parses
+  `-list_devices`; `$SPRUCE_MOCKINGBIRD_MIC` (name substring or index) overrides.
+- `transcriber.py` (121 ln) -- whisper-cli + model resolution (env-overridable
+  via `$SPRUCE_MOCKINGBIRD_WHISPER`/`_MODEL`/`_LANG`), 10-min timeout,
+  empty-transcript guard, honest preflight descriptions.
+- `review.py` (225 ln) -- the "Mockingbird UI" bit: rich Live recording
+  window (elapsed, bytes, take count, and the previous transcript pinned as a
+  draft so you record *against it*), then a review loop: send / edit in
+  `$VISUAL`/`$EDITOR` / re-record / quit. Keys are deliberately line-based
+  (p/s/q + Enter): the core allows exactly ONE cbreak stdin listener and this
+  plugin refuses to be a second one. Sessions land in
+  `~/.spruce_grove/mockingbird/<timestamp>/`, pruned to 20.
+- `register_callbacks.py` (109 ln) -- `/rec`, `/r`, `/record` via the
+  `custom_command` hook + `/help` surfacing; preflight explains exactly what
+  is missing (ffmpeg / whisper-cli / model / mic permission); non-TTY and
+  non-macOS guards; approval returns `CustomCommandResult(transcript)` so the
+  REPL feeds it in as the user prompt against the current directory (and
+  mid-run it queues as the next turn via the steer path).
+
+Verification, all live rather than hand-waved: the Station 4 wav
+re-transcribed through the plugin's own transcriber (3.6s, verbatim match);
+recorder drove a real 2-segment take (start/pause/resume/stop -> master.wav ->
+whisper); pexpect drove the full interactive flow through a pty (window,
+pause, resume, stop, transcribe, review, send). App-level: plugin loads via
+`load_plugin_callbacks()` into the user tier alongside junto/backoffice/
+creative_scaffold, `/rec` help surfaces through the callback layer, and
+non-TTY dispatch returns True (claimed, no crash). ruff clean; all files
+under the 600-line cap.
+
+phases.html synced: step 03 lists the voice brick in the L3 frontier; step 04
+notes the desktop dictation-to-agent loop now has a working CLI reference to
+port. Bead `SPRUCE-GROVE-OS-0ub` closed with this log. Deliberately YAGNI'd:
+a VU meter in the window (needs a second avfoundation tap on the same mic --
+usually a device-busy collision) -- noted here instead of a bead.
