@@ -292,15 +292,16 @@ async def main():
         try:
             import pyfiglet
 
-            # Width-aware banner: full SPRUCE GROVE when it fits, PUP when
+            # Width-aware banner: full SPRUCE GROVE when it fits, GROVE when
             # the terminal is too narrow (phones, tight splits).
             banner_columns = display_console.width
             intro_lines = pyfiglet.figlet_format(
                 startup_banner_text(banner_columns), font="ansi_shadow"
             ).split("\n")
 
-            # Simple blue to green gradient (top to bottom)
-            gradient_colors = ["bright_blue", "bright_cyan", "bright_green"]
+            # Grove truecolor gradient (top to bottom): spruce halo -> glow -> cedar,
+            # matching the import-time splash tiers in splash.py and BRAND.md.
+            gradient_colors = ["#2D4F3A", "#588F5E", "#D2A069"]
             display_console.print("\n")
 
             # Left-justified on purpose -- the full-screen splash handles
@@ -326,9 +327,9 @@ async def main():
             "[cyan]https://github.com/pydantic/pydantic-ai-harness[/cyan][/link]"
         )
         display_console.print(
-            f"[dim]{t('cli.banner.observability_pitch')}[/dim] "
-            "[link=https://pydantic.dev/logfire]"
-            "[cyan]https://pydantic.dev/logfire[/cyan][/link]\n"
+            f"[dim]{t('cli.banner.grove_closer')}[/dim] "
+            "[link=https://github.com/t-granlund/SPRUCE-GROVE-OS]"
+            "[#98B79E]https://github.com/t-granlund/SPRUCE-GROVE-OS[/#98B79E][/link]\n"
         )
 
         # Truecolor warning moved to interactive_mode() so it prints last — max visibility.

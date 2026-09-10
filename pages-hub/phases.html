@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0E130F" />
+<title>Master Project Phases — Spruce Grove</title>
+<link rel="icon" type="image/png" href="./assets/favicon_white.png" />
+<meta name="description" content="MASTER-MASTER-PROMPT voice memo, transcribed locally and distilled into a least-to-most-invasive execution ladder for Spruce Grove OS." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="./assets/tokens.css" />
+<link rel="stylesheet" href="./assets/sidebar.css" />
+<script src="./assets/icons.js"></script>
+<script>window.BB_SHELL = { base: "./", active: "phases", assetsBase: "./assets/" };</script>
+<script src="./assets/shell.js" defer></script>
+<script src="./assets/sidebar.js" defer></script>
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+  .skip-link { position:absolute; left:-999px; top:0; z-index:200; background:var(--BB-peri); color:var(--BB-bg); font-weight:700; padding:10px 16px; border-radius:0 0 10px 0; text-decoration:none; }
+  .skip-link:focus { left:0; }
+  body { margin:0; background:var(--BB-bg); color:var(--BB-t2); font-family:var(--BB-sans); font-size:15px; line-height:1.7; -webkit-font-smoothing:antialiased; }
+  a { color:var(--BB-link); text-decoration:none; } a:hover { text-decoration:underline; }
+  code, .mono { font-family:var(--BB-mono); }
+  code { background:rgba(242,162,106,.10); color:var(--BB-cyan); padding:2px 6px; border-radius:5px; font-size:.92em; }
+  h1,h2,h3 { margin:0; line-height:1.25; font-family:var(--BB-display); letter-spacing:-0.02em; color:var(--BB-t1); }
+  p { margin:0 0 14px; color:var(--BB-t2); }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── Hero ── */
+  .hero { padding:60px 0 40px; }
+  .kicker { font-family:var(--BB-mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--BB-peri); display:inline-block; border:1px solid var(--BB-line-2); padding:6px 14px; border-radius:999px; margin-bottom:20px; }
+  .hero h1 { font-size:clamp(36px,6vw,60px); font-weight:700; letter-spacing:-0.03em; line-height:1.05; }
+  .hero h1 em { font-style:normal; background:var(--BB-grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero p.lede { max-width:740px; font-size:18px; color:var(--BB-t2); margin-top:20px; }
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; margin:40px 0 8px; }
+  .stat { border:1px solid var(--BB-line); border-radius:var(--BB-radius); padding:14px 16px; background:var(--BB-bg-card); }
+  .stat .v { font-family:var(--BB-display); font-size:26px; font-weight:600; color:var(--BB-t1); }
+  .stat .k { font-family:var(--BB-mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--BB-t3); margin-top:4px; }
+
+  section { padding: 44px 0; border-top: 1px solid var(--BB-line); }
+  .sec-h { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .sec-h .ic { width:34px; height:34px; border-radius:10px; display:grid; place-items:center; border:1px solid var(--BB-line-2); color:var(--BB-peri); background:rgba(228,170,113,.08); }
+  .sec-h h2 { font-size:26px; font-weight:700; }
+  .sec-sub { color:var(--BB-t3); font-size:14.5px; margin-bottom:26px; max-width:680px; }
+
+  /* ── Pipeline ── */
+  .pipe { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; }
+  .pipe .step { border:1px solid var(--BB-line); border-radius:var(--BB-radius); background:var(--BB-bg-card); padding:16px 18px; position:relative; }
+  .pipe .num { font-family:var(--BB-mono); font-size:11px; letter-spacing:.14em; color:var(--BB-mint); text-transform:uppercase; }
+  .pipe .t { color:var(--BB-t1); font-weight:600; margin:6px 0 6px; }
+  .pipe p { font-size:13.5px; color:var(--BB-t3); margin:0; }
+
+  /* ── North star ── */
+  .ns { border:1px solid var(--BB-line-2); border-radius:var(--BB-radius); background:linear-gradient(160deg, var(--BB-spruce-deep), var(--BB-bg-card) 70%); padding:26px 28px; box-shadow:var(--BB-shadow-lift); }
+  .ns blockquote { margin:0; font-family:var(--BB-display); font-size:clamp(19px,2.4vw,24px); font-weight:500; color:var(--BB-peri-l); line-height:1.5; }
+  .ns cite { display:block; margin-top:14px; font-style:normal; font-family:var(--BB-mono); font-size:12px; color:var(--BB-t3); }
+  .pillars { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-top:20px; }
+  .pillar { border:1px solid var(--BB-line); border-radius:var(--BB-radius); background:var(--BB-bg-card); padding:16px 18px; }
+  .pillar .t { color:var(--BB-mint); font-weight:600; margin-bottom:6px; }
+  .pillar p { font-size:13.5px; color:var(--BB-t3); margin:0; }
+
+  /* ── Verification board ── */
+  .board { display:flex; flex-direction:column; gap:12px; }
+  .row { border:1px solid var(--BB-line); border-radius:var(--BB-radius); background:var(--BB-bg-card); padding:16px 18px; display:grid; grid-template-columns:132px 1fr; gap:6px 18px; align-items:start; }
+  .chip { font-family:var(--BB-mono); font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; border-radius:999px; padding:4px 12px; display:inline-block; width:fit-content; }
+  .chip.verified { background:rgba(152,183,158,.14); color:var(--BB-mint); border:1px solid rgba(152,183,158,.35); }
+  .chip.corrected { background:rgba(226,138,90,.12); color:var(--BB-cyan); border:1px solid rgba(242,162,106,.4); }
+  .chip.open { background:rgba(238,235,229,.07); color:var(--BB-t3); border:1px solid var(--BB-line-2); }
+  .row .claim { color:var(--BB-t1); font-weight:600; margin-bottom:4px; }
+  .row .evidence { font-size:13.5px; color:var(--BB-t3); margin:0; }
+  .row .evidence a { color:var(--BB-mint); }
+
+  /* ── Pecking-order ladder ── */
+  .legend { display:flex; gap:18px; flex-wrap:wrap; font-family:var(--BB-mono); font-size:11.5px; color:var(--BB-t3); margin:-10px 0 22px; }
+  .legend span { display:inline-flex; align-items:center; gap:7px; }
+  .dot { width:10px; height:10px; border-radius:3px; display:inline-block; }
+  .phase { border:1px solid var(--BB-line); border-radius:var(--BB-radius); background:var(--BB-bg-card); padding:20px 22px; margin-bottom:14px; }
+  .phase .top { display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+  .phase .run { font-family:var(--BB-mono); font-size:12px; font-weight:700; letter-spacing:.14em; color:var(--BG-peri, var(--BB-peri)); }
+  .phase h3 { font-size:19px; font-weight:600; }
+  .phase .state { margin-left:auto; font-family:var(--BB-mono); font-size:10.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; border-radius:999px; padding:3px 11px; }
+  .state.done { background:rgba(152,183,158,.16); color:var(--BB-mint); }
+  .state.next { background:rgba(228,170,113,.16); color:var(--BB-peri); }
+  .state.later { background:rgba(238,235,229,.07); color:var(--BB-t3); }
+  .phase p.desc { font-size:14px; color:var(--BB-t2); margin:10px 0 14px; max-width:760px; }
+  .meter { height:7px; border-radius:999px; background:var(--BB-bg-elev); overflow:hidden; margin-bottom:6px; }
+  .meter i { display:block; height:100%; border-radius:999px; background:linear-gradient(90deg, var(--BB-moss), var(--BB-cedar)); }
+  .meter-row { display:grid; grid-template-columns:1fr auto; align-items:center; gap:14px; margin-bottom:12px; }
+  .meter-cap { font-family:var(--BB-mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--BB-t3); white-space:nowrap; }
+  .alpha { display:flex; gap:24px; flex-wrap:wrap; font-size:12.5px; color:var(--BB-t3); }
+  .alpha b { color:var(--BB-t2); font-weight:600; }
+  .alpha span { border-left:2px solid var(--BB-line-2); padding-left:10px; }
+
+  /* ── Cohort cards ── */
+  .cohort { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; }
+  .card { border:1px solid var(--BB-line); border-radius:var(--BB-radius); background:var(--BB-bg-card); padding:18px 20px; }
+  .card .t { color:var(--BB-t1); font-weight:600; margin-bottom:4px; }
+  .card .tag { font-family:var(--BB-mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--BB-peri); margin-bottom:8px; }
+  .card p { font-size:13.5px; color:var(--BB-t3); margin:0; }
+
+  /* ── Guardrails ── */
+  .warn { border:1px solid rgba(242,162,106,.45); border-radius:var(--BB-radius); background:rgba(226,138,90,.07); padding:20px 22px; }
+  .warn .t { color:var(--BB-cyan); font-weight:700; margin-bottom:8px; }
+  .warn p, .warn li { font-size:14px; color:var(--BB-t2); }
+  .warn ul { margin:8px 0 0; padding-left:18px; }
+
+  .closer { text-align:center; padding:56px 24px 72px; }
+  .closer p { font-family:var(--BB-display); font-size:clamp(18px,2.6vw,24px); color:var(--BB-peri-l); max-width:640px; margin:0 auto; }
+  .closer .sig { font-family:var(--BB-mono); font-size:12px; color:var(--BB-t3); margin-top:16px; }
+
+  @media (max-width: 640px) { .row { grid-template-columns: 1fr; } .phase .state { margin-left:0; } }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#sb-main">Skip to content</a>
+
+<main id="sb-main">
+  <div class="wrap">
+    <div class="hero">
+      <span class="kicker">Voice Memo → Verdict → Ladder</span>
+      <h1>Master Project <em>Phases</em></h1>
+      <p class="lede">The <code>MASTER-MASTER-PROMPT.m4a</code> briefing, transcribed fully on-device and distilled
+        into one execution question: <strong>what do we touch first, and how much blast radius does each touch carry?</strong>
+        Everything below is ordered from least invasive to most invasive — a pecking order, not a calendar.</p>
+      <div class="stats">
+        <div class="stat"><div class="v">14:19</div><div class="k">audio (voice memo)</div></div>
+        <div class="stat"><div class="v">40s</div><div class="k">local transcription</div></div>
+        <div class="stat"><div class="v">0 cloud</div><div class="k">whisper large-v3-turbo</div></div>
+        <div class="stat"><div class="v">7 rungs</div><div class="k">L0 → L6 ladder</div></div>
+        <div class="stat"><div class="v">4 claims</div><div class="k">independently researched</div></div>
+      </div>
+    </div>
+
+    <section id="pipeline">
+      <div class="sec-h"><span class="ic" data-ic="activity"></span><h2>How this was made</h2></div>
+      <p class="sec-sub">Full pipeline, zero cloud. The voice memo never left the machine — transcription ran on
+        <strong>Mockingbird's</strong> bundled <code>whisper-large-v3-turbo-q5_0</code> through <code>whisper-cli</code>, Metal-accelerated.</p>
+      <div class="pipe">
+        <div class="step"><span class="num">01 · Capture</span><div class="t">MASTER-MASTER-PROMPT.m4a</div><p>859s, 48kHz mono AAC voice memo. Found sitting in the SPRUCE-GROVE-OS working dir.</p></div>
+        <div class="step"><span class="num">02 · Transcribe</span><div class="t">ffmpeg → whisper-cli</div><p>Model: <code>q5_0</code> large-v3-turbo from <code>~/dev/mockingbird/models/</code>. Total time ~40s for 14 minutes of speech.</p></div>
+        <div class="step"><span class="num">03 · Understand</span><div class="t">Summarized + grouped</div><p>Memo distilled into asks: a grove bootloader, a <code>uvx spruce-grove</code> default, Leather Apron Club backing, grove cohort use cases, long-term OS ambitions.</p></div>
+        <div class="step"><span class="num">04 · Research</span><div class="t">Claims verified or corrected</div><p>Four checkable claims researched against public sources (GitHub, news, FDA/ClinicalTrials). Errors corrected below — truth for truth's sake.</p></div>
+      </div>
+    </section>
+
+    <section id="north-star">
+      <div class="sec-h"><span class="ic" data-ic="swatch"></span><h2>The north star</h2></div>
+      <p class="sec-sub">What the memo is actually asking for, stripped of audio and put into words that can survive a Monday.</p>
+      <div class="ns">
+        <blockquote>"Take the Code Puppy harness, make it look, boot, and carry itself as <strong>Spruce Grove OS</strong> —
+          classy, elegant, badass — and use it to lift the grove: the barbershops, artisans, and tradespeople of the
+          community who explain with their voice and deserve systems built to listen."</blockquote>
+        <cite>— MASTER-MASTER-PROMPT memo, recap · Sept 2026</cite>
+      </div>
+      <div class="pillars">
+        <div class="pillar"><div class="t">The harness is proven</div><p>Code Puppy is the engine (Pydantic AI harness, plugin architecture, trust model). We inherit the machinery; we change the bodywork, not the pistons.</p></div>
+        <div class="pillar"><div class="t">Voice-first by design</div><p>The trees speak before they type: dictation + capture (Mockingbird) feeding the local agent. Articulate the need; the harness iterates.</p></div>
+        <div class="pillar"><div class="t">Leather Apron Club (Junto)</div><p>Federal-Franklin ethos for NWA's small businesses: craftspeople helping craftspeople. Spruce Grove OS is the club's shared toolkit — 'backed by' on the splash.</p></div>
+        <div class="pillar"><div class="t">Accountability, not blame</div><p>Traceability as a service: find the cog with the inefficiency, fix the process, never point at the person.</p></div>
+      </div>
+    </section>
+
+    <section id="research">
+      <div class="sec-h"><span class="ic" data-ic="flask"></span><h2>Research &amp; verification board</h2></div>
+      <p class="sec-sub">Four claims from the memo, checked against public sources. <code>NOT VERIFIED</code> beats a confident guess — and one claim came back <strong>corrected</strong>, which matters more.</p>
+      <div class="board">
+        <div class="row">
+          <span class="chip verified">Verified</span>
+          <div>
+            <div class="claim">"Pfaffenberger left Walmart for Pydantic; the open-source fork runs on the Pydantic AI harness."</div>
+            <p class="evidence">Business Insider (Aug 3, 2026): "creator of Walmart's vibe-coding tool Code Puppy is leaving for AI startup Pydantic."
+              He now authors on <a href="https://pydantic.dev/articles/linguistic-drift-at-the-frontier">pydantic.dev</a> and works at the heart of
+              <a href="https://github.com/pydantic/pydantic-ai-harness">pydantic/pydantic-ai-harness</a> (874) while <a href="https://github.com/mpfaffenberger/code_puppy">code_puppy</a> (808) continues upstream. Our fork is synced to upstream v0.0.830.</p>
+          </div>
+        </div>
+        <div class="row">
+          <span class="chip corrected">Corrected</span>
+          <div>
+            <div class="claim">"Caplyta is on the verge of FDA approval for anxiety." — <strong>Not so.</strong></div>
+            <p class="evidence">FDA approvals are: schizophrenia (2019), bipolar I/II depression (2021), and adjunctive MDD (Nov 2025) —
+              <strong>nothing for anxiety</strong>. ClinicalTrials.gov shows zero GAD studies for lumateperone; the only anxiety-adjacent entry is a
+              <a href="https://clinicaltrials.gov/study/NCT07799493">not-yet-recruiting Phase 4 in social anxiety</a>. Flagging verbatim because memory
+              of what a doctor said is a source, not a verdict.</p>
+          </div>
+        </div>
+        <div class="row">
+          <span class="chip verified">Verified</span>
+          <div>
+            <div class="claim">The fork state: <code>t-granlund/SPRUCE-GROVE-OS</code> is our custom rebrand of upstream code_puppy.</div>
+            <p class="evidence">Origin confirmed via GitHub. HEAD is <code>0e796f7</code> — an upstream-sync branch (v0.0.830) with "pure-brand resolutions,"
+              which is direct evidence the rename work is already costing merge effort (relevant to rung L4 below). Note: the fork's GitHub repo is <strong>public</strong>.</p>
+          </div>
+        </div>
+        <div class="row">
+          <span class="chip verified">Verified · audit</span>
+          <div>
+            <div class="claim">Field-recon audit (Sept 10): the fork sits further up the ladder than the memo implies.</div>
+            <p class="evidence">Code inspection upgraded three rungs: <strong>L1</strong> splash/banner were already grove-truecolor (taglines, gradient, and one
+              stray dog glyph were the only upstream remnants — now fixed); <strong>L2</strong> packaging was already shipped as <code>spruce-grove</code> with
+              <code>spruce-grove</code>/<code>grove</code> entry points; <strong>L4</strong> the <code>spruce_grove</code> namespace rebrand was already complete.
+              The genuinely open frontier is <strong>L3 (grove plugins)</strong> and above. Local <code>uv run</code> test suite: 101/101 green on banner-adjacent slices.</p>
+          </div>
+        </div>
+        <div class="row">
+          <span class="chip open">Open / contextual</span>
+          <div>
+            <div class="claim">Apple's personal-assistant keynote (Ternus era), on-device LLMs, neural-engine "duo" hardware.</div>
+            <p class="evidence">Useful ambient tech signal — on-device + assistant + foldable trends do pressure-test the "local-first harness" bet —
+              but <strong>no build decision in this plan depends on it</strong>. Tracked, not blocking.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ladder">
+      <div class="sec-h"><span class="ic" data-ic="layers"></span><h2>The pecking order — least to most invasive</h2></div>
+      <p class="sec-sub">Each rung costs more than the one below it. <strong>"Invasiveness"</strong> = how much of the forked tree we modify and how
+        much it hurts every future <code>git merge</code> with upstream. The unwritten rule of the whole ladder: <em>upstream syncs are the tax; scope is the payer.</em></p>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--BB-mint)"></span>done / safe</span>
+        <span><span class="dot" style="background:var(--BB-peri)"></span>next up</span>
+        <span><span class="dot" style="background:var(--BB-line-2)"></span>later / parked</span>
+      </div>
+
+      <div class="phase">
+        <div class="top"><span class="run">L0 · 0%</span><h3>Research, provenance, and this dashboard</h3><span class="state done">done · today</span></div>
+        <p class="desc">Zero code changes. Transcribe the memo, verify claims, publish this page, and write PROVENANCE.md so anyone joining the
+          grove knows what Spruce Grove OS is and where every byte came from. You are literally standing on this rung.</p>
+        <div class="meter-row"><div class="meter"><i style="width:0%"></i></div><span class="meter-cap">invasiveness 0%</span></div>
+        <div class="alpha"><span><b>Blast radius:</b> none</span><span><b>Sync tax:</b> none</span><span><b>Depends on:</b> nothing</span></div>
+      </div>
+
+      <div class="phase">
+        <div class="top"><span class="run">L1 · 5%</span><h3>Grove bootloader — TUI splash &amp; brand string swap</h3><span class="state done">done · Sept 10</span></div>
+        <p class="desc">The "bootloader" the memo asks for. Field-recon found the heavy lifting already in-tree: the import-time splash already shimmers in grove
+          truecolor (halo <code>#2D4F3A</code> → glow <code>#588F5E</code> → cedar <code>#D2A069</code>), and the width-aware banner already reads
+          SPRUCE GROVE / GROVE. Sept 10 polish closed the last puppy-shaped gaps: banner gradient blue→green replaced with the grove halo→glow→cedar ramp,
+          tagline now reads <em>"Backed by the Leather Apron Club (Junto) · running on the Pydantic AI harness"</em>, the upstream Logfire ad slot became
+          the grove closer with the fork's repo link, and the lingering dog glyph in <code>cli.loading</code> is retired. 101/101 banner-adjacent tests pass.</p>
+        <div class="meter-row"><div class="meter"><i style="width:5%"></i></div><span class="meter-cap">invasiveness 5%</span></div>
+        <div class="alpha"><span><b>Blast radius:</b> a few display files</span><span><b>Sync tax:</b> trivial re-conflicts</span><span><b>Depends on:</b> L0</span></div>
+      </div>
+
+      <div class="phase">
+        <div class="top"><span class="run">L2 · 15%</span><h3>Distribution rename — <code>uvx spruce-grove</code></h3><span class="state next">next</span></div>
+        <p class="desc">Make the default local instance boot by name: packaging metadata (project name, console scripts, entry points) so
+          <code>uvx spruce-grove</code> resolves to the fork. Runtime modules stay untouched — the rebrand lives at the install seam, not in the source tree.
+          This is the "new default local instance" milestone from the memo.</p>
+        <div class="meter-row"><div class="meter"><i style="width:15%"></i></div><span class="meter-cap">invasiveness 15%</span></div>
+        <div class="alpha"><span><b>Blast radius:</b> pyproject + scripts</span><span><b>Sync tax:</b> small, recurring</span><span><b>Depends on:</b> L1; a package registry decision</span></div>
+      </div>
+
+      <div class="phase">
+        <div class="top"><span class="run">L3 · 25%</span><h3>Grove features as plugins — zero core edits</h3><span class="state next">next</span></div>
+        <p class="desc">The fork's own rules already say it: new functionality belongs in <code>code_puppy_core_plugins</code>/<code>.spruce_grove/plugins/</code>
+          callbacks, not in the core. Cohort tools (booking-site scaffolds, small-business tax/law checklists, portfolio pages) ship as trusted plugins with the
+          SHA-256 trust gate doing bouncer duty. Highest leverage per unit of risk on the whole ladder.
+          <strong>First brick shipped Sept 10:</strong> <code>~/.spruce_grove/plugins/junto</code> — a <code>/junto</code> (alias <code>/grove</code>) command
+          rendering the club credo in grove colors, wired through <code>custom_command</code> + <code>custom_command_help</code>, dispatch-verified
+          end-to-end through the real <code>on_custom_command</code> seam. Zero core edits, exactly as the golden rule demands.</p>
+        <div class="meter-row"><div class="meter"><i style="width:25%"></i></div><span class="meter-cap">invasiveness 25%</span></div>
+        <div class="alpha"><span><b>Blast radius:</b> plugin dirs only</span><span><b>Sync tax:</b> ~zero (isolated)</span><span><b>Depends on:</b> L0; trust model stays intact</span></div>
+      </div>
+
+      <div class="phase">
+        <div class="top"><span class="run">L4 · 55%</span><h3>Namespace rebrand — <code>code_puppy</code> → <code>spruce_grove</code> modules</h3><span class="state done">done · pre-existing</span></div>
+        <p class="desc"><strong>The ladder's original calibration was wrong:</strong> this rung is already climbed. The fork's package <em>is</em>
+          <code>spruce_grove</code> — imports, layout, tests, docs. The 55% sync-tax mortgage is already being paid (see the "pure-brand resolutions" merge),
+          and past Tyler decided it was worth it. What remains isn't escalation, just <strong>merge discipline</strong>: keep upstream syncs branded consistently
+          and never let <code>code_puppy</code> imports leak back in.</p>
+        <div class="meter-row"><div class="meter"><i style="width:55%"></i></div><span class="meter-cap">invasiveness 55%</span></div>
+        <div class="alpha"><span><b>Blast radius:</b> whole tree</span><span><b>Sync tax:</b> high &amp; permanent</span><span><b>Depends on:</b> L2 proven insufficient; bandwidth for a flag-day</span></div>
+      </div>
+
+      <div class="phase">
+        <div class="top"><span class="run">L5 · 80%</span><h3>Desktop application</h3><span class="state later">later</span></div>
+        <p class="desc">The memo's second milestone: wrap the harness into a desktop app. Mockingbird is the in-house reference implementation —
+          Tauri 2 + React shell, SQLite, local models, zero telemetry. Best shape: <strong>separate repo that consumes the CLI as a library</strong>,
+          so this rung adds surface area without growing the fork's diff. Multi-month effort; needs L1–L3 stable.</p>
+        <div class="meter-row"><div class="meter"><i style="width:80%"></i></div><span class="meter-cap">invasiveness 80%</span></div>
+        <div class="alpha"><span><b>Blast radius:</b> new artifact + release pipeline</span><span><b>Sync tax:</b> n/a (new repo)</span><span><b>Depends on:</b> L3; a maintainer's calendar</span></div>
+      </div>
+
+      <div class="phase">
+        <div class="top"><span class="run">L6 · 100%</span><h3>Bootable OS (the "OS" made literal)</h3><span class="state later">parked · north star</span></div>
+        <p class="desc">Long-range: an actual boots-to-the-harness Linux spin. It's the name made literal and a great campfire story, but every
+          preceding rung must be a living product first. Parked — revisit only when L5 has real users asking for it.</p>
+        <div class="meter-row"><div class="meter"><i style="width:100%"></i></div><span class="meter-cap">invasiveness 100%</span></div>
+        <div class="alpha"><span><b>Blast radius:</b> everything</span><span><b>Sync tax:</b> sovereignty (no upstream)</span><span><b>Depends on:</b> L5 with traction</span></div>
+      </div>
+    </section>
+
+    <section id="cohort">
+      <div class="sec-h"><span class="ic" data-ic="grid"></span><h2>The grove cohort — use cases that feed L3</h2></div>
+      <p class="sec-sub">The memo's community layer: real NWA people whose work becomes plugin-shaped problems. Each is a reason the L3 plugin tier exists.</p>
+      <div class="cohort">
+        <div class="card"><div class="t">Bentonville Barber Company</div><div class="tag">use case one</div><p>Named explicitly as the first slide: site, identity, bookings, and whatever else keeps walk-ins honest. Small, beautiful, demonstrable.</p></div>
+        <div class="card"><div class="t">Creative artisans</div><div class="tag">squiggle cutters</div><p>Handmade goods work — product pages, storytelling, and nothing that requires a BigCartel subscription to survive.</p></div>
+        <div class="card"><div class="t">FPV cinematography</div><div class="tag">full send</div><p>Drone footage portfolio for the friend filming athletes through trees. Media-heavy sites that make adrenaline legible.</p></div>
+        <div class="card"><div class="t">Small-business back office</div><div class="tag">the full list</div><p>Compliance, taxes, "what should I have read and didn't" — the boring stuff that decides whether the lights stay on. Checklists first, integrations second.</p></div>
+      </div>
+    </section>
+
+    <section id="guardrails">
+      <div class="sec-h"><span class="ic" data-ic="shield"></span><h2>Guardrails — keep it safe and secure</h2></div>
+      <p class="sec-sub">The memo's own closing instruction, made operational: "keep it safe and secure — don't do anything stupid."</p>
+      <div class="warn">
+        <div class="t"> The fork repo is PUBLIC. The voice memo and its transcript currently sit untracked inside the working directory.</div>
+        <p>The audio and transcript are personal. They must never be committed to <code>t-granlund/SPRUCE-GROVE-OS</code> (public on GitHub).
+          <strong>Closed Sept 10:</strong> all three files (<code>.m4a</code>, <code>.txt</code>, <code>.srt</code>) are now covered by <code>.gitignore</code>
+          and no longer appear in <code>git status</code>. They still live on disk locally, just never on GitHub.</p>
+        <ul>
+          <li><strong>Trust model stays the bouncer:</strong> cohort plugins (L3) load through the SHA-256 trust gate — no exceptions for friends.</li>
+          <li><strong>Privacy posture:</strong> this dashboard shows project signal only; personal health and family details from the memo stay local and unpublished.</li>
+          <li><strong>Attribution is non-negotiable:</strong> upstream is mpfaffenberger/code_puppy; the grove is a rebrand riding on their harness. PROVENANCE.md says so plainly.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="closer">
+      <p>"The harness is borrowed. The grove is ours. Leave it better than we found it."</p>
+      <div class="sig">MASTER PROJECT PHASES · computed from MASTER-MASTER-PROMPT.m4a · together we are better, always</div>
+    </div>
+  </div>
+</main>
+
+<script>
+  // inject Lucide icons into section headers (keeps markup icon-agnostic)
+  document.querySelectorAll("[data-ic]").forEach(function (el) {
+    if (window.BB && BB.icon) el.innerHTML = BB.icon(el.getAttribute("data-ic"), 18);
+  });
+</script>
+</body>
+</html>

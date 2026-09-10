@@ -22,7 +22,7 @@ import shutil
 import sys
 import threading
 
-# Pyramid raster, 20 rows x <=44 cols. Digits are glow tiers:
+# Fir (triangle) raster, 20 rows x <=44 cols. Digits are glow tiers:
 # 0 = empty, 1 = outer halo, 2 = inner glow, 3 = neon core.
 _PYRAMID = (
     "000000000000000000112333211",

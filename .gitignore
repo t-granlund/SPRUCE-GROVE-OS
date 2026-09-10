@@ -58,3 +58,8 @@ code_puppy/bundled_skills/
 # Cancel-wedge repro harness output (scripts/repro_cancel_wedge.py)
 wedge_artifacts/
 wedge_soak.log
+
+# Personal voice memo + local transcript (never publish — repo is public)
+MASTER-MASTER-PROMPT.m4a
+MASTER-MASTER-PROMPT.txt
+MASTER-MASTER-PROMPT.srt

@@ -21,6 +21,7 @@
     { key: "releases",     href: base + "releases/",     label: "Releases",      icon: "activity" },
     { key: "architecture", href: base + "architecture/", label: "Architecture",  icon: "grid" },
     { key: "design",       href: base + "design/",       label: "Design System", icon: "swatch" },
+    { key: "phases",       href: base + "phases.html",   label: "Phases",        icon: "layers" },
     { key: "flat",         href: base + "flat/",         label: "Flat Docs",     icon: "file" }
   ];
   var account = { href: "https://github.com/t-granlund/code_puppy", icon: "github" };
