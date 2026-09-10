@@ -195,3 +195,29 @@ the beads-managed block).
 - Positive: `bash scripts/brand_personal_guard.sh --all` -> WHOLE-TREE AUDIT: GREEN.
 - Note: lefthook binary is not installed on this machine; enforcement comes from the
   beads-hook chain locally and from lefthook.yml wherever `lefthook install` has run.
+
+---
+
+## 8. 2026-09-10 -- Bentonville Barber scaffold plugin (sg-5al.3)
+
+**What shipped (barber repo, commit b002842):** `.spruce_grove/plugins/barber_scaffold/`
+-- register_callbacks.py (`/barber-scaffold` + `/bbc-scaffold` alias, help entry) and
+a trust-ceremony README.md written for a NON-DEVELOPER at the /plugins prompt.
+
+**What shipped (user tier, uncommitted library):** `~/.spruce_grove/lib/grove_site_core/`
+-- tokens.py (granlund-grove palette ported from pages-hub/assets/tokens.css),
+builder.py (`build_site(profile, outdir)`: index + checklist pages, html-escaped,
+network-free, writes-only-in-outdir), `__init__.py` facade. This core is the reuse
+base the creative-cohort scaffold (5al.5) rides on.
+
+**Verification evidence (fresh, this session):**
+- ruff clean: plugins + core lib files.
+- Headless dispatch through importlib: `/barber-scaffold` -> True; `/nope` -> None.
+- Generated files asserted: site-out/index.html + checklist.html exist, contain brand
+  name and grove base token #0E130F.
+- qa-kitten visual pass: 8/8 checks across both pages (wordmark gradient, 5 service
+  cards, CTA, 7 gate rows each with source, zero console/load failures).
+- Zero edits to core spruce_grove/ (barber-plugin commit touches only the barber repo).
+
+**Notes:** Square booking URL is an explicit REPLACE-WITH-LIVE-LINK placeholder,
+gateline item #1 in the generated checklist. site-out/ gitignored in the barber repo.
