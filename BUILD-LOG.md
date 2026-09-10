@@ -239,3 +239,22 @@ today: cohort onboarding happens by clone + trust ceremony, not pip.
 a release pipeline, (3) name-squatting risk materializes.
 **Evidence:** HTTP 404 on both pypi.org/pypi/spruce-grove/json and .../sprucegrove/json
 (name unclaimed as of today).
+
+---
+
+## 10. 2026-09-10 -- Back-office checklist plugin (sg-5al.4)
+
+**What shipped (user tier, ~/.spruce_grove/plugins/backoffice/):** `/backoffice [outfile]`
+emits BACK-OFFICE-CHECKLIST.md -- 12 gates for NWA small business, each with its
+official source URL (EIN, structure, quarterly estimates, SE tax, records, Pub 15,
+1099-NEC, AR sales/use permit, ATAP portal, AR SOS LLC reg, AR income tax, Bentonville
+city permits). NOT-LEGAL-ADVICE banner rendered in both the panel and the markdown.
+
+**Tier note:** shipped user-tier (like junto), not project-tier -- back-office risk is
+general-purpose across every cohort business; user tier makes the command available
+everywhere Tyler works. Close reason annotated on the bead.
+
+**Verification evidence (fresh):** ruff clean; URL sweep live-verified (11x HTTP 200,
+ATAP 302 into its app portal, annotated on the item); headless dispatch True/None for
+/whatever; emitted markdown asserted >=10 rows, >=10 URLs, all hosts official
+(irs.gov / arkansas.gov / bentonvillear.com), banner present.
