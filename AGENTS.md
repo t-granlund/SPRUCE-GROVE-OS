@@ -10,64 +10,42 @@ Plugins are discovered from three tiers, loaded in order:
 
 | Tier | Location | When to use |
 |------|----------|-------------|
-| **Builtin** | `code_puppy_core_plugins/<name>/register_callbacks.py` | Official package discovered via Python entry points |
-| **User** | `~/.spruce_grove/plugins/<name>/register_callbacks.py` | Personal plugins, applied to every project |
-| **Project** | `<CWD>/.spruce_grove/plugins/<name>/register_callbacks.py` | Repo-specific plugins, shared with your team via git |
+| **Builtin** | `code_puppy_core_plugins/<name>/register_callbacks.py` | Official, discovered via entry points |
+| **User** | `~/.spruce_grove/plugins/<name>/register_callbacks.py` | Personal; every project |
+| **Project** | `<CWD>/.spruce_grove/plugins/<name>/register_callbacks.py` | Repo-specific, shared via git |
 
-All three tiers use the same pattern — drop a `register_callbacks.py` in a named subdirectory:
+All tiers use the same pattern — a `register_callbacks.py` in a named subdir (auto-discovered):
 
 ```python
 from spruce_grove.callbacks import register_callback
-
-def _on_startup():
-    print("my_feature loaded!")
-
-register_callback("startup", _on_startup)
+register_callback("startup", lambda: print("my_feature loaded!"))
 ```
-
-That's it. The plugin loader auto-discovers `register_callbacks.py` in subdirs.
 
 ### Project Plugins
 
-Project plugins live at `<CWD>/.spruce_grove/plugins/<name>/register_callbacks.py`.
-This mirrors the project-level discovery already used by agents (`<CWD>/.spruce_grove/agents/`)
-and skills (`<CWD>/.spruce_grove/skills/`).
+Mirrors agent/skill discovery (`.spruce_grove/agents|skills/`). Key details:
 
-**Key details:**
-
-- **Directory must be created intentionally.** Spruce Grove will never auto-create
-  `.spruce_grove/plugins/` — your team opts in by creating it.
-- **Disabled by default (trust gate).** Project plugins run arbitrary repo
-  code at import time, so none load until the user accepts them in the
-  `/plugins` TUI ceremony (select → Enter → type `trust`); accepted plugins
-  hot-load with no restart. Trust is a SHA-256 of the plugin dir, stored
-  user-side in `~/.spruce_grove/trusted_plugins.json` and scoped to the project
-  path — any file change reverts the plugin to untrusted, and everything else
-  fails closed. `/plugins revoke <name>` removes trust. Full security model:
-  `spruce_grove/plugins/trust.py`.
-- **Keep runtime state out of the plugin dir** — writing state (SQLite,
-  caches, logs) next to the code self-tampers the hash and demands
-  re-acceptance every boot. Use `~/.spruce_grove/` like builtin plugins do, or
-  a dot-path (e.g. `.state/`), which is excluded from hashing.
-- **Load order is builtin → user → project.** Project plugins load last, giving
-  them highest precedence for override-style hooks.
-- **Project wins on name collision.** If a project plugin shares a name with a
-  user plugin, only the project copy loads (the user plugin is skipped). This
-  matches how agents deduplicate — `discover_json_agents()` overwrites user
-  agents with project agents of the same name. A warning is logged when a
-  project plugin shadows a builtin.
-- **Module namespace isolation.** Project plugins use `project_plugins.<name>.register_callbacks`
-  in `sys.modules`, so they never collide with user plugins at the import level.
+- **Created intentionally** — the grove never auto-creates `.spruce_grove/plugins/`.
+- **Trust-gated.** None load until the user accepts in the `/plugins` TUI
+  (select → Enter → type `trust`); accepted plugins hot-load with no restart.
+  Trust is a SHA-256 of the plugin dir, stored in `~/.spruce_grove/trusted_plugins.json`
+  scoped to the project path; any file change reverts to untrusted, everything
+  else fails closed. `/plugins revoke <name>` removes trust. Model: `spruce_grove/plugins/trust.py`.
+- **No runtime state in the plugin dir** — state (SQLite, caches, logs) next to
+  the code self-tampers the hash. Use `~/.spruce_grove/` or a dot-path
+  (e.g. `.state/`), which is excluded from hashing.
+- **Load order builtin → user → project** (project last, highest precedence).
+- **Project wins name collisions** with user plugins (user copy skipped), matching
+  agent dedup; shadowing a builtin logs a warning.
+- **Namespace isolation:** project plugins import as `project_plugins.<name>.register_callbacks`.
 
 ## Available Hooks
 
-`register_callback("<hook>", func)` — deduplicated, async hooks accept sync or async functions.
+`register_callback("<hook>", func)` — deduplicated; sync or async functions accepted.
 
-`register_callback("<hook>", func, fail_closed=True)` — for security callbacks on `pre_tool_call`
-and `run_shell_command` only. Error isolation normally reports a crashed callback as `None`, and
-both of those consumers read `None` as "no objection", so a guard that raises currently reads as
-approval. With `fail_closed=True` its exception is reported as a block instead. Defaults to
-`False`; the flag is rejected on other hooks, whose consumers would misread a block result.
+`register_callback("<hook>", func, fail_closed=True)` — for `pre_tool_call` /
+`run_shell_command` only: a crashed guard normally reports `None` (read as
+approval); `fail_closed=True` reports the exception as a block. Rejected elsewhere.
 
 | Hook | When | Signature |
 |------|------|-----------|
@@ -76,40 +54,39 @@ approval. With `fail_closed=True` its exception is reported as a block instead. 
 | `invoke_agent` | Sub-agent invoked | `(*args, **kwargs) -> None` |
 | `agent_exception` | Unhandled agent error | `(exception, *args, **kwargs) -> None` |
 | `agent_run_start` | Before agent task | `(agent_name, model_name, session_id=None) -> None` |
-| `model_select` | Select a model for one run | `(*, agent_name, current_model, prompt, messages, session_id=None) -> str \| None` — first non-empty result wins |
+| `model_select` | Select a model for one run | `(*, agent_name, current_model, prompt, messages, session_id=None) -> str \| None` (first non-empty wins) |
 | `agent_run_end` | After agent run | `(agent_name, model_name, session_id=None, success=True, error=None, response_text=None, metadata=None) -> None` |
 | `load_prompt` | System prompt assembly | `() -> str \| None` |
-| `run_shell_command` | Before shell exec | `(context, command, cwd=None, timeout=60) -> dict \| None` (return `{"blocked": True}` to block, `{"rewrite": "<new cmd>"}` to transparently transform) |
+| `run_shell_command` | Before shell exec | `(context, command, cwd=None, timeout=60) -> dict \| None` (`{"blocked": True}` / `{"rewrite": cmd}`) |
 | `file_permission` | Before file op | `(context, file_path, operation, ...) -> bool` |
 | `pre_tool_call` | Before tool executes | `(tool_name, tool_args, context=None) -> Any` |
 | `post_tool_call` | After tool finishes | `(tool_name, tool_args, result, duration_ms, context=None) -> Any` |
 | `custom_command` | Unknown `/slash` cmd | `(command, name) -> True \| str \| None` |
 | `custom_command_help` | `/help` menu | `() -> list[tuple[str, str]]` |
-| `register_tools` | Tool registration | `() -> list[dict]` with `{"name": str, "register_func": callable}` |
-| `register_agent_tools` | Advertise tools to an agent's available list | `(agent_name: str \| None) -> list[str]` — tool names from `TOOL_REGISTRY` to merge into the agent's hardcoded `get_available_tools()` |
-| `register_agents` | Agent catalogue | `() -> list[dict]` with `{"name": str, "class": type}` |
-| `register_model_type` | Custom model type | `() -> list[dict]` with `{"type": str, "handler": callable}` |
-| `register_skills` | Skill catalogue | `() -> list[dict]` with `{"name": str, "skill_md" \| "skill_md_path" \| "frontmatter"+"body"}` |
-| `register_cli_args` | Before CLI `parse_args()` | `(parser) -> list` — plugins call `parser.add_argument(...)`; namespace flags (e.g. `--myplugin-foo`) to avoid argparse collisions |
-| `handle_cli_args` | After CLI `parse_args()` | `(args) -> dict \| None` — return `{"handled": True, "exit_code": int}` to terminate the CLI cleanly; return `None` to let startup proceed |
+| `register_tools` | Tool registration | `() -> list[{"name", "register_func"}]` |
+| `register_agent_tools` | Advertise tools to an agent | `(agent_name: str \| None) -> list[str]` (TOOL_REGISTRY names) |
+| `register_agents` | Agent catalogue | `() -> list[{"name", "class"}]` |
+| `register_model_type` | Custom model type | `() -> list[{"type", "handler"}]` |
+| `register_skills` | Skill catalogue | `() -> list[{"name", "skill_md" \| "skill_md_path" \| "frontmatter"+"body"}]` |
+| `register_cli_args` | Before CLI `parse_args()` | `(parser) -> list` (call `parser.add_argument`; namespace flags) |
+| `handle_cli_args` | After CLI `parse_args()` | `(args) -> dict \| None` (`{"handled": True, "exit_code": int}` to exit; `None` proceeds) |
 | `load_model_config` | Patch model config | `(*args, **kwargs) -> Any` |
 | `load_models_config` | Inject models | `() -> dict` |
 | `load_model_descriptions` | Inject description overlays | `() -> dict[str, str]` |
 | `get_model_system_prompt` | Per-model prompt | `(model_name, default_prompt, user_prompt) -> dict \| None` |
-| `provider_credential_flow` | `/add_model` hit a missing credential | `(*, provider_id, env_var) -> bool \| None` — save the credential (config + env) and return `True` to skip manual entry; short-circuits on first `True` |
+| `provider_credential_flow` | `/add_model` missing credential | `(*, provider_id, env_var) -> bool \| None` (first `True` wins) |
 | `stream_event` | Response streaming | `(event_type, event_data, agent_session_id=None) -> None` |
-| `transform_model_messages` | Before each model request, after history processing | `(agent_name, messages) -> None` — mutate the final `list[ModelMessage]` in place |
-| `pre_mcp_autostart` | Before bound MCP servers auto-start | `(agent_name, server_names) -> None` (refresh tokens / mint creds here) |
+| `transform_model_messages` | Before each model request | `(agent_name, messages) -> None` (mutate `list[ModelMessage]` in place) |
+| `pre_mcp_autostart` | Before bound MCP servers auto-start | `(agent_name, server_names) -> None` (refresh tokens here) |
 
-Full list + rarely-used hooks: see `spruce_grove/callbacks.py` source.
+Rare hooks: see `spruce_grove/callbacks.py` source.
 
 ## Ctrl+X Chords
 
 `Ctrl+X` is a **chord prefix** (readline-style), never a standalone hotkey. The
-line editor arms a pending state on `Ctrl+X`, paints a hint of the currently
-registered bindings on the bottom bar, and resolves the NEXT key against the
-chord registry in `spruce_grove/messaging/chords.py`. `Esc` (or any unbound key)
-cancels the chord; unbound keys are then processed normally.
+line editor arms on `Ctrl+X`, hints registered bindings on the bottom bar, and
+resolves the NEXT key against the registry in `spruce_grove/messaging/chords.py`.
+`Esc` (or any unbound key) cancels.
 
 | Chord | Action | Registered by | Active when |
 |-------|--------|---------------|-------------|
@@ -119,19 +96,14 @@ cancels the chord; unbound keys are then processed normally.
 
 **Design notes:**
 
-- **No modes.** This replaced a modal design where a bare `Ctrl+X` meant
-  "kill shells if a handler happened to be armed, editor chord otherwise" --
-  the arm/disarm lifecycle raced against keystrokes. Now `Ctrl+X` always
-  flows into the editor; the registry decides what the follow-up key does.
-- **Backgrounding is mid-flight detach.** `Ctrl+X Ctrl+B` makes every
-  streaming shell tool call return immediately with `background=True`,
-  `log_file`, and `pid`; the process keeps running and its remaining output
-  diverts to the log file (readers keep the pipes drained).
-- **Headless fallback.** With no line editor installed (piped stdin, embeds),
-  a bare `Ctrl+X` keeps its historical kill-all-shells meaning via the
-  listener's spawn-time `on_escape` callback.
+- **No modes** — `Ctrl+X` always flows into the editor; the registry decides the
+  follow-up key (the old modal arm/disarm raced keystrokes).
+- **Backgrounding is mid-flight detach** — streaming shell calls return
+  immediately with `background=True`, `log_file`, `pid`; processes keep running.
+- **Headless fallback** — without a line editor, bare `Ctrl+X` keeps its
+  historical kill-all-shells meaning.
 
-**Plugins can register their own chords:**
+**Plugins can register chords:**
 
 ```python
 from spruce_grove.messaging.chords import register_chord, unregister_chord
@@ -139,34 +111,22 @@ from spruce_grove.messaging.chords import register_chord, unregister_chord
 register_chord("\x14", my_callback, "Ctrl+T do the thing")  # Ctrl+X Ctrl+T
 ```
 
-Rules for chord callbacks: they run on the key-listener thread, so **never
-block** (hop to the asyncio loop's executor like the `$EDITOR` handler in
-`messaging/external_editor.py`); never raise (failures are swallowed and
-logged); register only while the binding is meaningful so the armed-chord
-hint stays honest. Keys are single raw control characters -- prefer
-`Ctrl+<letter>` bytes; digits and F-keys are deliberately unsupported.
+Chord callbacks run on the key-listener thread: **never block** (hop to the
+asyncio executor like `messaging/external_editor.py`), never raise, register
+only while meaningful. Keys are single raw control characters — prefer
+`Ctrl+<letter>`; digits/F-keys unsupported.
 
 ## Internationalization (i18n)
 
-User-facing CLI/TUI strings are localizable via `spruce_grove/i18n/`. See
-**`docs/I18N.md`** for the full guide (architecture, decisions, translator
-quickstart). Rules for new user-facing output (PUP-473):
+Localize user-facing strings via `spruce_grove/i18n/` (guide: **`docs/I18N.md`**). Rules (PUP-473):
 
-- **Wrap display strings** in `t("key", **params)` / `ngettext("key", n)`
-  (`from spruce_grove.i18n import t, ngettext`). Keys are dotted IDs; catalogs
-  live in `spruce_grove/i18n/locales/<locale>.json`. A missing key echoes the
-  key (never crashes).
-- **Interpolate with `{name}`** placeholders — do NOT build strings with
-  f-strings/concatenation, and do NOT rely on `str.format` semantics on
-  catalog text (attribute/index access and format specs are intentionally
-  unsupported; catalogs are untrusted input).
-- The single emit choke point (`messaging/message_queue.py::emit_message`)
-  resolves `i18n.lazy(...)` values; plain strings pass through unchanged.
-- **Model-facing system prompts are OUT of scope** — translating them changes
-  LLM behavior. Don't run them through the i18n seam.
-- Add extraction behind the pseudolocale/coverage CI gate
-  (`tests/i18n/test_i18n_audit.py`): every translated key must exist in the
-  `en-US` source, and a pseudolocale run must emit only bracketed text.
+- **Wrap display strings** in `t("key", **params)` / `ngettext("key", n)`; catalogs in
+  `spruce_grove/i18n/locales/<locale>.json`; missing keys echo (never crash).
+- **Interpolate with `{name}`** placeholders only — no f-strings, no `str.format`
+  on catalog text (untrusted input).
+- Single emit point (`messaging/message_queue.py::emit_message`) resolves `i18n.lazy(...)`.
+- **Model-facing system prompts are OUT of scope** — translation changes LLM behavior.
+- CI gate: `tests/i18n/test_i18n_audit.py` (every key in `en-US`, pseudolocale clean).
 
 ## Rules
 
@@ -175,7 +135,7 @@ quickstart). Rules for new user-facing output (PUP-473):
 3. **600-line hard cap** — split into submodules
 4. **Fail gracefully** — never crash the app
 5. **Return `None` from commands you don't own**
-6. **Always run linters - `ruff check --fix`, `ruff format .`
+6. **Always run linters** — `ruff check --fix`, `ruff format .`
 7. **NEVER ALLOW A CLAUDE CO-AUTHOR COMMIT**
 
 <!-- BEGIN BEADS INTEGRATION v:1 profile:minimal hash:7510c1e2 -->

@@ -757,3 +757,30 @@ clean on all touched files; brand_personal_guard --all exit 0. Analysis + gap re
 + final-review checklist: `docs/judge-abstain-remediation.md`. Live confirmation gate:
 next /goal cycle must show a non-ABSTAIN verdict (no local SYNTHETIC_API_KEY; recorded
 as gap G2).
+
+---
+
+## 22. 2026-09-10 18:08Z-18:21Z -- G3 judge-model assignment + ceremony, G2 live attempt, AGENTS.md housekeeping
+
+- **G3 (judge models):** found the grove config dir (`~/.spruce_grove`) had NO model
+  definitions at all -- the synthetic models only existed in legacy
+  `~/.code_puppy/extra_models.json`, which `ModelFactory` never reads. Authored
+  `~/.spruce_grove/extra_models.json` from the live subscription (dev.synthetic.new,
+  screenshots reviewed 18:09Z): 4 rotation-safe `syn:` aliases (large:text ->
+  GLM-5.3-Flash, small:text -> GLM-4.7-Flash, large:vision -> Kimi-K3,
+  small:vision -> Qwen3.8-27B) + 7 always-on `hf:` pins marked as rotation-risky.
+  Judge assignment: `tests_green` -> `syn:large:text` (1.0x deep evidence
+  reasoning), `lint_format` / `brand_merge_guard` / `privacy_provenance_guard` ->
+  `syn:small:text` (0.1x mechanical gates), per the 90x-plan quota matrix.
+  Ceremony (18:11:43-45Z) replayed the harness resolution path exactly:
+  `get_enabled_judges_or_default` -> 4/4 named judges, NO [default] fallback,
+  every model in config, every `get_model` returns **TolerantOpenAIChatModel**.
+  Both historical abstain engines are dead in-config: "model not present" and the
+  weight_versions validation abort.
+- **G2 (live confirmation):** attempted locally 18:12Z -- SYNTHETIC_API_KEY absent
+  everywhere (env 0, macOS keychain lookups exit 44 twice, puppy.cfg keyless;
+  earlier masked-output positive was a masking artifact of an error line, corrected
+  on re-check). Live gate remains the next /goal cycle in the keyed harness env.
+- **Housekeeping:** AGENTS.md trimmed 13,205 -> 9,986 chars (under the 10k loading
+  cap; bd-managed block untouched, all rules/hooks/tables preserved, one legacy
+  unclosed bold fixed). Emoji scan clean; brand_personal_guard --all exit 0.
