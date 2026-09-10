@@ -784,3 +784,20 @@ as gap G2).
 - **Housekeeping:** AGENTS.md trimmed 13,205 -> 9,986 chars (under the 10k loading
   cap; bd-managed block untouched, all rules/hooks/tables preserved, one legacy
   unclosed bold fixed). Emoji scan clean; brand_personal_guard --all exit 0.
+
+---
+
+## 23. 2026-09-10 18:24Z-18:27Z -- Bead 5al.8 closed: legacy-namespace ratchet emptied
+
+Interactive (non-wiggum) execution of the 5al.8 goal by code-puppy-d74801. All four
+grandfathered files rerouted to the grove namespace: `gemini_model` ->
+`spruce_grove.steer_metadata`, `tools/browser/tool_registry` ->
+`spruce_grove.tools._browser_registry`, `agents/_runtime` ->
+`spruce_grove.agents.retry_checkpoint`, `agents/_builder` ->
+`spruce_grove.model_utils`. Guard ratchet GRANDFATHERED list emptied (keep-EMPTY).
+Evidence: `brand_personal_guard.sh --all` exit 0 with empty ratchet (18:26:04Z,
+re-verified post-commit 18:27:08Z); pytest module slices 134 passed (18:26:27-31Z)
+plus full `tests/agents` sweep 465 passed (18:26:42-48Z); ruff check + format clean
+on all four files + guard script; emoji scan clean. Commit `54cdf13` (refactor,
+no co-author, no push). Judge note recorded in the bead: no wiggum fan-out in this
+session, so G2 live-panel evidence remains gated to the next harness /goal cycle.
