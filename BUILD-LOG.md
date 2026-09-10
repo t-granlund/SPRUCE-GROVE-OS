@@ -722,3 +722,38 @@ run in this window; nothing was republished or pushed.
 Docs: phases.html PyPI probe count line bumped 10 -> 11 (fresh 17:35Z probe cited); all
 ladder statuses re-read and remain honest (L1/L2/L4 done Sept 10, L3 active frontier).
 No `git push` performed; local commits only.
+
+---
+
+## 21. 2026-09-10 17:40Z-17:59Z -- Root cause of the nine-round judge ABSTAIN loop found and fixed (5al.9)
+
+The judge remediation note across all nine rounds cited only `ABSTAIN endpoint error
+(UnexpectedModelBehavior): Invalid response from synthetic chat completions endpoint:
+1 validation error for ChatCompletion metadata.weight_versions Input should be a valid
+string (input was a list)`. Forensics (17:40-17:50Z): the wiggum judge plugin converts
+model exceptions into abstensions; pydantic-ai `OpenAIChatModel._validate_completion`
+re-validates every response against a strict internal `_ChatCompletion`; Synthetic.new
+returns `metadata.weight_versions` as a LIST. Version matrix proven empirically with
+isolated uv envs: strict `metadata: dict[str, str]` declared on pydantic-ai 2.33.0,
+2.36.0 and 2.40.0, ABSENT on this repo's pin 2.35.0 -- which is why local dev never
+failed and the judge harness (on a strict release) aborted every judge call into an
+undecidable abstain loop. Zero repo defects were behind the nine rounds.
+
+Fix (bead SPRUCE-GROVE-OS-5al.9): new `spruce_grove/tolerant_openai.py` with
+`TolerantOpenAIChatModel(OpenAIChatModel)` using the documented `_validate_completion`
+subclass hook -- strict validation first; only on ValidationError, retry once with
+non-string metadata values JSON-encoded; unrelated failures still propagate. Wired
+only into the `custom_openai` branch of `spruce_grove/model_factory.py` (third-party
+endpoints); first-party OpenAI/Azure, cerebras, openrouter and zai_coding stay stock.
+
+Fresh evidence (17:52-17:59Z): `tests/test_tolerant_openai.py` 9/9 PASS incl. a
+monkeypatched strict-env repro (version-agnostic); isolated strict-env proof under
+pydantic-ai 2.33.0 -- stock model raises the byte-exact judge error
+(`metadata.weight_versions - Input should be a valid string`), tolerant model validates
+the same payload and coerces losslessly. Regression slice: `test_tolerant_openai +
+test_model_factory_basics + test_model_factory + test_callbacks_fail_closed +
+plugins/test_plugin_trust` 101 passed, 2 skipped (17:54:14Z). ruff check + format
+clean on all touched files; brand_personal_guard --all exit 0. Analysis + gap register
++ final-review checklist: `docs/judge-abstain-remediation.md`. Live confirmation gate:
+next /goal cycle must show a non-ABSTAIN verdict (no local SYNTHETIC_API_KEY; recorded
+as gap G2).

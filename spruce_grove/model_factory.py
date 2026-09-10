@@ -975,16 +975,18 @@ class ModelFactory:
             if api_key:
                 provider_args["api_key"] = api_key
             provider = make_openai_provider(provider_identity, **provider_args)
-            from pydantic_ai.models.openai import (
-                OpenAIChatModel,
-                OpenAIResponsesModel,
-            )
+            from pydantic_ai.models.openai import OpenAIResponsesModel
 
             if _custom_openai_uses_responses_api(model_name, model_config):
                 return OpenAIResponsesModel(
                     model_name=model_config["name"], provider=provider
                 )
-            return OpenAIChatModel(
+            # Third-party openai-compatible gateways (e.g. Synthetic.new) are
+            # not schema-faithful; use the tolerant subclass so provider-junk
+            # metadata fields cannot abort otherwise-valid completions.
+            from spruce_grove.tolerant_openai import TolerantOpenAIChatModel
+
+            return TolerantOpenAIChatModel(
                 model_name=model_config["name"],
                 provider=provider,
                 profile=_strict_openai_profile(model_name, model_config),
