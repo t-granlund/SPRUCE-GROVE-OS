@@ -221,3 +221,21 @@ base the creative-cohort scaffold (5al.5) rides on.
 
 **Notes:** Square booking URL is an explicit REPLACE-WITH-LIVE-LINK placeholder,
 gateline item #1 in the generated checklist. site-out/ gitignored in the barber repo.
+
+---
+
+## 9. 2026-09-10 -- Registry decision (sg-5al.2)
+
+**DECISION: stay source-only.** `uv run spruce-grove` / `uvx --from <checkout> spruce-grove`
+are today's install paths. PyPI publish deferred, not abandoned.
+
+**Rationale:** first-publish claims the public name permanently under whichever account
+publishes; account/token hygiene is an owner errand, not a loop action. Upstream sync
+(v0.0.830 line) still forces brand-resolution merges -- shipping a registry release
+mid-churn invites a mismatch someone else must explain. Nothing external asks for it
+today: cohort onboarding happens by clone + trust ceremony, not pip.
+
+**Re-trigger conditions:** (1) first external install request, (2) L5 desktop app needs
+a release pipeline, (3) name-squatting risk materializes.
+**Evidence:** HTTP 404 on both pypi.org/pypi/spruce-grove/json and .../sprucegrove/json
+(name unclaimed as of today).

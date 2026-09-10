@@ -248,16 +248,19 @@
       </div>
 
       <div class="phase">
-        <div class="top"><span class="run">L2 · 15%</span><h3>Distribution rename — <code>uvx spruce-grove</code></h3><span class="state next">next</span></div>
-        <p class="desc">Make the default local instance boot by name: packaging metadata (project name, console scripts, entry points) so
-          <code>uvx spruce-grove</code> resolves to the fork. Runtime modules stay untouched — the rebrand lives at the install seam, not in the source tree.
-          This is the "new default local instance" milestone from the memo.</p>
+        <div class="top"><span class="run">L2 · 15%</span><h3>Distribution rename — <code>uvx spruce-grove</code></h3><span class="state done">done · decision recorded</span></div>
+        <p class="desc">Verified by inspection: <code>pyproject.toml</code> already declares <code>name = "spruce-grove"</code> with console scripts
+          <code>spruce-grove</code>/<code>grove</code> at <code>spruce_grove.main:main_entry</code>, pinned to <code>pydantic-ai-harness==0.23.0</code>.
+          Local boots work today (<code>uv run spruce-grove</code>). Registry decision recorded Sept 10 (bead 5al.2):
+          <strong>stay source-only for now</strong> — first-publish namespace claims are irreversible, upstream sync still churns, and no public
+          audience demands an index yet. Re-trigger: first external install request, or the L5 desktop needing a release pipeline.
+          Both PyPI spellings probe as unclaimed (HTTP 404); sitting on the name is a 10-minute owner errand before the fork gets loud.</p>
         <div class="meter-row"><div class="meter"><i style="width:15%"></i></div><span class="meter-cap">invasiveness 15%</span></div>
         <div class="alpha"><span><b>Blast radius:</b> pyproject + scripts</span><span><b>Sync tax:</b> small, recurring</span><span><b>Depends on:</b> L1; a package registry decision</span></div>
       </div>
 
       <div class="phase">
-        <div class="top"><span class="run">L3 · 25%</span><h3>Grove features as plugins — zero core edits</h3><span class="state next">next</span></div>
+        <div class="top"><span class="run">L3 · 25%</span><h3>Grove features as plugins — zero core edits</h3><span class="state next">active frontier</span></div>
         <p class="desc">The fork's own rules already say it: new functionality belongs in <code>code_puppy_core_plugins</code>/<code>.spruce_grove/plugins/</code>
           callbacks, not in the core. Cohort tools (booking-site scaffolds, small-business tax/law checklists, portfolio pages) ship as trusted plugins with the
           SHA-256 trust gate doing bouncer duty. Highest leverage per unit of risk on the whole ladder.
