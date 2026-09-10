@@ -52,7 +52,7 @@ Tests and proof:
 | ID | Gap | Status | Owner | Next Action |
 | -- | --- | ------ | ----- | ----------- |
 | G1 | Judge-environment pydantic-ai schema drift vs the local 2.35.0 pin made verdicts depend on the environment, not the code | RESOLVED (5al.9) | spruce-grove dev | Closed by TolerantOpenAIChatModel; no further action |
-| G2 | No local SYNTHETIC_API_KEY, so no live end-to-end judge re-run could be performed locally | OPEN (attempted 18:12Z: env empty, keychain exits 44 x2, puppy.cfg has no key) | user + next /goal cycle | Live gate remains the next /goal cycle in the keyed harness env; it now finds 4 named judges on tolerant syn:alias models, with the fixed [default] fallback as belt-and-braces |
+| G2 | Harness runtime predates the fix, so keyed cycles still abstain | OPEN (diagnosed 18:58Z) | user (harness install) | The /goal harness executes the installed uv-tool `code-puppy` 0.0.830 (legacy namespace), which contains no `tolerant_openai.py` and resolves DATA_DIR to legacy `~/.code_puppy` (whose judges.json has every judge disabled, forcing the `[default]` fallback). This exactly reproduces the observed `[default]` ABSTAIN with the unchanged weight_versions shape. Next action: install a code-puppy build cut from this repo (or a release containing `tolerant_openai`) so the harness runs the fixed code and reads the `~/.spruce_grove` judge config; then re-run a /goal cycle as the live gate |
 | G3 | User-level judges.json in ~/.spruce_grove still has placeholder model strings ("REPLACE-WITH-YOUR-JUDGE-MODEL via /judges") for 4 enabled judges | OPEN | user | Ceremony decision: set real judge models (or disable placeholders) via /judges |
 | G4 | Streaming-path chunks (`_ChatCompletionChunk`) are not covered by the tolerant wrapper | OPEN | spruce-grove dev | No observed failure; monitor judge logs and extend the wrapper to chunk validation only if one appears |
 | G5 | Other third-party branches (cerebras, openrouter, zai_coding) still use stock strict models | OPEN | spruce-grove dev | Intentionally untouched to keep blast radius small; adopt the wrapper only if a failure is observed |
@@ -80,7 +80,7 @@ Tests and proof:
 - [x] Unrelated `ValidationError`s still propagate (no error masking)
 - [x] `tests/test_tolerant_openai.py` passes (9 tests, plus 101-test regression slice green)
 - [x] Strict-env proof recorded: stock model reproduces the byte-exact error under 2.33.0; tolerant model passes
-- [ ] G2: next /goal cycle shows a non-ABSTAIN verdict (attempted locally 18:12Z; blocked by missing key, harness env is the gate)
+- [ ] G2: next /goal cycle shows a non-ABSTAIN verdict (18:58Z cycle still abstained; root cause is the harness running pre-fix installed code-puppy 0.0.830, see gap register G2)
 - [x] G3: judges.json placeholders resolved (18:11Z ceremony PASS: 4/4 judges resolve to TolerantOpenAIChatModel on syn: aliases)
 - [ ] G4/G5: monitoring owners acknowledged; wrapper extended only on observed failure
 - [x] BUILD-LOG.md carries the 5al.9 fix entry and the pending live-confirmation note

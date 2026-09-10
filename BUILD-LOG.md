@@ -801,3 +801,41 @@ plus full `tests/agents` sweep 465 passed (18:26:42-48Z); ruff check + format cl
 on all four files + guard script; emoji scan clean. Commit `54cdf13` (refactor,
 no co-author, no push). Judge note recorded in the bead: no wiggum fan-out in this
 session, so G2 live-panel evidence remains gated to the next harness /goal cycle.
+
+---
+
+## 24. 2026-09-10 18:52Z-18:59Z -- 5al.8 twelfth-pass re-verify; G2 root cause of persistent ABSTAIN found (harness runs pre-fix install)
+
+Twelfth re-verification of bead SPRUCE-GROVE-OS-5al.8 (bead already CLOSED at
+`54cdf13`; `--claim` refused as expected: "issue not claimable: status closed";
+dry-run cycle, zero code diff, working tree clean at HEAD `b84a15c`). Fresh
+evidence this pass: `scripts/brand_personal_guard.sh --all` exit 0 WITH the green
+OK banner and GRANDFATHERED empty (18:53Z); no `code_puppy` imports anywhere in
+`spruce_grove/` outside the `_code_puppy_compat` shim; pytest slices green --
+gemini tests + full `tests/tools/browser/` + `tests/test_tolerant_openai.py`
+397 passed, agents runtime/builder slice (retry_checkpoint, runtime_cancellation,
+runtime_streaming_retry_classifier, agent_manager basics + full coverage)
+104 passed; ruff check + format --check clean on the 4 touched files.
+
+Judge-panel report this cycle: still **ABSTAIN, no real PASS/FAIL verdict** --
+the 5al.9 fix is therefore NOT live-confirmed. BUT the abstain is the SAME
+known shape (`ChatCompletion metadata.weight_versions Input should be a valid
+string`, list input), NOT a new error shape, so per the fallback plan the
+tolerant_openai scrub is intentionally left unchanged. New diagnosis of why the
+same shape persists (18:55-18:58Z): the /goal harness executes the **installed
+uv-tool `code-puppy` 0.0.830** (legacy namespace), not this repo's spruce_grove
+tree. Two independent proofs from the installed package: (1) it has NO
+`tolerant_openai.py` -- the 5al.9 wrapper does not exist in the harness runtime,
+so stock strict `OpenAIChatModel` plus Synthetic's list-valued
+`metadata.weight_versions` raises the identical ValidationError every cycle;
+(2) its `config.DATA_DIR` resolves to legacy `~/.code_puppy`, so
+`judge_config` reads `~/.code_puppy/judges.json` where ALL 5 judges are
+`enabled: false` -> `get_enabled_judges_or_default` returns the single
+`[default]` fallback judge on the implementor's model -- exactly the `[default]`
+ABSTAIN note observed. The section-22 ceremony replayed the REPO resolution
+path (DATA_DIR `~/.spruce_grove`, 4/4 named tolerant judges), which is why it
+looked fixed locally while the harness kept abstaining. Conclusion: zero repo
+defect; the live gate flips only when the harness runtime carries the 5al.9 fix
+(install a code-puppy build cut from this repo / a release containing
+`tolerant_openai`) and reads the `~/.spruce_grove` judge config. Recorded as
+the G2 next-action in `docs/judge-abstain-remediation.md`.
