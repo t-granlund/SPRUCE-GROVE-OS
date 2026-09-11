@@ -1180,3 +1180,39 @@ design.
 
 Bead ledger: 11 closed, 4 tracked (epic, 5al.6 one-human-click, parked
 5al.7, and... nothing else). Desktop at c226713; release asset refreshed.
+
+---
+
+## 33. 2026-09-11 -- launch day: PyPI claimed via trusted publishing, sprucegrove.io bought + DNS automated, announcement is the site root
+
+The public launch errands, finished:
+
+**PyPI -- claimed with zero tokens.** Tyler registered the pending trusted
+publisher on PyPI (project `spruce-grove`, repo
+`t-granlund/SPRUCE-GROVE-OS`, workflow `publish.yml`); publish.yml was
+converted from twine+secret to `pypa/gh-action-pypi-publish` (OIDC,
+`id-token: write`). The next push published **1.0.1**, and the pipeline now
+releases on every main push (1.0.2 followed with the docs). Install proven
+from the public index: `uv tool install spruce-grove` resolved 111 packages
+and put `grove` + `spruce-grove` on PATH. The runbook's token dance is
+retired -- no secret to rotate, ever.
+
+**sprucegrove.io -- $28.12 at Porkbun, then driven, not clicked.** DNS went
+in end to end by driving the logged-in Chrome session over AppleScript
+JavaScript: mapped the Speedy DNS drawer (`dnsDrawer_*` field ids, native
+value setters + input/change events for the React-ish form), deleted both
+`pixie.porkbun.com` parking records (confirm() dialogs accepted via System
+Events Return), and filed the exact GitHub Pages set: 4x A
+(185.199.108-111.153) + CNAME www -> t-granlund.github.io. Zone verified
+row-by-row in the panel and via 1.1.1.1/8.8.8.8. Porkbun's Cloudflare
+connection noted for later; Pages records stay DNS-only if the domain ever
+moves across.
+
+**Site root.** The announcement page now serves `/` on the domain; the hub
+lives at `/hub.html`; footer gained hub + progress links. Pages cname set
+via API; CNAME file rides every deploy. `http://sprucegrove.io` 200 within
+minutes; https follows once GitHub's Let's Encrypt cert provisions, then
+https_only goes on.
+
+Still human: the 10-second packaged-app smoke (mic click + ACP pill) for
+5al.6. Everything else with a button, we pressed.

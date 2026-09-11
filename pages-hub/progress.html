@@ -68,7 +68,7 @@
   <div class="wrap">
 
     <header class="hero">
-      <span class="kicker">Grove Roadmap &middot; computed 2026-09-11 after build-log 32</span>
+      <span class="kicker">Grove Roadmap &middot; computed 2026-09-11 &middot; launch day</span>
       <h1>Then &rarr; <em>Now</em> &rarr; Next</h1>
       <p class="sub">Three sources of truth, no vibes: the <strong>original spec</strong> is
       <code>MASTER-MASTER-PROMPT.m4a</code> (the voice memo that started the grove) plus the pristine
@@ -78,7 +78,7 @@
     </header>
 
     <div class="stats">
-      <div class="stat"><div class="v">32</div><div class="k">build-log entries</div></div>
+      <div class="stat"><div class="v">33</div><div class="k">build-log entries</div></div>
       <div class="stat"><div class="v">16 / 19</div><div class="k">beads closed</div></div>
       <div class="stat"><div class="v">4 + 1</div><div class="k">user plugins + shared lib</div></div>
       <div class="stat"><div class="v">0.1.0</div><div class="k">on PATH &middot; uvx-proven</div></div>
@@ -174,12 +174,12 @@
       <div class="sec-h"><span class="ic">III</span><h2>Next &mdash; the live queue <span class="tag">from bd, tonight</span></h2></div>
       <p class="sec-sub">8 of 15 lifetime beads closed. What remains, cheapest-first:</p>
       <div class="pipe">
-        <div class="step"><div class="num">01 &middot; 10 seconds &middot; human</div><div class="t">Two clicks in the packaged app</div>
-          <p>Open the rebuilt app: pill flips to <code>ACP · syn:large:text</code>, send a streamed prompt, click <b>record</b> and speak a steer. Closes 5al.6's last acceptance gap (real WKWebView mic + grant).</p></div>
-        <div class="step"><div class="num">02 &middot; owner errand &middot; ~10 min</div><div class="t">Claim the PyPI name</div>
-          <p><code>docs/PYPI-CLAIM.md</code>: account &rarr; token &rarr; <code>gh secret set PYPI_API_TOKEN</code> &rarr; rerun &rarr; 200. Claiming <code>spruce-grove</code> covers <code>spruce_grove</code>; only <code>sprucegrove</code> needs a placeholder.</p></div>
-        <div class="step"><div class="num">03 &middot; owner errand &middot; $28.12</div><div class="t">Buy sprucegrove.io</div>
-          <p>Porkbun, verified live pricing ($51.80 renewal band everywhere after year one; .ai is $82.70 -- skip). Runbook: <code>docs/DOMAIN-LAUNCH.md</code> -- DNS A-records to Pages, custom domain, then the announcement page becomes the site root.</p></div>
+        <div class="step" style="border-color:var(--mint)"><div class="num">01 &middot; THE LAST CLICK &middot; human</div><div class="t">Two clicks in the packaged app</div>
+          <p>Open the rebuilt app: pill flips to <code>ACP · syn:large:text</code>, send a streamed prompt, click <b>record</b> and speak a steer. Closes 5al.6 and with it the whole execution ladder minus the parked north star.</p></div>
+        <div class="step" style="opacity:.75"><div class="num">02 &middot; DONE &middot; trusted publishing</div><div class="t">spruce-grove is live on PyPI</div>
+          <p><strong>1.0.1 and 1.0.2 published</strong> via OIDC trusted publishing (zero tokens, nothing to rotate). <code>uv tool install spruce-grove</code> proven from the public index &mdash; 111 packages, executables on PATH. The pipeline releases on every main push.</p></div>
+        <div class="step" style="opacity:.75"><div class="num">03 &middot; DONE &middot; $28.12</div><div class="t">sprucegrove.io is ours -- and it serves</div>
+          <p>Bought at Porkbun; DNS driven in end to end (4x Pages A-records + www CNAME, parking records evicted). Announcement page is the site root; hub at <code>/hub.html</code>. HTTPS cert provisioning, then enforced.</p></div>
         <div class="step"><div class="num">04 &middot; then &middot; L3 frontier</div><div class="t">More cohort plugins + vision model entry</div>
           <p>Keep feeding real NWA people into plugin-shaped problems. Also queued: add <code>syn:small:vision</code> (Qwen3.8-27B, 262k) to extra_models so screenshot-reading work is priced right.</p></div>
         <div class="step"><div class="num">05 &middot; parked &middot; 5al.7</div><div class="t">Bootable OS spin (north star)</div>
