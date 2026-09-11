@@ -29,7 +29,8 @@ jobs:
           mkdir -p _site
 
           # 1. Landing hub at the root + shared assets (logo, favicon)
-          cp pages-hub/index.html _site/
+          cp pages-hub/announce.html _site/index.html
+          cp pages-hub/index.html _site/hub.html
           cp -r pages-hub/assets _site/
           # Inject live platform stats from the field guide data into the hub
           node - <<'EOF'
@@ -37,13 +38,13 @@ jobs:
           const dataJs = fs.readFileSync('docs/field-guide/data.js', 'utf8')
             .replace(/^window\.FIELD_GUIDE_DATA = /, '').replace(/;\s*$/, '');
           const d = JSON.parse(dataJs);
-          let html = fs.readFileSync('_site/index.html', 'utf8');
+          let html = fs.readFileSync('_site/hub.html', 'utf8');
           html = html
             .replace(/id="s-tools">—</,  `id="s-tools">${d.stats.tools}<`)
             .replace(/id="s-agents">—</, `id="s-agents">${d.stats.agents}<`)
             .replace(/id="s-plugins">—</,`id="s-plugins">${d.stats.plugins}<`)
             .replace(/id="s-commits">—</,`id="s-commits">${d.stats.commitsLast2Months}<`);
-          fs.writeFileSync('_site/index.html', html);
+          fs.writeFileSync('_site/hub.html', html);
           EOF
 
           # 2. Interactive field guide explorer
