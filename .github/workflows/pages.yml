@@ -70,6 +70,10 @@ jobs:
           #    its ./assets/ refs then resolve identically locally + deployed)
           cp pages-hub/announce.html _site/announce.html
 
+          # 5b. Roadmap boards at site root (same ./assets/ resolution)
+          cp pages-hub/phases.html _site/phases.html
+          cp pages-hub/progress.html _site/progress.html
+
           # Stop GitHub Pages from Jekyll-transforming anything
           touch _site/.nojekyll
 
