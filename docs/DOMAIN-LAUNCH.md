@@ -1,3 +1,18 @@
+## STATUS -- 2026-09-11: EXECUTED
+
+- [x] Domain purchased: sprucegrove.io at Porkbun ($28.12, 2026-09-11)
+- [x] DNS records added (4x A 185.199.108-111.153 + CNAME www -> t-granlund.github.io); parking records removed
+- [x] Pages custom domain configured via API + CNAME file in every deploy
+- [x] Account-level domain verification: TXT `_github-pages-challenge-t-granlund` = `6899430b00fd652aa04aec58e82cf3`, verified in GitHub settings
+- [x] Announcement page promoted to site root; hub at /hub.html
+- [x] http://sprucegrove.io serving 200
+- [ ] HTTPS cert: provisioning on GitHub's ACME schedule; enable https_only after it lands
+
+DNS was driven end to end through the logged-in Porkbun "Speedy" DNS drawer
+(AppleScript + JS: `dnsDrawer_*` fields, native value setters, confirm()
+dialogs accepted via System Events Return). Record list lives in build-log 33.
+
+
 # Domain launch — sprucegrove.io (owner errand, ~15 min)
 
 Status 2026-09-11: **sprucegrove.io is AVAILABLE** (RDAP 404, re-verified
