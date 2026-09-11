@@ -1135,3 +1135,48 @@ Still honest: the packaged-app smoke test (pill flips to
 dictation mic test. Beads queued next: b15 (browser live look-in via
 tool_call payloads), v5p (mid-run voice/text steer), tx3 (TEST-MAP.md + ACP
 fixtures + tauri-driver E2E).
+
+---
+
+## 32. 2026-09-11 05:00Z-05:45Z -- b15 + v5p + tx3 closed: look-in, steering, durability proven, test map written
+
+The three remaining desktop beads shipped in one pass (desktop commit
+c226713, release asset refreshed).
+
+**b15 -- Live Look-in panel.** Browser-tool tool_call updates are scanned
+for `screenshot_path` (the browser_screenshot tool saves PNGs under
+`/tmp/spruce_grove_screenshots_*` and reports the path in its result). A new
+`grove_read_image_base64` command (extension-whitelisted, 20MB cap) ferries
+the image to a slide-over panel: latest screenshot + scrolling action log,
+auto-opens on capture, toggleable from the topbar. Playwright-verified end
+to end (tool payload -> panel -> data-URL image).
+
+**v5p -- Mid-run steering.** ACP turns are strict request/response, so steer
+= `session/cancel` -> wait turn-end -> re-prompt in the SAME session (context
+preserved -- the capability load/resume was proven first, see below). The UI
+makes it seamless: with ACP, sending while busy queues a steer (status
+"steer queued -- redirecting Cedar"), and voice steer rides dictation into
+the same box. Two real bugs found by the Playwright test and fixed: the
+redirect fired while still busy (loop), and a steer landing after the turn
+already ended waited on a turn-end that never came (now: acp.turnActive
+tracking + a 1.2s fallback so steering can never wedge).
+
+**Durability proven at protocol level.** tests/acp_probe.py --lifecycle:
+session A plants a marker word; the process is killed; a FRESH agent
+`session/load`s the same sessionId and recalls the marker verbatim
+("GROVE-DURABILITY-082318" returned across process death). The desktop now
+resumes automatically: sessionId stored per cwd, passed to session/load on
+relaunch, with graceful fallback to a fresh session.
+
+**tx3 -- the test map.** tests/TEST-MAP.md answers the what/why/how in full:
+CLI 363-file suite (the engine, CI-gated), desktop 9 Rust unit tests, the
+ACP contract fixture (fixtures/acp/session.jsonl pinned; replayed through
+the real router -- protocol drift fails loudly), the Playwright UI
+integration suite, and the probe. Honest finding: tauri-driver 2.0.6 prints
+"not supported on this platform" on macOS (WKWebView has no public
+automation bridge) -- e2e_tauri_driver.py is kept for Linux/Windows CI;
+macOS coverage is Playwright + probe + one human smoke click, by platform
+design.
+
+Bead ledger: 11 closed, 4 tracked (epic, 5al.6 one-human-click, parked
+5al.7, and... nothing else). Desktop at c226713; release asset refreshed.
