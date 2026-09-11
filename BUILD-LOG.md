@@ -986,3 +986,60 @@ build-log documented them lovingly; the code itself was homeless. Fixed:
 
 Ritual from here: edit in user-plugins/, run the installer, restart session.
 Live-dir edits are now backports, not the source of truth.
+
+---
+
+## 29. 2026-09-11 00:05Z-00:35Z -- voice loop dogfooded live; desktop dictation path charted; PyPI claim prepped to the button
+
+Owner added the Synthetic key (via the app's own credential flow -- see
+below), then ordered the four-item sweep: dogfood /rec, validate, chart the
+desktop dictation port, prep the PyPI claim. All four sorted.
+
+**1+2. Dogfood + validation.** Drove the real interactive TUI
+(`spruce-grove --disable-ask-user-question` under pexpect) through the entire
+voice loop: /rec -> Mockingbird window -> 7s live mic capture -> s ->
+transcribed first take ("Thank you." -- room audio) -> s -> sent through ->
+Cedar ran on GLM-5.3-Flash and answered ("I'm Junto, your grove guide --
+nothing pending on my end, just hanging out among the spruces", 4.6k/524.3k
+tokens). Headless `-p` validation also 2/2 with SYNTHETIC_API_KEY explicitly
+UNSET -- the 401 era is over; G2's blocker is gone.
+
+- Key resolution discovered: the key lives in the macOS Keychain, service
+  `code-puppy`, accounts `synthetic_api_key` / `provider_SYNTHETIC_API_KEY` --
+  the owner used the app's credential flow, and the `$SYNTHETIC_API_KEY`
+  env-ref in extra_models.json resolves through keyring at request time.
+  Exactly the rotation-safe design. (Trap for the next archaeologist:
+  `launchctl getenv` exits 0 with empty output when unset -- exit-code
+  probes lie; measure the value length.)
+- pexpect lesson: prompt_toolkit owns the tty in RAW mode -- `\n` is Ctrl+J,
+  only `\r` submits. Banner matches fire before the editor exists; wait for
+  the prompt's agent marker (Cedar) plus a settle sleep.
+- Dogfood evidence: /tmp/sg-dogfood/dogfood.log.
+
+**3. Desktop dictation port -- path charted, four beads under 5al.6:**
+isu (plugin gains `--transcribe <file>` headless verb via
+register_cli_args/handle_cli_args -- hook order verified at
+cli_runner.py:56/253/255/262, so zero core edits and the desktop never
+re-implements the whisper rig) -> 55a (desktop `grove_transcribe` Tauri
+command mirroring grove_send's cli_command() resolution) -> 8xz (UI: mic
+button, MediaRecorder capture, transcript into the EDITABLE prompt box --
+the desktop's pause-edit-adapt loop -- then existing grove_send) + qz6
+(NSMicrophoneUsageDescription for the packaged .app; npm run dev inherits
+the terminal's grant). The design keeps "shell owns no agent logic" true.
+
+**4. PyPI claim -- everything but the account-gated button.** Re-probed:
+all three spellings still HTTP 404. Discovered publish.yml is already fully
+wired (publish-on-push-main: test job -> uv version bump -> uv build ->
+twine upload --skip-existing -> tag, keyed on a PYPI_API_TOKEN repo
+secret). Built the real artifacts locally: spruce_grove-0.1.0 wheel + sdist,
+`uvx twine check` PASSED. Wrote the owner runbook docs/PYPI-CLAIM.md
+(account -> token -> `gh secret set PYPI_API_TOKEN` -> rerun -> verify 200
+-> rotate to project scope). PEP 503 note: claiming `spruce-grove`
+automatically covers `spruce_grove`; only the no-separator `sprucegrove`
+would need a separate placeholder. Heads-up recorded: from the moment the
+secret exists, every push to main ships -- `[ci skip]` to land work without
+releasing.
+
+docs synced: this log. Dashboard ask honored: OPERATION GRANLUND mission
+dashboard (1.MASTER-ORCHESTRATION/dashboard/index.html) opened in the
+browser. All commits local then pushed per session rules.
