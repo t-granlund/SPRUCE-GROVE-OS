@@ -1097,3 +1097,41 @@ unverified). Recommendation recorded in docs/DOMAIN-LAUNCH.md: buy .io,
 A-records to Pages, custom-domain in Settings, then a one-line follow-up to
 make the announcement the site root. That purchase is the only remaining
 owner errand for the public launch.
+
+---
+
+## 31. 2026-09-11 04:30Z-05:00Z -- gck: the desktop speaks ACP -- inline chat is now genuinely live
+
+Root cause of the "inline chat shows no progress" complaint confirmed and
+fixed. grove_send scraped headless `-p` stdout, which only emits banner +
+THINKING + final text -- no tool calls, no deltas, no usage ever reached the
+webview. The fix rides the protocol that already shipped in the CLI:
+`spruce-grove --acp` (JSON-RPC over stdio, agent_client_protocol 0.11.0).
+
+- **Dialect ground-truthed live** (tests/acp_probe.py, now permanent in the
+  desktop repo): initialize -> protocolVersion 1 + agentCapabilities
+  (loadSession, fork, resume, close; promptCapabilities image+embeddedContext)
+  + agentInfo; session/new -> sessionId + configOptions with a live MODEL
+  PICKER (current syn:large:text); session/prompt -> per-turn usage
+  (totalTokens/input/output/cached); session/update variants observed:
+  agent_thought_chunk (thinking, streamed!), agent_message_chunk,
+  available_commands_update. stopReason end_turn.
+- **Rust client (acp.rs)**: ndjson router with request/response correlation,
+  auto-allow for session/request_permission (headless-EXTREME precedent,
+  logged in the UI), method-not-found for anything else so turns never hang,
+  session/cancel, Drop kills the child. 8 unit tests on the pure router
+  helpers. One real router bug caught by its own test: JSON-RPC responses
+  carry no method -- classify() now checks id+result before method presence.
+- **UI**: mode pill (starting -> ACP + model / legacy fallback), streaming
+  agent text, dashed italic thinking blocks, tool cards with status chips
+  (completed/failed), permission log lines, per-turn usage in the status
+  bar, cwd-change session restart, legacy fallback if ACP cannot start.
+- **Tests**: extended Playwright suite (tests/test_desktop_ui.py) covers the
+  full ACP stream + dictation + init regression -- PASS; cargo 8/8.
+- Release .app rebuilt; v0.1.0 asset refreshed on the public release.
+
+Still honest: the packaged-app smoke test (pill flips to
+`ACP · syn:large:text`, one streamed prompt) is a human click -- same as the
+dictation mic test. Beads queued next: b15 (browser live look-in via
+tool_call payloads), v5p (mid-run voice/text steer), tx3 (TEST-MAP.md + ACP
+fixtures + tauri-driver E2E).
