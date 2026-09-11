@@ -68,7 +68,7 @@
   <div class="wrap">
 
     <header class="hero">
-      <span class="kicker">Grove Roadmap &middot; computed 2026-09-10 evening</span>
+      <span class="kicker">Grove Roadmap &middot; computed 2026-09-11 after build-log 32</span>
       <h1>Then &rarr; <em>Now</em> &rarr; Next</h1>
       <p class="sub">Three sources of truth, no vibes: the <strong>original spec</strong> is
       <code>MASTER-MASTER-PROMPT.m4a</code> (the voice memo that started the grove) plus the pristine
@@ -78,11 +78,11 @@
     </header>
 
     <div class="stats">
-      <div class="stat"><div class="v">29</div><div class="k">build-log entries</div></div>
-      <div class="stat"><div class="v">8 / 15</div><div class="k">beads closed</div></div>
+      <div class="stat"><div class="v">32</div><div class="k">build-log entries</div></div>
+      <div class="stat"><div class="v">16 / 19</div><div class="k">beads closed</div></div>
       <div class="stat"><div class="v">4 + 1</div><div class="k">user plugins + shared lib</div></div>
       <div class="stat"><div class="v">0.1.0</div><div class="k">on PATH &middot; uvx-proven</div></div>
-      <div class="stat"><div class="v">live</div><div class="k">voice loop &middot; model auth</div></div>
+      <div class="stat"><div class="v">live + durable</div><div class="k">voice &middot; ACP &middot; resume</div></div>
     </div>
 
     <!-- ================================================== THEN -->
@@ -157,9 +157,9 @@
       </div>
 
       <div class="phase">
-        <div class="top"><span class="run">L5 &middot; desktop</span><h3>Shell v0 running; dictation path charted</h3><span class="state active">in flight</span></div>
-        <p>Tauri 2 shell spawns the groomed CLI headless, streams output, rides <code>--quick-resume</code>; dictation-to-agent is the open acceptance gap with a four-bead path charted tonight (plugin <code>--transcribe</code> verb &rarr; <code>grove_transcribe</code> command &rarr; mic UI &rarr; plist permission).</p>
-        <div class="meter-row"><div class="meter"><i style="width:80%"></i></div><span class="meter-cap">80% &middot; beads isu &rarr; 55a &rarr; 8xz + qz6</span></div>
+        <div class="top"><span class="run">L5 &middot; desktop</span><h3>Dictation, ACP streaming, look-in, steering, resume -- shipped</h3><span class="state active">one smoke click</span></div>
+        <p>The whole chain landed: dictation (mic &rarr; local whisper &rarr; editable prompt), <strong>ACP structured streaming</strong> (message deltas, thinking blocks, tool cards with status chips, per-turn token usage), the <strong>Live Look-in panel</strong> (browser screenshots stream in as the agent works), <strong>mid-run steering</strong> by text or voice (cancel + redirect in the same session, race-hardened), and <strong>relaunch durability</strong> (session/load proven across process death -- marker recalled verbatim). Remaining: one human smoke click in the packaged app closes 5al.6.</p>
+        <div class="meter-row"><div class="meter"><i style="width:95%"></i></div><span class="meter-cap">95% &middot; isu 55a 8xz qz6 gck b15 v5p tx3 all closed</span></div>
       </div>
 
       <div class="phase">
@@ -174,22 +174,24 @@
       <div class="sec-h"><span class="ic">III</span><h2>Next &mdash; the live queue <span class="tag">from bd, tonight</span></h2></div>
       <p class="sec-sub">8 of 15 lifetime beads closed. What remains, cheapest-first:</p>
       <div class="pipe">
-        <div class="step"><div class="num">01 &middot; in flight &middot; 5al.6</div><div class="t">Desktop dictation &mdash; the ordered chain</div>
-          <p><code>SPRUCE-GROVE-OS-isu</code> plugin <code>--transcribe</code> verb &rarr; <code>-55a</code> <code>grove_transcribe</code> Tauri command &rarr; <code>-8xz</code> mic button + editable prompt + send &rarr; <code>-qz6</code> plist for the packaged .app. Closes 5al.6's acceptance criterion.</p></div>
-        <div class="step"><div class="num">02 &middot; unblocked tonight &middot; G2</div><div class="t">/goal cycles with real judge verdicts</div>
-          <p>Synthetic key is live via keyring; the four judges can flip from ABSTAIN to PASS/FAIL. Launch <code>/goal</code> cycles through <code>spruce-grove</code> (not legacy <code>code-puppy</code>) and let the ladder judge itself.</p></div>
-        <div class="step"><div class="num">03 &middot; owner errand &middot; ~10 min</div><div class="t">Claim the PyPI name</div>
-          <p><code>docs/PYPI-CLAIM.md</code>: account &rarr; token &rarr; <code>gh secret set PYPI_API_TOKEN</code> &rarr; rerun &rarr; verify 200. PEP 503 bonus: claiming <code>spruce-grove</code> covers <code>spruce_grove</code>; only <code>sprucegrove</code> needs a placeholder.</p></div>
-        <div class="step"><div class="num">04 &middot; then &middot; L3 frontier</div><div class="t">More cohort plugins</div>
-          <p>Keep feeding real NWA people into plugin-shaped problems; hold the reuse contract (<code>grove_site_core</code>) and the trust gate as bouncer.</p></div>
+        <div class="step"><div class="num">01 &middot; 10 seconds &middot; human</div><div class="t">Two clicks in the packaged app</div>
+          <p>Open the rebuilt app: pill flips to <code>ACP · syn:large:text</code>, send a streamed prompt, click <b>record</b> and speak a steer. Closes 5al.6's last acceptance gap (real WKWebView mic + grant).</p></div>
+        <div class="step"><div class="num">02 &middot; owner errand &middot; ~10 min</div><div class="t">Claim the PyPI name</div>
+          <p><code>docs/PYPI-CLAIM.md</code>: account &rarr; token &rarr; <code>gh secret set PYPI_API_TOKEN</code> &rarr; rerun &rarr; 200. Claiming <code>spruce-grove</code> covers <code>spruce_grove</code>; only <code>sprucegrove</code> needs a placeholder.</p></div>
+        <div class="step"><div class="num">03 &middot; owner errand &middot; $28.12</div><div class="t">Buy sprucegrove.io</div>
+          <p>Porkbun, verified live pricing ($51.80 renewal band everywhere after year one; .ai is $82.70 -- skip). Runbook: <code>docs/DOMAIN-LAUNCH.md</code> -- DNS A-records to Pages, custom domain, then the announcement page becomes the site root.</p></div>
+        <div class="step"><div class="num">04 &middot; then &middot; L3 frontier</div><div class="t">More cohort plugins + vision model entry</div>
+          <p>Keep feeding real NWA people into plugin-shaped problems. Also queued: add <code>syn:small:vision</code> (Qwen3.8-27B, 262k) to extra_models so screenshot-reading work is priced right.</p></div>
         <div class="step"><div class="num">05 &middot; parked &middot; 5al.7</div><div class="t">Bootable OS spin (north star)</div>
+          <p>Stays parked until the desktop app has real users asking for it.</p></div>
+      </div>
           <p>Stays parked until the desktop app has real users asking for it. The name made literal, later.</p></div>
       </div>
     </section>
 
     <div class="closer">
       <p>&ldquo;The harness is borrowed. The grove is ours. Leave it better than we found it.&rdquo;</p>
-      <div class="sig">then: MASTER-MASTER-PROMPT.m4a &middot; now: build-log 29 &middot; next: bd live &middot; together we are better, always</div>
+      <div class="sig">then: MASTER-MASTER-PROMPT.m4a &middot; now: build-log 32 &middot; next: bd live &middot; together we are better, always</div>
     </div>
 
   </div>
