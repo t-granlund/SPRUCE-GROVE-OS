@@ -117,6 +117,7 @@ jobs:
     needs: test
     permissions:
       contents: write # Allows writing to the repository
+      id-token: write # OIDC for PyPI trusted publishing (no token secret)
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -126,8 +127,8 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Install uv, build, and twine
-        run: pip install uv build twine
+      - name: Install uv and build
+        run: pip install uv build
 
       - name: Setup uv virtual environment
         run: uv venv
@@ -146,14 +147,8 @@ jobs:
         run: |
           uv build
 
-      - name: Publish to PyPI
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        # --skip-existing: if a version already reached PyPI from a run that
-        # died before pushing its bump commit, warn instead of failing so the
-        # bump+tag still land and the next run moves past the collision.
-        run: uv run twine upload --verbose --skip-existing dist/*
+      - name: Publish to PyPI (trusted publishing, no token secret)
+        uses: pypa/gh-action-pypi-publish@release/v1
 
       - name: Push version bump and tag to GitHub
         if: ${{ success() }}
