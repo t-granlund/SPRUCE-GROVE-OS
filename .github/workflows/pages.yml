@@ -29,7 +29,8 @@ jobs:
           mkdir -p _site
 
           # 1. Landing hub at the root + shared assets (logo, favicon)
-          cp pages-hub/announce.html _site/index.html
+          cp pages-hub/product.html _site/index.html
+          cp pages-hub/announce.html _site/announce.html
           cp pages-hub/index.html _site/hub.html
           cp -r pages-hub/assets _site/
           # Inject live platform stats from the field guide data into the hub
@@ -69,8 +70,6 @@ jobs:
 
           # 5. Product announcement landing (site root, beside the hub —
           #    its ./assets/ refs then resolve identically locally + deployed)
-          cp pages-hub/announce.html _site/announce.html
-
           # 5b. Roadmap boards at site root (same ./assets/ resolution)
           cp pages-hub/phases.html _site/phases.html
           cp pages-hub/progress.html _site/progress.html
