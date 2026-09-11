@@ -66,6 +66,10 @@ jobs:
           mkdir -p _site/flat
           cp docs/field-guide-flat.html _site/flat/index.html
 
+          # 5. Product announcement landing (site root, beside the hub —
+          #    its ./assets/ refs then resolve identically locally + deployed)
+          cp pages-hub/announce.html _site/announce.html
+
           # Stop GitHub Pages from Jekyll-transforming anything
           touch _site/.nojekyll
 

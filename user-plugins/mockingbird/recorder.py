@@ -44,7 +44,7 @@ class RecorderError(RuntimeError):
     """Raised for any microphone-capture failure the user should see."""
 
 
-def _ffmpeg_binary() -> str:
+def ffmpeg_binary() -> str:
     ffmpeg = shutil.which("ffmpeg") or "/opt/homebrew/bin/ffmpeg"
     if not Path(ffmpeg).exists():
         raise RecorderError("ffmpeg not found. Install it with: brew install ffmpeg")
@@ -54,7 +54,7 @@ def _ffmpeg_binary() -> str:
 def list_audio_devices() -> List[str]:
     """Return readable names of available macOS audio input devices."""
     cmd = [
-        _ffmpeg_binary(),
+        ffmpeg_binary(),
         "-hide_banner",
         "-f",
         "avfoundation",
@@ -204,7 +204,7 @@ class MicRecorder:
     def _start_segment(self) -> None:
         seg_path = self.session_dir / f"segment_{len(self._segments):03d}.wav"
         cmd = [
-            _ffmpeg_binary(),
+            ffmpeg_binary(),
             "-hide_banner",
             "-loglevel",
             "error",
@@ -277,7 +277,7 @@ class MicRecorder:
             encoding="utf-8",
         )
         cmd = [
-            _ffmpeg_binary(),
+            ffmpeg_binary(),
             "-hide_banner",
             "-loglevel",
             "error",

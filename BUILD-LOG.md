@@ -1043,3 +1043,57 @@ releasing.
 docs synced: this log. Dashboard ask honored: OPERATION GRANLUND mission
 dashboard (1.MASTER-ORCHESTRATION/dashboard/index.html) opened in the
 browser. All commits local then pushed per session rules.
+
+---
+
+## 30. 2026-09-11 03:00Z-04:20Z -- dictation dialed end-to-end; v1.0.0 tagged; desktop v0.1.0 released; announcement page live
+
+Launch order executed: finalize in-flight dictation, cut the full release,
+ship the product page.
+
+**Dictation chain closed (isu/55a/8xz/qz6).**
+- Plugin `--transcribe <file>` verb (user-plugins/mockingbird/
+  cli_transcribe.py): any ffmpeg-readable container -> 16k mono PCM -> the
+  standard transcriber, plain-text stdout. Verified with the installed
+  0.1.0 tool: wav returns the Station 4 transcript verbatim; the original
+  m4a converts and matches; missing file -> stderr + exit 1.
+- Desktop Rust: `grove_save_recording` (bytes -> temp webm) +
+  `grove_transcribe` (mirrors grove_send's cli_command() resolution);
+  cargo test 3/3; release bundle built in 1m07s; plutil confirms
+  NSMicrophoneUsageDescription inside the built .app (infoPlist is a PATH
+  in the tauri 2.6 schema -- inline maps are rejected by tauri-build; a
+  sibling Info.plist merges).
+- Desktop UI: mic button live (record/stop, pulsing rec state),
+  MediaRecorder bytes -> save -> transcribe -> transcript lands in the
+  EDITABLE prompt box (the pause-edit-adapt loop, desktop edition). Also
+  fixed a latent bug: main.js called undefined initCwd(), which starved
+  refreshVersion() -- version pill could never populate; cwd now seeds
+  from grove_default_cwd.
+- Validation: Playwright + Chromium fake-media + mocked __TAURI__
+  (tests/test_dictation_ui.py, now permanent in the desktop repo) PASSES
+  the full flow: record -> save -> transcribe -> prompt-ready. One honest
+  human step remains: a single mic click in the real packaged app (WKWebView
+  grant) -- 5al.6 stays open for it.
+
+**Desktop released.** github.com/t-granlund/spruce-grove-desktop created
+(public, MIT -- the repo previously had NO remote) and release v0.1.0 cut
+with spruce-grove-desktop-0.1.0-macos-arm64.zip (2.2MB, unsigned build).
+
+**CLI v1.0.0 tagged** -- "the grove speaks": voice-first pillar live,
+desktop dictation, platform complete. CHANGELOG.md born (the build-log
+ladder remains the detailed trail). Tag v1.0.0 pushed.
+
+**Announcement page live.** pages-hub/announce.html: lean launch landing in
+the Granlund Grove token system -- hero, the 4-step voice loop, the real
+"Thank you." dogfood rendered as a terminal card, three download trails
+(uv tool install one-liner with copy buttons, desktop release asset, source),
+ethos band, provenance footer. Deployed to GitHub Pages at site root
+(pages.yml step 5); hub index carries an Announcement card. Push to main
+triggers the Pages deploy.
+
+**Domain: sprucegrove.io is AVAILABLE** (RDAP 404 tonight; .ai probes are
+inconclusive -- registry redirects; DNS shows no NS records, likely free but
+unverified). Recommendation recorded in docs/DOMAIN-LAUNCH.md: buy .io,
+A-records to Pages, custom-domain in Settings, then a one-line follow-up to
+make the announcement the site root. That purchase is the only remaining
+owner errand for the public launch.

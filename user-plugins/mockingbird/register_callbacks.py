@@ -20,6 +20,8 @@ import sys
 
 from spruce_grove.callbacks import CustomCommandResult, register_callback
 
+from . import cli_transcribe
+
 _COMMAND_NAMES = {"rec", "r", "record"}
 
 _HELP_ENTRY = (
@@ -107,3 +109,6 @@ def _handle_custom_command(command: str, name: str):
 
 register_callback("custom_command_help", _custom_help)
 register_callback("custom_command", _handle_custom_command)
+# headless transcription service (desktop shell, scripts, pipes)
+register_callback("register_cli_args", cli_transcribe.add_args)
+register_callback("handle_cli_args", cli_transcribe.handle)
