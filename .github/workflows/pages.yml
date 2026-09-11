@@ -74,6 +74,11 @@ jobs:
           cp pages-hub/phases.html _site/phases.html
           cp pages-hub/progress.html _site/progress.html
 
+          # 5c. Custom domain (sprucegrove.io, purchased 2026-09-11 at
+          #     Porkbun). Matches the Pages settings cname so Actions builds
+          #     always carry the domain, even after settings drift.
+          echo "sprucegrove.io" > _site/CNAME
+
           # Stop GitHub Pages from Jekyll-transforming anything
           touch _site/.nojekyll
 
