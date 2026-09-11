@@ -1,13 +1,15 @@
 # Domain launch — sprucegrove.io (owner errand, ~15 min)
 
-Status 2026-09-10: **sprucegrove.io is AVAILABLE** (RDAP 404, re-verified
-evening of the 1.0.0 release). `sprucegrove.ai` could not be conclusively
-probed (the .ai registry's RDAP redirects; DNS shows no NS records, which
-suggests unregistered but is not authoritative). Recommendation: **buy
-`sprucegrove.io`** — cheaper per year, reads cleanly, and the .io TLD is
-native to developer tools. Add `sprucegrove.ai` later only if the product
-gains traction worth defending (defensive registration is optional, not
-launch-blocking).
+Status 2026-09-11: **sprucegrove.io is AVAILABLE** (RDAP 404, re-verified
+post-1.0.0) and **priced, live from Porkbun's public API**:
+`$28.12` first year / `$51.80` renewal (`.io` registry wholesale rose
+industry-wide; ~$50/yr is the honest ongoing cost everywhere — Cloudflare
+Registrar at-cost lands in the same renewal band). `sprucegrove.ai`: `$82.70`
+flat — skip unless defending the brand later becomes worth it.
+
+Recommendation: **buy `sprucegrove.io` at Porkbun ($28.12 today)**, enable
+auto-renew + registrar lock. Cloudflare Registrar is the equally fine
+alternative if you prefer your DNS and registration in one at-cost place.
 
 ## The errand
 
