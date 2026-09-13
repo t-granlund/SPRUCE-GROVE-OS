@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spruce Grove — Desktop Build Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e130f;--card:#141b16;--line:#223026;--halo:#2d4f3a;--glow:#588f5e;
+--mint:#98b79e;--cedar:#d2a069;--text:#e8ece9;--dim:#93a096;--err:#d98a6a;
+--sans:"Inter",-apple-system,sans-serif;--disp:"Fraunces",Georgia,serif;--mono:"JetBrains Mono",monospace}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.65 var(--sans);-webkit-font-smoothing:antialiased}
+.hero{padding:72px 24px 40px;text-align:center;background:radial-gradient(ellipse 900px 420px at 50% -10%,rgba(45,79,58,.35),transparent 65%)}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--cedar)}
+h1{font-family:var(--disp);font-weight:500;font-size:46px;margin:14px 0 8px}
+h1 .dot{color:var(--cedar)}
+.sub{color:var(--dim);max-width:620px;margin:0 auto}
+.wrap{max-width:1020px;margin:0 auto;padding:24px 24px 90px}
+.banner{border:1px solid var(--halo);background:rgba(45,79,58,.14);border-radius:14px;padding:18px 22px;margin:26px 0;display:flex;gap:14px;align-items:center}
+.banner .dot{width:10px;height:10px;border-radius:50%;background:var(--glow);box-shadow:0 0 0 4px rgba(88,143,94,.18);flex:none}
+.banner b{color:var(--mint)}
+h2{font-family:var(--disp);font-weight:500;font-size:26px;margin:44px 0 14px}
+h2 .n{color:var(--cedar);font-family:var(--mono);font-size:14px;vertical-align:middle;margin-right:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.card{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:14px 16px}
+.card h3{margin:0 0 6px;font-size:15px;font-weight:600}
+.card p{margin:0;color:var(--dim);font-size:13.5px}
+.badge{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:3px 10px;float:right}
+.badge.ok{color:var(--glow);border-color:var(--halo)}
+.badge.warn{color:var(--cedar);border-color:var(--cedar)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);text-align:left;padding:10px 12px;border-bottom:1px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid rgba(34,48,38,.6);vertical-align:top}
+td.mono{font-family:var(--mono);font-size:12.5px;color:var(--mint);white-space:nowrap}
+.ok{color:var(--glow)}.warn{color:var(--cedar)}.err{color:var(--err)}
+.open{border-color:var(--cedar)}
+ol.punch{margin:0;padding-left:22px;color:var(--dim)}
+ol.punch li{margin:8px 0}
+ol.punch b{color:var(--text)}
+.foot{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);color:var(--dim);font-family:var(--mono);font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+a{color:var(--mint)}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="kicker">Spruce Grove OS &middot; build log 34 &middot; Sep 13, 2026</div>
+  <h1>Desktop Shell — Build Dashboard<span class="dot">.</span></h1>
+  <p class="sub">Full end-to-end state of the desktop application build: every subsystem, its verification evidence, and the one bead between here and a native-streaming production release.</p>
+</div>
+<div class="wrap">
+
+  <div class="banner">
+    <span class="dot"></span>
+    <span><b>Production-ready with one contained upstream bug.</b> Every subsystem is verified and shipped. In-app streaming from a Finder launch is contained by a proven watchdog (7/7 recoveries) pending fork bead 34 — the app cannot hang while it is open.</span>
+  </div>
+
+  <h2><span class="n">01</span>Subsystem status</h2>
+  <div class="grid">
+    <div class="card"><span class="badge ok">verified</span><h3>ACP handshake</h3><p>Initialize → session/new live against the real CLI. Pill: <span class="ok">ACP · syn:large:text · cli 1.0.3</span>.</p></div>
+    <div class="card"><span class="badge ok">verified</span><h3>Protocol dialect</h3><p>Captured live: agent_message_chunk, tool_call(+update), end_turn + usage — parsed and rendered.</p></div>
+    <div class="card"><span class="badge ok">verified</span><h3>Sidebar &amp; history</h3><p>Session history (first-prompt titles, relative time, forget), directory memory, new chat, resume — 12+ sessions accumulated in production.</p></div>
+    <div class="card"><span class="badge ok">verified</span><h3>Dictation (record)</h3><p>Real .m4a → transcript in 5.1s through the exact app code path. Recordings now MIME-honest (webm/mp4).</p></div>
+    <div class="card"><span class="badge ok">wiring verified</span><h3>Live look-in</h3><p>Screenshot-payload → panel pipeline suite-covered; image reader whitelisted, size-capped. Live run awaits streaming.</p></div>
+    <div class="card"><span class="badge ok">verified</span><h3>Steering</h3><p>Mid-run redirect within the same session; fallback arm tested.</p></div>
+    <div class="card"><span class="badge ok">shipped</span><h3>Experience audit</h3><p>qa-kitten 6.5/10 → AA contrast, branded focus ring, heading architecture, 860px measure, keyboard-accessible delete.</p></div>
+    <div class="card"><span class="badge ok">7 / 7</span><h3>Stall watchdog</h3><p>75s warn → 80s cancel + hard-kill + restart. Seven live recoveries, zero hangs. The app cannot be wedged by the CLI.</p></div>
+  </div>
+
+  <h2><span class="n">02</span>Verification record</h2>
+  <table>
+    <tr><th>Check</th><th>Result</th><th>Evidence</th></tr>
+    <tr><td>Rust contract suite</td><td class="ok mono">9 / 9 pass</td><td>ACP dialect fixture replayed through the router</td></tr>
+    <tr><td>UI scenario suite (Playwright)</td><td class="ok mono">10 / 10 groups pass</td><td>Real main.js + mocked IPC: streaming, dictation, steering, look-in, sidebar, new-chat, resume</td></tr>
+    <tr><td>Live dialect capture</td><td class="ok mono">match</td><td>session/update shapes identical to client parser; 6s round-trip from terminal parent</td></tr>
+    <tr><td>Dictation backend</td><td class="ok mono">5.1 s</td><td>Bentonville Fire Dept Station 4.m4a → transcript</td></tr>
+    <tr><td>Watchdog containment</td><td class="ok mono">7 / 7</td><td>Wedged turn detected, truth surfaced, session restarted, history intact — every time</td></tr>
+    <tr><td>Elimination dossier (bead 34)</td><td class="mono">6 causes ruled out</td><td>env, cwd, stderr pipe, SIGPIPE, sandbox, shell — all tested live; binary identical (1.0.3)</td></tr>
+    <tr><td>In-app native streaming (Finder launch)</td><td class="warn mono">contained · open</td><td>Wedges under Tauri parentage; watchdog recovers; fork bead 34 owns the cure</td></tr>
+  </table>
+
+  <h2><span class="n">03</span>Beads</h2>
+  <table>
+    <tr><th>Bead</th><th>Status</th><th>Note</th></tr>
+    <tr><td class="mono">5al.6 desktop shell</td><td class="ok">CLOSED</td><td>E2E record above; closed Sep 13</td></tr>
+    <tr><td class="mono">Build log 34</td><td class="warn open">OPEN · contained</td><td>GUI-parent streaming wedge — cure is a fork-side turn timeout + error emission; py-spy under the Tauri parent reproduces on demand</td></tr>
+    <tr><td class="mono">5al.7 bootable spin</td><td class="warn">PARKED</td><td>North star, not a launch blocker</td></tr>
+  </table>
+
+  <h2><span class="n">04</span>Launch punch list</h2>
+  <ol class="punch">
+    <li><b>Bead 34 (fork, ~1 session)</b> — turn timeout + error emission in the ACP glue; verified under a Tauri parent. Unlocks native streaming in both launch modes.</li>
+    <li><b>Ship v0.2.0</b> — tag, build, publish app bundle to GitHub Releases; point sprucegrove.io downloads at it.</li>
+    <li><b>Gatekeeper note</b> — app is adhoc-signed: right-click → Open on other Macs (or a Developer ID later).</li>
+    <li><b>Council night</b> — founding-members guide is live at <a href="https://t-granlund.github.io/leather-apron-club/guide.html">leather-apron-club/guide.html</a>; verify its install line once in a fresh Terminal.</li>
+  </ol>
+
+  <div class="foot">
+    <span>desktop 1512c02 · fork dossier 7fe370e · club 53e1236</span>
+    <span>progress 17/19 beads · watchdog 7/7 · suites 19/19</span>
+  </div>
+</div>
+</body>
+</html>
