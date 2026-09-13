@@ -1216,3 +1216,36 @@ https_only goes on.
 
 Still human: the 10-second packaged-app smoke (mic click + ACP pill) for
 5al.6. Everything else with a button, we pressed.
+
+## 34 - desktop dogfood: ACP turn wedge in GUI-spawned CLI (OPEN bead)
+
+**Date:** Sep 13, 2026 | **Status:** OPEN - next fork bead
+
+While dogfooding the desktop shell (spruce-grove-desktop fbbfcb0), turns
+launched from the GUI app wedge ~60-90s in: no session/update events, turn
+never ends. Evidence captured live:
+
+- CLI child (uv tool spruce-grove --acp, PID verified) main thread stuck in
+  `gen_send_ex2 -> PyThreadHandleObject_join -> pthread_cond_wait` while the
+  SDK message thread waits on a lock (sample(1) stacks saved in session log).
+- Model socket observed in CLOSE_WAIT to the Synthetic endpoint: the request
+  died server-side and the CLI never surfaced an error.
+- Differential test: SAME binary, SAME cwd, SAME prompt from a terminal
+  parent completes in 6s with full event stream (tool_call + chunks +
+  end_turn + usage). GUI-parented (launchd minimal env) wedges.
+
+**Hypothesis (ranked):** keychain read for $SYNTHETIC_API_KEY behaves
+differently in the GUI session (ACL/partition-list prompt suppressed) ->
+auth fails -> server closes -> error path in the ACP glue (agent-client-
+protocol SDK) deadlocks in generator cleanup (join + lock circular wait).
+
+**Containment (shipped, desktop side):** stall watchdog - 75s silence warns,
+80s cancels, hard-kills the CLI, restarts the session (sessionId-validated
+load falls back to fresh). Proven live: the app detected the wedge, told the
+user, recovered to "grove ready" with history intact.
+
+**Fix direction (fork):** (1) wrap the ACP turn handler with a hard
+asyncio.timeout + emit a stream-error session/update + error stopReason;
+(2) never join the message thread from a generator close path; (3) verify
+keychain access under a launchd-spawned context; (4) consider passing the
+parent's PATH/env into the child when spawned from a GUI session.
