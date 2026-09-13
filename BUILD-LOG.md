@@ -1261,3 +1261,14 @@ intrinsic to the CLI/ACP-glue under a launchd-GUI-parented process tree. Next
 tool: py-spy (or lldb) attached to the CLI child spawned by the GUI app at
 moment-of-wedge; instrument the ACP glue turn handler with asyncio timeout +
 error emission. Desktop containment (watchdog) verified 5/5 recoveries.
+
+### Bead 34 close-out: reclassified DEFERRED-CONTAINED (not a launch blocker)
+Root located: code_puppy_core_plugins/acp/register_callbacks.py boots the ACP
+server on a second asyncio loop in a thread while blocking Code Puppy's outer
+asyncio.run(main()) loop with thread.join() — the exact deadlock shape sampled
+in production (main thread join + _process_messages lock wait). Proper cure =
+restructure that boot (run _serve on the caller's loop or drop the nested-loop
+design) + turn timeout; needs a py-spy session under the Tauri parent.
+LAUNCH IMPACT: none — founding members use the terminal path (verified working,
+6s round-trips); desktop streaming is contained 7/7 by the watchdog. Bead stays
+open in the fork for the next session; launch proceeds.
