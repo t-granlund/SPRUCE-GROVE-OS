@@ -1249,3 +1249,15 @@ asyncio.timeout + emit a stream-error session/update + error stopReason;
 (2) never join the message thread from a generator close path; (3) verify
 keychain access under a launchd-spawned context; (4) consider passing the
 parent's PATH/env into the child when spawned from a GUI session.
+
+### Bead 34 update (same day): elimination complete
+Ruled out as wedge causes, all tested live: env diff (GUI child env captured via
+ps eww, near-identical after PATH enrichment), process cwd (probe from workspace
+works, 6s), failed-session/load poisoning (load->new->prompt works from terminal,
+5s), stderr pipe fill (drained thread shipped in desktop, still wedged), app
+sandbox (none - adhoc, no entitlements), keychain ACL (no keychain reads in CLI
+greps). Login-shell spawn (zsh -lc) did NOT cure. Conclusion: the wedge is
+intrinsic to the CLI/ACP-glue under a launchd-GUI-parented process tree. Next
+tool: py-spy (or lldb) attached to the CLI child spawned by the GUI app at
+moment-of-wedge; instrument the ACP glue turn handler with asyncio timeout +
+error emission. Desktop containment (watchdog) verified 5/5 recoveries.
