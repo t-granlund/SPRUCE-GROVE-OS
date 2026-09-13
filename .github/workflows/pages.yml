@@ -32,6 +32,7 @@ jobs:
           cp pages-hub/product.html _site/index.html
           cp pages-hub/announce.html _site/announce.html
           cp pages-hub/index.html _site/hub.html
+          cp pages-hub/desktop-dashboard.html _site/
           cp -r pages-hub/assets _site/
           # Inject live platform stats from the field guide data into the hub
           node - <<'EOF'
