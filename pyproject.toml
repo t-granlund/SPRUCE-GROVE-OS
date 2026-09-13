@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "spruce-grove"
-version = "1.0.8"
+version = "1.0.9"
 description = "Spruce Grove OS - an agentic coding CLI distribution inspired by Code Puppy. Together we are better. Always."
 readme = "README.md"
 requires-python = ">=3.11,<3.15"
