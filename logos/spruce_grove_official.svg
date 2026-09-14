@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200" role="img" aria-label="Spruce Grove — the grove, official mark">
-  <!-- THE OFFICIAL MARK: three spruces, one silhouette. The front tree is largest.
-       The orange line is the ancestor of the tree that drew itself.
+  <!-- THE OFFICIAL MARK: three TreeMarks, one grove. Front tree largest.
+       The orange line is the tree that drew itself on tylergranlund.com.
        Together we are better, always. -->
-  <g stroke="#E4AA71" stroke-width="5" stroke-linejoin="round">
-    <path d="M62.0 65.5 L75.3 101.4 L80.7 101.4 L88.5 134.1 L94.8 134.1 L101.0 159.1 L67.5 159.1 L67.5 170.0 L56.5 170.0 L56.5 159.1 L23.0 159.1 L29.2 134.1 L35.5 134.1 L43.3 101.4 L48.7 101.4 Z" fill="#101812" stroke-opacity=".6"/>
-    <path d="M218.0 65.5 L231.3 101.4 L236.7 101.4 L244.5 134.1 L250.8 134.1 L257.0 159.1 L223.5 159.1 L223.5 170.0 L212.5 170.0 L212.5 159.1 L179.0 159.1 L185.2 134.1 L191.5 134.1 L199.3 101.4 L204.7 101.4 Z" fill="#101812" stroke-opacity=".6"/>
-    <path d="M140.0 35.9 L159.6 88.8 L167.6 88.8 L179.1 137.1 L188.3 137.1 L197.5 173.9 L148.1 173.9 L148.1 190.0 L131.9 190.0 L131.9 173.9 L82.5 173.9 L91.7 137.1 L100.9 137.1 L112.4 88.8 L120.5 88.8 Z" fill="#1D2A21"/>
+  <g stroke="#E4AA71" stroke-width="6.5" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M64.00 72.00 L34.00 117.00 L49.00 117.00 L26.50 152.00 L54.00 152.00 L54.00 172.00 L74.00 172.00 L74.00 152.00 L101.50 152.00 L79.00 117.00 L94.00 117.00 Z" fill="#101812" stroke-opacity=".6"/>
+    <path d="M216.00 72.00 L186.00 117.00 L201.00 117.00 L178.50 152.00 L206.00 152.00 L206.00 172.00 L226.00 172.00 L226.00 152.00 L253.50 152.00 L231.00 117.00 L246.00 117.00 Z" fill="#101812" stroke-opacity=".6"/>
+    <path d="M140.00 50.00 L98.00 113.00 L119.00 113.00 L87.50 162.00 L126.00 162.00 L126.00 190.00 L154.00 190.00 L154.00 162.00 L192.50 162.00 L161.00 113.00 L182.00 113.00 Z" fill="#1D2A21"/>
   </g>
 </svg>

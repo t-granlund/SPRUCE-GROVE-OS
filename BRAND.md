@@ -50,11 +50,12 @@ aspect 280:200).
 
 Geometry is the identity — do not decorate it:
 
-- **Three stepped spruces, one silhouette.** Each tree is the honest fir —
-  three tiers and a trunk — the shape from the original animated tree. The
-  front-center tree is the largest (scale 1.15); its two neighbors stand
-  behind it (scale 0.78, baselines higher — further away in the grove).
-- **The orange line** (`#E4AA71`, width 5) is the ancestor of the tree that
+- **Three TreeMarks, one silhouette.** Each tree is the canonical
+  tylergranlund.com TreeMark verbatim (two tiers, trunk, round joins —
+  `granlund-grove/src/components/site/TreeMark.tsx`). The front-center tree
+  is the largest (scale 7.0); its two neighbors stand behind (scale 5.0,
+  baselines higher — further away in the grove).
+- **The orange line** (`#E4AA71`, width 6.5) is the ancestor of the tree that
   drew itself. Back trees carry it at 60% — dusk depth, not a different color.
 - Interiors are forest dark: front `#1D2A21`, back `#101812`. No gradients,
   no shadows baked in; glow is CSS where a placement wants it.
@@ -68,7 +69,7 @@ Geometry is the identity — do not decorate it:
 
 `logos/spruce_grove_badge_ember.svg|png` and
 `logos/spruce_grove_badge_dark.svg|png` (256×256, rx 58 — the Ive radius).
-The same grove, inset 0.7521×, optically centered (content center rides 4px
+The same grove, inset 0.7753×, optically centered (content center rides 4px
 above true center — the ground is weight).
 
 - **Ember** (`#E4AA71` field, firs inset in forest-dark): the chrome mark —
