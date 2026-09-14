@@ -63,8 +63,13 @@ shipped to a real door:
 - **[leads.bentondrones.com](https://leads.bentondrones.com)** — lead intake:
   form → geocode → Jira → dashboard. Python stdlib + SQLite core, Render,
   Playwright-verified.
-- **[candmbarbershop.net](https://candmbarbershop.net)** — static,
-  accessibility-audited, owner-servable shopfront with a booking flow.
+- **[Bentonville Barber Company](https://www.bentonvillebarbercompany.com)** — the
+  club's home. Victor started it with his family behind him; Drew Garrison and
+  Daniel Devault came along; and when the old landlord hiked the rent, a customer
+  handed the shop its spot on the square. Helping each other — that's the whole
+  thesis. Booking runs on
+  [Square](https://book.squareup.com/appointments/9satyflw7ax0n7/location/LHWM21XKXHJQ2/services);
+  the first council convenes in the chairs.
 - **[sprucegrove.io](https://sprucegrove.io)** — the site, the CLI, the
   desktop shell — all shipped from the same tree.
 
