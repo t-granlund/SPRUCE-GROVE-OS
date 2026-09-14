@@ -40,6 +40,34 @@ Three sources, one creed — [ETHOS.md](ETHOS.md):
 3. **gran·lund — who is doing the carrying.** Help people solve problems.
    Remove technology obstacles. Meet people where they are, as humans.
 
+## Backed by the Leather Apron Club (Junto)
+
+In 1727 a 21-year-old printer gathered twelve tradesmen in Philadelphia —
+the Junto, the Leather Apron Club: a mutual-improvement circle that turned
+Friday-night questions into a subscription library, a fire brigade, and a
+university. The reboot convenes in Bentonville, Arkansas — first council
+**Friday, September 18, 2026 · Bentonville Barber Company**. Spruce Grove OS
+is the club's shared toolkit: an apprentice that lives on your own machine
+and works for the town. The standing question is Franklin's own —
+*how can the Junto assist you in any of your honorable designs?*
+
+## The grove works for the town
+
+No mockups — every showcase below is live today, built by the agent and
+shipped to a real door:
+
+- **[tylergranlund.com](https://tylergranlund.com)** — the flagship: TanStack
+  Start · React 19 SSR · TypeScript strict · Tailwind v4 · Vitest gates —
+  resale desk, ventures, career, writing, and a colophon that declares its
+  own stack.
+- **[leads.bentondrones.com](https://leads.bentondrones.com)** — lead intake:
+  form → geocode → Jira → dashboard. Python stdlib + SQLite core, Render,
+  Playwright-verified.
+- **[candmbarbershop.net](https://candmbarbershop.net)** — static,
+  accessibility-audited, owner-servable shopfront with a booking flow.
+- **[sprucegrove.io](https://sprucegrove.io)** — the site, the CLI, the
+  desktop shell — all shipped from the same tree.
+
 ## Meet Cedar
 
 The default agent persona is **Cedar**, the grove guide — same competent
