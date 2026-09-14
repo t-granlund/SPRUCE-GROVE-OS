@@ -353,6 +353,18 @@ footer .club-band {
 }
 footer .club-band b { color: var(--BB-cedar); font-weight: 500; }
 
+/* GRAN design language — stamp + rune (BRAND.md) */
+.sec-h { position: relative; }
+.sec-h .stamp {
+  position: absolute; top: -6px; right: 0; transform: rotate(-2.5deg);
+  font-family: var(--BB-mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--BB-cedar); border: 2px solid currentColor; outline: 1px solid rgba(228,170,113,.35); outline-offset: 3px;
+  padding: 6px 11px; border-radius: 2px; opacity: .9;
+}
+footer .club-band .rune {
+  display: inline-block; width: 44px; height: 14px; vertical-align: -2px; margin-right: 10px; opacity: .55;
+}
+
 .toast {
   position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
   background: var(--BB-bg-card); border: 1px solid var(--BB-cedar); color: var(--BB-t1);
