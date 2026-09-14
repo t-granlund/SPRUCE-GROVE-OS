@@ -117,5 +117,5 @@ Terminal splash truecolor mapping: halo `#2D4F3A` (45/79/58) -> glow
 ## Imagery roadmap
 
 - [x] Sprite/wordmark logo: Ghost Grove (three trees, golden center, one ground line)
-- [x] Replace `logos/spruce_grove_logo_noback.png` and field-guide/pages-hub assets
+- [x] Retired the pre-Grove placeholder marks (noback/withback/mark/north) — superseded by the official grove
 - [ ] TUI splash accent color: cedar on spruce-deep

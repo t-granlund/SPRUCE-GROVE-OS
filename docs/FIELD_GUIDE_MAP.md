@@ -348,5 +348,4 @@ Refresh everything from live sources, in dependency order:
 - `docs/HOOKS.md`, `docs/AGENT_SKILLS.md`, `docs/I18N.md`, `docs/FLUX.md`,
   `docs/CEREBRAS.md`, `docs/LEFTHOOK.md` — topical deep-dives.
 - `changelog/` — release changelog source.
-- `docs/decks/the-great-adpuppytion/` — a separate presentation deck (own
-  tests/assets), not part of the field guide.
+- The Leather Apron Club presentation lives in its canonical home: `~/code_puppy/docs/decks/the-great-adpuppytion/leather-apron-club/` (40 slides, Sept 18).
