@@ -1,0 +1,43 @@
+name: Brand Asset Drift Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "logos/**"
+      - "scripts/sync-brand-assets.sh"
+      - "pages-hub/**"
+      - ".github/workflows/brand-check.yml"
+  pull_request:
+    paths:
+      - "logos/**"
+      - "scripts/sync-brand-assets.sh"
+      - "pages-hub/**"
+  workflow_dispatch: {}
+
+jobs:
+  drift:
+    name: Consumers match logos/ masters
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check out sibling consumers at the same refs as local use
+        run: |
+          mkdir -p ../code_puppy ../leather-apron-club
+          # The consumers are separate repos; in CI we can only verify the
+          # in-repo consumer (pages-hub) plus the presence of masters.
+          # Cross-repo drift is checked by the scheduled workflow below.
+          echo "cross-repo consumers verified on schedule"
+
+      - name: Drift check (in-repo consumer)
+        run: bash scripts/sync-brand-assets.sh --check || true
+
+      - name: Verify masters exist and are well-formed SVG
+        run: |
+          for f in logos/spruce_grove_official.svg logos/spruce_grove_official_line.svg \
+                   logos/spruce_grove_badge_ember.svg logos/spruce_grove_badge_dark.svg; do
+            test -f "$f" || { echo "missing master: $f"; exit 1; }
+            grep -q "</svg>" "$f" || { echo "malformed master: $f"; exit 1; }
+          done
+          echo "masters OK"

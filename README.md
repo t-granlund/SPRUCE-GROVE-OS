@@ -10,7 +10,7 @@
 
 ![License: MIT](https://img.shields.io/badge/license-MIT-2D4F3A)
 ![Python 3.11–3.14](https://img.shields.io/badge/python-3.11--3.14-588F5E)
-![Tests: 7700 passing](https://img.shields.io/badge/tests-7700%20passing-D2A069)
+![Tests: 7869 passing](https://img.shields.io/badge/tests-7869%20passing-D2A069)
 ![Inspired by Code Puppy](https://img.shields.io/badge/inspired%20by-Code%20Puppy-F0E1C8)
 
 Spruce Grove OS is a full custom instance of an agentic coding assistant:
