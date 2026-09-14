@@ -41,39 +41,43 @@ nothing improvises.
 Name derivation, per truth-for-truth's-sake: "granlund" maps to "spruce
 grove" in Swedish. Say that, nothing fancier.
 
-## The mark — Ghost Grove
+## The mark — the Grove (official)
 
-Master vector: `logos/spruce_grove_ghostgrove.svg` (fill `#F2EDE0`; recolor by
-editing the single `fill`, or wrap and use `currentColor`). Rendered raster:
-`logos/spruce_grove_logo_white.png` (1024w, transparent).
+Masters: `logos/spruce_grove_official.svg` (the mark) and
+`logos/spruce_grove_official_line.svg` (line only — the animation ancestor).
+Rendered raster: `logos/spruce_grove_official.png` (1024w, transparent,
+aspect 280:200).
 
 Geometry is the identity — do not decorate it:
 
-- Three equilateral triangles standing on one ground line. Three trees, one
-  grove: *together we are better, always.*
-- The center tree is exactly **1.618×** the height of its neighbors (golden
-  ratio) — precision is the Koenigsegg nod; reduction is the Ive nod.
-- The gaps between the trees are cut narrow on purpose: the negative space
-  forms its own small spruces. *The grove grows groves.*
-- No trunks, no gradients, no shadows baked in, no mascot eyes. Glow, where a
-  placement wants it, is CSS (`filter: drop-shadow`), never in the asset.
-- Minimum size 20px height; below that, use a single triangle.
+- **Three stepped spruces, one silhouette.** Each tree is the honest fir —
+  three tiers and a trunk — the shape from the original animated tree. The
+  front-center tree is the largest (scale 1.15); its two neighbors stand
+  behind it (scale 0.78, baselines higher — further away in the grove).
+- **The orange line** (`#E4AA71`, width 5) is the ancestor of the tree that
+  drew itself. Back trees carry it at 60% — dusk depth, not a different color.
+- Interiors are forest dark: front `#1D2A21`, back `#101812`. No gradients,
+  no shadows baked in; glow is CSS where a placement wants it.
+- **The draw-on is part of the mark.** In presentation contexts the line
+  draws itself (stroke-dashoffset, flanks first, center last, fill fades in
+  as each tree lands; honors prefers-reduced-motion). Static contexts use
+  the finished mark.
+- One idea, Ive reduction; the discipline of the line, Koenigsegg precision.
 
 ### The badge — where the mark wears chrome
 
 `logos/spruce_grove_badge_ember.svg|png` and
 `logos/spruce_grove_badge_dark.svg|png` (256×256, rx 58 — the Ive radius).
-Same geometry, inset 0.6727×, optically centered (content center rides 4px
-above true center — the ground line is weight).
+The same grove, inset 0.7521×, optically centered (content center rides 4px
+above true center — the ground is weight).
 
-- **Ember** (`#E4AA71` field, trees+ground as true cutouts): the chrome mark —
+- **Ember** (`#E4AA71` field, firs inset in forest-dark): the chrome mark —
   favicons, nav lockups, app icons, anywhere under 64px. It is the same orange
   as the wordmark dot; the two are one system.
-- **Dark** (`#0E130F` field; flank trees `#6FA97A` moss, center tree `#E4AA71`
-  gold, ground line mist at 55%): the large-format mark — READMEs, social,
-  og-images. The green/gold live in the trees; the gold center is the dot,
-  repeated.
-- **Silhouette** (bare, `#F2EDE0`/currentColor): the monumental mark — deck
+- **Dark** (`#0E130F` field; flank firs `#6FA97A` moss, center fir `#E4AA71`
+  gold): the large-format mark — READMEs, social, og-images. The green/gold
+  live in the trees; the gold center is the dot, repeated.
+- **The official silhouette** (line + fills): the monumental mark — deck
   heroes, watermarks. No badge where the statement is the badge.
 - Below 20px, only the ember badge survives; the silhouette and dark badge
   are not for favicon scale.
