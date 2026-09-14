@@ -1,7 +1,7 @@
 # SPRUCE GROVE OS
 
 <p align="center">
-  <img src="logos/spruce_grove_logo_withback.jpeg" alt="The Spruce Grove mark - three geometric spruces in brand greens on charcoal" width="260">
+  <img src="logos/spruce_grove_badge_dark.png" alt="The Spruce Grove badge — three spruces, one ground line; the center tree in gold, its neighbors in moss" width="200">
 </p>
 
 **gran · lund · sv. · spruce grove** — an agentic coding CLI grown in the grove.

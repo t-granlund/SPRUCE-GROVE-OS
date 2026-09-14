@@ -30,7 +30,9 @@ a:hover { color: var(--BB-link-hover); }
 .wordmark {
   font-family: var(--BB-display); font-weight: 600; letter-spacing: .01em;
   color: var(--BB-t1); font-size: 17px; margin-right: auto; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: 10px;
 }
+.wordmark .brandmark { width: 25px; height: 25px; flex: 0 0 auto; display: block; }
 .wordmark .leaf { color: var(--BB-cedar); }
 .nav a.anchor {
   color: var(--BB-t3); font-size: 13.5px; letter-spacing: .04em;

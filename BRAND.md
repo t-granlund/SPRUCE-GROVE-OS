@@ -59,6 +59,25 @@ Geometry is the identity — do not decorate it:
   placement wants it, is CSS (`filter: drop-shadow`), never in the asset.
 - Minimum size 20px height; below that, use a single triangle.
 
+### The badge — where the mark wears chrome
+
+`logos/spruce_grove_badge_ember.svg|png` and
+`logos/spruce_grove_badge_dark.svg|png` (256×256, rx 58 — the Ive radius).
+Same geometry, inset 0.6727×, optically centered (content center rides 4px
+above true center — the ground line is weight).
+
+- **Ember** (`#E4AA71` field, trees+ground as true cutouts): the chrome mark —
+  favicons, nav lockups, app icons, anywhere under 64px. It is the same orange
+  as the wordmark dot; the two are one system.
+- **Dark** (`#0E130F` field; flank trees `#6FA97A` moss, center tree `#E4AA71`
+  gold, ground line mist at 55%): the large-format mark — READMEs, social,
+  og-images. The green/gold live in the trees; the gold center is the dot,
+  repeated.
+- **Silhouette** (bare, `#F2EDE0`/currentColor): the monumental mark — deck
+  heroes, watermarks. No badge where the statement is the badge.
+- Below 20px, only the ember badge survives; the silhouette and dark badge
+  are not for favicon scale.
+
 ## Color tokens (source of truth: granlund-grove `src/styles.css`)
 
 | Token | OKLCH | Role |

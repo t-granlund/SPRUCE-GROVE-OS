@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Spruce Grove — grove badge">
+  <rect width="256" height="256" rx="58" fill="#0E130F"/>
+  <g transform="translate(37.85,55.3) scale(0.6727)">
+    <path fill="#6FA97A" d="M35.2 84.6 L67.2 140 L3.2 140 Z"/>
+    <path fill="#E4AA71" d="M129 50.2 L180.8 140 L77.2 140 Z"/>
+    <path fill="#6FA97A" d="M222.8 84.6 L254.8 140 L190.8 140 Z"/>
+    <rect fill="#F2EDE0" opacity=".55" x="3.2" y="148" width="261.6" height="6"/>
+  </g>
+</svg>
