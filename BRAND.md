@@ -41,6 +41,24 @@ nothing improvises.
 Name derivation, per truth-for-truth's-sake: "granlund" maps to "spruce
 grove" in Swedish. Say that, nothing fancier.
 
+## The mark — Ghost Grove
+
+Master vector: `logos/spruce_grove_ghostgrove.svg` (fill `#F2EDE0`; recolor by
+editing the single `fill`, or wrap and use `currentColor`). Rendered raster:
+`logos/spruce_grove_logo_white.png` (1024w, transparent).
+
+Geometry is the identity — do not decorate it:
+
+- Three equilateral triangles standing on one ground line. Three trees, one
+  grove: *together we are better, always.*
+- The center tree is exactly **1.618×** the height of its neighbors (golden
+  ratio) — precision is the Koenigsegg nod; reduction is the Ive nod.
+- The gaps between the trees are cut narrow on purpose: the negative space
+  forms its own small spruces. *The grove grows groves.*
+- No trunks, no gradients, no shadows baked in, no mascot eyes. Glow, where a
+  placement wants it, is CSS (`filter: drop-shadow`), never in the asset.
+- Minimum size 20px height; below that, use a single triangle.
+
 ## Color tokens (source of truth: granlund-grove `src/styles.css`)
 
 | Token | OKLCH | Role |
@@ -74,6 +92,6 @@ Terminal splash truecolor mapping: halo `#2D4F3A` (45/79/58) -> glow
 
 ## Imagery roadmap
 
-- [ ] Sprite/wordmark logo: spruce cone + canopy mark (vector)
-- [ ] Replace `logos/spruce_grove_logo_noback.png` and field-guide/pages-hub assets
+- [x] Sprite/wordmark logo: Ghost Grove (three trees, golden center, one ground line)
+- [x] Replace `logos/spruce_grove_logo_noback.png` and field-guide/pages-hub assets
 - [ ] TUI splash accent color: cedar on spruce-deep

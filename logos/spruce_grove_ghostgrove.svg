@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 268 160" role="img" aria-label="Spruce Grove — three trees, one grove">
+  <!-- GHOST GROVE
+       Three equilateral triangles on one ground line.
+       The center tree stands 1.618x taller (golden ratio).
+       The gaps between the trees are cut narrow on purpose:
+       the negative space forms its own small spruce —
+       the grove grows groves. Together we are better, always. -->
+  <g fill="#F2EDE0">
+    <path d="M35.2 84.6 L67.2 140 L3.2 140 Z"/>
+    <path d="M129 50.2 L180.8 140 L77.2 140 Z"/>
+    <path d="M222.8 84.6 L254.8 140 L190.8 140 Z"/>
+    <rect x="3.2" y="148" width="261.6" height="6"/>
+  </g>
+</svg>
