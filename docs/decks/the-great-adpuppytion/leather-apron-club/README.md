@@ -1,5 +1,12 @@
 # The Leather Apron Club — Bentonville 2026
 
+> ⚠️ **STALE COPY — DO NOT PRESENT FROM HERE.**
+> The canonical deck (40 slides, first council **Friday, September 18, 2026**,
+> real spruce-trio logo, Chaplin live-transcription stage) lives in the
+> `code_puppy` checkout: `~/code_puppy/docs/decks/the-great-adpuppytion/leather-apron-club/`.
+> This snapshot predates the 09-11 → 09-18 date change and the Sep 13–14
+> rebuild passes. Synced for archive only.
+
 The founding presentation for the first meeting of the Leather Apron Club:
 **Friday, September 11, 2026 · Bentonville Barber Company.**
 
