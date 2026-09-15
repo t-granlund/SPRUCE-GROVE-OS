@@ -53,11 +53,15 @@
 /* phones — the same kit the other doors wear: one swipeable switcher row, air in the hero */
   @media (max-width: 720px) {
     .aud-switch { gap: 14px 16px; padding: 9px 18px 11px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .nav { width: 100vw; }
+    .nav .wrap { height: auto; min-height: 54px; flex-wrap: wrap; padding-top: 6px; padding-bottom: 2px; row-gap: 0; }
+    .nav .wrap .aud-switch, .aud-switch { min-width: 0; width: 100%; }
     .aud-switch::-webkit-scrollbar { display: none; }
     .aud-switch .as-label { font-size: 9.5px; white-space: nowrap; }
     .aud-switch .as-door { white-space: nowrap; font-size: 10.5px; }
     .hero, .o-hero { padding-left: 22px; padding-right: 22px; }
     .kicker, .sub, .lede { max-width: 100%; }
+    .kicker { flex-wrap: wrap; row-gap: 4px; }
     h1 { font-size: clamp(29px, 8.4vw, 44px); }
   }
   </style>
