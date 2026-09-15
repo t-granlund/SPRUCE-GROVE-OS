@@ -8,7 +8,7 @@
 
 > Together we are better. Always.
 
-![License: MIT](https://img.shields.io/badge/license-MIT-2D4F3A)
+![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-2D4F3A)
 ![Python 3.11–3.14](https://img.shields.io/badge/python-3.11--3.14-588F5E)
 ![Tests: 7869 passing](https://img.shields.io/badge/tests-7869%20passing-D2A069)
 ![Inspired by Code Puppy](https://img.shields.io/badge/inspired%20by-Code%20Puppy-F0E1C8)
@@ -23,7 +23,7 @@ vision, mission, and values.
 Every trail in this grove started as a Code Puppy trail. Spruce Grove OS is
 built directly from — and stays import-compatible with — **Code Puppy** by
 [Michael Pfaffenberger](https://github.com/mpfaffenberger/code_puppy)
-(MIT licensed). Huge respect to the original project and its contributors;
+(MIT licensed — its notice is preserved verbatim in our [NOTICE](NOTICE)). Huge respect to the original project and its contributors;
 this grove exists because the puppy shared everything. Exact lineage, sync
 points, and the full rename/contract map: [PROVENANCE.md](PROVENANCE.md).
 
@@ -168,5 +168,7 @@ Config: `~/.spruce_grove/grove.cfg` · Env vars: `SPRUCE_GROVE_*`.
 
 ## License
 
-MIT — inherited from Code Puppy. See [LICENSE](LICENSE) and attribution in
-[PROVENANCE.md](PROVENANCE.md).
+Apache-2.0 as of v1.0.26 (previously MIT, inherited from Code Puppy).
+The Code Puppy lineage is preserved verbatim in [NOTICE](NOTICE) — the puppy
+came first, and the receipt travels with the work. See also
+[TRADEMARKS.md](TRADEMARKS.md) and [PROVENANCE.md](PROVENANCE.md).

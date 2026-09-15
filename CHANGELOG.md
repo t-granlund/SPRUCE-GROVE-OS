@@ -3,6 +3,26 @@
 An agentic coding CLI grown from Code Puppy (MIT, Michael Pfaffenberger) into
 the Granlund Grove. Together we are better. Always.
 
+## Unreleased — 2026-09-15 — "the receipt travels"
+
+### License: MIT -> Apache-2.0
+
+The Grove relicenses to Apache-2.0. What changes and why:
+
+- **NOTICE file added** — carries the Grove attribution and preserves the
+  Code Puppy lineage verbatim (Pfaffenberger's MIT notice). The receipt now
+  travels with every copy, through every rebrand.
+- **Patent grant** — contributors grant users an explicit patent license,
+  with defensive termination. The builders of the grove are shielded.
+- **Modified-file markers** — derivatives must state what they changed;
+  stripping the names becomes evidence of the strip, not just a loss.
+- **Trademarks withheld** — the names and marks ride outside the license
+  (see TRADEMARKS.md).
+
+Code Puppy remains MIT, upstream untouched — its notice lives in our NOTICE,
+verbatim, because the puppy came first. Full reasoning:
+[docs/LICENSE-ANALYSIS.md](docs/LICENSE-ANALYSIS.md).
+
 ## 1.0.0 — 2026-09-10 — "the grove speaks"
 
 First full release. The voice-first pillar — the reason the fork exists — is

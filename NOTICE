@@ -1,0 +1,53 @@
+SPRUCE GROVE OS
+Copyright 2026 Tyler Granlund
+
+This product includes software developed as part of the Spruce Grove project
+(https://github.com/t-granlund/SPRUCE-GROVE-OS).
+
+   "Spruce Grove OS is an open-source agentic coding CLI - every trail in this
+   grove is inspired by Code Puppy, and every value is our own: together we
+   are better, always."
+
+   - Junto, the grove guide
+
+----------------------------------------------------------------------
+LINEAGE AND ATTRIBUTION
+----------------------------------------------------------------------
+
+Spruce Grove OS is inspired by and built from the open-source Code Puppy
+project. Code Puppy and the code inherited from it are Copyright (c) 2025
+Mike Pfaffenberger, licensed under the MIT License, reproduced here verbatim
+as its terms require and as the Grove's own ethos demands:
+
+    MIT License
+
+    Copyright (c) 2025 Mike Pfaffenberger
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+The Grove says it plainly: the puppy came first. Together we are better,
+always -- and that includes him.
+
+----------------------------------------------------------------------
+TRADEMARKS
+----------------------------------------------------------------------
+
+The names "Spruce Grove" and "The Leather Apron Club", the three-spruce
+TreeMark, the grove badge, and associated marks are not licensed under
+Apache-2.0 or this NOTICE. See TRADEMARKS.md.
