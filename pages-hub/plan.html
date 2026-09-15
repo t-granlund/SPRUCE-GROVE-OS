@@ -68,6 +68,29 @@
     .aud-switch .as-door { color: var(--text-dim, #93a096); text-decoration: none; padding: 3px 2px; border-bottom: 1px solid transparent; }
     .aud-switch .as-door:hover { color: var(--text, #e8ece9); border-bottom-color: rgba(238,235,229,.14); }
     .aud-switch .as-door.active { color: var(--ember, #e4aa71); border-bottom-color: var(--ember, #e4aa71); }
+
+/* phones — the kit: one switcher row (swipeable), hero with air, ghost rests */
+  @media (max-width: 720px) {
+    .aud-switch { gap: 14px 16px; padding: 9px 18px 11px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .aud-switch::-webkit-scrollbar { display: none; }
+    .aud-switch .as-label { font-size: 9.5px; white-space: nowrap; }
+    .aud-switch .as-door { white-space: nowrap; font-size: 10.5px; }
+    .o-hero { padding: 146px 22px 46px; }
+    .o-hero h1 { font-size: clamp(29px, 8.4vw, 40px); }
+    .o-hero .lede { font-size: 15.5px; }
+    .o-hero .ghost-mark { display: none; }
+  }
+
+  /* phones — the shipped-vs-planned table becomes a card stack */
+  @media (max-width: 720px) {
+    .honest { padding: 18px 16px 10px; }
+    .honest th { display: none; }
+    .honest table, .honest tbody, .honest tr, .honest td { display: block; width: 100%; }
+    .honest tr { padding: 12px 2px; border-bottom: 1px solid rgba(34,48,38,.6); }
+    .honest tr:last-child { border-bottom: 0; }
+    .honest td.s { display: inline-block; margin: 2px 0 6px; padding: 2px 0; border-bottom: 0; }
+    .honest td.s.road { color: var(--ember, #e4aa71); }
+  }
   </style>
 </head>
 <body>

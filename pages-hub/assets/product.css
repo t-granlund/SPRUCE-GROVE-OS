@@ -391,3 +391,10 @@ footer .club-band .rune {
   * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
   html { scroll-behavior: auto; }
 }
+
+/* phones: the double bar condenses; the switcher carries navigation */
+@media (max-width: 720px) {
+  .nav .wrap { height: 54px; gap: 14px; padding: 0 18px; }
+  .nav .ver { display: none; }
+  .nav .wrap .wordmark { font-size: 15px; }
+}
