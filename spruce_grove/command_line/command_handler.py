@@ -1,5 +1,6 @@
 # Import to trigger command registration
 import spruce_grove.command_line.config_commands  # noqa: F401
+import spruce_grove.command_line.onboarding_synthetic  # noqa: F401
 import spruce_grove.command_line.core_commands  # noqa: F401
 import spruce_grove.command_line.session_commands  # noqa: F401
 import spruce_grove.command_line.uc_menu  # noqa: F401
