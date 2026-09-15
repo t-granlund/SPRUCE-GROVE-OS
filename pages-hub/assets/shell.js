@@ -68,6 +68,15 @@
         byId[id].setAttribute("aria-current", "true");
       }
       for (var k2 in byId) if (k2 !== id) byId[k2].removeAttribute("aria-current");
+      // Mirror the active section onto any other nav that opted into the spy
+      // (e.g. a page's sticky quick-nav bar) so all surfaces agree.
+      Array.prototype.forEach.call(
+        document.querySelectorAll("[data-spy-link]"),
+        function (el) {
+          var h = (el.getAttribute("href") || "").slice(1);
+          el.classList.toggle("active", h === id && !!id);
+        }
+      );
     }
     function onScroll() {
       var probe = 140, best = null;
@@ -87,7 +96,7 @@
     onScroll();
   }
 
-  var logo = '<img src="' + assets + 'spruce_grove_logo_noback.png" alt="Spruce Grove logo" width="30" height="30" />';
+  var logo = '<img src="' + assets + 'grove-mark.svg" alt="Spruce Grove logo" width="30" height="30" />';
 
   var sidebar =
     '<aside class="sb" aria-label="Primary navigation">' +
@@ -112,7 +121,7 @@
   var topbar =
     '<header class="sb-topbar">' +
     '  <button class="sb-burger" type="button" aria-label="Open navigation" aria-expanded="false">' + I("menu", 20) + "</button>" +
-    '  <a class="brand" href="' + base + 'index.html"><img src="' + assets + 'spruce_grove_logo_noback.png" alt="Spruce Grove logo" width="26" height="26" /><span>Spruce Grove</span></a>' +
+    '  <a class="brand" href="' + base + 'index.html"><img src="' + assets + 'grove-mark.svg" alt="Spruce Grove logo" width="26" height="26" /><span>Spruce Grove</span></a>' +
     '  <span class="spacer"></span>' +
     '  <a class="sb-link" style="padding:8px 11px" href="' + account.href + '" target="_blank" rel="noopener" aria-label="GitHub repository">' + I("github", 16) + '<span class="lbl">GitHub</span></a>' +
     "</header>";

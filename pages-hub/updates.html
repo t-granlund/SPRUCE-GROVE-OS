@@ -143,13 +143,52 @@
   .beat.on { animation:beatpulse 2.2s ease-in-out infinite; }
   @media (prefers-reduced-motion: reduce) { .beat.on { animation:none; } }
 
+  /* sticky navigation bar — sections + provenance filter, all viewports */
+  .tocbar {
+    position: sticky; top: 0; z-index: 360;
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px; margin: 0 0 26px;
+    background: rgba(14,19,15,.93); backdrop-filter: blur(10px);
+    border: 1px solid var(--border); border-radius: var(--radius-sm, 8px);
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .tocbar::-webkit-scrollbar { display: none; }
+  .tb-group { display: flex; align-items: center; gap: 6px; flex: 0 0 auto; }
+  .tb-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 12px; min-height: 32px;
+    font-size: 12.5px; color: var(--text-soft);
+    background: transparent; border: 1px solid var(--border); border-radius: 999px;
+    text-decoration: none; white-space: nowrap; cursor: pointer;
+  }
+  .tb-btn:hover { color: var(--text); border-color: var(--border-light); background: rgba(255,255,255,.04); }
+  .tb-n { font-family: var(--mono); font-size: 10.5px; color: var(--text-muted); }
+  .tb-filter-btn[aria-pressed="true"] { color: #0E130F; background: var(--accent); border-color: var(--accent); font-weight: 600; }
+  .tb-filter-btn[aria-pressed="true"] .tb-n, .tb-filter-btn[aria-pressed="true"] .dot { color: inherit; }
+  .tb-jump.active { color: var(--accent-3); border-color: rgba(152,183,158,.5); background: rgba(152,183,158,.08); }
+  .tb-jump.tb-off { opacity: .35; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; }
+  .dot.gr { background: var(--accent-3); }
+  .dot.up { background: var(--accent-2); }
+  .tb-sep { width: 1px; align-self: stretch; background: var(--border); flex: 0 0 auto; }
+  .prov-out, section.g[data-filter-out] { display: none !important; }
+  .tile-btn { all: unset; cursor: pointer; display: block; width: 100%; border-radius: var(--radius-sm, 8px); }
+  .tile-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .tile-btn[aria-pressed="true"] { background: rgba(228,170,113,.07); outline: 1px solid rgba(228,170,113,.35); }
+  @media (max-width: 980px) { .tocbar { top: 51px; } }
+  @media (max-width: 720px) {
+    .tocbar { padding: 8px 10px; }
+    .tb-btn { padding: 8px 11px; min-height: 34px; }
+    .toc a { display: block; padding: 9px 0; }
+  }
+
   @media print { body { background:#fff; color:#000; } .deep,.minor,.fixes { box-shadow:none; border-color:#ccc; } }
 </style>
 </head>
 <body>
 
 <main class="wrap">
-  <header class="hero"><img class="watermark" src="../assets/spruce_grove_official.png" alt="" aria-hidden="true" />
+  <header class="hero"><img class="watermark" src="../assets/grove-ghost.svg" alt="" aria-hidden="true" />
     <span class="kicker">Release Observatory</span>
     <h1>The last two months, <em>curated.</em></h1>
     <p class="lede">Everything notable that shipped in spruce-grove over the past 60 days, with plain-language breakdowns of what it is, what it does, and why it matters — plus a complete index of the smaller work.</p>
@@ -164,12 +203,32 @@
       <!-- AUTO-END:stats -->
     </div>
 
-    <div class="provline" role="list" aria-label="Update provenance">
-      <div class="p" role="listitem"><span class="n">39</span><div class="t"><span class="chip gr">grove-grown</span> updates built here</div></div>
-      <div class="p" role="listitem"><span class="n">29</span><div class="t"><span class="chip up">upstream-synced</span> via Code Puppy</div></div>
-      <div class="p" role="listitem"><span class="beat" id="upstream-beat" aria-hidden="true">●</span> <span class="n conn" id="upstream-state">connector checking…</span><div class="t">live: mpfaffenberger/code_puppy</div></div>
+    <div class="provline" role="list" aria-label="Update provenance — the tiles are filters, click to isolate">
+      <div class="p" role="listitem"><button class="tile-btn" type="button" data-filter="gr" aria-pressed="false" title="Show only grove-grown updates"><span class="n">39</span><div class="t"><span class="chip gr">grove-grown</span> updates built here</div></button></div>
+      <div class="p" role="listitem"><button class="tile-btn" type="button" data-filter="up" aria-pressed="false" title="Show only upstream-synced updates"><span class="n">29</span><div class="t"><span class="chip up">upstream-synced</span> via Code Puppy</div></button></div>
+      <div class="p" role="listitem"><button class="tile-btn" type="button" data-filter="all" aria-pressed="true" title="Show every update"><span class="beat" id="upstream-beat" aria-hidden="true">●</span> <span class="n conn" id="upstream-state">connector checking…</span><div class="t">live: mpfaffenberger/code_puppy</div></button></div>
     </div>
   </header>
+
+  <div class="tocbar" role="navigation" aria-label="Quick navigation and provenance filter">
+    <div class="tb-group" role="group" aria-label="Filter updates by provenance">
+      <button class="tb-btn tb-filter-btn" type="button" data-filter="all" aria-pressed="true">All <span class="tb-n">68</span></button>
+      <button class="tb-btn tb-filter-btn" type="button" data-filter="gr" aria-pressed="false"><span class="dot gr" aria-hidden="true"></span>Grove <span class="tb-n">39</span></button>
+      <button class="tb-btn tb-filter-btn" type="button" data-filter="up" aria-pressed="false"><span class="dot up" aria-hidden="true"></span>Upstream <span class="tb-n">29</span></button>
+    </div>
+    <span class="tb-sep" aria-hidden="true"></span>
+    <div class="tb-group tb-jumps" aria-label="Jump to section">
+      <a class="tb-btn tb-jump" data-spy-link href="#upstream">Connector</a>
+      <a class="tb-btn tb-jump" data-spy-link href="#extensibility">Extensibility</a>
+      <a class="tb-btn tb-jump" data-spy-link href="#durable">Durability</a>
+      <a class="tb-btn tb-jump" data-spy-link href="#agents">Agents</a>
+      <a class="tb-btn tb-jump" data-spy-link href="#models">Models</a>
+      <a class="tb-btn tb-jump" data-spy-link href="#observability">Telemetry</a>
+      <a class="tb-btn tb-jump" data-spy-link href="#living">Living Log</a>
+      <a class="tb-btn tb-jump" data-spy-link href="#auto-detected">Auto-detected</a>
+      <a class="tb-btn tb-jump" data-spy-link href="#minor">Minor &amp; Fixes</a>
+    </div>
+  </div>
 
   <nav class="toc" id="toc">
     <div class="title">On This Page</div>
@@ -697,6 +756,64 @@
           "PROVENANCE.md.</p>";
       }
     });
+})();
+</script>
+<script>
+/* Provenance filter — derives everything from the chips the generator emits,
+   so filtering and regeneration can never drift apart. The Upstream Connector
+   section is meta-context and stays visible under every filter. */
+(function () {
+  "use strict";
+  var controls = Array.prototype.slice.call(document.querySelectorAll("[data-filter]"));
+  if (!controls.length) return;
+  var EXEMPT = { upstream: true };
+  var sections = Array.prototype.slice.call(document.querySelectorAll("main section.g"))
+    .filter(function (s) { return !EXEMPT[s.id]; });
+  var jumps = Array.prototype.slice.call(document.querySelectorAll(".tb-jump"));
+
+  function entryVisible(el, f) {
+    if (f === "all") return true;
+    return !!el.querySelector(f === "gr" ? ".prov.gr" : ".prov.up");
+  }
+
+  function apply(f) {
+    controls.forEach(function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-filter") === f ? "true" : "false");
+    });
+    sections.forEach(function (sec) {
+      var entries = sec.querySelectorAll(".deep, .split li");
+      var anyVisible = false;
+      Array.prototype.forEach.call(entries, function (el) {
+        var vis = entryVisible(el, f);
+        el.hidden = !vis;
+        if (vis) anyVisible = true;
+      });
+      Array.prototype.forEach.call(sec.querySelectorAll(".minor, .fixes"), function (card) {
+        card.hidden = card.querySelectorAll("li:not([hidden])").length === 0;
+      });
+      var split = sec.querySelector(".split");
+      if (split) split.hidden = sec.querySelectorAll(".split li:not([hidden])").length === 0;
+      sec.hidden = entries.length > 0 && !anyVisible;
+    });
+    jumps.forEach(function (a) {
+      var id = (a.getAttribute("href") || "").slice(1);
+      var sec = document.getElementById(id);
+      a.classList.toggle("tb-off", !!(sec && sec.hidden));
+      if (sec && sec.hidden) a.removeAttribute("aria-current");
+    });
+  }
+
+  controls.forEach(function (b) {
+    b.addEventListener("click", function () { apply(b.getAttribute("data-filter")); });
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    var t = e.target;
+    if (t && t.getAttribute && t.getAttribute("data-filter")) {
+      e.preventDefault();
+      apply(t.getAttribute("data-filter"));
+    }
+  });
 })();
 </script>
 </body>
