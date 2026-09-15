@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spruce Grove — the plan</title>
+  <meta name="description" content="The plan: a business instance tuned to the means you have, transparent AI usage, a plugin suite you own — marketing, analytics, email with compliance built in — and full lifecycle management from the smallest shop to the biggest of big." />
+  <link rel="icon" type="image/png" href="./assets/favicon-64.png" />
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=IM+Fell+English+SC&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/tokens.css" />
+  <link rel="stylesheet" href="./assets/product.css" />
+  <style>
+    .o-hero { padding: 96px 0 36px; text-align: center; position: relative; overflow: hidden; }
+    .o-hero .ghost-mark { position: absolute; right: -30px; top: -20px; width: 280px; opacity: .05; pointer-events: none; }
+    .o-hero h1 { font-family: var(--display); font-weight: 600; font-size: clamp(34px, 5vw, 56px); line-height: 1.06; margin: 0 auto; max-width: 16em; }
+    .o-hero h1 em { font-style: italic; color: var(--ember, #e4aa71); }
+    .o-hero .lede { font-family: "EB Garamond", Georgia, serif; font-size: 20px; line-height: 1.65; color: var(--text-dim, #93a096); max-width: 36em; margin: 22px auto 0; }
+    .o-section { padding: 44px 0; border-top: 1px solid var(--line, #223026); }
+    .o-section > .wrap > h2 { font-family: "IM Fell English SC", Georgia, serif; font-weight: 400; font-size: 30px; margin: 0 0 8px; }
+    .o-sub { font-family: "EB Garamond", Georgia, serif; font-style: italic; color: var(--text-faint, #8b988e); margin: 0 0 26px; }
+    .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media (max-width: 760px) { .tiers { grid-template-columns: 1fr; } }
+    .tier { border: 1px solid var(--line, #223026); background: var(--bg-card, #141b16); padding: 22px 20px 16px; }
+    .tier .n { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--ember, #e4aa71); display: block; margin-bottom: 6px; }
+    .tier b { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 20px; display: block; margin-bottom: 8px; }
+    .tier p { font-size: 13.5px; line-height: 1.65; color: var(--text-dim, #93a096); margin: 0 0 10px; }
+    .tier ul { margin: 0; padding-left: 18px; }
+    .tier li { font-size: 12.5px; line-height: 1.6; color: var(--text-dim, #93a096); margin: 4px 0; }
+    .plugins { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 760px) { .plugins { grid-template-columns: 1fr; } }
+    .plugin { border: 1px solid var(--line, #223026); background: var(--bg-card, #141b16); padding: 22px 22px 16px; position: relative; }
+    .plugin .st { position: absolute; top: -11px; right: 18px; font-family: "JetBrains Mono", monospace; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; padding: 3px 9px; }
+    .st.road { background: var(--bg, #0e130f); color: var(--ember, #e4aa71); border: 1px solid var(--ember, #e4aa71); }
+    .st.ship { background: var(--ember, #e4aa71); color: #0e130f; }
+    .plugin h3 { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 20px; margin: 4px 0 8px; }
+    .plugin p { font-size: 13.5px; line-height: 1.65; color: var(--text-dim, #93a096); margin: 0 0 10px; }
+    .plugin ul { margin: 0; padding-left: 18px; }
+    .plugin li { font-size: 12.5px; line-height: 1.6; color: var(--text-dim, #93a096); margin: 4px 0; }
+    .lifecycle { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    @media (max-width: 760px) { .lifecycle { grid-template-columns: 1fr; } }
+    .life { border-top: 2px solid var(--ember, #e4aa71); background: var(--bg-card, #141b16); padding: 18px 20px 12px; }
+    .life h3 { font-family: "IM Fell English SC", Georgia, serif; font-weight: 400; font-size: 19px; margin: 0 0 8px; }
+    .life p { font-size: 13px; line-height: 1.6; color: var(--text-dim, #93a096); margin: 0; }
+    .honest { border: 1px solid var(--line, #223026); background: var(--bg-card, #141b16); padding: 26px 28px 18px; }
+    .honest h3 { font-family: "IM Fell English SC", Georgia, serif; font-weight: 400; font-size: 22px; margin: 0 0 12px; }
+    .honest table { width: 100%; border-collapse: collapse; }
+    .honest th { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--ember, #e4aa71); text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line, #223026); }
+    .honest td { font-size: 13px; line-height: 1.55; color: var(--text-dim, #93a096); padding: 8px 10px; border-bottom: 1px solid rgba(34,48,38,.6); vertical-align: top; }
+    .honest td b { color: var(--text, #e8ece9); }
+    .honest .s { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+    .s.today { color: var(--moss, #6fa97a); }
+    .s.road { color: var(--ember, #e4aa71); }
+    .door { text-align: center; border: 1px solid var(--ember-line, rgba(228,170,113,.38)); background: linear-gradient(180deg, var(--bg-card, #141b16), var(--bg, #0e130f)); padding: 40px 30px; margin: 30px 0 0; }
+    .door h2 { font-family: "IM Fell English SC", Georgia, serif; font-weight: 400; font-size: 30px; margin: 0 0 8px; }
+    .provenance { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--text-faint, #8b988e); line-height: 1.9; border-top: 1px solid var(--line, #223026); margin-top: 40px; padding-top: 18px; }
+    .provenance a { color: var(--mint, #98b79e); }
+    .aud-switch { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 10px 0;
+      border-bottom: 1px solid var(--line, #223026); font-family: "JetBrains Mono", monospace;
+      font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+    .aud-switch .as-label { color: var(--text-faint, #8b988e); letter-spacing: .18em; }
+    .aud-switch .as-door { color: var(--text-dim, #93a096); text-decoration: none; padding: 3px 2px; border-bottom: 1px solid transparent; }
+    .aud-switch .as-door:hover { color: var(--text, #e8ece9); border-bottom-color: rgba(238,235,229,.14); }
+    .aud-switch .as-door.active { color: var(--ember, #e4aa71); border-bottom-color: var(--ember, #e4aa71); }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="wrap">
+      <span class="wordmark">Spruce Grove</span>
+      <a class="anchor" href="#instance">The instance</a>
+      <a class="anchor" href="#suite">The suite</a>
+      <a class="anchor" href="#lifecycle">The lifecycle</a>
+      <a class="anchor" href="#honest">Shipped vs planned</a>
+      <span class="ver"><b>the plan</b> · honest by design</span>
+    </div>
+    <div class="wrap">
+      <div class="aud-switch">
+        <span class="as-label">you are:</span>
+        <a class="as-door" href="./">running a business</a>
+        <a class="as-door" href="./product.html">building the thing</a>
+        <a class="as-door" href="./interested.html">just curious</a>
+        <a class="as-door" href="./share.html">spreading the word</a>
+        <a class="as-door active" href="./plan.html">seeing the whole plan</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="o-hero wrap">
+    <svg class="ghost-mark" viewBox="0 0 280 200" aria-hidden="true"><g stroke="#E4AA71" stroke-width="6.5" stroke-linejoin="round" stroke-linecap="round"><path d="M64 65.5 L75.3 101.4 L80.7 101.4 L88.5 134.1 L94.8 134.1 L101 159.1 L67.5 159.1 L67.5 170 L56.5 170 L56.5 159.1 L23 159.1 L29.2 134.1 L35.5 134.1 L43.3 101.4 L48.7 101.4 Z" fill="none" stroke-opacity=".6"/><path d="M218 65.5 L229.3 101.4 L223.7 101.4 L215.9 134.1 L209.6 134.1 L203.4 159.1 L235.9 159.1 L235.9 170 L247.1 170 L247.1 159.1 L280.4 159.1 L274.2 134.1 L267.9 134.1 L260.1 101.4 L254.7 101.4 Z" fill="none" stroke-opacity=".6"/><path d="M140 35.9 L159.6 88.8 L167.6 88.8 L179.1 137.1 L188.3 137.1 L197.5 173.9 L148.1 173.9 L148.1 190 L132 190 L132 173.9 L82.5 173.9 L91.7 137.1 L100.9 137.1 L112.4 88.8 L120.5 88.8 Z" fill="none"/></g></svg>
+    <p class="kicker" style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--moss,#6fa97a);margin:0 0 14px">the plan · from the smallest shop to the biggest of big</p>
+    <h1>Everything a business runs,<br/><em>owned by the business.</em></h1>
+    <p class="lede">The machine is free today. The plan is the rest of the stack: an AI instance
+    tuned to the means you have, with usage you can see; the marketing, analytics, and email
+    tools you'd otherwise rent — as plugins you own; and full lifecycle management that scales
+    from a crew of one to an enterprise. Here is what's real, what's next, and what's the plan.</p>
+  </header>
+
+  <!-- ==================== I · the instance ==================== -->
+  <section class="o-section" id="instance">
+    <div class="wrap">
+      <h2>I &middot; The instance, tuned to your means</h2>
+      <p class="o-sub">choose the engine — the harness makes every one of them go further</p>
+      <p style="font-family:'EB Garamond',Georgia,serif;font-size:17px;line-height:1.75;color:var(--text,#e8ece9);max-width:46em;margin:0 0 22px;">
+      Spruce Grove runs on the AI you choose: <b>Synthetic.new, Claude, ChatGPT, or your own
+      setup</b>. You bring the subscription you can afford; the harness stretches it —
+      <b>transparent usage you can watch as it lands, session history that survives anything,
+      context you can steer mid-run, and model routing that spends cheap tokens on small work
+      and saves the strong ones for the hard parts.</b> One command sets it up; one command
+      checks it any time.</p>
+      <div class="tiers">
+        <div class="tier"><span class="n">means · 01</span><b>The misfit</b>
+          <p>Starting from nothing. Free engine access or the cheapest tier that exists.</p>
+          <ul><li>Free install, free to run</li><li>Small-model routing for everyday work</li><li>Upgrade only when the work pays for it</li></ul></div>
+        <div class="tier"><span class="n">means · 02</span><b>The shop</b>
+          <p>One subscription, stretched by the harness until it behaves like a bigger one.</p>
+          <ul><li>One command to connect your Synthetic.new, Claude, or ChatGPT key</li><li>Alias routing: cheap tokens for fan-out, strong tokens for the hard parts</li><li>Usage visible in the stream — no mystery bill</li></ul></div>
+        <div class="tier"><span class="n">means · 03</span><b>The company</b>
+          <p>Your accounts, your policies, your scale — the same machine at enterprise size.</p>
+          <ul><li>Own endpoints and keys per team</li><li>The lifecycle layer below: access by identity and role</li><li>Auditability as a design law, not an add-on</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== II · the suite ==================== -->
+  <section class="o-section" id="suite">
+    <div class="wrap">
+      <h2>II &middot; The plugin suite &mdash; the tools you'd otherwise rent</h2>
+      <p class="o-sub">the grove's architecture is plugin-first: these bolt onto the machine you already run — <b>planned, not shipped; honest by design</b></p>
+      <div class="plugins">
+        <div class="plugin"><span class="st road">planned</span>
+          <h3>Marketing &amp; website analytics</h3>
+          <p>The dashboard a business actually opens: who came, what they looked at, what
+          turned them into a customer — on your own site, in your own instance.</p>
+          <ul><li>Business-intelligence dashboard over your own data</li><li>No third-party pixel required — your analytics, your records</li><li>Feeds the email engine below automatically</li></ul></div>
+        <div class="plugin"><span class="st road">planned</span>
+          <h3>The email platform you own</h3>
+          <p>A marketing engine like the big platforms — except the platform is yours, and the
+          compliance is a design law, not a settings page you hope you got right.</p>
+          <ul><li>Lifecycle campaigns wired to your analytics funnel</li><li>CAN-SPAM mechanics: working opt-out, physical address, honest headers</li><li>GDPR/lifecycle records: consent, removal requests, <b>record of removal</b> — kept and automated</li><li>Forms that carry consent forward, so every list is clean by construction</li></ul></div>
+        <div class="plugin"><span class="st ship">shipped</span>
+          <h3>The plugin architecture itself</h3>
+          <p>The reason the two cards above say "planned" with confidence: the machine was born
+          plugin-first — every capability above hangs on hooks that exist today, contributed
+          like everything else in the grove.</p>
+          <ul><li>Plugins discover and load from three tiers — global, personal, per-project</li><li>Guardrails and audit hooks are first-class</li><li>A business suite is new plugins, not a new machine</li></ul></div>
+        <div class="plugin"><span class="st road">planned</span>
+          <h3>Domain &amp; web operations</h3>
+          <p>The drones build already crossed this bridge by hand: registrar, DNS, verification,
+          certificates — scripted, gated by a human, verified live. The plan is to make that
+          walk a single auditable command for every business in the grove.</p>
+          <ul><li>Domain records, TLS, and verification as reviewed workflows</li><li>The runbook discipline of the drones build, generalized</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== III · the lifecycle ==================== -->
+  <section class="o-section" id="lifecycle">
+    <div class="wrap">
+      <h2>III &middot; The lifecycle &mdash; provisioned by who you are</h2>
+      <p class="o-sub">identity as the key: access, tools, and software that follow your role and need — from a crew of one to the biggest of big</p>
+      <div class="lifecycle">
+        <div class="life"><h3>Provisioning on arrival</h3>
+          <p>A new person, role, or need appears — and the access, tools, and accounts that
+          role requires appear with it. Dynamically, by identity and need, with every grant
+          recorded.</p></div>
+        <div class="life"><h3>Deprovisioning on exit</h3>
+          <p>The inverse, done properly and immediately: keys rotated, access removed, records
+          kept. The step every enterprise knows is the dangerous one — automated, logged,
+          boring.</p></div>
+        <div class="life"><h3>Domains, software, users — one ledger</h3>
+          <p>The same lifecycle discipline for the whole estate: who owns which domain, which
+          software instance, which account. Renewals, expirations, and handoffs as workflows,
+          not as 3 a.m. surprises.</p></div>
+        <div class="life"><h3>Security as provenance</h3>
+          <p>Identity-as-a-service the grove way: the same receipt culture that keeps the code
+          honest keeps the access honest. Every grant, every revocation, every change —
+          attributable, reviewable, and reversible.</p></div>
+      </div>
+      <p style="font-family:'EB Garamond',Georgia,serif;font-size:16.5px;line-height:1.75;color:var(--text,#e8ece9);max-width:46em;margin:22px 0 0">
+      This is the scale promise, stated plainly: <b>the smallest of small gets the same
+      machinery as the biggest of big</b> — because it is the same machine, sized by its
+      plugins and its keys, never by its price tag. The shop on the square and the enterprise
+      across the country run the same grove; what changes is how much of the stack they switch
+      on.</p>
+    </div>
+  </section>
+
+  <!-- ==================== IV · honest ==================== -->
+  <section class="o-section" id="honest">
+    <div class="wrap">
+      <h2>IV &middot; Shipped today vs the plan</h2>
+      <p class="o-sub">the grove's law: proven, not promised — so here is the line, drawn in public</p>
+      <div class="honest">
+        <table>
+          <tr><th>Capability</th><th>Status</th><th>The proof</th></tr>
+          <tr><td><b>The machine</b> — voice-first, streaming, steerable, session-durable, plugin-first</td><td class="s today">shipped</td><td>v1.0.28 on PyPI, free, Apache-2.0; 7,869 automated tests</td></tr>
+          <tr><td><b>The instance tuned to your means</b> — engine of your choice, one-command setup, transparent usage, alias routing</td><td class="s today">shipped</td><td>/onboard-synthetic and /check; the model family carries its own quota honesty</td></tr>
+          <tr><td><b>Two businesses' tools built on it</b></td><td class="s today">shipped</td><td>The drones pipeline and the barbershop shopfront — public pages, receipts attached</td></tr>
+          <tr><td><b>Analytics &amp; BI dashboard</b></td><td class="s road">planned</td><td>Plugin architecture shipped; the dashboard is the first business plugin</td></tr>
+          <tr><td><b>The owned email platform</b> — lifecycle, CAN-SPAM/GDPR mechanics, records of removal</td><td class="s road">planned</td><td>Compliance stated as design law now, so it is built in — not bolted on later</td></tr>
+          <tr><td><b>Domain &amp; web operations</b> as one auditable command</td><td class="s road">planned</td><td>The drones build walked this bridge by hand, with a runbook — the pattern exists</td></tr>
+          <tr><td><b>Full lifecycle &amp; identity workflows</b> — provisioning, deprovisioning, access by role and need</td><td class="s road">planned</td><td>The audit and guardrail hooks exist today; the lifecycle layer is the build this plan calls for</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== door ==================== -->
+  <section class="o-section">
+    <div class="wrap">
+      <div class="door">
+        <h2>The plan needs builders and believers</h2>
+        <p style="font-family:'EB Garamond',Georgia,serif;font-size:17px;line-height:1.7;color:var(--text-dim,#93a096);max-width:38em;margin:0 auto 20px">
+        The machine is free tonight. The suite is the next climb — built in public, at the
+        council table, by the tradesmen and builders of the grove. Business owners: bring your
+        friction, and the plan bends toward what you actually need. That is what the club is
+        for.</p>
+        <div class="ctas">
+          <a class="cta" href="https://t-granlund.github.io/leather-apron-club/">The Leather Apron Club — first council Friday, September 25</a>
+          <a class="cta" href="./#install">Get the machine — free, open source, yours</a>
+        </div>
+      </div>
+      <p class="provenance">
+        shipped claims trace to the repository and its tests · planned claims are labeled planned —
+        the grove does not sell futures as facts · provenance:
+        <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/PROVENANCE.md">PROVENANCE.md</a> ·
+        claims ledger: <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/FACTCHECK.md">FACTCHECK.md</a>
+      </p>
+    </div>
+  </section>
+
+</body>
+</html>

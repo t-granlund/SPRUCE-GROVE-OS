@@ -35,6 +35,7 @@ jobs:
           cp pages-hub/product.html _site/product.html
           cp pages-hub/interested.html _site/interested.html
           cp pages-hub/share.html _site/share.html
+          cp pages-hub/plan.html _site/plan.html
           cp pages-hub/index.html _site/hub.html
           cp pages-hub/desktop-dashboard.html _site/
           cp -r pages-hub/assets _site/
