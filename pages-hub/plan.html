@@ -9,14 +9,17 @@
   <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=IM+Fell+English+SC&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=IM+Fell+English+SC&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./assets/tokens.css" />
   <link rel="stylesheet" href="./assets/product.css" />
   <style>
-    .o-hero { padding: 96px 0 36px; text-align: center; position: relative; overflow: hidden; }
-    .o-hero .ghost-mark { position: absolute; right: -30px; top: -20px; width: 280px; opacity: .05; pointer-events: none; }
-    .o-hero h1 { font-family: var(--display); font-weight: 600; font-size: clamp(34px, 5vw, 56px); line-height: 1.06; margin: 0 auto; max-width: 16em; }
-    .o-hero h1 em { font-style: italic; color: var(--ember, #e4aa71); }
+    .o-hero { padding: 178px 0 46px; text-align: center; position: relative; }
+    .o-hero .kicker { position: relative; z-index: 2; }
+    .o-hero h1 { position: relative; z-index: 2; font-family: var(--BB-display, "Fraunces", Georgia, serif); }
+    .o-hero .lede { position: relative; z-index: 2; }
+    .o-hero .ghost-mark { position: absolute; right: 34px; top: 118px; width: 210px; opacity: .07; pointer-events: none; }
+    .o-hero h1 { font-family: var(--BB-display, "Fraunces", Georgia, serif); font-weight: 600; font-size: clamp(34px, 5vw, 56px); line-height: 1.06; margin: 0 auto; max-width: 16em; }
+    .o-hero h1 em { font-style: italic; color: var(--ember, #e4aa71); font-family: var(--BB-display, "Fraunces", Georgia, serif); }
     .o-hero .lede { font-family: "EB Garamond", Georgia, serif; font-size: 20px; line-height: 1.65; color: var(--text-dim, #93a096); max-width: 36em; margin: 22px auto 0; }
     .o-section { padding: 44px 0; border-top: 1px solid var(--line, #223026); }
     .o-section > .wrap > h2 { font-family: "IM Fell English SC", Georgia, serif; font-weight: 400; font-size: 30px; margin: 0 0 8px; }
