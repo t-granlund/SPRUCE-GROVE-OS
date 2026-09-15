@@ -135,7 +135,7 @@
   #upstream-live .uh { font-family:var(--mono); font-size:11px; color:var(--accent-2); flex:0 0 64px; }
   #upstream-live .ud { font-family:var(--mono); font-size:11px; color:var(--text-muted); flex:0 0 52px; }
   #upstream-live .uu { font-family:var(--mono); font-size:11px; color:var(--accent-3); flex:0 0 120px; overflow:hidden; text-overflow:ellipsis; }
-  #upstream-live .um { color:var(--text-soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  #upstream-live .um { color:var(--text-soft); overflow-wrap:anywhere; }
   .upnote { margin:0; font-size:13px; color:var(--text-muted); }
   .beat { color:var(--text-muted); font-size:10px; }
   .beat.on { color:var(--accent-3); }
@@ -182,12 +182,19 @@
     .toc a { display: block; padding: 9px 0; }
   }
 
+  /* anchor clearance for the sticky bar */
+  section.g { scroll-margin-top: 76px; }
+  html, body { overflow-x: clip; }
+  @media (max-width: 980px) {
+    .tocbar { top: 68px; }
+    section.g { scroll-margin-top: 134px; }
+  }
   @media print { body { background:#fff; color:#000; } .deep,.minor,.fixes { box-shadow:none; border-color:#ccc; } }
 </style>
 </head>
 <body>
 
-<main class="wrap">
+<div class="wrap">
   <header class="hero"><img class="watermark" src="../assets/grove-ghost.svg" alt="" aria-hidden="true" />
     <span class="kicker">Release Observatory</span>
     <h1>The last two months, <em>curated.</em></h1>
@@ -204,20 +211,20 @@
     </div>
 
     <div class="provline" role="list" aria-label="Update provenance — the tiles are filters, click to isolate">
-      <div class="p" role="listitem"><button class="tile-btn" type="button" data-filter="gr" aria-pressed="false" title="Show only grove-grown updates"><span class="n">39</span><div class="t"><span class="chip gr">grove-grown</span> updates built here</div></button></div>
-      <div class="p" role="listitem"><button class="tile-btn" type="button" data-filter="up" aria-pressed="false" title="Show only upstream-synced updates"><span class="n">29</span><div class="t"><span class="chip up">upstream-synced</span> via Code Puppy</div></button></div>
+      <div class="p" role="listitem"><button class="tile-btn" type="button" data-filter="gr" aria-pressed="false" aria-label="Filter: show only grove-grown updates" title="Show only grove-grown updates"><span class="n" data-count="gr">–</span><div class="t"><span class="chip gr">grove-grown</span> updates built here</div></button></div>
+      <div class="p" role="listitem"><button class="tile-btn" type="button" data-filter="up" aria-pressed="false" aria-label="Filter: show only upstream-synced updates" title="Show only upstream-synced updates"><span class="n" data-count="up">–</span><div class="t"><span class="chip up">upstream-synced</span> via Code Puppy</div></button></div>
       <div class="p" role="listitem"><button class="tile-btn" type="button" data-filter="all" aria-pressed="true" title="Show every update"><span class="beat" id="upstream-beat" aria-hidden="true">●</span> <span class="n conn" id="upstream-state">connector checking…</span><div class="t">live: mpfaffenberger/code_puppy</div></button></div>
     </div>
   </header>
 
   <div class="tocbar" role="navigation" aria-label="Quick navigation and provenance filter">
     <div class="tb-group" role="group" aria-label="Filter updates by provenance">
-      <button class="tb-btn tb-filter-btn" type="button" data-filter="all" aria-pressed="true">All <span class="tb-n">68</span></button>
-      <button class="tb-btn tb-filter-btn" type="button" data-filter="gr" aria-pressed="false"><span class="dot gr" aria-hidden="true"></span>Grove <span class="tb-n">39</span></button>
-      <button class="tb-btn tb-filter-btn" type="button" data-filter="up" aria-pressed="false"><span class="dot up" aria-hidden="true"></span>Upstream <span class="tb-n">29</span></button>
+      <button class="tb-btn tb-filter-btn" type="button" data-filter="all" aria-pressed="true">All <span class="tb-n" data-count="all">–</span></button>
+      <button class="tb-btn tb-filter-btn" type="button" data-filter="gr" aria-pressed="false"><span class="dot gr" aria-hidden="true"></span>Grove <span class="tb-n" data-count="gr">–</span></button>
+      <button class="tb-btn tb-filter-btn" type="button" data-filter="up" aria-pressed="false"><span class="dot up" aria-hidden="true"></span>Upstream <span class="tb-n" data-count="up">–</span></button>
     </div>
     <span class="tb-sep" aria-hidden="true"></span>
-    <div class="tb-group tb-jumps" aria-label="Jump to section">
+    <div class="tb-group tb-jumps" role="group" aria-label="Jump to section">
       <a class="tb-btn tb-jump" data-spy-link href="#upstream">Connector</a>
       <a class="tb-btn tb-jump" data-spy-link href="#extensibility">Extensibility</a>
       <a class="tb-btn tb-jump" data-spy-link href="#durable">Durability</a>
@@ -254,8 +261,9 @@
     <p class="secintro">Spruce Grove is grown <em>from</em> Code Puppy (MIT, Michael Pfaffenberger and
     contributors) — not away from it. This connector is the standing agreement to keep watching the
     upstream line: see what they ship, judge whether it helps this grove, port what does, and log
-    what differs. Of the updates on this page, <strong>39 were grown here</strong> and
-    <strong>29 arrived by proxy of the upstream line</strong> — 68 curated entries carrying 69 commits — every entry above carries its badge.</p>
+    what differs. Of the updates on this page, the live tally in the strip below the header is computed from commit authorship
+    on every page load — every entry above carries its badge, and the counts can
+    never drift from the evidence.</p>
 
     <div class="split">
       <div class="minor">
@@ -700,7 +708,7 @@
     </div>
   </section>
 
-</main>
+</div>
 
 <footer>
   <div class="wrap inner">
@@ -784,7 +792,21 @@
   }
 
   function apply(f) {
-    controls.forEach(function (b) {
+    function fillCounts() {
+    var gr = document.querySelectorAll(".prov.gr").length;
+    var up = document.querySelectorAll(".prov.up").length;
+    var all = 0;
+    sections.forEach(function (sec) {
+      all += sec.querySelectorAll(".deep, .split li").length;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-count]"), function (el) {
+      var k = el.getAttribute("data-count");
+      el.textContent = k === "gr" ? gr : k === "up" ? up : all;
+    });
+  }
+  fillCounts();
+
+  controls.forEach(function (b) {
       b.setAttribute("aria-pressed", b.getAttribute("data-filter") === f ? "true" : "false");
     });
     sections.forEach(function (sec) {
