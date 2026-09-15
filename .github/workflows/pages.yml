@@ -31,6 +31,7 @@ jobs:
           # 1. Landing hub at the root + shared assets (logo, favicon)
           cp pages-hub/product.html _site/index.html
           cp pages-hub/announce.html _site/announce.html
+          cp pages-hub/owners.html _site/owners.html
           cp pages-hub/index.html _site/hub.html
           cp pages-hub/desktop-dashboard.html _site/
           cp -r pages-hub/assets _site/
