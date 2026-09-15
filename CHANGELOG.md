@@ -23,6 +23,24 @@ Code Puppy remains MIT, upstream untouched — its notice lives in our NOTICE,
 verbatim, because the puppy came first. Full reasoning:
 [docs/LICENSE-ANALYSIS.md](docs/LICENSE-ANALYSIS.md).
 
+### The grove tends itself — self-healing auto-updates
+
+The version checker always *watched* PyPI and nagged; now it *acts*. When a
+newer release is live, the on-disk install upgrades in place via
+`uv tool upgrade` on the startup daemon thread:
+
+- **Running sessions never break.** The active process keeps its warm,
+  fully-loaded code; the next launch boots the new version. No restarts, no
+  mid-session import swaps, startup never blocks.
+- **A broken updater can never break a session.** Best-effort, never raises;
+  any failure degrades to the old nag with the manual command attached.
+- **Guards.** `NO_AUTO_UPDATE=1` opts out of actuation (`NO_VERSION_UPDATE=1`
+  still silences the whole check). Source/editable checkouts are never
+  upgraded. 180s subprocess timeout. Tests default to `NO_AUTO_UPDATE=1` so
+  no test can ever mutate a real installation.
+- **i18n.** Five new `version.self_update_*` keys across en-US, es, fr-CA.
+- **Reference:** `docs/SELF-UPDATE.md`.
+
 ## 1.0.0 — 2026-09-10 — "the grove speaks"
 
 First full release. The voice-first pillar — the reason the fork exists — is

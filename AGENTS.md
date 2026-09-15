@@ -128,6 +128,19 @@ Localize user-facing strings via `spruce_grove/i18n/` (guide: **`docs/I18N.md`**
 - **Model-facing system prompts are OUT of scope** — translation changes LLM behavior.
 - CI gate: `tests/i18n/test_i18n_audit.py` (every key in `en-US`, pseudolocale clean).
 
+## Self-healing updater
+
+`version_checker.py` observes; `self_update.py` actuates. Contracts — see
+**`docs/SELF-UPDATE.md`** for the full loop, guards, and pipeline caveats:
+
+- `perform_self_update` **never raises** (every path reports and returns a bool).
+- **Tests never actuate**: `tests/conftest.py` pins `NO_AUTO_UPDATE=1`
+  suite-wide. Keep it that way — no test may mutate a real installation.
+- Source/editable checkouts are never upgraded (`self_update_supported()`
+  requires a uv tool env).
+- New user-facing strings need `version.self_update_*` keys in **all three**
+  locales (en-US, es, fr-CA) or the i18n audit gate goes red.
+
 ## Rules
 
 1. **Plugins over core** — if a hook exists for it, use it

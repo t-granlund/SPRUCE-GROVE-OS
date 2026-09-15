@@ -1,5 +1,12 @@
 # PyPI name claim — the 10-minute owner errand
 
+> **STATUS (2026-09-15): DONE.** `spruce-grove` is claimed and live on PyPI,
+> publishing on every push to main via **OIDC trusted publishing** (no
+> `PYPI_API_TOKEN` secret — the token steps below are historical). The
+> release pipeline now also serializes runs and self-heals its own push
+> races; see `docs/SELF-UPDATE.md` for how releases reach users without
+> anyone pressing an update button.
+
 Status as of 2026-09-10: `spruce-grove` / `sprucegrove` / `spruce_grove` all
 return HTTP 404 on pypi.org (re-verified Sept 10 evening). The wheel builds
 clean (`uv build` -> `dist/spruce_grove-0.1.0*`, `twine check` PASSED) and

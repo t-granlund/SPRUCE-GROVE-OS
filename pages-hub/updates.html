@@ -174,7 +174,7 @@
 
   <!-- ================= DURABILITY ================= -->
   <section class="g" id="durable">
-    <h2><svg class="si" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>Reliability & Durability <span class="tag">3 headliners</span></h2>
+    <h2><svg class="si" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>Reliability & Durability <span class="tag">4 headliners</span></h2>
     <p class="secintro">Long-running agentic jobs used to face the entire Unix gauntlet: crashes, suspend/resume, network blips. This cycle made persistence a first-class concern instead of an afterthought.</p>
 
     <article class="deep">
@@ -201,6 +201,14 @@
         <dt class="q-what">What it is</dt><dd>Interrupted long-running goals can now be resumed by a durable UUID instead of whatever ephemeral session handle they happened to have.</dd>
         <dt class="q-do">What it does</dt><dd>Every goal gets a stable identifier written into the durable store on creation; killing the process mid-goal and restarting lets you reference that UUID and pick up where the DAG left off, toolcalls-as-checkpoints.</dd>
         <dt class="q-why">Why it matters</dt><dd>Before this, a laptop sleep or a core dump meant restarting a multi-hour orchestration from scratch. UUID-resume turns goal execution into something closer to workflow engines like Temporal &mdash; while staying in-process.</dd>
+      </dl>
+    </article>
+    <article class="deep">
+      <div class="head"><h3>Self-healing auto-updates</h3><span class="meta"><span class="hash">721ce25</span> · 2026-09-15 · feat</span></div>
+      <dl class="qa">
+        <dt class="q-what">What it is</dt><dd>The end of the update button. On every startup the CLI compares itself against PyPI and, when a newer release exists, upgrades its on-disk install in place &mdash; no human, no nag, no maintenance window.</dd>
+        <dt class="q-do">What it does</dt><dd>A startup daemon thread fetches the latest version (never blocking the session), reports what it found, and runs <code>uv tool upgrade</code> when behind. The running session keeps its warm, consistent code; the next launch boots the new release and one log line narrates the handoff.</dd>
+        <dt class="q-why">Why it matters</dt><dd>Tools that wait for a keeper to update them on someone else's schedule go stale and take their owners with them. The grove verifies against the world, acts, reports in plain words &mdash; and can always be told to wait (<code>NO_AUTO_UPDATE</code>). Living and breathing beats installed and monitored.</dd>
       </dl>
     </article>
   </section>

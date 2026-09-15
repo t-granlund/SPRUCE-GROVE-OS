@@ -45,6 +45,25 @@ removing technology obstacles, and meeting people where they are — as humans.
 
 ---
 
+## The grove tends itself
+
+"Leave everything better than you found it" — applied to the tool itself.
+A living thing does not wait for a keeper to feed it on schedule; it
+checks, it acts, it heals, and it says so plainly while it does.
+
+Spruce Grove OS checks its own pulse on every startup and upgrades itself
+when a newer self exists — without disturbing the session that noticed,
+so the next one begins current. No update button, no release memo, no
+corporation deciding when you may be fresh. The principle is mutual aid
+turned inward: the grove serves its town *and* tends its own roots.
+
+Three truths hold it honest: it verifies against the world before it acts
+(love truth for truth's sake); it reports every self-heal in plain words
+(no silent mutations); it can always be told to wait (consent survives
+autonomy).
+
+---
+
 ## The creed (one breath)
 
 > Hold the truths self-evident. Love truth for truth's sake. Be kinder than

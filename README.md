@@ -157,6 +157,30 @@ uv run spruce-grove        # or: uv run grove
 
 Config: `~/.spruce_grove/grove.cfg` · Env vars: `SPRUCE_GROVE_*`.
 
+## Staying current (self-healing updates)
+
+Run it as a `uv tool` and the grove tends itself:
+
+```bash
+uv tool install spruce-grove
+grove          # or: spruce-grove
+```
+
+On every startup a background check compares your install against PyPI.
+When a newer release exists, the on-disk install upgrades **in place** while
+your current session keeps running its warm, consistent code — nothing is
+restarted, nothing breaks. Your **next** launch boots the new version, and
+a single log line tells you the handoff happened. There is no update button
+to remember, no changelog you must babysit.
+
+- `NO_AUTO_UPDATE=1` — keep the check, never actuate
+- `NO_VERSION_UPDATE=1` — silence the whole check
+- Pin back anytime: `uv tool install spruce-grove==X.Y.Z`
+- Source checkouts (the `git clone` flow above) are never touched by the
+  updater — dev environments are sacred.
+
+Details: [docs/SELF-UPDATE.md](docs/SELF-UPDATE.md).
+
 ## Code Puppy compatibility
 
 - `code_puppy.*` imports (e.g. from `code-puppy-core-plugins`) resolve to
