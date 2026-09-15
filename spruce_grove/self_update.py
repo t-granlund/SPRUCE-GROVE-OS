@@ -61,8 +61,15 @@ def perform_self_update(current_version, latest_version) -> bool:
     if auto_update_disabled():
         emit_info(t("version.self_update_disabled", current=current_version))
         return False
-    if not self_update_supported():
-        emit_warning(t("version.self_update_skipped", reason="not a uv-managed install"))
+    try:
+        supported = self_update_supported()
+    except Exception as e:
+        emit_warning(t("version.self_update_failed", error=e))
+        return False
+    if not supported:
+        emit_warning(
+            t("version.self_update_skipped", reason="not a uv-managed install")
+        )
         return False
 
     emit_info(

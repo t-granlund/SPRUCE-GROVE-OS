@@ -45,9 +45,7 @@ class TestAutoUpdateDisabled:
 
 class TestSelfUpdateSupported:
     def test_requires_uv_binary(self, monkeypatch):
-        monkeypatch.setattr(
-            "spruce_grove.self_update.shutil.which", lambda name: None
-        )
+        monkeypatch.setattr("spruce_grove.self_update.shutil.which", lambda name: None)
         assert self_update_supported() is False
 
     def test_requires_uv_managed_install(self, monkeypatch):
@@ -64,9 +62,7 @@ class TestSelfUpdateSupported:
         monkeypatch.setattr(
             "spruce_grove.self_update.shutil.which", lambda name: "/usr/bin/uv"
         )
-        with patch(
-            "spruce_grove.self_update._running_from_uv_tool", return_value=True
-        ):
+        with patch("spruce_grove.self_update._running_from_uv_tool", return_value=True):
             assert self_update_supported() is True
 
 
@@ -93,9 +89,7 @@ class TestPerformSelfUpdate:
             "spruce_grove.self_update.self_update_supported", lambda: True
         )
         completed = MagicMock(returncode=2, stdout="", stderr="boom")
-        with patch(
-            "spruce_grove.self_update.subprocess.run", return_value=completed
-        ):
+        with patch("spruce_grove.self_update.subprocess.run", return_value=completed):
             assert perform_self_update("1.0.3", "1.0.36") is False
         _fake_messaging["success"].assert_not_called()
         _fake_messaging["warning"].assert_called_once()
@@ -114,9 +108,7 @@ class TestPerformSelfUpdate:
 
     def test_disabled_env_short_circuits(self, _fake_messaging, monkeypatch):
         monkeypatch.setenv("NO_AUTO_UPDATE", "1")
-        with patch(
-            "spruce_grove.self_update.subprocess.run"
-        ) as mock_run:
+        with patch("spruce_grove.self_update.subprocess.run") as mock_run:
             assert perform_self_update("1.0.3", "1.0.36") is False
         mock_run.assert_not_called()
         _fake_messaging["info"].assert_called_once()
@@ -126,9 +118,7 @@ class TestPerformSelfUpdate:
         monkeypatch.setattr(
             "spruce_grove.self_update.self_update_supported", lambda: False
         )
-        with patch(
-            "spruce_grove.self_update.subprocess.run"
-        ) as mock_run:
+        with patch("spruce_grove.self_update.subprocess.run") as mock_run:
             assert perform_self_update("1.0.3", "1.0.36") is False
         mock_run.assert_not_called()
         _fake_messaging["warning"].assert_called_once()
