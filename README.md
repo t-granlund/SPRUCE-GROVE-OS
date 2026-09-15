@@ -168,7 +168,7 @@ Config: `~/.spruce_grove/grove.cfg` · Env vars: `SPRUCE_GROVE_*`.
 
 ## License
 
-Apache-2.0 as of v1.0.26 (previously MIT, inherited from Code Puppy).
+Apache-2.0 since September 2026 (previously MIT, inherited from Code Puppy).
 The Code Puppy lineage is preserved verbatim in [NOTICE](NOTICE) — the puppy
 came first, and the receipt travels with the work. See also
 [TRADEMARKS.md](TRADEMARKS.md) and [PROVENANCE.md](PROVENANCE.md).
