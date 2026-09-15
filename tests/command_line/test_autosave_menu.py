@@ -7,13 +7,14 @@ other termflow menus.
 """
 
 import json
-from datetime import datetime, timedelta
+from datetime import date as _RealDate, datetime, timedelta
 from io import StringIO
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 from termflow.ansi.utils import visible
 
+from spruce_grove.command_line import session_browser_data
 from spruce_grove.command_line.autosave_menu import interactive_autosave_picker
 from spruce_grove.command_line.session_browser import (
     _extract_message_content,
@@ -58,6 +59,20 @@ class MockModelMessage:
     def __init__(self, kind: str, parts: list):
         self.kind = kind
         self.parts = parts
+
+
+from unittest import mock as _mock  # noqa: E402
+
+# Freeze the session-browser clock: the TODAY/YESTERDAY buckets flip at
+# midnight, so a fixture stamped "now - 1h" crosses the boundary whenever CI
+# runs just after 00:00 runner-local. Anchor everything to a fixed date.
+FROZEN_ANCHOR_DATE = datetime(2026, 9, 14).date()
+
+
+class _FrozenDate(_RealDate):
+    @classmethod
+    def today(cls):
+        return FROZEN_ANCHOR_DATE
 
 
 def _entry(
@@ -502,6 +517,10 @@ class TestSessionBrowser:
 
     def drive(self, entries, script, size=lambda: (110, 30)):
         output = StringIO()
+        with _mock.patch.object(session_browser_data, "date", _FrozenDate):
+            return self._drive_inner(entries, script, output, size)
+
+    def _drive_inner(self, entries, script, output, size):
         browser = build_session_browser(
             entries=entries,
             base_dir=Path("/fake"),
@@ -514,7 +533,9 @@ class TestSessionBrowser:
         return browser, result, visible(output.getvalue()), output.getvalue()
 
     def sample_entries(self):
-        now = datetime.now()
+        now = datetime.combine(
+            FROZEN_ANCHOR_DATE, datetime.min.time()
+        ) + timedelta(hours=23)  # 23:00 on the frozen day - offsets never cross midnight
         stamp = lambda **kw: (now - timedelta(**kw)).isoformat()  # noqa: E731
         return [
             _entry(
