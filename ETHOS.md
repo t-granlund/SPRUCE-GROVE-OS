@@ -1,5 +1,9 @@
 # ETHOS — The Truths This Grove Holds Self-Evident
 
+> The founding story — who built this, who it is for, and why voice comes
+> first — lives in **[MANIFESTO.md](MANIFESTO.md)**. This document is the
+> philosophy it operates by.
+
 > bring people together.
 > collaborate.
 > assume positive intent.

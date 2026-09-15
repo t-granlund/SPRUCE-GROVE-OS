@@ -323,8 +323,8 @@ async def main():
         # Powered-by tagline under the big banner (prints even without pyfiglet).
         display_console.print(
             f"[dim]{t('cli.banner.powered_by')}[/dim] "
-            "[link=https://github.com/pydantic/pydantic-ai-harness]"
-            "[cyan]https://github.com/pydantic/pydantic-ai-harness[/cyan][/link]"
+            "[link=https://sprucegrove.io/releases/]"
+            "[cyan]sprucegrove.io/releases[/cyan][/link]"
         )
         display_console.print(
             f"[dim]{t('cli.banner.grove_closer')}[/dim] "

@@ -258,5 +258,6 @@
   "agent_manager.discovery.plugin_load_failed": "Advertencia: No se pudieron cargar los agentes de complementos: {error}",
   "agent_manager.delete.file_not_found": "El archivo del clon '{agent_name}' no existe.",
   "agent_manager.discovery.json_discovery_failed": "Advertencia: No se pudieron descubrir los agentes JSON: {error}",
-  "agent_manager.delete.success": "Se eliminó el clon '{agent_name}'."
+  "agent_manager.delete.success": "Se eliminó el clon '{agent_name}'.",
+  "cli.banner.powered_by": "Respaldado por el Leather Apron Club (Junto) · se repara solo · control por voz ·"
 }

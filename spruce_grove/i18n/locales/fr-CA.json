@@ -258,5 +258,6 @@
   "agent_manager.discovery.plugin_load_failed": "Avertissement : impossible de charger les agents des modules d’extension : {error}",
   "agent_manager.delete.file_not_found": "Le fichier du clone '{agent_name}' n’existe pas.",
   "agent_manager.discovery.json_discovery_failed": "Avertissement : impossible de découvrir les agents JSON : {error}",
-  "agent_manager.delete.success": "Clone '{agent_name}' supprimé."
+  "agent_manager.delete.success": "Clone '{agent_name}' supprimé.",
+  "cli.banner.powered_by": "Soutenu par le Leather Apron Club (Junto) · auto-réparation · pilotage vocal ·"
 }

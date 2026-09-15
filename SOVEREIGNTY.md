@@ -1,5 +1,50 @@
 # Multi-Agent-Orch-CLI — Sovereignty Playbook
 
+> **REALITY UPDATE — 2026-09-15.** The brief below was written in the
+> `~/spruce_grove` fork era (v0.0.768). The grove has since moved into
+> `SPRUCE-GROVE-OS` (this repo, origin), self-healing releases train
+> directly from PyPI, the site lives at https://sprucegrove.io/, and the
+> upstream relationship is now a managed connector (see
+> `docs/SELF-UPDATE.md` + the observatory's Upstream Connector). The
+> historical tables below are kept for the insurance lineage they document.
+
+## The harness exit — pydantic-ai, honestly
+
+**Where we stand:** 58 modules under `spruce_grove/` import pydantic-ai
+directly (76 reference it). It owns the agent loop, streaming, tool
+calling, model resolution, and the retry/refresh seams. The boot banner no
+longer advertises it (this was branding; the dependency is still real).
+
+**The honest assessment:** a big-bang removal is a rewrite masquerading as
+a cleanup, and the Leather Apron Gate exists precisely to stop manic,
+insecure moves like that. The exit is a staged seam, judged by the same
+five criteria as any upstream signal:
+
+1. **Inventory & freeze (done).** Touchpoints mapped: `pydantic_patches`,
+   `model_factory`, `agents/base_agent`, `event_stream_handler`,
+   `round_robin_model`, `cli_runner` bootstrap, MCP toolset bridges.
+2. **The seam.** Define an internal `HarnessProtocol` — the grove's own
+   vocabulary for: resolve model → run agent loop → stream events →
+   call tools → report usage. Every pydantic-ai call site gets routed
+   through it; behavior unchanged, tests green at each landing.
+3. **The replacement.** Behind the protocol, grow (or vendor) the grove's
+   own loop: stdlib + httpx streaming, the tolerant OpenAI client we
+   already carry, our own retry/token logic (much of it already exists —
+   `http_retry.py`, `claude_oauth_transport.py`, `tolerant_openai.py`).
+   Gate criterion: it must be *tried & true* in production before the
+   flag flips — the seam lets both implementations run side by side.
+4. **The flip & the prune.** Flip per-model/per-agent behind config,
+   then delete. The exit ends with `pydantic-ai` gone from pyproject and
+   the compat story updated in `PROVENANCE.md`.
+
+**Estimate:** multiple focused sprints, not a session. The seam work can
+start any session and pays off immediately (one vocabulary instead of 58
+import sites), which is exactly why it is the sovereignty play.
+
+---
+
+# Multi-Agent-Orch-CLI — Sovereignty Playbook
+
 A living brief on what this is, what's backed up where, and how to stay self-sufficient if the upstream public repo ever disappears.
 
 ## What You Actually Own

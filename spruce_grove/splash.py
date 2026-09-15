@@ -1,7 +1,7 @@
-"""Import-time neon splash: a shimmering Pydantic pyramid while imports load.
+"""Import-time neon splash: the grove fir, shimmering while imports load.
 
-Spruce Grove's cold start is dominated by heavy imports (pydantic-ai,
-prompt_toolkit, rich, ...). This module is deliberately **stdlib-only** so
+Spruce Grove's cold start is dominated by heavy imports (prompt_toolkit,
+rich, ...). This module is deliberately **stdlib-only** so
 ``spruce_grove/main.py`` can start the animation *before* those imports begin
 and stop it the moment they finish. Do not import anything from
 ``spruce_grove`` here -- that would defeat the entire point.

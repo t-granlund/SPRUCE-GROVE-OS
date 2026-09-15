@@ -15,12 +15,12 @@
 <script>window.BB_SHELL = { base: "../", active: "releases", assetsBase: "../assets/",
     subnav: [
       { href: "#upstream",      label: "Upstream Connector" },
+      { href: "#living",        label: "The Living Log" },
       { href: "#extensibility", label: "Extensibility & Plugins" },
       { href: "#durable",       label: "Reliability & Durability" },
       { href: "#agents",        label: "Agents & Orchestration" },
       { href: "#models",        label: "Models & Providers" },
       { href: "#observability", label: "Observability & Telemetry" },
-      { href: "#living",        label: "The Living Log" },
       { href: "#auto-detected", label: "New Since Last Curation" },
       { href: "#minor",         label: "Minor & Bug Fixes" }
     ] };</script>
@@ -137,6 +137,7 @@
   #upstream-live .uu { font-family:var(--mono); font-size:11px; color:var(--accent-3); flex:0 0 120px; overflow:hidden; text-overflow:ellipsis; }
   #upstream-live .um { color:var(--text-soft); overflow-wrap:anywhere; }
   .upnote { margin:0; font-size:13px; color:var(--text-muted); }
+  .prov.gate { color:var(--accent); border:1px solid rgba(228,170,113,.4); font-size:8.5px; padding:0 5px; }
   .beat { color:var(--text-muted); font-size:10px; }
   .beat.on { color:var(--accent-3); }
   @keyframes beatpulse { 0%,100% { opacity:1; } 50% { opacity:.35; } }
@@ -241,6 +242,7 @@
     <div class="title">On This Page</div>
     <ol id="toc-list">
       <li><a href="#upstream">Upstream Connector</a></li>
+      <li><a href="#living">The Living Log</a></li>
       <li><a href="#extensibility">Extensibility & Plugins</a></li>
       <li><a href="#durable">Reliability & Durability</a></li>
       <li><a href="#agents">Agents & Orchestration</a></li>
@@ -289,9 +291,83 @@
     </div>
 
     <article class="deep">
+      <div class="head"><h3>The Leather Apron Gate</h3><span class="meta"><span class="hash">counsel</span> · nothing passes unjudged</span></div>
+      <dl class="qa">
+        <dt class="q-what">What it is</dt><dd>The standing review that every signal from the upstream line must face before it touches this grove &mdash; and that our own work must face before it ships. The Junto's question, made mechanical: <em>is it tried, true, and honest &mdash; or manic, insecure, or risky?</em></dd>
+        <dt class="q-do">What it does</dt><dd>Every live-feed row arrives wearing <span class="prov gate">⧗ awaiting counsel</span>. A human counsel member judges it against five criteria: <strong>tried &amp; true</strong> (battle-tested, no surprise dependencies), <strong>secure</strong> (no new exfiltration surface, secrets stay in the grove, supply chain clean), <strong>honest</strong> (docs match behavior, no vanity numbers), <strong>grove-fit</strong> (passes the rename map and compatibility contracts), and <strong>counsel sign-off</strong> (an apron-wearer says yes). Only then does the badge flip.</dd>
+        <dt class="q-why">Why it matters</dt><dd>Staying connected to upstream is free leverage; accepting upstream blindly is how a supply chain becomes an attack chain. The connector is read-only public metadata &mdash; no tokens, no code, no identity ever crosses it. The gate is the only door.</dd>
+      </dl>
+    </article>
+
+    <article class="deep">
       <div class="head"><h3>Live upstream feed</h3><span class="meta"><span class="hash">api.github.com</span> · checked on every page load · no cache</span></div>
       <div id="upstream-live" aria-live="polite"><p class="upnote">Listening for the upstream pulse…</p></div>
     </article>
+  </section>
+
+  <!-- ================= LIVING LOG ================= -->
+  <section class="g" id="living">
+    <h2>The Living Log <span class="tag">voice-led</span></h2>
+    <p class="secintro">This is the live stream of how the harness evolves — the primary engine, not a side channel. The loop: <strong>speak</strong> (dictate while building) &rarr; <strong>capture</strong> (entries land in <code>LIVING-UPDATES.md</code> as they happen) &rarr; <strong>gate</strong> (every signal — ours and upstream's — faces the Leather Apron criteria below) &rarr; <strong>ship</strong> (the self-healing release train carries it) &rarr; <strong>observe</strong> (this page, live) &rarr; <strong>learn</strong> (port what helps, log what differs). The founding story and the rules of the grove live in <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/MANIFESTO.md">MANIFESTO.md</a>. Entries age from <span class="chip">idea</span> through <span class="chip up">in flight</span> to <span class="chip gr">shipped</span>, and the shipped ones graduate into
+    <!-- AUTO-BEGIN:living-updates -->
+<div class="pcount">8 entries · newest first</div>
+    <article class="deep">
+      <div class="head"><h3>2026-09-15 — The logo pack: one geometry, four jobs</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session with Junto (this one) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>The flat green trio read clip-art against the granlund look. Built the pack from the tylergranlund.com glyph DNA — stepped canopy, trunk notch, rounded joins, low-opacity fill wash: the <strong>Core Disc</strong> (statement roundel — stickers, laptops, app icons, favicons), the <strong>Grove Mark</strong> (app/nav logo, dark + light variants), the <strong>Ghost</strong> (watermark line art), and the <strong>Lockups</strong> (Fraunces wordmark). Wired across the board: shell chrome, every era-ghost, favicons, README badge, and the design system itself — BRAND.md now carries &quot;The logo pack&quot; and design.html a live Logo Pack section.</dd>
+      </dl>
+    </article>
+    <article class="deep">
+      <div class="head"><h3>2026-09-15 — The Mechanics page: one page, ethos to evidence</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session with Junto (this one) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd><code>pages-hub/mechanics.html</code> — the lifecycle core as a single-page explainer on the sprucegrove.io site: breathing core, four contracts, heartbeat, gates and judges, the nine-rounds war story, the human layer. Full GRAN design language (Fraunces/mono/EB Garamond, rune lines, one stamp, grain veil, era-ghost). Registered in the site sidebar and the hub, linked to the Release Observatory. The master class, made public.</dd>
+      </dl>
+    </article>
+    <article class="deep">
+      <div class="head"><h3>2026-09-15 — The master class: teaching the lifecycle the way we teach people</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session with Junto (this one) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>&quot;The full enchilada&quot;: <code>MASTER-CLASS.md</code> now carries the training methodology — the 8am rule (zero context, zero shame, one concept per breath), the service-counter cadence, and troubleshooting theory run on the judge ABSTAIN war story as the lab. Seven modules: ethos-as-mechanism → breathing core → sovereignty heartbeat → gates &amp; judges → the war story → empathetic service tactics → teach-backs. Graduation standard: the eighth-grader in the room could follow it.</dd>
+      </dl>
+    </article>
+    <article class="deep">
+      <div class="head"><h3>2026-09-15 — The Living Log itself: release notes that breathe</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session with Junto (this one) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>The release observatory covered the last two months of commits, but the <em>organic</em> work — decided out loud, mid-session — had no home. This ledger was born, the pipeline grew a <code>living-updates</code> region, and the observatory now renders the dictation stream on every regen. The page stopped being a snapshot and became a heartbeat.</dd>
+      </dl>
+    </article>
+    <article class="deep">
+      <div class="head"><h3>2026-09-15 — The grove tends itself: self-healing auto-updates</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session (see <code>CHANGELOG.md</code>, Unreleased) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>The version checker always <em>watched</em> PyPI and nagged; the decision to make it <em>act</em> came out of a spoken working session. It now upgrades the on-disk install via <code>uv tool upgrade</code> on the startup daemon thread — running sessions never break, failures degrade to the old nag, <code>NO_AUTO_UPDATE=1</code> opts out. Reference: <code>docs/SELF-UPDATE.md</code>.</dd>
+      </dl>
+    </article>
+    <article class="deep">
+      <div class="head"><h3>2026-09-14 — The receipt travels: MIT → Apache-2.0</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session (see <code>CHANGELOG.md</code>, Unreleased) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>Relicensing decision made out loud, reasons logged in <code>docs/LICENSE-ANALYSIS.md</code>: NOTICE carries the Code Puppy lineage verbatim, contributors grant a patent license with defensive termination, modified files must state what changed. Upstream stays MIT, untouched — the puppy came first.</dd>
+      </dl>
+    </article>
+    <article class="deep">
+      <div class="head"><h3>2026-09 (undated draft) — TASK-001: Synthetic.new 90x plan re-pinning</h3><span class="meta"><span class="chip up">in flight</span> · drafted in a working session (<code>Sythentic-spruce-grove-updates.md</code>) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>Heavyweight model pins (Kimi-K3 at 3.0×) were exhausting the weekly quota in minutes under multi-agent execution. The plan: shift main-reasoning agents to <code>syn:large:text</code> (1.0×), fan-out agents to Flash-class (0.1×), embeddings to 0.0× — tracked through the Beads task DB, config changes staged in <code>grove.cfg</code> and agent JSON overrides.</dd>
+      </dl>
+    </article>
+    <article class="deep">
+      <div class="head"><h3>2026-09-10 — The voice loop ships: &quot;the grove speaks&quot;</h3><span class="meta"><span class="chip gr">shipped</span> · the founding dictation sessions (see <code>CHANGELOG.md</code>, 1.0.0) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>The reason the fork exists, validated and released: <code>/rec</code> mic-to-whisper plugin, headless <code>--transcribe</code>, desktop dictation wired through the CLI. Zero cloud transcription. The TUI heard &quot;Thank you.&quot;, sent it, and Cedar answered — dogfood evidence in build-log 29.</dd>
+      </dl>
+    </article>
+      <!-- AUTO-END:living-updates -->
   </section>
 
   <!-- ================= EXTENSIBILITY ================= -->
@@ -465,78 +541,6 @@
         <dt class="q-why">Why it matters</dt><dd>Long sessions drift. Models lose track of wall-clock time in extended context, leading to subtly-wrong time-sensitive reasoning ("is that before or after my context window started"). A heartbeat counter is cheap and durable.</dd>
       </dl>
     </article>
-  </section>
-
-  <!-- ================= LIVING LOG ================= -->
-  <section class="g" id="living">
-    <h2>The Living Log <span class="tag">voice-led</span></h2>
-    <p class="secintro">Not every decision in this grove arrives as a commit message.
-    Many arrive mid-conversation &mdash; spoken out loud while Tyler works through the
-    harness with Cedar, captured as they happen, promoted to releases when they land.
-    The structured ledger is <code>LIVING-UPDATES.md</code> at the repo root; the cards
-    below regenerate from it on every pipeline run. Entries age from
-    <span class="chip">idea</span> through <span class="chip up">in flight</span> to
-    <span class="chip gr">shipped</span>, and the shipped ones graduate into
-    <code>CHANGELOG.md</code>.</p>
-    <!-- AUTO-BEGIN:living-updates -->
-<div class="pcount">8 entries · newest first</div>
-    <article class="deep">
-      <div class="head"><h3>2026-09-15 — The logo pack: one geometry, four jobs</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session with Junto (this one) · <span class="prov gr">grove-grown</span></span></div>
-      <dl class="qa">
-        <dt class="q-what">What happened</dt>
-        <dd>The flat green trio read clip-art against the granlund look. Built the pack from the tylergranlund.com glyph DNA — stepped canopy, trunk notch, rounded joins, low-opacity fill wash: the <strong>Core Disc</strong> (statement roundel — stickers, laptops, app icons, favicons), the <strong>Grove Mark</strong> (app/nav logo, dark + light variants), the <strong>Ghost</strong> (watermark line art), and the <strong>Lockups</strong> (Fraunces wordmark). Wired across the board: shell chrome, every era-ghost, favicons, README badge, and the design system itself — BRAND.md now carries &quot;The logo pack&quot; and design.html a live Logo Pack section.</dd>
-      </dl>
-    </article>
-    <article class="deep">
-      <div class="head"><h3>2026-09-15 — The Mechanics page: one page, ethos to evidence</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session with Junto (this one) · <span class="prov gr">grove-grown</span></span></div>
-      <dl class="qa">
-        <dt class="q-what">What happened</dt>
-        <dd><code>pages-hub/mechanics.html</code> — the lifecycle core as a single-page explainer on the sprucegrove.io site: breathing core, four contracts, heartbeat, gates and judges, the nine-rounds war story, the human layer. Full GRAN design language (Fraunces/mono/EB Garamond, rune lines, one stamp, grain veil, era-ghost). Registered in the site sidebar and the hub, linked to the Release Observatory. The master class, made public.</dd>
-      </dl>
-    </article>
-    <article class="deep">
-      <div class="head"><h3>2026-09-15 — The master class: teaching the lifecycle the way we teach people</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session with Junto (this one) · <span class="prov gr">grove-grown</span></span></div>
-      <dl class="qa">
-        <dt class="q-what">What happened</dt>
-        <dd>&quot;The full enchilada&quot;: <code>MASTER-CLASS.md</code> now carries the training methodology — the 8am rule (zero context, zero shame, one concept per breath), the service-counter cadence, and troubleshooting theory run on the judge ABSTAIN war story as the lab. Seven modules: ethos-as-mechanism → breathing core → sovereignty heartbeat → gates &amp; judges → the war story → empathetic service tactics → teach-backs. Graduation standard: the eighth-grader in the room could follow it.</dd>
-      </dl>
-    </article>
-    <article class="deep">
-      <div class="head"><h3>2026-09-15 — The Living Log itself: release notes that breathe</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session with Junto (this one) · <span class="prov gr">grove-grown</span></span></div>
-      <dl class="qa">
-        <dt class="q-what">What happened</dt>
-        <dd>The release observatory covered the last two months of commits, but the <em>organic</em> work — decided out loud, mid-session — had no home. This ledger was born, the pipeline grew a <code>living-updates</code> region, and the observatory now renders the dictation stream on every regen. The page stopped being a snapshot and became a heartbeat.</dd>
-      </dl>
-    </article>
-    <article class="deep">
-      <div class="head"><h3>2026-09-15 — The grove tends itself: self-healing auto-updates</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session (see <code>CHANGELOG.md</code>, Unreleased) · <span class="prov gr">grove-grown</span></span></div>
-      <dl class="qa">
-        <dt class="q-what">What happened</dt>
-        <dd>The version checker always <em>watched</em> PyPI and nagged; the decision to make it <em>act</em> came out of a spoken working session. It now upgrades the on-disk install via <code>uv tool upgrade</code> on the startup daemon thread — running sessions never break, failures degrade to the old nag, <code>NO_AUTO_UPDATE=1</code> opts out. Reference: <code>docs/SELF-UPDATE.md</code>.</dd>
-      </dl>
-    </article>
-    <article class="deep">
-      <div class="head"><h3>2026-09-14 — The receipt travels: MIT → Apache-2.0</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session (see <code>CHANGELOG.md</code>, Unreleased) · <span class="prov gr">grove-grown</span></span></div>
-      <dl class="qa">
-        <dt class="q-what">What happened</dt>
-        <dd>Relicensing decision made out loud, reasons logged in <code>docs/LICENSE-ANALYSIS.md</code>: NOTICE carries the Code Puppy lineage verbatim, contributors grant a patent license with defensive termination, modified files must state what changed. Upstream stays MIT, untouched — the puppy came first.</dd>
-      </dl>
-    </article>
-    <article class="deep">
-      <div class="head"><h3>2026-09 (undated draft) — TASK-001: Synthetic.new 90x plan re-pinning</h3><span class="meta"><span class="chip up">in flight</span> · drafted in a working session (<code>Sythentic-spruce-grove-updates.md</code>) · <span class="prov gr">grove-grown</span></span></div>
-      <dl class="qa">
-        <dt class="q-what">What happened</dt>
-        <dd>Heavyweight model pins (Kimi-K3 at 3.0×) were exhausting the weekly quota in minutes under multi-agent execution. The plan: shift main-reasoning agents to <code>syn:large:text</code> (1.0×), fan-out agents to Flash-class (0.1×), embeddings to 0.0× — tracked through the Beads task DB, config changes staged in <code>grove.cfg</code> and agent JSON overrides.</dd>
-      </dl>
-    </article>
-    <article class="deep">
-      <div class="head"><h3>2026-09-10 — The voice loop ships: &quot;the grove speaks&quot;</h3><span class="meta"><span class="chip gr">shipped</span> · the founding dictation sessions (see <code>CHANGELOG.md</code>, 1.0.0) · <span class="prov gr">grove-grown</span></span></div>
-      <dl class="qa">
-        <dt class="q-what">What happened</dt>
-        <dd>The reason the fork exists, validated and released: <code>/rec</code> mic-to-whisper plugin, headless <code>--transcribe</code>, desktop dictation wired through the CLI. Zero cloud transcription. The TUI heard &quot;Thank you.&quot;, sent it, and Cedar answered — dogfood evidence in build-log 29.</dd>
-      </dl>
-    </article>
-      <!-- AUTO-END:living-updates -->
   </section>
 
   <!-- AUTO-BEGIN:auto-features -->
@@ -753,7 +757,8 @@
         return "<li><span class='uh'>" + esc(c.sha.slice(0, 7)) + "</span>" +
           "<span class='ud'>" + esc(when) + "</span>" +
           "<span class='uu'>" + esc(who) + "</span>" +
-          "<span class='um'>" + esc(msg) + "</span></li>";
+          "<span class='um'>" + esc(msg) + "</span>" +
+          "<span class='prov gate' title='Awaiting Leather Apron counsel review'>⧗ counsel</span></li>";
       }).join("");
       if (live) {
         live.innerHTML = "<ul class='uplist'>" + rows + "</ul>" +
