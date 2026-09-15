@@ -23,10 +23,17 @@ five criteria as any upstream signal:
 1. **Inventory & freeze (done).** Touchpoints mapped: `pydantic_patches`,
    `model_factory`, `agents/base_agent`, `event_stream_handler`,
    `round_robin_model`, `cli_runner` bootstrap, MCP toolset bridges.
-2. **The seam.** Define an internal `HarnessProtocol` — the grove's own
-   vocabulary for: resolve model → run agent loop → stream events →
-   call tools → report usage. Every pydantic-ai call site gets routed
-   through it; behavior unchanged, tests green at each landing.
+2. **The seam — LANDED 2026-09-15.** `spruce_grove/harness/` is live:
+   grove-owned `Harness` protocol (`protocol.py`, zero external imports —
+   structurally tested), the delegating adapter (`pydantic_harness.py`,
+   pass-through to `ModelFactory` — parity proven by tests), and the
+   soft-failing selector (`selector.py`, `SPRUCE_GROVE_HARNESS` env,
+   unknown names fall back loudly and safely). First two call sites
+   migrated: `tools/subagent_invocation.py` and `private_inference.py`.
+   Remaining: 56 files — each migrates one landing at a time, tests green,
+   starting with `load_config`/`make_model_settings` (settings surface),
+   then the `RunContext` tool vocabulary (the long tail), then the agent
+   loop and streaming.
 3. **The replacement.** Behind the protocol, grow (or vendor) the grove's
    own loop: stdlib + httpx streaming, the tolerant OpenAI client we
    already carry, our own retry/token logic (much of it already exists —
@@ -36,6 +43,12 @@ five criteria as any upstream signal:
 4. **The flip & the prune.** Flip per-model/per-agent behind config,
    then delete. The exit ends with `pydantic-ai` gone from pyproject and
    the compat story updated in `PROVENANCE.md`.
+5. **The north star — grove on metal.** When the core is grove-owned end
+   to end and stdlib-lean, the long-horizon track opens: a runtime small
+   enough to wake on real hardware, agnostic across Linux/macOS/Windows
+   first, bare-metal eventually. That is the destination, not the next
+   step — it inherits every gate and every test the seam lands along the
+   way.
 
 **Estimate:** multiple focused sprints, not a session. The seam work can
 start any session and pays off immediately (one vocabulary instead of 58

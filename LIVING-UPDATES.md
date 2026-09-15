@@ -44,6 +44,27 @@ The harness wins by running three moves in parallel, not sequentially:
 
 <!-- LIVING:BEGIN -->
 
+### 2026-09-15 — The harness seam lands: the grove starts owning its own engine
+- Source: birthday dictation + build session (the sovereignty push)
+- Status: in-flight
+- Origin: grove-grown
+- Decision taken on the birthday: the grove stops renting its core. The
+  inherited agent framework is now behind a grove-owned seam
+  (`spruce_grove/harness/`) — a protocol in grove vocabulary, an adapter
+  that delegates verbatim, and a soft-failing selector
+  (`SPRUCE_GROVE_HARNESS`).
+- First two call sites migrated with behavior parity proven by tests
+  (same raises, same fallbacks, same handle types). 56 remain; each lands
+  one at a time, tests green, no big-bang rewrite — the Gate applies to
+  our own work too.
+- Roadmap adopted into SOVEREIGNTY.md: inventory (done) → seam (landed) →
+  grove implementation behind the seam → flip per model → prune. The north
+  star beyond: a core so lean and standard it could wake on real hardware,
+  agnostic and self-owned — the destination, not the next step.
+- Public phrasing rule adopted: the pages speak of "the inherited
+  framework" and the ethos — never of companies or people. The work speaks
+  for itself.
+
 ### 2026-09-15 — The logo pack: one geometry, four jobs
 - Source: voice dictation session with Junto (this one)
 - Status: shipped

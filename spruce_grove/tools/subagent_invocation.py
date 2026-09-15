@@ -343,6 +343,7 @@ async def _invoke_agent_impl(
     try:
         # Lazy import to break circular dependency with messaging module
         from spruce_grove.model_factory import ModelFactory, make_model_settings
+        from spruce_grove.harness import get_harness
 
         # Load the specified agent config
         agent_config = load_agent(agent_name)
@@ -369,7 +370,9 @@ async def _invoke_agent_impl(
 
             if model_name:
                 try:
-                    model = ModelFactory.get_model(requested_model_name, models_config)
+                    model = get_harness().resolve_model(
+                        requested_model_name, models_config
+                    )
                     if model is None:
                         raise ValueError(
                             f"Model '{requested_model_name}' is configured but "
