@@ -23,11 +23,18 @@ def isolated_home(monkeypatch):
     tmp = tempfile.mkdtemp()
     monkeypatch.setenv("HOME", tmp)
     monkeypatch.setenv("XDG_CONFIG_HOME", os.path.join(tmp, ".config"))
+    # Re-import the grove so CONFIG_DIR resolves inside the sandbox, but
+    # RESTORE the original module objects afterwards. Deleting them breaks
+    # every later test whose patches reference the original module objects
+    # (this hung the MCP wizard suite: its prompt mock vanished and the
+    # wizard blocked on real stdin).
+    saved = {k: v for k, v in sys.modules.items() if k.startswith("spruce_grove")}
     for mod in [m for m in list(sys.modules) if m.startswith("spruce_grove")]:
         del sys.modules[mod]
     yield tmp
     for mod in [m for m in list(sys.modules) if m.startswith("spruce_grove")]:
         del sys.modules[mod]
+    sys.modules.update(saved)
 
 
 import sys  # noqa: E402  (kept late so the fixture comment above reads first)
