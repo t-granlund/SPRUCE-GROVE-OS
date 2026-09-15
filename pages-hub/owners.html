@@ -60,6 +60,24 @@
     .provenance a { color: var(--mint, #98b79e); }
     .owner-door { font-family: "JetBrains Mono", monospace; font-size: 11.5px; letter-spacing: .08em; }
     .owner-door a { color: var(--ember, #e4aa71); }
+    /* the audience switcher — one component, four doors, on every page */
+    .aud-switch { display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+      padding: 10px 0; border-bottom: 1px solid var(--line, #223026);
+      font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .1em;
+      text-transform: uppercase; }
+    .aud-switch .as-label { color: var(--text-faint, #8b988e); letter-spacing: .18em; }
+    .aud-switch .as-door { color: var(--text-dim, #93a096); text-decoration: none; padding: 3px 2px; border-bottom: 1px solid transparent; }
+    .aud-switch .as-door:hover { color: var(--text, #e8ece9); border-bottom-color: var(--line-2, rgba(238,235,229,.14)); }
+    .aud-switch .as-door.active { color: var(--ember, #e4aa71); border-bottom-color: var(--ember, #e4aa71); }
+    /* proof strip — quick-scan credibility under the hero */
+    .proof-strip { display: flex; justify-content: center; gap: 0; flex-wrap: wrap;
+      border: 1px solid var(--line, #223026); background: var(--bg-card, #141b16); margin: 34px auto 0; }
+    .proof-strip .p-cell { flex: 1 1 200px; padding: 16px 18px; text-align: center; border-right: 1px solid var(--line, #223026); }
+    .proof-strip .p-cell:last-child { border-right: 0; }
+    .proof-strip .p-num { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 26px; color: var(--ember, #e4aa71); display: block; }
+    .proof-strip .p-what { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-faint, #8b988e); }
+    .o-hero { position: relative; overflow: hidden; }
+    .o-hero .ghost-mark { position: absolute; right: -40px; top: -30px; width: 300px; opacity: .05; pointer-events: none; }
   </style>
 </head>
 <body>
@@ -73,6 +91,15 @@
       <a class="anchor" href="#door">The door</a>
       <span class="ver"><b>free</b> · Apache-2.0</span>
     </div>
+    <div class="wrap">
+      <div class="aud-switch">
+        <span class="as-label">you are:</span>
+        <a class="as-door active" href="./">running a business</a>
+        <a class="as-door" href="./product.html">building the thing</a>
+        <a class="as-door" href="./interested.html">just curious</a>
+        <a class="as-door" href="./share.html">spreading the word</a>
+      </div>
+    </div>
   </nav>
 
   <!-- ==================== hero ==================== -->
@@ -82,6 +109,13 @@
     <p class="lede">You should not need a procurement cycle to get a website, a lead pipeline,
     or the boring software your day depends on. A crew of neighbors builds it with you,
     in public, and hands you the keys. This page shows the receipts.</p>
+    <svg class="ghost-mark" viewBox="0 0 280 200" aria-hidden="true"><g stroke="#E4AA71" stroke-width="6.5" stroke-linejoin="round" stroke-linecap="round"><path d="M64 65.5 L75.3 101.4 L80.7 101.4 L88.5 134.1 L94.8 134.1 L101 159.1 L67.5 159.1 L67.5 170 L56.5 170 L56.5 159.1 L23 159.1 L29.2 134.1 L35.5 134.1 L43.3 101.4 L48.7 101.4 Z" fill="none" stroke-opacity=".6"/><path d="M218 65.5 L229.3 101.4 L223.7 101.4 L215.9 134.1 L209.6 134.1 L203.4 159.1 L235.9 159.1 L235.9 170 L247.1 170 L247.1 159.1 L280.4 159.1 L274.2 134.1 L267.9 134.1 L260.1 101.4 L254.7 101.4 Z" fill="none" stroke-opacity=".6"/><path d="M140 35.9 L159.6 88.8 L167.6 88.8 L179.1 137.1 L188.3 137.1 L197.5 173.9 L148.1 173.9 L148.1 190 L132 190 L132 173.9 L82.5 173.9 L91.7 137.1 L100.9 137.1 L112.4 88.8 L120.5 88.8 Z" fill="none"/></g></svg>
+    <div class="proof-strip">
+      <div class="p-cell"><span class="p-num">2</span><span class="p-what">shops' tools built in public</span></div>
+      <div class="p-cell"><span class="p-num">30&ndash;90</span><span class="p-what">days, friction to self-sustaining</span></div>
+      <div class="p-cell"><span class="p-num">75,000+</span><span class="p-what">people work this way</span></div>
+      <div class="p-cell"><span class="p-num">$0</span><span class="p-what">license · your keys · no seat rent</span></div>
+    </div>
   </header>
 
   <!-- ==================== the three prices ==================== -->
