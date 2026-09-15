@@ -176,3 +176,22 @@
 
 /* hide the now-legacy top .nav bars when the shell is active */
 .sb-legacy-topnav { display: none !important; }
+
+/* ---------- per-page table of contents (BB_SHELL.subnav) ---------- */
+.sb-subnav { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--sb-border, rgba(238,235,229,.09)); }
+.sb-subnav .sb-sec { color: var(--sb-accent, #E4AA71); }
+.sb-subnav .sb-list { list-style: none; margin: 0; padding: 0 6px; }
+.sb-sublink {
+  display: block; padding: 6px 10px; margin: 1px 0;
+  font-size: 12.5px; line-height: 1.35; color: var(--sb-muted, #A5A699);
+  text-decoration: none; border-radius: 7px;
+  border-left: 2px solid transparent;
+  white-space: normal;
+}
+.sb-sublink:hover { background: var(--sb-bg-2, rgba(255,255,255,.04)); color: var(--sb-text, #EEEBE2); }
+.sb-sublink.active {
+  color: var(--sb-text, #EEEBE2);
+  border-left-color: var(--sb-cyan, #7FD6C2);
+  background: var(--sb-bg-2, rgba(255,255,255,.05));
+}
+.sb-collapsed .sb-subnav { display: none; }

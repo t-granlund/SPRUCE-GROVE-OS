@@ -3,6 +3,41 @@
 An agentic coding CLI grown from Code Puppy (MIT, Michael Pfaffenberger) into
 the Granlund Grove. Together we are better. Always.
 
+## How to read this page
+
+Every component and entry carries its origin — no mistaking what we built for
+what we inherited:
+
+- **grove-grown** — designed and built in this grove, for this grove.
+- **inherited** — arrived with the Code Puppy line; hardened and extended here.
+- **transient** — inherited *and* scheduled for replacement; the exit plan
+  lives in [PROVENANCE.md](PROVENANCE.md).
+- **voice-led** — born in a dictation session with the agent and captured in
+  [LIVING-UPDATES.md](LIVING-UPDATES.md), the living ledger this changelog
+  promotes from.
+
+## Core components atlas
+
+| Component | Layer | Origin | Status |
+|---|---|---|---|
+| Voice loop (`/rec` plugin, `--transcribe`, desktop dictation) | voice-first | grove-grown | the reason the fork exists |
+| Self-update daemon (`self_update.py`) | platform | grove-grown | shipped (Unreleased) |
+| Cohort bricks + `user-plugins/` (Junto, barber, backoffice, creative scaffold) | plugins | grove-grown | versioned in-repo |
+| Desktop shell ([spruce-grove-desktop](https://github.com/t-granlund/spruce-grove-desktop)) | surfaces | grove-grown | v0.1.0 |
+| Release observatory + field-guide pipeline (`pages-hub/`) | surfaces | grove-grown | auto-regenerating |
+| Cedar persona + agent configs (`agents/`) | agent layer | grove-grown persona, inherited engine | stable |
+| TUI / CLI (`command_line/`, `cli_runner.py`) | interface | inherited | hardened here |
+| Tool layer + `TOOL_REGISTRY` (`tools/`) | tools | inherited | extended here |
+| Plugin architecture (3 tiers, SHA-256 trust gate, 30+ hooks) | plugins | inherited | extended here |
+| Model layer, multi-provider (`model_factory.py`) | models | inherited | extended here |
+| Session storage, migration, compaction | durability | inherited | extended here |
+| i18n catalogs (`i18n/`) | platform | inherited | catalog regen cadence |
+| pydantic-ai + MCP plumbing | foundation | external | pinned |
+| Compat shim (`_code_puppy_compat.py`) + `code-puppy-core-plugins` bundle | compatibility | inherited | **transient** — vendoring planned |
+
+Deep rename/contract map: [PROVENANCE.md](PROVENANCE.md). Organic
+dictation-era decisions: [LIVING-UPDATES.md](LIVING-UPDATES.md).
+
 ## Unreleased — 2026-09-15 — "the receipt travels"
 
 ### License: MIT -> Apache-2.0

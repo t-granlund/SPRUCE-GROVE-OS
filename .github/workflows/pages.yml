@@ -70,6 +70,10 @@ jobs:
           mkdir -p _site/design
           cp pages-hub/design.html _site/design/index.html
 
+          # 3d. Mechanics (self-healing loop, gates & judges)
+          mkdir -p _site/mechanics
+          cp pages-hub/mechanics.html _site/mechanics/index.html
+
           # 4. Fully-offline flat file
           mkdir -p _site/flat
           cp docs/field-guide-flat.html _site/flat/index.html

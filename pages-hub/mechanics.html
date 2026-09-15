@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0E130F" />
+<title>The Mechanics — How the Grove Tends Itself | Spruce Grove</title>
+<link rel="icon" type="image/png" href="../assets/favicon-64.png" />
+<meta name="description" content="A single-page explainer of the Spruce Grove OS lifecycle core: the breathing self-update loop, the four contracts, the sovereignty heartbeat, gates and judges, the nine-rounds-zero-defects war story, and the empathetic service layer — every mechanism traced to its ethos truth." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/tokens.css" />
+<link rel="stylesheet" href="../assets/sidebar.css" />
+<script src="../assets/icons.js"></script>
+<script>window.BB_SHELL = { base: "../", active: "mechanics", assetsBase: "../assets/",
+  subnav: [
+    { href: "#ethos",     label: "The Root System" },
+    { href: "#loop",      label: "The Breathing Core" },
+    { href: "#contracts", label: "The Four Contracts" },
+    { href: "#heartbeat", label: "The Heartbeat" },
+    { href: "#gates",     label: "Gates & Judges" },
+    { href: "#war-story", label: "Nine Rounds, Zero Defects" },
+    { href: "#human",     label: "The Human Layer" },
+    { href: "#sources",   label: "Source Map" }
+  ] };</script>
+<script src="../assets/shell.js" defer></script>
+<script src="../assets/sidebar.js" defer></script>
+<style>
+  :root {
+    --bg: #0E130F; --bg-elev: #121813; --bg-card: #161D18;
+    --border: rgba(238,235,229,.09); --border-light: rgba(238,235,229,.16);
+    --text: #EEEBE2; --text-soft: #D1CEC5; --text-muted: #A5A699;
+    --accent: #E4AA71; --accent-2: #F2A26A; --accent-3: #98B79E; --accent-4: #ECEBE5;
+    --radius: 14px; --radius-sm: 8px;
+    --shadow: 0 24px 80px -28px rgba(0,0,0,0.6);
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --display: "Fraunces", Georgia, "Times New Roman", serif;
+    --reading: "EB Garamond", Georgia, serif;
+  }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; scroll-padding-top:80px; }
+  body {
+    margin:0; color:var(--text); font-family:var(--sans); font-size:15px; line-height:1.7;
+    background-color:var(--bg);
+    /* GRAN rule 1: never flat black — moss glow high, ember warmth low-corner */
+    background-image:
+      radial-gradient(ellipse 80% 55% at 50% -10%, rgba(57,95,71,.35), transparent 60%),
+      radial-gradient(ellipse 55% 40% at 100% 100%, rgba(228,170,113,.09), transparent 70%);
+    -webkit-font-smoothing:antialiased;
+  }
+  /* GRAN rule 2: grain on everything dark — SVG noise veil */
+  body::before {
+    content:""; position:fixed; inset:0; z-index:1; pointer-events:none; opacity:.045;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  main { position:relative; z-index:2; }
+  a { color:var(--accent-2); text-decoration:none; } a:hover { text-decoration:underline; text-underline-offset:3px; }
+  code, .mono { font-family:var(--mono); }
+  code { background:rgba(242,162,106,.10); color:var(--accent-2); padding:2px 6px; border-radius:5px; font-size:.92em; overflow-wrap:anywhere; }
+  h1,h2,h3,h4 { margin:0; line-height:1.25; font-family:var(--display); letter-spacing:-0.02em; }
+  p { margin:0 0 14px; }
+
+  .wrap { max-width:900px; margin:0 auto; padding:0 24px; }
+  /* long-form reading voice (GRAN rule 3: EB Garamond) */
+  .prose p, .prose li { font-family:var(--reading); font-size:18.5px; line-height:1.75; color:var(--text-soft); }
+  .prose p b, .prose li b { color:var(--text); font-family:var(--sans); font-size:15px; }
+  .prose strong { color:var(--text); }
+
+  /* era-ghost (GRAN rule 9) */
+  .ghost { position:fixed; bottom:-30px; right:-40px; width:340px; opacity:.05; pointer-events:none; z-index:0; }
+  @media (max-width:820px){ .ghost { display:none; } }
+
+  .hero { padding:76px 0 30px; position:relative; }
+  .kicker { font-family:var(--mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent);
+    display:inline-block; border:1px solid var(--border-light); padding:6px 14px; border-radius:999px; margin-bottom:22px; }
+  .hero h1 { font-size:clamp(38px,6.5vw,68px); font-weight:700; letter-spacing:-0.03em; line-height:1.03; }
+  .hero h1 em { font-style:normal; background:linear-gradient(92deg,#E4AA71,#F2A26A,#98B79E); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero .lede { max-width:700px; font-family:var(--reading); font-size:20px; line-height:1.7; color:var(--text-soft); margin-top:22px; }
+  .hero .lede b { color:var(--text); }
+  .cta { display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }
+  .btn { font-family:var(--mono); font-size:13px; padding:11px 18px; border-radius:10px; cursor:pointer;
+    border:1px solid var(--border-light); background:var(--bg-card); color:var(--text); transition:.16s; }
+  .btn:hover { border-color:var(--accent); color:var(--accent); text-decoration:none; transform:translateY(-1px); }
+  .btn.primary { background:linear-gradient(180deg,rgba(228,170,113,.16),rgba(228,170,113,.05)); border-color:rgba(228,170,113,.5); color:var(--accent); }
+
+  section { padding:34px 0; }
+  .seclabel { font-family:var(--mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--text-muted);
+    display:flex; align-items:center; gap:12px; margin:0 0 20px; }
+  .seclabel::before { content:"#"; color:var(--accent); font-weight:700; }
+  .seclabel .rule { flex:1; height:1px; background:linear-gradient(90deg,var(--border-light),transparent); }
+  section h2 { font-size:clamp(26px,4vw,36px); margin-bottom:14px; }
+  section h2 .tag { font-family:var(--mono); font-size:11.5px; font-weight:500; color:var(--accent); letter-spacing:.1em;
+    text-transform:uppercase; border:1px solid var(--border-light); padding:4px 12px; border-radius:999px; vertical-align:middle; margin-left:12px; white-space:nowrap; }
+
+  /* GRAN rule 6: the rune line — hairline divider, algiz glyph centered */
+  .runeline { display:flex; align-items:center; gap:14px; margin:34px 0; opacity:.4; }
+  .runeline::before, .runeline::after { content:""; flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--border-light),transparent); }
+  .runeline svg { color:var(--accent-3); flex:none; }
+
+  .panel { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:24px 26px; box-shadow:var(--shadow); }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; }
+  .card-sm { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:20px 22px; }
+  .card-sm h4 { font-family:var(--mono); font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent-3); margin-bottom:10px; }
+  .card-sm p { font-size:14px; color:var(--text-soft); margin:0; }
+
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { font-family:var(--mono); font-size:11px; letter-spacing:.09em; text-transform:uppercase; color:var(--text-muted);
+    text-align:left; padding:10px 14px; border-bottom:1px solid var(--border-light); }
+  td { padding:11px 14px; border-bottom:1px solid var(--border); color:var(--text-soft); vertical-align:top; }
+  tr:last-child td { border-bottom:none; }
+  td b { color:var(--text); font-weight:600; }
+  .ok { color:var(--accent-3); } .warn { color:var(--accent-2); }
+
+  pre.diagram { font-family:var(--mono); font-size:12.5px; line-height:1.75; color:var(--text-soft);
+    background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius-sm);
+    padding:20px 22px; overflow-x:auto; margin:0; }
+  pre.diagram .hl { color:var(--accent); } pre.diagram .gr { color:var(--accent-3); }
+
+  .flow { display:flex; flex-wrap:wrap; align-items:center; gap:10px; font-family:var(--mono); font-size:12px;
+    text-transform:uppercase; letter-spacing:.08em; color:var(--text-soft); }
+  .flow .step { border:1px solid var(--border-light); border-radius:999px; padding:7px 14px; background:var(--bg-card); }
+  .flow .step b { color:var(--accent-3); font-weight:600; }
+  .flow .arr { color:var(--accent); }
+
+  /* GRAN rule 5: the stamp — one per view, on the line that must not be missed */
+  .stamp { display:inline-block; font-family:var(--mono); font-size:clamp(14px,2.4vw,19px); font-weight:700;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--accent); border:2px solid var(--accent);
+    border-radius:4px; padding:12px 20px; transform:rotate(-2.5deg);
+    box-shadow:5px 5px 0 rgba(228,170,113,.32), -5px -5px 0 rgba(228,170,113,.14);
+    background:rgba(228,170,113,.05); }
+  .stamprow { text-align:center; margin:34px 0 8px; }
+
+  .moves { counter-reset:move; list-style:none; margin:0; padding:0; }
+  .moves li { counter-increment:move; position:relative; padding:14px 0 14px 54px; border-bottom:1px solid var(--border); }
+  .moves li:last-child { border-bottom:none; }
+  .moves li::before { content:counter(move,decimal-leading-zero); position:absolute; left:0; top:14px;
+    font-family:var(--mono); font-size:13px; font-weight:700; color:var(--accent);
+    border:1px solid rgba(228,170,113,.4); border-radius:999px; width:36px; height:36px; display:grid; place-items:center; background:rgba(228,170,113,.06); }
+  .moves b { color:var(--text); }
+  .moves p { margin:4px 0 0; font-size:14.5px; color:var(--text-soft); }
+
+  .quote { border-left:3px solid var(--accent); padding:6px 0 6px 20px; margin:22px 0;
+    font-family:var(--reading); font-style:italic; font-size:19px; line-height:1.6; color:var(--text-soft); }
+  .quote b { color:var(--text); font-style:normal; }
+
+  .note { border:1px dashed rgba(228,170,113,.45); border-radius:var(--radius-sm); padding:16px 20px;
+    background:rgba(228,170,113,.05); font-size:13.5px; color:var(--text-soft); margin:18px 0; }
+  .note b { color:var(--accent-2); font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; display:block; margin-bottom:6px; }
+
+  footer.site { border-top:1px solid var(--border); padding:30px 0 46px; margin-top:40px; }
+  footer.site .inner { display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap;
+    font-family:var(--mono); font-size:12.5px; color:var(--text-muted); }
+  .creed { text-align:center; font-family:var(--reading); font-style:italic; font-size:19px; color:var(--text-soft); margin:26px 0 0; }
+  .creed b { color:var(--accent); font-style:normal; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior:auto; }
+    *, *::before, *::after { animation:none !important; transition:none !important; }
+  }
+  @media print { body::before, .ghost { display:none; } .panel, .card-sm, pre.diagram { box-shadow:none; } }
+</style>
+</head>
+<body>
+
+<img class="ghost" src="../assets/spruce_grove_official.png" alt="" aria-hidden="true" />
+
+<main>
+  <div class="wrap">
+
+    <!-- ============ HERO ============ -->
+    <header class="hero">
+      <span class="kicker">Spruce Grove OS &middot; Mechanics</span>
+      <h1>The grove <em>tends itself.</em></h1>
+      <p class="lede">Every mechanism that keeps this system alive on one page: the breathing
+      self-update loop, the four contracts, the sovereignty heartbeat, the gates and judges,
+      and the war story that proved the design. <b>Every mechanism here is a value with a
+      test attached</b> &mdash; traced back to the sentence of ethos that demands it.</p>
+      <div class="cta">
+        <a class="btn primary" href="../releases/">See the receipts &mdash; the Release Observatory &rarr;</a>
+        <a class="btn" href="https://github.com/t-granlund/code_puppy" target="_blank" rel="noopener">Read the source on GitHub</a>
+      </div>
+    </header>
+
+    <div class="runeline" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21V7"/><path d="M12 7 6 2"/><path d="M12 7l6-5"/></svg></div>
+
+    <!-- ============ ETHOS ============ -->
+    <section id="ethos">
+      <div class="seclabel">01 &middot; The root system<span class="rule"></span></div>
+      <h2>Ethos as mechanism <span class="tag">why before how</span></h2>
+      <div class="prose">
+        <p>The lifecycle design is not an engineering preference that happens to have a
+        slogan. <b>The slogan, executed.</b> The ethos fixes three truths, and each one
+        becomes a concrete mechanism you can open in the repo.</p>
+      </div>
+      <div class="panel" style="margin-top:20px">
+        <table>
+          <thead><tr><th>Ethos truth</th><th>Mechanism it becomes</th><th>Where to see it</th></tr></thead>
+          <tbody>
+            <tr><td><b>It verifies against the world before it acts</b><br/><span class="mono" style="font-size:11px;color:var(--text-muted)">love truth for truth's sake</span></td><td>PyPI's JSON API is the source of truth for &ldquo;latest&rdquo;; a fetch failure means observe-only &mdash; never act</td><td><code>docs/SELF-UPDATE.md</code></td></tr>
+            <tr><td><b>It reports every self-heal in plain words</b><br/><span class="mono" style="font-size:11px;color:var(--text-muted)">no silent mutations</span></td><td>Every actuation reports through the message bus, in three languages</td><td><code>version_checker.py</code></td></tr>
+            <tr><td><b>It can always be told to wait</b><br/><span class="mono" style="font-size:11px;color:var(--text-muted)">consent survives autonomy</span></td><td><code>NO_AUTO_UPDATE=1</code> and <code>NO_VERSION_UPDATE=1</code> &mdash; opt-outs are first-class features</td><td><code>docs/SELF-UPDATE.md</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prose">
+        <p>Three verbs organize the whole machine: it <b>checks</b> (the breathing core), it
+        <b>acts</b> (the heartbeat), it <b>heals</b> (the gates and judges). If you can say which
+        verb a given log line belongs to, you understand this system.</p>
+      </div>
+    </section>
+
+    <div class="runeline" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21V7"/><path d="M12 7 6 2"/><path d="M12 7l6-5"/></svg></div>
+
+    <!-- ============ THE LOOP ============ -->
+    <section id="loop">
+      <div class="seclabel">02 &middot; The breathing core<span class="rule"></span></div>
+      <h2>The loop that never blocks you <span class="tag">checks</span></h2>
+      <div class="prose">
+        <p>Every startup, on a daemon thread, without ever blocking the user:</p>
+      </div>
+      <pre class="diagram">launch &rarr; daemon thread &rarr; GET pypi.org/pypi/spruce-grove/json
+           &rarr; compare (installed vs latest)
+           &rarr; equal  &rarr; <span class="gr">idle</span> (one "current version" line)
+           &rarr; newer &rarr; <span class="hl">report status</span> (message bus, plain words)
+                      &rarr; uv tool upgrade spruce-grove
+                          &rarr; exit 0 &rarr; <span class="gr">"next launch starts on the new version"</span>
+                          &rarr; failure &rarr; warn + the manual command</pre>
+      <div class="prose" style="margin-top:20px">
+        <p>The design question: <b>how do you swap the code of a running program without
+        breaking it?</b> The answer: <b>you don't.</b> You swap the <em>disk</em>, and let process
+        boundaries do the rest. A running session keeps its warm, resolved imports and
+        executes the version it started with, to the end of its life. The next launch
+        boots on the new code. No restarts, no mid-session mixing.</p>
+      </div>
+      <div class="panel" style="margin-top:18px">
+        <table>
+          <thead><tr><th>Piece</th><th>Role</th></tr></thead>
+          <tbody>
+            <tr><td><code>version_checker.py</code></td><td><b>The observer</b> &mdash; fetch, compare, report. Decides <em>whether</em> to actuate.</td></tr>
+            <tr><td><code>self_update.py</code></td><td><b>The actor</b> &mdash; actuation, guards, reporting. <b>Never decides.</b></td></tr>
+            <tr><td>Startup daemon thread</td><td>Non-blocking, never joined &mdash; a hung network cannot hang a session.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="runeline" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21V7"/><path d="M12 7 6 2"/><path d="M12 7l6-5"/></svg></div>
+
+    <!-- ============ CONTRACTS ============ -->
+    <section id="contracts">
+      <div class="seclabel">03 &middot; The four contracts<span class="rule"></span></div>
+      <h2>The part that must never rot <span class="tag">guarantees</span></h2>
+      <div class="cards">
+        <div class="card-sm"><h4>1 &middot; Never raise</h4><p>The updater returns and reports on every path; the caller adds a last-resort try/except anyway. Defense in depth.</p></div>
+        <div class="card-sm"><h4>2 &middot; Never actuate in tests</h4><p>The test suite runs with <code>NO_AUTO_UPDATE=1</code> set suite-wide. No test can ever mutate a real installation.</p></div>
+        <div class="card-sm"><h4>3 &middot; Never touch source checkouts</h4><p>Actuation requires the <code>uv</code> binary <em>and</em> an installed-tool path. Editable installs are sacred.</p></div>
+        <div class="card-sm"><h4>4 &middot; Subprocess with a timeout</h4><p>Actuation runs as a subprocess with a 180-second cap, never joined. Worst case is a warning line.</p></div>
+      </div>
+      <div class="prose" style="margin-top:18px">
+        <p>Contracts two and three are care turned into code: <b>the system never surprises
+        someone who didn't ask.</b> Escape hatches exist for every intent &mdash; keep checking but
+        never upgrade, silence the whole check, pin a known-good version &mdash; each documented in
+        <code>docs/SELF-UPDATE.md</code>.</p>
+      </div>
+    </section>
+
+    <div class="runeline" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21V7"/><path d="M12 7 6 2"/><path d="M12 7l6-5"/></svg></div>
+
+    <!-- ============ HEARTBEAT ============ -->
+    <section id="heartbeat">
+      <div class="seclabel">04 &middot; The heartbeat<span class="rule"></span></div>
+      <h2>The daily pipeline <span class="tag">acts</span></h2>
+      <div class="prose">
+        <p>Once a day, on your word &mdash; not on a schedule &mdash; the full self-healing pipeline
+        runs. Five verbs, the same ethos table in motion:</p>
+      </div>
+      <div class="flow" role="list" aria-label="Daily pipeline stages">
+        <span class="step" role="listitem"><b>snapshot</b> consent</span><span class="arr">&rarr;</span>
+        <span class="step" role="listitem"><b>rebase</b> verify</span><span class="arr">&rarr;</span>
+        <span class="step" role="listitem"><b>tests</b> the gate</span><span class="arr">&rarr;</span>
+        <span class="step" role="listitem"><b>reinstall</b> the act</span><span class="arr">&rarr;</span>
+        <span class="step" role="listitem"><b>regen + push</b> report</span>
+      </div>
+      <div class="note"><b>Say this out loud when teaching</b>
+        The sovereignty brief predates the 1.0 rebrand: its architecture is current, its
+        paths and version numbers are historical. Verify against the working tree before
+        quoting it as fact &mdash; love truth for truth's sake, including about our own docs.</div>
+      <div class="prose">
+        <p>The ownership map is the disaster plan: working source clone, public fork, private
+        insurance mirror, the installed tool, an offline wheel, and the user profile. If the
+        public repo vanishes &mdash; <b>nothing breaks immediately.</b> Installed binary keeps
+        running; clone the private mirror; reinstall from local source; nuclear offline
+        fallback from the wheel. That sentence &mdash; <em>nothing breaks immediately</em> &mdash; is
+        the whole deliverable.</p>
+      </div>
+    </section>
+
+    <div class="runeline" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21V7"/><path d="M12 7 6 2"/><path d="M12 7l6-5"/></svg></div>
+
+    <!-- ============ GATES & JUDGES ============ -->
+    <section id="gates">
+      <div class="seclabel">05 &middot; Gates &amp; judges<span class="rule"></span></div>
+      <h2>How the grove says no <span class="tag">heals</span></h2>
+      <div class="prose">
+        <p><b>Gates</b> are the hook engine: event-driven checks &mdash; before a tool runs, after it
+        runs, at session start and stop &mdash; with pattern matching, per-hook timeouts, and
+        blocking power. The contract is three exit codes:</p>
+      </div>
+      <div class="cards" style="margin:18px 0">
+        <div class="card-sm"><h4>exit 0 &middot; allow</h4><p>The tool call proceeds; stdout joins the transcript.</p></div>
+        <div class="card-sm"><h4 class="warn">exit 1 &middot; block</h4><p>The veto. The tool call does not happen; stderr becomes the reason.</p></div>
+        <div class="card-sm"><h4>exit 2 &middot; feedback</h4><p>Error context returned without blocking &mdash; the model can correct course.</p></div>
+      </div>
+      <div class="prose">
+        <p><b>Judges</b> are the evaluation layer: model-backed verdicts on whether a goal is
+        actually complete. They vote PASS, FAIL &mdash; or ABSTAIN. And that third vote is the
+        one the whole design warns about.</p>
+      </div>
+      <div class="stamprow"><span class="stamp">An abstaining judge does not vote</span></div>
+      <div class="prose">
+        <p>A gate that fails is loud. A judge that abstains is <b>silent</b> &mdash; the system keeps
+        working, politely, forever, on the wrong premise. The war story below is what that
+        looks like in practice, and how it was proven.</p>
+      </div>
+    </section>
+
+    <div class="runeline" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21V7"/><path d="M12 7 6 2"/><path d="M12 7l6-5"/></svg></div>
+
+    <!-- ============ WAR STORY ============ -->
+    <section id="war-story">
+      <div class="seclabel">06 &middot; The war story<span class="rule"></span></div>
+      <h2>Nine rounds, zero defects <span class="tag">the proof</span></h2>
+      <div class="prose">
+        <p>Nine consecutive sprint re-verification rounds passed locally, with fresh evidence.
+        Yet every evaluation cycle returned the same judge note: the endpoint's
+        <code>metadata.weight_versions</code> field &mdash; a list &mdash; failed strict validation, and
+        the judge abstained. The loop remediated forever. Nine rounds of &ldquo;it still fails&rdquo;
+        reads to a human as nine failures, even though every check passed. <b>The work wasn't
+        broken &mdash; the referee couldn't vote. Those are different problems, and we proved
+        which one we had.</b></p>
+      </div>
+      <div class="panel" style="margin:20px 0">
+        <table>
+          <thead><tr><th>pydantic-ai release</th><th>Strict metadata field declared</th><th>Behavior on the list payload</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">2.33.0</td><td class="warn">Yes</td><td>ValidationError &mdash; judge abstains</td></tr>
+            <tr><td class="mono">2.35.0 <span class="mono" style="font-size:10.5px;color:var(--text-muted)">(repo pin)</span></td><td class="ok">No</td><td class="ok">Passes untouched &mdash; why local dev never failed</td></tr>
+            <tr><td class="mono">2.36.0 / 2.40.0</td><td class="warn">Yes</td><td>ValidationError &mdash; judge abstains</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <ol class="moves">
+          <li><b>Reproduce or don't trust.</b><p>The failure never reproduced in local dev &mdash; itself evidence: the trigger is environmental, not code.</p></li>
+          <li><b>Isolate the variable.</b><p>The judge harness resolves its own pydantic-ai release; the repo pins another. Same code, same payload, different environments.</p></li>
+          <li><b>Prove it byte-exact.</b><p>Isolated environments per release: the stock model raises the byte-exact judge error under the strict release; the pinned one passes untouched.</p></li>
+          <li><b>Fix minimal, scope tight.</b><p>A tolerant model wrapper &mdash; strict validation first, one metadata-only retry, unrelated errors propagate unchanged, wired only into the third-party endpoint branch. Blast radius, bounded.</p></li>
+          <li><b>Gate the fix.</b><p>Nine passing tests, a strict-environment regression proof, and a written validation plan naming exactly what the next cycle must show.</p></li>
+        </ol>
+      </div>
+      <div class="prose">
+        <p>The remediation doc ends with a <b>gap register</b> &mdash; every residual gap owned,
+        statused, with a next action. Two gaps stay deliberately open, with the reason
+        written down: extend only on observed failure, to keep the blast radius small.
+        <b>An honest open gap beats a fake closed one.</b> The full narrative lives in
+        <code>docs/judge-abstain-remediation.md</code>; the training version in
+        <code>MASTER-CLASS.md</code>, both in the repo.</p>
+      </div>
+    </section>
+
+    <div class="runeline" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21V7"/><path d="M12 7 6 2"/><path d="M12 7l6-5"/></svg></div>
+
+    <!-- ============ HUMAN LAYER ============ -->
+    <section id="human">
+      <div class="seclabel">07 &middot; The human layer<span class="rule"></span></div>
+      <h2>Troubleshooting is emotional work <span class="tag">the service counter</span></h2>
+      <div class="prose">
+        <p>A user reading an error message is not reading text; they're reading a verdict on
+        their day. The lifecycle core exists so humans stop babysitting updates &mdash; and that
+        only works if the conversation <b>about</b> it is as well-engineered as the code.</p>
+      </div>
+      <div class="cards" style="margin-top:18px">
+        <div class="card-sm"><h4>Validate before you verify</h4><p>&ldquo;That would frustrate me too&rdquo; is not filler &mdash; it lowers the temperature so the signal can be heard.</p></div>
+        <div class="card-sm"><h4>Name the mechanism plainly</h4><p>&ldquo;The update happens beside your session, never inside it. What you're working on finishes; the next launch is current.&rdquo;</p></div>
+        <div class="card-sm"><h4>Consent first</h4><p>&ldquo;It does this by itself, and you can tell it to wait &mdash; and it will wait, every startup, until you say otherwise.&rdquo;</p></div>
+        <div class="card-sm"><h4>Show, don't assert</h4><p>Every claim one command away from evidence: a log line, a test name, a doc section.</p></div>
+        <div class="card-sm"><h4>Leave them the ladder</h4><p>End with the next rung: the doc to open, the command to pin, the gap register to read. Self-sufficient is complete.</p></div>
+        <div class="card-sm"><h4>Never blame person-shaped</h4><p>&ldquo;The code was right, the referee's glasses were wrong.&rdquo; That sentence teaches more than a redacted postmortem.</p></div>
+      </div>
+    </section>
+
+    <div class="runeline" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21V7"/><path d="M12 7 6 2"/><path d="M12 7l6-5"/></svg></div>
+
+    <!-- ============ SOURCES ============ -->
+    <section id="sources">
+      <div class="seclabel">08 &middot; Source map<span class="rule"></span></div>
+      <h2>What to open, and how much to trust it <span class="tag">receipts</span></h2>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Artifact (repo root)</th><th>Covers</th><th>Fidelity</th></tr></thead>
+          <tbody>
+            <tr><td><code>docs/SELF-UPDATE.md</code></td><td>The breathing core: loop, session-safety model, contracts, escape hatches, release races</td><td class="ok">Cleanest current-state doc &mdash; written the day it shipped</td></tr>
+            <tr><td><code>docs/judge-abstain-remediation.md</code></td><td>Root cause, version matrix, fix, gap register G1&ndash;G5, validation plan</td><td>Detailed, self-auditing; gap rows are living</td></tr>
+            <tr><td><code>ETHOS.md</code></td><td>&ldquo;The grove tends itself&rdquo; &mdash; the three truths, the creed</td><td class="ok">Stable; the why behind every mechanism</td></tr>
+            <tr><td><code>SOVEREIGNTY.md</code></td><td>Ownership map, daily pipeline, disaster ladder</td><td class="warn">Architecture current &middot; paths/versions stale</td></tr>
+            <tr><td><code>spruce_grove/hook_engine/</code> + <code>docs/HOOKS.md</code></td><td>Gate mechanics: events, matchers, exit codes</td><td class="ok">Current</td></tr>
+            <tr><td><code>MASTER-CLASS.md</code></td><td>The seven-module training guide this page condenses</td><td class="ok">Current &mdash; the teach-backs live there</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cta" style="margin-top:24px">
+        <a class="btn primary" href="../releases/">Every claim above has a receipt &mdash; the Release Observatory &rarr;</a>
+        <a class="btn" href="https://github.com/t-granlund/code_puppy" target="_blank" rel="noopener">The repo &mdash; open any artifact yourself</a>
+      </div>
+    </section>
+
+    <footer class="site">
+      <div class="runeline" style="margin:6px 0 26px" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21V7"/><path d="M12 7 6 2"/><path d="M12 7l6-5"/></svg></div>
+      <p class="creed">The grove checks itself, acts only after verifying, heals without breaking
+      the session that noticed, and says so plainly &mdash; and it can always be told to wait.
+      <b>Together we are better. Always.</b></p>
+      <div class="inner" style="margin-top:26px">
+        <span>Spruce Grove OS &middot; mechanics &middot; built in the grove</span>
+        <span>live receipts: <a href="../releases/">Release Observatory</a></span>
+      </div>
+    </footer>
+
+  </div>
+</main>
+
+</body>
+</html>

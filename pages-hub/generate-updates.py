@@ -7,6 +7,7 @@ markers. Hand-curated deep-dive narratives outside the markers are untouched.
 
 Auto-managed regions:
   stats          - hero statline numbers (commits/features/fixes/tools/agents/plugins)
+  living-updates - cards from the dictation ledger (LIVING-UPDATES.md)
   toc            - link to the auto-detected section (appears only when needed)
   auto-features  - cards for notable feat commits not yet curated into deep-dives
   minor-list     - recent minor enhancements (feat/refactor/perf/docs buckets)
@@ -27,13 +28,47 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_JS = REPO_ROOT / "docs" / "field-guide" / "data.js"
 UPDATES_HTML = REPO_ROOT / "pages-hub" / "updates.html"
+LIVING_MD = REPO_ROOT / "LIVING-UPDATES.md"
 
 MAX_LIST_ITEMS = 18
 MAX_AUTO_CARDS = 12
+MAX_LIVING_CARDS = 12
+
+LIVING_BEGIN = "<!-- LIVING:BEGIN -->"
+LIVING_END = "<!-- LIVING:END -->"
+
+# status -> (chip label, css chip class). Reuses the provenance chip palette.
+LIVING_STATUS = {
+    "shipped": ("shipped", "gr"),
+    "in-flight": ("in flight", "up"),
+    "idea": ("idea", ""),
+}
 
 # Ordered list (NOT a set) so output is deterministic across runs regardless
 # of Python's hash randomization.
 MINOR_KINDS = ["feat", "refactor", "perf", "polish", "docs", "style"]
+
+# Authors whose commits count as grove-grown. Everything else arrived by
+# proxy of the upstream Code Puppy line (see PROVENANCE.md for the lineage
+# and the compatibility contracts that keep the two honest).
+GROVE_AUTHORS = {"tyler granlund", "t-granlund", "tyler"}
+
+
+def _prov_chip(author: str | None) -> str:
+    """Provenance chip from commit authorship — the living classification.
+
+    Grove-grown vs upstream-synced is decided by evidence (who authored the
+    commit), not by vibes, so the observatory stays accountable to the same
+    ledger PROVENANCE.md keeps.
+    """
+    is_grove = (author or "").strip().lower() in GROVE_AUTHORS
+    cls, label = ("gr", "grove") if is_grove else ("up", "upstream")
+    title = (
+        "Authored in the grove"
+        if is_grove
+        else "Authored upstream — synced via the Code Puppy line"
+    )
+    return f'<span class="prov {cls}" title="{title}">{label}</span>'
 
 # Self-referential/maintenance feats that would just spam the auto-detected
 # cards (site regen chores, i18n extraction sweeps, etc.).
@@ -53,6 +88,104 @@ def _load_data() -> dict:
             text = text[len(prefix) :]
             break
     return json.loads(text.strip().rstrip(";\n"))
+
+
+def _load_living() -> list[dict]:
+    """Parse the dictation ledger between LIVING:BEGIN / LIVING:END markers.
+
+    Entries look like:
+
+        ### 2026-09-15 — Title
+        - Source: ...
+        - Status: shipped
+        - Origin: grove-grown
+        - free-form body bullet
+
+    Tolerant by design: unknown fields become body bullets, a missing
+    ledger file renders as an empty list (the page just omits the cards),
+    and the protocol section outside the markers is ignored.
+    """
+    if not LIVING_MD.exists():
+        return []
+    text = LIVING_MD.read_text(encoding="utf-8")
+    # rfind: the protocol prose at the top of the ledger mentions the marker
+    # literals when describing the format — the real BEGIN is the last one.
+    begin = text.rfind(LIVING_BEGIN)
+    if begin == -1:
+        return []
+    end = text.find(LIVING_END, begin + len(LIVING_BEGIN))
+    if end == -1:
+        return []
+    block = text[begin + len(LIVING_BEGIN) : end]
+
+    entries: list[dict] = []
+    for chunk in block.split("\n### ")[1:]:
+        lines = chunk.strip().splitlines()
+        title = lines[0].strip() if lines else ""
+        # Fold soft-wrapped markdown bullets: a line that doesn't start with
+        # "- " continues the previous bullet (prose wraps mid-sentence).
+        items: list[str] = []
+        for line in lines[1:]:
+            stripped = line.strip()
+            if not stripped:
+                continue
+            if stripped.startswith("- "):
+                items.append(stripped[2:])
+            elif items:
+                items[-1] += " " + stripped
+        entry: dict = {"title": title, "fields": {}, "body": []}
+        for item in items:
+            m = re.match(r"^([A-Za-z][A-Za-z ]*?):\s+(.+)$", item)
+            if m and m.group(1).lower() not in entry["fields"]:
+                entry["fields"][m.group(1).lower()] = m.group(2).strip()
+            else:
+                entry["body"].append(item)
+        entries.append(entry)
+    return entries
+
+
+def _inline_md(text: str) -> str:
+    """Escape HTML, then honor `code`, **bold**, and *italic* spans."""
+    out = html.escape(text)
+    out = re.sub(r"`([^`]+)`", r"<code>\1</code>", out)
+    out = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", out)
+    out = re.sub(r"\*([^*]+)\*", r"<em>\1</em>", out)
+    return out
+
+
+def _living_cards(entries: list[dict]) -> str:
+    """Render dictation-ledger entries as observatory cards."""
+    if not entries:
+        return ""
+    cards = []
+    for e in entries[:MAX_LIVING_CARDS]:
+        status_raw = e["fields"].get("status", "idea").lower()
+        label, chip_cls = LIVING_STATUS.get(status_raw, (status_raw, ""))
+        chip = (
+            f'<span class="chip {chip_cls}">{html.escape(label)}</span>'
+            if chip_cls
+            else f'<span class="chip">{html.escape(label)}</span>'
+        )
+        meta_bits = [chip]
+        if source := e["fields"].get("source"):
+            meta_bits.append(_inline_md(source))
+        if origin := e["fields"].get("origin"):
+            meta_bits.append(
+                f'<span class="prov {"gr" if "grove" in origin else "up"}">'
+                f"{html.escape(origin)}</span>"
+            )
+        body = "".join(f"        <dd>{_inline_md(b)}</dd>\n" for b in e["body"])
+        if body:
+            body = f'      <dl class="qa">\n        <dt class="q-what">What happened</dt>\n{body}      </dl>\n'
+        cards.append(
+            f'    <article class="deep">\n'
+            f'      <div class="head"><h3>{_inline_md(e["title"])}</h3>'
+            f'<span class="meta">{" · ".join(meta_bits)}</span></div>\n'
+            f"{body}"
+            f"    </article>"
+        )
+    count_note = f'<div class="pcount">{len(entries)} entries · newest first</div>'
+    return count_note + "\n" + "\n".join(cards)
 
 
 def _bucketize(commits: list[dict]) -> dict[str, list[dict]]:
@@ -81,7 +214,8 @@ def _list_items(commits: list[dict], exclude: set[str], limit: int) -> str:
         msg = html.escape(c.get("msg") or c.get("subject") or "")
         lines.append(
             '          <li><span class="h">%s</span>'
-            '<span class="d">· %s</span> · %s</li>' % (h, d, msg)
+            '<span class="d">· %s</span> · %s%s</li>'
+            % (h, d, msg, _prov_chip(c.get("author", "")))
         )
         if len(lines) >= limit:
             break
@@ -119,17 +253,29 @@ def _auto_cards(buckets: dict[str, list[dict]], curated: set[str]) -> str:
         h = html.escape(c.get("short_hash", ""))
         d = html.escape(c.get("date", ""))
         msg = html.escape(c.get("msg") or "")
+        prov = _prov_chip(c.get("author", ""))
         cards.append(f"""    <article class="deep" style="border-style:dashed">
-      <div class="head"><h3>{msg}</h3><span class="meta"><span class="hash">{h}</span> · {d} · feat</span></div>
+      <div class="head"><h3>{msg}</h3><span class="meta"><span class="hash">{h}</span> · {d} · feat{prov}</span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
         <dt class="q-do">What it does</dt><dd>See commit <code>{h}</code> in the repo for the implementation diff.</dd>
         <dt class="q-why">Why it matters</dt><dd>Auto-detected &mdash; a curated narrative will be added on the next observatory curation pass.</dd>
       </dl>
     </article>""")
+    grove_n = sum(
+        1
+        for c in fresh[:MAX_AUTO_CARDS]
+        if (c.get("author") or "").strip().lower() in GROVE_AUTHORS
+    )
+    up_n = len(fresh[:MAX_AUTO_CARDS]) - grove_n
+    prov_count = (
+        f' <span class="pcount">{grove_n} grove-grown · {up_n} upstream-synced</span>'
+        if fresh
+        else ""
+    )
     return f"""  <!-- ================= AUTO-DETECTED ================= -->
   <section class="g" id="auto-detected">
-    <h2>New Since Last Curation <span class="tag">auto-detected</span></h2>
+    <h2>New Since Last Curation <span class="tag">auto-detected</span>{prov_count}</h2>
     <p class="secintro">Feature commits detected by the pipeline that haven't been
     curated into deep-dives yet. These render straight from the changelog so the page
     never goes stale between curation passes.</p>
@@ -191,6 +337,7 @@ def main() -> None:
     )
 
     page = _replace_region(page, "stats", _statline(data, buckets))
+    page = _replace_region(page, "living-updates", _living_cards(_load_living()))
     page = _replace_region(page, "auto-features", auto)
     toc_link = (
         '      <li><a href="#auto-detected">New Since Last Curation</a></li>'

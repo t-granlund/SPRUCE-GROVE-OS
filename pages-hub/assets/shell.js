@@ -19,6 +19,7 @@
     { key: "hub",          href: base + "index.html",    label: "Hub",           icon: "hub" },
     { key: "field-guide",  href: base + "field-guide/",  label: "Field Guide",   icon: "book" },
     { key: "releases",     href: base + "releases/",     label: "Releases",      icon: "activity" },
+    { key: "mechanics",    href: base + "mechanics/",    label: "Mechanics",     icon: "shield" },
     { key: "architecture", href: base + "architecture/", label: "Architecture",  icon: "grid" },
     { key: "design",       href: base + "design/",       label: "Design System", icon: "swatch" },
     { key: "phases",       href: base + "phases.html",   label: "Phases",        icon: "layers" },
@@ -26,12 +27,64 @@
   ];
   var account = { href: "https://github.com/t-granlund/code_puppy", icon: "github" };
 
+  // Optional per-page table of contents: BB_SHELL.subnav = [{href:"#id", label:"..."}, ...]
+  var SUBNAV = Array.isArray(cfg.subnav) ? cfg.subnav : [];
+
   function navLink(item) {
     var on = item.key === active;
     return '<li><a class="sb-link' + (on ? " active" : "") + '" href="' + item.href + '"' +
       (on ? ' aria-current="page"' : "") + ">" +
       '<span class="ic">' + I(item.icon, 19) + "</span>" +
       '<span class="lbl">' + item.label + "</span></a></li>";
+  }
+
+  function subnavHTML() {
+    if (!SUBNAV.length) return "";
+    var links = SUBNAV.map(function (item) {
+      return '<li><a class="sb-sublink" href="' + item.href + '">' +
+        '<span class="lbl">' + item.label + "</span></a></li>";
+    }).join("");
+    return '<nav class="sb-subnav" aria-label="On this page">' +
+      '<div class="sb-sec">On This Page</div>' +
+      '<ul class="sb-list">' + links + "</ul></nav>";
+  }
+
+  function initScrollSpy() {
+    if (!SUBNAV.length) return;
+    var links = document.querySelectorAll(".sb-subnav .sb-sublink");
+    if (!links.length) return;
+    var byId = {};
+    for (var i = 0; i < links.length; i++) {
+      var h = (links[i].getAttribute("href") || "").slice(1);
+      if (h) byId[h] = links[i];
+    }
+    var current = null;
+    function setActive(id) {
+      if (current === id) return;
+      current = id;
+      for (var k in byId) byId[k].classList.remove("active");
+      if (id && byId[id]) {
+        byId[id].classList.add("active");
+        byId[id].setAttribute("aria-current", "true");
+      }
+      for (var k2 in byId) if (k2 !== id) byId[k2].removeAttribute("aria-current");
+    }
+    function onScroll() {
+      var probe = 140, best = null;
+      for (var id in byId) {
+        var el = document.getElementById(id);
+        if (!el) continue;
+        if (el.getBoundingClientRect().top - probe <= 0) best = id;
+      }
+      setActive(best);
+    }
+    var ticking = false;
+    window.addEventListener("scroll", function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { onScroll(); ticking = false; });
+    }, { passive: true });
+    onScroll();
   }
 
   var logo = '<img src="' + assets + 'spruce_grove_logo_white.png" alt="Spruce Grove logo" width="30" height="30" />';
@@ -46,6 +99,7 @@
     '  <nav class="sb-nav" aria-label="Site sections">' +
     '    <div class="sb-sec">Explore</div>' +
     '    <ul class="sb-list">' + NAV.map(navLink).join("") + "</ul>" +
+    subnavHTML() +
     "  </nav>" +
     '  <div class="sb-foot">' +
     '    <div class="meta">public mirror<br/>fork build</div>' +
@@ -91,4 +145,6 @@
   document.body.appendChild(skip);
   document.body.appendChild(shell);
   shell.appendChild(main);
+
+  initScrollSpy();
 })();

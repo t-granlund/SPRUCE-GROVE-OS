@@ -12,7 +12,18 @@
 <link rel="stylesheet" href="../assets/tokens.css" />
 <link rel="stylesheet" href="../assets/sidebar.css" />
 <script src="../assets/icons.js"></script>
-<script>window.BB_SHELL = { base: "../", active: "releases", assetsBase: "../assets/" };</script>
+<script>window.BB_SHELL = { base: "../", active: "releases", assetsBase: "../assets/",
+    subnav: [
+      { href: "#upstream",      label: "Upstream Connector" },
+      { href: "#extensibility", label: "Extensibility & Plugins" },
+      { href: "#durable",       label: "Reliability & Durability" },
+      { href: "#agents",        label: "Agents & Orchestration" },
+      { href: "#models",        label: "Models & Providers" },
+      { href: "#observability", label: "Observability & Telemetry" },
+      { href: "#living",        label: "The Living Log" },
+      { href: "#auto-detected", label: "New Since Last Curation" },
+      { href: "#minor",         label: "Minor & Bug Fixes" }
+    ] };</script>
 <script src="../assets/shell.js" defer></script>
 <script src="../assets/sidebar.js" defer></script>
 <style>
@@ -102,6 +113,36 @@
   footer { border-top:1px solid var(--border); padding:28px 0 40px; margin-top:60px; }
   footer .inner { display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; font-family:var(--mono); font-size:12.5px; color:var(--text-muted); }
 
+
+  /* provenance + upstream connector */
+  .provline { display:flex; gap:14px; flex-wrap:wrap; margin-top:22px; }
+  .provline .p { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm, 8px); padding:12px 16px; min-width:190px; flex:1; }
+  .provline .p .n { font-size:24px; font-weight:700; color:var(--text); }
+  .provline .p .n.conn { font-size:13px; font-family:var(--mono); font-weight:500; }
+  .provline .p .t { font-size:12px; color:var(--text-muted); margin-top:5px; }
+  .chip { display:inline-block; font-family:var(--mono); font-size:10px; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:999px; border:1px solid; }
+  .chip.gr { color:var(--accent-3); border-color:rgba(152,183,158,.45); background:rgba(152,183,158,.08); }
+  .chip.up { color:var(--accent-2); border-color:rgba(242,162,106,.45); background:rgba(242,162,106,.08); }
+  .prov { display:inline-block; font-family:var(--mono); font-size:9.5px; letter-spacing:.05em; text-transform:uppercase; padding:1px 7px; border-radius:999px; margin-left:9px; white-space:nowrap; }
+  .prov.gr { color:var(--accent-3); border:1px solid rgba(152,183,158,.4); }
+  .prov.up { color:var(--accent-2); border:1px solid rgba(242,162,106,.4); }
+  .pcount { font-family:var(--mono); font-size:12px; font-weight:400; color:var(--text-muted); letter-spacing:.02em; }
+  .minor li .prov, .fixes li .prov { margin-left:7px; font-size:8.5px; padding:0 5px; float:right; }
+  #upstream-live { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 24px; }
+  #upstream-live ul.uplist { list-style:none; margin:0; padding:0; }
+  #upstream-live .uplist li { display:flex; gap:12px; align-items:baseline; padding:7px 0; border-bottom:1px solid var(--border); font-size:13.5px; }
+  #upstream-live .uplist li:last-child { border-bottom:none; }
+  #upstream-live .uh { font-family:var(--mono); font-size:11px; color:var(--accent-2); flex:0 0 64px; }
+  #upstream-live .ud { font-family:var(--mono); font-size:11px; color:var(--text-muted); flex:0 0 52px; }
+  #upstream-live .uu { font-family:var(--mono); font-size:11px; color:var(--accent-3); flex:0 0 120px; overflow:hidden; text-overflow:ellipsis; }
+  #upstream-live .um { color:var(--text-soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .upnote { margin:0; font-size:13px; color:var(--text-muted); }
+  .beat { color:var(--text-muted); font-size:10px; }
+  .beat.on { color:var(--accent-3); }
+  @keyframes beatpulse { 0%,100% { opacity:1; } 50% { opacity:.35; } }
+  .beat.on { animation:beatpulse 2.2s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { .beat.on { animation:none; } }
+
   @media print { body { background:#fff; color:#000; } .deep,.minor,.fixes { box-shadow:none; border-color:#ccc; } }
 </style>
 </head>
@@ -122,16 +163,24 @@
       <div class="s"><div class="n">65</div><div class="t">plugins</div></div>
       <!-- AUTO-END:stats -->
     </div>
+
+    <div class="provline" role="list" aria-label="Update provenance">
+      <div class="p" role="listitem"><span class="n">39</span><div class="t"><span class="chip gr">grove-grown</span> updates built here</div></div>
+      <div class="p" role="listitem"><span class="n">29</span><div class="t"><span class="chip up">upstream-synced</span> via Code Puppy</div></div>
+      <div class="p" role="listitem"><span class="beat" id="upstream-beat" aria-hidden="true">●</span> <span class="n conn" id="upstream-state">connector checking…</span><div class="t">live: mpfaffenberger/code_puppy</div></div>
+    </div>
   </header>
 
   <nav class="toc" id="toc">
     <div class="title">On This Page</div>
     <ol id="toc-list">
+      <li><a href="#upstream">Upstream Connector</a></li>
       <li><a href="#extensibility">Extensibility & Plugins</a></li>
       <li><a href="#durable">Reliability & Durability</a></li>
       <li><a href="#agents">Agents & Orchestration</a></li>
       <li><a href="#models">Models & Providers</a></li>
       <li><a href="#observability">Observability & Telemetry</a></li>
+      <li><a href="#living">The Living Log</a></li>
       <!-- AUTO-BEGIN:toc -->
       <li><a href="#auto-detected">New Since Last Curation</a></li>
       <!-- AUTO-END:toc -->
@@ -139,13 +188,52 @@
     </ol>
   </nav>
 
+
+  <!-- ================= UPSTREAM CONNECTOR ================= -->
+  <section class="g" id="upstream">
+    <h2><svg class="si" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M22 8h2"/></svg>Upstream Connector <span class="tag">living link</span></h2>
+    <p class="secintro">Spruce Grove is grown <em>from</em> Code Puppy (MIT, Michael Pfaffenberger and
+    contributors) — not away from it. This connector is the standing agreement to keep watching the
+    upstream line: see what they ship, judge whether it helps this grove, port what does, and log
+    what differs. Of the updates on this page, <strong>39 were grown here</strong> and
+    <strong>29 arrived by proxy of the upstream line</strong> — 68 curated entries carrying 69 commits — every entry above carries its badge.</p>
+
+    <div class="split">
+      <div class="minor">
+        <h3>The line, verbatim</h3>
+        <span class="count">from PROVENANCE.md</span>
+        <ul>
+          <li>Upstream: <code>github.com/mpfaffenberger/code_puppy</code> — the living source we learn from</li>
+          <li>Working fork: <code>github.com/t-granlund/code_puppy</code> — where the grove's own commits live</li>
+          <li>Sync point: merge <span class="h">d819ae4e</span> — <em>0 upstream commits behind</em> at import</li>
+          <li>Import: pristine copy became commit #1; rebrand applied in audited passes after</li>
+        </ul>
+      </div>
+      <div class="fixes">
+        <h3>The contracts that keep it safe</h3>
+        <span class="count">compatibility, kept on purpose</span>
+        <ul>
+          <li><code>code_puppy.*</code> imports resolve to <code>spruce_grove.*</code> via the meta-path shim — upstream patterns keep working</li>
+          <li>Entry-point group <code>code_puppy.plugins</code> retained — upstream plugin bundles load unrenamed</li>
+          <li><code>code-puppy-core-plugins</code> stays a pinned dependency — upstream's official bundle ships to us directly</li>
+          <li>Rename map is audited, not improvised — every port lands rebrand-clean</li>
+        </ul>
+      </div>
+    </div>
+
+    <article class="deep">
+      <div class="head"><h3>Live upstream feed</h3><span class="meta"><span class="hash">api.github.com</span> · checked on every page load · no cache</span></div>
+      <div id="upstream-live" aria-live="polite"><p class="upnote">Listening for the upstream pulse…</p></div>
+    </article>
+  </section>
+
   <!-- ================= EXTENSIBILITY ================= -->
   <section class="g" id="extensibility">
-    <h2><svg class="si" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>Extensibility & Plugins <span class="tag">3 headliners</span></h2>
+    <h2><svg class="si" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>Extensibility & Plugins <span class="tag">3 headliners</span> <span class="pcount">1 grove-grown · 2 upstream-synced</span></h2>
     <p class="secintro">The platform keeps growing by composition, not by core bloat. These three changes formalized how plugins and external packages load, and hardened the boundary between core and userland.</p>
 
     <article class="deep">
-      <div class="head"><h3>Entry-point plugin discovery</h3><span class="meta"><span class="hash">7f5ba17</span> · 2026-08-14 · feat</span></div>
+      <div class="head"><h3>Entry-point plugin discovery</h3><span class="meta"><span class="hash">7f5ba17</span> · 2026-08-14 · feat<span class="prov up" title="Authored upstream · synced via the Code Puppy line">upstream</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>Plugins can now register themselves through Python package entry points, not just by living in a directory. The loader discovers installed distributions advertising the <code>spruce_grove.plugins</code> group at import time.</dd>
         <dt class="q-do">What it does</dt><dd>Lets plugin authors ship their work as a normal <code>pip</code>-installable package; the moment the package lands in the environment, it appears in spruce-grove alongside user-dir plugins without any config editing.</dd>
@@ -154,7 +242,7 @@
     </article>
 
     <article class="deep">
-      <div class="head"><h3>Installed core-plugin version surfaced at startup</h3><span class="meta"><span class="hash">0dd7f79</span> · 2026-08-15 · feat</span></div>
+      <div class="head"><h3>Installed core-plugin version surfaced at startup</h3><span class="meta"><span class="hash">0dd7f79</span> · 2026-08-15 · feat<span class="prov up" title="Authored upstream · synced via the Code Puppy line">upstream</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>The CLI now prints the version of the installed <code>code-puppy-core-plugins</code> package on startup, alongside the app version.</dd>
         <dt class="q-do">What it does</dt><dd>Shows two independent numbers in the startup banner: the app version and the version of the companion plugins package, since they rev separately after the plugin-extraction refactor.</dd>
@@ -163,7 +251,7 @@
     </article>
 
     <article class="deep">
-      <div class="head"><h3>Project-tier plugin trust gate hardened</h3><span class="meta"><span class="hash">beeab61</span> · 2026-08-10 · fix</span></div>
+      <div class="head"><h3>Project-tier plugin trust gate hardened</h3><span class="meta"><span class="hash">beeab61</span> · 2026-08-10 · fix<span class="prov gr" title="Authored by t-granlund — grown in the grove">grove</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>When spruce-grove is launched from a directory containing its own <code>.spruce_grove/plugins</code>, those plugins now load only after explicit trust approval &mdash; and running from <code>~</code> no longer accidentally treats your personal plugins as untrusted project code.</dd>
         <dt class="q-do">What it does</dt><dd>Adds a guard that returns <code>None</code> from <code>get_project_plugins_directory()</code> when the resolved path equals the user plugins dir, so the trust-gate applies only to actual repo-bundled code, never to your own home-profile plugins.</dd>
@@ -174,11 +262,11 @@
 
   <!-- ================= DURABILITY ================= -->
   <section class="g" id="durable">
-    <h2><svg class="si" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>Reliability & Durability <span class="tag">4 headliners</span></h2>
+    <h2><svg class="si" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>Reliability & Durability <span class="tag">4 headliners</span> <span class="pcount">1 grove-grown · 3 upstream-synced</span></h2>
     <p class="secintro">Long-running agentic jobs used to face the entire Unix gauntlet: crashes, suspend/resume, network blips. This cycle made persistence a first-class concern instead of an afterthought.</p>
 
     <article class="deep">
-      <div class="head"><h3>Pickle replaced with versioned JSON envelopes</h3><span class="meta"><span class="hash">30edbc8</span> · 2026-08-15 · feat</span></div>
+      <div class="head"><h3>Pickle replaced with versioned JSON envelopes</h3><span class="meta"><span class="hash">30edbc8</span> · 2026-08-15 · feat<span class="prov up" title="Authored upstream · synced via the Code Puppy line">upstream</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>Session and state persistence moved off <code>pickle</code> (Python-specific, version-fragile, unsafe to deserialize) and onto a versioned JSON envelope format with explicit schema migration.</dd>
         <dt class="q-do">What it does</dt><dd>Every persisted record now carries its own <code>format_version</code> and deserializes through a whole-tree migrator that validates on read and can roll forward old formats without breaking.</dd>
@@ -187,7 +275,7 @@
     </article>
 
     <article class="deep">
-      <div class="head"><h3>Self-healing session-format sweep</h3><span class="meta"><span class="hash">1659081</span> · 2026-08-16 · fix</span></div>
+      <div class="head"><h3>Self-healing session-format sweep</h3><span class="meta"><span class="hash">1659081</span> · 2026-08-16 · fix<span class="prov up" title="Authored upstream · synced via the Code Puppy line">upstream</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A migration pass that scans all saved sessions at startup and upgrades any in an old format, instead of failing on the first stale file.</dd>
         <dt class="q-do">What it does</dt><dd>Runs a quiet sweep at boot; when it finds a legacy session it rewrites it to the current envelope format in place and continues, with per-file errors logged to a transient channel instead of spamming the console.</dd>
@@ -196,7 +284,7 @@
     </article>
 
     <article class="deep">
-      <div class="head"><h3>Goal resume by stable UUID</h3><span class="meta"><span class="hash">90fde59</span> · 2026-07-22 · feat</span></div>
+      <div class="head"><h3>Goal resume by stable UUID</h3><span class="meta"><span class="hash">90fde59</span> · 2026-07-22 · feat<span class="prov up" title="Authored upstream · synced via the Code Puppy line">upstream</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>Interrupted long-running goals can now be resumed by a durable UUID instead of whatever ephemeral session handle they happened to have.</dd>
         <dt class="q-do">What it does</dt><dd>Every goal gets a stable identifier written into the durable store on creation; killing the process mid-goal and restarting lets you reference that UUID and pick up where the DAG left off, toolcalls-as-checkpoints.</dd>
@@ -204,7 +292,7 @@
       </dl>
     </article>
     <article class="deep">
-      <div class="head"><h3>Self-healing auto-updates</h3><span class="meta"><span class="hash">721ce25</span> · 2026-09-15 · feat</span></div>
+      <div class="head"><h3>Self-healing auto-updates</h3><span class="meta"><span class="hash">721ce25</span> · 2026-09-15 · feat<span class="prov gr" title="Authored by t-granlund — grown in the grove">grove</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>The end of the update button. On every startup the CLI compares itself against PyPI and, when a newer release exists, upgrades its on-disk install in place &mdash; no human, no nag, no maintenance window.</dd>
         <dt class="q-do">What it does</dt><dd>A startup daemon thread fetches the latest version (never blocking the session), reports what it found, and runs <code>uv tool upgrade</code> when behind. The running session keeps its warm, consistent code; the next launch boots the new release and one log line narrates the handoff.</dd>
@@ -215,11 +303,11 @@
 
   <!-- ================= AGENTS ================= -->
   <section class="g" id="agents">
-    <h2><svg class="si" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M12 8V4H8"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>Agents & Orchestration <span class="tag">3 headliners</span></h2>
+    <h2><svg class="si" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M12 8V4H8"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>Agents & Orchestration <span class="tag">3 headliners</span> <span class="pcount">3 upstream-synced</span></h2>
     <p class="secintro">The core promise of spruce-grove is that delegation is cheap and safe. These changes made the recursion bounded, the failures recoverable, and the prompts identity-stable.</p>
 
     <article class="deep">
-      <div class="head"><h3>Bounded sub-agent recursion depth</h3><span class="meta"><span class="hash">350c5c66</span> · 2026-07-21 · feat</span></div>
+      <div class="head"><h3>Bounded sub-agent recursion depth</h3><span class="meta"><span class="hash">350c5c66</span> · 2026-07-21 · feat<span class="prov up" title="Authored upstream · synced via the Code Puppy line">upstream</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A hard cap on how deeply sub-agents can delegate to other sub-agents, enforced at invocation time.</dd>
         <dt class="q-do">What it does</dt><dd>Tracks agent invocation depth per session and refuses to start another nested level once the cap is reached, emitting a clear error instead of spinning into infinite recursion.</dd>
@@ -228,7 +316,7 @@
     </article>
 
     <article class="deep">
-      <div class="head"><h3>Dead-model fallback on pinned sub-agents</h3><span class="meta"><span class="hash">12c5c3c</span> · 2026-08-11 · fix</span></div>
+      <div class="head"><h3>Dead-model fallback on pinned sub-agents</h3><span class="meta"><span class="hash">12c5c3c</span> · 2026-08-11 · fix<span class="prov up" title="Authored upstream · synced via the Code Puppy line">upstream</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>If an invoked sub-agent has a specific model pinned and that model is currently dead or unavailable, the invocation now falls back to a working model instead of hard-failing.</dd>
         <dt class="q-do">What it does</dt><dd>Catches model-resolution errors in the delegation path, logs a scoped warning (deduplicated per conversation, not per process), and retries with the next available provider for that agent's tier.</dd>
@@ -237,7 +325,7 @@
     </article>
 
     <article class="deep">
-      <div class="head"><h3>Sub-agent identity/depth prompt injection</h3><span class="meta"><span class="hash">b519df9</span> · 2026-07-23 · feat</span></div>
+      <div class="head"><h3>Sub-agent identity/depth prompt injection</h3><span class="meta"><span class="hash">b519df9</span> · 2026-07-23 · feat<span class="prov up" title="Authored upstream · synced via the Code Puppy line">upstream</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>Every sub-agent invocation now prepends an explicit system-context block describing the agent's own name and how deep in the delegation stack it is.</dd>
         <dt class="q-do">What it does</dt><dd>Frames the delegation-chain position for the model: <em>you are QA-Kitten, 2 levels deep, spawned by Pack Leader</em>. Models answer differently and more conservatively when they know their own place in the tree.</dd>
@@ -248,11 +336,11 @@
 
   <!-- ================= MODELS ================= -->
   <section class="g" id="models">
-    <h2><svg class="si" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"/></svg>Models & Providers <span class="tag">3 headliners</span></h2>
+    <h2><svg class="si" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"/></svg>Models & Providers <span class="tag">3 headliners</span> <span class="pcount">3 upstream-synced</span></h2>
     <p class="secintro">New frontier models keep shipping with weird knobs. This cycle handled three of them: per-tool guardrails for the sharpest new model, a generalized request-param surface, and OAuth for baselines that needed it.</p>
 
     <article class="deep">
-      <div class="head"><h3>Per-tool guardrails for GPT-5.6 family</h3><span class="meta"><span class="hash">5ce5975</span> · 2026-07-21 · feat</span></div>
+      <div class="head"><h3>Per-tool guardrails for GPT-5.6 family</h3><span class="meta"><span class="hash">5ce5975</span> · 2026-07-21 · feat<span class="prov up" title="Authored upstream · synced via the Code Puppy line">upstream</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>Models in the GPT-5.6 family can now be gated per-tool: some tools allowed, some blocked, based on a per-model safety profile.</dd>
         <dt class="q-do">What it does</dt><dd>Reads a model-family capability map at agent setup; a GPT-5.6-backed agent gets its available tool list filtered so, for example, file-writing tools may be disabled while read-only tools remain.</dd>
@@ -261,7 +349,7 @@
     </article>
 
     <article class="deep">
-      <div class="head"><h3>User-defined custom request params per model</h3><span class="meta"><span class="hash">d08b6c9</span> · 2026-08-01 · feat</span></div>
+      <div class="head"><h3>User-defined custom request params per model</h3><span class="meta"><span class="hash">d08b6c9</span> · 2026-08-01 · feat<span class="prov up" title="Authored upstream · synced via the Code Puppy line">upstream</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A pass-through config surface letting you attach arbitrary key/value params to any model's request payload without forking the provider.</dd>
         <dt class="q-do">What it does</dt><dd>Reads extra params from the model config (e.g. <code>"request_params": {"reasoning_effort": "high"}</code>) and merges them into the HTTP payload that provider actually receives.</dd>
@@ -270,7 +358,7 @@
     </article>
 
     <article class="deep">
-      <div class="head"><h3>Meta Muse OAuth provider</h3><span class="meta"><span class="hash">c0e26247</span> · 2026-08-05 · feat</span></div>
+      <div class="head"><h3>Meta Muse OAuth provider</h3><span class="meta"><span class="hash">c0e26247</span> · 2026-08-05 · feat<span class="prov up" title="Authored upstream · synced via the Code Puppy line">upstream</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>Full OAuth support for Meta's Muse model family, with token lifecycle handled the same way as the existing Claude and Codex OAuth paths.</dd>
         <dt class="q-do">What it does</dt><dd>Implements the Muse auth flow (browser-redirect + token refresh + encrypted storage) and exposes Muse models in the model factory under the <code>muse:</code> prefix once authenticated.</dd>
@@ -281,11 +369,11 @@
 
   <!-- ================= OBSERVABILITY ================= -->
   <section class="g" id="observability">
-    <h2><svg class="si" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>Observability & Telemetry <span class="tag">3 headliners</span></h2>
+    <h2><svg class="si" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>Observability & Telemetry <span class="tag">3 headliners</span> <span class="pcount">3 upstream-synced (4 commits)</span></h2>
     <p class="secintro">An agent that can't report its own token usage is a black box. This cycle made the reporting granular, lossless across providers, and end-to-end timestamped.</p>
 
     <article class="deep">
-      <div class="head"><h3>Per-run token usage and latency</h3><span class="meta"><span class="hash">ccc81e7</span> · 2026-07-24 · feat</span></div>
+      <div class="head"><h3>Per-run token usage and latency</h3><span class="meta"><span class="hash">ccc81e7</span> · 2026-07-24 · feat<span class="prov up" title="Authored upstream · synced via the Code Puppy line">upstream</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>Every agent run now reports granular token consumption and wall-clock latency at turn-end.</dd>
         <dt class="q-do">What it does</dt><dd>The turn-completion telemetry includes prompt/completion token counts (broken out by cache-read vs cache-write where the provider exposes it) and the millisecond duration from first request to final stream close.</dd>
@@ -294,7 +382,7 @@
     </article>
 
     <article class="deep">
-      <div class="head"><h3>Sub-agent usage reporting & cache-metric reliability</h3><span class="meta"><span class="hash">d00ac86</span> + <span class="hash">827f8a1</span> · 2026-08-15/16 · fix</span></div>
+      <div class="head"><h3>Sub-agent usage reporting & cache-metric reliability</h3><span class="meta"><span class="hash">d00ac86</span> + <span class="hash">827f8a1</span> · 2026-08-15/16 · fix<span class="prov up" title="Authored upstream · synced via the Code Puppy line">upstream</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>Sub-agent invocations now reliably surface their own token-usage back into the parent session's telemetry, and the triad of cache-write-cost hallucinations, provider-reported drift, and reporting regressions were closed in a single sweep.</dd>
         <dt class="q-do">What it does</dt><dd>Plumbs sub-agent token counters through the delegation finish protocol so the parent's usage pane reflects the leaf work, and normalizes providers' differing cost-reporting semantics so the display never invents numbers.</dd>
@@ -303,7 +391,7 @@
     </article>
 
     <article class="deep">
-      <div class="head"><h3><code>timestamp_heartbeat</code> plugin</h3><span class="meta"><span class="hash">5ae287b</span> · 2026-07-23 · feat</span></div>
+      <div class="head"><h3><code>timestamp_heartbeat</code> plugin</h3><span class="meta"><span class="hash">5ae287b</span> · 2026-07-23 · feat<span class="prov up" title="Authored upstream · synced via the Code Puppy line">upstream</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A plugin that stamps a <code>__SYS_TIMESTAMP__</code> field into tool results every N calls, so every result in a session has a coarse but consistent clock.</dd>
         <dt class="q-do">What it does</dt><dd>Hooks the tool-callback chain; on every k-th invocation it appends a timestamp block to the result payload, giving downstream log parsers and the model itself a time anchor.</dd>
@@ -312,52 +400,81 @@
     </article>
   </section>
 
+  <!-- ================= LIVING LOG ================= -->
+  <section class="g" id="living">
+    <h2>The Living Log <span class="tag">voice-led</span></h2>
+    <p class="secintro">Not every decision in this grove arrives as a commit message.
+    Many arrive mid-conversation &mdash; spoken out loud while Tyler works through the
+    harness with Cedar, captured as they happen, promoted to releases when they land.
+    The structured ledger is <code>LIVING-UPDATES.md</code> at the repo root; the cards
+    below regenerate from it on every pipeline run. Entries age from
+    <span class="chip">idea</span> through <span class="chip up">in flight</span> to
+    <span class="chip gr">shipped</span>, and the shipped ones graduate into
+    <code>CHANGELOG.md</code>.</p>
+    <!-- AUTO-BEGIN:living-updates -->
+<div class="pcount">7 entries · newest first</div>
+    <article class="deep">
+      <div class="head"><h3>2026-09-15 — The Mechanics page: one page, ethos to evidence</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session with Junto (this one) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd><code>pages-hub/mechanics.html</code> — the lifecycle core as a single-page explainer on the sprucegrove.io site: breathing core, four contracts, heartbeat, gates and judges, the nine-rounds war story, the human layer. Full GRAN design language (Fraunces/mono/EB Garamond, rune lines, one stamp, grain veil, era-ghost). Registered in the site sidebar and the hub, linked to the Release Observatory. The master class, made public.</dd>
+      </dl>
+    </article>
+    <article class="deep">
+      <div class="head"><h3>2026-09-15 — The master class: teaching the lifecycle the way we teach people</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session with Junto (this one) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>&quot;The full enchilada&quot;: <code>MASTER-CLASS.md</code> now carries the training methodology — the 8am rule (zero context, zero shame, one concept per breath), the service-counter cadence, and troubleshooting theory run on the judge ABSTAIN war story as the lab. Seven modules: ethos-as-mechanism → breathing core → sovereignty heartbeat → gates &amp; judges → the war story → empathetic service tactics → teach-backs. Graduation standard: the eighth-grader in the room could follow it.</dd>
+      </dl>
+    </article>
+    <article class="deep">
+      <div class="head"><h3>2026-09-15 — The Living Log itself: release notes that breathe</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session with Junto (this one) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>The release observatory covered the last two months of commits, but the <em>organic</em> work — decided out loud, mid-session — had no home. This ledger was born, the pipeline grew a <code>living-updates</code> region, and the observatory now renders the dictation stream on every regen. The page stopped being a snapshot and became a heartbeat.</dd>
+      </dl>
+    </article>
+    <article class="deep">
+      <div class="head"><h3>2026-09-15 — The grove tends itself: self-healing auto-updates</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session (see <code>CHANGELOG.md</code>, Unreleased) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>The version checker always <em>watched</em> PyPI and nagged; the decision to make it <em>act</em> came out of a spoken working session. It now upgrades the on-disk install via <code>uv tool upgrade</code> on the startup daemon thread — running sessions never break, failures degrade to the old nag, <code>NO_AUTO_UPDATE=1</code> opts out. Reference: <code>docs/SELF-UPDATE.md</code>.</dd>
+      </dl>
+    </article>
+    <article class="deep">
+      <div class="head"><h3>2026-09-14 — The receipt travels: MIT → Apache-2.0</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session (see <code>CHANGELOG.md</code>, Unreleased) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>Relicensing decision made out loud, reasons logged in <code>docs/LICENSE-ANALYSIS.md</code>: NOTICE carries the Code Puppy lineage verbatim, contributors grant a patent license with defensive termination, modified files must state what changed. Upstream stays MIT, untouched — the puppy came first.</dd>
+      </dl>
+    </article>
+    <article class="deep">
+      <div class="head"><h3>2026-09 (undated draft) — TASK-001: Synthetic.new 90x plan re-pinning</h3><span class="meta"><span class="chip up">in flight</span> · drafted in a working session (<code>Sythentic-spruce-grove-updates.md</code>) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>Heavyweight model pins (Kimi-K3 at 3.0×) were exhausting the weekly quota in minutes under multi-agent execution. The plan: shift main-reasoning agents to <code>syn:large:text</code> (1.0×), fan-out agents to Flash-class (0.1×), embeddings to 0.0× — tracked through the Beads task DB, config changes staged in <code>grove.cfg</code> and agent JSON overrides.</dd>
+      </dl>
+    </article>
+    <article class="deep">
+      <div class="head"><h3>2026-09-10 — The voice loop ships: &quot;the grove speaks&quot;</h3><span class="meta"><span class="chip gr">shipped</span> · the founding dictation sessions (see <code>CHANGELOG.md</code>, 1.0.0) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>The reason the fork exists, validated and released: <code>/rec</code> mic-to-whisper plugin, headless <code>--transcribe</code>, desktop dictation wired through the CLI. Zero cloud transcription. The TUI heard &quot;Thank you.&quot;, sent it, and Cedar answered — dogfood evidence in build-log 29.</dd>
+      </dl>
+    </article>
+      <!-- AUTO-END:living-updates -->
+  </section>
+
   <!-- AUTO-BEGIN:auto-features -->
   <!-- ================= AUTO-DETECTED ================= -->
   <section class="g" id="auto-detected">
-    <h2>New Since Last Curation <span class="tag">auto-detected</span></h2>
+    <h2>New Since Last Curation <span class="tag">auto-detected</span> <span class="pcount">12 grove-grown · 0 upstream-synced</span></h2>
     <p class="secintro">Feature commits detected by the pipeline that haven't been
     curated into deep-dives yet. These render straight from the changelog so the page
     never goes stale between curation passes.</p>
 
-    <article class="deep">
-      <div class="head"><h3>The founding surfaces &mdash; the Leather Apron Club goes public</h3><span class="meta"><span class="hash">3eec7b69</span> &middot; 2026-09-14 &middot; feat</span></div>
-      <dl class="qa">
-        <dt class="q-what">What it is</dt><dd>Every surface now carries the founding message: the Junto rebooted in Bentonville &mdash; first council Friday, September 18, 2026, at Bentonville Barber Company. The product page, the public hub, the club hall (t-granlund.github.io/leather-apron-club), the explainer guide, and the 40-slide presentation all speak with one voice.</dd>
-        <dt class="q-do">What it does</dt><dd>A visitor lands anywhere &mdash; sprucegrove.io, the club pages, the repo README &mdash; and meets the same story: Dr. Franklin's 1727 mutual-improvement circle, rebooted, meeting in a barbershop on the square, teaching neighbors to run an apprentice on their own machines.</dd>
-        <dt class="q-why">Why it matters</dt><dd>The launch is real and dated. Coherence across surfaces is what turns a repo into an institution.</dd>
-      </dl>
-    </article>
-
-    <article class="deep">
-      <div class="head"><h3>GRAN &mdash; the design language, codified</h3><span class="meta"><span class="hash">5068d35</span> &middot; 2026-09-14 &middot; feat</span></div>
-      <dl class="qa">
-        <dt class="q-what">What it is</dt><dd>Nine rules in <code>BRAND.md</code>: never-flat-black canvas, grain on everything dark, four type voices, three symbols (spruce-trio, North Star, algiz rune), the rubber stamp, the rune line, opposition as rebellion, scarce motion, era-ghosts.</dd>
-        <dt class="q-do">What it does</dt><dd>Every surface inherits the same laws instead of improvising &mdash; deck, product site, club pages, READMEs all render from one visual constitution.</dd>
-        <dt class="q-why">Why it matters</dt><dd>Dark-forest punk with Scandinavian discipline: immersive and rebellious without ever being tacky, because the rules are written down.</dd>
-      </dl>
-    </article>
-
-    <article class="deep">
-      <div class="head"><h3>The official mark &mdash; three TreeMarks, one grove</h3><span class="meta"><span class="hash">8bd08fa</span> &middot; 2026-09-14 &middot; feat</span></div>
-      <dl class="qa">
-        <dt class="q-what">What it is</dt><dd>The mark descends from the canonical tylergranlund.com <code>TreeMark</code> (verbatim geometry): three firs in one silhouette, the front tree largest, drawn in the orange line, with a self-drawing animation on the presentation's opening slides.</dd>
-        <dt class="q-do">What it does</dt><dd>One master SVG set (<code>logos/</code>) feeds every consumer: deck (animated + static), product nav lockup, hub watermarks, club pages, README badges, favicons, and tylergranlund.com PWA icons. A sync script plus CI drift check keeps the copies honest.</dd>
-        <dt class="q-why">Why it matters</dt><dd>The portfolio's single tree became the grove &mdash; together we are better, always, right down to the SVG &mdash; and it can never quietly drift apart again.</dd>
-      </dl>
-    </article>
-
-    <article class="deep">
-      <div class="head"><h3>Realtime transcription on the Great Dictator stage</h3><span class="meta"><span class="hash">cfdd8b87</span> &middot; 2026-09-14 &middot; feat</span></div>
-      <dl class="qa">
-        <dt class="q-what">What it is</dt><dd>The presentation's Chaplin stage now runs a 61-segment whisper-built cue track from the film's actual audio: words appear inside the film frame as they are spoken, and the nine monumental quotes ignite at their true spoken seconds.</dd>
-        <dt class="q-do">What it does</dt><dd>Replaces guessed fractions with true timestamps; the machine hears Chaplin's warning about machine men and transcribes it live, word for word.</dd>
-        <dt class="q-why">Why it matters</dt><dd>The presentation's centerpiece is now an argument that demonstrates itself.</dd>
-      </dl>
-    </article>
-
     <article class="deep" style="border-style:dashed">
-      <div class="head"><h3>left sidebar navigation across all pages, mobile-optimized</h3><span class="meta"><span class="hash">a1b20a8e</span> · 2026-08-24 · feat</span></div>
+      <div class="head"><h3>left sidebar navigation across all pages, mobile-optimized</h3><span class="meta"><span class="hash">a1b20a8e</span> · 2026-08-24 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
         <dt class="q-do">What it does</dt><dd>See commit <code>a1b20a8e</code> in the repo for the implementation diff.</dd>
@@ -365,7 +482,7 @@
       </dl>
     </article>
     <article class="deep" style="border-style:dashed">
-      <div class="head"><h3>sortable, filterable plugin sidebar</h3><span class="meta"><span class="hash">3cdb0825</span> · 2026-08-24 · feat</span></div>
+      <div class="head"><h3>sortable, filterable plugin sidebar</h3><span class="meta"><span class="hash">3cdb0825</span> · 2026-08-24 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
         <dt class="q-do">What it does</dt><dd>See commit <code>3cdb0825</code> in the repo for the implementation diff.</dd>
@@ -373,7 +490,7 @@
       </dl>
     </article>
     <article class="deep" style="border-style:dashed">
-      <div class="head"><h3>master-detail plugin ecosystem explorer</h3><span class="meta"><span class="hash">dba4cd94</span> · 2026-08-24 · feat</span></div>
+      <div class="head"><h3>master-detail plugin ecosystem explorer</h3><span class="meta"><span class="hash">dba4cd94</span> · 2026-08-24 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
         <dt class="q-do">What it does</dt><dd>See commit <code>dba4cd94</code> in the repo for the implementation diff.</dd>
@@ -381,7 +498,7 @@
       </dl>
     </article>
     <article class="deep" style="border-style:dashed">
-      <div class="head"><h3>white logo toolkit plugin + white logo for grove theme</h3><span class="meta"><span class="hash">25bd211e</span> · 2026-08-24 · feat</span></div>
+      <div class="head"><h3>white logo toolkit plugin + white logo for grove theme</h3><span class="meta"><span class="hash">25bd211e</span> · 2026-08-24 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
         <dt class="q-do">What it does</dt><dd>See commit <code>25bd211e</code> in the repo for the implementation diff.</dd>
@@ -389,7 +506,7 @@
       </dl>
     </article>
     <article class="deep" style="border-style:dashed">
-      <div class="head"><h3>sweep legacy page bodies to WCAG 2.2 AAA body-text contrast</h3><span class="meta"><span class="hash">7402d085</span> · 2026-08-18 · feat</span></div>
+      <div class="head"><h3>sweep legacy page bodies to WCAG 2.2 AAA body-text contrast</h3><span class="meta"><span class="hash">7402d085</span> · 2026-08-18 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
         <dt class="q-do">What it does</dt><dd>See commit <code>7402d085</code> in the repo for the implementation diff.</dd>
@@ -397,7 +514,7 @@
       </dl>
     </article>
     <article class="deep" style="border-style:dashed">
-      <div class="head"><h3>sidebar app-shell + reusable popover + design system, WCAG 2.2 AAA</h3><span class="meta"><span class="hash">1d07640a</span> · 2026-08-17 · feat</span></div>
+      <div class="head"><h3>sidebar app-shell + reusable popover + design system, WCAG 2.2 AAA</h3><span class="meta"><span class="hash">1d07640a</span> · 2026-08-17 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
         <dt class="q-do">What it does</dt><dd>See commit <code>1d07640a</code> in the repo for the implementation diff.</dd>
@@ -405,7 +522,7 @@
       </dl>
     </article>
     <article class="deep" style="border-style:dashed">
-      <div class="head"><h3>lucide icon pass + face-only mark, brand watermarks across site</h3><span class="meta"><span class="hash">1a0d7817</span> · 2026-08-17 · feat</span></div>
+      <div class="head"><h3>lucide icon pass + face-only mark, brand watermarks across site</h3><span class="meta"><span class="hash">1a0d7817</span> · 2026-08-17 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
         <dt class="q-do">What it does</dt><dd>See commit <code>1a0d7817</code> in the repo for the implementation diff.</dd>
@@ -413,7 +530,7 @@
       </dl>
     </article>
     <article class="deep" style="border-style:dashed">
-      <div class="head"><h3>wide-screen lane expansion + left-aligned navigation</h3><span class="meta"><span class="hash">c6dc217d</span> · 2026-08-17 · feat</span></div>
+      <div class="head"><h3>wide-screen lane expansion + left-aligned navigation</h3><span class="meta"><span class="hash">c6dc217d</span> · 2026-08-17 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
         <dt class="q-do">What it does</dt><dd>See commit <code>c6dc217d</code> in the repo for the implementation diff.</dd>
@@ -421,7 +538,7 @@
       </dl>
     </article>
     <article class="deep" style="border-style:dashed">
-      <div class="head"><h3>interactive architecture board - L-R flow, drilldown sheets, live inventory</h3><span class="meta"><span class="hash">83bf4660</span> · 2026-08-17 · feat</span></div>
+      <div class="head"><h3>interactive architecture board - L-R flow, drilldown sheets, live inventory</h3><span class="meta"><span class="hash">83bf4660</span> · 2026-08-17 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
         <dt class="q-do">What it does</dt><dd>See commit <code>83bf4660</code> in the repo for the implementation diff.</dd>
@@ -429,7 +546,7 @@
       </dl>
     </article>
     <article class="deep" style="border-style:dashed">
-      <div class="head"><h3>site-wide rebrand to periwinkle/cyan/mint design system</h3><span class="meta"><span class="hash">a8a4b794</span> · 2026-08-17 · feat</span></div>
+      <div class="head"><h3>site-wide rebrand to periwinkle/cyan/mint design system</h3><span class="meta"><span class="hash">a8a4b794</span> · 2026-08-17 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
         <dt class="q-do">What it does</dt><dd>See commit <code>a8a4b794</code> in the repo for the implementation diff.</dd>
@@ -437,7 +554,7 @@
       </dl>
     </article>
     <article class="deep" style="border-style:dashed">
-      <div class="head"><h3>architecture diagram page - self-healing pipeline, Apple-internal-training treatment</h3><span class="meta"><span class="hash">157cd7c1</span> · 2026-08-17 · feat</span></div>
+      <div class="head"><h3>architecture diagram page - self-healing pipeline, Apple-internal-training treatment</h3><span class="meta"><span class="hash">157cd7c1</span> · 2026-08-17 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
         <dt class="q-do">What it does</dt><dd>See commit <code>157cd7c1</code> in the repo for the implementation diff.</dd>
@@ -445,7 +562,7 @@
       </dl>
     </article>
     <article class="deep" style="border-style:dashed">
-      <div class="head"><h3>evergreen release observatory auto-regenerated by update pipeline</h3><span class="meta"><span class="hash">ca3c5c51</span> · 2026-08-17 · feat</span></div>
+      <div class="head"><h3>evergreen release observatory auto-regenerated by update pipeline</h3><span class="meta"><span class="hash">ca3c5c51</span> · 2026-08-17 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
       <dl class="qa">
         <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
         <dt class="q-do">What it does</dt><dd>See commit <code>ca3c5c51</code> in the repo for the implementation diff.</dd>
@@ -466,24 +583,24 @@
         <span class="count">feat + refactor + docs + chore highlights</span>
         <ul>
           <!-- AUTO-BEGIN:minor-list -->
-          <li><span class="h">e9b9d1e5</span><span class="d">· 08-27</span> · expose engine-truthful replacement API for previews</li>
-          <li><span class="h">a12ed1f4</span><span class="d">· 08-27</span> · regenerate + post-update leftovers (2026-08-27 15:34)</li>
-          <li><span class="h">4d567a57</span><span class="d">· 08-27</span> · regenerate + post-update leftovers (2026-08-27 14:13)</li>
-          <li><span class="h">7f761e0c</span><span class="d">· 08-27</span> · format provider edit tools</li>
-          <li><span class="h">fbb2684f</span><span class="d">· 08-24</span> · use real Spruce Grove logo across nav, favicon &amp; shell</li>
-          <li><span class="h">644a9782</span><span class="d">· 08-24</span> · regenerate + post-update leftovers (2026-08-24 10:56)</li>
-          <li><span class="h">53520c15</span><span class="d">· 08-24</span> · document provider-specific edit tools</li>
-          <li><span class="h">9a1a2399</span><span class="d">· 08-24</span> · format agent manager i18n changes</li>
-          <li><span class="h">a2394b7e</span><span class="d">· 08-22</span> · bump version refs to v0.0.768 + rebuild offline wheel</li>
-          <li><span class="h">092679e0</span><span class="d">· 08-22</span> · regenerate for v0.0.768 update</li>
-          <li><span class="h">b202aac5</span><span class="d">· 08-21</span> · switch update_schedule to ad-hoc mode (no launchd)</li>
-          <li><span class="h">4b5fc66d</span><span class="d">· 08-21</span> · bump stale version refs to v0.0.754 (architecture.html, SOVEREIGNTY.md, FIELD_GUIDE_MAP snapshot)</li>
-          <li><span class="h">ba29310f</span><span class="d">· 08-21</span> · regenerate + post-update leftovers (2026-08-21 14:43)</li>
-          <li><span class="h">1fe10cc1</span><span class="d">· 08-20</span> · rename opt-in scope filter flag from --here to --cwd</li>
-          <li><span class="h">0902fedb</span><span class="d">· 08-20</span> · fix stale version refs (v0.0.729/v0.0.709 -&gt; v0.0.751) in architecture.html + SOVEREIGNTY.md</li>
-          <li><span class="h">902c3787</span><span class="d">· 08-20</span> · regenerate + post-update leftovers (2026-08-20 18:47)</li>
-          <li><span class="h">b5933ecd</span><span class="d">· 08-20</span> · regenerate + post-update leftovers (2026-08-20 18:42)</li>
-          <li><span class="h">adcb2388</span><span class="d">· 08-20</span> · regenerate + post-update leftovers (2026-08-20 18:36)</li>
+          <li><span class="h">e9b9d1e5</span><span class="d">· 08-27</span> · expose engine-truthful replacement API for previews<span class="prov up" title="Authored upstream — synced via the Code Puppy line">upstream</span></li>
+          <li><span class="h">a12ed1f4</span><span class="d">· 08-27</span> · regenerate + post-update leftovers (2026-08-27 15:34)<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">4d567a57</span><span class="d">· 08-27</span> · regenerate + post-update leftovers (2026-08-27 14:13)<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">7f761e0c</span><span class="d">· 08-27</span> · format provider edit tools<span class="prov up" title="Authored upstream — synced via the Code Puppy line">upstream</span></li>
+          <li><span class="h">fbb2684f</span><span class="d">· 08-24</span> · use real Spruce Grove logo across nav, favicon &amp; shell<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">644a9782</span><span class="d">· 08-24</span> · regenerate + post-update leftovers (2026-08-24 10:56)<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">53520c15</span><span class="d">· 08-24</span> · document provider-specific edit tools<span class="prov up" title="Authored upstream — synced via the Code Puppy line">upstream</span></li>
+          <li><span class="h">9a1a2399</span><span class="d">· 08-24</span> · format agent manager i18n changes<span class="prov up" title="Authored upstream — synced via the Code Puppy line">upstream</span></li>
+          <li><span class="h">a2394b7e</span><span class="d">· 08-22</span> · bump version refs to v0.0.768 + rebuild offline wheel<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">092679e0</span><span class="d">· 08-22</span> · regenerate for v0.0.768 update<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">b202aac5</span><span class="d">· 08-21</span> · switch update_schedule to ad-hoc mode (no launchd)<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">4b5fc66d</span><span class="d">· 08-21</span> · bump stale version refs to v0.0.754 (architecture.html, SOVEREIGNTY.md, FIELD_GUIDE_MAP snapshot)<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">ba29310f</span><span class="d">· 08-21</span> · regenerate + post-update leftovers (2026-08-21 14:43)<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">1fe10cc1</span><span class="d">· 08-20</span> · rename opt-in scope filter flag from --here to --cwd<span class="prov up" title="Authored upstream — synced via the Code Puppy line">upstream</span></li>
+          <li><span class="h">0902fedb</span><span class="d">· 08-20</span> · fix stale version refs (v0.0.729/v0.0.709 -&gt; v0.0.751) in architecture.html + SOVEREIGNTY.md<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">902c3787</span><span class="d">· 08-20</span> · regenerate + post-update leftovers (2026-08-20 18:47)<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">b5933ecd</span><span class="d">· 08-20</span> · regenerate + post-update leftovers (2026-08-20 18:42)<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">adcb2388</span><span class="d">· 08-20</span> · regenerate + post-update leftovers (2026-08-20 18:36)<span class="prov gr" title="Authored in the grove">grove</span></li>
       <!-- AUTO-END:minor-list -->
         </ul>
       </div>
@@ -493,24 +610,24 @@
         <span class="count">fix bucket highlights</span>
         <ul>
           <!-- AUTO-BEGIN:fixes-list -->
-          <li><span class="h">dd9d44bb</span><span class="d">· 08-24</span> · remove shell from field guide (double-sidebar collision)</li>
-          <li><span class="h">6cc00803</span><span class="d">· 08-24</span> · broken nav/sidebar logo — height:auto collapses in flex</li>
-          <li><span class="h">de17cf21</span><span class="d">· 08-24</span> · replace fake inline SVG silhouettes with real logo</li>
-          <li><span class="h">d9e5346d</span><span class="d">· 08-24</span> · stats show real numbers locally (fetch -&gt; script include)</li>
-          <li><span class="h">48f5fc83</span><span class="d">· 08-24</span> · QA pass on landing page — 12 issues fixed</li>
-          <li><span class="h">762cb843</span><span class="d">· 08-17</span> · flat-doc JSON corruption + responsive [mobile/tablet] layout</li>
-          <li><span class="h">1de4c0a7</span><span class="d">· 08-16</span> · correct skill source labels and sanitize paths</li>
-          <li><span class="h">81745592</span><span class="d">· 08-10</span> · flat HTML no longer wipes DATA.plugins via JS escape reinterpretation</li>
-          <li><span class="h">5226fefa</span><span class="d">· 08-31</span> · default agency level to high (#898)</li>
-          <li><span class="h">8f396963</span><span class="d">· 08-29</span> · make private inference provider-safe</li>
-          <li><span class="h">db6d4d80</span><span class="d">· 08-29</span> · disable chat template thinking for private inference</li>
-          <li><span class="h">83cf6700</span><span class="d">· 08-29</span> · default shell safety permission to high</li>
-          <li><span class="h">583dfbf6</span><span class="d">· 08-29</span> · require autonomous completion of requested tasks</li>
-          <li><span class="h">45738d69</span><span class="d">· 08-29</span> · repair malformed editor args before tool callbacks</li>
-          <li><span class="h">456a3bfa</span><span class="d">· 08-29</span> · allow apply_patch outside working directory</li>
-          <li><span class="h">24333272</span><span class="d">· 08-28</span> · match grep/list ignore patterns relative to the search root</li>
-          <li><span class="h">45882f08</span><span class="d">· 08-28</span> · a failing MCP tool degrades the turn, never kills the session</li>
-          <li><span class="h">6998d236</span><span class="d">· 08-28</span> · an unreachable HTTP connector degrades the turn, never ends it</li>
+          <li><span class="h">dd9d44bb</span><span class="d">· 08-24</span> · remove shell from field guide (double-sidebar collision)<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">6cc00803</span><span class="d">· 08-24</span> · broken nav/sidebar logo — height:auto collapses in flex<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">de17cf21</span><span class="d">· 08-24</span> · replace fake inline SVG silhouettes with real logo<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">d9e5346d</span><span class="d">· 08-24</span> · stats show real numbers locally (fetch -&gt; script include)<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">48f5fc83</span><span class="d">· 08-24</span> · QA pass on landing page — 12 issues fixed<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">762cb843</span><span class="d">· 08-17</span> · flat-doc JSON corruption + responsive [mobile/tablet] layout<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">1de4c0a7</span><span class="d">· 08-16</span> · correct skill source labels and sanitize paths<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">81745592</span><span class="d">· 08-10</span> · flat HTML no longer wipes DATA.plugins via JS escape reinterpretation<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">5226fefa</span><span class="d">· 08-31</span> · default agency level to high (#898)<span class="prov up" title="Authored upstream — synced via the Code Puppy line">upstream</span></li>
+          <li><span class="h">8f396963</span><span class="d">· 08-29</span> · make private inference provider-safe<span class="prov up" title="Authored upstream — synced via the Code Puppy line">upstream</span></li>
+          <li><span class="h">db6d4d80</span><span class="d">· 08-29</span> · disable chat template thinking for private inference<span class="prov up" title="Authored upstream — synced via the Code Puppy line">upstream</span></li>
+          <li><span class="h">83cf6700</span><span class="d">· 08-29</span> · default shell safety permission to high<span class="prov up" title="Authored upstream — synced via the Code Puppy line">upstream</span></li>
+          <li><span class="h">583dfbf6</span><span class="d">· 08-29</span> · require autonomous completion of requested tasks<span class="prov up" title="Authored upstream — synced via the Code Puppy line">upstream</span></li>
+          <li><span class="h">45738d69</span><span class="d">· 08-29</span> · repair malformed editor args before tool callbacks<span class="prov up" title="Authored upstream — synced via the Code Puppy line">upstream</span></li>
+          <li><span class="h">456a3bfa</span><span class="d">· 08-29</span> · allow apply_patch outside working directory<span class="prov up" title="Authored upstream — synced via the Code Puppy line">upstream</span></li>
+          <li><span class="h">24333272</span><span class="d">· 08-28</span> · match grep/list ignore patterns relative to the search root<span class="prov up" title="Authored upstream — synced via the Code Puppy line">upstream</span></li>
+          <li><span class="h">45882f08</span><span class="d">· 08-28</span> · a failing MCP tool degrades the turn, never kills the session<span class="prov up" title="Authored upstream — synced via the Code Puppy line">upstream</span></li>
+          <li><span class="h">6998d236</span><span class="d">· 08-28</span> · an unreachable HTTP connector degrades the turn, never ends it<span class="prov up" title="Authored upstream — synced via the Code Puppy line">upstream</span></li>
       <!-- AUTO-END:fixes-list -->
         </ul>
       </div>
@@ -526,5 +643,61 @@
   </div>
 </footer>
 
+
+<script>
+/* Upstream Connector — live pulse from mpfaffenberger/code_puppy. No keys, no proxy:
+   the public GitHub API allows CORS, so the page checks the upstream line directly.
+   Failure is graceful: the connector reports idle and the manual path remains. */
+(function () {
+  "use strict";
+  var state = document.getElementById("upstream-state");
+  var beat = document.getElementById("upstream-beat");
+  var live = document.getElementById("upstream-live");
+  if (!live) return;
+  var base = "https://api.github.com/repos/mpfaffenberger/code_puppy";
+  var hdr = { "Accept": "application/vnd.github+json" };
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+  fetch(base, { headers: hdr })
+    .then(function (r) { if (!r.ok) throw new Error("repo " + r.status); return r.json(); })
+    .then(function (d) {
+      if (state && d.pushed_at) {
+        var pushed = new Date(d.pushed_at);
+        state.textContent = "upstream alive · pushed " +
+          pushed.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+      }
+      if (beat) beat.classList.add("on");
+      return fetch(base + "/commits?per_page=5", { headers: hdr });
+    })
+    .then(function (r) { if (!r.ok) throw new Error("commits " + r.status); return r.json(); })
+    .then(function (commits) {
+      var rows = commits.map(function (c) {
+        var when = new Date(c.commit.author.date).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+        var who = (c.author && c.author.login) || c.commit.author.name || "unknown";
+        var msg = String(c.commit.message).split("\n")[0];
+        return "<li><span class='uh'>" + esc(c.sha.slice(0, 7)) + "</span>" +
+          "<span class='ud'>" + esc(when) + "</span>" +
+          "<span class='uu'>" + esc(who) + "</span>" +
+          "<span class='um'>" + esc(msg) + "</span></li>";
+      }).join("");
+      if (live) {
+        live.innerHTML = "<ul class='uplist'>" + rows + "</ul>" +
+          "<p class='upnote' style='margin-top:14px'>Live from api.github.com — checked " +
+          esc(new Date().toLocaleTimeString()) + ". Each signal is reviewed against our compat " +
+          "contracts (PROVENANCE.md): port what helps, log what differs, stay rebrand-clean.</p>";
+      }
+    })
+    .catch(function () {
+      if (state) state.textContent = "connector idle — offline or rate-limited";
+      if (live) {
+        live.innerHTML = "<p class='upnote'>Live check unavailable right now. The upstream line " +
+          "never moves out of reach: <strong>github.com/mpfaffenberger/code_puppy</strong>. Our sync " +
+          "point is merge d819ae4e — 0 upstream commits behind at import; every sync is logged in " +
+          "PROVENANCE.md.</p>";
+      }
+    });
+})();
+</script>
 </body>
 </html>
