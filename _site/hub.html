@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0E130F" />
+<title>Spruce Grove — Public Knowledge Base</title>
+<link rel="icon" type="image/png" href="./assets/favicon-64.png" />
+<link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
+<meta name="description" content="Public mirror of the Spruce Grove platform: field guide, release observatory, and the interactive agent/tool explorer." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="./assets/tokens.css" />
+<link rel="stylesheet" href="./assets/sidebar.css" />
+<script src="./assets/icons.js"></script>
+<script>window.BB_SHELL = { base: "./", active: "hub", assetsBase: "./assets/" };</script>
+<script src="./assets/shell.js" defer></script>
+<script src="./assets/sidebar.js" defer></script>
+<style>
+  :root {
+    --bg: #0E130F; --bg-elev: #121813; --bg-card: #161D18;
+    --border: rgba(238,235,229,.09); --border-light: rgba(238,235,229,.16);
+    --text: #EEEBE2; --text-soft: #D1CEC5; --text-muted: #A5A699; /* AAA on --bg: soft 11.96:1, muted 8.17:1 */
+    --accent: #E4AA71; --accent-2: #F2A26A; --accent-3: #98B79E; --accent-4: #ECEBE5; --danger: #CAAB88;
+    --radius: 14px; --radius-sm: 8px;
+    --shadow: 0 24px 80px -28px rgba(0,0,0,0.6);
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --display: "Fraunces", Georgia, "Times New Roman", serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+  .skip-link { position:absolute; left:-999px; top:0; z-index:200; background:var(--accent); color:var(--bg); font-weight:700; padding:10px 16px; border-radius:0 0 10px 0; text-decoration:none; }
+  .skip-link:focus { left:0; }
+  body { margin:0; background:var(--bg); background-image:radial-gradient(ellipse 80% 60% at 50% -10%, rgba(57,95,71,.35), transparent 60%), radial-gradient(ellipse 60% 40% at 100% 100%, rgba(228,170,113,.08), transparent 70%); color:var(--text); font-family:var(--sans); font-size:15px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  a { color:var(--accent-2); text-decoration:none; } a:hover { text-decoration:underline; }
+  code, .mono { font-family:var(--mono); }
+  code { background:rgba(242,162,106,.10); color:var(--accent-2); padding:2px 6px; border-radius:5px; font-size:.92em; }
+  h1,h2,h3 { margin:0; line-height:1.25; font-family:var(--display); letter-spacing:-0.02em; }
+  p { margin:0 0 14px; color:var(--text-soft); }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  .hero { padding:60px 0 48px; }
+  .kicker { font-family:var(--mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); display:inline-block; border:1px solid var(--border-light); padding:6px 14px; border-radius:999px; margin-bottom:20px; }
+  .hero h1 { font-size:clamp(38px,6vw,64px); font-weight:700; letter-spacing:-0.03em; line-height:1.05; }
+  .hero h1 em { font-style:normal; background:linear-gradient(92deg,#E4AA71,#F2A26A,#98B79E); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero p.lede { max-width:720px; font-size:19px; color:var(--text-soft); margin-top:22px; }
+
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin:44px 0 12px; }
+  .stat { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; text-align:center; box-shadow:var(--shadow); }
+  .stat .n { font-size:34px; font-weight:700; color:var(--accent); font-family:var(--mono); }
+  .stat .l { font-size:12.5px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.08em; margin-top:6px; }
+
+  .card .ci { width:36px;height:36px;border-radius:10px;display:grid;place-items:center;margin-bottom:6px;border:1px solid var(--border-light);background:rgba(228,170,113,.08);color:var(--accent); }
+  .card.t-2 .ci { color:var(--accent-2); background:rgba(242,162,106,.08); border-color:rgba(242,162,106,.22);}
+  .card.t-3 .ci { color:var(--accent-3); background:rgba(152,183,158,.08); border-color:rgba(152,183,158,.22);}
+  .card.t-accent .ci { color:var(--accent); }
+  .card.t-4 .ci { color:var(--accent-4); background:rgba(236,235,229,.09); border-color:rgba(236,235,229,.22);}
+  .watermark { position:absolute; top:-20px; right:-40px; width:400px; height:auto; opacity:.05; pointer-events:none; object-fit:contain; }
+  .hero { position:relative; }
+  .hero::before { content:""; position:absolute; top:-40px; left:50%; transform:translateX(-50%); width:600px; height:300px; background:radial-gradient(ellipse, rgba(228,170,113,.06), transparent 70%); pointer-events:none; z-index:-1; }
+  @media(max-width:820px){ .watermark{display:none} }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; padding:24px 0 80px; }
+  .cards-head { margin-bottom:8px; }
+  .cards-head h2 { font-size:24px; }
+  .cards-head p { font-size:14px; color:var(--text-muted); margin-top:4px; }
+  .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:28px; display:flex; flex-direction:column; gap:14px; transition:transform .18s ease, border-color .18s ease; box-shadow:var(--shadow); }
+  .card:hover { transform:translateY(-3px); border-color:var(--border-light); text-decoration:none; }
+  .card:hover .ci { box-shadow:0 0 16px -4px currentColor; }
+  .card .t { font-size:12px; font-family:var(--mono); letter-spacing:.12em; text-transform:uppercase; }
+  .card .h { font-size:20px; font-weight:700; color:var(--text); }
+  .card .d { color:var(--text-soft); font-size:14.5px; flex:1; }
+  .card .go { font-family:var(--mono); font-size:12.5px; display:inline-flex; gap:8px; align-items:center; }
+  .card.t-accent .t, .card.t-accent .go { color:var(--accent); }
+  .card.t-2 .t, .card.t-2 .go { color:var(--accent-2); }
+  .card.t-3 .t, .card.t-3 .go { color:var(--accent-3); }
+  .card.t-4 .t, .card.t-4 .go { color:var(--accent-4); }
+  .card .pill { display:inline-block; font-family:var(--mono); font-size:10.5px; padding:3px 9px; border-radius:999px; border:1px solid var(--border-light); color:var(--text-muted); width:fit-content; }
+
+  footer { border-top:1px solid var(--border); padding:28px 0 40px; margin-top:40px; }
+  footer .inner { display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; font-family:var(--mono); font-size:12.5px; color:var(--text-muted); }
+  footer a { color:var(--text-soft); }
+
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<main class="wrap" id="main">
+  <section class="hero" aria-label="Introduction"><img class="watermark" src="./assets/grove-ghost.svg" alt="" aria-hidden="true" />
+    <span class="kicker">Public Mirror · t-granlund/spruce_grove</span>
+    <h1>Spruce Grove, <em>documented.</em></h1>
+    <p class="lede">A living knowledge base for the multi-agent CLI platform. Explore every tool, agent, plugin, and skill; read the curated breakdown of the last two months of shipping; or take the fully-offline flat file on the go.</p>
+
+    <div class="stats" id="stats">
+      <!-- injected at build-time by pages workflow -->
+      <div class="stat"><div class="n" id="s-tools">61</div><div class="l">Tools</div></div>
+      <div class="stat"><div class="n" id="s-agents">22</div><div class="l">Agents</div></div>
+      <div class="stat"><div class="n" id="s-plugins">65</div><div class="l">Plugins</div></div>
+      <div class="stat"><div class="n" id="s-commits">952</div><div class="l">Commits / 2mo</div></div>
+    </div>
+  </section>
+
+  <section class="cards" aria-label="Knowledge base sections">
+    <div class="cards-head"><h2>Explore the Platform</h2><p>Pick a starting point — each section is self-contained and works offline.</p></div>
+    <a class="card t-2" href="./field-guide/">
+      <span class="ci"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/></svg></span>
+      <span class="t">Explore</span>
+      <span class="h">Field Guide</span>
+      <span class="d">The interactive explorer for the whole platform: browse every tool, sub-agent, plugin, skill, and the SDLC lifecycle — filterable, live-synced to the repo, rebuilt daily.</span>
+      <span class="pill">interactive · data-driven</span>
+      <span class="go">Open the explorer →</span>
+    </a>
+
+    <a class="card t-accent" href="./releases/">
+      <span class="ci"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg></span>
+      <span class="t">Catch Up</span>
+      <span class="h">Release Observatory</span>
+      <span class="d">Curated deep-dives on the notable updates of the last two months — what each is, what it does, and why it matters — plus a scannable index of every minor change and bug fix.</span>
+      <span class="pill">curated · last 60 days</span>
+      <span class="go">Read the updates →</span>
+    </a>
+
+    <a class="card t-4" href="./architecture/">
+      <span class="ci"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg></span>
+      <span class="t">Understand</span>
+      <span class="h">Architecture</span>
+      <span class="d">The self-healing pipeline as a single diagram &mdash; scheduler, six-stage train, mirrors, backups, and the watchdog that keeps the whole machine honest.</span>
+      <span class="pill">visual &middot; apple-grade</span>
+      <span class="go">See the machine &rarr;</span>
+    </a>
+
+    <a class="card t-3" href="./mechanics/">
+      <span class="ci"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span>
+      <span class="t">Trust</span>
+      <span class="h">The Mechanics</span>
+      <span class="d">How the grove tends itself, on one page: the breathing self-update loop, the four contracts, gates and judges, the nine-rounds-zero-defects war story, and the ethos beneath every mechanism.</span>
+      <span class="pill">one page &middot; ethos to evidence</span>
+      <span class="go">See how it heals &rarr;</span>
+    </a>
+    <a class="card t-3" href="./council/">
+      <span class="ci"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg></span>
+      <span class="t">Governance</span>
+      <span class="h">The Council &amp; the Wall</span>
+      <span class="go">How it is steered &rarr;</span>
+    </a>
+
+    <a class="card t-3" href="./flat/">
+      <span class="ci"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span>
+      <span class="t">Carry</span>
+      <span class="h">Flat Field Guide</span>
+      <span class="d">A single self-contained HTML file with the entire field guide inlined — no server, no assets. Download it, email it, or open it from a thumb drive.</span>
+      <span class="pill">offline · self-contained</span>
+      <span class="go">Get the flat file →</span>
+    </a>
+
+    <a class="card t-3" href="./progress.html">
+      <span class="ci"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M12 19h4.5a3.5 3.5 0 0 0 0-7h-9a3.5 3.5 0 0 1 0-7H12"/></svg></span>
+      <span class="t">Track</span>
+      <span class="h">Roadmap: Then &rarr; Now &rarr; Next</span>
+      <span class="d">The original MASTER-MASTER-PROMPT spec beside what ships tonight and the live bead queue &mdash; rung by rung, with build-log evidence for every claim.</span>
+      <span class="pill">spec vs shipped vs queue</span>
+      <span class="go">See the board &rarr;</span>
+    </a>
+
+    <a class="card t-accent" href="./announce.html">
+      <span class="ci"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>
+      <span class="t">Announce</span>
+      <span class="h">Product Page</span>
+      <span class="d">The 1.0.0 announcement: what the grove is, the voice-first loop, and every way to download it &mdash; CLI, desktop app, source.</span>
+      <span class="pill">launch &middot; share this</span>
+      <span class="go">See the landing &rarr;</span>
+    </a>
+
+    <a class="card t-accent" href="./design/">
+      <span class="ci"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20Z"/></svg></span>
+      <span class="t">Reference</span>
+      <span class="h">Design System</span>
+      <span class="d">The Granlund-Grove forest palette in full: every token, swatch, icon, and component — with WCAG AAA contrast ratios documented for every color.</span>
+      <span class="pill">grove theme · AAA</span>
+      <span class="go">See the system →</span>
+    </a>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap inner">
+    <span>Spruce Grove public mirror · rebuilt on demand by the update_schedule pipeline</span>
+    <span>source: <a href="https://github.com/mpfaffenberger/code_puppy" target="_blank" rel="noopener">mpfaffenberger/spruce_grove</a> · mirror: <a href="https://github.com/t-granlund/code_puppy" target="_blank" rel="noopener">t-granlund/spruce_grove</a></span>
+  </div>
+</footer>
+
+<script>
+<!-- Stats: load field-guide data.js via script include (works on file://,
+     unlike fetch). The GitHub Pages workflow also injects at build time;
+     this covers local dev + any path the deploy might miss. Try the Pages
+     path first, then the local-dev relative path. -->
+<script src="./field-guide/data.js" onerror="this.onerror=null;this.src='../docs/field-guide/data.js'"></script>
+<script>
+  (function() {
+    // If the Pages workflow already injected numbers, skip.
+    if (document.getElementById('s-tools').textContent !== '—') return;
+    var d = window.FIELD_GUIDE_DATA;
+    if (!d || !d.stats) return;
+    var map = {
+      's-tools': d.stats.tools,
+      's-agents': d.stats.agents,
+      's-plugins': d.stats.plugins,
+      's-commits': d.stats.commitsLast2Months,
+    };
+    Object.keys(map).forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && map[id] != null) el.textContent = map[id];
+    });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spruce Grove OS — the agentic coding CLI that speaks your language</title>
+<meta name="description" content="Spruce Grove OS 1.0.0: speak your prompt, review the transcript, send it to the grove. Local whisper transcription, plugin architecture, zero-telemetry voice loop. Open source.">
+<link rel="icon" type="image/png" href="./assets/favicon-64.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="./assets/tokens.css" />
+<style>
+  body { margin:0; background:var(--BB-bg); color:var(--BB-t2); font-family:var(--BB-sans); font-size:16px; line-height:1.7; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:980px; margin:0 auto; padding:0 24px; }
+  a { color:var(--BB-cyan); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  h1,h2,h3 { font-family:var(--BB-display); color:var(--BB-t1); line-height:1.2; margin:0; letter-spacing:-0.02em; }
+  code, .mono { font-family:var(--BB-mono); }
+  code { background:rgba(242,162,106,.10); color:var(--BB-cyan); padding:2px 7px; border-radius:6px; font-size:.9em; }
+  .kicker { font-family:var(--BB-mono); font-size:11.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--BB-peri); display:inline-block; border:1px solid var(--BB-line-2); padding:6px 14px; border-radius:999px; }
+  /* hero */
+  header.hero { padding:96px 0 64px; text-align:center; position:relative; overflow:hidden; }
+  header.hero::before { content:""; position:absolute; inset:-40% -20% auto; height:130%;
+    background:radial-gradient(60% 55% at 50% 0%, rgba(88,143,94,.20), transparent 70%); pointer-events:none; }
+  .hero .inner { position:relative; }
+  .hero h1 { font-size:clamp(34px,5.6vw,58px); margin:22px 0 0; }
+  .hero h1 em { font-style:normal; background:var(--BB-grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero .sub { max-width:640px; margin:20px auto 0; font-size:18px; color:var(--BB-t2); }
+  .ctas { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:34px; }
+  .cta { display:inline-flex; align-items:center; gap:10px; border-radius:12px; padding:13px 26px;
+    font-weight:600; font-size:15px; border:1px solid var(--BB-line-2); color:var(--BB-t1);
+    background:var(--BB-bg-card); transition:border-color .15s ease; }
+  .cta:hover { border-color:var(--BB-mint); text-decoration:none; }
+  .cta.solid { background:var(--BB-grad); border:none; color:#0b110c; }
+  .cta.solid:hover { filter:brightness(1.08); }
+  .hero .ver { margin-top:26px; font-family:var(--BB-mono); font-size:12px; color:var(--BB-t3); }
+  /* sections */
+  section { padding:56px 0; border-top:1px solid var(--BB-line); }
+  .sec-h { text-align:center; margin-bottom:34px; }
+  .sec-h .kicker { margin-bottom:14px; }
+  .sec-h h2 { font-size:clamp(24px,3.4vw,34px); }
+  .sec-h p { max-width:640px; margin:12px auto 0; color:var(--BB-t3); }
+  /* voice loop steps */
+  .loop { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; }
+  .loop .step { border:1px solid var(--BB-line); border-radius:14px; background:var(--BB-bg-card); padding:20px; }
+  .loop .n { font-family:var(--BB-mono); font-size:11px; letter-spacing:.16em; color:var(--BB-mint); }
+  .loop h3 { font-size:16.5px; margin:8px 0 6px; }
+  .loop p { margin:0; font-size:14px; color:var(--BB-t2); }
+  /* terminal card */
+  .terminal { border:1px solid var(--BB-line-2); border-radius:16px; overflow:hidden; margin:34px auto 0; max-width:760px;
+    background:linear-gradient(170deg, var(--BB-spruce-deep, #17251b), var(--BB-bg-card) 80%); box-shadow:0 18px 50px rgba(0,0,0,.35); }
+  .terminal .bar { display:flex; gap:7px; padding:12px 16px; border-bottom:1px solid var(--BB-line); }
+  .terminal .bar i { width:11px; height:11px; border-radius:50%; background:var(--BB-line-2); }
+  .terminal .bar i:first-child { background:#c96f4a; }
+  .terminal .body { padding:20px 22px; font-family:var(--BB-mono); font-size:13px; line-height:1.75; text-align:left; }
+  .terminal .u { color:var(--BB-mint); }
+  .terminal .d { color:var(--BB-t3); }
+  .terminal .a { color:var(--BB-peri-l); }
+  /* downloads */
+  .dl { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+  .dl .card { border:1px solid var(--BB-line); border-radius:16px; background:var(--BB-bg-card); padding:24px; display:flex; flex-direction:column; gap:10px; }
+  .dl .card.best { border-color:rgba(88,143,94,.5); box-shadow:0 0 0 1px rgba(88,143,94,.25), 0 14px 40px rgba(0,0,0,.25); }
+  .dl h3 { font-size:18px; }
+  .dl .pill { font-family:var(--BB-mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--BB-cedar); }
+  .dl p { margin:0; font-size:14px; color:var(--BB-t2); flex:1; }
+  .dl .cmd { position:relative; background:var(--BB-bg-elev, rgba(0,0,0,.3)); border:1px solid var(--BB-line);
+    border-radius:10px; padding:11px 38px 11px 13px; font-family:var(--BB-mono); font-size:12px; color:var(--BB-mint);
+    overflow-x:auto; white-space:nowrap; }
+  .dl .copy { position:absolute; right:6px; top:6px; bottom:6px; border:none; background:transparent; color:var(--BB-t3);
+    cursor:pointer; font-family:var(--BB-mono); font-size:11px; border-radius:6px; padding:0 8px; }
+  .dl .copy:hover { color:var(--BB-t1); background:rgba(255,255,255,.06); }
+  .dl .go { font-weight:600; font-size:14px; }
+  .fine { font-size:12px; color:var(--BB-t3); margin-top:4px; }
+  /* ethos */
+  .ethos { text-align:center; padding:72px 0; border-top:1px solid var(--BB-line); position:relative; overflow:hidden; }
+  .ethos::before { content:""; position:absolute; inset:auto -10% -60%; height:80%;
+    background:radial-gradient(50% 60% at 50% 100%, rgba(88,143,94,.16), transparent 70%); pointer-events:none; }
+  .ethos blockquote { margin:0 auto; max-width:760px; font-family:var(--BB-display); font-size:clamp(20px,3vw,28px);
+    color:var(--BB-peri-l); line-height:1.45; }
+  .ethos .club { margin-top:16px; font-family:var(--BB-mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--BB-t3); }
+  footer { border-top:1px solid var(--BB-line); padding:34px 0 44px; }
+  footer .wrap { display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap; font-size:13px; color:var(--BB-t3); }
+  footer a { color:var(--BB-t2); }
+  .links { display:flex; gap:18px; flex-wrap:wrap; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap inner">
+    <span class="kicker">Spruce Grove OS &middot; v1.0.0 &middot; &ldquo;the grove speaks&rdquo;</span>
+    <h1>The agentic coding CLI<br>that speaks <em>your</em> language.</h1>
+    <p class="sub">Say what you need out loud. Spruce Grove transcribes it on-device with a
+    local whisper model, shows you the words, lets you tune them, and hands them to the agent
+    working in your repo. Open source. Your voice never leaves your Mac.</p>
+    <div class="ctas">
+      <a class="cta solid" href="#download">Get the grove</a>
+      <a class="cta" href="#voice">Hear how it works</a>
+      <a class="cta" href="https://github.com/t-granlund/SPRUCE-GROVE-OS" target="_blank" rel="noopener">Source on GitHub</a>
+    </div>
+    <div class="ver">MIT &middot; built from Code Puppy (Michael Pfaffenberger) &middot; backed by the Leather Apron Club &middot; together we are better, always</div>
+  </div>
+</header>
+
+<section id="voice">
+  <div class="wrap">
+    <div class="sec-h">
+      <span class="kicker">voice-first</span>
+      <h2>Think out loud. Ship anyway.</h2>
+      <p>The whole loop is local until you choose to send: capture, transcription, review.
+      The agent only ever sees words you approved.</p>
+    </div>
+    <div class="loop">
+      <div class="step"><div class="n">01 &middot; SPEAK</div><h3>Record</h3><p>Hit <code>/rec</code> in the CLI or the mic button in the desktop app. Pause and resume &mdash; riffs welcome.</p></div>
+      <div class="step"><div class="n">02 &middot; LISTEN BACK</div><h3>Transcribe locally</h3><p>whisper-large-v3-turbo runs on your Metal GPU. No cloud, no queue, no telemetry.</p></div>
+      <div class="step"><div class="n">03 &middot; TUNE</div><h3>Review &amp; edit</h3><p>The transcript lands in an editable prompt. Re-record against your own draft until it sings.</p></div>
+      <div class="step"><div class="n">04 &middot; SEND</div><h3>Dispatch the agent</h3><p>Your approved words become the prompt, applied against the directory you're working in.</p></div>
+    </div>
+    <div class="terminal">
+      <div class="bar"><i></i><i></i><i></i></div>
+      <div class="body">
+        <div class="u">you &middot; /rec &middot; spoken, 7 seconds</div>
+        <div>&gt; Thank you.</div>
+        <div class="d">&nbsp;</div>
+        <div class="u">grove &middot; transcript approved &mdash; sending it through as your prompt</div>
+        <div class="a">Cedar &middot; Hey there! You're very welcome. I'm Junto, your grove guide &mdash;
+        nothing pending on my end, just hanging out among the spruces.</div>
+        <div class="d">&nbsp;</div>
+        <div class="d">// real session, live TUI, local whisper &mdash; see BUILD-LOG.md 29</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="download">
+  <div class="wrap">
+    <div class="sec-h">
+      <span class="kicker">download</span>
+      <h2>Pick your trailhead</h2>
+      <p>The CLI is the harness. The desktop app is a thin shell around it. The source is the source.</p>
+    </div>
+    <div class="dl">
+      <div class="card best">
+        <span class="pill">CLI &middot; recommended</span>
+        <h3>Spruce Grove CLI</h3>
+        <p>The full harness: agents, plugins, the <code>/rec</code> voice loop, 40+ tools. Installs as an isolated uv tool.</p>
+        <div class="cmd">uv tool install spruce-grove
+          <button class="copy" data-copy>copy</button></div>
+        <div class="fine">Try before installing: <code>uvx spruce-grove --version</code> &middot; Published on PyPI as <a href="https://pypi.org/project/spruce-grove/"><strong>spruce-grove 1.0.1</strong></a> (trusted publishing, zero tokens) &middot; open source, MIT.</div>
+        <a class="go" href="https://github.com/t-granlund/SPRUCE-GROVE-OS#readme" target="_blank" rel="noopener">Setup guide &rarr;</a>
+      </div>
+      <div class="card">
+        <span class="pill">macOS &middot; apple silicon</span>
+        <h3>Desktop app v0.1.0</h3>
+        <p>A quiet Tauri window over the CLI: type or dictate, watch it think. Continuity rides the CLI's quick-resume.</p>
+        <div class="cmd">github.com/t-granlund/spruce-grove-desktop/releases/latest
+          <button class="copy" data-copy>copy</button></div>
+        <div class="fine">Unzip &rarr; drag to Applications &rarr; right-click &rarr; Open (unsigned build). Needs the CLI + ffmpeg + a whisper model for dictation.</div>
+        <a class="go" href="https://github.com/t-granlund/spruce-grove-desktop/releases/tag/v0.1.0" target="_blank" rel="noopener">Release notes &rarr;</a>
+      </div>
+      <div class="card">
+        <span class="pill">source &middot; mit</span>
+        <h3>Clone the grove</h3>
+        <p>Read the build-log ladder, run the tests, plant your own plugins. The whole trail is the repo.</p>
+        <div class="cmd">git clone https://github.com/t-granlund/SPRUCE-GROVE-OS
+          <button class="copy" data-copy>copy</button></div>
+        <div class="fine">29 build-log entries, bead-tracked roadmap, design system in <code>pages-hub/</code>.</div>
+        <a class="go" href="https://github.com/t-granlund/SPRUCE-GROVE-OS" target="_blank" rel="noopener">Browse the source &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="platform">
+  <div class="wrap">
+    <div class="sec-h">
+      <span class="kicker">under the canopy</span>
+      <h2>A harness you can garden in</h2>
+    </div>
+    <div class="loop">
+      <div class="step"><div class="n">PLUGINS</div><h3>Three tiers, one golden rule</h3><p>Builtin, user, and project plugins with a SHA-256 trust ceremony. Every feature in 1.0 shipped without touching core.</p></div>
+      <div class="step"><div class="n">AGENTS</div><h3>Cedar and the cohort</h3><p>Sub-agents, skills, model routing &mdash; inherited from the Code Puppy harness, rebranded to the grove and kept compatible upstream.</p></div>
+      <div class="step"><div class="n">PRIVACY</div><h3>Local by default</h3><p>Transcription is on-device. Provider credentials live in your macOS keychain, referenced by rotation-safe env-refs, never in plaintext configs.</p></div>
+      <div class="step"><div class="n">PROVENANCE</div><h3>Every trail recorded</h3><p>A 29-entry build-log, a bead-tracked roadmap, and a rename map back to upstream. Traceability is the ethos, not a feature.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="ethos">
+  <div class="wrap">
+    <blockquote>&ldquo;The harness is borrowed. The grove is ours.<br>Leave it better than we found it.&rdquo;</blockquote>
+    <div class="club">The Leather Apron Club (Junto) &middot; est. 1727 &middot; rebooted for the Ozarks</div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Spruce Grove OS 1.0.0 &middot; <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS" target="_blank" rel="noopener">source</a> &middot; <a href="https://github.com/t-granlund/spruce-grove-desktop" target="_blank" rel="noopener">desktop</a> &middot; <a href="https://github.com/mpfaffenberger/code_puppy" target="_blank" rel="noopener">upstream: Code Puppy</a></span>
+    <span class="links"><a href="./">product</a><a href="./hub.html">hub</a><a href="./progress.html">progress</a><a href="./phases.html">roadmap</a><a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/BUILD-LOG.md" target="_blank" rel="noopener">build-log</a><a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/PROVENANCE.md" target="_blank" rel="noopener">provenance</a></span>
+  </div>
+</footer>
+
+<script>
+  // copy buttons: one behavior, zero dependencies
+  document.querySelectorAll("[data-copy]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const cmd = btn.closest(".cmd").childNodes[0].textContent.trim();
+      navigator.clipboard.writeText(cmd).then(() => {
+        btn.textContent = "copied";
+        setTimeout(() => (btn.textContent = "copy"), 1400);
+      });
+    });
+  });
+</script>
+</body>
+</html>

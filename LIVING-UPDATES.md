@@ -44,6 +44,27 @@ The harness wins by running three moves in parallel, not sequentially:
 
 <!-- LIVING:BEGIN -->
 
+### 2026-09-15 — The execution board: the sovereignty work becomes runnable
+- Source: build session (the "what can be automated" question)
+- Status: in-flight
+- Origin: grove-grown
+- The infrastructure runbook became a task board
+  (`docs/SOVEREIGNTY-EXECUTION.md`) with one owner per task: the human
+  for identity, payment, ceremony, and approval; scripts for everything
+  that can be verified.
+- Automation kit landed in `scripts/sovereignty/`: the wall
+  (`arm_the_wall.sh`), the insurance snapshot (`backup_github.sh`), the
+  site-parity harness (`build_site_parity.sh` — byte-identical artifact
+  proof for the rails migration), the clean-history export
+  (`fresh_history_export.sh`), and the Forgejo/Woodpecker/Caddy stack
+  templates.
+- Live inventories taken: domains (the project domain was already
+  privacy-shielded at purchase — Porkbun, private registrant) and the
+  full account surface (repos, collaborators, secrets, protection state).
+- First supply-chain audit ran against the actual ship set: one finding
+  (a file-upload parser with a known advisory), fixed and re-audited to
+  zero. The audit command is now part of the board.
+
 ### 2026-09-15 — The Council & The Wall: governance made public
 - Source: council session (governance design)
 - Status: in-flight

@@ -1,0 +1,34 @@
+# The grove's front door. TLS automatic via Let's Encrypt.
+# Serves: the release observatory + static site, the wheel index,
+# and reverse-proxies Forgejo + Woodpecker.
+
+{
+	email {$ACME_EMAIL}
+}
+
+# The public site (the artifact the CI builds — mounted read-only at /srv/site)
+sprucegrove.io, www.sprucegrove.io {
+	root * /srv/site
+	encode gzip zstd
+	try_files {path} {path}/ /index.html
+	file_server
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "no-referrer"
+	}
+}
+
+# The wheel index — the grove's own package rail (Phase D option b)
+releases.sprucegrove.io {
+	root * /srv/site/dist
+	file_server
+}
+
+git.sprucegrove.io {
+	reverse_proxy forgejo:3000
+}
+
+ci.sprucegrove.io {
+	reverse_proxy woodpecker-server:8000
+}

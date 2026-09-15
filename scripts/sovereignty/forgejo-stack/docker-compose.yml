@@ -1,0 +1,77 @@
+# The grove's own rails — Forgejo (git) + Woodpecker (CI) + Caddy (site/index).
+# Self-hosted, steward-owned, runs on any Linux box or VPS.
+#
+# Usage:
+#   cp .env.example .env   # fill in the steward values
+#   docker compose up -d
+#   Then: Woodpecker web UI -> connect Forgejo -> enable the repos.
+#
+# This file is a TEMPLATE from docs/SOVEREIGNTY-INFRASTRUCTURE.md Phase C.
+# It is infrastructure and passes the same Gate as code: council sign-off
+# before it faces the public internet.
+
+services:
+  forgejo:
+    image: codeberg.org/forgejo/forgejo:9-rootless
+    restart: unless-stopped
+    environment:
+      FORGEJO__server__DOMAIN: ${FORGEJO_DOMAIN}
+      FORGEJO__server__ROOT_URL: https://${FORGEJO_DOMAIN}
+      FORGEJO__service__DISABLE_REGISTRATION: "true"
+      USER: git
+      GITEA_CUSTOM: /data/gitea
+    volumes:
+      - forgejo-data:/data
+    ports:
+      - "127.0.0.1:3000:3000"
+
+  woodpecker-server:
+    image: woodpeckerci/woodpecker-server:v3
+    restart: unless-stopped
+    environment:
+      WOODPECKER_OPEN: "false"
+      WOODPECKER_HOST: https://${CI_DOMAIN}
+      WOODPECKER_AGENT_SECRET: ${WOODPECKER_AGENT_SECRET}
+      WOODPECKER_FORGEJO: "true"
+      WOODPECKER_FORGEJO_URL: https://${FORGEJO_DOMAIN}
+      WOODPECKER_FORGEJO_CLIENT: ${WOODPECKER_CLIENT_ID}
+      WOODPECKER_FORGEJO_SECRET: ${WOODPECKER_CLIENT_SECRET}
+    volumes:
+      - woodpecker-data:/var/lib/woodpecker
+    ports:
+      - "127.0.0.1:8000:8000"
+
+  woodpecker-agent:
+    image: woodpeckerci/woodpecker-agent:v3
+    restart: unless-stopped
+    depends_on:
+      - woodpecker-server
+    environment:
+      WOODPECKER_SERVER: woodpecker-server:9000
+      WOODPECKER_AGENT_SECRET: ${WOODPECKER_AGENT_SECRET}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on:
+      - forgejo
+      - woodpecker-server
+    environment:
+      ACME_EMAIL: ${ACME_EMAIL}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+      - site:/srv/site:ro
+
+volumes:
+  forgejo-data:
+  woodpecker-data:
+  caddy-data:
+  caddy-config:
+  site:

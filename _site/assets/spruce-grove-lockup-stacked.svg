@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 352" role="img" aria-label="Spruce Grove stacked lockup">
+  <!-- STACKED LOCKUP · mark above wordmark. For badges, READMEs, deck title slides. -->
+  <g fill="none" stroke-linejoin="round" stroke-linecap="round" transform="translate(50 4)">
+    <path d="M78 96 L48 141 L63 141 L40.5 176 L68 176 L68 196 L88 196 L88 176 L115.5 176 L93 141 L108 141 Z"
+          fill="#D1CEC5" fill-opacity="0.12" stroke="#D1CEC5" stroke-opacity="0.8" stroke-width="7"/>
+    <path d="M242 96 L212 141 L227 141 L204.5 176 L232 176 L232 196 L252 196 L252 176 L279.5 176 L257 141 L272 141 Z"
+          fill="#D1CEC5" fill-opacity="0.12" stroke="#D1CEC5" stroke-opacity="0.8" stroke-width="7"/>
+    <path d="M160 46 L115 113.5 L137.5 113.5 L103.75 166 L145 166 L145 196 L175 196 L175 166 L216.25 166 L182.5 113.5 L205 113.5 Z"
+          fill="#E4AA71" fill-opacity="0.16" stroke="#E4AA71" stroke-width="10.5"/>
+    <path d="M28 206 H292" stroke="#D1CEC5" stroke-opacity="0.85" stroke-width="6"/>
+  </g>
+  <text x="210" y="300" text-anchor="middle" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-weight="600"
+        font-size="56" letter-spacing="-1" fill="#EEEBE2">Spruce Grove</text>
+  <text x="210" y="332" text-anchor="middle" font-family="'JetBrains Mono', Menlo, monospace" font-weight="500"
+        font-size="13" letter-spacing="4" fill="#A5A699">TOGETHER WE ARE BETTER. ALWAYS.</text>
+</svg>

@@ -1,0 +1,82 @@
+/* ============================================================
+   Spruce Grove -- Design tokens (Granlund-Grove forest theme)
+   WCAG 2.2 AAA calibrated on --BB-bg (#0E130F).
+   Palette migrated from the granlund-grove design system:
+   charcoal-green base, warm cedar primary, forest sage accents.
+   ============================================================ */
+:root {
+  /* surfaces (grove charcoal-green) */
+  --BB-bg: #0E130F;
+  --BB-bg-elev: #121813;
+  --BB-bg-card: #161D18;
+  --BB-panel: #1B211C;
+
+  /* borders (warm-tinted, low-opacity) */
+  --BB-line: rgba(238,235,229,.10);
+  --BB-line-2: rgba(238,235,229,.18);
+
+  /* PARAGRAPH / body text (AAA >= 7:1 on --BB-bg) */
+  --BB-t1: #EEEBE2;                 /* 15.7:1 -- grove foreground, headings */
+  --BB-t2: #D1CEC5;                 /* 11.9:1 -- grove stone, body copy */
+  --BB-t3: #A5A699;                 /*  7.6:1 -- grove muted-fg, secondary */
+
+  /* ACCENT foregrounds: >= 4.5:1, for large text / UI chrome / data only */
+  --BB-peri: #E4AA71;               /*  9.2:1 -- cedar, primary accent */
+  --BB-cyan: #F2A26A;               /*  9.1:1 -- cedar-bright, interactive */
+  --BB-mint: #98B79E;               /*  8.6:1 -- sage, positive/success */
+  --BB-peri-l: #ECEBE5;             /* 15.7:1 -- mist, light accent */
+  --BB-pink: #CAAB88;               /*  8.7:1 -- amber-soft, tertiary */
+
+  /* forest palette (surface/decorative, NOT for small text) */
+  --BB-spruce: #1D3A2A;
+  --BB-spruce-deep: #0E1F15;
+  --BB-moss: #395F47;
+  --BB-cedar: #E4AA71;
+  --BB-stone: #D1CEC5;
+  --BB-mist: #ECEBE5;
+  --BB-bark: #3D3026;
+
+  /* LINKS */
+  --BB-link: var(--BB-cyan);
+  --BB-link-hover: var(--BB-mint);
+
+  /* focus ring: AAA vs surfaces AND vs all accents */
+  --BB-focus: var(--BB-cedar);
+
+  /* type & radius */
+  --BB-radius: 14px;
+  --BB-radius-sm: 8px;
+  --BB-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --BB-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --BB-display: "Fraunces", Georgia, "Times New Roman", serif;
+
+  /* gradients */
+  --BB-grad: linear-gradient(92deg, #E4AA71, #F2A26A, #98B79E, #CAAB88);
+  --BB-grad-grove: linear-gradient(180deg,
+    rgba(14,19,15,0) 0%, rgba(14,19,15,.6) 60%, #0E130F 100%);
+  --BB-grad-fade: radial-gradient(ellipse at top,
+    rgba(57,95,71,.4), transparent 60%);
+
+  /* shadows (grove atmospheric) */
+  --BB-shadow-grove: 0 30px 80px -20px rgba(0,0,0,.55), 0 4px 16px -4px rgba(0,0,0,.4);
+  --BB-shadow-lift: 0 12px 40px -16px rgba(0,0,0,.5);
+  --BB-shadow: 0 24px 80px -28px rgba(0,0,0,.6);
+}
+
+/* -- Atmospheric base styles (grove) ------------------------------- */
+::selection { background: var(--BB-cedar); color: var(--BB-bg); }
+
+/* Forest-tinted scrollbar */
+* { scrollbar-width: thin; scrollbar-color: rgba(57,95,71,.6) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background-color: rgba(45,75,55,.7); border-radius: 999px;
+  border: 2px solid transparent; background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background-color: rgba(228,170,113,.75); }
+
+/* Cedar focus ring (WCAG 2.2 Focus Appearance) */
+:focus-visible {
+  outline: 2px solid var(--BB-cedar); outline-offset: 2px;
+}

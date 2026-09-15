@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spruce Grove OS — the complete machine</title>
+  <meta name="description" content="Voice-first agentic coding CLI with a desktop shell: live ACP streaming, mid-run steering, session durability, on-device dictation. Open source, Apache-2.0." />
+  <link rel="icon" type="image/png" href="./assets/favicon-64.png" />
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./assets/tokens.css" />
+  <link rel="stylesheet" href="./assets/product.css" />
+    <style>
+    .aud-switch { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 10px 0;
+      border-bottom: 1px solid var(--line, #223026); font-family: "JetBrains Mono", monospace;
+      font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+    .aud-switch .as-label { color: var(--text-faint, #8b988e); letter-spacing: .18em; }
+    .aud-switch .as-door { color: var(--text-dim, #93a096); text-decoration: none; padding: 3px 2px; border-bottom: 1px solid transparent; }
+    .aud-switch .as-door:hover { color: var(--text, #e8ece9); border-bottom-color: rgba(238,235,229,.14); }
+    .aud-switch .as-door.active { color: var(--ember, #e4aa71); border-bottom-color: var(--ember, #e4aa71); }
+  
+/* phones — the same kit the other doors wear: one swipeable switcher row, air in the hero */
+  @media (max-width: 720px) {
+    .models { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .models tbody { display: table; width: max-content; min-width: 100%; }
+    .aud-switch { gap: 14px 16px; padding: 9px 18px 11px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .nav { width: 100vw; }
+    .nav .wrap { height: auto; min-height: 54px; flex-wrap: wrap; padding-top: 6px; padding-bottom: 2px; row-gap: 0; }
+    .nav .wrap .aud-switch, .aud-switch { min-width: 0; width: 100%; }
+    .aud-switch::-webkit-scrollbar { display: none; }
+    .aud-switch .as-label { font-size: 9.5px; white-space: nowrap; }
+    .aud-switch .as-door { white-space: nowrap; font-size: 10.5px; }
+    .hero, .o-hero { padding-left: 22px; padding-right: 22px; }
+    .kicker, .sub, .lede { max-width: 100%; }
+    .kicker { flex-wrap: wrap; row-gap: 4px; }
+    .hero .wrap, .wrap { min-width: 0; }
+    .cmd-row { display: flex; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; contain: inline-size; }
+    .cmd-row .cmd { flex: 1 1 auto; }
+    h1 { font-size: clamp(29px, 8.4vw, 44px); }
+  }
+  </style>
+</head>
+<body>
+
+  <!-- nav -->
+  <nav class="nav">
+    <div class="wrap">
+      <span class="wordmark"><svg class="brandmark" viewBox="0 0 256 256" aria-hidden="true"><rect width="256" height="256" rx="58" fill="#E4AA71"/><g transform="translate(19.5,31) scale(0.7753)"><path fill="#0E130F" d="M64.00 72.00 L34.00 117.00 L49.00 117.00 L26.50 152.00 L54.00 152.00 L54.00 172.00 L74.00 172.00 L74.00 152.00 L101.50 152.00 L79.00 117.00 L94.00 117.00 Z"/><path fill="#0E130F" d="M216.00 72.00 L186.00 117.00 L201.00 117.00 L178.50 152.00 L206.00 152.00 L206.00 172.00 L226.00 172.00 L226.00 152.00 L253.50 152.00 L231.00 117.00 L246.00 117.00 Z"/><path fill="#0E130F" d="M140.00 50.00 L98.00 113.00 L119.00 113.00 L87.50 162.00 L126.00 162.00 L126.00 190.00 L154.00 190.00 L154.00 162.00 L192.50 162.00 L161.00 113.00 L182.00 113.00 Z"/></g></svg>Spruce Grove</span>
+      <a class="anchor owner-door" href="./" style="color:#e4aa71">for the owners &rarr;</a>
+      <a class="anchor" href="#mechanics">Mechanics</a>
+      <a class="anchor" href="#voice">Voice</a>
+      <a class="anchor" href="#steering">Steering</a>
+      <a class="anchor" href="#proven">Proven</a>
+      <a class="anchor" href="#install">Install</a>
+      <span class="ver">v<b>1.0.28</b> · Apache-2.0</span>
+    </div>
+    <div class="wrap">
+      <div class="aud-switch">
+        <span class="as-label">you are:</span>
+        <a class="as-door" href="./">running a business</a>
+        <a class="as-door active" href="./product.html">building the thing</a>
+        <a class="as-door" href="./interested.html">just curious</a>
+        <a class="as-door" href="./share.html">spreading the word</a>
+        <a class="as-door" href="./plan.html">the whole plan</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- hero -->
+  <header class="hero">
+    <div class="wrap">
+      <p class="kicker">An agentic coding CLI · voice-first · open source</p>
+      <h1>Speak.<br />It <em>builds.</em></h1>
+      <p class="sub">
+        Spruce Grove OS is a coding agent that streams its thinking, takes dictation,
+        survives its own process dying, and lets you <b>steer mid-run</b> — in a desktop
+        shell machined around the machine. Every trail inspired by Code Puppy.
+        Every value our own.
+      </p>
+      <p class="club-line">
+        Backed by the <b>Leather Apron Club (Junto)</b> — Dr.&nbsp;Franklin&rsquo;s 1727
+        mutual-improvement circle, rebooted in Bentonville, Arkansas. First council
+        Friday, September&nbsp;18, 2026 · Bentonville Barber Company.
+      </p>
+      <div class="cmd-row">
+        <span class="dollar">$</span>
+        <span class="cmd" id="cmd-install">uv tool install spruce-grove</span>
+        <button class="copy" onclick="__copyCmd('cmd-install')">copy</button>
+      </div>
+      <div class="ctas">
+        <a class="cta solid" href="#mechanics">Watch it think <span class="arr">&darr;</span></a>
+        <a class="cta" href="https://github.com/t-granlund/SPRUCE-GROVE-OS" target="_blank" rel="noopener">Source · GitHub</a>
+        <a class="cta" href="https://pypi.org/project/spruce-grove/" target="_blank" rel="noopener">PyPI</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- spec band -->
+  <section class="specs">
+    <div class="wrap">
+      <div class="spec"><div class="v"><span data-count="363"></span></div><div class="k">test files, CI-gated</div></div>
+      <div class="spec"><div class="v"><span data-count="111"></span></div><div class="k">packages on install</div></div>
+      <div class="spec"><div class="v"><span data-count="262"></span><small>k</small></div><div class="k">token context, vision tier</div></div>
+      <div class="spec"><div class="v"><span data-count="5"></span></div><div class="k">model tiers, one keychain</div></div>
+      <div class="spec"><div class="v"><span data-count="33"></span></div><div class="k">build-log entries</div></div>
+      <div class="spec"><div class="v"><span data-count="4"></span><small>s</small></div><div class="k">install to PATH</div></div>
+    </div>
+  </section>
+
+  <!-- 01 stream -->
+  <section class="sec" id="mechanics">
+    <div class="wrap">
+      <div class="sec-h"><span class="idx">01</span><h2>The session, streamed</h2></div>
+      <p class="lede">
+        No spinner-and-pray. The agent speaks the <b>ACP protocol</b> — message deltas,
+        thinking blocks, tool cards with live status chips, per-turn token counts —
+        and the desktop renders every event the instant it lands.
+        <b>Press run. It's the real dialect.</b>
+      </p>
+      <div class="machine">
+        <div class="stage">
+          <div class="stage-bar">
+            <span class="dots"><i></i><i></i><i></i></span>
+            <span class="ttl">spruce-grove --acp · session 8f3a…</span>
+            <button class="run" onclick="__runM1()">&#9654; run</button>
+            <span class="state" id="m1state">idle</span>
+          </div>
+          <div class="term" id="m1term"></div>
+        </div>
+        <div class="side">
+          <h3>Structured, not scraped</h3>
+          <p>Legacy shells scrape terminal lines and guess. Grove speaks JSON-RPC
+             over stdio: every token, every tool call, every permission is a typed
+             event with a home in the UI.</p>
+          <p>Thinking streams in italics. Tools get cards. Usage lands at turn-end.</p>
+          <div class="spec-note">
+            dialect pinned by <b>fixtures/acp/session.jsonl</b><br />
+            replayed through the real router in CI<br />
+            9 Rust unit tests · protocol drift fails loudly
+          </div>
+        </div>
+      </div>
+
+      <!-- 02 voice -->
+      <div class="sec-h" id="voice"><span class="idx">02</span><h2>Voice, gated by hands</h2></div>
+      <p class="lede">
+        Dictation is on-device. Whisper runs locally, the transcript lands
+        <b>editable</b> in the prompt, and <b>nothing sends until you send it</b>.
+        The mic is a gate, not a wiretap.
+      </p>
+      <div class="machine">
+        <div class="stage">
+          <div class="stage-bar">
+            <span class="dots"><i></i><i></i><i></i></span>
+            <span class="ttl">dictation · whisper local</span>
+            <span class="state" id="m2state2">ready</span>
+          </div>
+          <div class="mic-wrap">
+            <button class="mic" id="m2mic" onclick="__toggleMic()" aria-label="start simulated dictation">
+              <svg viewBox="0 0 24 24"><path d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V21h2v-3.08A7 7 0 0 0 19 11h-2z"/></svg>
+            </button>
+            <div class="wave" id="m2wave"></div>
+            <div class="mic-state" id="m2state">press the mic — say a feature</div>
+            <div class="draft" id="m2draft" contenteditable="false"><span class="hint">transcript lands here — edit it before it ever sends</span></div>
+          </div>
+        </div>
+        <div class="side">
+          <h3>Whisper never leaves the machine</h3>
+          <p>The voice plugin records, transcribes with local whisper, and drops
+             text in your prompt. Review is a first-class step, not a compromise.</p>
+          <p>And because it fills the same prompt box, dictation doubles as
+             <b>mid-run steering</b> — speak a redirect while the agent works.</p>
+          <div class="spec-note">
+            verb: <b>spruce-grove --transcribe file</b><br />
+            plugin: mockingbird · user-plugins tier<br />
+            zero core edits · zero cloud calls
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 steering -->
+      <div class="sec-h" id="steering"><span class="idx">03</span><h2>Steer it like it's moving</h2></div>
+      <p class="lede">
+        Because it is. ACP turns are strict request/response, so Grove makes steering
+        clean: sending while busy cancels the turn and <b>redirects within the same
+        session</b> — context intact, nothing re-explained. Type below mid-sweep.
+      </p>
+      <div class="machine">
+        <div class="stage">
+          <div class="stage-bar">
+            <span class="dots"><i></i><i></i><i></i></span>
+            <span class="ttl">long-running turn</span>
+            <button class="run" id="m3go" onclick="__runM3()">&#9654; start sweep</button>
+            <span class="state" id="m3state">idle</span>
+          </div>
+          <div class="term" id="m3term"></div>
+          <div class="steer-input">
+            <input id="m3input" type="text" placeholder="say something mid-run — enter to steer…" />
+            <button onclick="__steerSend()">steer &#8629;</button>
+          </div>
+        </div>
+        <div class="side">
+          <h3>Cancel, then redirect — same brain</h3>
+          <p>Naive shells lose the thread on cancel. Grove's client races on purpose:
+             <span class="mono">turnActive</span> tracking plus a fallback timer, so a
+             steer can never wedge on a missed turn-end.</p>
+          <p>Two real bugs — found by the UI test, fixed before they shipped.</p>
+          <div class="spec-note">
+            flow: <b>session/cancel &rarr; turn-end &rarr; re-prompt</b><br />
+            same sessionId · context preserved<br />
+            voice steer rides the same path
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 look-in -->
+      <div class="sec-h"><span class="idx">04</span><h2>Watch the browser work</h2></div>
+      <p class="lede">
+        When the agent drives a browser, screenshots stream into a
+        <b>Live Look-in panel</b> as they're taken — paths detected in tool
+        payloads, ferried to the panel, rendered while the cursor still moves.
+      </p>
+      <div class="machine">
+        <div class="stage">
+          <div class="stage-bar">
+            <span class="dots"><i></i><i></i><i></i></span>
+            <span class="ttl">agent browser · checkout flow</span>
+            <button class="run" onclick="__runM4()">&#9654; run browser</button>
+            <span class="state" id="m4state">idle</span>
+          </div>
+          <div class="lookin-demo">
+            <div class="br-card">
+              <div class="br-chrome"><i></i><i></i><i></i></div>
+              <div class="br-body">
+                <h4>Cedar Lane Supply — checkout</h4>
+                <p>An ordinary form. The agent fills it; you watch it happen.</p>
+                <div class="br-field" id="m4f1" data-ph="email@cedarlane.supply"></div>
+                <div class="br-field" data-ph="card number"></div>
+                <span class="br-btn" id="m4btn">place order</span>
+              </div>
+              <div class="br-cursor" id="m4cursor" style="left:12%;top:80%"></div>
+              <div class="flash" id="m4flash"></div>
+            </div>
+            <div class="li-panel">
+              <div class="li-head">live look-in · panel</div>
+              <div class="li-ph" id="m4ph">waiting for take_screenshot…</div>
+              <div class="li-log" id="m4log"><div>panel armed — tool payload watch on</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="side">
+          <h3>Not a screenshot folder — a window</h3>
+          <p>Browser tools save PNGs to tempdirs and report the path. The desktop
+             scans tool payloads, whitelisted-reads the image, and slides it into
+             the panel with a rolling action log.</p>
+          <p>Auto-opens on capture. Toggle it any time.</p>
+          <div class="spec-note">
+            command: <b>grove_read_image_base64</b><br />
+            extension-whitelisted · 20 MB cap<br />
+            Playwright-verified end to end
+          </div>
+        </div>
+      </div>
+
+      <!-- 05 durability -->
+      <div class="sec-h"><span class="idx">05</span><h2>It survives its own death</h2></div>
+      <p class="lede">
+        Sessions persist across process relaunches. Plant a marker, kill the agent,
+        relaunch — the fresh process <b>loads the same session and recalls the
+        marker verbatim</b>. Proven at the protocol level before a single line of UI.
+      </p>
+      <div class="machine">
+        <div class="stage">
+          <div class="stage-bar">
+            <span class="dots"><i></i><i></i><i></i></span>
+            <span class="ttl">lifecycle test · acp_probe --lifecycle</span>
+            <button class="run" id="m5kill" onclick="__runM5()">&#9889; kill -9 + relaunch</button>
+            <span class="state" id="m5state">session live</span>
+          </div>
+          <div class="kill-grid">
+            <div class="sess" id="m5live">
+              <span class="sess-t">session A · process 1</span>
+              <span class="sess-id">8f3a21c4-…</span>
+              <span class="marker">marker: GROVE-DURABILITY-082318</span>
+              <span class="pill-s">context warm</span>
+            </div>
+            <div class="sess" id="m5dead">
+              <span class="sess-t">session A · process 2 (fresh)</span>
+              <span class="sess-id">8f3a21c4-… (loaded)</span>
+              <span class="marker" id="m5deadMarker">—</span>
+              <span class="pill-s" id="m5deadState">not launched</span>
+            </div>
+          </div>
+        </div>
+        <div class="side">
+          <h3>Durability is a protocol fact</h3>
+          <p>The desktop stores your session per working directory. Relaunch the app
+             and the pill reads <span class="mono">ACP · resumed</span> — same
+             conversation, same context, new process.</p>
+          <p>A dead session never bricks the shell: load failures fall back to a
+             fresh session, gracefully.</p>
+          <div class="spec-note">
+            flow: <b>session/load across process death</b><br />
+            probe: marker recalled verbatim<br />
+            UI: resume wired, fallback wired
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 ladder -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-h"><span class="idx">06</span><h2>The ladder it was built on</h2></div>
+      <p class="lede">Nineteen beads tracked across the build. Sixteen closed with evidence. One needs your mic.</p>
+      <div class="rungs">
+        <div class="rung"><span class="rl">L0</span><span class="rt">Rebrand &amp; Junto boot banner<small>the grove in grove clothes</small></span><span class="rs">closed</span><div class="meter"><i style="width:100%"></i></div></div>
+        <div class="rung"><span class="rl">L1</span><span class="rt">Plugin tier + trust gate<small>every feature, zero core edits</small></span><span class="rs">closed</span><div class="meter"><i style="width:100%"></i></div></div>
+        <div class="rung"><span class="rl">L2</span><span class="rt">Cohort bricks · NWA plugin suite<small>real people, real problems</small></span><span class="rs">5 shipped</span><div class="meter"><i style="width:100%"></i></div></div>
+        <div class="rung"><span class="rl">L3</span><span class="rt">Voice-first pillar<small>mic &rarr; local whisper &rarr; review &rarr; send</small></span><span class="rs">closed</span><div class="meter"><i style="width:100%"></i></div></div>
+        <div class="rung"><span class="rl">L4</span><span class="rt">Namespace ratchet<small>CI-audited i18n catalog</small></span><span class="rs">closed</span><div class="meter"><i style="width:100%"></i></div></div>
+        <div class="rung"><span class="rl">L5</span><span class="rt">Desktop shell · Tauri 2<small>ACP streaming · look-in · steering · resume</small></span><span class="rs open">one smoke click</span><div class="meter"><i style="width:95%"></i></div></div>
+        <div class="rung"><span class="rl">L6</span><span class="rt">Bootable OS spin — the name made literal<small>parked, on purpose, until users ask</small></span><span class="rs open">north star</span><div class="meter"><i style="width:0%"></i></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 model rig -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-h"><span class="idx">07</span><h2>The model rig</h2></div>
+      <p class="lede">
+        Rotation-safe aliases pin behavior while the vendor rotates models behind
+        them. Keys resolve from the <b>macOS Keychain</b> — never a plaintext config.
+      </p>
+      <table class="models">
+        <thead><tr><th>alias</th><th>backs onto</th><th>context</th><th>cost weight</th><th>role</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">syn:large:text</td><td>GLM-5.3-Flash</td><td>524k</td><td>1.0&times;</td><td>the builder</td></tr>
+          <tr><td class="mono">syn:small:text</td><td>GLM-4.7-Flash</td><td>196k</td><td>0.1&times;</td><td>the workhorse</td></tr>
+          <tr><td class="mono">syn:small:vision</td><td>Qwen3.8-27B</td><td>262k</td><td>0.1&times;</td><td>the eyes (look-in)</td></tr>
+          <tr><td class="mono">syn:large:vision</td><td>Qwen3.8-27B</td><td>524k</td><td>1.0&times;</td><td>the deep read</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 08 proven -->
+  <section class="sec" id="proven">
+    <div class="wrap">
+      <div class="sec-h"><span class="idx">08</span><h2>Proven, not promised</h2></div>
+      <p class="lede">
+        The full what/why/how lives in <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/TEST-MAP.md" target="_blank" rel="noopener">TEST-MAP</a>. The short version:
+      </p>
+      <div class="prove">
+        <div class="pcard">
+          <div class="pl">layer 1 · the engine</div>
+          <h3>363 test files</h3>
+          <p>Every tool, hook, plugin tier and i18n catalog — <b>CI-gated on macOS before any release</b>.</p>
+          <div class="pf">uv run pytest · publish workflow</div>
+        </div>
+        <div class="pcard">
+          <div class="pl">layer 2 · the chassis</div>
+          <h3>9 Rust tests + UI suite</h3>
+          <p>ANSI stripping, ACP routing, permission selection, session parsing — plus Playwright driving the real UI: streaming, steering, look-in, dictation.</p>
+          <div class="pf">cargo test · 9/9 · ui green</div>
+        </div>
+        <div class="pcard">
+          <div class="pl">layer 3 · the contract</div>
+          <h3>The pinned dialect</h3>
+          <p>The recorded ACP session replays through the real router. <b>Protocol drift fails loudly</b> — and the lifecycle probe proves session/load recalls across process death.</p>
+          <div class="pf">marker: GROVE-DURABILITY-082318</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- in the wild -->
+  <section class="sec" id="wild">
+    <div class="wrap">
+      <div class="sec-h"><span class="idx">09</span><h2>In the wild</h2>
+        <span class="stamp" aria-hidden="true">live today &middot; no mockups</span></div>
+      <p class="lede">
+        The grove doesn't demo with mockups &mdash; it works for the town. Every link below is
+        <b>live today</b>, built by the agent and shipped to a real door.
+      </p>
+      <table class="models">
+        <thead><tr><th>for</th><th>what was built</th><th>see it live</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">tylergranlund.com</td><td>The flagship: TanStack Start · React 19 SSR · TypeScript strict · Tailwind v4 · Vitest gates — resale desk, ventures, career, writing, and a colophon that declares its own stack</td><td><a href="https://tylergranlund.com" target="_blank" rel="noopener">tylergranlund.com</a></td></tr>
+          <tr><td class="mono">Benton Drones</td><td>Lead intake: form &rarr; geocode &rarr; Jira &rarr; dashboard — Python stdlib + SQLite core, Render, Playwright-verified (<a href="https://t-granlund.github.io/leather-apron-club/works/benton-drones.html" target="_blank" rel="noopener">the full build story</a>)</td><td><a href="https://leads.bentondrones.com" target="_blank" rel="noopener">leads.bentondrones.com</a></td></tr>
+          <tr><td class="mono">Bentonville Barber Company</td><td>The club's home — Victor's chairs on the square, there because a customer handed over the keys. Booking runs on Square; the shopfront ships with the shop (<a href="https://t-granlund.github.io/leather-apron-club/works/bentonville-barbershop.html" target="_blank" rel="noopener">the full story</a>)</td><td><a href="https://www.bentonvillebarbercompany.com" target="_blank" rel="noopener">bentonvillebarbercompany.com</a></td></tr>
+          <tr><td class="mono">The grove itself</td><td>This page, the CLI, the desktop shell &mdash; all shipped from the same tree</td><td><a href="https://sprucegrove.io" target="_blank" rel="noopener">sprucegrove.io</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- install -->
+  <section class="sec" id="install">
+    <div class="wrap">
+      <div class="install">
+        <h2>Four seconds to a grove on your PATH</h2>
+        <p>One command from the public index. No tokens, no config ceremony — the keychain asks when it's needed.</p>
+        <div class="cmd-row">
+          <span class="dollar">$</span>
+          <span class="cmd" id="cmd-install2">uv tool install spruce-grove</span>
+          <button class="copy" onclick="__copyCmd('cmd-install2')">copy</button>
+        </div>
+        <div class="gets">
+          <span>installs <b>grove</b> + <b>spruce-grove</b></span>
+          <span>111 packages resolved</span>
+          <span>macOS arm64 today</span>
+          <span>try first: <b>uvx spruce-grove --version</b></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- footer -->
+  <footer>
+    <div class="wrap">
+      <span>Spruce Grove OS · MIT · grown in the Spruce Grove by Tyler Granlund, from Code Puppy roots.</span>
+      <span class="links">
+        <a href="https://pypi.org/project/spruce-grove/">PyPI</a>
+        <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS">source</a>
+        <a href="https://github.com/t-granlund/spruce-grove-desktop">desktop</a>
+        <a href="./hub.html">hub</a>
+        <a href="./progress.html">progress</a>
+        <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/BUILD-LOG.md">build-log</a>
+      </span>
+      <span class="club-band"><svg class="rune" viewBox="0 0 120 24" aria-hidden="true"><g stroke="#E4AA71" stroke-width="4" fill="none" stroke-linecap="round"><path d="M60 3 V21 M60 10 L45 4 M60 10 L75 4"/><path d="M10 12 H42 M78 12 H110" opacity=".45"/></g></svg>Backed by the Leather Apron Club (Junto) · est. Philadelphia 1727 → Bentonville 2026 · first council Friday, September 18, 2026 · Bentonville Barber Company · <b>together we are better, always</b> · spread joy, love, and cream cheese</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+  <script src="./assets/product.js"></script>
+</body>
+</html>

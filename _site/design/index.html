@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Design System — Spruce Grove</title>
+<link rel="icon" type="image/png" href="../assets/favicon-64.png" />
+<meta name="description" content="The Spruce Grove design system: tokens, iconography, components, and accessibility standards." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../assets/tokens.css" />
+<link rel="stylesheet" href="../assets/sidebar.css" />
+<script src="../assets/icons.js"></script>
+<script>window.BB_SHELL = { base: "../", active: "design", assetsBase: "../assets/" };</script>
+<script src="../assets/shell.js" defer></script>
+<script src="../assets/sidebar.js" defer></script>
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin:0; background:var(--BB-bg); color:var(--BB-t2); font-family:var(--BB-sans); font-size:15px; line-height:1.7; -webkit-font-smoothing:antialiased; }
+  a { color:var(--BB-link); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  code { font-family:var(--BB-mono); background:rgba(242,162,106,.10); color:var(--BB-cyan); padding:2px 6px; border-radius:5px; font-size:.9em; overflow-wrap:anywhere; }
+  h1,h2,h3 { margin:0; line-height:1.2; color:var(--BB-t1); font-family:var(--BB-display); letter-spacing:-0.02em; }
+  p { margin:0 0 14px; }
+
+  main, .sb-main { overflow-x: hidden; }
+  .wrap { width: 100%; max-width: 980px; min-width: 0; margin: 0 auto; padding: 0 26px; overflow-x: hidden; }
+  .wrap * { min-width: 0; max-width: 100%; }
+  .hero h1, section h2 { overflow-wrap: break-word; }
+  .hero { padding: 84px 0 40px; }
+  .kick { font-family:var(--BB-mono); font-size:11.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--BB-peri); border:1px solid var(--BB-line-2); padding:6px 15px; border-radius:999px; display:inline-block; margin-bottom:20px; }
+  .hero h1 { font-size:clamp(38px,5.5vw,60px); font-weight:800; letter-spacing:-0.03em; }
+  .hero h1 em { font-style:normal; background:var(--BB-grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero p { max-width:640px; font-size:18px; color:var(--BB-t3); margin-top:18px; }
+
+  section { padding: 44px 0; border-top: 1px solid var(--BB-line); }
+  .sec-h { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .sec-h .ic { width:34px;height:34px;border-radius:10px;display:grid;place-items:center;border:1px solid var(--BB-line-2); color:var(--BB-peri); background:rgba(228,170,113,.08); }
+  .sec-h h2 { font-size:26px; font-weight:700; letter-spacing:-0.02em; }
+  .sec-sub { color:var(--BB-t3); font-size:14.5px; margin-bottom:26px; max-width:640px; }
+
+  /* tokens swatches */
+  .swgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:14px; }
+  .sw { border:1px solid var(--BB-line); border-radius:var(--BB-radius-sm); overflow:hidden; background:var(--BB-bg-card); }
+  .sw .chip { height:74px; display:grid; place-items:center; font-family:var(--BB-mono); font-size:12px; font-weight:600; }
+  .sw .meta { padding:10px 12px; font-size:12.5px; }
+  .sw .meta .n { color:var(--BB-t1); font-weight:600; font-family:var(--BB-mono); }
+  .sw .meta .v { color:var(--BB-t3); font-family:var(--BB-mono); font-size:11px; }
+  .sw .meta .r { color:var(--BB-mint); font-family:var(--BB-mono); font-size:11px; }
+
+  /* iconography */
+  .icongrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:12px; }
+  .iccell { border:1px solid var(--BB-line); border-radius:var(--BB-radius-sm); padding:16px 10px; display:flex; flex-direction:column; align-items:center; gap:10px; background:var(--BB-bg-card); }
+  .iccell .ic { color:var(--BB-peri); display:grid; place-items:center; }
+  .iccell .nm { font-family:var(--BB-mono); font-size:10.5px; color:var(--BB-t3); }
+
+  /* components */
+  .demo { border:1px solid var(--BB-line); border-radius:var(--BB-radius); padding:22px; background:var(--BB-bg-card); margin-bottom:18px; }
+  .demo .lbl { font-family:var(--BB-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--BB-peri); margin-bottom:14px; }
+  .btns { display:flex; gap:12px; flex-wrap:wrap; }
+  .btn { font-family:var(--BB-mono); font-size:12.5px; padding:9px 16px; border-radius:9px; border:1px solid var(--BB-line-2); background:var(--BB-panel); color:var(--BB-t2); cursor:pointer; }
+  .btn:hover { border-color:var(--BB-peri); color:var(--BB-peri); }
+  .btn.pri { background:rgba(242,162,106,.12); border-color:rgba(242,162,106,.4); color:var(--BB-cyan); }
+  .snip { background:#0E130F; border:1px solid var(--BB-line); border-radius:10px; padding:16px; font-family:var(--BB-mono); font-size:12px; color:var(--BB-t3); overflow-x:auto; white-space:pre; margin-top:16px; }
+
+  .note { border-left:3px solid var(--BB-mint); background:rgba(152,183,158,.06); padding:14px 18px; border-radius:0 10px 10px 0; color:var(--BB-t3); font-size:14px; }
+  .note b { color:var(--BB-t1); }
+
+  footer { border-top:1px solid var(--BB-line); padding:30px 26px 60px; color:var(--BB-t3); font-size:12.5px; display:flex; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+  :focus-visible { outline:2px solid var(--BB-focus); outline-offset:2px; border-radius:6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="kick">Design System · v1 · WCAG 2.2 AAA</span>
+    <h1>One system, <em>every page.</em></h1>
+    <p>Tokens, iconography, and components that power the hub, field guide, releases, architecture, and flat docs. Built for AAA contrast on a dark surface, fully responsive, keyboard-first.</p>
+  </header>
+
+  <!-- ============ TOKENS ============ -->
+  <section id="tokens">
+    <div class="sec-h"><span class="ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.28 1.28L3 12l5.82 1.9a2 2 0 0 1 1.28 1.28L12 21l1.9-5.82a2 2 0 0 1 1.28-1.28L21 12l-5.82-1.9a2 2 0 0 1-1.28-1.28Z"/></svg></span><h2>Color tokens</h2></div>
+    <p class="sec-sub">Body/secondary text is AAA (&ge;7:1). Accent tokens are &ge;4.5:1 and reserved for large text, icons, borders, and data — never small body copy. Values shown are contrast vs <code>--BB-bg</code>.</p>
+    <div class="swgrid" id="swatches"></div>
+  </section>
+
+  <!-- ============ TYPE ============ -->
+  <section id="type">
+    <div class="sec-h"><span class="ic">T</span><h2>Typography</h2></div>
+    <p class="sec-sub">Inter for UI, JetBrains Mono for code/mono labels. Display uses clamp() so it never overflows on any viewport.</p>
+    <div class="demo"><div class="lbl">Display / clamp(38–60px)</div><div style="font-size:clamp(30px,5vw,52px);font-weight:800;letter-spacing:-0.03em;color:var(--BB-t1)">The machine, explained.</div></div>
+    <div class="demo"><div class="lbl">Body / 15px</div><p style="font-size:15px;max-width:560px">Body copy sits at <code>--BB-t2</code> (#D1CEC5), comfortably above the AAA 7:1 threshold at 15.9:1 on the base background.</p></div>
+    <div class="demo"><div class="lbl">Mono / inline code</div><p><code>~/.spruce_grove/scripts/update-code-grove.sh</code> and <code>json.dumps(data, indent=2)</code> wrap cleanly at any width.</p></div>
+  </section>
+
+  <!-- ============ ICONS ============ -->
+  <section id="iconography">
+    <div class="sec-h"><span class="ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg></span><h2>Iconography</h2></div>
+    <p class="sec-sub">Lucide stroke set, weight 2, rounded joins, tinted per context. Shared through <code>assets/icons.js</code> — call <code>BB.icon(name)</code>. Decorative glyphs are <code>aria-hidden</code>; only meaningful ones carry labels.</p>
+    <div class="icongrid" id="icons"></div>
+  </section>
+
+  <!-- ============ LOGO PACK ============ -->
+  <section id="logo-pack">
+    <div class="sec-h"><span class="ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 L6 11 H9 L4.5 18 H10 V22 H14 V18 H19.5 L15 11 H18 Z" fill="currentColor" fill-opacity="0.16"/></svg></span><h2>Logo Pack</h2></div>
+    <p class="sec-sub">One geometry, four jobs &mdash; the granlund spruce (stepped canopy, trunk notch, rounded joins, low-opacity fill wash) composed per use. Masters in <code>logos/</code>, site copies in <code>assets/</code>. Full rules live in <code>BRAND.md &rarr; The logo pack</code>.</p>
+    <div class="demo">
+      <div class="lbl">The Core Disc &mdash; the statement piece: stickers, laptops, app icons, favicons</div>
+      <div class="btns" style="align-items:center">
+        <img src="../assets/spruce-core-disc.svg" width="96" height="96" alt="Spruce Grove Core Disc">
+        <img src="../assets/spruce-core-disc-256.png" width="64" height="64" alt="Core Disc, 256px render">
+        <img src="../assets/favicon-64.png" width="32" height="32" alt="favicon, 64px Disc render">
+      </div>
+    </div>
+    <div class="demo">
+      <div class="lbl">The Grove Mark &mdash; application logo &middot; dark surfaces &middot; and the Ghost (watermark line art)</div>
+      <div class="btns" style="align-items:center">
+        <img src="../assets/grove-mark.svg" width="116" height="84" alt="Spruce Grove mark for dark surfaces">
+        <img src="../assets/grove-ghost.svg" width="116" height="84" alt="Ghost line-art watermark">
+      </div>
+    </div>
+    <div class="demo">
+      <div class="lbl">Light-surface variant &mdash; spruce-green strokes, deep-gold center, for paper and light UI</div>
+      <div class="btns" style="background:#F4F1E8;border-radius:10px;padding:14px 18px">
+        <img src="../assets/spruce-grove-mark-on-light.svg" width="116" height="84" alt="Spruce Grove mark for light surfaces" style="border:0">
+      </div>
+    </div>
+    <div class="demo">
+      <div class="lbl">The Lockups &mdash; website headers, READMEs, decks (Fraunces wordmark, Georgia fallback)</div>
+      <div class="btns" style="align-items:center">
+        <img src="../assets/spruce-grove-lockup-horizontal.svg" width="250" height="85" alt="Horizontal lockup with wordmark">
+        <img src="../assets/spruce-grove-lockup-stacked.svg" width="120" height="97" alt="Stacked lockup with wordmark">
+      </div>
+    </div>
+    <div class="demo">
+      <div class="lbl">Masters</div>
+      <p style="font-size:13px">Editable sources in <code>logos/</code> (SVG first, PNG renders exported); site copies in <code>assets/</code>. Favicon + apple-touch are Disc renders. Below 20px, only the Disc survives. Legacy marks (<code>official</code>, <code>badge_*</code>, <code>noback</code>) are frozen for old embeds only.</p>
+    </div>
+  </section>
+
+  <!-- ============ COMPONENTS ============ -->
+  <section id="components">
+    <div class="sec-h"><span class="ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg></span><h2>Components</h2></div>
+
+    <div class="demo">
+      <div class="lbl">Sidebar shell</div>
+      <p style="font-size:14px">Left column on desktop (&ge;981px), off-canvas drawer on mobile with a hamburger topbar. Collapses on desktop via the header toggle or <code>Esc</code>; traps focus when open on mobile; restores focus on close; persists the desktop collapse state.</p>
+      <div class="snip">&lt;link rel="stylesheet" href="<base>assets/tokens.css"&gt;
+&lt;link rel="stylesheet" href="<base>assets/sidebar.css"&gt;
+&lt;script src="<base>assets/icons.js"&gt;&lt;/script&gt;
+&lt;script&gt;window.BB_SHELL = { base:"../", active:"hub", assetsBase:"../assets/" };&lt;/script&gt;
+&lt;script src="<base>assets/shell.js" defer&gt;&lt;/script&gt;
+&lt;script src="<base>assets/sidebar.js" defer&gt;&lt;/script&gt;</div>
+    </div>
+
+    <div class="demo">
+      <div class="lbl">Detail popover</div>
+      <p style="font-size:14px">Modal dialog with focus trap, Esc/backdrop close, "Open page" (full detail in a new tab), "Copy link", and deep-linkable <code>#detail=&lt;key&gt;</code> state. Trigger with <code>data-pop</code>.</p>
+      <div class="btns"><button class="btn pri">Open page</button><button class="btn ghost">Copy link</button><button class="btn">Close</button></div>
+    </div>
+
+    <div class="demo">
+      <div class="lbl">Buttons</div>
+      <div class="btns"><button class="btn">Default</button><button class="btn pri">Primary</button><button class="btn ghost">Ghost</button></div>
+    </div>
+
+    <div class="demo">
+      <div class="lbl">Note / callout</div>
+      <div class="note"><b>AAA note.</b> Every interactive target is &ge;24&times;24px, focus rings use <code>--BB-focus</code> (#E4AA71) at 3px-equivalent high contrast, and all motion respects <code>prefers-reduced-motion</code>.</div>
+    </div>
+  </section>
+
+</div>
+<footer>
+  <p>Spruce Grove design system. The single source of truth for every section of the site.</p>
+  <p style="text-align:right">built to WCAG 2.2 AAA</p>
+</footer>
+
+<script>
+  // Swatch table from the actual token sheet
+  var TOKENS = [
+    ["--BB-bg","#0E130F","grove bg","—"],["--BB-t1","#EEEBE2","foreground","15.7:1"],["--BB-t2","#D1CEC5","stone","11.9:1"],
+    ["--BB-t3","#A5A699","muted-fg","7.6:1"],["--BB-peri","#E4AA71","cedar","9.2:1"],["--BB-cyan","#F2A26A","cedar-br","9.1:1"],
+    ["--BB-mint","#98B79E","sage","8.6:1"],["--BB-peri-l","#ECEBE5","mist","15.7:1"],["--BB-pink","#CAAB88","amber","8.7:1"],
+    ["--BB-focus","#E4AA71","cedar","9.2:1"]
+  ];
+  document.getElementById("swatches").innerHTML = TOKENS.map(function(t){
+    var fg = t[0]==="--BB-t1"||t[0]==="--BB-t2"||t[0]==="--BB-t3"||t[0]==="--BB-focus" ? "#0E130F" : "#D1CEC5";
+    return '<div class="sw"><div class="chip" style="background:'+t[1]+';color:'+fg+'">'+t[0]+'</div>'+
+      '<div class="meta"><div class="n">'+t[0]+'</div><div class="v">'+t[1]+' · '+t[2]+'</div><div class="r">'+t[3]+'</div></div></div>';
+  }).join("");
+  // Icon catalog
+  var NAMES=["hub","book","activity","grid","swatch","file","server","clock","archive","branch","flask","package","upload","wrench","fork","database","calendar","terminal","layers","shield","bell","refresh","commit","bot","cpu","list","bug","menu","x","github"];
+  document.getElementById("icons").innerHTML = NAMES.map(function(n){
+    return '<div class="iccell"><span class="ic">'+BB.icon(n,22)+'</span><span class="nm">'+n+'</span></div>';
+  }).join("");
+</script>
+</body>
+</html>
