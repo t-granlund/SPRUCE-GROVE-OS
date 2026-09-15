@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock, patch
 
 import httpx
+import pytest
 
 from spruce_grove.version_checker import (
     default_version_mismatch_behavior,
@@ -8,6 +9,13 @@ from spruce_grove.version_checker import (
     normalize_version,
     versions_are_equal,
 )
+
+
+@pytest.fixture(autouse=True)
+def _no_real_self_update():
+    """Mismatch-path tests must never attempt a real ``uv tool upgrade``."""
+    with patch("spruce_grove.self_update.perform_self_update") as mock_update:
+        yield mock_update
 
 
 def test_normalize_version():

@@ -61,6 +61,21 @@ def fetch_latest_version(package_name):
         return None
 
 
+def _maybe_self_update(current_version, latest_version) -> None:
+    """Close the self-heal loop: actuate the upgrade, best-effort, never raise.
+
+    Runs on the startup daemon thread after the status messages land, so the
+    user sees what is happening and startup is never blocked. Any failure is
+    reported and swallowed - a broken updater must never break a session.
+    """
+    try:
+        from spruce_grove.self_update import perform_self_update
+
+        perform_self_update(current_version, latest_version)
+    except Exception as e:  # pragma: no cover - absolute last resort
+        emit_warning(t("version.self_update_failed", error=e))
+
+
 def default_version_mismatch_behavior(current_version) -> threading.Thread:
     """Kick off the PyPI version check without blocking startup.
 
@@ -76,7 +91,10 @@ def default_version_mismatch_behavior(current_version) -> threading.Thread:
         emit_warning(t("version.undetected"))
 
     def _check() -> None:
-        report_version_status(current_version, fetch_latest_version("spruce-grove"))
+        latest = fetch_latest_version("spruce-grove")
+        report_version_status(current_version, latest)
+        if latest and version_is_newer(latest, current_version):
+            _maybe_self_update(current_version, latest)
 
     thread = threading.Thread(target=_check, name="version-check", daemon=True)
     thread.start()

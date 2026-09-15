@@ -17,6 +17,16 @@ import pytest
 
 
 @pytest.fixture(autouse=True)
+def _no_auto_update(monkeypatch):
+    """Tests must never actuate a real ``uv tool upgrade`` of the install.
+
+    The self-heal loop is guarded by NO_AUTO_UPDATE; defaulting it here keeps
+    every test - including e2e subprocess runs - on the observe-only path.
+    """
+    monkeypatch.setenv("NO_AUTO_UPDATE", "1")
+
+
+@pytest.fixture(autouse=True)
 def _isolate_shared_provider_credentials(monkeypatch, request):
     """Provider tests must neither use the OS keyring nor leak across cases."""
     from code_puppy import shared_credentials
