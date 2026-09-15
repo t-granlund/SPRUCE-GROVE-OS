@@ -20,7 +20,18 @@
     .aud-switch .as-door { color: var(--text-dim, #93a096); text-decoration: none; padding: 3px 2px; border-bottom: 1px solid transparent; }
     .aud-switch .as-door:hover { color: var(--text, #e8ece9); border-bottom-color: rgba(238,235,229,.14); }
     .aud-switch .as-door.active { color: var(--ember, #e4aa71); border-bottom-color: var(--ember, #e4aa71); }
-    </style>
+  
+/* phones — the same kit the other doors wear: one swipeable switcher row, air in the hero */
+  @media (max-width: 720px) {
+    .aud-switch { gap: 14px 16px; padding: 9px 18px 11px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .aud-switch::-webkit-scrollbar { display: none; }
+    .aud-switch .as-label { font-size: 9.5px; white-space: nowrap; }
+    .aud-switch .as-door { white-space: nowrap; font-size: 10.5px; }
+    .hero, .o-hero { padding-left: 22px; padding-right: 22px; }
+    .kicker, .sub, .lede { max-width: 100%; }
+    h1 { font-size: clamp(29px, 8.4vw, 44px); }
+  }
+  </style>
 </head>
 <body>
 

@@ -49,6 +49,17 @@
       border-top: 1px solid #223026; margin-top: 46px; padding-top: 18px; }
     .foot a { color: #98b79e; }
     ::selection { background: rgba(228,170,113,.3); }
+
+/* phones — the same kit the other doors wear: one swipeable switcher row, air in the hero */
+  @media (max-width: 720px) {
+    .aud-switch { gap: 14px 16px; padding: 9px 18px 11px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .aud-switch::-webkit-scrollbar { display: none; }
+    .aud-switch .as-label { font-size: 9.5px; white-space: nowrap; }
+    .aud-switch .as-door { white-space: nowrap; font-size: 10.5px; }
+    .hero, .o-hero { padding-left: 22px; padding-right: 22px; }
+    .kicker, .sub, .lede { max-width: 100%; }
+    h1 { font-size: clamp(29px, 8.4vw, 44px); }
+  }
   </style>
 </head>
 <body>
