@@ -32,6 +32,7 @@ jobs:
           cp pages-hub/owners.html _site/index.html
           cp pages-hub/announce.html _site/announce.html
           cp pages-hub/owners.html _site/owners.html
+          cp pages-hub/product.html _site/product.html
           cp pages-hub/interested.html _site/interested.html
           cp pages-hub/share.html _site/share.html
           cp pages-hub/index.html _site/hub.html
