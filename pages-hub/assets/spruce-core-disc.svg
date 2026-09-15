@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Spruce Grove core disc — the statement piece">
+  <!-- THE CORE DISC · cedar roundel, inset granlund spruce trio.
+       Stands on its own: sticker, laptop, app icon, favicon. -->
+  <defs>
+    <radialGradient id="disc" cx="36%" cy="28%" r="90%">
+      <stop offset="0%" stop-color="#F2A26A"/>
+      <stop offset="56%" stop-color="#E4AA71"/>
+      <stop offset="100%" stop-color="#C9955C"/>
+    </radialGradient>
+  </defs>
+  <circle cx="256" cy="256" r="244" fill="url(#disc)"/>
+  <circle cx="256" cy="256" r="225" fill="none" stroke="#14231B" stroke-opacity="0.18" stroke-width="3"/>
+  <g fill="none" stroke-linejoin="round" stroke-linecap="round">
+    <!-- left spruce (deep forest, recessed) -->
+    <path d="M144 234 L111 283.5 L127.5 283.5 L102.75 322 L133 322 L133 344 L155 344 L155 322 L185.25 322 L160.5 283.5 L177 283.5 Z"
+          fill="#14231B" fill-opacity="0.14" stroke="#14231B" stroke-width="8"/>
+    <!-- right spruce (deep forest, recessed) -->
+    <path d="M368 234 L335 283.5 L351.5 283.5 L326.75 322 L357 322 L357 344 L379 344 L379 322 L409.25 322 L384.5 283.5 L401 283.5 Z"
+          fill="#14231B" fill-opacity="0.14" stroke="#14231B" stroke-width="8"/>
+    <!-- center spruce (mist — the light-bringer on cedar) -->
+    <path d="M256 174 L205 250.5 L230.5 250.5 L192.25 310 L239 310 L239 344 L273 344 L273 310 L319.75 310 L281.5 250.5 L307 250.5 Z"
+          fill="#F0E1C8" fill-opacity="0.22" stroke="#F0E1C8" stroke-width="12"/>
+    <!-- ground line -->
+    <path d="M118 356 H394" stroke="#14231B" stroke-opacity="0.9" stroke-width="9"/>
+  </g>
+</svg>

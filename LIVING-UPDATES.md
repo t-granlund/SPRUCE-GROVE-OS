@@ -44,6 +44,20 @@ The harness wins by running three moves in parallel, not sequentially:
 
 <!-- LIVING:BEGIN -->
 
+### 2026-09-15 — The logo pack: one geometry, four jobs
+- Source: voice dictation session with Junto (this one)
+- Status: shipped
+- Origin: grove-grown
+- The flat green trio read clip-art against the granlund look. Built the
+  pack from the tylergranlund.com glyph DNA — stepped canopy, trunk notch,
+  rounded joins, low-opacity fill wash: the **Core Disc** (statement
+  roundel — stickers, laptops, app icons, favicons), the **Grove Mark**
+  (app/nav logo, dark + light variants), the **Ghost** (watermark line
+  art), and the **Lockups** (Fraunces wordmark). Wired across the board:
+  shell chrome, every era-ghost, favicons, README badge, and the design
+  system itself — BRAND.md now carries "The logo pack" and design.html a
+  live Logo Pack section.
+
 ### 2026-09-15 — The Mechanics page: one page, ethos to evidence
 - Source: voice dictation session with Junto (this one)
 - Status: shipped

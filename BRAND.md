@@ -41,47 +41,30 @@ nothing improvises.
 Name derivation, per truth-for-truth's-sake: "granlund" maps to "spruce
 grove" in Swedish. Say that, nothing fancier.
 
-## The mark — the Grove (official)
+## The logo pack — one geometry, four jobs
 
-Masters: `logos/spruce_grove_official.svg` (the mark) and
-`logos/spruce_grove_official_line.svg` (line only — the animation ancestor).
-Rendered raster: `logos/spruce_grove_official.png` (1024w, transparent,
-aspect 280:200).
+Source of truth for the glyph: the granlund spruce on tylergranlund.com —
+stepped canopy, trunk notch, rounded joins, a low-opacity fill wash under
+the stroke. Every file in the pack is that one geometry, composed and
+dressed per job. Masters live in `logos/`; site-chrome copies in
+`pages-hub/assets/`.
 
-Geometry is the identity — do not decorate it:
+| Piece | Files | Job |
+|---|---|---|
+| **The Core Disc** | `logos/spruce-core-disc.svg` · `-512.png` · `-256.png` | The statement piece that stands on its own — stickers, laptops, app icons, favicons. Cedar gradient roundel, inset keyline, trio inset: deep-forest sides, mist center (the light-bringer), ink ground line. |
+| **The Grove Mark** | `logos/spruce-grove-mark.svg` (dark surfaces) · `spruce-grove-mark-on-light.svg` | The application logo — nav chrome, sidebars, docs. Stone sides recessed, gold center, one ground line. |
+| **The Ghost** | `logos/spruce-grove-ghost.svg` | Watermarks, era-ghosts, print line art. Pure strokes, no fill; presenting surfaces dim it with CSS opacity. |
+| **The Lockups** | `logos/spruce-grove-lockup-horizontal.svg` · `-stacked.svg` | Website headers, READMEs, decks. Mark + Fraunces wordmark (Georgia fallback) + mono motto line. |
 
-- **Three TreeMarks, one silhouette.** Each tree is the canonical
-  tylergranlund.com TreeMark verbatim (two tiers, trunk, round joins —
-  `granlund-grove/src/components/site/TreeMark.tsx`). The front-center tree
-  is the largest (scale 7.0); its two neighbors stand behind (scale 5.0,
-  baselines higher — further away in the grove).
-- **The orange line** (`#E4AA71`, width 6.5) is the ancestor of the tree that
-  drew itself. Back trees carry it at 60% — dusk depth, not a different color.
-- Interiors are forest dark: front `#1D2A21`, back `#101812`. No gradients,
-  no shadows baked in; glow is CSS where a placement wants it.
-- **The draw-on is part of the mark.** In presentation contexts the line
-  draws itself (stroke-dashoffset, flanks first, center last, fill fades in
-  as each tree lands; honors prefers-reduced-motion). Static contexts use
-  the finished mark.
-- One idea, Ive reduction; the discipline of the line, Koenigsegg precision.
+Favicon/app-icon duties ride the Disc: `pages-hub/assets/favicon-64.png`
+(64px) and `apple-touch-icon.png` (180px) are Disc renders.
 
-### The badge — where the mark wears chrome
+Legacy (kept for old embeds, not for new work): `spruce_grove_official.*`,
+`spruce_grove_badge_*`, `spruce_grove_logo_noback.png`.
 
-`logos/spruce_grove_badge_ember.svg|png` and
-`logos/spruce_grove_badge_dark.svg|png` (256×256, rx 58 — the Ive radius).
-The same grove, inset 0.7753×, optically centered (content center rides 4px
-above true center — the ground is weight).
-
-- **Ember** (`#E4AA71` field, firs inset in forest-dark): the chrome mark —
-  favicons, nav lockups, app icons, anywhere under 64px. It is the same orange
-  as the wordmark dot; the two are one system.
-- **Dark** (`#0E130F` field; flank firs `#6FA97A` moss, center fir `#E4AA71`
-  gold): the large-format mark — READMEs, social, og-images. The green/gold
-  live in the trees; the gold center is the dot, repeated.
-- **The official silhouette** (line + fills): the monumental mark — deck
-  heroes, watermarks. No badge where the statement is the badge.
-- Below 20px, only the ember badge survives; the silhouette and dark badge
-  are not for favicon scale.
+Rules that carry forward: geometry is the identity — never decorate it;
+one ground line; the center tree is the light-bringer; below 20px only the
+Disc survives.
 
 ## Color tokens (source of truth: granlund-grove `src/styles.css`)
 

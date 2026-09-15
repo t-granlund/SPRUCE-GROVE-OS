@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 232" role="img" aria-label="Spruce Grove ghost — watermark line art">
+  <!-- THE GHOST · watermark / era-ghost / print line art. Pure strokes, no fill.
+       Color is baked for dark surfaces; presenting surfaces dim it with CSS opacity. -->
+  <g fill="none" stroke="#ECEBE5" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M78 96 L48 141 L63 141 L40.5 176 L68 176 L68 196 L88 196 L88 176 L115.5 176 L93 141 L108 141 Z" stroke-width="5"/>
+    <path d="M242 96 L212 141 L227 141 L204.5 176 L232 176 L232 196 L252 196 L252 176 L279.5 176 L257 141 L272 141 Z" stroke-width="5"/>
+    <path d="M160 46 L115 113.5 L137.5 113.5 L103.75 166 L145 166 L145 196 L175 196 L175 166 L216.25 166 L182.5 113.5 L205 113.5 Z" stroke-width="6.5"/>
+    <path d="M28 206 H292" stroke-width="5"/>
+  </g>
+</svg>
