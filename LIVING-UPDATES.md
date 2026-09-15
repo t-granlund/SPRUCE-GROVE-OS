@@ -44,6 +44,20 @@ The harness wins by running three moves in parallel, not sequentially:
 
 <!-- LIVING:BEGIN -->
 
+### 2026-09-15 — The Council & The Wall: governance made public
+- Source: council session (governance design)
+- Status: in-flight
+- Origin: grove-grown
+- The steering model is now public: three anonymous stewards, decisions
+  starting as questions in Leather Apron sessions, the five-criteria Gate,
+  and an Approval Wall no release climbs without the council's marks.
+- Contributor path codified: learn the desktop and CLI, work in the open,
+  earn into review rotation and steward seats.
+- New public page: `sprucegrove.io/council/` — the story told in
+  iconography only. No persons, no companies: seats, seals, and rules.
+- Emergency lane defined: any steward may ship a security hotfix; the
+  full council ratifies within 72 hours.
+
 ### 2026-09-15 — The harness seam lands: the grove starts owning its own engine
 - Source: birthday dictation + build session (the sovereignty push)
 - Status: in-flight

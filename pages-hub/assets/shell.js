@@ -21,6 +21,7 @@
     { key: "releases",     href: base + "releases/",     label: "Releases",      icon: "activity" },
     { key: "mechanics",    href: base + "mechanics/",    label: "Mechanics",     icon: "shield" },
     { key: "architecture", href: base + "architecture/", label: "Architecture",  icon: "grid" },
+    { key: "council",      href: base + "council/",      label: "Council",       icon: "shield" },
     { key: "design",       href: base + "design/",       label: "Design System", icon: "swatch" },
     { key: "phases",       href: base + "phases.html",   label: "Phases",        icon: "layers" },
     { key: "flat",         href: base + "flat/",         label: "Flat Docs",     icon: "file" }

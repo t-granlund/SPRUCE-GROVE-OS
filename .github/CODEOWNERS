@@ -1,0 +1,27 @@
+# CODEOWNERS — The Approval Wall
+#
+# Every path in this repository requires steward review before merge.
+# The council model is defined in GOVERNANCE.md; release publishing is
+# additionally gated by the protected release environment (see
+# docs/SOVEREIGNTY-INFRASTRUCTURE.md).
+#
+# Steward handles are added here as council accounts are provisioned
+# (pseudonymous by design — see GOVERNANCE.md). Until then the repo owner
+# holds the reviewing seat; the wall becomes real the moment the second
+# and third steward handles land.
+
+# Default: everything requires review.
+* @t-granlund
+
+# Gate surfaces — unanimous council review required (3 of 3):
+# These paths change the self-updater, the connector, security layers, or
+# the harness seam. Add all steward handles below as they are provisioned.
+/spruce_grove/self_update.py          @t-granlund
+/spruce_grove/version_checker.py      @t-granlund
+/spruce_grove/harness/                @t-granlund
+/spruce_grove/pydantic_patches.py     @t-granlund
+/spruce_grove/secret_store.py         @t-granlund
+/spruce_grove/provider_credentials.py @t-granlund
+/.github/workflows/                   @t-granlund
+/docs/SELF-UPDATE.md                  @t-granlund
+/GOVERNANCE.md                        @t-granlund

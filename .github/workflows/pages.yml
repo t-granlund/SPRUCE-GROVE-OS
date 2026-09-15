@@ -40,19 +40,30 @@ jobs:
           cp pages-hub/desktop-dashboard.html _site/
           cp -r pages-hub/assets _site/
           # Inject live platform stats from the field guide data into the hub
-          node - <<'EOF'
-          const fs = require('fs');
-          const dataJs = fs.readFileSync('docs/field-guide/data.js', 'utf8')
-            .replace(/^window\.FIELD_GUIDE_DATA = /, '').replace(/;\s*$/, '');
-          const d = JSON.parse(dataJs);
-          let html = fs.readFileSync('_site/hub.html', 'utf8');
-          html = html
-            .replace(/id="s-tools">—</,  `id="s-tools">${d.stats.tools}<`)
-            .replace(/id="s-agents">—</, `id="s-agents">${d.stats.agents}<`)
-            .replace(/id="s-plugins">—</,`id="s-plugins">${d.stats.plugins}<`)
-            .replace(/id="s-commits">—</,`id="s-commits">${d.stats.commitsLast2Months}<`);
-          fs.writeFileSync('_site/hub.html', html);
-          EOF
+          # (stdlib Python — no node/npm anywhere in the build)
+          python3 - <<'PYEOF'
+          import json, re
+
+          text = open("docs/field-guide/data.js", encoding="utf-8").read().strip()
+          for prefix in ("window.FIELD_GUIDE_DATA = ", "const FIELD_GUIDE_DATA = "):
+              if text.startswith(prefix):
+                  text = text[len(prefix):]
+                  break
+          data = json.loads(text.strip().rstrip(";\n"))
+          stats = data.get("stats", {})
+
+          html = open("_site/hub.html", encoding="utf-8").read()
+          for key, stat in (
+              ("s-tools", "tools"),
+              ("s-agents", "agents"),
+              ("s-plugins", "plugins"),
+              ("s-commits", "commitsLast2Months"),
+          ):
+              html = html.replace(
+                  f'id="{key}">—<', f'id="{key}">{stats.get(stat, "—")}<'
+              )
+          open("_site/hub.html", "w", encoding="utf-8").write(html)
+          PYEOF
 
           # 2. Interactive field guide explorer
           mkdir -p _site/field-guide
@@ -73,6 +84,10 @@ jobs:
           # 3d. Mechanics (self-healing loop, gates & judges)
           mkdir -p _site/mechanics
           cp pages-hub/mechanics.html _site/mechanics/index.html
+
+          # 3e. Council & the Approval Wall (governance story)
+          mkdir -p _site/council
+          cp pages-hub/council.html _site/council/index.html
 
           # 4. Fully-offline flat file
           mkdir -p _site/flat
