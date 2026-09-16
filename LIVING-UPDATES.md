@@ -44,6 +44,29 @@ The harness wins by running three moves in parallel, not sequentially:
 
 <!-- LIVING:BEGIN -->
 
+### 2026-09-16 — Brand polish: every surface on the canonical kit, desktop included
+- Source: build session ("logos not fully polished and applied everywhere")
+- Status: shipped
+- Origin: grove-grown
+- Visual audit of all 14 live pages (rendered evidence, not vibes): the
+  persona pages' wordmark chips still carried the pre-rebrand solid tile
+  (tan rounded square, solid dark trees); the field-guide's primary logo
+  was the legacy flat mark with a 404 favicon; retired dog-era SVGs still
+  shipped in two asset dirs.
+- Fixed: persona tiles (product/owners/plan) now render the Core Disc;
+  field-guide rebranded to the Grove Mark with synced favicon/touch-icon;
+  retired assets deleted from both deployed dirs (dog svgs now 404);
+  desktop-dashboard favicon added; design.html lockup ratio corrected.
+- The desktop app (spruce-grove-desktop) rebuilt its entire Tauri icon set
+  from the Core Disc: 15 pngs + multi-res ico + icns via iconutil; ui
+  favicon swapped to the Disc data URI; README lockup added; the repo is
+  now a sync-brand-assets.sh consumer (its grove-mark.svg was a stale
+  generation - the sync loop caught it).
+- New master artifact: logos/social-preview-1280x640.png for the GitHub
+  repo social preview (manual upload in Settings).
+- Receipt: sync --check reports every consumer in sync with the masters;
+  parity build green; live pages verified (mark 200, dog svg 404).
+
 ### 2026-09-16 — Rails continued + five dependency exits with receipts
 - Source: build session ("rails: continue; complete any dependency exits needed")
 - Status: shipped
