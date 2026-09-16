@@ -5,7 +5,7 @@
       <path d="M256.0 159.2 L198.8 244.9 L227.4 244.9 L184.6 311.6 L236.9 311.6 L236.9 349.8 L275.1 349.8 L275.1 311.6 L327.4 311.6 L284.6 244.9 L313.1 244.9 Z" fill="none" stroke="black" stroke-width="29.5" stroke-linejoin="round" stroke-linecap="round"/>
     </mask>
   </defs>
-  <circle cx="256" cy="256" r="246" fill="#DCA66F"/>
+  <circle cx="256" cy="256" r="246" fill="#EFE6D4"/>
   <path stroke="#1E2B22" stroke-width="11.5" stroke-linecap="round" fill="none" d="M96.1 356 H415.9"/>
   <g fill="none" stroke="#1E2B22" stroke-width="11.5" stroke-linejoin="round" stroke-linecap="round" mask="url(#tuck)">
     <path d="M161.3 247.8 L130.7 293.6 L146.0 293.6 L123.1 329.4 L151.1 329.4 L151.1 349.8 L171.5 349.8 L171.5 329.4 L199.6 329.4 L176.6 293.6 L191.9 293.6 Z"/>

@@ -1,8 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Spruce Grove — grove badge, dark">
-  <rect width="256" height="256" rx="58" fill="#0E130F"/>
-  <g transform="translate(19.45,30.96) scale(0.7753)">
-    <path fill="#6FA97A" d="M64.00 72.00 L34.00 117.00 L49.00 117.00 L26.50 152.00 L54.00 152.00 L54.00 172.00 L74.00 172.00 L74.00 152.00 L101.50 152.00 L79.00 117.00 L94.00 117.00 Z"/>
-    <path fill="#6FA97A" d="M216.00 72.00 L186.00 117.00 L201.00 117.00 L178.50 152.00 L206.00 152.00 L206.00 172.00 L226.00 172.00 L226.00 152.00 L253.50 152.00 L231.00 117.00 L246.00 117.00 Z"/>
-    <path fill="#E4AA71" d="M140.00 50.00 L98.00 113.00 L119.00 113.00 L87.50 162.00 L126.00 162.00 L126.00 190.00 L154.00 190.00 L154.00 162.00 L192.50 162.00 L161.00 113.00 L182.00 113.00 Z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Spruce Grove - grove badge, dark">
+  <rect width="256" height="256" rx="58" fill="#132018"/>
+  <defs>
+    <mask id="tuck">
+      <rect x="0" y="0" width="256" height="256" fill="white"/>
+      <path d="M128.0 -15.7 L70.8 70.0 L99.4 70.0 L56.6 136.7 L109.0 136.7 L109.0 174.8 L147.1 174.8 L147.1 136.7 L199.4 136.7 L156.6 70.0 L185.2 70.0 Z" fill="none" stroke="black" stroke-width="14.75" stroke-linejoin="round" stroke-linecap="round"/>
+    </mask>
+  </defs>
+  <path stroke="#DCA66F" stroke-width="5.75" stroke-linecap="round" fill="none" d="M18.4 177.9 H237.6"/>
+  <g fill="none" stroke="#DCA66F" stroke-width="5.75" stroke-linejoin="round" stroke-linecap="round" mask="url(#tuck)">
+    <path d="M33.3 72.8 L2.7 118.7 L18.0 118.7 L-4.9 154.4 L23.1 154.4 L23.1 174.8 L43.5 174.8 L43.5 154.4 L71.6 154.4 L48.6 118.7 L63.9 118.7 Z"/>
+    <path d="M222.7 72.8 L192.1 118.7 L207.4 118.7 L184.4 154.4 L212.5 154.4 L212.5 174.8 L232.9 174.8 L232.9 154.4 L260.9 154.4 L238.0 118.7 L253.3 118.7 Z"/>
   </g>
+  <path d="M128.0 -15.7 L70.8 70.0 L99.4 70.0 L56.6 136.7 L109.0 136.7 L109.0 174.8 L147.1 174.8 L147.1 136.7 L199.4 136.7 L156.6 70.0 L185.2 70.0 Z" fill="none" stroke="#DCA66F" stroke-width="5.75" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M128.0 -37.2 L134.5 -30.7 L128.0 -24.2 L121.5 -30.7 Z" fill="#E8862D"/>
 </svg>

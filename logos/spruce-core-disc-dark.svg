@@ -5,12 +5,12 @@
       <path d="M256.0 159.2 L198.8 244.9 L227.4 244.9 L184.6 311.6 L236.9 311.6 L236.9 349.8 L275.1 349.8 L275.1 311.6 L327.4 311.6 L284.6 244.9 L313.1 244.9 Z" fill="none" stroke="black" stroke-width="29.5" stroke-linejoin="round" stroke-linecap="round"/>
     </mask>
   </defs>
-  <circle cx="256" cy="256" r="246" fill="#DCA66F"/>
-  <path stroke="#1E2B22" stroke-width="11.5" stroke-linecap="round" fill="none" d="M96.1 356 H415.9"/>
-  <g fill="none" stroke="#1E2B22" stroke-width="11.5" stroke-linejoin="round" stroke-linecap="round" mask="url(#tuck)">
+  <circle cx="256" cy="256" r="246" fill="#132018"/>
+  <path stroke="#DCA66F" stroke-width="11.5" stroke-linecap="round" fill="none" d="M96.1 356 H415.9"/>
+  <g fill="none" stroke="#DCA66F" stroke-width="11.5" stroke-linejoin="round" stroke-linecap="round" mask="url(#tuck)">
     <path d="M161.3 247.8 L130.7 293.6 L146.0 293.6 L123.1 329.4 L151.1 329.4 L151.1 349.8 L171.5 349.8 L171.5 329.4 L199.6 329.4 L176.6 293.6 L191.9 293.6 Z"/>
     <path d="M350.7 247.8 L320.1 293.6 L335.4 293.6 L312.4 329.4 L340.5 329.4 L340.5 349.8 L360.9 349.8 L360.9 329.4 L388.9 329.4 L366.0 293.6 L381.3 293.6 Z"/>
   </g>
-  <path d="M256.0 159.2 L198.8 244.9 L227.4 244.9 L184.6 311.6 L236.9 311.6 L236.9 349.8 L275.1 349.8 L275.1 311.6 L327.4 311.6 L284.6 244.9 L313.1 244.9 Z" fill="none" stroke="#1E2B22" stroke-width="11.5" stroke-linejoin="round" stroke-linecap="round"/>
-  <path d="M256 116.2 L269.0 129.2 L256 142.2 L243.0 129.2 Z" fill="#1E2B22"/>
+  <path d="M256.0 159.2 L198.8 244.9 L227.4 244.9 L184.6 311.6 L236.9 311.6 L236.9 349.8 L275.1 349.8 L275.1 311.6 L327.4 311.6 L284.6 244.9 L313.1 244.9 Z" fill="none" stroke="#DCA66F" stroke-width="11.5" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M256 116.2 L269.0 129.2 L256 142.2 L243.0 129.2 Z" fill="#E8862D"/>
 </svg>

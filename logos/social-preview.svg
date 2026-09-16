@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="disc">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640">
+  <rect width="1280" height="640" fill="#0E130F"/>
+  <g transform="translate(80,84) scale(0.92)">
   <defs>
     <mask id="tuck">
       <rect x="0" y="0" width="512" height="512" fill="white"/>
@@ -13,4 +15,10 @@
   </g>
   <path d="M256.0 159.2 L198.8 244.9 L227.4 244.9 L184.6 311.6 L236.9 311.6 L236.9 349.8 L275.1 349.8 L275.1 311.6 L327.4 311.6 L284.6 244.9 L313.1 244.9 Z" fill="none" stroke="#1E2B22" stroke-width="11.5" stroke-linejoin="round" stroke-linecap="round"/>
   <path d="M256 116.2 L269.0 129.2 L256 142.2 L243.0 129.2 Z" fill="#1E2B22"/>
+
+</g>
+  <text x="600" y="286" font-family="Georgia, serif" font-size="84" fill="#F2EFE6" font-weight="700">Spruce Grove</text>
+  <text x="602" y="360" font-family="Georgia, serif" font-size="38" fill="#8FA08F">Spruce Grove, documented.</text>
+  <path d="M602 420 H842" stroke="#E8862D" stroke-width="6" stroke-linecap="round"/>
+  <text x="602" y="478" font-family="Menlo, monospace" font-size="26" fill="#8FA08F">sprucegrove.io</text>
 </svg>
