@@ -310,7 +310,18 @@
     <h2>The Living Log <span class="tag">voice-led</span></h2>
     <p class="secintro">This is the live stream of how the harness evolves — the primary engine, not a side channel. The loop: <strong>speak</strong> (dictate while building) &rarr; <strong>capture</strong> (entries land in <code>LIVING-UPDATES.md</code> as they happen) &rarr; <strong>gate</strong> (every signal — ours and upstream's — faces the Leather Apron criteria below) &rarr; <strong>ship</strong> (the self-healing release train carries it) &rarr; <strong>observe</strong> (this page, live) &rarr; <strong>learn</strong> (port what helps, log what differs). The founding story and the rules of the grove live in <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/MANIFESTO.md">MANIFESTO.md</a>. Entries age from <span class="chip">idea</span> through <span class="chip up">in flight</span> to <span class="chip gr">shipped</span>, and the shipped ones graduate into
     <!-- AUTO-BEGIN:living-updates -->
-<div class="pcount">11 entries · newest first</div>
+<div class="pcount">12 entries · newest first</div>
+    <article class="deep">
+      <div class="head"><h3>2026-09-15 — The dashboard lands: release rail + dependency census go public</h3><span class="meta"><span class="chip gr">shipped</span> · build session (the &quot;level-set everything we borrow&quot; question) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>The stale solid-mark favicon pair left the repo root; the site serves the Disc, hash-verified against <code>logos/</code>.</dd>
+        <dd><code>docs/DEPENDENCY-EXIT.md</code>: the full census of everything borrowed — six tiers, verdicts computed by import scans of grove source and the plugin package. npm/axios: zero in-repo. <code>typer</code>: computed unused, removal queued. CI action pinning and site-font self-hosting queued. <code>httpx2</code> documented (codex/claude transports), <code>requests</code> dedupe queued, <code>pyfiglet</code> replacement queued.</dd>
+        <dd><code>/dashboard.html</code> live on the public site: every release on the rail with what landed in it, and the dependency-exit ladder rendered from the in-repo board. Wired into pages.yml + the parity harness.</dd>
+        <dd>GitHub releases with real notes now exist for the rail (the tag was the only receipt since v1.0.1 — now the notes travel with it).</dd>
+        <dd>AGENTS.md back under the 10k cap so the agent rules load whole.</dd>
+      </dl>
+    </article>
     <article class="deep">
       <div class="head"><h3>2026-09-15 — The execution board: the sovereignty work becomes runnable</h3><span class="meta"><span class="chip up">in flight</span> · build session (the &quot;what can be automated&quot; question) · <span class="prov gr">grove-grown</span></span></div>
       <dl class="qa">
