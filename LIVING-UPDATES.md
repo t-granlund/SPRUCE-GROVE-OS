@@ -44,6 +44,27 @@ The harness wins by running three moves in parallel, not sequentially:
 
 <!-- LIVING:BEGIN -->
 
+### 2026-09-16 — The validation ladder: desktop onboarding, traceability, the living directory
+- Source: dictation session (the "biggest validations" question)
+- Status: in-flight
+- Origin: grove-grown
+- Three validations now name the next phase, captured in
+  `docs/VALIDATION-LADDER.md`: (1) the desktop OS onboarding — persona-driven
+  first runs that tune token economy and context utilization from minute one
+  and make the synthetic-subscription path seamless; (2) the traceability
+  program — generated matrices mapping every button, command, and feature to
+  the test and the build-log receipt that proves it; (3) the living directory
+  — opening a folder loads it as an organism with pulses, hooks, telemetry,
+  and an audit trail, all voice-driven through mockingbird.
+- The small-business portfolio wedge opened with two Benton-Drones-style
+  studies (private lab, local-only): one business books jobs by `mailto:`
+  with no online booking at all; the other runs a commercial gym portal with
+  no public schedule — both are exactly the gap the grove's small-business
+  kit exists to fill.
+- The family-lab wedge (voice-first computing for the smallest builders) is
+  captured privately and locally by design — the public repo never carries
+  the people, only the product ideas.
+
 ### 2026-09-15 — The dashboard lands: release rail + dependency census go public
 - Source: build session (the "level-set everything we borrow" question)
 - Status: shipped
