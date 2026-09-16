@@ -1,4 +1,4 @@
-01fe3aa8213106f45c6da97af5aa942f52cf1f1fbf921752f59b0ceb1fe76342  ./releases/index.html
+0e4406ca4383c90aad0bacf829ff66b99e25f211ba8e1802e4fa279de7f38f52  ./releases/index.html
 126addb63120198741573f05a305f9695146311a74bfc2584e30ba142ed4688f  ./assets/grove-mark.svg
 185b284929dfa9c6907fd3d4050be426951d4d02bb59922e2968ca3877a81407  ./assets/spruce-core-disc-512.png
 1bc03baee927b9a8afcf897508c3a539bdb067321851c2871b45d6bd37494ca7  ./field-guide/data.js
@@ -20,7 +20,6 @@
 5dabbc88a0c2dbbbb8e7aad1b82dac25e1edc6cb91d436d8e59551f9bf65ffcf  ./assets/sidebar.css
 60d959dfbd5c4021c6829cf9835c015582b698f8035f26a30d92ce31bc55856b  ./index.html
 60d959dfbd5c4021c6829cf9835c015582b698f8035f26a30d92ce31bc55856b  ./owners.html
-60ed30cdba8ae8daf54d73bbe5248e71f7d9365a0f7b1f7123175da40da6f8f8  ./hub.html
 67448d8047eeb423cc9c5298ccb355041e8cecf3447d9821c0ebb5745a4beb61  ./product.html
 6f2dd5b2994a5abc829badb98ffe8d544daf50ecb5d8e34bccbe4e172edafa8b  ./assets/spruce-grove-lockup-horizontal.svg
 75e8646f9828f6df98d8654b791f4f8c455b9fe8c91edc095098ba1e66f0fa65  ./assets/popover.css
@@ -36,6 +35,7 @@
 a1c5eefc4b8d2ae9bdd47257636ad218b6e992a4dacbf6b00b851c6dd02f06dd  ./CNAME
 a356c4122ddafac859965d16c400ff63de466ff8cdc3ff8ea472a38201a4c6af  ./assets/popover.js
 aa075717892f6863fd81779fcb979059da58071b0832a3e6752ee5dd360e519d  ./assets/favicon-64.png
+b15f72a42dd75025b3dbfe46df6a37e1ac60ed7d12248c146e41bca6871a67a0  ./hub.html
 b6f64c107f1ab696cdbdac50dca33948779253c61000ee1a3610a19d5e76701c  ./assets/grove-full.svg
 bbb4242613c11b7106be8b121abf984ee6d4dc72609cf29494a950258f9b1df8  ./assets/spruce-core-disc-256.png
 c858310af93ffffc6da402e112d091aaa5fc88f157c50fb12398649530f545d5  ./assets/spruce_grove_logo_noback.png
@@ -52,3 +52,4 @@ ef718d40767b54977fef29d985312443c82adb736bead8273a5429da4c81a72b  ./assets/grove
 f013378872a2b6e74bef3080c7e70c8febe157cdee874b7aab40544235d22260  ./assets/product.css
 f1767deb97978e9191b0f1eac61be42ea0c6a10c052475dbdb9b8c299f8c3ab6  ./design/index.html
 fdcb779095da0ccd1e7c64fa9b04271ec74f89195402509b24e2a13eb2110f73  ./assets/sidebar.js
+ffadd2027366dab3895f4a38a8b1929c8ce59996e7348660af29ecfb3396f52c  ./dashboard.html
