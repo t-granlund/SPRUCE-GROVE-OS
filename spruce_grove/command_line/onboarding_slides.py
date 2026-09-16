@@ -42,14 +42,9 @@ def get_nav_footer() -> SlideContent:
 
 def get_gradient_banner() -> SlideContent:
     """Generate the SPRUCE GROVE banner using the semantic header style."""
-    try:
-        import pyfiglet
+    from spruce_grove.banner_art import art_for_label
 
-        banner = pyfiglet.figlet_format(
-            startup_banner_text(), font="ansi_shadow"
-        ).rstrip()
-    except ImportError:
-        banner = f"═══ {startup_banner_text()}  ═══"
+    banner = art_for_label(startup_banner_text())
     return [("class:tui.header", banner)]
 
 

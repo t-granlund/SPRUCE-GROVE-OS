@@ -203,15 +203,12 @@ class TestLogoDisplay:
         prompt_arg = "write hello world"
         assert prompt_arg is not None  # args.prompt is not None
 
-    def test_pyfiglet_available(self):
-        """Test that pyfiglet can be imported when available."""
-        try:
-            import pyfiglet
+    def test_banner_art_available(self):
+        """The baked banner art imports with zero external dependencies."""
+        from spruce_grove import banner_art
 
-            assert pyfiglet is not None
-        except ImportError:
-            # pyfiglet may not always be available
-            pass
+        assert banner_art.art_for_label("SPRUCE GROVE")
+        assert banner_art.art_for_label("GROVE")
 
 
 class TestAPIKeyLoading:

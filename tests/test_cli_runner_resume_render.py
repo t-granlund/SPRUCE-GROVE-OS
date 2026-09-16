@@ -112,7 +112,7 @@ async def test_resume_interactive_renders_history():
 
     extra = {
         "spruce_grove.cli_runner.interactive_mode": mock_inter,
-        "pyfiglet.figlet_format": MagicMock(return_value="LOGO\n\n"),
+        "spruce_grove.banner_art.art_for_label": MagicMock(return_value="LOGO\n\n"),
         "sys.stdout": mock_stdout,
     }
     extra.update(_resume_patches(mock_display, agent))

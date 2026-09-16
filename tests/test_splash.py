@@ -99,18 +99,18 @@ class TestFrame:
         assert output.count(splash._SYNC_START) == output.count(splash._SYNC_END)
         assert output.count(splash._SYNC_START) >= 1
 
-    def test_baked_figlet_matches_pyfiglet(self):
-        import pyfiglet
+    def test_baked_figlet_is_canonical(self):
+        """pyfiglet is gone (dependency-exit rung 5); the bakes are now the
+        canonical art. Guard their shape: the unwrapped ansi-shadow render of
+        "SPRUCE GROVE" is six rstripped lines up to 96 columns (the natural
+        width banner_art records and platform_utils pins its threshold to)."""
+        from spruce_grove import banner_art
 
-        for text, baked in (
-            ("SPRUCE GROVE", splash._BANNER_FULL),
-            ("GROVE", splash._BANNER_COMPACT),
-        ):
-            rendered = pyfiglet.figlet_format(text, font="ansi_shadow", width=300)
-            lines = [ln.rstrip() for ln in rendered.splitlines()]
-            while lines and not lines[-1]:
-                lines.pop()
-            assert tuple(lines) == baked, f"baked figlet drifted for {text!r}"
+        assert banner_art.SPRUCE_GROVE_NATURAL_WIDTH == 96
+        for baked in (splash._BANNER_FULL, splash._BANNER_COMPACT):
+            assert len(baked) == 6
+            assert all(isinstance(ln, str) and ln == ln.rstrip() for ln in baked)
+            assert all(len(ln) <= banner_art.SPRUCE_GROVE_NATURAL_WIDTH for ln in baked)
 
 
 class TestComposeRows:

@@ -57,11 +57,14 @@ class TestStartupBannerText:
         assert platform_utils.startup_banner_text(78) == "GROVE"
 
     def test_threshold_matches_baked_figlet_width(self):
-        import pyfiglet
+        from spruce_grove import banner_art
 
-        rendered = pyfiglet.figlet_format("SPRUCE GROVE", font="ansi_shadow", width=300)
-        width = max(len(line.rstrip()) for line in rendered.splitlines())
-        assert width == platform_utils._FULL_BANNER_WIDTH
+        # The threshold is pinned to the unwrapped render width, measured at
+        # bake time (banner_art replaced the pyfiglet dependency).
+        assert (
+            platform_utils._FULL_BANNER_WIDTH == banner_art.SPRUCE_GROVE_NATURAL_WIDTH
+        )
+        width = banner_art.SPRUCE_GROVE_NATURAL_WIDTH
         assert platform_utils.startup_banner_text(width) == "SPRUCE GROVE"
         assert platform_utils.startup_banner_text(width - 1) == "GROVE"
 

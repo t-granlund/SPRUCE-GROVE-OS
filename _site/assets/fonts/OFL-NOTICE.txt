@@ -1,0 +1,13 @@
+Self-hosted webfonts (dependency-exit rung 3, docs/DEPENDENCY-EXIT.md)
+
+Fraunces    (c) 2020 The Fraunces Project Authors
+Inter       (c) 2016-2026 The Inter Project Authors
+JetBrains Mono (c) 2020-2026 The JetBrains Project Authors
+
+All three families are licensed under the SIL Open Font License, Version 1.1:
+https://openfontlicense.org - the license permits use, redistribution, and
+bundling (with the reserved-font-name rules respected upstream). The latin
+subset woff2 files here are served from sprucegrove.io itself; nothing loads
+from a third-party CDN.
+
+Source of record: fonts.google.com (css2 API), baked 2026-09-16.

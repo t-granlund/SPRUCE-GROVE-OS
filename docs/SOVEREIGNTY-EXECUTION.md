@@ -101,6 +101,8 @@
 | Task | Result |
 |---|---|
 | B1 domain/DNS inventory | sprucegrove.io: Porkbun + privacy ON; NS on Porkbun |
+| C2 weekly backup (2026-09-16) | bundle sealed: `~/spruce-grove-sovereignty/backups/20260915-235647.tar.gz` + sha256 |
+| D2 quarterly audit (2026-09-16) | pip-audit: 53 known CVEs found &rarr; lock upgraded to fix versions &rarr; re-audit clean |
 | C1 GitHub inventory | 28 repos; no collaborators beyond owner; no branch protection; OIDC publish (no secrets to rotate) |
 | C2 backup bundle | run `scripts/sovereignty/backup_github.sh` (see output dir) |
 | C3 parity build | `build_site_parity.sh` — artifact + `_site.sha256` |

@@ -6,9 +6,7 @@
 <title>Last Two Months — Spruce Grove Release Observatory</title>
 <link rel="icon" type="image/png" href="../assets/favicon-64.png" />
 <meta name="description" content="Curated deep-dives on the notable Spruce Grove updates of the last two months — what each is, what it does, and why it matters — plus a full index of every minor change and bug fix." />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="./assets/fonts.css" />
 <link rel="stylesheet" href="../assets/tokens.css" />
 <link rel="stylesheet" href="../assets/sidebar.css" />
 <script src="../assets/icons.js"></script>
@@ -310,7 +308,14 @@
     <h2>The Living Log <span class="tag">voice-led</span></h2>
     <p class="secintro">This is the live stream of how the harness evolves — the primary engine, not a side channel. The loop: <strong>speak</strong> (dictate while building) &rarr; <strong>capture</strong> (entries land in <code>LIVING-UPDATES.md</code> as they happen) &rarr; <strong>gate</strong> (every signal — ours and upstream's — faces the Leather Apron criteria below) &rarr; <strong>ship</strong> (the self-healing release train carries it) &rarr; <strong>observe</strong> (this page, live) &rarr; <strong>learn</strong> (port what helps, log what differs). The founding story and the rules of the grove live in <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/MANIFESTO.md">MANIFESTO.md</a>. Entries age from <span class="chip">idea</span> through <span class="chip up">in flight</span> to <span class="chip gr">shipped</span>, and the shipped ones graduate into
     <!-- AUTO-BEGIN:living-updates -->
-<div class="pcount">13 entries · newest first</div>
+<div class="pcount">14 entries · newest first</div>
+    <article class="deep">
+      <div class="head"><h3>2026-09-16 — Rails continued + five dependency exits with receipts</h3><span class="meta"><span class="chip gr">shipped</span> · build session (&quot;rails: continue; complete any dependency exits needed&quot;) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>Rails (AUTO): the weekly insurance snapshot ran and sealed (<code>backups/20260915-235647.tar.gz</code> + sha256, 28 repos mirror-cloned with issues/releases metadata); the D2 pip-audit re-run found 53 known vulnerabilities across 8 packages - every one bumped to its fix version, re-audit clean.</dd>
+      </dl>
+    </article>
     <article class="deep">
       <div class="head"><h3>2026-09-16 — The validation ladder: desktop onboarding, traceability, the living directory</h3><span class="meta"><span class="chip up">in flight</span> · dictation session (the &quot;biggest validations&quot; question) · <span class="prov gr">grove-grown</span></span></div>
       <dl class="qa">
@@ -391,13 +396,6 @@
       <dl class="qa">
         <dt class="q-what">What happened</dt>
         <dd>Relicensing decision made out loud, reasons logged in <code>docs/LICENSE-ANALYSIS.md</code>: NOTICE carries the Code Puppy lineage verbatim, contributors grant a patent license with defensive termination, modified files must state what changed. Upstream stays MIT, untouched — the puppy came first.</dd>
-      </dl>
-    </article>
-    <article class="deep">
-      <div class="head"><h3>2026-09 (undated draft) — TASK-001: Synthetic.new 90x plan re-pinning</h3><span class="meta"><span class="chip up">in flight</span> · drafted in a working session (<code>Sythentic-spruce-grove-updates.md</code>) · <span class="prov gr">grove-grown</span></span></div>
-      <dl class="qa">
-        <dt class="q-what">What happened</dt>
-        <dd>Heavyweight model pins (Kimi-K3 at 3.0×) were exhausting the weekly quota in minutes under multi-agent execution. The plan: shift main-reasoning agents to <code>syn:large:text</code> (1.0×), fan-out agents to Flash-class (0.1×), embeddings to 0.0× — tracked through the Beads task DB, config changes staged in <code>grove.cfg</code> and agent JSON overrides.</dd>
       </dl>
     </article>
       <!-- AUTO-END:living-updates -->

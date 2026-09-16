@@ -50,11 +50,13 @@ class TestGetGradientBanner:
             "get_terminal_size",
             lambda fallback=(80, 24): os.terminal_size((50, 24)),
         )
-        with patch("pyfiglet.figlet_format", return_value="BANNER") as figlet:
+        with patch(
+            "spruce_grove.banner_art.art_for_label", return_value="BANNER"
+        ) as art:
             content = mod.get_gradient_banner()
 
         assert _plain(content) == "BANNER"
-        figlet.assert_called_once_with("GROVE", font="ansi_shadow")
+        art.assert_called_once_with("GROVE")
 
     def test_with_pyfiglet(self):
         from spruce_grove.command_line.onboarding_slides import get_gradient_banner
@@ -65,14 +67,21 @@ class TestGetGradientBanner:
         # Should contain some content
         assert len(result) > 0
 
-    def test_without_pyfiglet(self):
-        """Test fallback when pyfiglet is unavailable."""
-        import spruce_grove.command_line.onboarding_slides as mod
+    def test_baked_art_always_available(self, monkeypatch):
+        """The bake replaced the library: a narrow terminal gets the exact
+        baked GROVE art, no external dependency consulted."""
+        import os
 
-        # pyfiglet is available in this env, so normal path works
+        import spruce_grove.command_line.onboarding_slides as mod
+        from spruce_grove import banner_art, platform_utils
+
+        monkeypatch.setattr(
+            platform_utils.shutil,
+            "get_terminal_size",
+            lambda fallback=(80, 24): os.terminal_size((50, 24)),
+        )
         content = mod.get_gradient_banner()
-        result = _plain(content)
-        assert len(result) > 0
+        assert _plain(content) == banner_art.GROVE_BANNER
 
 
 class TestSlideWelcome:

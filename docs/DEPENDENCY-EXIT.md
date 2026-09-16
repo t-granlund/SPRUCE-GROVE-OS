@@ -25,14 +25,14 @@ Census date: 2026-09-15 &middot; pyproject 1.0.50 &middot; uv.lock 146 packages
 |---|---|---|
 | `httpx[http2]` | 11 imports (gemini, health, servers, http_utils) | **KEEP** — primary client. |
 | `httpx2` | 5 imports (codex client, claude cache/oauth transports) | **KEEP, documented.** Separate transport used where provider quirks demand it; consolidate onto one client in the ladder below. |
-| `requests` | 3 imports (http_utils, universal_constructor) | **DEDUPE candidate** — httpx already here; fold the 3 call sites, drop. |
+| `requests` | 3 imports, but the real surface is the universal constructor: generated tool code imports `requests` (documented examples teach it) and `create_requests_session` feeds that environment | **KEEP — revised 2026-09-16.** This is a generated-code contract surface, not a dedupe target. |
 | `openai`, `anthropic` SDKs | 3 imports (model_factory) + required by pydantic-ai extras | **KEEP** — provider SDKs ride behind the harness seam. |
 
 ## Tier 2 — Declared but not imported (verify, then prune)
 
 | Dependency | Grove source | Core plugins | Verdict |
 |---|---|---|---|
-| `typer` | 0 imports | 0 imports | **REMOVE** — computed unused by both codebases. |
+| `typer` | 0 imports | 0 imports | **REMOVED 2026-09-16** — computed unused by both codebases; suite green without it. |
 | `agent-client-protocol` | 0 imports | yes (`acp` plugin, `acp.schema`) | **KEEP** — the ACP native-agent surface. |
 | `boto3` | 0 imports | yes (bedrock models) | **KEEP** (plugins), consider extra-gating. |
 | `azure-identity` | 0 imports | yes (discovery/token) | **KEEP** (plugins), consider extra-gating. |
@@ -62,7 +62,7 @@ Census date: 2026-09-15 &middot; pyproject 1.0.50 &middot; uv.lock 146 packages
 
 | Item | State | Action |
 |---|---|---|
-| Google Fonts (`fonts.googleapis.com`) | 10 pages-hub pages load Fraunces/Inter/JetBrains Mono from Google's CDN | **SELF-HOST** — download the families into `pages-hub/assets/fonts/`, swap to `@font-face`. Removes an external CDN from a privacy-first product's public face. |
+| Google Fonts (`fonts.googleapis.com`) | was 10+ pages-hub pages on Google's CDN | **SELF-HOSTED 2026-09-16** — 12 latin woff2 faces (592K) + `fonts.css` + OFL notice; 16 pages swapped; zero third-party CDN calls remain. |
 | Favicons/app icons | `pages-hub/assets/` == `logos/` masters (hash-verified); stale solid-mark pair in root `assets/` deleted 2026-09-15 | done; `scripts/sync-brand-assets.sh` + brand-check workflow guard drift. |
 | Copy buttons, nav JS | inline, zero dependencies | keep. |
 
@@ -81,14 +81,16 @@ Census date: 2026-09-15 &middot; pyproject 1.0.50 &middot; uv.lock 146 packages
 
 ## The ladder (ordered, honest)
 
-1. **PIN CI actions by SHA** (Tier 4) — one sweep, zero behavior change. *AUTO.*
-2. **Drop `typer`** (Tier 2) — computed unused; run the suite green without it. *AUTO.*
-3. **Self-host the site fonts** (Tier 5) — removes Google from the public face. *AUTO.*
-4. **Dedupe `requests` onto `httpx`** (Tier 1) — 3 call sites. *AUTO.*
-5. **Replace `pyfiglet` with the baked splash constants** (Tier 3) — 2 call sites. *AUTO.*
-6. **Harness exit Phases 3-4** (Tier 0) — recreate compaction + agent loop grove-owned behind the seam; then `pydantic-ai-harness` drops, and finally `pydantic-ai-slim` itself. The long march; tracked on the board, rendered on the dashboard.
-7. **Extra-gate boto3/azure-identity** (Tier 2) — behind `bedrock`/`azure` extras once plugin lazy-imports allow.
-8. **Vendor or formally adopt `code-puppy-core-plugins`** (Tier 3) — council decision, after the compat contracts land (`COMPAT-EXIT.md`).
+1. **Pin CI actions by SHA** (Tier 4) — **DONE 2026-09-16**: 4 workflows, 5 actions pinned to immutable commits (checkout, setup-python, pages artifacts, pypi-publish); yaml-validated.
+2. **Drop `typer`** (Tier 2) — **DONE 2026-09-16**: removed from pyproject + lock (typer, shellingham swept); full suite 7,873 passed.
+3. **Self-host the site fonts** (Tier 5) — **DONE 2026-09-16**: 12 latin woff2 faces + `fonts.css` + OFL notice; 16 pages swapped off the CDN.
+4. ~~**Dedupe `requests` onto `httpx`**~~ — **REVISED 2026-09-16, KEEP**: the real surface is generated-code contracts (the universal constructor's environment), not 3 import sites. The census's import count was true but not the whole truth.
+5. **Replace `pyfiglet` with baked art** (Tier 3) — **DONE 2026-09-16**: `spruce_grove/banner_art.py` bakes both renders byte-identically (default-width wrap preserved); pyfiglet dropped; suite green.
+6. **Supply-chain bumps** (Tier 3/4) — **DONE 2026-09-16**: `pip-audit` found 53 known vulnerabilities across 8 packages (pillow, pyjwt, cryptography, httpx2, mcp, json-repair, h2, pydantic-settings); lock upgraded to fix versions; re-audit clean. Found during the D2 re-run.
+7. **Gate-flagged: `mcp` 2.x migration** (Tier 3) — discovered mid-bump when the resolver jumped a major version and broke FastMCP; pinned `<2`, CVE fix taken from the 1.x line (1.30.0). The 2.x rename is its own deliberate landing.
+8. **Extra-gate `boto3`/`azure-identity`** (Tier 2) — plugin-consumed; behind extras once lazy imports allow. *PARKED.*
+9. **Vendor or formally adopt `code-puppy-core-plugins`** (Tier 3) — council decision after the compat contracts land. *PARKED.*
+10. **The harness itself** — the largest dependency of all; tracked as Program A in the dashboard and `SOVEREIGNTY.md`. *IN-FLIGHT (2/58).*
 
 Rule: a ladder item only flips to *done* with its receipt (tests green, hash
 proof, or a diff) — the dashboard says so too.

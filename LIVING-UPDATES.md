@@ -44,6 +44,28 @@ The harness wins by running three moves in parallel, not sequentially:
 
 <!-- LIVING:BEGIN -->
 
+### 2026-09-16 — Rails continued + five dependency exits with receipts
+- Source: build session ("rails: continue; complete any dependency exits needed")
+- Status: shipped
+- Origin: grove-grown
+- Rails (AUTO): the weekly insurance snapshot ran and sealed
+  (`backups/20260915-235647.tar.gz` + sha256, 28 repos mirror-cloned with
+  issues/releases metadata); the D2 pip-audit re-run found 53 known
+  vulnerabilities across 8 packages - every one bumped to its fix version,
+  re-audit clean.
+- Dependency exits landed: CI actions pinned by SHA (4 workflows, 5 actions);
+  `typer` removed (computed unused, suite green); site fonts self-hosted
+  (16 pages, 12 latin woff2 faces, OFL notice, zero CDN calls);
+  `pyfiglet` replaced by `banner_art.py` baked constants (byte-identical
+  renders, default-width wrap preserved).
+- Revised honestly: the `requests` dedupe rung retired - the real surface is
+  generated-code contracts in the universal constructor, not 3 import sites.
+  The census counts imports; the receipts read what they mean.
+- Gate catch of the day: the CVE bump tried to drag `mcp` to 2.x (FastMCP
+  renamed); pinned `<2`, took the fix from the 1.x line, and queued the 2.x
+  migration as its own deliberate rung.
+- Receipt: full suite 7,873 passed / 41 skipped - identical to baseline.
+
 ### 2026-09-16 — The validation ladder: desktop onboarding, traceability, the living directory
 - Source: dictation session (the "biggest validations" question)
 - Status: in-flight

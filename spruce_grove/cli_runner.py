@@ -289,38 +289,34 @@ async def main():
     # Show the logo on entering interactive mode (no -p flag; covers
     # both `spruce-grove` and `spruce-grove -i`).
     if not args.prompt:
-        try:
-            import pyfiglet
+        # Width-aware banner: full SPRUCE GROVE when it fits, GROVE when
+        # the terminal is too narrow (phones, tight splits). The art is
+        # baked in banner_art - the boot path needs no lettering library.
+        from spruce_grove.banner_art import art_for_label
 
-            # Width-aware banner: full SPRUCE GROVE when it fits, GROVE when
-            # the terminal is too narrow (phones, tight splits).
-            banner_columns = display_console.width
-            intro_lines = pyfiglet.figlet_format(
-                startup_banner_text(banner_columns), font="ansi_shadow"
-            ).split("\n")
+        banner_columns = display_console.width
+        intro_lines = art_for_label(startup_banner_text(banner_columns)).split("\n")
 
-            # Grove truecolor gradient (top to bottom): spruce halo -> glow -> cedar,
-            # matching the import-time splash tiers in splash.py and BRAND.md.
-            gradient_colors = ["#2D4F3A", "#588F5E", "#D2A069"]
-            display_console.print("\n")
+        # Grove truecolor gradient (top to bottom): spruce halo -> glow -> cedar,
+        # matching the import-time splash tiers in splash.py and BRAND.md.
+        gradient_colors = ["#2D4F3A", "#588F5E", "#D2A069"]
+        display_console.print("\n")
 
-            # Left-justified on purpose -- the full-screen splash handles
-            # the centered spectacle; this banner tops the scrollback.
-            lines = []
-            for line_num, line in enumerate(intro_lines):
-                if line.strip():
-                    # Top=blue, middle=cyan, bottom=green by line position
-                    color_idx = min(line_num // 2, len(gradient_colors) - 1)
-                    color = gradient_colors[color_idx]
-                    lines.append(f"[{color}]{line}[/{color}]")
-                else:
-                    lines.append("")
-            # Print directly to console to avoid the 'dim' style from emit_system_message
-            display_console.print("\n".join(lines))
-        except ImportError:
-            emit_system_message(t("cli.loading"))
+        # Left-justified on purpose -- the full-screen splash handles
+        # the centered spectacle; this banner tops the scrollback.
+        lines = []
+        for line_num, line in enumerate(intro_lines):
+            if line.strip():
+                # Top=blue, middle=cyan, bottom=green by line position
+                color_idx = min(line_num // 2, len(gradient_colors) - 1)
+                color = gradient_colors[color_idx]
+                lines.append(f"[{color}]{line}[/{color}]")
+            else:
+                lines.append("")
+        # Print directly to console to avoid the 'dim' style from emit_system_message
+        display_console.print("\n".join(lines))
 
-        # Powered-by tagline under the big banner (prints even without pyfiglet).
+        # Powered-by tagline under the big banner (always prints).
         display_console.print(
             f"[dim]{t('cli.banner.powered_by')}[/dim] "
             "[link=https://sprucegrove.io/releases/]"

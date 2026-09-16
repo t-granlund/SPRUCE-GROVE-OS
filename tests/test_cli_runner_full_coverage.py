@@ -226,7 +226,7 @@ class TestMain:
             ["spruce-grove"],
             extra_patches={
                 "spruce_grove.cli_runner.interactive_mode": mock_inter,
-                "pyfiglet.figlet_format": MagicMock(return_value="LOGO\n\n"),
+                "spruce_grove.banner_art.art_for_label": MagicMock(return_value="LOGO\n\n"),
             },
         )
         mock_inter.assert_called_once()
@@ -242,11 +242,11 @@ class TestMain:
                 ["spruce-grove"],
                 extra_patches={
                     "spruce_grove.cli_runner.interactive_mode": mock_inter,
-                    "pyfiglet.figlet_format": mock_figlet,
+                    "spruce_grove.banner_art.art_for_label": mock_figlet,
                 },
             )
 
-        mock_figlet.assert_called_once_with("GROVE", font="ansi_shadow")
+        mock_figlet.assert_called_once_with("GROVE")
 
     @pytest.mark.anyio
     async def test_with_command_args(self):
@@ -255,7 +255,7 @@ class TestMain:
             ["spruce-grove", "do", "something"],
             extra_patches={
                 "spruce_grove.cli_runner.interactive_mode": mock_inter,
-                "pyfiglet.figlet_format": MagicMock(return_value="LOGO\n\n"),
+                "spruce_grove.banner_art.art_for_label": MagicMock(return_value="LOGO\n\n"),
             },
         )
         assert mock_inter.call_args[1]["initial_command"] == "do something"
@@ -390,7 +390,7 @@ class TestMain:
                 mode_target: AsyncMock(),
                 "spruce_grove.cli_runner.get_core_plugins_version": mock_core_version,
                 "spruce_grove.messaging.emit_system_message": mock_emit,
-                "pyfiglet.figlet_format": MagicMock(return_value="LOGO\n\n"),
+                "spruce_grove.banner_art.art_for_label": MagicMock(return_value="LOGO\n\n"),
             },
         )
 
@@ -621,21 +621,13 @@ class TestMain:
             _assert_core_plugins_message_once(mock_emit, "0.0.2")
 
     @pytest.mark.anyio
-    async def test_pyfiglet_import_error(self):
-        import builtins
-
-        real_import = builtins.__import__
-
-        def fake_import(name, *args, **kwargs):
-            if name == "pyfiglet":
-                raise ImportError("no pyfiglet")
-            return real_import(name, *args, **kwargs)
-
+    async def test_banner_art_needs_no_lettering_library(self):
+        """The boot banner renders from baked constants - no pyfiglet, no
+        import-error fallback to guard against (dependency-exit rung 5)."""
         await self._run_main(
             ["spruce-grove"],
             extra_patches={
                 "spruce_grove.cli_runner.interactive_mode": AsyncMock(),
-                "builtins.__import__": fake_import,
             },
         )
 
