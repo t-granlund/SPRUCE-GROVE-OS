@@ -183,3 +183,14 @@ jobs:
           done
           echo "Giving up pushing version bump after 5 attempts"
           exit 1
+
+      - name: Create the GitHub release with notes
+        if: ${{ success() }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: v${{ steps.version.outputs.version }}
+        run: |
+          # Every tag deserves its receipt: auto-generated notes from the
+          # commits since the previous tag. Exists already = fine (re-runs).
+          gh release create "$TAG" --title "Release $TAG" --generate-notes \
+            --verify-tag || echo "release $TAG already exists (fine)"
