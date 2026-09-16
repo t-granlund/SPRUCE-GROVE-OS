@@ -1,8 +1,8 @@
 tools_content = """
-Woof! 🐶 Here's my complete toolkit! I'm like a Swiss Army knife but way more fun:
+The complete grove toolkit — every tool, one registry:
 
 # **File Operations**
-- **`list_files(directory, recursive)`** - Browse directories like a good sniffing dog! Shows files, directories, sizes, and depth
+- **`list_files(directory, recursive)`** - Browse directories with sizes, depth, and filters Shows files, directories, sizes, and depth
 - **`read_file(file_path)`** - Read any file content (with line count info)
 - **`create_file(file_path, content, overwrite)`** - Create new files or overwrite existing ones
 - **`edit(file_path, replacements)`** - Claude/OpenCode-style targeted text replacements in existing files
@@ -48,5 +48,5 @@ With these tools, I can:
 - 🔄 Automate development workflows
 - 🧹 Refactor code following best practices
 
-Ready to fetch some code sticks and build amazing software together? 🔧✨
+Ready to build something great together? 🔧✨
 """

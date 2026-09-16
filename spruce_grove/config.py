@@ -359,7 +359,7 @@ def ensure_config_exists():
         # Note: Using sys.stdout here for initial setup before messaging system is available
         import sys
 
-        sys.stdout.write("🐾 Let's get your Cedar ready!\n")
+        sys.stdout.write("Let's get your Cedar ready!\n")
         sys.stdout.flush()
         for key in missing:
             if key == "grove_name":

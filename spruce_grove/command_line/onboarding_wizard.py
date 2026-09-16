@@ -1,6 +1,6 @@
 """Interactive TUI onboarding wizard for first-time Spruce Grove users.
 
-🐶 Quick 5-slide tutorial. ADHD-friendly!
+Quick 5-slide tutorial. ADHD-friendly!
 
 Usage:
     from spruce_grove.command_line.onboarding_wizard import (
@@ -360,7 +360,7 @@ async def run_onboarding_wizard() -> Optional[str]:
     if wizard.result == "skipped":
         emit_info("✓ Tutorial skipped")
     elif wizard.result == "completed":
-        emit_info("✓ Tutorial completed! Welcome to Spruce Grove! 🐶")
+        emit_info("✓ Tutorial completed! Welcome to Spruce Grove!")
     else:
         emit_info("✓ Exited tutorial")
 

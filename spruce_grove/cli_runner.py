@@ -1591,7 +1591,7 @@ def _force_utf8_stdio():
     """Ensure stdout/stderr can encode non-ASCII output (e.g. emoji prompts).
 
     On Windows the console often defaults to a legacy code page (e.g. cp1252),
-    so writing UTF-8 characters such as the "🐾" onboarding banner raises
+    so writing UTF-8 characters such as the onboarding banner raises
     UnicodeEncodeError and crashes the very first run. Reconfigure the streams
     to UTF-8 where the runtime supports it; no-op otherwise.
     """

@@ -2,7 +2,7 @@
 
 Logs unexpected errors to XDG_STATE_HOME/spruce_grove/logs/ for debugging purposes.
 Per XDG spec, logs are "state data" (actions history), not configuration.
-Because even good puppies make mistakes sometimes! 🐶
+Because even the best-tended grove drops a branch now and then.
 """
 
 import os

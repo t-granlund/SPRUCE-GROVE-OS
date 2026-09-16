@@ -68,7 +68,7 @@ def handle_show_command(command: str) -> bool:
     current_agent = get_current_agent()
     default_agent = get_default_agent()
 
-    status_msg = f"""[bold magenta]🐶 Cedar Status[/bold magenta]
+    status_msg = f"""[bold magenta]Cedar Status[/bold magenta]
 
 [bold]grove_name:[/bold]            [cyan]{grove_name}[/cyan]
 [bold]owner_name:[/bold]            [cyan]{owner_name}[/cyan]

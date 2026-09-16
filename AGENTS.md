@@ -83,10 +83,12 @@ Rare hooks: see `spruce_grove/callbacks.py` source.
 
 ## Ctrl+X Chords
 
-`Ctrl+X` is a **chord prefix** (readline-style), never a standalone hotkey. The
+`Ctrl+X` is a **chord prefix** (readline-style), never a standalone hotkey: the
 line editor arms on `Ctrl+X`, hints registered bindings on the bottom bar, and
-resolves the NEXT key against the registry in `spruce_grove/messaging/chords.py`.
-`Esc` (or any unbound key) cancels.
+resolves the NEXT key against the registry in `spruce_grove/messaging/chords.py`
+(`Esc` or any unbound key cancels). No modes — `Ctrl+X` always flows into the
+editor; without a line editor (headless), bare `Ctrl+X` keeps its historical
+kill-all-shells meaning.
 
 | Chord | Action | Registered by | Active when |
 |-------|--------|---------------|-------------|
@@ -94,16 +96,10 @@ resolves the NEXT key against the registry in `spruce_grove/messaging/chords.py`
 | `Ctrl+X Ctrl+X` | Kill all running shell commands | `command_runner` | While shell commands run |
 | `Ctrl+X Ctrl+B` | Background all running shell commands | `command_runner` | While shell commands run |
 
-**Design notes:**
+**Backgrounding is mid-flight detach** — streaming shell calls return
+immediately with `background=True`, `log_file`, `pid`; processes keep running.
 
-- **No modes** — `Ctrl+X` always flows into the editor; the registry decides the
-  follow-up key (the old modal arm/disarm raced keystrokes).
-- **Backgrounding is mid-flight detach** — streaming shell calls return
-  immediately with `background=True`, `log_file`, `pid`; processes keep running.
-- **Headless fallback** — without a line editor, bare `Ctrl+X` keeps its
-  historical kill-all-shells meaning.
-
-**Plugins can register chords:**
+Plugins can register chords:
 
 ```python
 from spruce_grove.messaging.chords import register_chord, unregister_chord
@@ -158,12 +154,7 @@ This project uses **bd (beads)** for issue tracking. Run `bd prime` to see full 
 
 ### Quick Reference
 
-```bash
-bd ready              # Find available work
-bd show <id>          # View issue details
-bd update <id> --claim  # Claim work
-bd close <id>         # Complete work
-```
+`bd ready` (find work) - `bd show <id>` - `bd update <id> --claim` - `bd close <id>`
 
 ### Rules
 
@@ -171,7 +162,7 @@ bd close <id>         # Complete work
 - Run `bd prime` for detailed command reference and session close protocol
 - Use `bd remember` for persistent knowledge — do NOT use MEMORY.md files
 
-**Architecture in one line:** issues live in a local Dolt DB; sync uses `refs/dolt/data` on your git remote; `.beads/issues.jsonl` is a passive export. See https://github.com/gastownhall/beads/blob/main/docs/SYNC_CONCEPTS.md for details and anti-patterns.
+**Architecture in one line:** issues live in a local Dolt DB; sync uses `refs/dolt/data` on your git remote; `.beads/issues.jsonl` is a passive export.
 
 ## Session Completion
 
@@ -179,22 +170,8 @@ bd close <id>         # Complete work
 
 **MANDATORY WORKFLOW:**
 
-1. **File issues for remaining work** - Create issues for anything that needs follow-up
-2. **Run quality gates** (if code changed) - Tests, linters, builds
-3. **Update issue status** - Close finished work, update in-progress items
-4. **PUSH TO REMOTE** - This is MANDATORY:
-   ```bash
-   git pull --rebase
-   git push
-   git status  # MUST show "up to date with origin"
-   ```
-5. **Clean up** - Clear stashes, prune remote branches
-6. **Verify** - All changes committed AND pushed
-7. **Hand off** - Provide context for next session
-
-**CRITICAL RULES:**
-- Work is NOT complete until `git push` succeeds
-- NEVER stop before pushing - that leaves work stranded locally
-- NEVER say "ready to push when you are" - YOU must push
-- If push fails, resolve and retry until it succeeds
+1. **File issues** for remaining work; close/update finished and in-progress issues
+2. **Run quality gates** (if code changed) - tests, linters, builds
+3. **PUSH TO REMOTE** (mandatory): `git pull --rebase` then `git push`; `git status` MUST show "up to date with origin". Resolve and retry until the push succeeds - NEVER stop before pushing.
+4. **Hand off** - clear stashes, prune remote branches, leave context for next session
 <!-- END BEADS INTEGRATION -->

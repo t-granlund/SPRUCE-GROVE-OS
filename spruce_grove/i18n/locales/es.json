@@ -1,6 +1,6 @@
 {
   "startup.welcome": "¡Bienvenido(a) a Spruce Grove, {name}!",
-  "startup.ready": "Listo para ir por el código. 🐶",
+  "startup.ready": "Listo para construir en la arboleda.",
   "computer_use.startup.opt_in": "Computer Use de macOS está desactivado de forma predeterminada. Ejecuta `/computer-use enable` para activarlo.",
   "locale.set": "Idioma configurado en {locale}.",
   "locale.current": "Idioma actual: {locale}",

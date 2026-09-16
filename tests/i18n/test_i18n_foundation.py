@@ -170,7 +170,7 @@ def test_locale_switching(tmp_path):
     _write_catalog(tmp_path, "es-ES", {"startup.ready": "Listo!"})
     catalog.add_catalog_dir(str(tmp_path))
 
-    assert i18n.t("startup.ready") == "Ready to fetch some code. \U0001f436"
+    assert i18n.t("startup.ready") == "Ready to build in the grove."
     translate.set_locale("es-ES")
     assert i18n.t("startup.ready") == "Listo!"
 
@@ -264,7 +264,7 @@ def test_spanish_catalog_ships_and_resolves():
 def test_deprecated_es419_resolves_through_base_es():
     # es-419 has no catalog of its own (deprecated); resolves through base es.
     translate.set_locale("es-419")
-    assert i18n.t("startup.ready") == "Listo para ir por el c\u00f3digo. \U0001f436"
+    assert i18n.t("startup.ready") == "Listo para construir en la arboleda."
 
 
 def test_spanish_region_falls_back_to_base_language():
@@ -282,7 +282,7 @@ def test_central_south_american_dialect_inherits_base_es(tmp_path):
     translate.set_locale("es-AR")
     assert i18n.t("confirm.yes") == "Dale"  # from es-AR
     # Inherited from base es (chain skips the missing es-419 catalog).
-    assert i18n.t("startup.ready") == "Listo para ir por el c\u00f3digo. \U0001f436"
+    assert i18n.t("startup.ready") == "Listo para construir en la arboleda."
     # Inherited from en-US default.
     assert i18n.t("confirm.no") == "No"
 
@@ -333,7 +333,7 @@ def test_unshipped_spanish_region_falls_back_to_base_es():
         translate.set_locale(dialect)
         assert i18n.t("confirm.yes") == "S\u00ed"
         assert i18n.t("startup.ready") == (
-            "Listo para ir por el c\u00f3digo. \U0001f436"
+            "Listo para construir en la arboleda."
         )
         assert i18n.t("confirm.no") == "No"  # inherited from en-US default
 
