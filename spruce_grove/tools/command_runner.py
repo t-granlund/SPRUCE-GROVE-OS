@@ -98,6 +98,115 @@ else:
         return False
 
 
+def _read_available_chunk(stream):
+    """One bounded read of bytes already inside ``stream``'s pipe.
+
+    Returns bytes, or ``None`` when no safe non-waiting read primitive
+    exists. Callers MUST have just confirmed data is available (e.g.
+    ``_win32_pipe_has_data``) — ``read1`` performs at most one raw read,
+    and a raw read on an empty pipe whose write-end is still open blocks
+    until EOF, which a detached grandchild may never deliver.
+    """
+    buffered = getattr(stream, "buffer", None)
+    target = buffered if buffered is not None else stream
+    if not hasattr(target, "read1"):
+        return None
+    try:
+        return target.read1(65536)
+    except (ValueError, OSError):
+        return b""
+
+
+def _drain_available(stream, sink, _has_data=None) -> None:
+    """Drain bytes that have already arrived in a dead child's pipe.
+
+    Never waits for EOF: a detached grandchild (``start /B server``,
+    ``Start-Process``, ...) can inherit the pipe write-handle, so EOF may
+    never arrive. A blocking ``read()`` here wedges the reader thread,
+    which then wedges every later ``close()`` on the shared io buffer
+    lock — including the Ctrl+C kill sweep (the "stuck cancelling" hang).
+    Only called after the child has exited; a trailing partial line is
+    flushed as-is rather than waited for.
+    """
+    has_data = _has_data if _has_data is not None else _win32_pipe_has_data
+    try:
+        remainder = ""
+        while has_data(stream):
+            chunk = _read_available_chunk(stream)
+            if not chunk:
+                break
+            if isinstance(chunk, bytes):
+                chunk = chunk.decode("utf-8", errors="replace")
+            text = remainder + chunk
+            parts = text.split("\n")
+            remainder = parts.pop()
+            for line in parts:
+                sink(line.rstrip("\r\n"))
+        if remainder:
+            sink(remainder.rstrip("\r\n"))
+    except (ValueError, OSError):
+        pass
+
+
+def _close_stream_quietly(stream) -> None:
+    try:
+        if stream and not stream.closed:
+            stream.close()
+    except (OSError, ValueError, AttributeError):
+        pass
+
+
+def _close_pipes_best_effort(proc, timeout: float = 0.25) -> None:
+    """Close a process's pipes without ever blocking the calling thread.
+
+    Closing a wrapped pipe can block indefinitely when a reader thread is
+    wedged inside a blocking read holding the io buffer lock (EOF never
+    arriving because a detached grandchild inherited the write-end). The
+    Ctrl+C sweep runs on the key-listener thread — blocking THERE kills
+    every future cancel gesture — so the closes run in a throwaway daemon
+    thread and we only wait ``timeout`` seconds.
+    """
+
+    def _close():
+        _close_stream_quietly(proc.stdout)
+        _close_stream_quietly(proc.stderr)
+        _close_stream_quietly(proc.stdin)
+
+    closer = threading.Thread(target=_close, daemon=True)
+    closer.start()
+    closer.join(timeout)
+
+
+def _close_process_pipes(process, *reader_threads) -> None:
+    """Close a finished process's pipes, honoring wedged reader threads.
+
+    When every reader thread has exited, close the wrapped streams
+    normally. When one is wedged (blocked in a read holding the io
+    buffer lock), ``close()`` on the wrapper would deadlock THIS thread —
+    the executor thread that the agent's tool call is awaiting — so only
+    the raw handles are closed instead: no io locks are involved, so this
+    returns immediately. The wedged reader is a daemon; it unwinds
+    whenever the handle-holder dies.
+    """
+    if any(t is not None and t.is_alive() for t in reader_threads):
+        for stream in (process.stdout, process.stderr):
+            try:
+                if stream is None or stream.closed:
+                    continue
+                # TextIOWrapper -> BufferedReader -> FileIO: closing the
+                # raw layer takes no io locks.
+                raw = getattr(getattr(stream, "buffer", stream), "raw", None)
+                if raw is not None:
+                    raw.close()
+            except (OSError, ValueError, AttributeError):
+                pass
+        _close_stream_quietly(process.stdin)
+        return
+    _close_stream_quietly(process.stdout)
+    _close_stream_quietly(process.stderr)
+    _close_stream_quietly(process.stdin)
+
+
 _AWAITING_USER_INPUT = threading.Event()
 _AWAITING_USER_INPUT_NOTIFY = threading.Event()
 _AWAITING_USER_INPUT_NOTIFY.set()
@@ -238,21 +347,21 @@ def kill_all_running_shell_processes() -> int:
     count = 0
     for p in procs:
         try:
-            # Close pipes first to unblock readline()
-            try:
-                if p.stdout and not p.stdout.closed:
-                    p.stdout.close()
-                if p.stderr and not p.stderr.closed:
-                    p.stderr.close()
-                if p.stdin and not p.stdin.closed:
-                    p.stdin.close()
-            except (OSError, ValueError):
-                pass
-
             if p.poll() is None:
+                # Live process: nudge blocking readlines with a bounded,
+                # best-effort pipe close (NEVER inline — a wedged reader
+                # holding the io buffer lock would deadlock this thread,
+                # which is the key-listener thread; that froze every future
+                # cancel gesture), then kill the tree.
+                _close_pipes_best_effort(p)
                 _kill_process_group(p)
                 count += 1
                 _USER_KILLED_PROCESSES.add(p.pid)
+            # Dead shell: leave its pipes alone entirely. A detached
+            # grandchild may still hold the write-end and a reader thread
+            # the io lock — closing here is exactly what wedged the cancel
+            # path (close() blocks on the lock until the grandchild dies,
+            # which for a server may be never).
         finally:
             _unregister_process(p)
     return count
@@ -724,8 +833,24 @@ def run_shell_command_streaming(
                     # Windows: no select on pipes — PeekNamedPipe to check availability
                     try:
                         if _win32_pipe_has_data(process.stdout):
-                            line = process.stdout.readline()
-                            if not line:  # EOF
+                            line = None
+                            try:
+                                line = process.stdout.readline()
+                            except (ValueError, OSError):
+                                pass
+                            if not line:
+                                # EOF or a transient read error during the
+                                # spawn/exit race — grab anything already
+                                # sitting in the pipe buffer before giving
+                                # up. A detached grandchild may re-open the
+                                # write-end a moment later, but we never
+                                # wait for it.
+                                _drain_available(
+                                    process.stdout,
+                                    lambda line: _sink(
+                                        _truncate_line(line), stdout_lines, "stdout"
+                                    ),
+                                )
                                 break
                             line = line.rstrip("\r\n")
                             line = _truncate_line(line)
@@ -734,19 +859,18 @@ def run_shell_command_streaming(
                         else:
                             # No data available, check if process has exited
                             if process.poll() is not None:
-                                # Process exited, do one final drain
-                                try:
-                                    remaining = process.stdout.read()
-                                    if remaining:
-                                        for line in remaining.split("\n"):
-                                            # Strip CR/LF like the readline path —
-                                            # Windows CRLF's stray \r would retrigger
-                                            # the renderer's redraw bypass.
-                                            line = line.rstrip("\r\n")
-                                            line = _truncate_line(line)
-                                            _sink(line, stdout_lines, "stdout")
-                                except (ValueError, OSError):
-                                    pass
+                                # Process exited: drain only what already
+                                # arrived. NEVER wait for EOF here — a
+                                # detached grandchild (`start /B server`)
+                                # can inherit the pipe write-end and hold
+                                # it open forever, wedging read() and, via
+                                # the shared io lock, the cancel path.
+                                _drain_available(
+                                    process.stdout,
+                                    lambda line: _sink(
+                                        _truncate_line(line), stdout_lines, "stdout"
+                                    ),
+                                )
                                 break
                             # Sleep briefly to avoid busy-waiting (100ms like POSIX)
                             time.sleep(0.1)
@@ -789,8 +913,24 @@ def run_shell_command_streaming(
                     # Windows: no select on pipes — PeekNamedPipe to check availability
                     try:
                         if _win32_pipe_has_data(process.stderr):
-                            line = process.stderr.readline()
-                            if not line:  # EOF
+                            line = None
+                            try:
+                                line = process.stderr.readline()
+                            except (ValueError, OSError):
+                                pass
+                            if not line:
+                                # EOF or a transient read error during the
+                                # spawn/exit race — grab anything already
+                                # sitting in the pipe buffer before giving
+                                # up. A detached grandchild may re-open the
+                                # write-end a moment later, but we never
+                                # wait for it.
+                                _drain_available(
+                                    process.stderr,
+                                    lambda line: _sink(
+                                        _truncate_line(line), stderr_lines, "stderr"
+                                    ),
+                                )
                                 break
                             line = line.rstrip("\r\n")
                             line = _truncate_line(line)
@@ -799,19 +939,18 @@ def run_shell_command_streaming(
                         else:
                             # No data available, check if process has exited
                             if process.poll() is not None:
-                                # Process exited, do one final drain
-                                try:
-                                    remaining = process.stderr.read()
-                                    if remaining:
-                                        for line in remaining.split("\n"):
-                                            # Strip CR/LF like the readline path —
-                                            # Windows CRLF's stray \r would retrigger
-                                            # the renderer's redraw bypass.
-                                            line = line.rstrip("\r\n")
-                                            line = _truncate_line(line)
-                                            _sink(line, stderr_lines, "stderr")
-                                except (ValueError, OSError):
-                                    pass
+                                # Process exited: drain only what already
+                                # arrived. NEVER wait for EOF here — a
+                                # detached grandchild (`start /B server`)
+                                # can inherit the pipe write-end and hold
+                                # it open forever, wedging read() and, via
+                                # the shared io lock, the cancel path.
+                                _drain_available(
+                                    process.stderr,
+                                    lambda line: _sink(
+                                        _truncate_line(line), stderr_lines, "stderr"
+                                    ),
+                                )
                                 break
                             # Sleep briefly to avoid busy-waiting (100ms like POSIX)
                             time.sleep(0.1)
@@ -849,16 +988,6 @@ def run_shell_command_streaming(
             if process.poll() is None:
                 nuclear_kill(process)
 
-            try:
-                if process.stdout and not process.stdout.closed:
-                    process.stdout.close()
-                if process.stderr and not process.stderr.closed:
-                    process.stderr.close()
-                if process.stdin and not process.stdin.closed:
-                    process.stdin.close()
-            except (OSError, ValueError):
-                pass
-
             # Unregister once we're done cleaning up
             _unregister_process(process)
 
@@ -877,6 +1006,13 @@ def run_shell_command_streaming(
                         f"stderr reader thread failed to terminate after {timeout_type} timeout",
                         message_group=group_id,
                     )
+
+            # Close AFTER the bounded joins: a wedged reader (EOF never came
+            # because a detached grandchild inherited the pipe write-end)
+            # holds the io buffer lock, and close() on the wrapper would
+            # block this thread forever. Guarded close falls back to raw
+            # handles when readers are stuck.
+            _close_process_pipes(process, stdout_thread, stderr_thread)
 
         except Exception as e:
             if not silent:
@@ -982,15 +1118,19 @@ def run_shell_command_streaming(
         exit_code = process.returncode
         execution_time = time.time() - start_time
 
-        try:
-            if process.stdout and not process.stdout.closed:
-                process.stdout.close()
-            if process.stderr and not process.stderr.closed:
-                process.stderr.close()
-            if process.stdin and not process.stdin.closed:
-                process.stdin.close()
-        except (OSError, ValueError):
-            pass
+        # The process is dead; if readers are still looping (e.g. an orphaned
+        # grandchild keeps the pipe open and EOF never arrives), tell them to
+        # stop instead of letting them spin forever.
+        if (stdout_thread and stdout_thread.is_alive()) or (
+            stderr_thread and stderr_thread.is_alive()
+        ):
+            stop_event.set()
+
+        # Readers can be wedged in a blocking read (EOF never came because a
+        # detached grandchild inherited the pipe write-end). Closing the
+        # wrapped streams here would deadlock this executor thread on the io
+        # buffer lock — the tool call would never return. Guarded close:
+        _close_process_pipes(process, stdout_thread, stderr_thread)
 
         _unregister_process(process)
 
@@ -1568,6 +1708,14 @@ def register_agent_run_shell_command(agent):
         """Execute a shell command with comprehensive monitoring and safety features.
 
         Supports streaming output, timeout handling, and background execution.
+
+        Long-running servers/listeners: pass background=True instead of
+        self-backgrounding with `start /B` or `Start-Process` — a detached
+        grandchild inherits this command's output pipes and can wedge the
+        runner (EOF never arrives). On Windows, `timeout /t` fails under
+        redirected stdin ("Input redirection is not supported"); sleep with
+        `ping -n 2 127.0.0.1 >nul` or `python -c "import time; time.sleep(1)"`
+        instead.
         """
         result = await run_shell_command(context, command, cwd, timeout, background)
         await on_run_shell_command_output(result)
