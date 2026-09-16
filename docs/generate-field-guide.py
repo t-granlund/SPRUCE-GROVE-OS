@@ -572,7 +572,7 @@ def _inline_image_assets(html: str, base_dir: Path) -> str:
     and favicon as data URIs keeps the file truly self-contained, matching the
     same philosophy used for inlined JS/CSS/data above.
     """
-    pattern = re.compile(r'(src|href)="assets/([A-Za-z0-9_.\-]+\.png)"')
+    pattern = re.compile(r'(src|href)="assets/([A-Za-z0-9_.\-]+\.(?:png|svg))"')
 
     def _sub(m: re.Match) -> str:
         fname = m.group(2)
@@ -580,7 +580,8 @@ def _inline_image_assets(html: str, base_dir: Path) -> str:
         if not fpath.exists():
             return m.group(0)
         b64 = base64.b64encode(fpath.read_bytes()).decode("ascii")
-        return f'{m.group(1)}="data:image/png;base64,{b64}"'
+        mime = "image/svg+xml" if fname.endswith(".svg") else "image/png"
+        return f'{m.group(1)}="data:{mime};base64,{b64}"'
 
     return pattern.sub(_sub, html)
 

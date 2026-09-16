@@ -14,6 +14,7 @@ CHECK=0
 repo_path() {
   case "$1" in
     pages-hub)          echo "$ROOT/pages-hub" ;;
+    docs/field-guide)   echo "$ROOT/docs/field-guide" ;;
     code_puppy)         echo "$HOME/code_puppy" ;;
     leather-apron-club) echo "$HOME/leather-apron-club" ;;
     *)                  echo "" ;;
@@ -23,6 +24,9 @@ repo_path() {
 PAIRS="pages-hub|assets/favicon-64.png|favicon-64.png
 pages-hub|assets/apple-touch-icon.png|apple-touch-icon.png
 pages-hub|assets/spruce_grove_official.png|spruce_grove_official.png
+docs/field-guide|assets/favicon-64.png|favicon-64.png
+docs/field-guide|assets/apple-touch-icon.png|apple-touch-icon.png
+docs/field-guide|assets/spruce-grove-mark.svg|spruce-grove-mark.svg
 code_puppy|docs/decks/the-great-adpuppytion/leather-apron-club/assets/favicon-64.png|favicon-64.png
 code_puppy|docs/decks/the-great-adpuppytion/leather-apron-club/assets/apple-touch-icon.png|apple-touch-icon.png
 code_puppy|docs/decks/the-great-adpuppytion/leather-apron-club/assets/spruce_grove_official.png|spruce_grove_official.png

@@ -15,8 +15,6 @@ FILES=(
   pages-hub/assets/tokens.css
   pages-hub/assets/sidebar.css
   pages-hub/assets/popover.css
-  pages-hub/assets/grove.svg
-  pages-hub/assets/grove-full.svg
   pages-hub/index.html
   pages-hub/architecture.html
   pages-hub/updates.html
