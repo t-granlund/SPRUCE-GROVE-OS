@@ -38,6 +38,7 @@ jobs:
           cp pages-hub/plan.html _site/plan.html
           cp pages-hub/index.html _site/hub.html
           cp pages-hub/desktop-dashboard.html _site/
+          cp pages-hub/dashboard.html _site/
           cp -r pages-hub/assets _site/
           # Inject live platform stats from the field guide data into the hub
           # (stdlib Python — no node/npm anywhere in the build)

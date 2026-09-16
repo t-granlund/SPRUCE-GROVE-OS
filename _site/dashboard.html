@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spruce Grove — Project Dashboard: releases &amp; the dependency exit</title>
+<meta name="description" content="The grove's public project dashboard: every release on the rail, and the ladder for owning everything we currently borrow — computed, never claimed.">
+<link rel="icon" type="image/png" href="./assets/favicon-64.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="./assets/tokens.css" />
+<style>
+  body { margin:0; background:var(--BB-bg); color:var(--BB-t2); font-family:var(--BB-sans); font-size:16px; line-height:1.7; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:980px; margin:0 auto; padding:0 24px; }
+  a { color:var(--BB-cyan); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+  h1,h2,h3 { font-family:var(--BB-display); color:var(--BB-t1); line-height:1.2; margin:0; letter-spacing:-0.02em; }
+  code, .mono { font-family:var(--BB-mono); }
+  code { background:rgba(242,162,106,.10); color:var(--BB-cyan); padding:2px 7px; border-radius:6px; font-size:.9em; }
+  .kicker { font-family:var(--BB-mono); font-size:11.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--BB-peri); display:inline-block; border:1px solid var(--BB-line-2); padding:6px 14px; border-radius:999px; }
+  header.hero { padding:84px 0 48px; text-align:center; position:relative; overflow:hidden; }
+  header.hero::before { content:""; position:absolute; inset:-40% -20% auto; height:130%;
+    background:radial-gradient(60% 55% at 50% 0%, rgba(88,143,94,.20), transparent 70%); pointer-events:none; }
+  .hero .inner { position:relative; }
+  .hero h1 { font-size:clamp(32px,5vw,52px); margin:22px 0 0; }
+  .hero h1 em { font-style:normal; background:var(--BB-grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero .sub { max-width:680px; margin:18px auto 0; font-size:17px; color:var(--BB-t2); }
+  section { padding:48px 0; border-top:1px solid var(--BB-line); }
+  .sec-h { margin-bottom:26px; }
+  .sec-h .kicker { margin-bottom:12px; }
+  .sec-h h2 { font-size:clamp(22px,3vw,30px); }
+  .sec-h p { max-width:680px; margin:10px 0 0; color:var(--BB-t3); font-size:14.5px; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th { text-align:left; font-family:var(--BB-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+       color:var(--BB-t3); padding:10px 12px; border-bottom:1px solid var(--BB-line-2); }
+  td { padding:12px; border-bottom:1px solid var(--BB-line); vertical-align:top; }
+  tr:hover td { background:rgba(88,143,94,.05); }
+  .ver { font-family:var(--BB-mono); font-weight:600; color:var(--BB-t1); white-space:nowrap; }
+  .date { font-family:var(--BB-mono); font-size:12px; color:var(--BB-t3); white-space:nowrap; }
+  td .desc { color:var(--BB-t2); font-size:13.5px; }
+  .pill { display:inline-block; font-family:var(--BB-mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase;
+          padding:3px 10px; border-radius:999px; border:1px solid var(--BB-line-2); color:var(--BB-t2); white-space:nowrap; }
+  .pill.shipped { color:#8fd49a; border-color:rgba(88,143,94,.5); background:rgba(88,143,94,.10); }
+  .pill.inflight { color:var(--BB-cedar); border-color:rgba(210,160,105,.5); background:rgba(210,160,105,.10); }
+  .pill.queued { color:var(--BB-t2); }
+  .pill.parked { color:var(--BB-t3); }
+  .pill.clean { color:#8fd49a; border-color:rgba(88,143,94,.5); }
+  .tier { margin:26px 0 8px; font-family:var(--BB-mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--BB-mint); }
+  .note { font-size:12.5px; color:var(--BB-t3); margin-top:14px; }
+  .statgrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:20px; }
+  .stat { border:1px solid var(--BB-line); border-radius:14px; background:var(--BB-bg-card); padding:16px 18px; }
+  .stat .n { font-family:var(--BB-display); font-size:26px; color:var(--BB-t1); }
+  .stat .l { font-family:var(--BB-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--BB-t3); margin-top:4px; }
+  .closer { text-align:center; padding:56px 0 64px; border-top:1px solid var(--BB-line); }
+  .closer blockquote { margin:0 auto; max-width:700px; font-family:var(--BB-display); font-size:clamp(18px,2.6vw,25px); color:var(--BB-peri-l); }
+  footer { border-top:1px solid var(--BB-line); padding:30px 0 40px; }
+  footer .wrap { display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap; font-size:13px; color:var(--BB-t3); }
+  footer a { color:var(--BB-t2); }
+  .links { display:flex; gap:16px; flex-wrap:wrap; }
+  @media (max-width:640px){ th,td{padding:9px 8px;} .hide-sm{display:none;} }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap inner">
+    <span class="kicker">Spruce Grove OS &middot; project dashboard</span>
+    <h1>The release rail &amp;<br>the <em>dependency exit</em>.</h1>
+    <p class="sub">Everything this grove ships, and everything it currently borrows &mdash; on one page.
+    Statuses mirror the in-repo board (<code>docs/SOVEREIGNTY-EXECUTION.md</code>) and the census
+    (<code>docs/DEPENDENCY-EXIT.md</code>). Counts are computed, never claimed.</p>
+  </div>
+</header>
+
+<section id="rail">
+  <div class="wrap">
+    <div class="sec-h">
+      <span class="kicker">release rail</span>
+      <h2>Every version, and what landed in it</h2>
+      <p>Published to PyPI by trusted publishing on every green merge to main. The full narrative
+      for each landing lives in the <a href="./releases/">Release Observatory</a>.</p>
+    </div>
+    <div class="statgrid">
+      <div class="stat"><div class="n">1.0.50</div><div class="l">latest on PyPI</div></div>
+      <div class="stat"><div class="n">146</div><div class="l">locked packages</div></div>
+      <div class="stat"><div class="n">2 / 58</div><div class="l">harness call sites migrated</div></div>
+      <div class="stat"><div class="n">0</div><div class="l">npm packages in the build</div></div>
+    </div>
+    <table>
+      <thead><tr><th>version</th><th class="hide-sm">date</th><th>what landed</th><th>links</th></tr></thead>
+      <tbody>
+        <tr><td class="ver">1.0.50</td><td class="date hide-sm">2026-09-15</td>
+            <td><span class="desc">Session handoff document; observatory provenance on every entry + live upstream connector; parity build sealed.</span></td>
+            <td><a href="https://pypi.org/project/spruce-grove/1.0.50/">PyPI</a> &middot; <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/releases/tag/v1.0.50">notes</a></td></tr>
+        <tr><td class="ver">1.0.49</td><td class="date hide-sm">2026-09-15</td>
+            <td><span class="desc">Sovereignty execution: the task board, the automation kit (wall, backups, parity, Forgejo stack), first supply-chain audits.</span></td>
+            <td><a href="https://pypi.org/project/spruce-grove/1.0.49/">PyPI</a> &middot; <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/releases/tag/v1.0.49">notes</a></td></tr>
+        <tr><td class="ver">1.0.48</td><td class="date hide-sm">2026-09-15</td>
+            <td><span class="desc">Governance: the council, the approval wall, the compatibility-exit ledger.</span></td>
+            <td><a href="https://pypi.org/project/spruce-grove/1.0.48/">PyPI</a> &middot; <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/releases/tag/v1.0.48">notes</a></td></tr>
+        <tr><td class="ver">1.0.47</td><td class="date hide-sm">2026-09-15</td>
+            <td><span class="desc">Harness seam Phase 2: grove-owned protocol, delegating adapter, first call sites migrated.</span></td>
+            <td><a href="https://pypi.org/project/spruce-grove/1.0.47/">PyPI</a> &middot; <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/releases/tag/v1.0.47">notes</a></td></tr>
+        <tr><td class="ver">1.0.46</td><td class="date hide-sm">2026-09-15</td>
+            <td><span class="desc">Manifesto, the Leather Apron Gate, bootloader rebrand &mdash; the boot screen speaks only grove.</span></td>
+            <td><a href="https://pypi.org/project/spruce-grove/1.0.46/">PyPI</a> &middot; <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/releases/tag/v1.0.46">notes</a></td></tr>
+        <tr><td class="ver">1.0.45</td><td class="date hide-sm">2026-09-15</td>
+            <td><span class="desc">Design system: Logo Pack section complete; observatory nav QA across viewports.</span></td>
+            <td><a href="https://pypi.org/project/spruce-grove/1.0.45/">PyPI</a> &middot; <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/releases/tag/v1.0.45">notes</a></td></tr>
+        <tr><td class="ver">1.0.44</td><td class="date hide-sm">2026-09-15</td>
+            <td><span class="desc">The logo pack: Core Disc, Grove Marks, Ghost, Lockups &mdash; one geometry, four jobs; observatory provenance nav.</span></td>
+            <td><a href="https://pypi.org/project/spruce-grove/1.0.44/">PyPI</a> &middot; <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/releases/tag/v1.0.44">notes</a></td></tr>
+      </tbody>
+    </table>
+    <p class="note">Older versions: <a href="https://pypi.org/project/spruce-grove/#history">full PyPI history</a> &middot;
+    tags back to <code>v1.0.1</code> on GitHub.</p>
+  </div>
+</section>
+
+<section id="exit">
+  <div class="wrap">
+    <div class="sec-h">
+      <span class="kicker">dependency exit</span>
+      <h2>Everything we borrow, and the ladder out</h2>
+      <p>The census lives in <code>docs/DEPENDENCY-EXIT.md</code>; this is its public face.
+      A rung flips to shipped only with its receipt &mdash; tests green, hash proof, or a diff.</p>
+    </div>
+
+    <div class="tier">Tier 0 &middot; the harness</div>
+    <table>
+      <thead><tr><th>item</th><th class="hide-sm">surface</th><th>status</th></tr></thead>
+      <tbody>
+        <tr><td><code>pydantic-ai-slim</code> + <code>pydantic-ai-harness</code></td>
+            <td class="hide-sm"><span class="desc">110 + 4 imports; the agent loop itself</span></td>
+            <td><span class="pill inflight">in-flight &middot; 2/58 call sites</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="tier">Tier 1&ndash;3 &middot; runtime &amp; site</div>
+    <table>
+      <thead><tr><th>item</th><th class="hide-sm">surface</th><th>status</th></tr></thead>
+      <tbody>
+        <tr><td>npm / node / axios</td><td class="hide-sm"><span class="desc">none in-repo; node already removed from CI</span></td><td><span class="pill clean">clean &middot; nothing to migrate</span></td></tr>
+        <tr><td>stale brand assets</td><td class="hide-sm"><span class="desc">old solid-mark favicon pair removed; site serves the Disc</span></td><td><span class="pill shipped">done 2026-09-15</span></td></tr>
+        <tr><td>dog-era copy &amp; emoji</td><td class="hide-sm"><span class="desc">i18n x3 + source sweep; compat aliases retained by contract</span></td><td><span class="pill shipped">done 2026-09-15</span></td></tr>
+        <tr><td>pin CI actions by SHA</td><td class="hide-sm"><span class="desc">5 tag-pinned actions &rarr; immutable refs</span></td><td><span class="pill queued">queued</span></td></tr>
+        <tr><td>drop <code>typer</code></td><td class="hide-sm"><span class="desc">computed unused by grove + plugins</span></td><td><span class="pill queued">queued</span></td></tr>
+        <tr><td>self-host site fonts</td><td class="hide-sm"><span class="desc">10 pages off the Google CDN, into assets/</span></td><td><span class="pill queued">queued</span></td></tr>
+        <tr><td>dedupe <code>requests</code> &rarr; <code>httpx</code></td><td class="hide-sm"><span class="desc">3 call sites</span></td><td><span class="pill queued">queued</span></td></tr>
+        <tr><td>replace <code>pyfiglet</code> with baked splash</td><td class="hide-sm"><span class="desc">2 call sites; constants already exist</span></td><td><span class="pill queued">queued</span></td></tr>
+        <tr><td>extra-gate <code>boto3</code> / <code>azure-identity</code></td><td class="hide-sm"><span class="desc">plugin-consumed; move behind extras</span></td><td><span class="pill parked">parked</span></td></tr>
+        <tr><td>adopt or vendor <code>code-puppy-core-plugins</code></td><td class="hide-sm"><span class="desc">council decision after compat contracts</span></td><td><span class="pill parked">parked &middot; council</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="tier">Tier 4&ndash;6 &middot; rails &amp; tooling</div>
+    <table>
+      <thead><tr><th>item</th><th class="hide-sm">surface</th><th>status</th></tr></thead>
+      <tbody>
+        <tr><td>GitHub &rarr; Forgejo rails</td><td class="hide-sm"><span class="desc">Docker stack templated; parity harness sealed</span></td><td><span class="pill inflight">in-flight &middot; board C5&ndash;C7</span></td></tr>
+        <tr><td>Docker images</td><td class="hide-sm"><span class="desc">forgejo 9-rootless, woodpecker v3, caddy 2</span></td><td><span class="pill queued">pin digests at stand-up</span></td></tr>
+        <tr><td>GitHub releases with notes</td><td class="hide-sm"><span class="desc">rail historically tag-only; notes now published</span></td><td><span class="pill shipped">done 2026-09-15</span></td></tr>
+        <tr><td>Dolt / beads tracker</td><td class="hide-sm"><span class="desc">issues in a local Dolt DB, synced via git refs</span></td><td><span class="pill shipped">owned</span></td></tr>
+      </tbody>
+    </table>
+    <p class="note">Verdicts were computed by grep, not vibes: every &ldquo;unused&rdquo; row traces to an import
+    scan of grove source and the plugin package on the census date.</p>
+  </div>
+</section>
+
+<div class="closer">
+  <div class="wrap">
+    <blockquote>&ldquo;Debt with a name and a date is a plan;<br>debt without is drift.&rdquo;</blockquote>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Spruce Grove OS &middot; dashboard &middot; <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS" target="_blank" rel="noopener">source</a> &middot; <a href="https://github.com/t-granlund/spruce-grove-desktop" target="_blank" rel="noopener">desktop</a></span>
+    <span class="links"><a href="./hub.html">hub</a><a href="./releases/">observatory</a><a href="./progress.html">progress</a><a href="./council/">council</a><a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/docs/DEPENDENCY-EXIT.md" target="_blank" rel="noopener">census</a></span>
+  </div>
+</footer>
+
+</body>
+</html>

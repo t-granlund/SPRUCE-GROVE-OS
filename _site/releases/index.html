@@ -310,7 +310,16 @@
     <h2>The Living Log <span class="tag">voice-led</span></h2>
     <p class="secintro">This is the live stream of how the harness evolves — the primary engine, not a side channel. The loop: <strong>speak</strong> (dictate while building) &rarr; <strong>capture</strong> (entries land in <code>LIVING-UPDATES.md</code> as they happen) &rarr; <strong>gate</strong> (every signal — ours and upstream's — faces the Leather Apron criteria below) &rarr; <strong>ship</strong> (the self-healing release train carries it) &rarr; <strong>observe</strong> (this page, live) &rarr; <strong>learn</strong> (port what helps, log what differs). The founding story and the rules of the grove live in <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/MANIFESTO.md">MANIFESTO.md</a>. Entries age from <span class="chip">idea</span> through <span class="chip up">in flight</span> to <span class="chip gr">shipped</span>, and the shipped ones graduate into
     <!-- AUTO-BEGIN:living-updates -->
-<div class="pcount">10 entries · newest first</div>
+<div class="pcount">11 entries · newest first</div>
+    <article class="deep">
+      <div class="head"><h3>2026-09-15 — The execution board: the sovereignty work becomes runnable</h3><span class="meta"><span class="chip up">in flight</span> · build session (the &quot;what can be automated&quot; question) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>The infrastructure runbook became a task board (<code>docs/SOVEREIGNTY-EXECUTION.md</code>) with one owner per task: the human for identity, payment, ceremony, and approval; scripts for everything that can be verified.</dd>
+        <dd>Automation kit landed in <code>scripts/sovereignty/</code>: the wall (<code>arm_the_wall.sh</code>), the insurance snapshot (<code>backup_github.sh</code>), the site-parity harness (<code>build_site_parity.sh</code> — byte-identical artifact proof for the rails migration), the clean-history export (<code>fresh_history_export.sh</code>), and the Forgejo/Woodpecker/Caddy stack templates.</dd>
+        <dd>First supply-chain audit ran against the actual ship set: one finding (a file-upload parser with a known advisory), fixed and re-audited to zero. The audit command is now part of the board.</dd>
+      </dl>
+    </article>
     <article class="deep">
       <div class="head"><h3>2026-09-15 — The Council &amp; The Wall: governance made public</h3><span class="meta"><span class="chip up">in flight</span> · council session (governance design) · <span class="prov gr">grove-grown</span></span></div>
     </article>

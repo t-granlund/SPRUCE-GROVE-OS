@@ -20,6 +20,7 @@ for f in announce owners product interested share plan; do
 done
 cp pages-hub/index.html "$SITE/hub.html"
 cp pages-hub/desktop-dashboard.html "$SITE/"
+cp pages-hub/dashboard.html "$SITE/"
 cp -r pages-hub/assets "$SITE/"
 cp pages-hub/phases.html "$SITE/phases.html"
 cp pages-hub/progress.html "$SITE/progress.html"

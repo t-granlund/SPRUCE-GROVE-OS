@@ -44,6 +44,29 @@ The harness wins by running three moves in parallel, not sequentially:
 
 <!-- LIVING:BEGIN -->
 
+### 2026-09-15 — The dashboard lands: release rail + dependency census go public
+- Source: build session (the "level-set everything we borrow" question)
+- Status: shipped
+- Origin: grove-grown
+- The rebrand finished its sweep: the last dog-era copy and paw prints left the
+  CLI and all three locales. Compat aliases (`puppy_name`, `get_puppy_name`,
+  the `agent_code_puppy` session bridge) stay by contract — the receipt is the
+  contract, not the vibe.
+- The stale solid-mark favicon pair left the repo root; the site serves the
+  Disc, hash-verified against `logos/`.
+- `docs/DEPENDENCY-EXIT.md`: the full census of everything borrowed — six
+  tiers, verdicts computed by import scans of grove source and the plugin
+  package. npm/axios: zero in-repo. `typer`: computed unused, removal queued.
+  CI action pinning and site-font self-hosting queued. `httpx2` documented
+  (codex/claude transports), `requests` dedupe queued, `pyfiglet` replacement
+  queued.
+- `/dashboard.html` live on the public site: every release on the rail with
+  what landed in it, and the dependency-exit ladder rendered from the in-repo
+  board. Wired into pages.yml + the parity harness.
+- GitHub releases with real notes now exist for the rail (the tag was the only
+  receipt since v1.0.1 — now the notes travel with it).
+- AGENTS.md back under the 10k cap so the agent rules load whole.
+
 ### 2026-09-15 — The execution board: the sovereignty work becomes runnable
 - Source: build session (the "what can be automated" question)
 - Status: in-flight
