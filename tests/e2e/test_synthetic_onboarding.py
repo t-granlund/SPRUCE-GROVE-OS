@@ -84,9 +84,7 @@ def test_apply_onboarding_writes_models_key_and_main_model(isolated_home):
         apply_onboarding,
     )
 
-    with mock.patch(
-        "spruce_grove.command_line.onboarding_synthetic.set_api_key"
-    ):
+    with mock.patch("spruce_grove.command_line.onboarding_synthetic.set_api_key"):
         with mock.patch.dict(os.environ, {"SYNTHETIC_API_KEY": "sk-test"}):
             apply_onboarding("sk-test")
 
@@ -94,9 +92,7 @@ def test_apply_onboarding_writes_models_key_and_main_model(isolated_home):
     assert len([k for k in models if k.startswith(("syn:", "hf:"))]) == 11
     assert models["syn:large:vision"]["supports_vision"] is True
 
-    cfg_path = os.path.join(
-        isolated_home, ".config", "spruce_grove", "grove.cfg"
-    )
+    cfg_path = os.path.join(isolated_home, ".config", "spruce_grove", "grove.cfg")
     assert "model = syn:large:text" in open(cfg_path).read()
 
 

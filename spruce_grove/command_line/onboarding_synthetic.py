@@ -215,9 +215,13 @@ def handle_onboard_synthetic_command(command: str) -> bool:
 
     emit_info("Synthetic.new onboarding - what this sets up:")
     emit_info("  1. Your API key, stored in the shared credential store")
-    emit_info("  2. The rotation-safe alias family: syn:large:text (driving seat, 1.0x),")
+    emit_info(
+        "  2. The rotation-safe alias family: syn:large:text (driving seat, 1.0x),"
+    )
     emit_info("     syn:small:text (fan-out, 0.1x), syn:large:vision (Kimi-K3),")
-    emit_info("     syn:small:vision (Qwen3.8-27B) - vision models tagged for image work")
+    emit_info(
+        "     syn:small:vision (Qwen3.8-27B) - vision models tagged for image work"
+    )
     emit_info("  3. The pinned fallbacks (labelled with their rotation/quota risk)")
     emit_info("  4. Main model -> syn:large:text")
 

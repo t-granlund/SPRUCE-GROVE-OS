@@ -533,9 +533,9 @@ class TestSessionBrowser:
         return browser, result, visible(output.getvalue()), output.getvalue()
 
     def sample_entries(self):
-        now = datetime.combine(
-            FROZEN_ANCHOR_DATE, datetime.min.time()
-        ) + timedelta(hours=23)  # 23:00 on the frozen day - offsets never cross midnight
+        now = datetime.combine(FROZEN_ANCHOR_DATE, datetime.min.time()) + timedelta(
+            hours=23
+        )  # 23:00 on the frozen day - offsets never cross midnight
         stamp = lambda **kw: (now - timedelta(**kw)).isoformat()  # noqa: E731
         return [
             _entry(

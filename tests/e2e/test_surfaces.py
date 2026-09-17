@@ -54,6 +54,7 @@ def _page(browser):
 
 # ── the deck ────────────────────────────────────────────────────────────
 
+
 @pytest.mark.skipif(not _reachable("http://localhost:8086"), reason="deck server down")
 class TestDeck:
     def test_gran_chrome_present(self, browser):
@@ -77,9 +78,9 @@ class TestDeck:
         )
         page.evaluate(f"Reveal.slide({idx})")
         page.wait_for_timeout(800)
-        assert page.evaluate(
-            "!!document.getElementById('chaplin-video')"
-        ), "the film is gone"
+        assert page.evaluate("!!document.getElementById('chaplin-video')"), (
+            "the film is gone"
+        )
         caps = page.evaluate("document.getElementById('bank-caps').textContent")
         assert caps is not None
 
@@ -96,7 +97,10 @@ class TestDeck:
 
 # ── sprucegrove.io (product) ────────────────────────────────────────────
 
-@pytest.mark.skipif(not _reachable("http://localhost:8087"), reason="product server down")
+
+@pytest.mark.skipif(
+    not _reachable("http://localhost:8087"), reason="product server down"
+)
 class TestProduct:
     def test_lockup_and_brandmark(self, browser):
         page = _page(browser)
@@ -123,13 +127,16 @@ class TestProduct:
 
 # ── the club hall ───────────────────────────────────────────────────────
 
+
 @pytest.mark.skipif(not _reachable("http://localhost:8088"), reason="club server down")
 class TestClub:
     def test_hall_staples(self, browser):
         page = _page(browser)
         page.goto(f"{CLUB}/", wait_until="networkidle")
         page.wait_for_timeout(900)
-        assert page.evaluate("(function(){var m=document.querySelector('.mark-hero');return m&&m.naturalWidth>0})()")
+        assert page.evaluate(
+            "(function(){var m=document.querySelector('.mark-hero');return m&&m.naturalWidth>0})()"
+        )
         assert page.locator(".notice .stamp").count() == 1
         assert page.evaluate("!!document.querySelector('header .rune-line')")
         assert page.evaluate("!!document.getElementById('grove-grain')")
@@ -139,7 +146,9 @@ class TestClub:
         page.goto(f"{CLUB}/", wait_until="networkidle")
         cd = page.locator("#countdown").text_content() or ""
         assert "convene" in cd.lower() or "council" in cd.lower()
-        hrefs = page.evaluate("Array.from(document.querySelectorAll('a')).map(a => a.getAttribute('href'))")
+        hrefs = page.evaluate(
+            "Array.from(document.querySelectorAll('a')).map(a => a.getAttribute('href'))"
+        )
         assert "guide.html" in hrefs, "the explainer guide is an orphan again"
         assert any(h and "sprucegrove.io" in h for h in hrefs)
 
@@ -147,5 +156,7 @@ class TestClub:
         page = _page(browser)
         page.goto(f"{CLUB}/", wait_until="networkidle")
         assert "candm" not in page.content().lower()
-        works = page.evaluate("Array.from(document.querySelectorAll('a')).filter(a => (a.getAttribute('href')||'').includes('works/')).length")
+        works = page.evaluate(
+            "Array.from(document.querySelectorAll('a')).filter(a => (a.getAttribute('href')||'').includes('works/')).length"
+        )
         assert works >= 1

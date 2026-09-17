@@ -332,9 +332,7 @@ def test_unshipped_spanish_region_falls_back_to_base_es():
     for dialect in ("es-MX", "es-AR", "es-CO", "es-CL"):
         translate.set_locale(dialect)
         assert i18n.t("confirm.yes") == "S\u00ed"
-        assert i18n.t("startup.ready") == (
-            "Listo para construir en la arboleda."
-        )
+        assert i18n.t("startup.ready") == ("Listo para construir en la arboleda.")
         assert i18n.t("confirm.no") == "No"  # inherited from en-US default
 
 

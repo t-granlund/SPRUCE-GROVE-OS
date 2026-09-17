@@ -226,7 +226,9 @@ class TestMain:
             ["spruce-grove"],
             extra_patches={
                 "spruce_grove.cli_runner.interactive_mode": mock_inter,
-                "spruce_grove.banner_art.art_for_label": MagicMock(return_value="LOGO\n\n"),
+                "spruce_grove.banner_art.art_for_label": MagicMock(
+                    return_value="LOGO\n\n"
+                ),
             },
         )
         mock_inter.assert_called_once()
@@ -255,7 +257,9 @@ class TestMain:
             ["spruce-grove", "do", "something"],
             extra_patches={
                 "spruce_grove.cli_runner.interactive_mode": mock_inter,
-                "spruce_grove.banner_art.art_for_label": MagicMock(return_value="LOGO\n\n"),
+                "spruce_grove.banner_art.art_for_label": MagicMock(
+                    return_value="LOGO\n\n"
+                ),
             },
         )
         assert mock_inter.call_args[1]["initial_command"] == "do something"
@@ -390,7 +394,9 @@ class TestMain:
                 mode_target: AsyncMock(),
                 "spruce_grove.cli_runner.get_core_plugins_version": mock_core_version,
                 "spruce_grove.messaging.emit_system_message": mock_emit,
-                "spruce_grove.banner_art.art_for_label": MagicMock(return_value="LOGO\n\n"),
+                "spruce_grove.banner_art.art_for_label": MagicMock(
+                    return_value="LOGO\n\n"
+                ),
             },
         )
 

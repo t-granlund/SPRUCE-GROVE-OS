@@ -85,9 +85,7 @@ class TestResolveModelParity(_ParityBase):
         from spruce_grove import model_factory
         from spruce_grove.model_factory import ModelFactory
 
-        monkeypatch.setattr(
-            model_factory, "get_api_key", lambda name: "test-key-123"
-        )
+        monkeypatch.setattr(model_factory, "get_api_key", lambda name: "test-key-123")
         direct = ModelFactory.get_model("test-model", self.CONFIG)
         through = get_harness().resolve_model("test-model", self.CONFIG)
         assert direct is not None and through is not None

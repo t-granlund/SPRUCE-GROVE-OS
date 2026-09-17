@@ -70,6 +70,7 @@ def _prov_chip(author: str | None) -> str:
     )
     return f'<span class="prov {cls}" title="{title}">{label}</span>'
 
+
 # Self-referential/maintenance feats that would just spam the auto-detected
 # cards (site regen chores, i18n extraction sweeps, etc.).
 NOISE_RE = re.compile(r"field-guide|changelog\.py|user-facing strings", re.IGNORECASE)

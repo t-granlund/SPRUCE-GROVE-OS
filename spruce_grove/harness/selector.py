@@ -37,8 +37,7 @@ def available_harnesses() -> dict[str, HarnessInfo]:
 def get_harness() -> Harness:
     """Return the configured harness implementation. Never raises."""
     wanted = (
-        os.environ.get("SPRUCE_GROVE_HARNESS", "").strip().lower()
-        or DEFAULT_HARNESS
+        os.environ.get("SPRUCE_GROVE_HARNESS", "").strip().lower() or DEFAULT_HARNESS
     )
     if wanted not in _REGISTRY:
         logger.error(
