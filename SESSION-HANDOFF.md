@@ -111,3 +111,40 @@
 
 *Handoff written 2026-09-15 evening, after the macOS golden-master restart
 prep. All work pushed. Nothing left dangling.*
+
+---
+
+# ADDENDUM — 2026-09-16 midday (the branding + orbit close-out)
+
+> Fresh OS session: read the original handoff above, then this. The board in
+> `docs/SOVEREIGNTY-EXECUTION.md` still governs.
+
+## What changed since the 9/15 handoff
+
+| Thing | State |
+|---|---|
+| Repo | clean tree, synced with origin (only this addendum added) |
+| **The Disc decision: MADE** | **"Sevardhet" is the Core Disc master** (`f8b8e3c`: Kungsleden + Birch variants, full propagation; plan logged `95a1523`) |
+| Site surfaces | every sprucegrove.io page on the current logo kit (`a2bcc6a`), persona tiles + social preview (`6dd3815`) |
+| LIVING-UPDATES | the dictation ledger renders into the Release Observatory (`pages-hub/generate-updates.py`) — entries graduate to CHANGELOG when they ship |
+| Desktop sibling | inspector/settings/repo-access + Core Disc iconography landed; **`REVIEW.md` holds a 50-finding three-agent audit, top 20 ranked — the fresh desktop session starts there** |
+| Stray log | moved out of repo root to `1.MASTER-ORCHESTRATION/LOGS/` |
+
+## Fresh OS session — launch prompt
+
+*"Read SESSION-HANDOFF.md top to bottom, then work the board in
+docs/SOVEREIGNTY-EXECUTION.md — start with the post-reboot ritual, then the
+highest-priority open item. The Disc is decided (Sevardhet); branding is
+propagated everywhere; don't redo it."*
+
+## Still open (unchanged priority order)
+
+1. Post-reboot ritual (~2 min): `colima start`, confirm self-heal, skim the board
+2. Council onboarding — Dustin + Anderson (Tyler, this week)
+3. Tyler counsel items: COMPAT-EXIT, sovereignty-infra, manifesto naming
+4. Harness exit: `load_config` / `make_model_settings` through the seam next
+5. Wall-arming after stewards exist
+
+*The orbit/business track lives in `~/dev/SPRUCE-GROVE-OUTREACH` (local-only,
+never committed) and `~/dev/1.MASTER-ORCHESTRATION` (its LEVEL-SET.md is the
+cross-workstream source of truth). Family-lab stays private by design.*
