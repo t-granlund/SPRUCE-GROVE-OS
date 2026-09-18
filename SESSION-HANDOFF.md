@@ -148,3 +148,22 @@ propagated everywhere; don't redo it."*
 *The orbit/business track lives in `~/dev/SPRUCE-GROVE-OUTREACH` (local-only,
 never committed) and `~/dev/1.MASTER-ORCHESTRATION` (its LEVEL-SET.md is the
 cross-workstream source of truth). Family-lab stays private by design.*
+
+---
+
+# ADDENDUM — 2026-09-18 morning (manifesto live + barbershop handoff verified)
+
+- **Manifesto rendered for the web — landed** (`b6b53ce`): `pages-hub/manifesto.html`
+  ("Believe" hub card, scroll-icon nav entry), published to `_site/manifesto/` by both
+  the parity script and the pages workflow; mechanics/updates font-path fix included.
+  Parity build verified clean (63 files) before commit.
+- **Barbershop P1 (`bmy`) closed.** REVIEW-GUIDE.html + TEXTS-TO-SEND.md verified
+  end-to-end: all 10 services match `services.html` line-by-line (name/duration/price),
+  hours/address match `location.html`, 6-barber team count confirmed, guide covers every
+  memo-1 ask (Square stays, cost comparison, local/secure, monitoring, chairside).
+  Remaining Tyler-only: pick delivery method, personalize the two texts, send.
+- **Security finding filed as `8l7`:** `t-granlund/bentonville-barber` is PUBLIC and its
+  mock-site code already contains real barber names. Handoff deliverables are now
+  gitignored local-only in that repo (guard commit `4e0d956`) — deliver by AirDrop/email,
+  never push. Decide: make the repo private or scrub.
+- Voice memos remain untracked local-only by design (`docs/OFFSITE-*`).
