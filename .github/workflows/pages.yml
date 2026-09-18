@@ -90,6 +90,10 @@ jobs:
           mkdir -p _site/council
           cp pages-hub/council.html _site/council/index.html
 
+          # 3f. The Manifesto (the why — rendered from MANIFESTO.md)
+          mkdir -p _site/manifesto
+          cp pages-hub/manifesto.html _site/manifesto/index.html
+
           # 4. Fully-offline flat file
           mkdir -p _site/flat
           cp docs/field-guide-flat.html _site/flat/index.html

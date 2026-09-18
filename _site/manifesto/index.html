@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Manifesto — Spruce Grove OS</title>
+<link rel="icon" type="image/png" href="../assets/favicon-64.png" />
+<meta name="description" content="The Spruce Grove OS manifesto: why voice-driven, locally-owned tooling exists, who it is for, the rules of the grove, and why the harness is not tied to any single person." />
+<link rel="stylesheet" href="../assets/fonts.css" />
+<link rel="stylesheet" href="../assets/tokens.css" />
+<link rel="stylesheet" href="../assets/sidebar.css" />
+<script src="../assets/icons.js"></script>
+<script>window.BB_SHELL = { base: "../", active: "manifesto", assetsBase: "../assets/", subnav: [
+  { href: "#thesis",    label: "The thesis" },
+  { href: "#who",       label: "Who this is for" },
+  { href: "#craft",     label: "The craft, inherited" },
+  { href: "#rules",     label: "The rules of the grove" },
+  { href: "#building",  label: "What we are building" },
+  { href: "#nobody",    label: "Not tied to one person" },
+  { href: "#source",    label: "Read the original" }
+] };</script>
+<script src="../assets/shell.js" defer></script>
+<script src="../assets/sidebar.js" defer></script>
+<style>
+  :root {
+    --bg: #0E130F; --bg-elev: #121813; --bg-card: #161D18;
+    --border: rgba(238,235,229,.09); --border-light: rgba(238,235,229,.16);
+    --text: #EEEBE2; --text-soft: #D1CEC5; --text-muted: #A5A699;
+    --accent: #E4AA71; --accent-2: #F2A26A; --accent-3: #98B79E; --accent-4: #ECEBE5; --danger: #CAAB88;
+    --radius: 14px; --radius-sm: 8px;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --display: "Fraunces", Georgia, "Times New Roman", serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); }
+  .wrap { max-width:860px; margin:0 auto; padding:0 24px; }
+  a { color:var(--accent-3); }
+
+  .hero { padding:72px 0 34px; position:relative; }
+  .kicker { font-family:var(--mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); display:inline-block; border:1px solid var(--border-light); padding:6px 14px; border-radius:999px; margin-bottom:20px; }
+  h1 { font-family:var(--display); font-size:clamp(34px,5vw,52px); font-weight:600; letter-spacing:-.02em; margin:0 0 18px; line-height:1.05; }
+  h1 em { color:var(--accent-3); font-style:italic; }
+  .lede { font-size:17px; color:var(--text-soft); max-width:720px; margin:0; line-height:1.65; }
+  .dateline { font-family:var(--mono); font-size:12px; color:var(--text-muted); margin-top:16px; }
+
+  section.g { margin-top:56px; }
+  section.g > h2 { font-size:28px; font-weight:700; letter-spacing:-.02em; padding-bottom:12px; border-bottom:1px solid var(--border); margin-bottom:8px; }
+  section.g .secintro { font-size:16px; color:var(--text-soft); max-width:720px; margin:14px 0 30px; line-height:1.6; }
+  section.g p { font-size:15.5px; color:var(--text-soft); max-width:720px; line-height:1.7; margin:14px 0; }
+  section.g p b, section.g li b { color:var(--text); }
+  section.g p em { color:var(--accent-3); }
+
+  .thesis { background:var(--bg-card); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:var(--radius); padding:24px 26px; margin:20px 0; }
+  .thesis p { font-size:17px; color:var(--text); margin:0; line-height:1.7; }
+
+  ol.rules { margin:0; padding:0; list-style:none; counter-reset:rule; }
+  ol.rules li { position:relative; padding:16px 18px 16px 64px; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); margin-bottom:12px; }
+  ol.rules li::before { counter-increment:rule; content:counter(rule); position:absolute; left:16px; top:14px; width:34px; height:34px; display:grid; place-items:center; border-radius:50%; background:rgba(228,170,113,.12); border:1px solid rgba(228,170,113,.45); color:var(--accent); font-family:var(--mono); font-weight:600; }
+  ol.rules b { display:block; margin-bottom:4px; }
+  ol.rules span.d { font-size:14px; color:var(--text-soft); line-height:1.55; }
+
+  .forgrid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:20px 0; }
+  @media (max-width:720px){ .forgrid { grid-template-columns:1fr; } }
+  .forcard { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; }
+  .forcard h3 { font-size:15.5px; font-weight:700; margin:0 0 8px; color:var(--accent-4); }
+  .forcard p { font-size:14px; margin:0; }
+
+  .quote { font-family:var(--display); font-size:20px; color:var(--text); line-height:1.55; border-left:3px solid var(--accent-3); padding:6px 0 6px 20px; margin:22px 0; }
+  .quote .who { display:block; font-family:var(--mono); font-size:11.5px; color:var(--text-muted); margin-top:10px; }
+
+  .nobody { display:grid; gap:14px; margin:20px 0; }
+  .nobody .cardx { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; }
+  .nobody .cardx h3 { font-size:15.5px; font-weight:700; margin:0 0 6px; color:var(--accent-3); }
+  .nobody .cardx p { font-size:14px; margin:0; }
+
+  footer { border-top:1px solid var(--border); padding:28px 0 40px; margin-top:60px; font-family:var(--mono); font-size:12.5px; color:var(--text-muted); }
+  footer a { color:var(--accent-3); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="kicker">The Manifesto</span>
+    <h1>Written on a birthday, <em>with the kids</em></h1>
+    <p class="lede">Everything downstream of this document is downstream of one belief: the people
+    closest to the problem, given voice and a tool that keeps itself honest, will out-build any
+    monolith that schedules their imagination for the next fiscal year.</p>
+    <p class="dateline">2026-09-15 &middot; Tyler Granlund, 37 today, spending it with Mavis (7) and Pierce (2)</p>
+  </header>
+
+  <section class="g" id="thesis">
+    <h2>The thesis of this moment in time</h2>
+    <div class="thesis">
+      <p><b>Voice can now drive the build to exactly what you need.</b> Not a demo. Not a
+      roadmap item. A working reality: speak while you build, and the harness captures the
+      stream, ships the work, heals itself, and shows its receipts in public. This page &mdash;
+      this whole grove &mdash; exists because that loop closed.</p>
+    </div>
+  </section>
+
+  <section class="g" id="who">
+    <h2>Who this is for</h2>
+    <p class="secintro">Four answers, from the manifesto verbatim in spirit: the misfits, the small
+    businesses, the people inside the walls, and the kids.</p>
+    <div class="forgrid">
+      <div class="forcard">
+        <h3>The misfits &amp; rebels</h3>
+        <p>The people who like to challenge the status quo &mdash; not to burn things down, but
+        because they can see the thing that should exist and cannot rest until it does. The ones
+        who were told <em>wrong place, wrong time, wrong age, wrong degree.</em> The ones who kept
+        showing up anyway.</p>
+      </div>
+      <div class="forcard">
+        <h3>The small businesses</h3>
+        <p>Like the Fleckenstein family, rooted in Mokena, Illinois since 1977, who catered our
+        desserts and our wedding cake for free because that is what family friends do. The world
+        consolidated around them. Things are too monopolized. <b>Bring the power back to the
+        people.</b> If this harness had existed when they needed it, they would have had it. That
+        sentence is the business case.</p>
+      </div>
+      <div class="forcard">
+        <h3>The people inside the walls</h3>
+        <p>For Ashley &mdash; who started at $14 an hour as a senior recruiting coordinator,
+        navigated the hiring and firing storms of mass-hire warehouses, did the ethical work when
+        a DC she helped run burned to the ground, and executed flawlessly private, all-sensory
+        executive experiences in London. Nobody handed her a platform. She <em>was</em> the
+        platform. This harness is for every associate like her: unseen, holding the standard.</p>
+      </div>
+      <div class="forcard">
+        <h3>The kids</h3>
+        <p>For Mavis and Pierce &mdash; because they will fail, feel feelings, and hear things
+        that don't make sense in a world moving this fast, and they deserve tools that tell them
+        the truth, heal instead of blame, and give them the power to believe in themselves.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="g" id="craft">
+    <h2>The craft, inherited</h2>
+    <p>Precision is a learned love. David Beckham &mdash; obsessed over not because of fame but
+    because of <em>practice made visible</em>: every free kick earned in repetition, precision
+    beating anything. Traveling soccer was taken away by a coach who bullied &mdash; and the
+    lesson stuck forever: talent behind cruelty is worthless, and the adults who allow it lose
+    the kid.</p>
+    <p>Karate kept the flame: Ryukyu Kempo and Modern Arnis, the precision of kata, a bo-staff
+    twirled on demo teams in malls, two stripes from black under the Dillman lineage with Dave
+    and his wife running the dojo &mdash; a dojo that gave what every good tool should give:
+    <b>community, belonging, learning and growing together.</b> The belts slowed down; the
+    discipline didn't.</p>
+    <div class="quote">
+      That is the design language of this harness: kata precision, practiced in public, taught
+      with patience &mdash; or it doesn't ship.
+    </div>
+  </section>
+
+  <section class="g" id="rules">
+    <h2>The rules of the grove</h2>
+    <ol class="rules">
+      <li><b>We make no enemies. Ever.</b>
+        <span class="d">Not the incumbents, not the giants, not the people inside systems doing
+        their best inside bad incentives. We build the honest alternative and let it speak.</span></li>
+      <li><b>Truth for truth's sake.</b>
+        <span class="d">No invented facts, no vanity metrics, no numbers that drift from the
+        evidence. If a count can drift, compute it.</span></li>
+      <li><b>Leave everything better than you found it.</b>
+        <span class="d">Including the tool itself: it checks its own pulse, upgrades itself, and
+        reports plainly.</span></li>
+      <li><b>The counsel gates everything.</b>
+        <span class="d">Upstream work, our own work &mdash; nothing passes until it is tried,
+        true, secure, and would survive the Leather Apron Club's judgment. Manic, insecure, or
+        risky does not pass. No exceptions for shiny.</span></li>
+      <li><b>Voice is a first-class citizen.</b>
+        <span class="d">The dictation ledger (LIVING-UPDATES.md) is a primary engine, not a side
+        channel. Speak, capture, curate, ship.</span></li>
+      <li><b>Together we are better. Always.</b>
+        <span class="d">Upstream, downstream, inside the walls, outside them &mdash; the Junto is
+        not a metaphor; it is the operating model.</span></li>
+    </ol>
+  </section>
+
+  <section class="g" id="building">
+    <h2>What we are building</h2>
+    <p>A living, breathing harness &mdash; grown from Code Puppy (with gratitude and an open line
+    back), hardened here, healed here, taught here &mdash; that any person of any craft can pick
+    up and be dangerous with in minutes. Not to replace the giants: to make their size irrelevant
+    to the person with the problem and the voice to describe it.</p>
+    <p>The observatory shows the receipts. The ledger shows the decisions. The gates show the
+    judgment. The self-heal shows the respect for your time.</p>
+  </section>
+
+  <section class="g" id="nobody">
+    <h2>Not tied to a single person</h2>
+    <p class="secintro">A manifesto written by one person could belong to that person. This one is
+    built so it doesn't have to. The harness is engineered &mdash; and governed &mdash; to outlive
+    its author's attendance.</p>
+    <div class="nobody">
+      <div class="cardx">
+        <h3>Open lineage, open line back</h3>
+        <p>The grove is grown from <a href="https://github.com/mpfaffenberger/code_puppy">Code
+        Puppy</a> by Michael Pfaffenberger &mdash; credited here by name, in public, with
+        gratitude. The heritage is a feature, not an embarrassment: anyone can read the upstream,
+        diff the grove against it, and see exactly what changed and why.</p>
+      </div>
+      <div class="cardx">
+        <h3>Models are rented. The harness is owned.</h3>
+        <p>OpenAI, Anthropic, Gemini, Bedrock, a local model &mdash; any of them, swapped by
+        changing one setting. No vendor owns the tool, and no individual's account, taste, or
+        presence is a dependency. The <em>harness</em> is the asset, and it runs on your machine.</p>
+      </div>
+      <div class="cardx">
+        <h3>Seats, not names</h3>
+        <p>Governance runs through the <a href="../council/">Leather Apron Council and the
+        Wall</a>: stewards hold seats &mdash; infrastructure, releases, roadmap &mdash; and on
+        every public surface they are seats, not names. Contributions are judged by the work
+        against the Gate, never by who signed them.</p>
+      </div>
+      <div class="cardx">
+        <h3>The receipts do not need the author in the room</h3>
+        <p>The release observatory, the dictation ledger, the changelog, the parity seals and
+        checksums &mdash; everything is computed and committed, not remembered. A stranger can
+        verify every claim on this site without asking anyone anything.</p>
+      </div>
+      <div class="cardx">
+        <h3>Capability lives in plugins, not in people</h3>
+        <p>Core stays small; features ship as plugins registered through public hooks. The next
+        contributor adds a capability without touching the engine &mdash; and without asking the
+        author's permission to be useful.</p>
+      </div>
+      <div class="cardx">
+        <h3>The ethos is versioned, not memorized</h3>
+        <p>This manifesto lives in the repository next to the code it governs
+        (<a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/MANIFESTO.md">MANIFESTO.md</a>).
+        Fork it, argue with it, better it &mdash; the argument is the point. That is what the
+        Junto has always meant.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="g" id="source">
+    <h2>The source, unedited</h2>
+    <p>This page is the manifesto rendered for the web. The original &mdash; written in one
+    sitting, on a birthday, with kids playing in the background and a wife inside the walls of
+    the biggest company in the world &mdash; lives versioned in the repository. The signal is
+    getting louder. Keep pushing. Keep growing.</p>
+    <p><a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/MANIFESTO.md">Read
+    MANIFESTO.md on GitHub &rarr;</a></p>
+  </section>
+
+  <footer>
+    Spruce Grove OS &middot; the manifesto, rendered for the web &middot;
+    <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/MANIFESTO.md">source of record</a>
+  </footer>
+</div>
+</body>
+</html>

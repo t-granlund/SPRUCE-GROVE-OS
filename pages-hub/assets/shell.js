@@ -17,6 +17,7 @@
 
   var NAV = [
     { key: "hub",          href: base + "index.html",    label: "Hub",           icon: "hub" },
+    { key: "manifesto",    href: base + "manifesto/",    label: "Manifesto",     icon: "scroll" },
     { key: "field-guide",  href: base + "field-guide/",  label: "Field Guide",   icon: "book" },
     { key: "releases",     href: base + "releases/",     label: "Releases",      icon: "activity" },
     { key: "mechanics",    href: base + "mechanics/",    label: "Mechanics",     icon: "shield" },

@@ -33,6 +33,8 @@ cp pages-hub/architecture.html "$SITE/architecture/index.html"
 cp pages-hub/design.html "$SITE/design/index.html"
 cp pages-hub/mechanics.html "$SITE/mechanics/index.html"
 cp pages-hub/council.html "$SITE/council/index.html"
+mkdir -p "$SITE/manifesto"
+cp pages-hub/manifesto.html "$SITE/manifesto/index.html"
 cp docs/field-guide-flat.html "$SITE/flat/index.html"
 
 # stats injection (stdlib python — mirrors the workflow step)
