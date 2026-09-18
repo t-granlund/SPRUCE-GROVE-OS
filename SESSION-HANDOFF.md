@@ -167,3 +167,27 @@ cross-workstream source of truth). Family-lab stays private by design.*
   gitignored local-only in that repo (guard commit `4e0d956`) — deliver by AirDrop/email,
   never push. Decide: make the repo private or scrub.
 - Voice memos remain untracked local-only by design (`docs/OFFSITE-*`).
+
+## Addendum 2 — 2026-09-18, the anonymity pivot (policy decided by Tyler)
+
+> **Policy, inherited by every future session:** businesses and their staff
+> may be named and detailed publicly. **Nothing about the grove's own people
+> (Tyler + family) goes on any public surface** — generalize to the ethos,
+> keep the real stories, drop every name/age/relationship.
+
+- **Landed in `bcc846c`:** MANIFESTO.md + manifesto page fully authorless
+  (dateline, kids, the inside-the-walls story, the dojo — all generalized;
+  Fleckenstein business reference kept); "Tyler's Mac" → "the keeper's Mac",
+  TYLER → KEEPER on the dashboard board, granlund spruce → grove spruce
+  (copy + asset comments), product footer generalized.
+- **Field guide changelog feed now anonymizes at generation time** —
+  `_display_author()` in `docs/field_guide_changelog.py` renders the grove's
+  own commits as "the grove" (matches observatory provenance chips). Upstream
+  contributors keep their names: credit, not exposure.
+- Full leak sweep of `_site/` + `pages-hub/` + manifesto + data.js: **clean**.
+- Residue filed as `SPRUCE-GROVE-OS-r8c` (Tyler decisions): pyproject author/
+  email/homepage on public PyPI, SESSION-HANDOFF.md living in the public
+  repo, and the history-rewrite question (one old commit subject says
+  "granlund-grove"). Git history itself was NOT rewritten.
+- `8l7` closed by policy: barber names on the public mock repo are fine;
+  the handoff-deliverable local-only guard stays (they carry Tyler's phone).
