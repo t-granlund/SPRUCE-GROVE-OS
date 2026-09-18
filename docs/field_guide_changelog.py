@@ -20,6 +20,16 @@ from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 
+# Public pages show seats, not names (MANIFESTO, "Not tied to a single
+# person"). The grove's own commits render as "the grove"; upstream
+# contributors and bots keep their names — credit, not exposure.
+_GROVE_AUTHORS = {"tyler granlund", "t-granlund", "tyler", "tyler.granlund"}
+
+
+def _display_author(author: str) -> str:
+    """Anonymize the grove's own commit author for public rendering."""
+    return "the grove" if author.strip().lower() in _GROVE_AUTHORS else author
+
 
 def _get_recent_commits(_run, repo_root: Path) -> dict:
     """Return a changelog summary dict consumed by `generate-field-guide.py`."""
@@ -56,7 +66,7 @@ def _get_recent_commits(_run, repo_root: Path) -> dict:
                 "hash": full_hash,
                 "short_hash": short_hash,
                 "subject": subject,
-                "author": author,
+                "author": _display_author(author),
                 "date": date_str,
                 "month": month_str,
             }

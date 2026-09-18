@@ -1,18 +1,18 @@
 window.FIELD_GUIDE_DATA = {
   "meta": {
-    "generatedAt": "2026-09-16T06:11:54.602248+00:00",
+    "generatedAt": "2026-09-18T12:47:54.416966+00:00",
     "repoPath": "/Users/tygranlund/dev/SPRUCE-GROVE-OS",
-    "repoHead": "c3ab2db",
+    "repoHead": "aacad29",
     "branch": "main",
-    "currentVersion": "spruce-grove v1.0.54",
+    "currentVersion": "spruce-grove v1.0.59",
     "sourceUrl": "https://github.com/mpfaffenberger/code_puppy"
   },
   "stats": {
     "tools": 61,
     "agents": 7,
-    "plugins": 68,
+    "plugins": 69,
     "skills": 4,
-    "commitsLast2Months": 179,
+    "commitsLast2Months": 192,
     "releases": 1
   },
   "tools": [
@@ -807,7 +807,7 @@ window.FIELD_GUIDE_DATA = {
         },
         {
           "name": "register_callbacks.py",
-          "lines": 125
+          "lines": 154
         }
       ],
       "hasReadme": true,
@@ -1775,6 +1775,35 @@ window.FIELD_GUIDE_DATA = {
       "hasSkill": false
     },
     {
+      "name": "mcp_binding_prompt",
+      "tier": "core-package",
+      "description": "mcp_binding_prompt  Three MCP-install affordances layered over core at `startup`, no core edits:  1.",
+      "hooks": [
+        "startup"
+      ],
+      "hasCustomCommand": false,
+      "files": [
+        {
+          "name": "__init__.py",
+          "lines": 1
+        },
+        {
+          "name": "custom_install.py",
+          "lines": 58
+        },
+        {
+          "name": "http_form.py",
+          "lines": 223
+        },
+        {
+          "name": "register_callbacks.py",
+          "lines": 48
+        }
+      ],
+      "hasReadme": true,
+      "hasSkill": false
+    },
+    {
       "name": "meta_oauth",
       "tier": "core-package",
       "description": "Callbacks for Meta Muse OAuth authentication and model registration.",
@@ -2039,11 +2068,11 @@ window.FIELD_GUIDE_DATA = {
         },
         {
           "name": "plugins_menu.py",
-          "lines": 444
+          "lines": 434
         },
         {
           "name": "plugins_menu_render.py",
-          "lines": 431
+          "lines": 418
         },
         {
           "name": "project_trust_flow.py",
@@ -2514,7 +2543,7 @@ window.FIELD_GUIDE_DATA = {
         },
         {
           "name": "register_callbacks.py",
-          "lines": 548
+          "lines": 576
         },
         {
           "name": "resume_repaint.py",
@@ -2522,7 +2551,7 @@ window.FIELD_GUIDE_DATA = {
         },
         {
           "name": "state.py",
-          "lines": 235
+          "lines": 293
         }
       ],
       "hasReadme": true,
@@ -2866,87 +2895,87 @@ window.FIELD_GUIDE_DATA = {
     }
   ],
   "changelog": {
-    "total_commits": 179,
+    "total_commits": 192,
     "releases": [
       {
         "month": "2026-09",
-        "commit_count": 179,
+        "commit_count": 192,
         "commits": [
           {
-            "hash": "c3ab2db12819ed30aaff27a53d16615a8663fabc",
-            "short_hash": "c3ab2db",
+            "hash": "aacad29e46aacdd899bd141457c3f6eee544cd30",
+            "short_hash": "aacad29",
+            "subject": "handoff: 9/18 addendum — manifesto landed (b6b53ce), barbershop P1 verified+closed, public-repo guard on handoff files (8l7 filed)",
+            "author": "the grove",
+            "date": "2026-09-18",
+            "month": "2026-09"
+          },
+          {
+            "hash": "d1f519954ff3eaa861c1b67307663bcab7cc2df9",
+            "short_hash": "d1f5199",
+            "subject": "chore: bump version [ci skip]",
+            "author": "github-actions[bot]",
+            "date": "2026-09-18",
+            "month": "2026-09"
+          },
+          {
+            "hash": "0f3b0311920ca4f4da45a2826aa19ccd30697562",
+            "short_hash": "0f3b031",
+            "subject": "pages: the manifesto rendered for the web — hub card, nav entry, publish loop",
+            "author": "the grove",
+            "date": "2026-09-17",
+            "month": "2026-09"
+          },
+          {
+            "hash": "2f3126b7129ab5e90c484f2a20a7b862f363da53",
+            "short_hash": "2f3126b",
+            "subject": "chore: bump version [ci skip]",
+            "author": "github-actions[bot]",
+            "date": "2026-09-17",
+            "month": "2026-09"
+          },
+          {
+            "hash": "899066a4233227ec58a8f02aa5e08fd2ed5147de",
+            "short_hash": "899066a",
+            "subject": "handoff: 9/16 addendum — Disc decided (Sevardhet), propagation complete, desktop audit pointer",
+            "author": "the grove",
+            "date": "2026-09-17",
+            "month": "2026-09"
+          },
+          {
+            "hash": "cf0d7c2481cca06ffa312d6f7c74f00c3c219bb8",
+            "short_hash": "cf0d7c2",
+            "subject": "chore: ruff format drift (10 files, mechanical)",
+            "author": "the grove",
+            "date": "2026-09-17",
+            "month": "2026-09"
+          },
+          {
+            "hash": "83fc83df4ba7341882bc874f89a3893201898ef5",
+            "short_hash": "83fc83d",
             "subject": "chore: bump version [ci skip]",
             "author": "github-actions[bot]",
             "date": "2026-09-16",
             "month": "2026-09"
           },
           {
-            "hash": "81635d0e61b027c1b4ebaebd777cfb15ddab4c25",
-            "short_hash": "81635d0",
-            "subject": "rails continued + five dependency exits with receipts",
-            "author": "Tyler Granlund",
+            "hash": "95a152341e0e793cb8a543d80b86bc7265614271",
+            "short_hash": "95a1523",
+            "subject": "plan: log Core Disc v6 propagation",
+            "author": "the grove",
             "date": "2026-09-16",
             "month": "2026-09"
           },
           {
-            "hash": "9b79d31290e66c3f8071c31f311d1ede2c63378c",
-            "short_hash": "9b79d31",
-            "subject": "chore: bump version [ci skip]",
-            "author": "github-actions[bot]",
+            "hash": "f8b8e3ca4496731333ab514a8fb3f7f4356d2bf5",
+            "short_hash": "f8b8e3c",
+            "subject": "logos: Core Disc reborn — Sevardhet master, Kungsleden + Birch variants, full propagation",
+            "author": "the grove",
             "date": "2026-09-16",
             "month": "2026-09"
           },
           {
-            "hash": "402ef99f27d595bc127a65c7c1df738779d6832f",
-            "short_hash": "402ef99",
-            "subject": "dashboard: the end-to-end verbose state of the grove",
-            "author": "Tyler Granlund",
-            "date": "2026-09-15",
-            "month": "2026-09"
-          },
-          {
-            "hash": "189a8b1dac7688ae407c0ac2fe271062d56d32f5",
-            "short_hash": "189a8b1",
-            "subject": "chore: bump version [ci skip]",
-            "author": "github-actions[bot]",
-            "date": "2026-09-16",
-            "month": "2026-09"
-          },
-          {
-            "hash": "d74e1619da6820f0a55f6d68c58be1c27201e466",
-            "short_hash": "d74e161",
-            "subject": "publish: auto-create the GitHub release with generated notes on every tag - the rail never goes noteless again",
-            "author": "Tyler Granlund",
-            "date": "2026-09-15",
-            "month": "2026-09"
-          },
-          {
-            "hash": "486f00ce02f53bb41b949556623569cfeb6761a2",
-            "short_hash": "486f00c",
-            "subject": "the validation ladder: desktop onboarding, traceability program, living directory",
-            "author": "Tyler Granlund",
-            "date": "2026-09-15",
-            "month": "2026-09"
-          },
-          {
-            "hash": "d2516567ee7de17e183c7fe44e22aaff02139700",
-            "short_hash": "d251656",
-            "subject": "chore: bump version [ci skip]",
-            "author": "github-actions[bot]",
-            "date": "2026-09-16",
-            "month": "2026-09"
-          },
-          {
-            "hash": "f08bf5a1580bc3c996db5823dafa06f076a78c60",
-            "short_hash": "f08bf5a",
-            "subject": "observatory: regenerate from the ledger - dashboard entry + today's landings rendered",
-            "author": "Tyler Granlund",
-            "date": "2026-09-15",
-            "month": "2026-09"
-          },
-          {
-            "hash": "3fd0f6ccad6493a901fc8a7af33f3ac5116b9342",
-            "short_hash": "3fd0f6c",
+            "hash": "1838aca363dbd4a4df8ed51c6e3a768d265e50dc",
+            "short_hash": "1838aca",
             "subject": "chore: bump version [ci skip]",
             "author": "github-actions[bot]",
             "date": "2026-09-16",
@@ -2956,6 +2985,97 @@ window.FIELD_GUIDE_DATA = {
       }
     ],
     "commits": [
+      {
+        "hash": "aacad29e46aacdd899bd141457c3f6eee544cd30",
+        "short_hash": "aacad29",
+        "subject": "handoff: 9/18 addendum — manifesto landed (b6b53ce), barbershop P1 verified+closed, public-repo guard on handoff files (8l7 filed)",
+        "author": "the grove",
+        "date": "2026-09-18"
+      },
+      {
+        "hash": "d1f519954ff3eaa861c1b67307663bcab7cc2df9",
+        "short_hash": "d1f5199",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-18"
+      },
+      {
+        "hash": "0f3b0311920ca4f4da45a2826aa19ccd30697562",
+        "short_hash": "0f3b031",
+        "subject": "pages: the manifesto rendered for the web — hub card, nav entry, publish loop",
+        "author": "the grove",
+        "date": "2026-09-17"
+      },
+      {
+        "hash": "2f3126b7129ab5e90c484f2a20a7b862f363da53",
+        "short_hash": "2f3126b",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-17"
+      },
+      {
+        "hash": "899066a4233227ec58a8f02aa5e08fd2ed5147de",
+        "short_hash": "899066a",
+        "subject": "handoff: 9/16 addendum — Disc decided (Sevardhet), propagation complete, desktop audit pointer",
+        "author": "the grove",
+        "date": "2026-09-17"
+      },
+      {
+        "hash": "cf0d7c2481cca06ffa312d6f7c74f00c3c219bb8",
+        "short_hash": "cf0d7c2",
+        "subject": "chore: ruff format drift (10 files, mechanical)",
+        "author": "the grove",
+        "date": "2026-09-17"
+      },
+      {
+        "hash": "83fc83df4ba7341882bc874f89a3893201898ef5",
+        "short_hash": "83fc83d",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-16"
+      },
+      {
+        "hash": "95a152341e0e793cb8a543d80b86bc7265614271",
+        "short_hash": "95a1523",
+        "subject": "plan: log Core Disc v6 propagation",
+        "author": "the grove",
+        "date": "2026-09-16"
+      },
+      {
+        "hash": "f8b8e3ca4496731333ab514a8fb3f7f4356d2bf5",
+        "short_hash": "f8b8e3c",
+        "subject": "logos: Core Disc reborn — Sevardhet master, Kungsleden + Birch variants, full propagation",
+        "author": "the grove",
+        "date": "2026-09-16"
+      },
+      {
+        "hash": "1838aca363dbd4a4df8ed51c6e3a768d265e50dc",
+        "short_hash": "1838aca",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-16"
+      },
+      {
+        "hash": "6dd38159762ebf31cc9308f9a743e26c67d44189",
+        "short_hash": "6dd3815",
+        "subject": "brand polish: persona tiles on the Core Disc, social preview, sync loop closes",
+        "author": "the grove",
+        "date": "2026-09-16"
+      },
+      {
+        "hash": "2f5cf6af36549a50297745d53acdd04ad07bcf63",
+        "short_hash": "2f5cf6a",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-16"
+      },
+      {
+        "hash": "a2bcc6a713e76ae6477a90181aab37c75e72874b",
+        "short_hash": "a2bcc6a",
+        "subject": "brand: every sprucegrove.io surface on the current logo kit",
+        "author": "the grove",
+        "date": "2026-09-16"
+      },
       {
         "hash": "c3ab2db12819ed30aaff27a53d16615a8663fabc",
         "short_hash": "c3ab2db",
@@ -2967,7 +3087,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "81635d0e61b027c1b4ebaebd777cfb15ddab4c25",
         "short_hash": "81635d0",
         "subject": "rails continued + five dependency exits with receipts",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-16"
       },
       {
@@ -2981,7 +3101,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "402ef99f27d595bc127a65c7c1df738779d6832f",
         "short_hash": "402ef99",
         "subject": "dashboard: the end-to-end verbose state of the grove",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -2995,14 +3115,14 @@ window.FIELD_GUIDE_DATA = {
         "hash": "d74e1619da6820f0a55f6d68c58be1c27201e466",
         "short_hash": "d74e161",
         "subject": "publish: auto-create the GitHub release with generated notes on every tag - the rail never goes noteless again",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
         "hash": "486f00ce02f53bb41b949556623569cfeb6761a2",
         "short_hash": "486f00c",
         "subject": "the validation ladder: desktop onboarding, traceability program, living directory",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3016,7 +3136,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "f08bf5a1580bc3c996db5823dafa06f076a78c60",
         "short_hash": "f08bf5a",
         "subject": "observatory: regenerate from the ledger - dashboard entry + today's landings rendered",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3030,21 +3150,21 @@ window.FIELD_GUIDE_DATA = {
         "hash": "6c89f57af62a9b28006ccfe2916a248bbe972954",
         "short_hash": "6c89f57",
         "subject": "chore: re-seal site parity manifest with the dashboard in the artifact",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
         "hash": "950ce482681bbb349f9174ace69a5dff81fedbe6",
         "short_hash": "950ce48",
         "subject": "project dashboard + dependency census: the borrowed-things level set",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
         "hash": "aac72b9013c1a95593f1fa9b2024aad5f74e84ba",
         "short_hash": "aac72b9",
         "subject": "rebrand completion: last dog-era copy and paw prints leave the CLI",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3058,7 +3178,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "28da0c2cee1c9fc7b688c3943137409982133a48",
         "short_hash": "28da0c2",
         "subject": "docs: session handoff — the launch document for the next session",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3072,7 +3192,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "622906034017cca8d911260696cc3f2de21ba0f7",
         "short_hash": "6229060",
         "subject": "sovereignty execution: the task board + automation kit + first audits",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3086,7 +3206,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "5ff3c47205c49d402254c638f9b444ce8ef56467",
         "short_hash": "5ff3c47",
         "subject": "governance: the council, the approval wall, and the compatibility exit ledger",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3100,7 +3220,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "06b1b8ce906adeedfa0aaffe87f80825f6d2b0a6",
         "short_hash": "06b1b8c",
         "subject": "sovereignty phase 2: the harness seam lands — grove-owned protocol, first call sites migrated",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3114,7 +3234,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "e7ef6d541a6113e13b3f0c680a6930a7d29af611",
         "short_hash": "e7ef6d5",
         "subject": "manifesto + gate + bootloader rebrand + sovereignty refresh",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3128,14 +3248,14 @@ window.FIELD_GUIDE_DATA = {
         "hash": "06ffddfa8c22d828312e53ba59f4fdd820647ed7",
         "short_hash": "06ffddf",
         "subject": "design system: Logo Pack section completed — light-surface variant, stacked lockup, masters note; page gains On-This-Page subnav (tokens/type/iconography/logo-pack/components)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
         "hash": "a2ef3dcd9fe397eafdeff062b46b20e45e7dac80",
         "short_hash": "a2ef3dc",
         "subject": "observatory: nav usability fixes from live QA — all viewports",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3149,14 +3269,14 @@ window.FIELD_GUIDE_DATA = {
         "hash": "f33619feeb0a85f8b37abf245d3494dc004e016e",
         "short_hash": "f33619f",
         "subject": "logo pack: the granlund glyph, one geometry four jobs — Core Disc (statement roundel: stickers/app-icons/favicons), Grove Mark (dark+light), Ghost (watermark line art), Lockups (Fraunces wordmark). Translated from tylergranlund.com's spruce DNA. Swept across the board: shell chrome, era-ghosts, favicons, README badge; BRAND.md 'The logo pack' + design.html Logo Pack section; legacy marks demoted to legacy.",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
         "hash": "e7ca0843b9fb1315d4ed32ac2a5e5681c8ce0c2c",
         "short_hash": "e7ca084",
         "subject": "observatory: sticky provenance nav bar — sections + working grove/upstream filter on all viewports",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3170,7 +3290,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "569c184aaa83f48c4e7081ac14ae3e940b79a854",
         "short_hash": "569c184",
         "subject": "fix(shell): sidebar brand logo pointed at spruce_grove_logo_white.png, which exists nowhere — 404 on every page since the sidebar shipped. Pointed at the spruce-trio noback mark (on-brand, on-transparency, already deployed).",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3184,7 +3304,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "c968b4b5b454ec3b576f09d99c57f504b1e737e1",
         "short_hash": "c968b4b",
         "subject": "observatory: provenance on every update + living upstream connector + sidebar TOC",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3198,14 +3318,14 @@ window.FIELD_GUIDE_DATA = {
         "hash": "7a967f50eb3f0b4426949194890130c357610dac",
         "short_hash": "7a967f5",
         "subject": "product: the leaf-period after the wordmark read as a stray dot at phone width — mark now clean like its sibling doors",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
         "hash": "47f09ab4191f2c3653dae4b9b11f39e164ca5ce2",
         "short_hash": "47f09ab",
         "subject": "product mobile: the 554px page tamed — nav pinned to 100vw, switcher scrolls in place (min-width:0), model tables become phone scrollers, kicker wraps, install command scrolls in its rail (inline-flex -> flex + contain:inline-size — the min-content floor that no amount of min-width could break), wordmark period dropped",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3219,14 +3339,14 @@ window.FIELD_GUIDE_DATA = {
         "hash": "8d2df79831b3f791d88579424ea63a0aa8466504",
         "short_hash": "8d2df79",
         "subject": "mobile kit reaches the remaining three doors (product/interested/share): swipeable switcher, hero air, type scale",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
         "hash": "8a0322edc9044d9b2189cdfa6e6c6141c41f851b",
         "short_hash": "8a0322e",
         "subject": "mobile pass: phone kit for the hub — one swipeable switcher row, ver pill rests, hero breathes (146px/22px), ghost mark rests on phones, shipped-vs-planned table stacks into cards (status in mint/ember voices); plan + owners + shared nav",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3240,7 +3360,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "d40fec8b315b3dbc74bfb03c08c882b986f80348",
         "short_hash": "d40fec8",
         "subject": "docs: root every asset into the self-healing loop — per-persona updates",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3254,21 +3374,21 @@ window.FIELD_GUIDE_DATA = {
         "hash": "bb49ba4496c9a598c0a4bd2f54b5d8c2d73bb74d",
         "short_hash": "bb49ba4",
         "subject": "plan page: official brandmark in the nav wordmark; ghost replaced with the TreeMark line-art (deliberate, ember, in-bounds)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
         "hash": "721ce251e361f758b973bd4c2c9627614dba6639",
         "short_hash": "721ce25",
         "subject": "feat: self-healing auto-update — close the loop from version check to actuation",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
         "hash": "8a7453e19eeffdffeef281b2aa86313e129be00a",
         "short_hash": "8a7453e",
         "subject": "owners hero: the 178px clearance never actually landed (silent no-op replace — anchor had overflow:hidden the rule never had); assert-backed this time",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3282,7 +3402,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "ea07516f96bd9bf998036daf8978046e92315f9c",
         "short_hash": "ea07516",
         "subject": "chore: redeploy to purge the pages edge fleet (mixed stale nodes serving the pre-polish hero)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3296,7 +3416,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "51d56860352ba67a94149263a8bf69679f272b74",
         "short_hash": "51d5686",
         "subject": "hero ghost: stroke-only spruces rendered jagged at scale — replaced with the official badge as a solid-fill watermark (no strokes, no artifacts) on owners + plan",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3310,7 +3430,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "d604fb5c376d65430d2520cb79bb1cca9190b414",
         "short_hash": "d604fb5",
         "subject": "plan + owners hero polish: clear the fixed double-bar nav (178px), Fraunces with italics on the display headlines (the --BB-* token names — var(--display) never resolved), spruce silhouettes repositioned in-bounds",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3324,7 +3444,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "7776a5d5bbdc0d87497e7f9fc6d0aeaa414fee47",
         "short_hash": "7776a5d",
         "subject": "the plan: plan.html — instance tuned to your means (misfit/shop/company tiers, engine of your choice, transparent usage), the plugin suite (analytics/BI, owned email platform with CAN-SPAM/GDPR/records-of-removal as design law, domain ops, plugin architecture shipped), full lifecycle (provisioning/deprovisioning by identity, one ledger), shipped-vs-planned table drawn in public; fifth switcher door on every page; staged to /plan.html",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3338,7 +3458,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "d77ea1dada302d567cbabc45f24ce3494b193539",
         "short_hash": "d77ea1d",
         "subject": "owners page: two-date plan — establishment sept 18 (invitations out that night), first council sept 25",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3352,14 +3472,14 @@ window.FIELD_GUIDE_DATA = {
         "hash": "d09e6029bb3778eabe5303e7107a27cf0dbe8fc6",
         "short_hash": "d09e602",
         "subject": "FACTCHECK.md at repo root: 43i pledge provenance (verified facts + the commitment itself, flagged as commitment)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
         "hash": "1b85303fff478cdb056b38a50172361b85e9ae58",
         "short_hash": "1b85303",
         "subject": "the 43i pledge: every dollar of grove profit, ledgered publicly, donated to the 43 Institute (Ken Block's foundation — pathways for 'motivated misfits' in action sports, motorsports, creative arts) — pledge block on the owners page + ledger line, beat four on the curious page, pledge card + 100% cell in the sharer's kit, provenance in FACTCHECK",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3373,14 +3493,14 @@ window.FIELD_GUIDE_DATA = {
         "hash": "b5ebf5bfeed6db98cb3611ae686f2724f4493ed1",
         "short_hash": "b5ebf5b",
         "subject": "pages: stage product.html at /product.html (the root swap removed its only staging — the builders' door 404'd)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
         "hash": "cf13b4a6cc499c988426a6ba76c52c0a0aff5774",
         "short_hash": "cf13b4a",
         "subject": "sprucegrove.io audience architecture: owners page IS the root — a page per viewer (owners / builders / curious / sharer), one switcher on every page; proof strip + ghost mark on the hero; interested.html (the 90-second story), share.html (the sharer's kit: copyable creed, standing questions, proven numbers, paste-ready attribution); builders keep /product.html",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3394,7 +3514,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "a5eccb19d8d175531e72c9eee31a295d43795fbc",
         "short_hash": "a5eccb1",
         "subject": "sprucegrove.io relaunch — for the owners: owners.html (the impact page: three prices struck, two public receipts — benton drones lead pipeline + barbershop shopfront, the 75k method story, the honest time/money/chaos ledger, the door) staged to /owners.html; product root gets the owners door + version/license truth (1.0.28 · Apache-2.0)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3408,7 +3528,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "699bee2871a7bd519e6d96e8e8279586ec7260ac",
         "short_hash": "699bee2",
         "subject": "README: relicense note version-agnostic (the CI bot moved the number; the fact stands)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3422,7 +3542,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "f0e8ace081d1216bb1076d84a82734f5e66b6469",
         "short_hash": "f0e8ace",
         "subject": "relicense MIT -> Apache-2.0: LICENSE (full text, Granlund 2026 + Pfaffenberger lineage), NOTICE (Code Puppy MIT notice preserved verbatim — the receipt travels), TRADEMARKS.md, CODE_OF_CONDUCT.md (the covenant), pyproject/README/CHANGELOG updated; wheel verified carrying LICENSE+NOTICE; reasoning in docs/LICENSE-ANALYSIS.md",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3436,7 +3556,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "c1ca90527a760584b4a3481c2c250db924fe603b",
         "short_hash": "c1ca905",
         "subject": "docs: license analysis — Apache-2.0 vs MIT for the grove (bad-actor playbook, the law behind attribution, NOTICE strategy, standing-your-ground runbook); ground truth: MIT lineage, no NOTICE files, club site unlicensed",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-15"
       },
       {
@@ -3450,7 +3570,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "749258e21b962e9c7fd9fc3e61c47d975d1957d7",
         "short_hash": "749258e",
         "subject": "mission control: the cooperative turn carded; deck count 47 (Act 0 + 9 acts)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
@@ -3464,35 +3584,35 @@ window.FIELD_GUIDE_DATA = {
         "hash": "9ec98f1a9f6adf22861815eada4538d5643cf425",
         "short_hash": "9ec98f1",
         "subject": "fix suite-wide hang: e2e fixture must restore spruce_grove modules, not delete them (module deletion invalidated later tests' patches — the MCP config wizard's prompt mock vanished and it blocked on real stdin; hung the publish gate 2h+ in CI)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
         "hash": "fce9215c3523f1237db265d3199bdc1a2b921047",
         "short_hash": "fce9215",
         "subject": "fix midnight TZ flake in session browser test: freeze the browser clock to a fixed anchor date and stamp fixtures relative to it (the TODAY bucket flipped when CI ran just past midnight runner-local; caught by the publish gate on the onboarding push)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
         "hash": "a0f18bf1d33070217e376a32593eaaca7dff1214",
         "short_hash": "a0f18bf",
         "subject": "/onboard-synthetic: dedicated onboarding for Synthetic.new subscribers — stores the API key in the shared credential store, installs the rotation-safe syn: alias family (large/small text + vision, supports_vision tagged) and the pinned fallbacks verbatim from the maintainer config, points the main model at the driving seat; endpoint probe with 401 handling; /check mode; e2e suite 4/4",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
         "hash": "32ab5bdb4406ae9667a3ad11bad96fc152b00693",
         "short_hash": "32ab5bd",
         "subject": "mission control: desktop shell + hand-off carded",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
         "hash": "4565e2b49522ea1cc13c15e8a4a3e1c85f2b6125",
         "short_hash": "4565e2b",
         "subject": "deck now 44 slides (the method act); mission control + field guide map updated",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
@@ -3506,7 +3626,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "351e9a0edbfe4ecadf06eb8f77d87178b02eac0a",
         "short_hash": "351e9a0",
         "subject": "mission control: the method card added",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
@@ -3520,7 +3640,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "f222db72889015e8bf59fac627c09928f771376c",
         "short_hash": "f222db7",
         "subject": "mission control: the grove map — one page linking every live and local asset; purge pass: stale 33-slide deck copy, superseded brand masters (noback/withback/mark/ghostgrove/white), old hub favicons; live field guide upgraded to the official mark; favicon-64 across all hub pages",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
@@ -3534,14 +3654,14 @@ window.FIELD_GUIDE_DATA = {
         "hash": "294c8388dcb6021fa8a814243995cb0b2680b619",
         "short_hash": "294c838",
         "subject": "brand drift check hardened: bash-3.2 portable (no assoc arrays), pages-hub path fix, positive+negative+repair self-test all green",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
         "hash": "d296090cb78325bf1e195fe12d5e628fb2b74681",
         "short_hash": "d296090",
         "subject": "audit remediation: version truth (site v1.0.3 -> 1.0.20), changelog curated with the founding arc, README test badge corrected to 7869 collected, brand-asset sync script + CI drift check, e2e surface smoke suite (9 passing), telemetry decision filed as SPRUCE-GROVE-OS-r2j",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
@@ -3555,7 +3675,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "8bd08fa70059c2008fed32f80b252da26ec8b415",
         "short_hash": "8bd08fa",
         "subject": "OFFICIAL: the mark is three TreeMarks (canonical tylergranlund.com fir) — masters, badges, nav, hub, README, BRAND.md all rebuilt from the canonical geometry",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
@@ -3569,7 +3689,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "5068d35204b988e3425926bb83dc02ab900c3c1d",
         "short_hash": "5068d35",
         "subject": "OFFICIAL MARK locked: spruce_grove_official (3 firs, one silhouette, the orange line) + line master + badges rebuilt with the fir grove; nav brandmark, hub watermarks (all pages), README, BRAND.md laws",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
@@ -3583,7 +3703,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "83e5ba9eb95ba94cf0b1cd687a99e4b89dfdcf82",
         "short_hash": "83e5ba9",
         "subject": "the badge family: ember (orange field, trees cut out — chrome scale) and dark (green/gold in the trees — large format); nav lockup badge+wordmark+dot on sprucegrove.io; README fossil logo replaced; BRAND.md badge laws",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
@@ -3597,7 +3717,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "4653f39339748df512f527f01f9329dc48a01c5e",
         "short_hash": "4653f39",
         "subject": "Ghost Grove master (spruce_grove_ghostgrove.svg) + rendered white PNG; BRAND.md names the mark and its geometry laws; roadmap ticked",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
@@ -3611,7 +3731,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "9c5c503fb61d4512a1e030c8c705bde0085f8171",
         "short_hash": "9c5c503",
         "subject": "GRAN: the design language codified in BRAND.md (nine rules — canvas, grain, four voices, three symbols, the stamp, the rune line, opposition, scarce motion, era-ghost); product site carries the first stamps + rune",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
@@ -3625,7 +3745,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "9fc2438bb9912814f391c307e449a7f59b1a13c1",
         "short_hash": "9fc2438",
         "subject": "truth pass: In the wild + README tell the Bentonville Barber Company story (the club's home, the handed-down spot, Square booking) — candmbarbershop.net removed",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
@@ -3639,7 +3759,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "e159c5131c9202ece421c711fc8918352e81f392",
         "short_hash": "e159c51",
         "subject": "coherence: the founding message now lives on the front door — club line in the hero (Junto, est. 1727, first council Sept 18 at Bentonville Barber Co), full club band in the footer, README gains 'Backed by the Leather Apron Club' + 'The grove works for the town' showcases",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
@@ -3653,7 +3773,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "63994097ff4ae5f1f97694697bf5ea6c965a84cb",
         "short_hash": "6399409",
         "subject": "docs: mark the archived leather-apron-club deck copy stale — canonical deck lives in the code_puppy checkout (40 slides, Sept 18 council)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
@@ -3667,7 +3787,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "a1be96c64163ce3044d92adb809fefaa0762e7dc",
         "short_hash": "a1be96c",
         "subject": "assets: the North Star grove mark — hero spruce, gold north star, kin trees, completeness ring",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-14"
       },
       {
@@ -3681,7 +3801,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "797888f6355dd8c76bfc3a665ab0d7e71b14d493",
         "short_hash": "797888f",
         "subject": "bead 34: root located (nested asyncio loop + thread.join in acp glue), reclassified deferred-contained - not a launch blocker",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-13"
       },
       {
@@ -3695,21 +3815,21 @@ window.FIELD_GUIDE_DATA = {
         "hash": "b6c31be558f42d6736aa2e4b1bd7d67b2be3a7cb",
         "short_hash": "b6c31be",
         "subject": "pages: stage desktop dashboard",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-13"
       },
       {
         "hash": "abd92ea680d887eedbdb762c2fa0547939edca6f",
         "short_hash": "abd92ea",
         "subject": "progress: 17/19",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-13"
       },
       {
         "hash": "28e26d7ae13bcf5fc5b83ebd9bcb15e39b08c4d4",
         "short_hash": "28e26d7",
         "subject": "dashboard: desktop build e2e dashboard (subsystem matrix, verification record, beads, launch punch list); bead 5al.6 closed -> 17/19",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-13"
       },
       {
@@ -3723,7 +3843,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "7fe370e18f97c514088b020a4899ad0b17717dd4",
         "short_hash": "7fe370e",
         "subject": "bead 34: elimination dossier complete - wedge is launchd-GUI-parent intrinsic",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-13"
       },
       {
@@ -3737,7 +3857,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "714853d4a20010088e899bc0d04032c59eab6ff2",
         "short_hash": "714853d",
         "subject": "build-log 34: document GUI-spawned ACP turn wedge (open bead) with captured evidence",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-13"
       },
       {
@@ -3751,7 +3871,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "82e017c0381cae5c641068fe30c1814a630b0d39",
         "short_hash": "82e017c",
         "subject": "in the wild: flagship tylergranlund.com with stack call-outs; benton drones + barbershop link to full build stories",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-12"
       },
       {
@@ -3765,7 +3885,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "f39c91f39da52b2faea28a9358143cca8cf25657",
         "short_hash": "f39c91f",
         "subject": "product page: in the wild -- benton drones, C&M barbershop, resale desk, all live",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-11"
       },
       {
@@ -3779,7 +3899,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "bfe8963542d80776d68adc0d4ab66daa01e2f188",
         "short_hash": "bfe8963",
         "subject": "pages: the complete machine goes live -- product page is the site root at sprucegrove.io; announcement at /announce.html",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-11"
       },
       {
@@ -3793,7 +3913,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "a58b6ac2b6e1e5c744a5b29e833c6d9c929aa4c0",
         "short_hash": "a58b6ac",
         "subject": "product: the complete machine -- local dev instance of the full product overview page (5 working mechanic demos: ACP stream, voice gate, steering, look-in, durability kill-test; Koenigsegg specs, Ive restraint, Holzhausen surfaces; granlund-grove tokens)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-11"
       },
       {
@@ -3807,14 +3927,14 @@ window.FIELD_GUIDE_DATA = {
         "hash": "566c6af7922dccc2472bc841448d52558e87a2e5",
         "short_hash": "566c6af",
         "subject": "docs: DOMAIN-LAUNCH executed -- DNS, verification, root flip done; cert pending",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-11"
       },
       {
         "hash": "4fcdb1172e90a65476426e475f1b40e1407c9d0f",
         "short_hash": "4fcdb11",
         "subject": "pages: nudge deployment post domain-verification (cert provisioning)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-11"
       },
       {
@@ -3828,7 +3948,7 @@ window.FIELD_GUIDE_DATA = {
         "hash": "095fb4c9a3c4237c046e8aa7680fe02c16af70dd",
         "short_hash": "095fb4c",
         "subject": "build-log 33 + board: launch day -- PyPI claimed (trusted publishing), sprucegrove.io DNS driven in, root flip",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-11"
       },
       {
@@ -3842,14 +3962,14 @@ window.FIELD_GUIDE_DATA = {
         "hash": "752f3c9d625b51a8fc0bceff9c7a203a7f81c6a8",
         "short_hash": "752f3c9",
         "subject": "pages: announcement becomes the site root for sprucegrove.io; hub at /hub.html",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-11"
       },
       {
         "hash": "10bec0cedb136779197459ad425f29a753e99797",
         "short_hash": "10bec0c",
         "subject": "announce: uv tool install spruce-grove -- the claim landed, 1.0.1 live on PyPI",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-11"
       },
       {
@@ -3863,350 +3983,350 @@ window.FIELD_GUIDE_DATA = {
         "hash": "28fde020e18736cbb3f3e3e5d3f91de95dc45890",
         "short_hash": "28fde02",
         "subject": "pages: carry sprucegrove.io CNAME in every deploy",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-11"
       },
       {
         "hash": "3f2b73f367b0a927d237864bdb7b9d4a61c29393",
         "short_hash": "3f2b73f",
         "subject": "ci(pypi): trusted publishing via OIDC -- no token secret, pending publisher on PyPI side",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-11"
       },
       {
         "hash": "1148a3c006556926a73c8ca51d3b1d786e620c74",
         "short_hash": "1148a3c",
         "subject": "fix(pages): ship phases + progress boards -- the 404 Tyler caught",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-11"
       },
       {
         "hash": "de09604dd797b3494f3ce92356309a07ad333ffb",
         "short_hash": "de09604",
         "subject": "docs(hub): progress board synced to build-log 32 -- L5 95%, 16/19 beads, launch queue reordered",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-11"
       },
       {
         "hash": "d0ed503ab1a89da1c4a1e467be7cc02981fc647a",
         "short_hash": "d0ed503",
         "subject": "build-log 32: b15+v5p+tx3 closed -- look-in, steering, durability proven, test map",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-11"
       },
       {
         "hash": "f662e2e3c5205ba2ecec2ee8d954e41c4e5fd386",
         "short_hash": "f662e2e",
         "subject": "build-log 31: gck closed -- desktop speaks ACP, inline chat live",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "28ed62bcc8802c810e851bdd523178df8db99ad4",
         "short_hash": "28ed62b",
         "subject": "docs(launch): verified live domain pricing -- sprucegrove.io $28.12 first year at Porkbun, .ai $82.70",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "050caa5abbe115241dffbf90764c2485ef41bfb6",
         "short_hash": "050caa5",
         "subject": "launch: v1.0.0 announcement page + Pages deploy + domain runbook (build-log 30)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "036f867ffc54b4b227cf0931eac5a25b100bc23f",
         "short_hash": "036f867",
         "subject": "release: v1.0.0 -- the grove speaks (voice-first pillar live, desktop dictation, platform complete)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "8a6274e9acc17364ffabf84a2f5ecd41fef6e115",
         "short_hash": "8a6274e",
         "subject": "docs(hub): progress.html -- Then/Now/Next roadmap board (spec vs shipped vs live queue) + index card",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "5277c1a207573a22a4d599be11a9e9896369954f",
         "short_hash": "5277c1a",
         "subject": "docs(ladder): build-log 29 -- voice loop dogfooded live, desktop dictation path (4 beads), PyPI claim runbook",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "0641835ad00d25d0b40491c836a9c6553efaaa2e",
         "short_hash": "0641835",
         "subject": "chore(plugins): version user-tier plugins + shared lib; add install script (build-log 28)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "9dabbc2cc4393728407fe6c6076c5cefeca51565",
         "short_hash": "9dabbc2",
         "subject": "feat(voice): Mockingbird /rec plugin -- mic -> whisper -> review -> send-as-prompt (build-log 27)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "0fe1ca6a02e2e255d49425f8e20e7261050c6b0a",
         "short_hash": "0fe1ca6",
         "subject": "docs(ladder): build-log 26 -- uvx boot proven, fork standalone, grove installed to PATH",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "e720dc4909e849039a51922a6d8d1c4b2a5ceb8a",
         "short_hash": "e720dc4",
         "subject": "docs(ladder): build-log 25 + dashboard sync -- 5al.6 desktop shell v0 scaffolded",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "a719a639f6a13050c520b4470909465cf10c6ea6",
         "short_hash": "a719a63",
         "subject": "docs(dashboard): align phases.html with Sept 10 state, add next-steps queue",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "0302dfc01484f5379dc568ea3b62e95d77ed94aa",
         "short_hash": "0302dfc",
         "subject": "docs(ladder): build-log 24 -- 5al.8 twelfth-pass re-verify; G2 diagnosed as pre-fix harness install",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "b84a15ceb969d4c0e7e055119dafbd0bdf9b2c6c",
         "short_hash": "b84a15c",
         "subject": "guard: print green OK banner on clean --all run",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "6fb4ba2feeb9606cad6998b7749795593265cddb",
         "short_hash": "6fb4ba2",
         "subject": "docs(ladder): build-log 23 -- 5al.8 ratchet emptied, judge-panel evidence deferred to next harness cycle",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "54cdf13793b82cfcf3617621e1c4e207b4a8bcd7",
         "short_hash": "54cdf13",
         "subject": "refactor: reroute 4 grandfathered legacy-namespace imports to spruce_grove",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "15a152103f7847cf5566d778061570d03d586ccc",
         "short_hash": "15a1521",
         "subject": "docs(ladder): G3 judge-model ceremony evidence, G2 live-attempt record, AGENTS.md trimmed under 10k loading cap",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "357ec679b99ad0031fa9b88cf7457abcc581c0dc",
         "short_hash": "357ec67",
         "subject": "docs(ladder): tick completed final-review boxes in judge-abstain remediation doc; G2/G3/G4/G5 remain open gates",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "f036762f9f2f0b318f5050d66449053e86d33cee",
         "short_hash": "f036762",
         "subject": "fix: tolerate non-string metadata in custom_openai chat completions",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "390b72f62847fcefc0eee73363b3635dcae9ff95",
         "short_hash": "390b72f",
         "subject": "docs(ladder): ninth sprint re-verification 5al.1/.3/.2/.4/.5 -- fresh evidence after repeated judge endpoint error",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "6145a925805effaedb0dce1c2262343fe92dcd62",
         "short_hash": "6145a92",
         "subject": "docs(ladder): eighth sprint re-verification 5al.1/.3/.2/.4/.5 -- fresh evidence after repeated judge endpoint error",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "9660a7e8959667dddb73faa3a52ba61e288074b0",
         "short_hash": "9660a7e",
         "subject": "docs(ladder): seventh sprint re-verification 5al.1/.3/.2/.4/.5 -- fresh evidence after repeated judge endpoint error",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "b975ea15f30ec7f6b6b2df3fd1530ac6e776f95b",
         "short_hash": "b975ea1",
         "subject": "docs(ladder): sixth sprint re-verification 5al.1/.3/.2/.4/.5 -- fresh evidence after repeated judge endpoint error",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "d81e6f4c7b28803928bfb8492574e47cce8c15fe",
         "short_hash": "d81e6f4",
         "subject": "docs(ladder): fifth sprint re-verification 5al.1/.3/.2/.4/.5 -- fresh evidence after repeated judge endpoint error",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "47c3fdfbd216493278c708d1951b94a16f224b9c",
         "short_hash": "47c3fdf",
         "subject": "docs(ladder): fourth sprint re-verification 5al.1/.3/.2/.4/.5 -- fresh evidence after repeated judge endpoint error",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "e26cc33981d1ac603c42d2c6c7b89953d72a2d5d",
         "short_hash": "e26cc33",
         "subject": "docs(ladder): third sprint re-verification 5al.1/.3/.2/.4/.5 -- fresh evidence after judge endpoint error",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "bfa95af87fae991a799b4fc60791c5024a1f26d8",
         "short_hash": "bfa95af",
         "subject": "docs+verify(ladder): second re-verification pass 5al.1/.3/.2/.4/.5 -- committed verifiers, fresh evidence, ruff format sweep",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "2f54caec2eaad1fac3108855bfe48514ef9941f2",
         "short_hash": "2f54cae",
         "subject": "docs(ladder): sprint re-verification pass -- fresh evidence for 5al.1/.3/.2/.4/.5",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "08aade894257cde971d0206eec52f5a60ac23119",
         "short_hash": "08aade8",
         "subject": "docs(ladder): sg-5al.5 creative scaffolds + media core shipped -- dashboard + build log",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "2028ec1d1c4e3b9374d4207d0085a0d9b151f20f",
         "short_hash": "2028ec1",
         "subject": "docs(ladder): sg-5al.4 backoffice plugin shipped -- dashboard + build log",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "a5bf3d55e444117b1796b30a7c38cccdaa9dc17c",
         "short_hash": "a5bf3d5",
         "subject": "docs(ladder): sg-5al.2 registry decision recorded (source-only); repair raced L2/L3 status upgrades",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "29cc21bcbaefc7c1ac52876d17f7fb094c99991e",
         "short_hash": "29cc21b",
         "subject": "docs(ladder): sg-5al.3 barber scaffold shipped -- dashboard + build log",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "e459cc34d88417c55b3a01e53976d472d8969052",
         "short_hash": "e459cc3",
         "subject": "feat(guard): merge-discipline + privacy pre-commit guard (sg-5al.1)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "fecdf4b16d5382949ba2a386426739df74b844c8",
         "short_hash": "fecdf4b",
         "subject": "chore(tracking): beads (dolt) init + judge gates + dashboard tracking note",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "22586b375fbe560790117ee78c9e2b2ab240f822",
         "short_hash": "22586b3",
         "subject": "feat(boot): grove bootloader polish + phases dashboard + memo guardrails",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-10"
       },
       {
         "hash": "0e796f75be814a420ae385714d0098c697ad480b",
         "short_hash": "0e796f7",
         "subject": "fix(sync): brand new upstream test files; correct pure-brand resolutions for add_model_menu, core_commands, models_dev_parser",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-08"
       },
       {
         "hash": "c9ccc2802bc692e642a2647bebca9e6ba1cf5f87",
         "short_hash": "c9ccc28",
         "subject": "Merge branch 'sync/upstream-v0.0.830'",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-08"
       },
       {
         "hash": "536cabeda4d8a68a93e7e1335a77ec1065cc2b4d",
         "short_hash": "536cabe",
         "subject": "Import code_puppy @ 96124e1e (upstream sync to mpfaffenberger/code_puppy v0.0.830)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-08"
       },
       {
         "hash": "d5f4beef88326c02cc1f86b39c77fffcc19a2dd7",
         "short_hash": "d5f4bee",
         "subject": "Identity mark: geometric spruce-trio logo (raster + vector), refreshed favicons and web assets",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-04"
       },
       {
         "hash": "87e8a0b7353e668b09dc2ed3d4aca51883982620",
         "short_hash": "87e8a0b",
         "subject": "Landing-page README with live design-system tokens; BRAND.md synced to source palette",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-03"
       },
       {
         "hash": "3af36efce6d6fe279645062a88bddf57537bfeab",
         "short_hash": "3af36ef",
         "subject": "Green build: 7700 passed / 0 failed",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-03"
       },
       {
         "hash": "0247bb527dbbc7bb447adbb6c5875c0d259ed0f0",
         "short_hash": "0247bb5",
         "subject": "Fix import shim: prepend to meta_path with real-package guard + ruff config",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-03"
       },
       {
         "hash": "5f95f9e061e676df1722142692b1856a7d537983",
         "short_hash": "5f95f9e",
         "subject": "Identity docs: README rewrite, ETHOS, PROVENANCE, BRAND",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-03"
       },
       {
         "hash": "4c94d146a55b8a71efe8677734804e547b214db4",
         "short_hash": "4c94d14",
         "subject": "Persona + compat layer: Cedar the grove guide, code_puppy import shim, legacy aliases",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-03"
       },
       {
         "hash": "ff702421a14eaa9f9049ce632230e08dae87dedf",
         "short_hash": "ff70242",
         "subject": "Rebrand: code_puppy -> spruce_grove (module, dist, env vars, display names, assets)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-03"
       },
       {
         "hash": "6d96319570301bb250e16989cb5e18b85f93c2ec",
         "short_hash": "6d96319",
         "subject": "Import code_puppy @ d819ae4e (fork t-granlund/code_puppy, synced with upstream mpfaffenberger/code_puppy)",
-        "author": "Tyler Granlund",
+        "author": "the grove",
         "date": "2026-09-03"
       }
     ]

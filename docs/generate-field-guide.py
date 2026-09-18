@@ -1,7 +1,7 @@
 """Generate the Spruce Grove Field Guide data file from the live repo.
 
 Usage:
-    cd /Users/tygranlund/spruce_grove
+    cd ~/spruce_grove
     python docs/generate-field-guide.py
 
 Outputs:

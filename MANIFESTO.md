@@ -1,6 +1,6 @@
-# THE MANIFESTO — written on a birthday, with the kids
+# THE MANIFESTO — written in one sitting, out loud
 
-*2026-09-15. Tyler Granlund, 37 today, spending it with Mavis (7) and Pierce (2).*
+*2026-09-15. Dictated in one sitting — voice-led, start to finish.*
 
 ---
 
@@ -24,26 +24,27 @@ exist and cannot rest until it does. The ones who were told *wrong place,
 wrong time, wrong age, wrong degree.* The ones who kept showing up anyway.
 
 It is for the small businesses — the ones like the Fleckenstein family,
-rooted in Mokena, Illinois since 1977, who catered our desserts and our
-wedding cake for free because that is what family friends do. The world
+rooted in Mokena, Illinois since 1977, who catered the celebrations around
+them for free because that is what good neighbors do. The world
 consolidated around them. Things are too monopolized. **Bring the power
 back to the people.** If this harness had existed when they needed it, they
 would have had it. That sentence is the business case.
 
-It is for Ashley — who started at $14 an hour as a senior recruiting
-coordinator, navigated the hiring and firing storms of mass-hire warehouses,
-did the ethical work when a DC she helped run burned to the ground, became
-a project manager over international HR operations and systems, and
-executed — flawlessly — private, all-sensory executive experiences in
-London, including a dinner served by blind waiters in total darkness: a
-masterclass in trusting people and thinking differently. Nobody handed her
-a platform. She *was* the platform. This harness is for every associate
-like her: the people inside the walls, unseen, holding the standard.
+It is for the ones inside the walls — who started at $14 an hour as a senior
+recruiting coordinator, navigated the hiring and firing storms of mass-hire
+warehouses, did the ethical work when a DC they helped run burned to the
+ground, became a project manager over international HR operations and
+systems, and executed — flawlessly — private, all-sensory executive
+experiences in London, including a dinner served by blind waiters in total
+darkness: a masterclass in trusting people and thinking differently. Nobody
+handed them a platform. They *were* the platform. This harness is for every
+associate like them: the people inside the walls, unseen, holding the
+standard.
 
-And it is for Mavis and Pierce — because they will fail, feel feelings,
-and hear things that don't make sense in a world moving this fast, and
-they deserve tools that tell them the truth, heal instead of blame, and
-give them the power to believe in themselves.
+And it is for the kids — every kid — because they will fail, feel
+feelings, and hear things that don't make sense in a world moving this
+fast, and they deserve tools that tell them the truth, heal instead of
+blame, and give them the power to believe in themselves.
 
 ## The craft, inherited
 
@@ -54,7 +55,7 @@ a coach who bullied — and the lesson stuck forever: talent behind cruelty
 is worthless, and the adults who allow it lose the kid. Karate kept the
 flame: Ryukyu Kempo and Modern Arnis, the precision of kata, a bo-staff
 twirled on demo teams in malls, two stripes from black under the Dillman
-lineage with Dave and his wife running the dojo — a dojo that gave what
+lineage, in a dojo run by a husband-and-wife team — a dojo that gave what
 every good tool should give: **community, belonging, learning and growing
 together.** The belts slowed down; the discipline didn't.
 
@@ -94,6 +95,5 @@ gates show the judgment. The self-heal shows the respect for your time.
 
 ---
 
-*Written in one sitting, on a birthday, with kids playing in the background
-and a wife inside the walls of the biggest company in the world. The signal
-is getting louder. Keep pushing. Keep growing.*
+*Written in one sitting, out loud, with life happening in the background.
+The signal is getting louder. Keep pushing. Keep growing.*

@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Architecture — Spruce Grove Self-Healing Pipeline</title>
-<meta name="description" content="Interactive system architecture: the update pipeline, Tyler's fork layer, update_schedule end to end, and the full plugin/agent/skill/tool inventory." />
+<meta name="description" content="Interactive system architecture: the update pipeline, the fork layer, update_schedule end to end, and the full plugin/agent/skill/tool inventory." />
 <link rel="icon" type="image/png" href="../assets/favicon-64.png" />
 <link rel="stylesheet" href="../assets/fonts.css" />
 <link rel="stylesheet" href="../assets/tokens.css" />
@@ -150,7 +150,7 @@
 
   <div class="lbl"><span class="dotc" style="background:var(--peri)"></span>The end-to-end loop</div>
   <div class="lane">
-    <div class="node" data-d="machine" data-ic="server:peri"><span class="n-open">+</span><div class="n-k">Host</div><div class="n-t">Tyler's Mac</div><div class="n-d">Working clone, uv tool install, private profile. The whole show runs here.</div></div>
+    <div class="node" data-d="machine" data-ic="server:peri"><span class="n-open">+</span><div class="n-k">Host</div><div class="n-t">The keeper's Mac</div><div class="n-d">Working clone, uv tool install, private profile. The whole show runs here.</div></div>
     <div class="arrow"></div>
     <div class="node" data-d="launchd" data-ic="clock:cyan"><span class="n-open">+</span><div class="n-k">Schedule</div><div class="n-t">launchd</div><div class="n-d">Ad-hoc via /update now (launchd plist paused).</div></div>
     <div class="arrow"></div>
@@ -228,7 +228,7 @@
 <script>
 /* ---------- detail content ---------- */
 const D = {
-  machine: {k:'Host', t:"Tyler's Mac", b:`
+  machine: {k:'Host', t:"The keeper's Mac", b:`
     <p>The entire lifecycle executes locally in the user GUI session — no servers, no daemons outside launchd.</p>
     <div class="mini-h">Layout</div>
     <div class="kv"><b>~/spruce_grove</b><span>working clone · 4 remotes (origin upstream, myfork, private, +profile git inside ~/.spruce_grove)</span></div>
