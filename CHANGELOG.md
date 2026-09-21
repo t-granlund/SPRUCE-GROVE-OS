@@ -76,6 +76,28 @@ newer release is live, the on-disk install upgrades in place via
 - **i18n.** Five new `version.self_update_*` keys across en-US, es, fr-CA.
 - **Reference:** `docs/SELF-UPDATE.md`.
 
+### Synthetic.new lineup refresh — the subscription moves, the aliases hold
+
+The 2026-09 catalog shift, verified against the live `/openai/v1/models`
+endpoint and the docs (grove-grown, `onboarding_synthetic.py`):
+
+- **`syn:large:text` now fronts `hf:deepseek-ai/DeepSeek-V4.1-Flash`** (Beta,
+  multimodal input); quota wisdom updated to the current rate-limits docs —
+  Kimi-K3 is the request baseline (1 call = 1 request), the GLM Flash
+  aliases stretch quota furthest (~0.1 requests/call).
+- **`hf:zai-org/GLM-5.2` rotated out** — dropped from the pinned set, and
+  `/onboard-synthetic` prunes rotated-out pins from `extra_models.json` on
+  re-run; user-added models stay untouched.
+- **`/onboard-synthetic check` grew teeth**: diffs the live catalog against
+  the installed set (rotation drift), reads the free `/v2/quotas` endpoint
+  (weekly credits + 5-hour pool), and pings the quota-free embeddings
+  endpoint (`hf:nomic-ai/nomic-embed-text-v1.5` — subscription-included,
+  never counted against limits, verified live at 768 dims).
+- **Endpoints documented**: OpenAI-compatible (the grove's path),
+  Anthropic-compatible (`/anthropic/v1`), native quota + zero-data-retention
+  web search; `max_output_tokens=65536` pinned across the set per the live
+  catalog.
+
 ## 1.0.0 — 2026-09-10 — "the grove speaks"
 
 First full release. The voice-first pillar — the reason the fork exists — is

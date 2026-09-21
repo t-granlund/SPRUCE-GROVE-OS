@@ -236,6 +236,19 @@ The harness wins by running three moves in parallel, not sequentially:
   now renders the dictation stream on every regen. The page stopped being a
   snapshot and became a heartbeat.
 
+### 2026-09-21 — Synthetic.new lineup refresh: the subscription moves, the aliases hold
+- Source: agent session (see `CHANGELOG.md`, Unreleased)
+- Status: shipped
+- Origin: grove-grown
+- Verified against the live `/openai/v1/models` catalog, not guessed:
+  `syn:large:text` now fronts `hf:deepseek-ai/DeepSeek-V4.1-Flash` (Beta,
+  multimodal input); `hf:zai-org/GLM-5.2` rotated out and is pruned by
+  `/onboard-synthetic` on re-run. `check` now diffs the live catalog for
+  rotation drift, reads the free `/v2/quotas` endpoint (weekly credits +
+  5-hour pool), and pings the quota-free
+  `hf:nomic-ai/nomic-embed-text-v1.5` embeddings endpoint. Completes the
+  quota-honesty arc TASK-001 started.
+
 ### 2026-09-15 — The grove tends itself: self-healing auto-updates
 - Source: voice dictation session (see `CHANGELOG.md`, Unreleased)
 - Status: shipped

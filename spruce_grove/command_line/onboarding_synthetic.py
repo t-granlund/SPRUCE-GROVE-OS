@@ -10,8 +10,23 @@ survive rotation, so they are the right things to bake into config. The pinned
 entries ship anyway (clearly labelled with their quota-burn risk) for the days
 an alias is having a bad afternoon.
 
-Everything is idempotent: re-running refreshes the alias definitions and keeps
-any user-added models already present in ``extra_models.json``.
+Everything is idempotent: re-running refreshes the alias definitions, prunes
+pins the catalog has rotated out (``STALE_MODELS``), and keeps any user-added
+models already present in ``extra_models.json``.
+
+``/onboard-synthetic check`` goes beyond the key: it diffs the live
+``/openai/v1/models`` catalog against the installed set (catching rotation
+drift), reads the free ``/v2/quotas`` endpoint, and pings the quota-free
+embeddings endpoint. Synthetic also speaks Anthropic
+(``https://api.synthetic.new/anthropic/v1``) and offers a native
+zero-data-retention web search (``https://api.synthetic.new/v2/search``);
+the grove itself drives everything through the OpenAI-compatible endpoint.
+
+Lineup refreshed 2026-09 against the live catalog + docs: ``syn:large:text``
+now fronts ``hf:deepseek-ai/DeepSeek-V4.1-Flash`` (Beta, multimodal input) and
+``hf:zai-org/GLM-5.2`` has been rotated out. Kimi-K3 is the rate-limit
+baseline (one call = one request); the GLM Flash aliases stretch quota
+furthest (~0.1 requests per call per the rate-limits docs).
 """
 
 from __future__ import annotations
@@ -30,6 +45,25 @@ ENDPOINT = "https://api.synthetic.new/openai/v1"
 KEY_NAME = "SYNTHETIC_API_KEY"
 EXTRA_MODELS_PATH = os.path.join(CONFIG_DIR, "extra_models.json")
 
+# Synthetic also speaks Anthropic (messages + count_tokens) and ships two
+# native, quota-free endpoints: live subscription quotas and a zero-data-
+# retention web search. Documented here for tooling; the grove drives all of
+# its own traffic through the OpenAI-compatible endpoint above.
+ANTHROPIC_ENDPOINT = "https://api.synthetic.new/anthropic/v1"
+QUOTAS_URL = "https://api.synthetic.new/v2/quotas"
+SEARCH_URL = "https://api.synthetic.new/v2/search"
+
+# Embedding models are subscription-included and never count against rate
+# limits, but they are API-only (no chat), so onboarding verifies rather than
+# installs them — a chat-model entry in extra_models.json would be dead weight.
+EMBEDDINGS_URL = f"{ENDPOINT}/embeddings"
+EMBEDDINGS_MODEL = "hf:nomic-ai/nomic-embed-text-v1.5"
+
+# Upstream ids the live catalog has rotated out. apply_onboarding prunes
+# exactly these — and nothing else — so retired pins stop haunting the picker
+# while user-added models stay untouched.
+STALE_MODELS = frozenset({"hf:zai-org/GLM-5.2"})
+
 _ENDPOINT_BLOCK = {
     "url": ENDPOINT,
     "api_key": f"${KEY_NAME}",
@@ -44,6 +78,9 @@ def _model(name: str, context_length: int, description: str, **extra) -> dict:
         "name": name,
         "custom_endpoint": dict(_ENDPOINT_BLOCK),
         "context_length": context_length,
+        # Live catalog reports max_output_length 65536 across the whole
+        # lineup; pinning it here skips the 15%-of-context heuristic.
+        "max_output_tokens": 65536,
         "supported_settings": ["temperature", "seed", "top_p"],
         "description": description,
     }
@@ -56,50 +93,64 @@ ALIAS_MODELS = {
     "syn:large:text": _model(
         "syn:large:text",
         524288,
-        "Synthetic alias (rotation-safe) -> hf:zai-org/GLM-5.3-Flash. "
-        "1.0x driving-seat reasoning.",
+        "Synthetic alias (rotation-safe) -> hf:deepseek-ai/DeepSeek-V4.1-Flash "
+        "(Beta, takes images too). Cheap driving-seat reasoning, ~0.2 requests "
+        "per call vs the Kimi-K3 baseline.",
     ),
     "syn:small:text": _model(
         "syn:small:text",
         196608,
         "Synthetic alias (rotation-safe) -> hf:zai-org/GLM-4.7-Flash. "
-        "0.1x fan-out + mechanical gates.",
+        "0.1x-class fan-out + mechanical gates; stretches quota furthest.",
     ),
     "syn:large:vision": _model(
         "syn:large:vision",
         524288,
-        "Synthetic alias (rotation-safe) -> hf:moonshotai/Kimi-K3. Large vision.",
+        "Synthetic alias (rotation-safe) -> hf:moonshotai/Kimi-K3. Large "
+        "vision; the rate-limit baseline (1 request = 1 request).",
         supports_vision=True,
     ),
     "syn:small:vision": _model(
         "syn:small:vision",
         262144,
-        "Synthetic alias (rotation-safe) -> hf:Qwen/Qwen3.8-27B. Small vision.",
+        "Synthetic alias (rotation-safe) -> hf:Qwen/Qwen3.8-27B. Small vision "
+        "at a fraction of the baseline cost.",
         supports_vision=True,
     ),
 }
 
 # Pinned upstream ids — rotation 404 risk, so always prefer the syn: aliases.
 PINNED_MODELS = {
-    "hf:zai-org/GLM-5.2": _model(
-        "hf:zai-org/GLM-5.2",
+    "hf:zai-org/GLM-5.3-Flash": _model(
+        "hf:zai-org/GLM-5.3-Flash",
         524288,
-        "Pinned Synthetic model (rotation 404 risk; prefer syn:large:text). Always-on included.",
+        "Pinned Synthetic model (rotation 404 risk). Always-on included. "
+        "Cheapest reasoning class (~0.05 requests/call); no longer the "
+        "syn:large:text target.",
+    ),
+    "hf:deepseek-ai/DeepSeek-V4.1-Flash": _model(
+        "hf:deepseek-ai/DeepSeek-V4.1-Flash",
+        524288,
+        "Pinned Synthetic model (Beta; rotation 404 risk; prefer "
+        "syn:large:text). Always-on included. Current syn:large:text upstream.",
     ),
     "hf:zai-org/GLM-4.7-Flash": _model(
         "hf:zai-org/GLM-4.7-Flash",
         196608,
-        "Pinned Synthetic model (rotation 404 risk; prefer syn:small:text). Always-on included.",
+        "Pinned Synthetic model (rotation 404 risk; prefer syn:small:text). "
+        "Always-on included.",
     ),
     "hf:moonshotai/Kimi-K3": _model(
         "hf:moonshotai/Kimi-K3",
         524288,
-        "Pinned Synthetic model (3.0x quota burn; prefer syn:large:vision). Always-on included.",
+        "Pinned Synthetic model (rotation 404 risk; prefer syn:large:vision). "
+        "Always-on included. Rate-limit baseline: 1 call = 1 request.",
     ),
     "hf:Qwen/Qwen3.8-27B": _model(
         "hf:Qwen/Qwen3.8-27B",
         262144,
-        "Pinned Synthetic model (rotation 404 risk; prefer syn:small:vision). Always-on included.",
+        "Pinned Synthetic model (rotation 404 risk; prefer syn:small:vision). "
+        "Always-on included.",
     ),
     "hf:nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4": _model(
         "hf:nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4",
@@ -110,13 +161,6 @@ PINNED_MODELS = {
         "hf:openai/gpt-oss-120b",
         131072,
         "Pinned Synthetic model. Always-on included.",
-    ),
-    "hf:zai-org/GLM-5.3-Flash": _model(
-        "hf:zai-org/GLM-5.3-Flash",
-        524288,
-        "Pinned Synthetic model (rotation 404 risk; prefer syn:large:text). "
-        "Always-on included. Current syn:large:text upstream.",
-        max_output_tokens=65536,
     ),
 }
 
@@ -130,8 +174,8 @@ def build_synthetic_models() -> dict:
     return models
 
 
-def probe_endpoint(api_key: str, timeout: int = 20) -> tuple[bool, str]:
-    """Live check against the Synthetic endpoint. Returns (ok, detail)."""
+def fetch_model_ids(api_key: str, timeout: int = 20) -> tuple[bool, str, list]:
+    """Live GET /openai/v1/models. Returns (ok, detail, sorted model ids)."""
     req = urllib.request.Request(
         f"{ENDPOINT}/models",
         headers={"Authorization": f"Bearer {api_key}"},
@@ -139,11 +183,109 @@ def probe_endpoint(api_key: str, timeout: int = 20) -> tuple[bool, str]:
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             body = json.loads(resp.read().decode("utf-8", "replace"))
-            ids = body.get("data") or []
-            return True, f"endpoint answered, {len(ids)} models visible"
+            ids = sorted(
+                str(m.get("id")) for m in (body.get("data") or []) if m.get("id")
+            )
+            return True, f"endpoint answered, {len(ids)} models visible", ids
     except urllib.error.HTTPError as exc:
         if exc.code in (401, 403):
-            return False, "key rejected (401/403) — check the key on synthetic.new"
+            return False, "key rejected (401/403) — check the key on synthetic.new", []
+        return False, f"HTTP {exc.code}", []
+    except Exception as exc:  # network unreachable, DNS, timeout …
+        return False, f"could not reach endpoint: {exc}", []
+
+
+def probe_endpoint(api_key: str, timeout: int = 20) -> tuple[bool, str]:
+    """Live check against the Synthetic endpoint. Returns (ok, detail)."""
+    ok, detail, _ = fetch_model_ids(api_key, timeout=timeout)
+    return ok, detail
+
+
+def check_catalog_drift(live_ids: list) -> tuple[list, list]:
+    """Diff the live catalog against the onboarding model set.
+
+    Returns ``(rotated_out, unpinned)``: pinned ids that vanished from the
+    live catalog (404s waiting to happen — re-onboard), and live ids the
+    onboarding set doesn't install (on-demand models may legitimately show
+    up here; purely informational).
+    """
+    live = set(live_ids)
+    rotated = sorted(model_id for model_id in PINNED_MODELS if model_id not in live)
+    known = set(build_synthetic_models())
+    unpinned = sorted(model_id for model_id in live if model_id not in known)
+    return rotated, unpinned
+
+
+def probe_quotas(api_key: str, timeout: int = 15) -> tuple[bool, str]:
+    """Live read of the native /v2/quotas endpoint.
+
+    Free by design: Synthetic documents that /quotas requests never count
+    against subscription limits.
+    """
+    req = urllib.request.Request(
+        QUOTAS_URL,
+        headers={"Authorization": f"Bearer {api_key}"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            body = json.loads(resp.read().decode("utf-8", "replace"))
+    except urllib.error.HTTPError as exc:
+        if exc.code in (401, 403):
+            return False, "key rejected (401/403)"
+        return False, f"HTTP {exc.code}"
+    except Exception as exc:  # network unreachable, DNS, timeout …
+        return False, f"could not reach endpoint: {exc}"
+
+    weekly = body.get("weeklyTokenLimit") or {}
+    five_hour = body.get("rollingFiveHourLimit") or {}
+    subscription = body.get("subscription") or {}
+    parts = []
+    if weekly.get("remainingCredits") is not None:
+        percent = weekly.get("percentRemaining")
+        percent_txt = f", {percent:.0f}%" if isinstance(percent, (int, float)) else ""
+        parts.append(
+            f"weekly credits {weekly['remainingCredits']} of "
+            f"{weekly.get('maxCredits', '?')}{percent_txt}"
+        )
+    if five_hour.get("remaining") is not None:
+        parts.append(
+            f"5-hour requests {five_hour['remaining']:g} of {five_hour.get('max', '?'):g}"
+        )
+    if five_hour.get("limited"):
+        parts.append("5-hour pool exhausted — waits for the next regen tick")
+    if subscription.get("requests") is not None and subscription.get("limit"):
+        parts.append(
+            f"{subscription['requests']}/{subscription['limit']} requests this window"
+        )
+    if not parts:
+        return True, "quota endpoint answered (no known fields in payload)"
+    return True, "; ".join(parts)
+
+
+def probe_embeddings(api_key: str, timeout: int = 15) -> tuple[bool, str]:
+    """Ping POST /openai/v1/embeddings with the included embedding model.
+
+    Free by design: Synthetic documents that embeddings requests never count
+    against subscription limits, so this check burns no quota.
+    """
+    req = urllib.request.Request(
+        EMBEDDINGS_URL,
+        data=json.dumps({"model": EMBEDDINGS_MODEL, "input": "ping"}).encode(),
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            body = json.loads(resp.read().decode("utf-8", "replace"))
+        first = (body.get("data") or [{}])[0]
+        dims = len(first.get("embedding") or [])
+        return True, f"{EMBEDDINGS_MODEL} answered ({dims}-dim vector, quota-free)"
+    except urllib.error.HTTPError as exc:
+        if exc.code in (401, 403):
+            return False, "key rejected (401/403)"
         return False, f"HTTP {exc.code}"
     except Exception as exc:  # network unreachable, DNS, timeout …
         return False, f"could not reach endpoint: {exc}"
@@ -157,6 +299,8 @@ def apply_onboarding(api_key: str) -> None:
 
     def _merge(existing):
         merged = dict(existing or {})
+        for stale in STALE_MODELS:
+            merged.pop(stale, None)
         merged.update(build_synthetic_models())
         return merged
 
@@ -180,14 +324,22 @@ def apply_onboarding(api_key: str) -> None:
         "vision), the pinned fallback models, stores your API key in the shared\n"
         "credential store, and points the main model at syn:large:text (the\n"
         "driving seat). Vision is optimised automatically: the vision aliases\n"
-        "carry supports_vision so image work routes to them.\n\n"
+        "carry supports_vision so image work routes to them. Rotated-out pins\n"
+        "(e.g. hf:zai-org/GLM-5.2) are pruned; user-added models are kept.\n\n"
         "  /onboard-synthetic          interactive onboarding\n"
-        "  /onboard-synthetic check    verify key + endpoint without changing anything\n"
+        "  /onboard-synthetic check    verify key + live model catalog (rotation\n"
+        "                              drift), free quota readout (/v2/quotas),\n"
+        "                              and the quota-free embeddings endpoint\n"
     ),
 )
 def handle_onboard_synthetic_command(command: str) -> bool:
     """Interactive onboarding for Synthetic.new subscribers."""
-    from spruce_grove.messaging import emit_error, emit_info, emit_success
+    from spruce_grove.messaging import (
+        emit_error,
+        emit_info,
+        emit_success,
+        emit_warning,
+    )
 
     mode = command.replace("/onboard-synthetic", "", 1).strip().lower()
     if mode.startswith("check"):
@@ -202,11 +354,40 @@ def handle_onboard_synthetic_command(command: str) -> bool:
                 f"[{KEY_NAME}] is not set - run /onboard-synthetic to configure it."
             )
             return True
-        ok, detail = probe_endpoint(api_key)
+        ok, detail, live_ids = fetch_model_ids(api_key)
         if ok:
             emit_success(f"synthetic.new: {detail}")
         else:
             emit_error(f"synthetic.new: {detail}")
+        if ok:
+            rotated, unpinned = check_catalog_drift(live_ids)
+            if rotated:
+                emit_warning(
+                    "pinned models no longer on the subscription: "
+                    + ", ".join(rotated)
+                    + " - re-run /onboard-synthetic to refresh and prune"
+                )
+            if unpinned:
+                emit_info(
+                    "new on the subscription (not installed): " + ", ".join(unpinned)
+                )
+        ok_q, quota_detail = probe_quotas(api_key)
+        if ok_q:
+            emit_success(f"quotas: {quota_detail}")
+        else:
+            emit_warning(f"quotas: {quota_detail}")
+        ok_e, embed_detail = probe_embeddings(api_key)
+        if ok_e:
+            emit_success(f"embeddings: {embed_detail}")
+        else:
+            emit_warning(f"embeddings: {embed_detail}")
+        emit_info(
+            "also available: Anthropic-compat "
+            + ANTHROPIC_ENDPOINT
+            + " (messages), "
+            + SEARCH_URL
+            + " (quota-free web search)"
+        )
         emit_info(
             "models installed in extra_models.json: "
             + ", ".join(sorted(build_synthetic_models()))
@@ -215,14 +396,12 @@ def handle_onboard_synthetic_command(command: str) -> bool:
 
     emit_info("Synthetic.new onboarding - what this sets up:")
     emit_info("  1. Your API key, stored in the shared credential store")
-    emit_info(
-        "  2. The rotation-safe alias family: syn:large:text (driving seat, 1.0x),"
-    )
-    emit_info("     syn:small:text (fan-out, 0.1x), syn:large:vision (Kimi-K3),")
-    emit_info(
-        "     syn:small:vision (Qwen3.8-27B) - vision models tagged for image work"
-    )
-    emit_info("  3. The pinned fallbacks (labelled with their rotation/quota risk)")
+    emit_info("  2. The rotation-safe alias family: syn:large:text (driving seat,")
+    emit_info("     currently DeepSeek-V4.1-Flash), syn:small:text (0.1x-class")
+    emit_info("     fan-out), syn:large:vision (Kimi-K3), syn:small:vision")
+    emit_info("     (Qwen3.8-27B) - vision models tagged for image work")
+    emit_info("  3. The pinned fallbacks (labelled with their rotation/quota risk),")
+    emit_info("     minus anything the catalog has rotated out (pruned automatically)")
     emit_info("  4. Main model -> syn:large:text")
 
     if have_key:
@@ -251,10 +430,11 @@ def handle_onboard_synthetic_command(command: str) -> bool:
     emit_success("alias family + pinned models written to extra_models.json")
     emit_info(f"main model -> {DRIVING_SEAT}")
     emit_info("vision routed to the syn:* vision aliases (supports_vision tagged)")
-    emit_info("Quota wisdom, earned the hard way:")
+    emit_info("Quota wisdom, per the current rate-limits docs:")
     emit_info("  prefer the syn: aliases - pinned upstream ids rotate and 404")
-    emit_info("  Kimi-K3 burns 3.0x quota - keep it behind syn:large:vision")
-    emit_info("  syn:small:text is your 0.1x workhorse for fan-out and gates")
+    emit_info("  Kimi-K3 is the baseline: one call counts as one request")
+    emit_info("  GLM Flash aliases stretch quota furthest (~0.1 requests per call)")
+    emit_info("  embeddings (" + EMBEDDINGS_MODEL + ") are free - index away")
     emit_info("Verify any time with /onboard-synthetic check")
     return True
 
@@ -265,8 +445,19 @@ __all__ = [
     "DRIVING_SEAT",
     "KEY_NAME",
     "EXTRA_MODELS_PATH",
+    "ENDPOINT",
+    "ANTHROPIC_ENDPOINT",
+    "QUOTAS_URL",
+    "SEARCH_URL",
+    "EMBEDDINGS_URL",
+    "EMBEDDINGS_MODEL",
+    "STALE_MODELS",
     "build_synthetic_models",
+    "fetch_model_ids",
+    "check_catalog_drift",
     "probe_endpoint",
+    "probe_quotas",
+    "probe_embeddings",
     "apply_onboarding",
     "handle_onboard_synthetic_command",
 ]
