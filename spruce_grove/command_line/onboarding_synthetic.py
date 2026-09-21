@@ -94,8 +94,10 @@ ALIAS_MODELS = {
         "syn:large:text",
         524288,
         "Synthetic alias (rotation-safe) -> hf:deepseek-ai/DeepSeek-V4.1-Flash "
-        "(Beta, takes images too). Cheap driving-seat reasoning, ~0.2 requests "
-        "per call vs the Kimi-K3 baseline.",
+        "(Beta). Driving-seat reasoning AND the default vision target — it "
+        "takes images at ~0.2 requests/call vs the Kimi-K3 baseline; heavy "
+        "vision stays on syn:large:vision.",
+        supports_vision=True,
     ),
     "syn:small:text": _model(
         "syn:small:text",
@@ -125,14 +127,16 @@ PINNED_MODELS = {
         "hf:zai-org/GLM-5.3-Flash",
         524288,
         "Pinned Synthetic model (rotation 404 risk). Always-on included. "
-        "Cheapest reasoning class (~0.05 requests/call); no longer the "
-        "syn:large:text target.",
+        "Cheapest reasoning class (~0.1 requests/call per the rate-limits "
+        "docs); no longer the syn:large:text target.",
+        supports_vision=True,
     ),
     "hf:deepseek-ai/DeepSeek-V4.1-Flash": _model(
         "hf:deepseek-ai/DeepSeek-V4.1-Flash",
         524288,
         "Pinned Synthetic model (Beta; rotation 404 risk; prefer "
         "syn:large:text). Always-on included. Current syn:large:text upstream.",
+        supports_vision=True,
     ),
     "hf:zai-org/GLM-4.7-Flash": _model(
         "hf:zai-org/GLM-4.7-Flash",
@@ -145,12 +149,14 @@ PINNED_MODELS = {
         524288,
         "Pinned Synthetic model (rotation 404 risk; prefer syn:large:vision). "
         "Always-on included. Rate-limit baseline: 1 call = 1 request.",
+        supports_vision=True,
     ),
     "hf:Qwen/Qwen3.8-27B": _model(
         "hf:Qwen/Qwen3.8-27B",
         262144,
         "Pinned Synthetic model (rotation 404 risk; prefer syn:small:vision). "
         "Always-on included.",
+        supports_vision=True,
     ),
     "hf:nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4": _model(
         "hf:nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-NVFP4",
@@ -323,8 +329,10 @@ def apply_onboarding(api_key: str) -> None:
         "Installs the rotation-safe syn: alias family (large/small text and\n"
         "vision), the pinned fallback models, stores your API key in the shared\n"
         "credential store, and points the main model at syn:large:text (the\n"
-        "driving seat). Vision is optimised automatically: the vision aliases\n"
-        "carry supports_vision so image work routes to them. Rotated-out pins\n"
+        "driving seat). Vision is optimised automatically: syn:large:text\n"
+        "carries supports_vision (DeepSeek-V4.1-Flash takes images) so image\n"
+        "work routes to the cheapest multimodal alias; heavy vision stays on\n"
+        "syn:large:vision (Kimi-K3). Rotated-out pins\n"
         "(e.g. hf:zai-org/GLM-5.2) are pruned; user-added models are kept.\n\n"
         "  /onboard-synthetic          interactive onboarding\n"
         "  /onboard-synthetic check    verify key + live model catalog (rotation\n"
@@ -429,7 +437,10 @@ def handle_onboard_synthetic_command(command: str) -> bool:
     apply_onboarding(api_key)
     emit_success("alias family + pinned models written to extra_models.json")
     emit_info(f"main model -> {DRIVING_SEAT}")
-    emit_info("vision routed to the syn:* vision aliases (supports_vision tagged)")
+    emit_info(
+        "image work routes to syn:large:text (cheapest multimodal); "
+        "heavy vision -> syn:large:vision"
+    )
     emit_info("Quota wisdom, per the current rate-limits docs:")
     emit_info("  prefer the syn: aliases - pinned upstream ids rotate and 404")
     emit_info("  Kimi-K3 is the baseline: one call counts as one request")

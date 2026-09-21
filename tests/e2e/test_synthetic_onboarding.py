@@ -3,7 +3,8 @@
 Runs the real apply_onboarding against an isolated temp HOME and verifies:
   - the 11-model set (4 rotation-safe aliases + 7 pinned) matching the
     2026-09 live catalog: DeepSeek-V4.1-Flash in, GLM-5.2 rotated out
-  - vision aliases carry supports_vision (so vision routes to them)
+  - multimodal entries carry supports_vision; syn:large:text comes first,
+    so it is the default vision target (cheapest multimodal alias)
   - the API key path resolves through the shared credential store
   - extra_models.json + grove.cfg land with the driving seat assigned
   - rotated-out pins are pruned from extra_models.json on re-run
@@ -49,9 +50,11 @@ def test_model_set_is_the_maintainer_config(isolated_home):
 
     models = build_synthetic_models()
     assert len(models) == 11
+    assert models["syn:large:text"]["supports_vision"] is True
     assert models["syn:large:vision"]["supports_vision"] is True
     assert models["syn:small:vision"]["supports_vision"] is True
-    assert not models["syn:large:text"].get("supports_vision")
+    # GLM-4.7-Flash (syn:small:text upstream) is text-only per the live catalog.
+    assert not models["syn:small:text"].get("supports_vision")
     # 2026-09 catalog: DeepSeek-V4.1-Flash is the syn:large:text upstream and
     # GLM-5.2 has been rotated out of the live subscription entirely.
     assert "hf:deepseek-ai/DeepSeek-V4.1-Flash" in models
@@ -202,6 +205,7 @@ def test_apply_onboarding_writes_models_key_and_main_model(isolated_home):
     assert len([k for k in models if k.startswith(("syn:", "hf:"))]) == 11
     assert "hf:zai-org/GLM-5.2" not in models
     assert "my:own:model" in models
+    assert models["syn:large:text"]["supports_vision"] is True
     assert models["syn:large:vision"]["supports_vision"] is True
 
     cfg_path = os.path.join(isolated_home, ".config", "spruce_grove", "grove.cfg")

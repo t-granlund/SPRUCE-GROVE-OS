@@ -97,6 +97,11 @@ endpoint and the docs (grove-grown, `onboarding_synthetic.py`):
   Anthropic-compatible (`/anthropic/v1`), native quota + zero-data-retention
   web search; `max_output_tokens=65536` pinned across the set per the live
   catalog.
+- **Default vision target moved to `syn:large:text`** — the live catalog
+  shows DeepSeek-V4.1-Flash (also GLM-5.3-Flash, Kimi-K3, Qwen3.8-27B)
+  accepts image input; multimodal aliases and pins carry `supports_vision`,
+  and image work routes to the cheapest multimodal alias (~0.2 requests/call
+  vs Kimi-K3's 1.0 baseline). Heavy vision stays on `syn:large:vision`.
 
 ## 1.0.0 — 2026-09-10 — "the grove speaks"
 
