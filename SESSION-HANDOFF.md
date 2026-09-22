@@ -137,6 +137,47 @@ docs/SOVEREIGNTY-EXECUTION.md — start with the post-reboot ritual, then the
 highest-priority open item. The Disc is decided (Sevardhet); branding is
 propagated everywhere; don't redo it."*
 
+---
+
+# ADDENDUM — 2026-09-21 (the synthetic.new lineup refresh)
+
+> Fresh OS session: read the original handoff above, then this. The board in
+> `docs/SOVEREIGNTY-EXECUTION.md` still governs.
+
+## What changed since the 9/16 addendum
+
+| Thing | State |
+|---|---|
+| Repo | clean tree, synced with origin through `67bb580` |
+| Synthetic lineup | refreshed against the LIVE `/openai/v1/models` catalog (2026-09): `syn:large:text` now fronts `hf:deepseek-ai/DeepSeek-V4.1-Flash` (Beta, multimodal); `hf:zai-org/GLM-5.2` rotated out upstream and is pruned by re-running `/onboard-synthetic` |
+| `/onboard-synthetic check` | grew teeth: live-catalog drift detection, free `/v2/quotas` readout (weekly credits + 5-hour pool), quota-free embeddings ping |
+| Default vision target | `syn:large:text` (~0.2 requests/call vs the Kimi-K3 1.0 baseline); heavy vision stays on `syn:large:vision` |
+| Live config | `~/.spruce_grove/extra_models.json` refreshed in place (user-added entries preserved); main model unchanged (`GLM-5.3-Flash` slug, cheapest reasoning class) |
+| Known watch items | beads `3rg` (main model is a pinned id — deliberate, cheapest class) and `3ef` (verify DeepSeek Beta vision quality on a real image task) |
+
+## What shipped today (two commits, all pushed)
+
+1. **`0292fdf`** — lineup refresh: alias/pin definitions match the live
+   catalog; rotated-out pins pruned with user models preserved; drift-aware
+   `check`; endpoint documentation (OpenAI-compat driving path,
+   Anthropic-compat, native quota + zero-data-retention search);
+   `max_output_tokens=65536` across the set. Verified end-to-end against
+   the live API (11 models, 768-dim embeddings ping, quota readout).
+2. **`67bb580`** — default vision routed to `syn:large:text`: the live
+   catalog shows four models accept image input; multimodal entries carry
+   `supports_vision`, and config-order puts the cheapest first. Quota note
+   corrected to the rate-limits docs' own ~0.1 requests/call figure for
+   GLM-5.3-Flash.
+
+## Fresh OS session — launch prompt
+
+*"Read SESSION-HANDOFF.md top to bottom (the 9/21 addendum is last), then
+work the board in docs/SOVEREIGNTY-EXECUTION.md. The synthetic lineup was
+refreshed 2026-09-21 against the live catalog — don't redo it; check drift
+any time with /onboard-synthetic check. Two small beads wait: 3rg (main
+model pinned-id trade-off) and 3ef (DeepSeek Beta vision QA)."*
+
+
 ## Still open (unchanged priority order)
 
 1. Post-reboot ritual (~2 min): `colima start`, confirm self-heal, skim the board
