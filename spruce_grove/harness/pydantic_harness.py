@@ -10,6 +10,7 @@ option among many — then, eventually, deletable.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from typing import Any
 
 from spruce_grove.harness.protocol import Harness, HarnessInfo
@@ -36,6 +37,37 @@ class PydanticHarness:
         from spruce_grove.model_factory import ModelFactory
 
         return ModelFactory.get_model(model_name, config)
+
+    def load_models_config(self) -> dict[str, Any]:
+        """Delegate verbatim to ``ModelFactory.load_config``.
+
+        The import and the attribute lookup both happen at call time: the
+        heavy module stays off the boot path, and patches aimed at
+        ``spruce_grove.model_factory`` keep working through the seam
+        unchanged.
+        """
+        from spruce_grove import model_factory
+
+        return model_factory.ModelFactory.load_config()
+
+    def make_model_settings(
+        self,
+        model_name: str,
+        max_tokens: int | None = None,
+        overrides: Mapping[str, Any] | None = None,
+    ) -> Any:
+        """Delegate verbatim to ``model_factory.make_model_settings``.
+
+        Same late-import discipline as the other surfaces; the call-time
+        attribute lookup preserves the inherited test seam.
+        """
+        from spruce_grove import model_factory
+
+        return model_factory.make_model_settings(
+            model_name,
+            max_tokens=max_tokens,
+            overrides=overrides,
+        )
 
 
 # Structural check: an instance satisfies the grove protocol.

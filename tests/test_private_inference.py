@@ -3,6 +3,7 @@ from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
 
+from spruce_grove.harness.pydantic_harness import PydanticHarness
 from spruce_grove.private_inference import (
     _disable_anthropic_thinking,
     _disable_chat_template_thinking,
@@ -60,17 +61,16 @@ async def test_private_prompt_builds_one_toolless_request():
     }
 
     with (
-        patch(
-            "spruce_grove.private_inference.ModelFactory.load_config",
+        patch.object(
+            PydanticHarness,
+            "load_models_config",
             return_value={"private-model": {}},
         ),
-        patch(
-            "spruce_grove.private_inference.ModelFactory.get_model",
-            return_value=model,
-        ) as get_model,
-        patch(
-            "spruce_grove.private_inference.make_model_settings",
-            return_value=settings,
+        patch.object(
+            PydanticHarness, "resolve_model", return_value=model
+        ) as resolve_model,
+        patch.object(
+            PydanticHarness, "make_model_settings", return_value=settings
         ) as make_settings,
         patch("spruce_grove.private_inference.Agent", agent_factory),
     ):
@@ -84,7 +84,7 @@ async def test_private_prompt_builds_one_toolless_request():
         )
 
     assert result is output
-    get_model.assert_called_once_with("private-model", {"private-model": {}})
+    resolve_model.assert_called_once_with("private-model", {"private-model": {}})
     make_settings.assert_called_once_with(
         "private-model",
         max_tokens=32,
@@ -113,9 +113,7 @@ async def test_private_prompt_builds_one_toolless_request():
 @pytest.mark.asyncio
 async def test_private_prompt_rejects_unknown_model_before_agent_creation():
     with (
-        patch(
-            "spruce_grove.private_inference.ModelFactory.load_config", return_value={}
-        ),
+        patch.object(PydanticHarness, "load_models_config", return_value={}),
         patch("spruce_grove.private_inference.Agent") as agent_factory,
         pytest.raises(ValueError, match="Unknown private-inference model"),
     ):

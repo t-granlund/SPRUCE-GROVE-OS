@@ -232,3 +232,54 @@ cross-workstream source of truth). Family-lab stays private by design.*
   "granlund-grove"). Git history itself was NOT rewritten.
 - `8l7` closed by policy: barber names on the public mock repo are fine;
   the handoff-deliverable local-only guard stays (they carry Tyler's phone).
+
+---
+
+# ADDENDUM — 2026-09-22 (the settings surface crosses the harness seam)
+
+> Fresh session context: the transition review was asked for directly
+> ("make sure all core things are completed to fully transition away from
+> any code puppy or pydantic dependency"). The honest answer, with
+> receipts, is below. The board in `docs/SOVEREIGNTY-EXECUTION.md` still
+> governs; desktop polish lives in its own repo/session.
+
+## What the review found (computed, not claimed)
+
+| Surface | State |
+|---|---|
+| `pydantic-ai` in grove source | **61 files / 114 import statements** (recomputed 2026-09-22; the old "58 modules / 110 imports" had drifted) |
+| `pydantic-ai-harness` | 4 import sites (compaction, output limits, `/truncate`) — Phase 3 recreates these |
+| plain `pydantic` direct imports | 14 files — rides with the harness exit |
+| `code-puppy` residue | every remaining reference maps to a documented `docs/COMPAT-EXIT.md` contract (shim, entry-point group, legacy re-exports, config-key fallback, kennel var) — nothing undocumented |
+| `code-puppy-core-plugins` | still a hard pyproject dependency — ladder item 9, **PARKED for council** (contract #1) |
+| Harness seam | **3 of 61 call-site files** now route model resolution + the settings surface through `spruce_grove/harness/` |
+
+## What landed this session (AUTO, tests green)
+
+1. **Settings surface through the seam** — the `Harness` protocol grew
+   `load_models_config()` / `make_model_settings()`, parity-tested
+   against the inherited functions. Three call-site files migrated:
+   `agents/_builder.py` (agent construction — **no longer imports
+   `model_factory` at all**), `tools/subagent_invocation.py`,
+   `private_inference.py`. Six test files moved to seam-level stubs; the
+   adapter's call-time delegation keeps inherited patch seams alive.
+   Full suite: **7,880 passed / 38 skipped**.
+2. **Census + board refreshed** — `SOVEREIGNTY.md`, `docs/DEPENDENCY-EXIT.md`
+   (Tier 0 + ladder item 10), `pages-hub/dashboard.html` row D, and a
+   `LIVING-UPDATES.md` entry all carry the new computed numbers.
+
+## What "fully transitioned" still requires (honest, in order)
+
+1. **`RunContext` tool vocabulary** — the long tail, ~40 tool modules.
+2. **Agent loop + streaming events** — the biggest single surface.
+3. **Phase 3** — the grove implementation behind the protocol
+   (compaction/output-limits recreate the 4 `pydantic-ai-harness` sites).
+4. **The flip & prune** — grove implementation tried & true in
+   production, then `pydantic-ai` + `pydantic-ai-harness` leave pyproject.
+5. **Council items (TYLER, not AUTO)** — approve `docs/COMPAT-EXIT.md`;
+   vendor-or-adopt decision for `code-puppy-core-plugins`; the compat
+   contracts exit only when the council says the connector's promise is
+   kept a better way.
+
+*The seam work is designed so every one of these is a small landing, not
+a rewrite. Next session: start the `RunContext` tool vocabulary.*

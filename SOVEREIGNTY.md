@@ -10,10 +10,11 @@
 
 ## The harness exit — pydantic-ai, honestly
 
-**Where we stand:** 58 modules under `spruce_grove/` import pydantic-ai
-directly (76 reference it). It owns the agent loop, streaming, tool
-calling, model resolution, and the retry/refresh seams. The boot banner no
-longer advertises it (this was branding; the dependency is still real).
+**Where we stand:** 61 files under `spruce_grove/` import pydantic-ai
+(114 import statements; recomputed 2026-09-22). It owns the agent loop,
+streaming, tool calling, model resolution, and the retry/refresh seams.
+The boot banner no longer advertises it (this was branding; the dependency
+is still real).
 
 **The honest assessment:** a big-bang removal is a rewrite masquerading as
 a cleanup, and the Leather Apron Gate exists precisely to stop manic,
@@ -30,10 +31,15 @@ five criteria as any upstream signal:
    soft-failing selector (`selector.py`, `SPRUCE_GROVE_HARNESS` env,
    unknown names fall back loudly and safely). First two call sites
    migrated: `tools/subagent_invocation.py` and `private_inference.py`.
-   Remaining: 56 files — each migrates one landing at a time, tests green,
-   starting with `load_config`/`make_model_settings` (settings surface),
-   then the `RunContext` tool vocabulary (the long tail), then the agent
-   loop and streaming.
+   **Settings surface — LANDED 2026-09-22:** the protocol grew
+   `load_models_config` / `make_model_settings` (parity-tested against the
+   inherited functions), and three call-site files now route model
+   resolution plus settings through the seam — `agents/_builder.py` (the
+   agent construction path, which no longer imports `model_factory` at
+   all), `tools/subagent_invocation.py`, and `private_inference.py`.
+   Remaining: 58 of 61 files (computed 2026-09-22) — each migrates one
+   landing at a time, tests green, next the `RunContext` tool vocabulary
+   (the long tail), then the agent loop and streaming.
 3. **The replacement.** Behind the protocol, grow (or vendor) the grove's
    own loop: stdlib + httpx streaming, the tolerant OpenAI client we
    already carry, our own retry/token logic (much of it already exists —

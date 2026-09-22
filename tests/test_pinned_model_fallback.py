@@ -272,6 +272,7 @@ class TestPinnedModelFallback:
         assert out.error is None
         mock_make_settings.assert_called_once_with(
             "global-default-model",
+            max_tokens=None,
             overrides=overrides,
         )
 
@@ -497,7 +498,7 @@ class TestLoadModelWithFallbackScopingUnit:
         models_config = {"global-default-model": {}}
         with (
             patch(
-                "spruce_grove.agents._builder.ModelFactory.get_model",
+                "spruce_grove.model_factory.ModelFactory.get_model",
                 side_effect=self._fake_get_model,
             ),
             patch(

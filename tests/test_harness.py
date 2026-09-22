@@ -1,13 +1,16 @@
 """Tests for the harness seam (spruce_grove/harness/).
 
 The seam is the sovereignty boundary between grove code and whatever agent
-framework executes underneath. These tests prove three things:
+framework executes underneath. These tests prove four things:
 
 1. Selection works and fails soft (unknown names fall back, never crash).
 2. Behavior parity: the seam resolves models exactly like the inherited
    ``ModelFactory.get_model`` it delegates to — same raises, same Nones,
    same handle types.
-3. The boundary is structurally pure: ``protocol.py`` (the grove-owned
+3. The settings surface behaves identically through the seam
+   (``load_models_config`` / ``make_model_settings`` vs. the inherited
+   functions).
+4. The boundary is structurally pure: ``protocol.py`` (the grove-owned
    vocabulary) contains no reference to the external framework, so the
    seam cannot quietly dissolve.
 """
@@ -91,6 +94,42 @@ class TestResolveModelParity(_ParityBase):
         assert direct is not None and through is not None
         assert type(direct) is type(through)
         assert through.model_name == direct.model_name == "gpt-test"
+
+
+class TestSettingsSurfaceParity:
+    """The settings surface routes through the seam, byte for byte."""
+
+    def test_load_models_config_parity(self):
+        from spruce_grove.model_factory import ModelFactory
+
+        direct = ModelFactory.load_config()
+        through = get_harness().load_models_config()
+        assert through == direct
+        assert set(through) == set(direct)
+
+    def test_make_model_settings_parity(self):
+        from spruce_grove.model_factory import make_model_settings
+
+        direct = make_model_settings("some-model", max_tokens=4096)
+        through = get_harness().make_model_settings("some-model", max_tokens=4096)
+        assert through == direct
+
+    def test_make_model_settings_overrides_parity(self):
+        from spruce_grove.model_factory import make_model_settings
+
+        overrides = {"temperature": 0.25}
+        direct = make_model_settings("some-model", max_tokens=128, overrides=overrides)
+        through = get_harness().make_model_settings(
+            "some-model", max_tokens=128, overrides=overrides
+        )
+        assert through == direct
+
+    def test_extended_protocol_still_satisfied(self):
+        from spruce_grove.harness.protocol import Harness
+
+        # runtime_checkable checks every protocol method exists on the
+        # instance — this is what proves the adapter grew with the protocol.
+        assert isinstance(get_harness(), Harness)
 
 
 class TestBoundaryPurity:

@@ -73,9 +73,12 @@ def test_build_pydantic_agent_sets_logical_agent_name():
         patch.object(
             _builder, "load_model_with_fallback", _fake_load_model_with_fallback
         ),
-        patch.object(_builder.ModelFactory, "load_config", staticmethod(dict)),
+        patch(
+            "spruce_grove.model_factory.ModelFactory.load_config",
+            return_value={},
+        ),
         patch.object(_builder, "load_mcp_servers", lambda **k: []),
-        patch.object(_builder, "make_model_settings", lambda *a, **k: None),
+        patch("spruce_grove.model_factory.make_model_settings", lambda *a, **k: None),
         patch("spruce_grove.tools.register_tools_for_agent", lambda *a, **k: None),
     ):
         built = _builder.build_pydantic_agent(cfg)

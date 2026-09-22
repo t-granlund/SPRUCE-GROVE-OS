@@ -44,6 +44,40 @@ The harness wins by running three moves in parallel, not sequentially:
 
 <!-- LIVING:BEGIN -->
 
+### 2026-09-22 — The settings surface crosses the seam (harness exit 3 of 61)
+- Source: build session ("review the transition state; finish the core things")
+- Status: shipped
+- Origin: grove-grown
+- Census recomputed first, honestly: 61 files / 114 statements still import
+  pydantic-ai; the old "2 of ~58" was true on 9/15 and had drifted since.
+- The harness protocol grew its second surface: `load_models_config` +
+  `make_model_settings`, both parity-tested against the inherited
+  functions (same dicts out, same overrides filtering, same defaults).
+- Three call-site files now route model resolution AND settings through
+  the seam: `agents/_builder.py` — the agent construction path — no
+  longer imports `model_factory` at all; `tools/subagent_invocation.py`
+  and `private_inference.py` speak only grove vocabulary for
+  resolution/settings (their remaining pydantic-ai imports are the agent
+  loop, the next surface).
+- Six test files migrated to seam-level stubs (`PydanticHarness` methods
+  or the canonical `model_factory` paths); the adapter's call-time
+  delegation keeps the inherited patch seams alive. One honest behavior
+  note captured in tests: the adapter forwards every parameter
+  explicitly, so `max_tokens=None` now appears in call shapes (the
+  inherited default either way).
+- Receipt: full suite 7,880 passed / 38 skipped. Board updated:
+  `SOVEREIGNTY.md` + `docs/DEPENDENCY-EXIT.md` now say 3 of 61.
+- Bonus catch while regenerating the observatory: the anonymity pivot
+  (9/18) renamed grove authors to "the grove" in the commit feeds, but the
+  provenance-chip classifier still carried its own pre-pivot author list —
+  so every grove commit started rendering as "upstream-synced" on the
+  public site. Fixed at the root: the grove-author set now lives in ONE
+  place (`docs/field_guide_changelog.py`) and both generators import it;
+  regression tests pin "the grove" → grove-grown so the two surfaces can
+  never quietly disagree again.
+- Next on the seam: the `RunContext` tool vocabulary (the long tail,
+  ~40 modules), then the agent loop and streaming events.
+
 ### 2026-09-16 — Brand polish: every surface on the canonical kit, desktop included
 - Source: build session ("logos not fully polished and applied everywhere")
 - Status: shipped

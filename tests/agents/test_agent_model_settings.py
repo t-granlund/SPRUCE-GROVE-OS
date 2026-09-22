@@ -236,7 +236,7 @@ def test_main_agent_builder_passes_agent_model_settings():
             ),
         ),
         patch("spruce_grove.agents._builder.load_mcp_servers", return_value=[]),
-        patch("spruce_grove.agents._builder.make_model_settings") as make_settings,
+        patch("spruce_grove.model_factory.make_model_settings") as make_settings,
         patch(
             "spruce_grove.agents._builder.make_history_processor",
             return_value=MagicMock(),
@@ -260,7 +260,11 @@ def test_main_agent_builder_passes_agent_model_settings():
         result = build_pydantic_agent(agent)
 
     assert result is final
+    # The seam adapter normalizes the call shape: every parameter is
+    # forwarded explicitly, so ``max_tokens`` appears even when unset
+    # (its inherited default is ``None`` either way).
     make_settings.assert_called_once_with(
         "gpt-5-test",
+        max_tokens=None,
         overrides={"reasoning_effort": "high"},
     )

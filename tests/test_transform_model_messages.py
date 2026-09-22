@@ -199,9 +199,15 @@ async def test_main_agent_construction_installs_transform():
     config.name = "spruce-grove"
     with (
         patch.object(_builder, "load_model_with_fallback", _load_test_model),
-        patch.object(_builder.ModelFactory, "load_config", staticmethod(dict)),
+        patch(
+            "spruce_grove.model_factory.ModelFactory.load_config",
+            return_value={},
+        ),
         patch.object(_builder, "load_mcp_servers", lambda **_kwargs: []),
-        patch.object(_builder, "make_model_settings", lambda *_args, **_kwargs: None),
+        patch(
+            "spruce_grove.model_factory.make_model_settings",
+            lambda *_args, **_kwargs: None,
+        ),
         patch(
             "spruce_grove.tools.register_tools_for_agent",
             lambda *_args, **_kwargs: None,

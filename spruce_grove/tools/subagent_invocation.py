@@ -342,11 +342,14 @@ async def _invoke_agent_impl(
 
     try:
         # Lazy import to break circular dependency with messaging module
-        from spruce_grove.model_factory import ModelFactory, make_model_settings
         from spruce_grove.harness import get_harness
 
         # Load the specified agent config
         agent_config = load_agent(agent_name)
+
+        # One harness handle for the whole invocation: model resolution, the
+        # catalog, and settings all speak the same grove vocabulary.
+        harness = get_harness()
 
         with agent_config.temporary_model_name_override(model_name):
             # Seed history so make_history_processor (wired into history_processors)
@@ -357,7 +360,7 @@ async def _invoke_agent_impl(
             # Resolve the effective model through the agent so precedence lives
             # in one place: runtime override -> pinned model -> global default.
             requested_model_name = agent_config.get_model_name()
-            models_config = ModelFactory.load_config()
+            models_config = harness.load_models_config()
 
             if not requested_model_name:
                 raise ValueError("No model configured for sub-agent invocation")
@@ -370,9 +373,7 @@ async def _invoke_agent_impl(
 
             if model_name:
                 try:
-                    model = get_harness().resolve_model(
-                        requested_model_name, models_config
-                    )
+                    model = harness.resolve_model(requested_model_name, models_config)
                     if model is None:
                         raise ValueError(
                             f"Model '{requested_model_name}' is configured but "
@@ -429,7 +430,7 @@ async def _invoke_agent_impl(
             instructions = prepared.instructions
             prompt = prepared.user_prompt
 
-            model_settings = make_model_settings(
+            model_settings = harness.make_model_settings(
                 effective_model_name,
                 overrides=agent_config.get_model_settings_overrides(),
             )

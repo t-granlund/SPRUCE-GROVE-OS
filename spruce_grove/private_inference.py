@@ -9,11 +9,7 @@ from typing import TypeVar
 from pydantic_ai import Agent, UsageLimits
 
 from spruce_grove.harness import get_harness
-from spruce_grove.model_factory import (
-    ModelFactory,
-    _is_anthropic_model,
-    make_model_settings,
-)
+from spruce_grove.model_factory import _is_anthropic_model
 
 OutputT = TypeVar("OutputT")
 
@@ -80,12 +76,13 @@ async def run_private_prompt(
     Callers own policy for failures: safety checks may fail closed while
     convenience classifiers may fail open.
     """
-    models_config = ModelFactory.load_config()
+    harness = get_harness()
+    models_config = harness.load_models_config()
     if model_name not in models_config:
         raise ValueError(f"Unknown private-inference model: {model_name}")
 
-    model = get_harness().resolve_model(model_name, models_config)
-    model_settings = make_model_settings(
+    model = harness.resolve_model(model_name, models_config)
+    model_settings = harness.make_model_settings(
         model_name,
         max_tokens=max_tokens,
         overrides=dict(model_settings_overrides or {}),

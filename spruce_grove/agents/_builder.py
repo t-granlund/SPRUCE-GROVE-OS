@@ -39,9 +39,9 @@ from spruce_grove.config import (
     get_global_model_name,
     get_value,
 )
+from spruce_grove.harness import get_harness
 from spruce_grove.mcp_ import get_mcp_manager
 from spruce_grove.messaging import emit_error, emit_info, emit_warning
-from spruce_grove.model_factory import ModelFactory, make_model_settings
 
 if TYPE_CHECKING:
     from spruce_grove.model_utils import PreparedPrompt
@@ -425,8 +425,9 @@ def load_model_with_fallback(
     session. Leave ``None`` for the single main-agent-per-process case
     (default; unaffected by this parameter).
     """
+    harness = get_harness()
     try:
-        model = ModelFactory.get_model(requested_model_name, models_config)
+        model = harness.resolve_model(requested_model_name, models_config)
         if model is None:
             raise ValueError(
                 f"Model '{requested_model_name}' was found in configuration but "
@@ -485,7 +486,7 @@ def load_model_with_fallback(
             if not candidate or candidate == requested_model_name:
                 continue
             try:
-                model = ModelFactory.get_model(candidate, models_config)
+                model = harness.resolve_model(candidate, models_config)
                 emit_info(
                     f"Using fallback model: {candidate}", message_group=message_group
                 )
@@ -633,7 +634,8 @@ def build_pydantic_agent(
     agent._grove_rules = None
     message_group = message_group or str(uuid.uuid4())
 
-    models_config = ModelFactory.load_config()
+    harness = get_harness()
+    models_config = harness.load_models_config()
     model, resolved_model_name = load_model_with_fallback(
         agent.get_model_name(),
         models_config,
@@ -642,7 +644,7 @@ def build_pydantic_agent(
     )
     prepared = _assemble_instructions(agent, resolved_model_name)
     mcp_servers = load_mcp_servers(agent_name=getattr(agent, "name", None))
-    model_settings = make_model_settings(
+    model_settings = harness.make_model_settings(
         resolved_model_name,
         overrides=agent.get_model_settings_overrides(),
     )
@@ -770,7 +772,7 @@ def build_tool_probe_for_agent(agent: Any) -> Optional[Any]:
     from spruce_grove.tools import register_tools_for_agent
 
     try:
-        models_config = ModelFactory.load_config()
+        models_config = get_harness().load_models_config()
         model, resolved_model_name = load_model_with_fallback(
             agent.get_model_name() or "",
             models_config,

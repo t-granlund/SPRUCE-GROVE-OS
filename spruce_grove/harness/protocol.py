@@ -10,17 +10,22 @@ cannot quietly dissolve.
 Phase 2 scope (honest, no invented APIs):
 
 - ``HarnessInfo``      identity/metadata for diagnostics and the banner
-- ``Harness``          the protocol; today it covers model resolution,
-                       which is the first migrated surface. The agent loop,
-                       streaming, and tool-context surfaces will be added
-                       to this protocol *as their call sites migrate* —
-                       each addition lands with tests green. We do not
-                       invent loop/stream APIs from imagination; we shape
-                       them from the inventory in ``SOVEREIGNTY.md``.
+- ``Harness``          the protocol. Surfaces covered so far, each landed
+                       with parity tests:
+                       1. model resolution (``resolve_model``)
+                       2. the settings surface (``load_models_config`` /
+                          ``make_model_settings``)
+                       The agent loop, streaming, and tool-context
+                       surfaces will be added to this protocol *as their
+                       call sites migrate* — each addition lands with
+                       tests green. We do not invent loop/stream APIs
+                       from imagination; we shape them from the
+                       inventory in ``SOVEREIGNTY.md``.
 """
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from typing import Any, Protocol, runtime_checkable
 
 __all__ = ["Harness", "HarnessInfo"]
@@ -69,5 +74,33 @@ class Harness(Protocol):
 
         The return type is deliberately ``Any``: callers treat the handle
         as opaque, which is what makes the harness swappable.
+        """
+        ...
+
+    def load_models_config(self) -> dict[str, Any]:
+        """Load the model catalog that feeds the settings surface.
+
+        Semantics are inherited verbatim from ``ModelFactory.load_config``:
+        the bundled catalog, the user's extra-models overlay, and any
+        ``load_model_config`` plugin callbacks, merged in the inherited
+        precedence order. Callers treat the result as a plain mapping
+        keyed by model name.
+        """
+        ...
+
+    def make_model_settings(
+        self,
+        model_name: str,
+        max_tokens: int | None = None,
+        overrides: Mapping[str, Any] | None = None,
+    ) -> Any:
+        """Build the provider settings handle for a model.
+
+        Semantics are inherited verbatim from
+        ``model_factory.make_model_settings``: per-model and agent-scoped
+        settings, the max-tokens resolution chain, yolo-mode parallelism,
+        and provider-specific translation all behave exactly as before.
+        The return value is deliberately ``Any``: callers pass it opaquely
+        into the run call, which is what keeps this surface swappable.
         """
         ...

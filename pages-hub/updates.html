@@ -200,12 +200,12 @@
     <p class="lede">Everything notable that shipped in spruce-grove over the past 60 days, with plain-language breakdowns of what it is, what it does, and why it matters — plus a complete index of the smaller work.</p>
     <div class="statline">
       <!-- AUTO-BEGIN:stats -->
-      <div class="s"><div class="n">179</div><div class="t">commits</div></div>
+      <div class="s"><div class="n">192</div><div class="t">commits</div></div>
       <div class="s"><div class="n">4</div><div class="t">features</div></div>
       <div class="s"><div class="n">4</div><div class="t">bug fixes</div></div>
       <div class="s"><div class="n">61</div><div class="t">tools</div></div>
       <div class="s"><div class="n">7</div><div class="t">agents</div></div>
-      <div class="s"><div class="n">68</div><div class="t">plugins</div></div>
+      <div class="s"><div class="n">69</div><div class="t">plugins</div></div>
       <!-- AUTO-END:stats -->
     </div>
 
@@ -308,7 +308,16 @@
     <h2>The Living Log <span class="tag">voice-led</span></h2>
     <p class="secintro">This is the live stream of how the harness evolves — the primary engine, not a side channel. The loop: <strong>speak</strong> (dictate while building) &rarr; <strong>capture</strong> (entries land in <code>LIVING-UPDATES.md</code> as they happen) &rarr; <strong>gate</strong> (every signal — ours and upstream's — faces the Leather Apron criteria below) &rarr; <strong>ship</strong> (the self-healing release train carries it) &rarr; <strong>observe</strong> (this page, live) &rarr; <strong>learn</strong> (port what helps, log what differs). The founding story and the rules of the grove live in <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/MANIFESTO.md">MANIFESTO.md</a>. Entries age from <span class="chip">idea</span> through <span class="chip up">in flight</span> to <span class="chip gr">shipped</span>, and the shipped ones graduate into
     <!-- AUTO-BEGIN:living-updates -->
-<div class="pcount">15 entries · newest first</div>
+<div class="pcount">16 entries · newest first</div>
+    <article class="deep">
+      <div class="head"><h3>2026-09-22 — The settings surface crosses the seam (harness exit 3 of 61)</h3><span class="meta"><span class="chip gr">shipped</span> · build session (&quot;review the transition state; finish the core things&quot;) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>Census recomputed first, honestly: 61 files / 114 statements still import pydantic-ai; the old &quot;2 of ~58&quot; was true on 9/15 and had drifted since.</dd>
+        <dd>Three call-site files now route model resolution AND settings through the seam: <code>agents/_builder.py</code> — the agent construction path — no longer imports <code>model_factory</code> at all; <code>tools/subagent_invocation.py</code> and <code>private_inference.py</code> speak only grove vocabulary for resolution/settings (their remaining pydantic-ai imports are the agent loop, the next surface).</dd>
+        <dd>Six test files migrated to seam-level stubs (<code>PydanticHarness</code> methods or the canonical <code>model_factory</code> paths); the adapter&#x27;s call-time delegation keeps the inherited patch seams alive. One honest behavior note captured in tests: the adapter forwards every parameter explicitly, so <code>max_tokens=None</code> now appears in call shapes (the inherited default either way).</dd>
+      </dl>
+    </article>
     <article class="deep">
       <div class="head"><h3>2026-09-16 — Brand polish: every surface on the canonical kit, desktop included</h3><span class="meta"><span class="chip gr">shipped</span> · build session (&quot;logos not fully polished and applied everywhere&quot;) · <span class="prov gr">grove-grown</span></span></div>
       <dl class="qa">
@@ -390,13 +399,6 @@
       <dl class="qa">
         <dt class="q-what">What happened</dt>
         <dd>The release observatory covered the last two months of commits, but the <em>organic</em> work — decided out loud, mid-session — had no home. This ledger was born, the pipeline grew a <code>living-updates</code> region, and the observatory now renders the dictation stream on every regen. The page stopped being a snapshot and became a heartbeat.</dd>
-      </dl>
-    </article>
-    <article class="deep">
-      <div class="head"><h3>2026-09-15 — The grove tends itself: self-healing auto-updates</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session (see <code>CHANGELOG.md</code>, Unreleased) · <span class="prov gr">grove-grown</span></span></div>
-      <dl class="qa">
-        <dt class="q-what">What happened</dt>
-        <dd>The version checker always <em>watched</em> PyPI and nagged; the decision to make it <em>act</em> came out of a spoken working session. It now upgrades the on-disk install via <code>uv tool upgrade</code> on the startup daemon thread — running sessions never break, failures degrade to the old nag, <code>NO_AUTO_UPDATE=1</code> opts out. Reference: <code>docs/SELF-UPDATE.md</code>.</dd>
       </dl>
     </article>
       <!-- AUTO-END:living-updates -->

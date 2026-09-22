@@ -23,12 +23,22 @@ from pathlib import Path
 # Public pages show seats, not names (MANIFESTO, "Not tied to a single
 # person"). The grove's own commits render as "the grove"; upstream
 # contributors and bots keep their names — credit, not exposure.
-_GROVE_AUTHORS = {"tyler granlund", "t-granlund", "tyler", "tyler.granlund"}
+#
+# This is the CANONICAL grove-author set. Anything that classifies commit
+# authorship for a public surface (e.g. pages-hub/generate-updates.py's
+# provenance chips) must import it from here — a second, divergent copy is
+# exactly how an anonymity regression ships.
+GROVE_AUTHORS = {"tyler granlund", "t-granlund", "tyler", "tyler.granlund"}
+
+# The public display form `_display_author` emits for every grove author.
+# Provenance classifiers must treat this value as grove-grown too, or the
+# anonymized feeds mislabel their own commits as upstream.
+GROVE_DISPLAY_NAME = "the grove"
 
 
 def _display_author(author: str) -> str:
     """Anonymize the grove's own commit author for public rendering."""
-    return "the grove" if author.strip().lower() in _GROVE_AUTHORS else author
+    return GROVE_DISPLAY_NAME if author.strip().lower() in GROVE_AUTHORS else author
 
 
 def _get_recent_commits(_run, repo_root: Path) -> dict:

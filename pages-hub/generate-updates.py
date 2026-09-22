@@ -22,6 +22,7 @@ from __future__ import annotations
 import html
 import json
 import re
+import sys
 from collections import defaultdict
 from pathlib import Path
 
@@ -29,6 +30,16 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 DATA_JS = REPO_ROOT / "docs" / "field-guide" / "data.js"
 UPDATES_HTML = REPO_ROOT / "pages-hub" / "updates.html"
 LIVING_MD = REPO_ROOT / "LIVING-UPDATES.md"
+
+# The grove-author classification is canonical in docs/field_guide_changelog.py
+# (the module that renders commit feeds in the first place). Import it rather
+# than keeping a second copy: a divergent copy here mislabeled every anonymized
+# grove commit ("the grove") as upstream-synced on the public observatory.
+_DOCS_DIR = str(REPO_ROOT / "docs")
+if _DOCS_DIR not in sys.path:
+    sys.path.insert(0, _DOCS_DIR)
+
+from field_guide_changelog import GROVE_AUTHORS, GROVE_DISPLAY_NAME  # noqa: E402
 
 MAX_LIST_ITEMS = 18
 MAX_AUTO_CARDS = 12
@@ -51,7 +62,17 @@ MINOR_KINDS = ["feat", "refactor", "perf", "polish", "docs", "style"]
 # Authors whose commits count as grove-grown. Everything else arrived by
 # proxy of the upstream Code Puppy line (see PROVENANCE.md for the lineage
 # and the compatibility contracts that keep the two honest).
-GROVE_AUTHORS = {"tyler granlund", "t-granlund", "tyler"}
+#
+# Classification imports the canonical set (see import above). Note the
+# display form: commit feeds are anonymized BEFORE they reach this module,
+# so the grove's own commits arrive already renamed to "the grove" — that
+# value must classify as grove-grown, not upstream.
+
+
+def _is_grove_author(author: str | None) -> bool:
+    """True for any grove identity, raw or already anonymized for display."""
+    lowered = (author or "").strip().lower()
+    return lowered in GROVE_AUTHORS or lowered == GROVE_DISPLAY_NAME
 
 
 def _prov_chip(author: str | None) -> str:
@@ -61,7 +82,7 @@ def _prov_chip(author: str | None) -> str:
     commit), not by vibes, so the observatory stays accountable to the same
     ledger PROVENANCE.md keeps.
     """
-    is_grove = (author or "").strip().lower() in GROVE_AUTHORS
+    is_grove = _is_grove_author(author)
     cls, label = ("gr", "grove") if is_grove else ("up", "upstream")
     title = (
         "Authored in the grove"
@@ -264,9 +285,7 @@ def _auto_cards(buckets: dict[str, list[dict]], curated: set[str]) -> str:
       </dl>
     </article>""")
     grove_n = sum(
-        1
-        for c in fresh[:MAX_AUTO_CARDS]
-        if (c.get("author") or "").strip().lower() in GROVE_AUTHORS
+        1 for c in fresh[:MAX_AUTO_CARDS] if _is_grove_author(c.get("author"))
     )
     up_n = len(fresh[:MAX_AUTO_CARDS]) - grove_n
     prov_count = (
