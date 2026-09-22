@@ -144,3 +144,40 @@ class TestBoundaryPurity:
         # selector top level — selecting/inspecting stays import-light.
         top_level = source.split("def get_harness")[0]
         assert "pydantic_ai" not in top_level
+
+
+class TestToolContextVocabulary:
+    """Tool call sites annotate with grove vocabulary, not the framework.
+
+    The inherited framework injects context by type *identity*, so the
+    bound ``ToolContext`` must be the exact class it recognizes — these
+    tests pin that binding and keep the framework reference inside the
+    adapter.
+    """
+
+    def test_tool_context_binds_the_inherited_class(self):
+        from pydantic_ai import RunContext
+
+        from spruce_grove.harness import ToolContext
+
+        assert ToolContext is RunContext
+
+    def test_harness_reports_tool_context_type(self):
+        from pydantic_ai import RunContext
+
+        assert get_harness().tool_context_type() is RunContext
+
+    def test_binding_module_has_no_direct_framework_import(self):
+        from spruce_grove.harness import tool_context
+
+        source = inspect.getsource(tool_context)
+        assert "pydantic_ai" not in source
+        assert "from pydantic" not in source
+
+    def test_seam_exports_tool_context_lazily(self):
+        # ``from spruce_grove.harness import ToolContext`` resolves through
+        # the package __getattr__ without requiring an eager submodule.
+        import spruce_grove.harness as seam
+
+        assert seam.ToolContext is not None
+        assert "ToolContext" in seam.__all__

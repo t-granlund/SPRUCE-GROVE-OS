@@ -104,3 +104,20 @@ class Harness(Protocol):
         into the run call, which is what keeps this surface swappable.
         """
         ...
+
+    def tool_context_type(self) -> type:
+        """The class tool call sites annotate their context parameter with.
+
+        A tool opts into context injection by annotating its first
+        parameter with this class; the running harness recognizes that
+        annotation and injects a live context. The inherited framework
+        recognizes its own context class by type *identity*, so the
+        adapter returns exactly that class — call sites annotate with grove
+        vocabulary and injection keeps working byte for byte. When the
+        grove's own harness lands (Phase 3) it returns grove's own context
+        class and no call site moves.
+
+        The return is deliberately ``type``: the class is opaque grove
+        vocabulary, never imported from the external framework by callers.
+        """
+        ...

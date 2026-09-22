@@ -26,4 +26,20 @@ Rules of the seam (they mirror the Leather Apron Gate):
 from spruce_grove.harness.protocol import Harness, HarnessInfo
 from spruce_grove.harness.selector import get_harness
 
-__all__ = ["Harness", "HarnessInfo", "get_harness"]
+__all__ = ["Harness", "HarnessInfo", "get_harness", "ToolContext"]
+
+
+def __getattr__(name: str):
+    """Expose the tool-context vocabulary lazily.
+
+    ``ToolContext`` is bound via the running harness, which for the
+    inherited adapter imports the heavy framework. Resolving it lazily
+    keeps ``import spruce_grove.harness`` itself import-light — boot-path
+    code can select a harness without pulling the framework just to name
+    the seam.
+    """
+    if name == "ToolContext":
+        from spruce_grove.harness.tool_context import ToolContext
+
+        return ToolContext
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

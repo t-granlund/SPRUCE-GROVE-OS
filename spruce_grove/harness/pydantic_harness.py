@@ -69,6 +69,20 @@ class PydanticHarness:
             overrides=overrides,
         )
 
+    def tool_context_type(self) -> type:
+        """Return the inherited context class call sites annotate with.
+
+        Same late-import discipline as the other surfaces: the heavy
+        framework stays off the boot path until a tool module actually asks
+        for the annotation. The inherited framework detects the context
+        parameter by type *identity*, so this must be the exact class it
+        injects — see ``_is_run_context`` in the inherited
+        ``_function_schema``.
+        """
+        from pydantic_ai import RunContext
+
+        return RunContext
+
 
 # Structural check: an instance satisfies the grove protocol.
 _instance: PydanticHarness = PydanticHarness()
