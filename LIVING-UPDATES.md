@@ -64,17 +64,29 @@ The harness wins by running three moves in parallel, not sequentially:
   warning (the compat-shim discipline), and clearing a pin removes it
   from BOTH sections so a legacy pin can't resurrect. Regression tests
   pin the whole contract.
-- Live config repaired (backup: puppy.cfg.bak-pre-model-routing):
+- THEN the fourth bug surfaced — the umbrella over everything: the
+  rebrand renamed the config file `puppy.cfg` → `grove.cfg` in code but
+  never migrated the file, so Tyler's entire curated config sat in
+  `puppy.cfg` while every supported version read a `grove.cfg` that did
+  not exist. Identity, theme, routing: silently ignored since the
+  rename. Shipped a one-time migration in `ensure_config_exists` (copy
+  verbatim when `grove.cfg` is absent, legacy file kept as a backup,
+  never overwritten, no dual-read), filed as COMPAT-EXIT contract #9,
+  and ran it live: grove.cfg now exists with the full routing table.
+- Live routing table (verified by the new routing doctor — every pin
+  targets a real agent AND a live catalog model, problems: NONE):
   driving seat → syn:large:text; reasoning agents (spruce-grove, helios,
   planning-agent, model-judge, qa-kitten) → syn:large:text; fan-out
-  (web-retriever, agent-creator, backoffice, creative-scaffold) →
-  syn:small:text; compaction summarizer → hf:zai-org/GLM-5.3-Flash
-  (cheapest class at full 524288 context; rotated pin degrades to the
-  sliding-window fallback with a warning).
+  (web-retriever, agent-creator) → syn:small:text; compaction
+  summarizer → hf:zai-org/GLM-5.3-Flash (cheapest class at full 524288
+  context; rotated pin degrades to the sliding-window fallback). The
+  doctor itself caught two over-pins (backoffice/creative-scaffold are
+  plugin commands, not agents) — removed.
 - Receipts: both models resolve through the factory with the live key;
   live catalog shows all four syn: aliases present (no rotation drift);
   /v2/quotas read free of charge: weekly $54.38 of $84.00 (65%),
-  5-hour window fresh; full suite 7,895 passed / 38 skipped.
+  5-hour window fresh; full suite 7,895 passed / 38 skipped plus the
+  migration + routing-doctor test files.
 
 ### 2026-09-22 — The settings surface crosses the seam (harness exit 3 of 61)
 - Source: build session ("review the transition state; finish the core things")

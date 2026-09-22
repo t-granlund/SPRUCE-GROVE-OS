@@ -297,6 +297,81 @@ def probe_embeddings(api_key: str, timeout: int = 15) -> tuple[bool, str]:
         return False, f"could not reach endpoint: {exc}"
 
 
+def verify_model_routing() -> dict:
+    """Audit the model routing config: does every target actually resolve?
+
+    Pure-local (no network, no quota burn). This is the guardrail for the
+    failure mode that actually happened (2026-09-22): pins sat in a config
+    section no reader touched, under agent names that no longer existed,
+    while every agent silently rode the global default. Each check here
+    would have caught that drift loudly instead.
+
+    Returns a report dict:
+        global      the global default model (or None)
+        pins        [{"agent", "model"}] for every configured pin
+        summarizer  the compaction summarizer model (or None)
+        problems    human-readable, actionable problems (empty when healthy)
+    """
+    from spruce_grove.config import (
+        get_all_agent_pinned_models,
+        get_global_model_name,
+        get_summarization_model_name,
+    )
+    from spruce_grove.model_factory import ModelFactory
+
+    report: dict = {"global": None, "pins": [], "summarizer": None, "problems": []}
+
+    try:
+        catalog = ModelFactory.load_config()
+    except Exception as exc:
+        report["problems"].append(f"could not load the model catalog: {exc}")
+        return report
+
+    global_model = get_global_model_name()
+    report["global"] = global_model
+    if not global_model:
+        report["problems"].append("no global model configured - run /onboard-synthetic")
+    elif global_model not in catalog:
+        report["problems"].append(
+            f"global model {global_model!r} is not in the catalog - it will "
+            "fall through to the first available model at startup"
+        )
+
+    try:
+        from spruce_grove.agents.agent_manager import get_available_agents
+
+        agents = get_available_agents()
+        agent_names = (
+            set(agents) if isinstance(agents, dict) else {a.name for a in agents}
+        )
+    except Exception as exc:  # pragma: no cover - defensive: enumeration env issues
+        agent_names = None
+        report["problems"].append(f"could not enumerate agents: {exc}")
+
+    for agent_name, model in sorted(get_all_agent_pinned_models().items()):
+        report["pins"].append({"agent": agent_name, "model": model})
+        if agent_names is not None and agent_name not in agent_names:
+            report["problems"].append(
+                f"pin agent_model_{agent_name}: no such agent (stale name?) - "
+                f"real names: {', '.join(sorted(agent_names))}"
+            )
+        if model not in catalog:
+            report["problems"].append(
+                f"pin agent_model_{agent_name}: model {model!r} is not in the "
+                "catalog (rotated out? never installed?)"
+            )
+
+    summarizer = get_summarization_model_name()
+    report["summarizer"] = summarizer
+    if summarizer and summarizer not in catalog:
+        report["problems"].append(
+            f"summarization_model {summarizer!r} is not in the catalog - "
+            "compaction degrades to the sliding-window fallback"
+        )
+
+    return report
+
+
 def apply_onboarding(api_key: str) -> None:
     """Store the key, install the model set, point the main model at the alias."""
     set_api_key(KEY_NAME, api_key)
@@ -337,7 +412,9 @@ def apply_onboarding(api_key: str) -> None:
         "  /onboard-synthetic          interactive onboarding\n"
         "  /onboard-synthetic check    verify key + live model catalog (rotation\n"
         "                              drift), free quota readout (/v2/quotas),\n"
-        "                              and the quota-free embeddings endpoint\n"
+        "                              the quota-free embeddings endpoint, and\n"
+        "                              the routing audit (every agent pin must\n"
+        "                              name a real agent and a live model)\n"
     ),
 )
 def handle_onboard_synthetic_command(command: str) -> bool:
@@ -400,6 +477,18 @@ def handle_onboard_synthetic_command(command: str) -> bool:
             "models installed in extra_models.json: "
             + ", ".join(sorted(build_synthetic_models()))
         )
+        routing = verify_model_routing()
+        emit_info(f"routing: global model -> {routing['global']}")
+        emit_info(f"routing: summarizer -> {routing['summarizer']}")
+        for pin in routing["pins"]:
+            emit_info(f"routing: {pin['agent']} -> {pin['model']}")
+        if routing["problems"]:
+            for problem in routing["problems"]:
+                emit_warning(f"routing: {problem}")
+        else:
+            emit_success(
+                "routing: every pin targets a live catalog model and a real agent"
+            )
         return True
 
     emit_info("Synthetic.new onboarding - what this sets up:")

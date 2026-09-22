@@ -115,7 +115,26 @@ Every replacement follows the same shape:
 
 ---
 
-## The rule that governs all eight
+## 9. `puppy.cfg` → `grove.cfg` config-file rename
+
+- **Does:** the rebrand renamed the config file in code only. Users
+  upgraded from the Code Puppy era kept their entire curated config in
+  `~/.spruce_grove/puppy.cfg` while every supported version read a
+  `grove.cfg` that did not exist — identity, theme, model routing: all
+  silently ignored. Found 2026-09-22 while investigating why every agent
+  ran the same model.
+- **Proper recreation:** a one-time migration in `ensure_config_exists`:
+  when `grove.cfg` is absent and `puppy.cfg` exists, copy it verbatim and
+  log loudly. The legacy file stays on disk untouched as a backup and is
+  never read again (no dual-read — two live config files is divergence
+  hell). Never overwrites an existing `grove.cfg`.
+- **Exit criteria:** migration shipped in a release; affected installs
+  verified migrated (the doctor in `/onboard-synthetic check` shows the
+  routing table resolving); the legacy filename is documented as inert.
+
+---
+
+## The rule that governs all nine
 
 A compatibility contract is a promise to users, not to our nostalgia.
 Recreate it properly, run both doors honestly, and close it only when the

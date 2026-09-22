@@ -5,6 +5,7 @@ import json
 import logging
 import os
 import pathlib
+import shutil
 from typing import Any, Optional
 
 from spruce_grove.config_file import load_config, mutate_config
@@ -332,6 +333,33 @@ def _load_config() -> configparser.ConfigParser:
     return parser
 
 
+def _migrate_legacy_puppy_cfg() -> None:
+    """One-time migration: legacy ``puppy.cfg`` -> ``grove.cfg``.
+
+    The rebrand renamed the config file in code but never moved the file on
+    disk (found 2026-09-22): users upgraded from the Code Puppy era kept
+    their whole curated config in ``puppy.cfg`` while every supported
+    version read a ``grove.cfg`` that did not exist — settings silently
+    ignored, model routing silently defaulted. Copy once when ``grove.cfg``
+    is absent; ``puppy.cfg`` stays on disk untouched as a backup. Never
+    overwrites: if ``grove.cfg`` exists, it is canonical and the legacy
+    file is left alone.
+    """
+    legacy = os.path.join(CONFIG_DIR, "puppy.cfg")
+    if os.path.isfile(CONFIG_FILE) or not os.path.isfile(legacy):
+        return
+    try:
+        shutil.copyfile(legacy, CONFIG_FILE)
+        logger.info(
+            "migrated legacy %s -> %s (one-time); the legacy file is kept "
+            "as a backup and is no longer read",
+            legacy,
+            CONFIG_FILE,
+        )
+    except OSError as exc:  # pragma: no cover - defensive: unwritable disk
+        logger.warning("could not migrate legacy puppy.cfg: %s", exc)
+
+
 def ensure_config_exists():
     """
     Ensure that XDG directories and grove.cfg exist, prompting if needed.
@@ -341,6 +369,7 @@ def ensure_config_exists():
     for directory in [CONFIG_DIR, DATA_DIR, CACHE_DIR, STATE_DIR, SKILLS_DIR]:
         if not os.path.exists(directory):
             os.makedirs(directory, mode=0o700, exist_ok=True)
+    _migrate_legacy_puppy_cfg()
     exists = os.path.isfile(CONFIG_FILE)
     # Skip the read entirely when we already know there's nothing to read --
     # matches configparser's own no-op-on-missing-file behavior and avoids an
