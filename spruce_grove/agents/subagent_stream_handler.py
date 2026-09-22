@@ -17,7 +17,7 @@ import math
 from collections.abc import AsyncIterable
 from typing import Any, Optional
 
-from pydantic_ai import PartDeltaEvent, PartEndEvent, PartStartEvent, RunContext
+from pydantic_ai import PartDeltaEvent, PartEndEvent, PartStartEvent
 from pydantic_ai.messages import (
     TextPart,
     TextPartDelta,
@@ -26,6 +26,8 @@ from pydantic_ai.messages import (
     ToolCallPart,
     ToolCallPartDelta,
 )
+
+from spruce_grove.harness import ToolContext
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +94,7 @@ def _estimate_tokens(content: str) -> int:
 
 
 async def subagent_stream_handler(
-    ctx: RunContext,
+    ctx: ToolContext,
     events: AsyncIterable[Any],
     session_id: Optional[str] = None,
 ) -> None:

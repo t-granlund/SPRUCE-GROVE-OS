@@ -14,9 +14,10 @@ from typing import Any, Callable, Dict, Optional
 
 import httpx
 from fastmcp.client.transports import SSETransport, StreamableHttpTransport
-from pydantic_ai import RunContext
 from pydantic_ai.mcp import CallToolFunc, MCPToolset, ToolResult
 from pydantic_ai.toolsets import AbstractToolset
+
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.http_utils import create_async_client, get_cert_bundle_path
 from spruce_grove.mcp_.blocking_startup import BlockingStdioToolset
@@ -166,7 +167,7 @@ async def _input_schema_for_tool(
 
 
 async def process_tool_call(
-    ctx: RunContext[Any],
+    ctx: ToolContext[Any],
     call_tool: CallToolFunc,
     name: str,
     tool_args: dict[str, Any],

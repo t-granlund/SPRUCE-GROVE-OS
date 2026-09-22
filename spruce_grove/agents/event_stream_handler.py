@@ -6,7 +6,7 @@ import math
 from collections.abc import AsyncIterable
 from typing import Any, Optional
 
-from pydantic_ai import PartDeltaEvent, PartEndEvent, PartStartEvent, RunContext
+from pydantic_ai import PartDeltaEvent, PartEndEvent, PartStartEvent
 from pydantic_ai.messages import (
     TextPart,
     TextPartDelta,
@@ -18,6 +18,8 @@ from pydantic_ai.messages import (
 from rich.console import Console
 from rich.markup import escape
 from rich.text import Text
+
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.agents.smooth_stream import (
     SmoothTermflowWriter,
@@ -127,7 +129,7 @@ def _suppress_tool_progress() -> bool:
 
 
 async def event_stream_handler(
-    ctx: RunContext,
+    ctx: ToolContext,
     events: AsyncIterable[Any],
 ) -> None:
     """Handle streaming events from the agent run.

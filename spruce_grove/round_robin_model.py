@@ -3,7 +3,6 @@ from contextlib import asynccontextmanager, suppress
 from dataclasses import dataclass, field
 from typing import Any, AsyncIterator, List
 
-from pydantic_ai import RunContext
 from pydantic_ai.models import (
     Model,
     ModelMessage,
@@ -12,6 +11,8 @@ from pydantic_ai.models import (
     ModelSettings,
     StreamedResponse,
 )
+
+from spruce_grove.harness import ToolContext
 
 try:
     from opentelemetry.context import get_current_span
@@ -125,7 +126,7 @@ class RoundRobinModel(Model):
         messages: list[ModelMessage],
         model_settings: ModelSettings | None,
         model_request_parameters: ModelRequestParameters,
-        run_context: RunContext[Any] | None = None,
+        run_context: ToolContext[Any] | None = None,
     ) -> AsyncIterator[StreamedResponse]:
         """Make a streaming request using the next model in the round-robin sequence."""
         current_model = self._get_next_model()

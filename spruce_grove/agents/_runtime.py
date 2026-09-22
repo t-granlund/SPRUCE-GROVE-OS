@@ -955,7 +955,7 @@ async def _run_with_mcp_impl(
             drain_pause_state_on_cancel()
             await on_agent_run_cancel(group_id)
         except* RunCancelled as rc_group:
-            # First-party cancellation (RunContext.cancel() from a tool or
+            # First-party cancellation (ToolContext.cancel() from a tool or
             # capability hook). Same UX as an external cancel, but the
             # snapshot rides on the exception itself.
             _checkpoint_cancelled_history(rc_group, agent)

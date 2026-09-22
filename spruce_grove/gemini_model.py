@@ -18,7 +18,6 @@ from datetime import datetime, timezone
 from typing import Any
 
 import httpx
-from pydantic_ai import RunContext
 from pydantic_ai.messages import (
     ModelMessage,
     ModelRequest,
@@ -37,6 +36,8 @@ from pydantic_ai.models import Model, ModelRequestParameters, StreamedResponse
 from pydantic_ai.settings import ModelSettings
 from pydantic_ai.tools import ToolDefinition
 from pydantic_ai.usage import RequestUsage
+
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.steer_metadata import is_steer_request
 
@@ -732,7 +733,7 @@ class GeminiModel(Model):
         messages: list[ModelMessage],
         model_settings: ModelSettings | None,
         model_request_parameters: ModelRequestParameters,
-        run_context: RunContext[Any] | None = None,
+        run_context: ToolContext[Any] | None = None,
     ) -> AsyncIterator[StreamedResponse]:
         """Make a streaming request to the Gemini API."""
         system_instruction, contents = await self._map_messages(

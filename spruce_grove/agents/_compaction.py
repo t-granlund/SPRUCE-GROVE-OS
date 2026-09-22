@@ -32,7 +32,6 @@ from pydantic_ai.exceptions import (
 )
 from pydantic_ai.messages import ModelMessage, ModelResponse, ThinkingPart
 from pydantic_ai.models import Model
-from pydantic_ai.tools import RunContext
 from pydantic_ai.usage import RunUsage
 from pydantic_ai_harness.compaction import (
     FallbackCompaction,
@@ -40,6 +39,8 @@ from pydantic_ai_harness.compaction import (
     SummarizingCompaction,
     compact_now,
 )
+
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.agents._history import (
     estimate_tokens_for_message,
@@ -170,7 +171,7 @@ async def compact(
     messages: List[ModelMessage],
     model_max: int,
     context_overhead: int,
-    ctx: RunContext[Any],
+    ctx: ToolContext[Any],
     *,
     force: bool = False,
 ) -> Tuple[List[ModelMessage], List[ModelMessage]]:
@@ -182,7 +183,7 @@ async def compact(
         messages: Current message history (already accumulated by the caller).
         model_max: Effective model context window in tokens.
         context_overhead: Estimated overhead for system prompt + tool schemas.
-        ctx: The live pydantic-ai ``RunContext`` — passing it through means
+        ctx: The live grove ``ToolContext`` — passing it through means
             the summarizer's usage folds into the run's accounting.
         force: Compact regardless of the configured context threshold. Used by
             mid-run ``/compact`` at the next safe model-call boundary.
@@ -321,9 +322,9 @@ def make_history_processor(agent: Any) -> Callable[..., Any]:
     """
 
     async def history_processor(
-        ctx: RunContext[Any], messages: List[ModelMessage]
+        ctx: ToolContext[Any], messages: List[ModelMessage]
     ) -> List[ModelMessage]:
-        # The RunContext-annotated first parameter opts us into pydantic-ai's
+        # The ToolContext-annotated first parameter opts us into pydantic-ai's
         # 2-arg processor calling convention; the live ctx is handed straight
         # to the harness strategies so summary-call usage lands on the run.
         history: List[ModelMessage] = agent._message_history

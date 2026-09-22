@@ -3,10 +3,11 @@
 from copy import copy
 from typing import Any
 
-from pydantic_ai import RunContext
 from pydantic_ai.capabilities import Hooks, WrapModelRequestHandler
 from pydantic_ai.messages import ModelResponse
 from pydantic_ai.models import ModelRequestContext
+
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.callbacks import on_transform_model_messages
 
@@ -15,7 +16,7 @@ def build_model_message_transform(agent_name: str | None) -> Hooks:
     """Build the request-only plugin transform for an agent."""
 
     async def transform(
-        _ctx: RunContext[Any],
+        _ctx: ToolContext[Any],
         *,
         request_context: ModelRequestContext,
         handler: WrapModelRequestHandler,
