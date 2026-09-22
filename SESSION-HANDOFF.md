@@ -283,3 +283,19 @@ cross-workstream source of truth). Family-lab stays private by design.*
 
 *The seam work is designed so every one of these is a small landing, not
 a rewrite. Next session: start the `RunContext` tool vocabulary.*
+
+## Same-session follow-up: model routing was silently dead (fixed)
+
+Tyler noticed "only GLM 5.3 Flash is being used." Root cause, three bugs
+stacked: global default pointed at the pinned GLM-5.3-Flash (not the
+`syn:large:text` driving seat); all `agent_model_*` pins sat under an
+`[agents]` config section no code has ever read; and the pin names were
+legacy (`code_puppy`, `husky`, `web_puppy`, `junto`…). Net effect: every
+agent — main included — ran the global default. Fixed in code (dual-load
+pin reader with a loud warning + clear-removes-both-sections, tests) and
+in the live config (backup: `puppy.cfg.bak-pre-model-routing`): driving
+seat + reasoning agents → `syn:large:text`, fan-out agents →
+`syn:small:text`, summarizer → `hf:zai-org/GLM-5.3-Flash` (cheapest
+full-context class, graceful fallback). Judges and vision routing were
+already correct. Running sessions keep their old model until restarted;
+new sessions route per the table in `[grove]`.

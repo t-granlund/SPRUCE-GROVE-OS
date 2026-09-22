@@ -44,6 +44,38 @@ The harness wins by running three moves in parallel, not sequentially:
 
 <!-- LIVING:BEGIN -->
 
+### 2026-09-22 — Model routing: the smart-routing config was silently dead — every agent rode the cheapest model
+- Source: build session ("we're supposed to be smart about the right models for the right thing")
+- Status: shipped
+- Origin: grove-grown
+- Tyler's observation was exactly right: everything ran GLM-5.3-Flash.
+  Three compounding causes, all verified: (1) the global default pointed
+  at the pinned GLM-5.3-Flash entry instead of the `syn:large:text`
+  driving seat; (2) all seven per-agent pins sat under an `[agents]`
+  config section that NO code has ever read (the reader only scans
+  `[grove]`) — dead config wearing a tie; (3) five of the seven pin names
+  targeted legacy agent names (code_puppy, husky, web_puppy, junto…)
+  that no longer exist — real names verified at runtime:
+  spruce-grove, helios, planning-agent, model-judge, qa-kitten,
+  web-retriever, agent-creator, mail-researcher (+ plugin agents
+  backoffice, creative-scaffold).
+- Fixed at the root: the pin reader now dual-loads `[grove]` first and
+  the legacy `[agents]` section second, with a loud once-per-agent
+  warning (the compat-shim discipline), and clearing a pin removes it
+  from BOTH sections so a legacy pin can't resurrect. Regression tests
+  pin the whole contract.
+- Live config repaired (backup: puppy.cfg.bak-pre-model-routing):
+  driving seat → syn:large:text; reasoning agents (spruce-grove, helios,
+  planning-agent, model-judge, qa-kitten) → syn:large:text; fan-out
+  (web-retriever, agent-creator, backoffice, creative-scaffold) →
+  syn:small:text; compaction summarizer → hf:zai-org/GLM-5.3-Flash
+  (cheapest class at full 524288 context; rotated pin degrades to the
+  sliding-window fallback with a warning).
+- Receipts: both models resolve through the factory with the live key;
+  live catalog shows all four syn: aliases present (no rotation drift);
+  /v2/quotas read free of charge: weekly $54.38 of $84.00 (65%),
+  5-hour window fresh; full suite 7,895 passed / 38 skipped.
+
 ### 2026-09-22 — The settings surface crosses the seam (harness exit 3 of 61)
 - Source: build session ("review the transition state; finish the core things")
 - Status: shipped

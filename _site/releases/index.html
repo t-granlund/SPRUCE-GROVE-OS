@@ -308,7 +308,15 @@
     <h2>The Living Log <span class="tag">voice-led</span></h2>
     <p class="secintro">This is the live stream of how the harness evolves — the primary engine, not a side channel. The loop: <strong>speak</strong> (dictate while building) &rarr; <strong>capture</strong> (entries land in <code>LIVING-UPDATES.md</code> as they happen) &rarr; <strong>gate</strong> (every signal — ours and upstream's — faces the Leather Apron criteria below) &rarr; <strong>ship</strong> (the self-healing release train carries it) &rarr; <strong>observe</strong> (this page, live) &rarr; <strong>learn</strong> (port what helps, log what differs). The founding story and the rules of the grove live in <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/MANIFESTO.md">MANIFESTO.md</a>. Entries age from <span class="chip">idea</span> through <span class="chip up">in flight</span> to <span class="chip gr">shipped</span>, and the shipped ones graduate into
     <!-- AUTO-BEGIN:living-updates -->
-<div class="pcount">16 entries · newest first</div>
+<div class="pcount">18 entries · newest first</div>
+    <article class="deep">
+      <div class="head"><h3>2026-09-22 — Model routing: the smart-routing config was silently dead — every agent rode the cheapest model</h3><span class="meta"><span class="chip gr">shipped</span> · build session (&quot;we&#x27;re supposed to be smart about the right models for the right thing&quot;) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>Tyler&#x27;s observation was exactly right: everything ran GLM-5.3-Flash. Three compounding causes, all verified: (1) the global default pointed at the pinned GLM-5.3-Flash entry instead of the <code>syn:large:text</code> driving seat; (2) all seven per-agent pins sat under an <code>[agents]</code> config section that NO code has ever read (the reader only scans <code>[grove]</code>) — dead config wearing a tie; (3) five of the seven pin names targeted legacy agent names (code_puppy, husky, web_puppy, junto…) that no longer exist — real names verified at runtime: spruce-grove, helios, planning-agent, model-judge, qa-kitten, web-retriever, agent-creator, mail-researcher (+ plugin agents backoffice, creative-scaffold).</dd>
+        <dd>Live config repaired (backup: puppy.cfg.bak-pre-model-routing): driving seat → syn:large:text; reasoning agents (spruce-grove, helios, planning-agent, model-judge, qa-kitten) → syn:large:text; fan-out (web-retriever, agent-creator, backoffice, creative-scaffold) → syn:small:text; compaction summarizer → hf:zai-org/GLM-5.3-Flash (cheapest class at full 524288 context; rotated pin degrades to the sliding-window fallback with a warning).</dd>
+      </dl>
+    </article>
     <article class="deep">
       <div class="head"><h3>2026-09-22 — The settings surface crosses the seam (harness exit 3 of 61)</h3><span class="meta"><span class="chip gr">shipped</span> · build session (&quot;review the transition state; finish the core things&quot;) · <span class="prov gr">grove-grown</span></span></div>
       <dl class="qa">
@@ -392,13 +400,6 @@
       <dl class="qa">
         <dt class="q-what">What happened</dt>
         <dd>&quot;The full enchilada&quot;: <code>MASTER-CLASS.md</code> now carries the training methodology — the 8am rule (zero context, zero shame, one concept per breath), the service-counter cadence, and troubleshooting theory run on the judge ABSTAIN war story as the lab. Seven modules: ethos-as-mechanism → breathing core → sovereignty heartbeat → gates &amp; judges → the war story → empathetic service tactics → teach-backs. Graduation standard: the eighth-grader in the room could follow it.</dd>
-      </dl>
-    </article>
-    <article class="deep">
-      <div class="head"><h3>2026-09-15 — The Living Log itself: release notes that breathe</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session with Junto (this one) · <span class="prov gr">grove-grown</span></span></div>
-      <dl class="qa">
-        <dt class="q-what">What happened</dt>
-        <dd>The release observatory covered the last two months of commits, but the <em>organic</em> work — decided out loud, mid-session — had no home. This ledger was born, the pipeline grew a <code>living-updates</code> region, and the observatory now renders the dictation stream on every regen. The page stopped being a snapshot and became a heartbeat.</dd>
       </dl>
     </article>
       <!-- AUTO-END:living-updates -->

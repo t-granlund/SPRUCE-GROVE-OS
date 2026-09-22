@@ -21,7 +21,6 @@
 48282a415ec22e31beaf0a0666e6fae0c8cbddcd0b1f6e729f27c3ade8a64e43  ./assets/fonts/fraunces-500-63f1654d1e.woff2
 48282a415ec22e31beaf0a0666e6fae0c8cbddcd0b1f6e729f27c3ade8a64e43  ./assets/fonts/fraunces-600-63f1654d1e.woff2
 48282a415ec22e31beaf0a0666e6fae0c8cbddcd0b1f6e729f27c3ade8a64e43  ./assets/fonts/fraunces-700-63f1654d1e.woff2
-5230fe39435e0e38c05b9622705f1ca5f22ae648164439f44aad9e697a2fd19c  ./releases/index.html
 57834bb8371f0305d3f4c5086201f773bd357e5e233bd601175da59da094fbcc  ./assets/tokens.css
 5bc57aa66811a548ff0191ee17d65bce33bc277a35973f64db1f106fc857e87c  ./progress.html
 5ccc5857b7a8977e768a195c4c111da4f2950e60c29902c37e9ba6208223352d  ./field-guide/assets/apple-touch-icon.png
@@ -45,6 +44,7 @@ a356c4122ddafac859965d16c400ff63de466ff8cdc3ff8ea472a38201a4c6af  ./assets/popov
 a99fa11108464c82e96bb674e22ce4aaa22f4a26ad0cffe2704ded51d7a54240  ./desktop-dashboard.html
 aa075717892f6863fd81779fcb979059da58071b0832a3e6752ee5dd360e519d  ./field-guide/assets/favicon-64.png
 b561f7484795631e892d627464920a933ec6d33bc0ab2eafc04a2fafe7492d3c  ./assets/spruce-core-disc.svg
+bc04f27a09ccd62b427298f8808183884d17f587e81bf9ff9186356107dd3c1d  ./releases/index.html
 be70b6c20ed6eceda48811722479cbb235d7a1d4c797943879bf5656a33582cc  ./assets/apple-touch-icon.png
 c940764593d0fe5d596be327ca7558855e018039fb78509aa21921fd3644c3e4  ./assets/fonts/inter-400-1ab1ad5590.woff2
 c940764593d0fe5d596be327ca7558855e018039fb78509aa21921fd3644c3e4  ./assets/fonts/inter-500-1ab1ad5590.woff2

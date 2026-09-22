@@ -1979,7 +1979,46 @@ def get_agent_pinned_model(agent_name: str) -> str:
     Returns:
         Pinned model name, or None if no model is pinned for this agent.
     """
-    return get_value(f"agent_model_{agent_name}")
+    return _read_agent_pin(agent_name)
+
+
+_LEGACY_AGENTS_SECTION = "agents"
+_legacy_pin_warnings: set[str] = set()
+
+
+def _read_agent_pin(agent_name: str) -> Optional[str]:
+    """Read an agent pin, honoring the legacy ``[agents]`` section.
+
+    Pins live in ``[grove]`` (that is where ``/pin`` and every setter
+    write them). Hand-edited configs sometimes place ``agent_model_*``
+    keys under an ``[agents]`` section instead — a section nothing read,
+    so those pins silently fell through to the global default and the
+    agent ran on whatever model the default pointed at. This reader
+    honors the legacy location (``[grove]`` wins on conflict) and says
+    so loudly, the same dual-load discipline the compat shims follow.
+    """
+    key = f"agent_model_{agent_name}"
+    config = _load_config()
+    value = config.get(DEFAULT_SECTION, key, fallback=None)
+    if value:
+        return value
+
+    if _LEGACY_AGENTS_SECTION in config:
+        legacy = config[_LEGACY_AGENTS_SECTION].get(key, "")
+        if legacy:
+            if agent_name not in _legacy_pin_warnings:
+                _legacy_pin_warnings.add(agent_name)
+                logger.warning(
+                    "agent_model_%s is set under the [%s] section, which the "
+                    "grove historically never read — honoring it now, but "
+                    "move it to [%s] (or use /pin) so it is not lost on a "
+                    "future cleanup.",
+                    agent_name,
+                    _LEGACY_AGENTS_SECTION,
+                    DEFAULT_SECTION,
+                )
+            return legacy
+    return None
 
 
 def set_agent_pinned_model(agent_name: str, model_name: str):
@@ -1998,9 +2037,22 @@ def clear_agent_pinned_model(agent_name: str):
     Args:
         agent_name: Name of the agent to clear the pinned model for.
     """
-    # We can't easily delete keys from configparser, so set to empty string
-    # which will be treated as None by get_agent_pinned_model
-    set_config_value(f"agent_model_{agent_name}", "")
+    key = f"agent_model_{agent_name}"
+
+    def _apply(config: configparser.ConfigParser) -> None:
+        # Write the empty-string sentinel in [grove] (the historical
+        # behavior), and remove the key outright from BOTH sections: the
+        # legacy [agents] location must not resurrect a pin that the user
+        # just cleared, and the sentinel only exists because older readers
+        # treated a missing key and an empty key differently.
+        if DEFAULT_SECTION not in config:
+            config[DEFAULT_SECTION] = {}
+        config[DEFAULT_SECTION][key] = ""
+        for section in (DEFAULT_SECTION, _LEGACY_AGENTS_SECTION):
+            if section in config and config[section].get(key):
+                config.remove_option(section, key)
+
+    mutate_config(CONFIG_FILE, _apply)
 
 
 def get_all_agent_pinned_models() -> dict:
@@ -2009,10 +2061,16 @@ def get_all_agent_pinned_models() -> dict:
     Returns:
         Dict mapping agent names to their pinned model names.
         Only includes agents that have a pinned model (non-empty value).
+        Legacy ``[agents]``-section pins are included (``[grove]`` wins on
+        conflict) so listings and reverse lookups see what the reader sees.
     """
     config = _load_config()
 
     pinnings = {}
+    if _LEGACY_AGENTS_SECTION in config:
+        for key, value in config[_LEGACY_AGENTS_SECTION].items():
+            if key.startswith("agent_model_") and value:
+                pinnings[key[len("agent_model_") :]] = value
     if DEFAULT_SECTION in config:
         for key, value in config[DEFAULT_SECTION].items():
             if key.startswith("agent_model_") and value:
