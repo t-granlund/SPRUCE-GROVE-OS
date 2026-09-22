@@ -6,7 +6,7 @@ import json
 from typing import TYPE_CHECKING, Annotated, Any, Dict, List
 
 from pydantic import BeforeValidator, Field, WithJsonSchema
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 
 from .constants import (
     MAX_DESCRIPTION_LENGTH,
@@ -127,7 +127,7 @@ def register_ask_user_question(agent: Agent) -> None:
 
     @agent.tool
     def ask_user_question(
-        context: RunContext,  # noqa: ARG001 - Required by framework
+        context: ToolContext,  # noqa: ARG001 - Required by framework
         questions: QuestionsListWithSchema,
     ) -> AskUserQuestionOutput:
         """Ask the user multiple related questions in an interactive TUI."""

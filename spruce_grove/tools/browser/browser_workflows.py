@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Any, Dict
 
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 
 from spruce_grove import config
 from spruce_grove.messaging import emit_error, emit_info, emit_success, emit_warning
@@ -191,7 +191,7 @@ def register_save_workflow(agent):
 
     @agent.tool
     async def browser_save_workflow(
-        context: RunContext,
+        context: ToolContext,
         name: str,
         content: str,
     ) -> Dict[str, Any]:
@@ -203,7 +203,7 @@ def register_list_workflows(agent):
     """Register the list workflows tool."""
 
     @agent.tool
-    async def browser_list_workflows(context: RunContext) -> Dict[str, Any]:
+    async def browser_list_workflows(context: ToolContext) -> Dict[str, Any]:
         """List all saved browser automation workflows."""
         return await list_workflows()
 
@@ -213,7 +213,7 @@ def register_read_workflow(agent):
 
     @agent.tool
     async def browser_read_workflow(
-        context: RunContext,
+        context: ToolContext,
         name: str,
     ) -> Dict[str, Any]:
         """Read the contents of a saved browser automation workflow."""

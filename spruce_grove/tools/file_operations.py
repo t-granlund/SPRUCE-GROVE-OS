@@ -8,7 +8,7 @@ import tempfile
 from typing import Callable, List, Tuple
 
 from pydantic import BaseModel, conint
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 
 # ---------------------------------------------------------------------------
 # Module-level helper functions (exposed for unit tests _and_ used as tools)
@@ -244,7 +244,7 @@ def _list_entries_via_backend(directory: str, recursive: bool) -> List["ListedFi
 
 
 def _list_files(
-    context: RunContext, directory: str = ".", recursive: bool = True
+    context: ToolContext, directory: str = ".", recursive: bool = True
 ) -> ListFileOutput:
     import sys
 
@@ -546,7 +546,7 @@ def _list_files(
 
 
 def _read_file(
-    context: RunContext,
+    context: ToolContext,
     file_path: str,
     start_line: int | None = None,
     num_lines: int | None = None,
@@ -1228,7 +1228,7 @@ def _carries_type_filter(rg_args: list[str]) -> bool:
     )
 
 
-def _grep(context: RunContext, search_string: str, directory: str = ".") -> GrepOutput:
+def _grep(context: ToolContext, search_string: str, directory: str = ".") -> GrepOutput:
     import json
     import os
     import shutil
@@ -1436,7 +1436,7 @@ def register_list_files(agent):
 
     @agent.tool
     def list_files(
-        context: RunContext, directory: str = ".", recursive: bool = True
+        context: ToolContext, directory: str = ".", recursive: bool = True
     ) -> ListFileOutput:
         """List files and directories with intelligent filtering and safety features.
 
@@ -1492,7 +1492,7 @@ def register_read_file(agent):
 
     @agent.tool
     def read_file(
-        context: RunContext,
+        context: ToolContext,
         file_path: str,
         start_line: int | None = None,
         num_lines: int | None = None,
@@ -1509,7 +1509,7 @@ def register_grep(agent):
 
     @agent.tool
     def grep(
-        context: RunContext, search_string: str, directory: str = "."
+        context: ToolContext, search_string: str, directory: str = "."
     ) -> GrepOutput:
         """Recursively search file contents for a regex pattern using ripgrep (rg).
 

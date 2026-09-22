@@ -4,7 +4,7 @@ import logging
 from typing import List, Optional
 
 from pydantic import BaseModel
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.messaging import (
     SkillActivateMessage,
@@ -48,7 +48,7 @@ def register_activate_skill(agent):
 
     @agent.tool
     async def activate_skill(
-        context: RunContext, skill_name: str = ""
+        context: ToolContext, skill_name: str = ""
     ) -> SkillActivateOutput:
         """Activate a skill by loading its full SKILL.md instructions."""
         provider = get_skill_provider()
@@ -127,7 +127,7 @@ def register_list_or_search_skills(agent):
 
     @agent.tool
     async def list_or_search_skills(
-        context: RunContext, query: Optional[str] = None
+        context: ToolContext, query: Optional[str] = None
     ) -> SkillListOutput:
         """List available skills, optionally filtered by search query.
 

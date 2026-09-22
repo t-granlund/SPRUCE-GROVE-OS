@@ -10,7 +10,8 @@ from datetime import datetime, timezone
 from functools import partial
 from typing import Set
 
-from pydantic_ai import Agent, RunContext, UsageLimits
+from pydantic_ai import Agent, UsageLimits
+from spruce_grove.harness import ToolContext
 from pydantic_ai.capabilities import ProcessHistory
 
 from spruce_grove.agent_execution_context import executing_agent_context
@@ -228,7 +229,7 @@ def _save_partial_session(
 
 
 async def _invoke_agent_impl(
-    context: RunContext,
+    context: ToolContext,
     agent_name: str,
     prompt: str,
     session_id: str | None = None,
@@ -745,7 +746,7 @@ def register_invoke_agent(agent):
     """Register the default invoke_agent tool with no model override affordance."""
 
     async def invoke_agent(
-        context: RunContext,
+        context: ToolContext,
         agent_name: str,
         prompt: str,
         session_id: str | None = None,
@@ -792,7 +793,7 @@ def register_invoke_agent_with_model(agent):
 
     @agent.tool
     async def invoke_agent_with_model(
-        context: RunContext,
+        context: ToolContext,
         agent_name: str,
         prompt: str,
         model_name: str,

@@ -2,7 +2,7 @@
 
 from typing import Any, Dict, Optional
 
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.messaging import emit_error, emit_info, emit_success, emit_warning
 from spruce_grove.tools.common import generate_group_id
@@ -208,7 +208,7 @@ def register_initialize_browser(agent):
 
     @agent.tool
     async def browser_initialize(
-        context: RunContext,
+        context: ToolContext,
         headless: bool = False,
         browser_type: str = "chromium",
         homepage: str = "https://www.google.com",
@@ -231,7 +231,7 @@ def register_close_browser(agent):
     """Register the browser close tool."""
 
     @agent.tool
-    async def browser_close(context: RunContext) -> Dict[str, Any]:
+    async def browser_close(context: ToolContext) -> Dict[str, Any]:
         """
         Close the browser and clean up all resources.
 
@@ -245,7 +245,7 @@ def register_get_browser_status(agent):
     """Register the browser status tool."""
 
     @agent.tool
-    async def browser_status(context: RunContext) -> Dict[str, Any]:
+    async def browser_status(context: ToolContext) -> Dict[str, Any]:
         """
         Get current browser status and information.
 
@@ -260,7 +260,7 @@ def register_create_new_page(agent):
 
     @agent.tool
     async def browser_new_page(
-        context: RunContext,
+        context: ToolContext,
         url: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
@@ -279,7 +279,7 @@ def register_list_pages(agent):
     """Register the list pages tool."""
 
     @agent.tool
-    async def browser_list_pages(context: RunContext) -> Dict[str, Any]:
+    async def browser_list_pages(context: ToolContext) -> Dict[str, Any]:
         """
         List all open browser pages/tabs.
 

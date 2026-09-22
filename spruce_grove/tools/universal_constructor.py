@@ -11,7 +11,7 @@ from concurrent.futures import TimeoutError as FuturesTimeoutError
 from typing import Any, Literal, Optional, Union
 
 from pydantic import BaseModel, Field
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.messaging import get_message_bus
 from spruce_grove.messaging.messages import UniversalConstructorMessage
@@ -177,7 +177,7 @@ def _emit_uc_message(
 
 
 async def universal_constructor_impl(
-    context: RunContext,
+    context: ToolContext,
     action: Literal["list", "call", "create", "update", "info"],
     tool_name: Optional[str] = None,
     tool_args: Optional[Union[dict, str]] = None,
@@ -270,7 +270,7 @@ def _build_summary(result: UniversalConstructorOutput) -> str:
         return "Operation completed"
 
 
-def _handle_list_action(context: RunContext) -> UniversalConstructorOutput:
+def _handle_list_action(context: ToolContext) -> UniversalConstructorOutput:
     """Handle the 'list' action - list all available UC tools.
 
     Lists all enabled tools from the UC registry, returning their
@@ -312,7 +312,7 @@ def _handle_list_action(context: RunContext) -> UniversalConstructorOutput:
 
 
 def _handle_call_action(
-    context: RunContext,
+    context: ToolContext,
     tool_name: Optional[str],
     tool_args: Optional[Union[dict, str]],
 ) -> UniversalConstructorOutput:
@@ -435,7 +435,7 @@ def _handle_call_action(
 
 
 def _handle_create_action(
-    context: RunContext,
+    context: ToolContext,
     tool_name: Optional[str],
     python_code: Optional[str],
     description: Optional[str],
@@ -619,7 +619,7 @@ def _handle_create_action(
 
 
 def _handle_update_action(
-    context: RunContext,
+    context: ToolContext,
     tool_name: Optional[str],
     python_code: Optional[str],
     description: Optional[str],
@@ -747,7 +747,7 @@ def _handle_update_action(
 
 
 def _handle_info_action(
-    context: RunContext,
+    context: ToolContext,
     tool_name: Optional[str],
 ) -> UniversalConstructorOutput:
     """Handle the 'info' action - get detailed tool information.
@@ -813,7 +813,7 @@ def register_universal_constructor(agent):
 
     @agent.tool
     async def universal_constructor(
-        context: RunContext,
+        context: ToolContext,
         action: Literal["list", "call", "create", "update", "info"],
         tool_name: Optional[str] = None,
         tool_args: Optional[Union[dict, str]] = None,

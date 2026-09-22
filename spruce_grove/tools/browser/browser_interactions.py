@@ -2,7 +2,7 @@
 
 from typing import Any, Dict, List, Optional
 
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.messaging import emit_error, emit_info, emit_success
 from spruce_grove.tools.common import generate_group_id
@@ -332,7 +332,7 @@ def register_click_element(agent):
 
     @agent.tool
     async def browser_click(
-        context: RunContext,
+        context: ToolContext,
         selector: str,
         timeout: int = 10000,
         force: bool = False,
@@ -360,7 +360,7 @@ def register_double_click_element(agent):
 
     @agent.tool
     async def browser_double_click(
-        context: RunContext,
+        context: ToolContext,
         selector: str,
         timeout: int = 10000,
         force: bool = False,
@@ -384,7 +384,7 @@ def register_hover_element(agent):
 
     @agent.tool
     async def browser_hover(
-        context: RunContext,
+        context: ToolContext,
         selector: str,
         timeout: int = 10000,
         force: bool = False,
@@ -408,7 +408,7 @@ def register_set_element_text(agent):
 
     @agent.tool
     async def browser_set_text(
-        context: RunContext,
+        context: ToolContext,
         selector: str,
         text: str,
         clear_first: bool = True,
@@ -434,7 +434,7 @@ def register_get_element_text(agent):
 
     @agent.tool
     async def browser_get_text(
-        context: RunContext,
+        context: ToolContext,
         selector: str,
         timeout: int = 10000,
     ) -> Dict[str, Any]:
@@ -456,7 +456,7 @@ def register_get_element_value(agent):
 
     @agent.tool
     async def browser_get_value(
-        context: RunContext,
+        context: ToolContext,
         selector: str,
         timeout: int = 10000,
     ) -> Dict[str, Any]:
@@ -478,7 +478,7 @@ def register_select_option(agent):
 
     @agent.tool
     async def browser_select_option(
-        context: RunContext,
+        context: ToolContext,
         selector: str,
         value: Optional[str] = None,
         label: Optional[str] = None,
@@ -506,7 +506,7 @@ def register_browser_check(agent):
 
     @agent.tool
     async def browser_check(
-        context: RunContext,
+        context: ToolContext,
         selector: str,
         timeout: int = 10000,
     ) -> Dict[str, Any]:
@@ -528,7 +528,7 @@ def register_browser_uncheck(agent):
 
     @agent.tool
     async def browser_uncheck(
-        context: RunContext,
+        context: ToolContext,
         selector: str,
         timeout: int = 10000,
     ) -> Dict[str, Any]:

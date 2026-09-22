@@ -9,7 +9,7 @@ selectors, deterministic errors when nothing matches.
 
 from typing import Any, Dict, Optional
 
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.messaging import emit_error, emit_info, emit_success
 from spruce_grove.tools.common import generate_group_id
@@ -115,7 +115,7 @@ def register_click_by_role(agent):
 
     @agent.tool
     async def browser_click_by_role(
-        context: RunContext,
+        context: ToolContext,
         role: str,
         name: Optional[str] = None,
         exact: bool = False,
@@ -142,7 +142,7 @@ def register_click_by_text(agent):
 
     @agent.tool
     async def browser_click_by_text(
-        context: RunContext,
+        context: ToolContext,
         text: str,
         exact: bool = False,
         timeout: int = 10000,
@@ -167,7 +167,7 @@ def register_set_text_by_label(agent):
 
     @agent.tool
     async def browser_set_text_by_label(
-        context: RunContext,
+        context: ToolContext,
         label: str,
         text: str,
         exact: bool = False,

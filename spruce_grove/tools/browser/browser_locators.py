@@ -2,7 +2,7 @@
 
 from typing import Any, Dict, Optional
 
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.messaging import emit_info, emit_success
 from spruce_grove.tools.common import generate_group_id
@@ -459,7 +459,7 @@ def register_find_by_role(agent):
 
     @agent.tool
     async def browser_find_by_role(
-        context: RunContext,
+        context: ToolContext,
         role: str,
         name: Optional[str] = None,
         exact: bool = False,
@@ -485,7 +485,7 @@ def register_find_by_text(agent):
 
     @agent.tool
     async def browser_find_by_text(
-        context: RunContext,
+        context: ToolContext,
         text: str,
         exact: bool = False,
         timeout: int = 10000,
@@ -509,7 +509,7 @@ def register_find_by_label(agent):
 
     @agent.tool
     async def browser_find_by_label(
-        context: RunContext,
+        context: ToolContext,
         text: str,
         exact: bool = False,
         timeout: int = 10000,
@@ -533,7 +533,7 @@ def register_find_by_placeholder(agent):
 
     @agent.tool
     async def browser_find_by_placeholder(
-        context: RunContext,
+        context: ToolContext,
         text: str,
         exact: bool = False,
         timeout: int = 10000,
@@ -557,7 +557,7 @@ def register_find_by_test_id(agent):
 
     @agent.tool
     async def browser_find_by_test_id(
-        context: RunContext,
+        context: ToolContext,
         test_id: str,
         timeout: int = 10000,
     ) -> Dict[str, Any]:
@@ -579,7 +579,7 @@ def register_run_xpath_query(agent):
 
     @agent.tool
     async def browser_xpath_query(
-        context: RunContext,
+        context: ToolContext,
         xpath: str,
         timeout: int = 10000,
     ) -> Dict[str, Any]:
@@ -601,7 +601,7 @@ def register_find_buttons(agent):
 
     @agent.tool
     async def browser_find_buttons(
-        context: RunContext,
+        context: ToolContext,
         text_filter: Optional[str] = None,
         timeout: int = 10000,
     ) -> Dict[str, Any]:
@@ -623,7 +623,7 @@ def register_find_links(agent):
 
     @agent.tool
     async def browser_find_links(
-        context: RunContext,
+        context: ToolContext,
         text_filter: Optional[str] = None,
         timeout: int = 10000,
     ) -> Dict[str, Any]:

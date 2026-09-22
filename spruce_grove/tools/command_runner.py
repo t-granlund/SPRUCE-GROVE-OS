@@ -15,7 +15,7 @@ from functools import partial
 from typing import Callable, List, Literal, Optional, Set
 
 from pydantic import BaseModel
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 from rich.text import Text
 
 from spruce_grove.callbacks import on_run_shell_command_output
@@ -1081,7 +1081,7 @@ def _child_process_env() -> dict[str, str]:
 
 
 async def run_shell_command(
-    context: RunContext,
+    context: ToolContext,
     command: str,
     cwd: str | None = None,
     timeout: int = 60,
@@ -1533,7 +1533,7 @@ class ReasoningOutput(BaseModel):
 
 
 def share_your_reasoning(
-    context: RunContext, reasoning: str, next_steps: str | List[str] | None = None
+    context: ToolContext, reasoning: str, next_steps: str | List[str] | None = None
 ) -> ReasoningOutput:
     # Handle list of next steps by formatting them
     formatted_next_steps = next_steps
@@ -1559,7 +1559,7 @@ def register_agent_run_shell_command(agent):
 
     @agent.tool
     async def agent_run_shell_command(
-        context: RunContext,
+        context: ToolContext,
         command: str,
         cwd: str | None = None,
         timeout: int = 60,
@@ -1579,7 +1579,7 @@ def register_agent_share_your_reasoning(agent):
 
     @agent.tool
     def agent_share_your_reasoning(
-        context: RunContext,
+        context: ToolContext,
         reasoning: str = "",
         next_steps: str | List[str] | None = None,
     ) -> ReasoningOutput:

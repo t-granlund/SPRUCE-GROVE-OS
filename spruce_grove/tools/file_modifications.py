@@ -22,7 +22,7 @@ from typing import Annotated, Any, Dict, List, Union
 
 import json_repair
 from pydantic import BaseModel, BeforeValidator, WithJsonSchema
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.callbacks import on_delete_file, on_edit_file
 from spruce_grove.messaging import (  # Structured messaging types
@@ -400,7 +400,7 @@ def _log_error(
 
 
 def _delete_snippet_from_file(
-    context: RunContext | None,
+    context: ToolContext | None,
     file_path: str,
     snippet: str,
     message_group: str | None = None,
@@ -508,7 +508,7 @@ def apply_replacements_to_content(
 
 
 def _replace_in_file(
-    context: RunContext | None,
+    context: ToolContext | None,
     path: str,
     replacements: List[Dict[str, str]],
     message_group: str | None = None,
@@ -573,7 +573,7 @@ def _replace_in_file(
 
 
 def _write_to_file(
-    context: RunContext | None,
+    context: ToolContext | None,
     path: str,
     content: str,
     overwrite: bool = False,
@@ -636,7 +636,7 @@ def _write_to_file(
 
 
 def delete_snippet_from_file(
-    context: RunContext, file_path: str, snippet: str, message_group: str | None = None
+    context: ToolContext, file_path: str, snippet: str, message_group: str | None = None
 ) -> Dict[str, Any]:
     refused = _refuse_user_plugin_tree(file_path)
     if refused is not None:
@@ -663,7 +663,7 @@ def delete_snippet_from_file(
 
 
 def write_to_file(
-    context: RunContext,
+    context: ToolContext,
     path: str,
     content: str,
     overwrite: bool,
@@ -696,7 +696,7 @@ def write_to_file(
 
 
 def replace_in_file(
-    context: RunContext,
+    context: ToolContext,
     path: str,
     replacements: List[Dict[str, str]],
     message_group: str | None = None,
@@ -724,7 +724,7 @@ def replace_in_file(
 
 
 async def delete_snippet_from_file_async(
-    context: RunContext, file_path: str, snippet: str, message_group: str | None = None
+    context: ToolContext, file_path: str, snippet: str, message_group: str | None = None
 ) -> Dict[str, Any]:
     """Async permission-aware variant of ``delete_snippet_from_file``."""
     refused = _refuse_user_plugin_tree(file_path)
@@ -753,7 +753,7 @@ async def delete_snippet_from_file_async(
 
 
 async def write_to_file_async(
-    context: RunContext,
+    context: ToolContext,
     path: str,
     content: str,
     overwrite: bool,
@@ -788,7 +788,7 @@ async def write_to_file_async(
 
 
 async def replace_in_file_async(
-    context: RunContext,
+    context: ToolContext,
     path: str,
     replacements: List[Dict[str, str]],
     message_group: str | None = None,
@@ -820,7 +820,7 @@ async def replace_in_file_async(
 
 
 def _edit_file(
-    context: RunContext, payload: EditFilePayload, group_id: str | None = None
+    context: ToolContext, payload: EditFilePayload, group_id: str | None = None
 ) -> Dict[str, Any]:
     UndoManager().record_change(payload.file_path, "edit_file")
     """
@@ -912,7 +912,7 @@ def _edit_file(
 
 
 async def _edit_file_async(
-    context: RunContext, payload: EditFilePayload, group_id: str | None = None
+    context: ToolContext, payload: EditFilePayload, group_id: str | None = None
 ) -> Dict[str, Any]:
     """Async permission-aware variant of ``_edit_file``."""
     file_path = os.path.abspath(payload.file_path)
@@ -971,7 +971,7 @@ async def _edit_file_async(
 
 
 def _delete_file(
-    context: RunContext, file_path: str, message_group: str | None = None
+    context: ToolContext, file_path: str, message_group: str | None = None
 ) -> Dict[str, Any]:
     refused = _refuse_user_plugin_tree(file_path)
     if refused is not None:
@@ -1033,7 +1033,7 @@ def _delete_file(
 
 
 async def _delete_file_async(
-    context: RunContext, file_path: str, message_group: str | None = None
+    context: ToolContext, file_path: str, message_group: str | None = None
 ) -> Dict[str, Any]:
     """Async permission-aware variant of ``_delete_file``."""
     refused = _refuse_user_plugin_tree(file_path)
@@ -1112,7 +1112,7 @@ def register_edit_file(agent):
 
     @agent.tool
     async def edit_file(
-        context: RunContext,
+        context: ToolContext,
         payload: EditFilePayload | str = "",
     ) -> Dict[str, Any]:
         """Comprehensive file editing tool supporting multiple modification strategies.
@@ -1174,7 +1174,7 @@ def register_delete_file(agent):
     """Register only the delete_file tool."""
 
     @agent.tool
-    async def delete_file(context: RunContext, file_path: str) -> Dict[str, Any]:
+    async def delete_file(context: ToolContext, file_path: str) -> Dict[str, Any]:
         """Safely delete files with comprehensive logging and diff generation.
 
         Shows exactly what content was removed via diff output.
@@ -1212,7 +1212,7 @@ def register_create_file(agent):
 
     @agent.tool
     async def create_file(
-        context: RunContext,
+        context: ToolContext,
         file_path: str,
         content: str,
         overwrite: bool = False,
@@ -1295,7 +1295,7 @@ def _register_targeted_edit(agent, exposed_name: str):
     """Register the targeted replacement implementation under a public name."""
 
     async def targeted_edit(
-        context: RunContext,
+        context: ToolContext,
         file_path: str,
         replacements: RepairableReplacementsList,
     ) -> Dict[str, Any]:
@@ -1382,7 +1382,7 @@ def register_claude_edit(agent):
 
     @agent.tool
     async def edit(
-        context: RunContext,
+        context: ToolContext,
         file_path: str,
         old_string: str,
         new_string: str,
@@ -1447,7 +1447,7 @@ def register_delete_snippet(agent):
 
     @agent.tool
     async def delete_snippet(
-        context: RunContext,
+        context: ToolContext,
         file_path: str,
         snippet: str,
     ) -> Dict[str, Any]:

@@ -17,7 +17,8 @@ from pathlib import Path
 from typing import Any, Dict, Union
 
 from PIL import Image, UnidentifiedImageError
-from pydantic_ai import BinaryContent, RunContext, ToolReturn
+from pydantic_ai import BinaryContent, ToolReturn
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.messaging import emit_error, emit_info, emit_success
 from spruce_grove.tools.common import generate_group_id
@@ -173,7 +174,7 @@ def register_load_image(agent):
 
     @agent.tool
     async def load_image_for_analysis(
-        context: RunContext,
+        context: ToolContext,
         image_path: str,
     ) -> Union[ToolReturn, Dict[str, Any]]:
         """Load an image file so you can see and analyze it.

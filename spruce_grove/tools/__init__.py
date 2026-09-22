@@ -344,7 +344,7 @@ def _register_uc_tool_wrapper(agent, uc_tool_name: str):
     import inspect
     from typing import Any
 
-    from pydantic_ai import RunContext
+    from spruce_grove.harness import ToolContext
 
     # Get tool info and function from registry
     try:
@@ -388,7 +388,7 @@ def _register_uc_tool_wrapper(agent, uc_tool_name: str):
         tool_name: str, original_func, original_sig, original_annotations
     ):
         # Build the wrapper function
-        async def uc_tool_wrapper(context: RunContext, **kwargs: Any) -> Any:
+        async def uc_tool_wrapper(context: ToolContext, **kwargs: Any) -> Any:
             """Dynamically generated wrapper for a UC tool."""
             try:
                 result = original_func(**kwargs)
@@ -408,7 +408,7 @@ def _register_uc_tool_wrapper(agent, uc_tool_name: str):
         # Preserve annotations for pydantic-ai schema generation
         if original_annotations:
             # Add 'context' param and copy original params (excluding 'return')
-            new_annotations = {"context": RunContext}
+            new_annotations = {"context": ToolContext}
             for param_name, param_type in original_annotations.items():
                 if param_name != "return":
                     new_annotations[param_name] = param_type
@@ -426,7 +426,7 @@ def _register_uc_tool_wrapper(agent, uc_tool_name: str):
                     inspect.Parameter(
                         "context",
                         inspect.Parameter.POSITIONAL_OR_KEYWORD,
-                        annotation=RunContext,
+                        annotation=ToolContext,
                     )
                 ]
                 for param in original_sig.parameters.values():

@@ -8,7 +8,7 @@ from typing import List
 
 from pydantic import BaseModel, ConfigDict
 
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 from pydantic_ai.messages import ModelMessage
 
 from spruce_grove.config import (
@@ -262,7 +262,7 @@ def register_list_agents(agent):
     """
 
     @agent.tool
-    def list_agents(context: RunContext) -> ListAgentsOutput:
+    def list_agents(context: ToolContext) -> ListAgentsOutput:
         """List all available sub-agents that can be invoked."""
         # Generate a group ID for this tool execution
         group_id = generate_group_id("list_agents")

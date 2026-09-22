@@ -2,7 +2,7 @@
 
 from typing import Any, Dict, Optional
 
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.messaging import emit_error, emit_info, emit_success
 from spruce_grove.tools.common import generate_group_id
@@ -315,7 +315,7 @@ def register_execute_javascript(agent):
 
     @agent.tool
     async def browser_execute_js(
-        context: RunContext,
+        context: ToolContext,
         script: str,
         timeout: int = 30000,
     ) -> Dict[str, Any]:
@@ -337,7 +337,7 @@ def register_scroll_page(agent):
 
     @agent.tool
     async def browser_scroll(
-        context: RunContext,
+        context: ToolContext,
         direction: str = "down",
         amount: int = 3,
         element_selector: Optional[str] = None,
@@ -361,7 +361,7 @@ def register_scroll_to_element(agent):
 
     @agent.tool
     async def browser_scroll_to_element(
-        context: RunContext,
+        context: ToolContext,
         selector: str,
         timeout: int = 10000,
     ) -> Dict[str, Any]:
@@ -383,7 +383,7 @@ def register_set_viewport_size(agent):
 
     @agent.tool
     async def browser_set_viewport(
-        context: RunContext,
+        context: ToolContext,
         width: int,
         height: int,
     ) -> Dict[str, Any]:
@@ -405,7 +405,7 @@ def register_wait_for_element(agent):
 
     @agent.tool
     async def browser_wait_for_element(
-        context: RunContext,
+        context: ToolContext,
         selector: str,
         state: str = "visible",
         timeout: int = 30000,
@@ -429,7 +429,7 @@ def register_browser_highlight_element(agent):
 
     @agent.tool
     async def browser_highlight_element(
-        context: RunContext,
+        context: ToolContext,
         selector: str,
         color: str = "red",
         timeout: int = 10000,
@@ -452,7 +452,7 @@ def register_browser_clear_highlights(agent):
     """Register the clear highlights tool."""
 
     @agent.tool
-    async def browser_clear_highlights(context: RunContext) -> Dict[str, Any]:
+    async def browser_clear_highlights(context: ToolContext) -> Dict[str, Any]:
         """
         Clear all element highlights from the page.
 

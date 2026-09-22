@@ -2,7 +2,7 @@
 
 from typing import Any, Dict
 
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.messaging import emit_error, emit_info, emit_success
 from spruce_grove.tools.common import generate_group_id
@@ -157,7 +157,7 @@ def register_navigate_to_url(agent):
     """Register the navigation tool."""
 
     @agent.tool
-    async def browser_navigate(context: RunContext, url: str) -> Dict[str, Any]:
+    async def browser_navigate(context: ToolContext, url: str) -> Dict[str, Any]:
         """
         Navigate the browser to a specific URL.
 
@@ -174,7 +174,7 @@ def register_get_page_info(agent):
     """Register the page info tool."""
 
     @agent.tool
-    async def browser_get_page_info(context: RunContext) -> Dict[str, Any]:
+    async def browser_get_page_info(context: ToolContext) -> Dict[str, Any]:
         """
         Get information about the current page.
 
@@ -188,7 +188,7 @@ def register_browser_go_back(agent):
     """Register browser go back tool."""
 
     @agent.tool
-    async def browser_go_back(context: RunContext) -> Dict[str, Any]:
+    async def browser_go_back(context: ToolContext) -> Dict[str, Any]:
         """
         Navigate back in browser history.
 
@@ -202,7 +202,7 @@ def register_browser_go_forward(agent):
     """Register browser go forward tool."""
 
     @agent.tool
-    async def browser_go_forward(context: RunContext) -> Dict[str, Any]:
+    async def browser_go_forward(context: ToolContext) -> Dict[str, Any]:
         """
         Navigate forward in browser history.
 
@@ -217,7 +217,7 @@ def register_reload_page(agent):
 
     @agent.tool
     async def browser_reload(
-        context: RunContext, wait_until: str = "domcontentloaded"
+        context: ToolContext, wait_until: str = "domcontentloaded"
     ) -> Dict[str, Any]:
         """
         Reload the current page.
@@ -236,7 +236,7 @@ def register_wait_for_load_state(agent):
 
     @agent.tool
     async def browser_wait_for_load(
-        context: RunContext, state: str = "domcontentloaded", timeout: int = 30000
+        context: ToolContext, state: str = "domcontentloaded", timeout: int = 30000
     ) -> Dict[str, Any]:
         """
         Wait for the page to reach a specific load state.

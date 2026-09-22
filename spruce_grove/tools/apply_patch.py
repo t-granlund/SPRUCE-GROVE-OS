@@ -25,7 +25,7 @@ from dataclasses import dataclass
 from typing import Any, Dict, Sequence
 
 from pydantic import BaseModel
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.callbacks import on_apply_patch, on_edit_file
 from spruce_grove.tools import fs_access
@@ -416,7 +416,7 @@ def register_apply_patch(agent):
 
     @agent.tool
     async def apply_patch(
-        context: RunContext,
+        context: ToolContext,
         patchText: str,
     ) -> Dict[str, Any]:
         group_id = generate_group_id("apply_patch", "multi-file")

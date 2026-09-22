@@ -10,7 +10,8 @@ from pathlib import Path
 from tempfile import gettempdir, mkdtemp
 from typing import Any, Dict, Optional, Union
 
-from pydantic_ai import BinaryContent, RunContext, ToolReturn
+from pydantic_ai import BinaryContent, ToolReturn
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.messaging import emit_error, emit_info, emit_success
 from spruce_grove.tools.common import generate_group_id
@@ -156,7 +157,7 @@ def register_take_screenshot_and_analyze(agent):
 
     @agent.tool
     async def browser_screenshot_analyze(
-        context: RunContext,
+        context: ToolContext,
         full_page: bool = False,
         element_selector: Optional[str] = None,
     ) -> Union[ToolReturn, Dict[str, Any]]:

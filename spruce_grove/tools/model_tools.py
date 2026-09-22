@@ -12,7 +12,7 @@ from __future__ import annotations
 from typing import Any
 
 from pydantic import BaseModel, Field
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.messaging import emit_error, emit_info
 from spruce_grove.tools.common import generate_group_id
@@ -75,7 +75,7 @@ def register_list_available_models(agent):
     """Register the list_available_models tool with the provided agent."""
 
     @agent.tool
-    def list_available_models(context: RunContext) -> ListAvailableModelsOutput:
+    def list_available_models(context: ToolContext) -> ListAvailableModelsOutput:
         """List configured model aliases usable for explicit model overrides.
 
         Returns safe metadata only. Endpoint, auth, API key, environment

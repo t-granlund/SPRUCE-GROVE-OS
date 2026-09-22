@@ -12,7 +12,7 @@ color, occlusion, visual diff) - this is for functional progression.
 
 from typing import Any, Dict
 
-from pydantic_ai import RunContext
+from spruce_grove.harness import ToolContext
 
 from spruce_grove.messaging import emit_info, emit_success
 from spruce_grove.tools.common import generate_group_id
@@ -126,7 +126,7 @@ def register_get_page_snapshot(agent):
 
     @agent.tool
     async def browser_page_snapshot(
-        context: RunContext,
+        context: ToolContext,
         limit: int = 25,
     ) -> Dict[str, Any]:
         """
