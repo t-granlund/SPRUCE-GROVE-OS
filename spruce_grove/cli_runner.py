@@ -249,6 +249,29 @@ async def main():
     parser.add_argument(
         "command", nargs="*", help="Run a single command (deprecated, use -p instead)"
     )
+    parser.add_argument(
+        "--console",
+        action="store_true",
+        help=(
+            "List the grove sessions running on this machine and exit. "
+            "Human-readable table by default; add --json for machine output."
+        ),
+    )
+    parser.add_argument(
+        "--json",
+        dest="console_json",
+        action="store_true",
+        help="With --console, emit JSON (stable contract for tooling/desktop).",
+    )
+    parser.add_argument(
+        "--all",
+        dest="console_all",
+        action="store_true",
+        help=(
+            "With --console, also list orphans -- processes left behind by a "
+            "terminal window that has since closed."
+        ),
+    )
 
     # Plugins add CLI args via on_register_cli_args (loaded at import time);
     # duplicate option strings raise here = fail fast.
@@ -258,6 +281,23 @@ async def main():
     _initialize_locale()
     if args.disable_ask_user_question:
         os.environ["SPRUCE_GROVE_DISABLE_ASK_USER_QUESTION"] = "1"
+
+    # --console is a fast, headless read of local process state: no API keys,
+    # no agent, no message bus, no banner. It must stay ahead of all of that
+    # so tooling (and the desktop shell) can poll it cheaply.
+    if args.console:
+        from spruce_grove.live_sessions import list_live_sessions
+
+        sessions = list_live_sessions(include_closed=args.console_all)
+        if args.console_json:
+            import json as _json
+
+            print(_json.dumps([s.to_dict() for s in sessions], indent=2))
+        else:
+            from spruce_grove.live_sessions import format_table
+
+            print(format_table(sessions))
+        return 0
 
     # Plugins may act on parsed args and short-circuit startup; first dict
     # with handled=True wins (exits with its exit_code).
