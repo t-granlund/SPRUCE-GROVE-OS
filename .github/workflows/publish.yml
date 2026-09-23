@@ -133,8 +133,38 @@ jobs:
       - name: Setup uv virtual environment
         run: uv venv
 
-      - name: Bump version
-        run: uv version --bump patch
+      - name: Bump version (race-safe against PyPI)
+        # The bump MUST be derived from what is actually published, not just
+        # the local pyproject.toml. Two queued runs can start from the same
+        # commit, both compute the same next patch, and the loser dies with
+        # "400 File already exists" (observed on the 1.0.77 release). Ask PyPI
+        # for its latest version and step above the higher of the two.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          # Sync to the tip of main first (a sibling run may have bumped it).
+          git pull --rebase origin main || true
+
+          LOCAL=$(grep '^version = ' pyproject.toml | sed 's/version = "\(.*\)"/\1/')
+          # PyPI's latest release, or empty if the package is brand new.
+          PYPI=$(curl -fsS --max-time 20 https://pypi.org/pypi/spruce-grove/json \
+                 | python -c "import sys,json; print(json.load(sys.stdin)['info']['version'])" \
+                 2>/dev/null || echo "")
+          echo "local=$LOCAL pypi=$PYPI"
+
+          NEXT=$(python - "$LOCAL" "$PYPI" <<'PY'
+          import sys
+          def parse(v):
+              return tuple(int(x) for x in v.split(".")) if v else (0, 0, 0)
+          local, pypi = parse(sys.argv[1]), parse(sys.argv[2])
+          base = max(local, pypi)
+          print(".".join(str(x) for x in (base[0], base[1], base[2] + 1)))
+          PY
+          )
+          echo "Setting version to $NEXT"
+          uv version "$NEXT"
 
       - name: Capture new version
         id: version
