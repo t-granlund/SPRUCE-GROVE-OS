@@ -5,6 +5,8 @@ import sys
 from types import SimpleNamespace
 from unittest.mock import Mock
 
+import pytest
+
 from spruce_grove.tools._lazy import lazy_registration
 
 
@@ -53,3 +55,63 @@ def test_all_lazy_registrations_resolve():
         closed = dict(zip(register.__code__.co_freevars, register.__closure__))
         module = import_module(closed["module"].cell_contents)
         assert callable(getattr(module, closed["name"].cell_contents))
+
+
+class TestStaleImportDiagnostics:
+    """A mid-session import failure must name its likely cause.
+
+    Regression: a long-lived process kept a stale module table after an
+    on-disk upgrade, so a lazy tool import failed with a bare ImportError
+    that gave no hint what had happened.
+    """
+
+    def test_missing_symbol_is_reframed_with_the_restart_hint(self, monkeypatch):
+        def boom(_module):
+            raise ImportError(
+                "cannot import name 'ToolContext' from 'spruce_grove.harness'"
+            )
+
+        monkeypatch.setattr("spruce_grove.tools._lazy.import_module", boom)
+        register = lazy_registration(
+            "spruce_grove.tools.browser.browser_control", "register_browser_initialize"
+        )
+        with pytest.raises(ImportError) as excinfo:
+            register(object())
+
+        message = str(excinfo.value)
+        assert "restart" in message.lower()
+        assert "upgraded" in message.lower()
+        # The original failure is preserved as the cause.
+        assert isinstance(excinfo.value.__cause__, ImportError)
+
+    def test_a_tools_own_import_error_surfaces_unchanged(self, monkeypatch):
+        """If the module loads but the tool itself raises ImportError,
+        that is the tool's own bug -- do not blame the install."""
+
+        def raises_inside(agent):
+            raise ImportError("some internal optional dependency is missing")
+
+        importer = Mock(return_value=SimpleNamespace(register_thing=raises_inside))
+        monkeypatch.setattr("spruce_grove.tools._lazy.import_module", importer)
+        register = lazy_registration("example.tools", "register_thing")
+
+        with pytest.raises(ImportError) as excinfo:
+            register(object())
+        assert "restart the CLI" not in str(excinfo.value)
+
+    def test_missing_module_is_reframed(self, monkeypatch):
+        def boom(_module):
+            raise ImportError("No module named 'spruce_grove.tools.gone'")
+
+        monkeypatch.setattr("spruce_grove.tools._lazy.import_module", boom)
+        register = lazy_registration("spruce_grove.tools.gone", "register_gone")
+        with pytest.raises(ImportError) as excinfo:
+            register(object())
+        assert "restart" in str(excinfo.value).lower()
+
+    def test_success_path_is_untouched(self, monkeypatch):
+        impl = Mock(return_value="ok")
+        importer = Mock(return_value=SimpleNamespace(register_x=impl))
+        monkeypatch.setattr("spruce_grove.tools._lazy.import_module", importer)
+        register = lazy_registration("example.tools", "register_x")
+        assert register("agent") == "ok"
