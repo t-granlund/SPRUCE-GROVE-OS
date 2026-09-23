@@ -21,6 +21,32 @@ a cleanup, and the Leather Apron Gate exists precisely to stop manic,
 insecure moves like that. The exit is a staged seam, judged by the same
 five criteria as any upstream signal:
 
+**Why the remaining work is a replacement, not a migration (re-measured
+2026-09-23).** A census of what is actually imported from `pydantic_ai`
+today shows the seam has absorbed everything it can absorb: `resolve_model`,
+`load_models_config`, `make_model_settings`, `tool_context_type` — all
+landed. What is left is not "settings still to route", it is **pydantic-ai's
+own ontology**:
+
+| Symbol group | Examples | Why the seam cannot absorb it |
+|---|---|---|
+| Message vocabulary | `ModelMessage`, `ModelRequest`, `ModelResponse`, `UserPromptPart`, `ToolReturn`, `BinaryContent` | These *are* the conversation. Grove has no equivalent type, so routing them through a pass-through seam would rename the problem, not solve it. |
+| Streaming events | `PartStartEvent`, `PartDeltaEvent`, `PartEndEvent` | The agent loop's output contract. |
+| Loop machinery | `Agent`, `Hooks`, `WrapModelRequestHandler`, `ProcessHistory`, `ModelRequestContext`, `ModelRequestParameters` | This is the agent loop itself — the thing step 3 replaces. |
+| Toolset/tool bases | `AbstractToolset`, `ToolManager`, `ToolDefinition`, `MCPToolset` | What step 2's `tools/` migration is still standing on. |
+| Provider transports | `OpenAIChatModel`, `AnthropicModel`, `OpenAIProvider`, `ModelSettings`, `RequestUsage`, `UsageLimits` | Model access, slated for the stdlib+httpx replacement. |
+
+The conclusion that matters: **step 2 is complete.** There is no further
+call-site migration to do, because every remaining import needs a grove-owned
+equivalent to migrate *to*, and those equivalents are step 3 deliverables.
+Attempting more "migrations" now would produce cosmetic wrappers that alias
+pydantic-ai types under grove names — churn with no sovereignty gained.
+
+This is why `SPRUCE-GROVE-OS-tdy` should be treated as **blocked on step 3**,
+not as a queue of landings. The next real work is starting the replacement
+behind the protocol, where the seam already lets both implementations run
+side by side.
+
 1. **Inventory & freeze (done).** Touchpoints mapped: `pydantic_patches`,
    `model_factory`, `agents/base_agent`, `event_stream_handler`,
    `round_robin_model`, `cli_runner` bootstrap, MCP toolset bridges.
@@ -40,10 +66,16 @@ five criteria as any upstream signal:
    **Tool vocabulary — LANDED 2026-09-22:** `ToolContext` binds, at the
    seam, to the exact class the adapter injects (identity, not a
    look-alike); 28 modules migrated off `pydantic_ai.RunContext` (21 tool
-   modules + the agent/model/MCP layers). Census recomputed 2026-09-22
-   evening: **47 files / 92 import statements** (from 61 / 114), with 34
-   files now importing `spruce_grove.harness`. Remaining: the agent loop
-   and streaming events, then the replacement and the flip.
+   modules + the agent/model/MCP layers). Census recomputed 2026-09-23:
+   **57 files / 92 import statements**, with 34 files now importing
+   `spruce_grove.harness`. (The 2026-09-22 figure of 47 files counted only
+   files with a top-level `pydantic_ai` import and missed 10 that reach it
+   through `model_factory` or a nested import — the statement count of 92
+   was right, so no code changed, only the measurement.)
+
+   **Step 2 is complete.** See the ontology table above: every remaining
+   import names something pydantic-ai *defines* rather than something the
+   seam *routes*. Remaining work is the replacement (step 3) and the flip.
 3. **The replacement.** Behind the protocol, grow (or vendor) the grove's
    own loop: stdlib + httpx streaming, the tolerant OpenAI client we
    already carry, our own retry/token logic (much of it already exists —
