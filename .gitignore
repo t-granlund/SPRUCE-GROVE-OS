@@ -31,10 +31,10 @@ nuitka-crash-report.xml
 *.backup
 main.bin
 
-# Session log dumps (written to cwd by the CLI; not source).
-# The CLI's dump names vary (Log at <ts>, NEWLog, LATESTLog, WHAT!Log,
-# NEW-SEPxxLog). They habitually end with 'Log at <timestamp>.txt';
-# anchor on that so every variant is caught and the prefix is free.
+# Terminal session dumps (iTerm2 AutoLog writes these into the cwd of
+# whichever shell is logging; the grove does not write them). Names vary
+# (Log at <ts>, NEWLog, LATESTLog, WHAT!Log, NEW-SEPxxLog) but share the
+# 'Log at <timestamp>.txt' tail -- anchor there so every variant is caught.
 *Log at *.txt
 NEWLog*.txt
 LATESTLog*.txt
