@@ -37,9 +37,13 @@ five criteria as any upstream signal:
    resolution plus settings through the seam — `agents/_builder.py` (the
    agent construction path, which no longer imports `model_factory` at
    all), `tools/subagent_invocation.py`, and `private_inference.py`.
-   Remaining: 58 of 61 files (computed 2026-09-22) — each migrates one
-   landing at a time, tests green, next the `RunContext` tool vocabulary
-   (the long tail), then the agent loop and streaming.
+   **Tool vocabulary — LANDED 2026-09-22:** `ToolContext` binds, at the
+   seam, to the exact class the adapter injects (identity, not a
+   look-alike); 28 modules migrated off `pydantic_ai.RunContext` (21 tool
+   modules + the agent/model/MCP layers). Census recomputed 2026-09-22
+   evening: **47 files / 92 import statements** (from 61 / 114), with 34
+   files now importing `spruce_grove.harness`. Remaining: the agent loop
+   and streaming events, then the replacement and the flip.
 3. **The replacement.** Behind the protocol, grow (or vendor) the grove's
    own loop: stdlib + httpx streaming, the tolerant OpenAI client we
    already carry, our own retry/token logic (much of it already exists —
@@ -57,7 +61,7 @@ five criteria as any upstream signal:
    way.
 
 **Estimate:** multiple focused sprints, not a session. The seam work can
-start any session and pays off immediately (one vocabulary instead of 58
+start any session and pays off immediately (one vocabulary instead of 92
 import sites), which is exactly why it is the sovereignty play.
 
 ---

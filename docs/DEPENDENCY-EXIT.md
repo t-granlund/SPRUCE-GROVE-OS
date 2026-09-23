@@ -16,7 +16,7 @@ Census date: 2026-09-15 &middot; pyproject 1.0.50 &middot; uv.lock 146 packages
 
 | Dependency | Used by | Verdict |
 |---|---|---|
-| `pydantic-ai-slim[openai,anthropic]` | 61 files / 114 import statements (recomputed 2026-09-22) | **KEEP behind the seam.** Exit plan = `SOVEREIGNTY.md` Phases 2-4. Call-site files routed through the seam: 3 of 61 — model resolution + the settings surface (`_builder.py` no longer imports `model_factory` at all). |
+| `pydantic-ai-slim[openai,anthropic]` | 47 files / 92 import statements (recomputed 2026-09-22 evening, after the tool-context vocabulary landing; was 61 / 114) | **KEEP behind the seam.** Exit plan = `SOVEREIGNTY.md` Phases 2-4. Call-site files routed through the seam: 34 now import `spruce_grove.harness` — model resolution, the settings surface (`_builder.py` no longer imports `model_factory` at all), and the `ToolContext` tool vocabulary; 18 of them no longer mention `pydantic-ai` at all. |
 | `pydantic-ai-harness` | 4 imports (compaction, output limits, `/truncate`) | Same seam. Phase 3 recreates compaction/limits grove-owned, then this drops. |
 
 ## Tier 1 — HTTP clients (consolidate eventually)
@@ -90,7 +90,7 @@ Census date: 2026-09-15 &middot; pyproject 1.0.50 &middot; uv.lock 146 packages
 7. **Gate-flagged: `mcp` 2.x migration** (Tier 3) — discovered mid-bump when the resolver jumped a major version and broke FastMCP; pinned `<2`, CVE fix taken from the 1.x line (1.30.0). The 2.x rename is its own deliberate landing.
 8. **Extra-gate `boto3`/`azure-identity`** (Tier 2) — plugin-consumed; behind extras once lazy imports allow. *PARKED.*
 9. **Vendor or formally adopt `code-puppy-core-plugins`** (Tier 3) — council decision after the compat contracts land. *PARKED.*
-10. **The harness itself** — the largest dependency of all; tracked as Program A in the dashboard and `SOVEREIGNTY.md`. *IN-FLIGHT (3 of 61 call-site files; model resolution + settings surface landed 2026-09-22).*
+10. **The harness itself** — the largest dependency of all; tracked as Program A in the dashboard and `SOVEREIGNTY.md`. *IN-FLIGHT (34 files now import the seam; model resolution + settings surface + the tool-context vocabulary landed 2026-09-22).*
 
 Rule: a ladder item only flips to *done* with its receipt (tests green, hash
 proof, or a diff) — the dashboard says so too.

@@ -311,3 +311,30 @@ live: `~/.spruce_grove/grove.cfg` now exists with the full routing table
 `puppy.cfg`). Verified end-to-end: doctor reports problems: NONE; both
 models resolve with the live key; all four `syn:` aliases live; quotas
 healthy. Running sessions keep their old model until restarted.
+
+# ADDENDUM — 2026-09-22 evening (the RunContext vocabulary lands)
+
+Item 1 of the "what fully transitioned still requires" list is done: the
+`RunContext` tool vocabulary now routes through the harness seam.
+
+- **The seam's vocabulary is a binding, not a class.** pydantic-ai detects
+the injected tool context by *type identity* (`annotation is RunContext`),
+so `ToolContext` could not be a fresh look-alike — it binds to the exact
+class the harness injects. New `spruce_grove/harness/tool_context.py` does
+`ToolContext = get_harness().tool_context_type()` once at import; the
+`Harness` protocol grew a pure `tool_context_type()` method and
+`harness/__init__` exposes `ToolContext` lazily. `protocol.py` stays free
+of `pydantic_ai`/`pydantic` imports (structural test still green).
+- **28 modules migrated off `pydantic_ai.RunContext`**: all 21 tool
+modules, then the agent/model/MCP layers (`gemini_model`,
+`round_robin_model`, `mcp_/managed_server`, `agents/_compaction`,
+`agents/_model_message_transform`, both stream handlers). Only the adapter
+files (`harness/tool_context.py`, `harness/pydantic_harness.py`) keep the
+direct pydantic-ai reference — that's the point of a seam.
+- **Verified**: tools+harness suites 640 passed; agents+mcp+harness 956
+passed; import smoke test confirms
+`ToolContext is pydantic_ai._run_context.RunContext`.
+
+**Next for the harness exit:** item 2 — agent loop + streaming events, the
+biggest single surface — then Phase 3 grove implementation behind the
+protocol.

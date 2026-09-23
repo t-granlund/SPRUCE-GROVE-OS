@@ -44,6 +44,27 @@ The harness wins by running three moves in parallel, not sequentially:
 
 <!-- LIVING:BEGIN -->
 
+### 2026-09-22 — The harness seam learns its own word for tool context: RunContext -> ToolContext
+- Source: build session (harness exit, bead SPRUCE-GROVE-OS-tdy)
+- Status: shipped
+- Origin: grove-grown
+- pydantic-ai detects the injected tool context by *type identity*, not by
+  name, so the grove vocabulary could not be a fresh look-alike class -- it
+  has to bind to the exact class the harness injects. That binding lives in
+  the adapter and nowhere else.
+- New `spruce_grove/harness/tool_context.py` binds
+  `ToolContext = get_harness().tool_context_type()` once at import; the
+  protocol gains a pure `tool_context_type()` method and `harness/__init__`
+  exposes `ToolContext` lazily. `protocol.py` stays free of pydantic imports
+  (structural test still green).
+- 28 modules migrated off `pydantic_ai.RunContext`: all 21 tool modules,
+  then the agent/model/MCP layers (gemini_model, round_robin_model,
+  mcp_/managed_server, agents/_compaction, _model_message_transform, both
+  stream handlers). Only the adapter files keep the direct pydantic-ai
+  reference -- that's the point of a seam.
+- Verified: tools+harness suites 640 passed; agents+mcp+harness 956 passed;
+  import smoke test confirms `ToolContext is pydantic_ai._run_context.RunContext`.
+
 ### 2026-09-22 — Model routing: the smart-routing config was silently dead — every agent rode the cheapest model
 - Source: build session ("we're supposed to be smart about the right models for the right thing")
 - Status: shipped
