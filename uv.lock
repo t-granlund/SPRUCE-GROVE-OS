@@ -2536,7 +2536,7 @@ wheels = [
 
 [[package]]
 name = "spruce-grove"
-version = "1.0.78"
+version = "1.0.79"
 source = { editable = "." }
 dependencies = [
     { name = "agent-client-protocol" },
