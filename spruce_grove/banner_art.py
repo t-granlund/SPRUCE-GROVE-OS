@@ -1,10 +1,17 @@
 """Baked banner art - the grove's boot lettering, owned outright.
 
-Generated once from pyfiglet's ``ansi_shadow`` font (at pyfiglet's default
-80-column wrap, byte-identical to what the call sites rendered) and committed
-as constants, so the boot path never needs the library again. Dependency-exit
-rung 5, docs/DEPENDENCY-EXIT.md. The gradient in ``cli_runner`` still paints
-these line-by-line; only the letter source changed.
+The wordmark is drawn in **braille** (U+2800 block), not a figlet font.
+Braille packs a 2x4 dot grid per cell, so a single terminal row carries
+four dot rows of vertical resolution - enough for genuinely curved,
+organic letterforms. The old ``ansi_shadow`` bake rendered as chunky
+solid blocks (8-bit-looking); this is the grove's own hand: dotted, soft,
+and never a straight line. See the wiggle ethos in docs/ETHOS.md.
+
+Baked from SF Compact Rounded via Pillow at build time and committed as
+constants, so the boot path never needs a font library. Each mark is six
+bracelet rows, ``SPRUCE GROVE`` exactly 96 columns wide (the natural
+width ``platform_utils._FULL_BANNER_WIDTH`` pins its label threshold to).
+Dependency-exit rung 5, docs/DEPENDENCY-EXIT.md.
 """
 
 from __future__ import annotations
@@ -16,19 +23,38 @@ __all__ = [
     "SPRUCE_GROVE_NATURAL_WIDTH",
 ]
 
-# Rendered exactly as the call sites did: figlet_format(label, font="ansi_shadow")
-# at pyfiglet's default 80-column wrap.
-SPRUCE_GROVE_BANNER = "███████╗██████╗ ██████╗ ██╗   ██╗ ██████╗███████╗\n██╔════╝██╔══██╗██╔══██╗██║   ██║██╔════╝██╔════╝\n███████╗██████╔╝██████╔╝██║   ██║██║     █████╗  \n╚════██║██╔═══╝ ██╔══██╗██║   ██║██║     ██╔══╝  \n███████║██║     ██║  ██║╚██████╔╝╚██████╗███████╗\n╚══════╝╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚══════╝\n                                                 \n ██████╗ ██████╗  ██████╗ ██╗   ██╗███████╗\n██╔════╝ ██╔══██╗██╔═══██╗██║   ██║██╔════╝\n██║  ███╗██████╔╝██║   ██║██║   ██║█████╗  \n██║   ██║██╔══██╗██║   ██║╚██╗ ██╔╝██╔══╝  \n╚██████╔╝██║  ██║╚██████╔╝ ╚████╔╝ ███████╗\n ╚═════╝ ╚═╝  ╚═╝ ╚═════╝   ╚═══╝  ╚══════╝\n                                           "
+# Braille bake of "SPRUCE GROVE" (6 rows x 96 cols). Rows are tuples of
+# six strings joined with newlines; kept as tuples so the splash can
+# iterate them line-by-line without re-splitting.
+SPRUCE_GROVE_BANNER_LINES = (
+    "\u2800\u2800\u28c0\u28e4\u28e4\u28e4\u28c0\u2800\u2800\u28e0\u28e4\u28e4\u28e4\u28e4\u28c0\u2800\u2880\u28e4\u28e4\u28e4\u28e4\u28c4\u2840\u2800\u2800\u28e0\u28c4\u2800\u2800\u2800\u2880\u28e4\u2840\u2800\u2800\u28c0\u28e4\u28e4\u28e4\u28c0\u2800\u2800\u2880\u28e4\u28e4\u28e4\u28e4\u28e4\u28c4\u2800\u2800\u2800\u2800\u2880\u28e0\u28e4\u28e4\u28c4\u2840\u2800\u2800\u2880\u28e4\u28e4\u28e4\u28e4\u28c4\u2840\u2800\u2800\u2800\u28c0\u28e4\u28e4\u28e4\u28c0\u2800\u2800\u28e0\u28c4\u2800\u2800\u2800\u2800\u28e0\u28e4\u2800\u28e0\u28e4\u28e4\u28e4\u28e4\u28e4\u2840\u2800\u2800",
+    "\u2800\u28fc\u28ff\u281f\u281b\u283b\u28ff\u28e7\u2800\u28ff\u28ff\u281b\u281b\u283b\u28ff\u28e7\u28b8\u28ff\u285f\u281b\u281b\u28bf\u28ff\u2844\u2800\u28ff\u28ff\u2800\u2800\u2800\u28b8\u28ff\u2847\u2880\u28fe\u28ff\u281f\u281b\u283b\u28ff\u28f7\u2800\u28b8\u28ff\u285f\u281b\u281b\u281b\u280b\u2800\u2800\u2800\u28f0\u28ff\u287f\u281b\u281b\u283b\u28ff\u28e7\u2800\u28b8\u28ff\u285f\u281b\u281b\u28bf\u28ff\u2844\u2800\u28fe\u28ff\u281f\u281b\u283b\u28ff\u28f7\u2840\u28bb\u28ff\u2846\u2800\u2800\u28a0\u28ff\u287f\u2800\u28ff\u28ff\u281b\u281b\u281b\u281b\u2801\u2800\u2800",
+    "\u2800\u28bb\u28ff\u28f6\u28e4\u28c4\u28c8\u2801\u2800\u28ff\u28ff\u28c0\u28c0\u28e0\u28ff\u287f\u28b8\u28ff\u28c7\u28c0\u28c0\u28fc\u28ff\u2807\u2800\u28ff\u28ff\u2800\u2800\u2800\u28b8\u28ff\u2847\u28b8\u28ff\u2847\u2800\u2800\u2800\u2808\u280b\u2800\u28b8\u28ff\u28e7\u28e4\u28e4\u28e4\u2844\u2800\u2800\u2800\u28ff\u28ff\u2800\u2880\u28e4\u28e4\u28ed\u28cd\u2800\u28b8\u28ff\u28c7\u28c0\u28c0\u28fc\u28ff\u2807\u28b8\u28ff\u2847\u2800\u2800\u2800\u28b8\u28ff\u2847\u2808\u28bf\u28ff\u2844\u2880\u28ff\u28ff\u2801\u2800\u28ff\u28ff\u28e4\u28e4\u28e4\u28e4\u2800\u2800\u2800",
+    "\u2800\u28c0\u2848\u2819\u281b\u283b\u28ff\u28e7\u2800\u28ff\u28ff\u283f\u283f\u283f\u281b\u2801\u28b8\u28ff\u287f\u283f\u28ff\u28ff\u284b\u2800\u2800\u28ff\u28ff\u2800\u2800\u2800\u28b8\u28ff\u2847\u28b8\u28ff\u2847\u2800\u2800\u2800\u2880\u28c0\u2800\u28b8\u28ff\u285f\u281b\u281b\u281b\u2801\u2800\u2800\u2800\u28ff\u28ff\u2800\u2808\u281b\u281b\u28ff\u28ff\u2800\u28b8\u28ff\u287f\u283f\u28ff\u28ff\u284b\u2800\u28b8\u28ff\u2847\u2800\u2800\u2800\u28b8\u28ff\u2847\u2800\u2818\u28ff\u28f7\u28fc\u28ff\u2807\u2800\u2800\u28ff\u28ff\u281b\u281b\u281b\u280b\u2800\u2800\u2800",
+    "\u2800\u28bf\u28ff\u28e6\u28e4\u28f4\u28ff\u287f\u2800\u28ff\u28ff\u2800\u2800\u2800\u2800\u2800\u28b8\u28ff\u2847\u2800\u2818\u28ff\u28f7\u2844\u2800\u2839\u28ff\u28e7\u28e4\u28e4\u28fe\u287f\u2803\u2808\u28bf\u28ff\u28e6\u28e4\u28f4\u28ff\u287f\u2800\u28b8\u28ff\u28e7\u28e4\u28e4\u28e4\u28c4\u2800\u2800\u2800\u2839\u28ff\u28f7\u28e4\u28e4\u28f4\u28ff\u280f\u2800\u28b8\u28ff\u2847\u2800\u2818\u28ff\u28f7\u2844\u2808\u28bf\u28ff\u28e6\u28e4\u28f4\u28ff\u287f\u2801\u2800\u2800\u2839\u28ff\u28ff\u284f\u2800\u2800\u2800\u28ff\u28ff\u28e4\u28e4\u28e4\u28e4\u2840\u2800\u2800",
+    "\u2800\u2800\u2809\u281b\u281b\u281b\u2809\u2800\u2800\u2819\u280b\u2800\u2800\u2800\u2800\u2800\u2808\u281b\u2801\u2800\u2800\u2808\u281b\u2801\u2800\u2800\u2808\u2819\u281b\u281b\u2809\u2800\u2800\u2800\u2800\u2809\u281b\u281b\u281b\u2809\u2800\u2800\u2808\u281b\u281b\u281b\u281b\u281b\u280b\u2800\u2800\u2800\u2800\u2808\u2819\u281b\u281b\u280b\u2801\u2800\u2800\u2808\u281b\u2801\u2800\u2800\u2808\u281b\u2801\u2800\u2800\u2809\u281b\u281b\u281b\u2809\u2800\u2800\u2800\u2800\u2800\u2819\u281b\u2800\u2800\u2800\u2800\u2819\u281b\u281b\u281b\u281b\u281b\u2801\u2800\u2800",
+)
 
-GROVE_BANNER = " ██████╗ ██████╗  ██████╗ ██╗   ██╗███████╗\n██╔════╝ ██╔══██╗██╔═══██╗██║   ██║██╔════╝\n██║  ███╗██████╔╝██║   ██║██║   ██║█████╗  \n██║   ██║██╔══██╗██║   ██║╚██╗ ██╔╝██╔══╝  \n╚██████╔╝██║  ██║╚██████╔╝ ╚████╔╝ ███████╗\n ╚═════╝ ╚═╝  ╚═╝ ╚═════╝   ╚═══╝  ╚══════╝\n                                           "
+# Braille bake of "GROVE" (6 rows x 45 cols) - the compact lockup.
+GROVE_BANNER_LINES = (
+    "\u2800\u2800\u28c0\u28e4\u28e4\u28e4\u28c0\u2800\u2800\u2800\u2880\u28e4\u28e4\u28e4\u28e4\u28c4\u2840\u2800\u2800\u2800\u2880\u28e0\u28e4\u28e4\u28c4\u2840\u2800\u2800\u2880\u28e4\u2840\u2800\u2800\u2800\u2880\u28e4\u2844\u2800\u28e0\u28e4\u28e4\u28e4\u28e4\u28e4\u2840",
+    "\u2880\u28fe\u28ff\u281f\u281b\u281b\u28bf\u28ff\u2844\u2800\u28b8\u28ff\u285f\u281b\u281b\u28bf\u28ff\u2844\u2800\u28b0\u28ff\u287f\u281b\u281b\u28bf\u28ff\u28c6\u2800\u2818\u28ff\u28f7\u2800\u2800\u2800\u28fc\u28ff\u2807\u2800\u28ff\u28ff\u281b\u281b\u281b\u281b\u2801",
+    "\u28b8\u28ff\u2847\u2800\u28e0\u28e4\u28ec\u28ed\u2841\u2800\u28b8\u28ff\u28c7\u28c0\u28c0\u28fc\u28ff\u2807\u2800\u28ff\u28ff\u2800\u2800\u2800\u2800\u28ff\u28ff\u2800\u2800\u2839\u28ff\u28e7\u2800\u28f8\u28ff\u284f\u2800\u2800\u28ff\u28ff\u28e4\u28e4\u28e4\u28e4\u2800",
+    "\u28b8\u28ff\u2847\u2800\u2819\u281b\u28bb\u28ff\u2847\u2800\u28b8\u28ff\u287f\u283f\u28ff\u28ff\u284b\u2800\u2800\u28ff\u28ff\u2800\u2800\u2800\u2800\u28ff\u28ff\u2800\u2800\u2800\u28bb\u28ff\u28e6\u28ff\u287f\u2800\u2800\u2800\u28ff\u28ff\u281b\u281b\u281b\u280b\u2800",
+    "\u2808\u28bf\u28ff\u28e6\u28e4\u28e4\u28fe\u287f\u2801\u2800\u28b8\u28ff\u2847\u2800\u2818\u28ff\u28f7\u2844\u2800\u2839\u28ff\u28f7\u28e4\u28e4\u28fe\u28ff\u280f\u2800\u2800\u2800\u2808\u28bf\u28ff\u28ff\u2801\u2800\u2800\u2800\u28ff\u28ff\u28e4\u28e4\u28e4\u28e4\u2840",
+    "\u2800\u2800\u2809\u281b\u281b\u281b\u2809\u2800\u2800\u2800\u2808\u281b\u2801\u2800\u2800\u2808\u281b\u2801\u2800\u2800\u2808\u2819\u281b\u281b\u280b\u2801\u2800\u2800\u2800\u2800\u2800\u2808\u281b\u2803\u2800\u2800\u2800\u2800\u2819\u281b\u281b\u281b\u281b\u281b\u2801",
+)
 
-# The unwrapped width of "SPRUCE GROVE" (measured at width=300 at bake time).
+SPRUCE_GROVE_BANNER = "\n".join(SPRUCE_GROVE_BANNER_LINES)
+GROVE_BANNER = "\n".join(GROVE_BANNER_LINES)
+
+# The unwrapped width of "SPRUCE GROVE" - exactly the bake width.
 # platform_utils._FULL_BANNER_WIDTH pins the label-selection threshold to this.
 SPRUCE_GROVE_NATURAL_WIDTH = 96
 
 
 def art_for_label(label: str) -> str:
-    """Return the baked ansi-shadow art for a ``startup_banner_text`` label.
+    """Return the baked braille art for a ``startup_banner_text`` label.
 
     ``SPRUCE GROVE`` gets the full render; anything else gets the compact
     GROVE art.

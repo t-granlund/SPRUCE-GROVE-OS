@@ -44,6 +44,26 @@ The harness wins by running three moves in parallel, not sequentially:
 
 <!-- LIVING:BEGIN -->
 
+### 2026-09-23 — The boot mark learns to wiggle, and Wiggledom becomes the fourth pillar
+- Source: build session (Jacob Collier's "The Wiggly Wonder of Music")
+- Status: shipped
+- Origin: grove-grown
+- The boot wordmark was pyfiglet's `ansi_shadow` — chunky solid blocks that
+  read as 8-bit. It is now drawn in **braille**: dots, not slabs, with the
+  curved, organic letterforms the grove deserves. `banner_art.py` and
+  `splash.py` both carry the new bake; the splash taught itself a braille
+  tier map (cells with an interior dot are the neon core, the rest glow).
+  Same contract, unchanged: six rows, `SPRUCE GROVE` exactly 96 columns.
+- The idea behind the art became the idea behind the tool. **Wiggledom** is
+  now the fourth pillar in `ETHOS.md` (README too): melody is the
+  through-line, rhythm is space and pace, harmony is the relationship
+  between the parts. Straight lines are brittle; the wiggle is water.
+  The boot tagline now closes with *there are no straight lines in nature*.
+- The Collier transcript moved into `docs/` (kebab-cased), beside the other
+  talk transcripts, as the reference for the new pillar.
+- The `cli.banner.grove_closer` key was missing from `es` and `fr-CA`
+  catalogs — a pre-existing i18n gap, closed while here.
+
 ### 2026-09-22 — Fifteen private agents cross into the grove, and the last code_puppy tie gets a name
 - Source: build session ("port over all the agents I had so they stand completely on their own")
 - Status: shipped

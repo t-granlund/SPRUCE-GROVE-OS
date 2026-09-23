@@ -29,7 +29,7 @@ points, and the full rename/contract map: [PROVENANCE.md](PROVENANCE.md).
 
 ## The ethos of the grove
 
-Three sources, one creed — [ETHOS.md](ETHOS.md):
+Four sources, one creed — [ETHOS.md](ETHOS.md):
 
 1. **Ozark Bagels — how to carry yourself.** Be first to say hello. Be kinder
    than necessary. Be tough minded, but tender hearted. Leave everything
@@ -39,6 +39,11 @@ Three sources, one creed — [ETHOS.md](ETHOS.md):
    phrasing over contradiction combat. Pragmatism over metaphysics.
 3. **gran·lund — who is doing the carrying.** Help people solve problems.
    Remove technology obstacles. Meet people where they are, as humans.
+4. **Wiggledom — how the work moves.** Straight lines are brittle; the wiggle
+   is fluid and "stronger than almost anything — like water." Melody is the
+   through-line, rhythm is space and pace, harmony is the relationship between
+   the parts. Embrace the dissonance. When the world feels like a straight
+   line, be a wiggler.
 
 ## Backed by the Leather Apron Club (Junto)
 

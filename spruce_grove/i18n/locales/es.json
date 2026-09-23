@@ -259,5 +259,6 @@
   "agent_manager.delete.file_not_found": "El archivo del clon '{agent_name}' no existe.",
   "agent_manager.discovery.json_discovery_failed": "Advertencia: No se pudieron descubrir los agentes JSON: {error}",
   "agent_manager.delete.success": "Se eliminó el clon '{agent_name}'.",
-  "cli.banner.powered_by": "Respaldado por el Leather Apron Club (Junto) · se repara solo · control por voz ·"
+  "cli.banner.powered_by": "Respaldado por el Leather Apron Club (Junto) · se repara solo · control por voz ·",
+  "cli.banner.grove_closer": "En la naturaleza no hay líneas rectas · Juntos somos mejores, siempre"
 }

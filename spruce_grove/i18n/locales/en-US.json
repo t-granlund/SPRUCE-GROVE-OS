@@ -35,7 +35,7 @@
   "confirm.no": "No",
   "cli.loading": "Spruce Grove is Loading...",
   "cli.banner.powered_by": "Backed by the Leather Apron Club (Junto) · self-healing · voice-driven ·",
-  "cli.banner.grove_closer": "Together we are better, always ·",
+  "cli.banner.grove_closer": "There are no straight lines in nature · Together we are better, always",
   "logfire.enabled": "🔭 Logfire instrumentation enabled — spans ship only if a Logfire token is configured.",
   "logfire.missing_package": "enable_logfire is set but the 'logfire' package is not importable. Your install may be broken; try reinstalling spruce-grove.",
   "logfire.configure_failed": "Failed to configure Logfire: {error}",

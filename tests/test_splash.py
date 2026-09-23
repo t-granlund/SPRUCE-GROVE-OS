@@ -71,11 +71,12 @@ class TestFrame:
         frame = splash._build_frame(0, True, FULL)
         lines = frame.splitlines()
         assert len(lines) == len(FULL)
-        allowed = set(" \u2591\u2592\u2588") | splash._SHADOW_TRIM
+        pyramid = set(" \u2591\u2592\u2588")
         for line in lines:
             visible = ANSI_RE.sub("", line)
             assert len(visible) <= splash._BANNER_FULL_WIDTH + 8
-            assert set(visible) <= allowed
+            # Pyramid tiers are block glyphs; the wordmark is braille.
+            assert all(c in pyramid or 0x2800 <= ord(c) <= 0x28FF for c in visible)
 
     def test_sheen_moves_between_phases(self):
         assert splash._build_frame(0, True, FULL) != splash._build_frame(20, True, FULL)
@@ -99,18 +100,22 @@ class TestFrame:
         assert output.count(splash._SYNC_START) == output.count(splash._SYNC_END)
         assert output.count(splash._SYNC_START) >= 1
 
-    def test_baked_figlet_is_canonical(self):
-        """pyfiglet is gone (dependency-exit rung 5); the bakes are now the
-        canonical art. Guard their shape: the unwrapped ansi-shadow render of
-        "SPRUCE GROVE" is six rstripped lines up to 96 columns (the natural
-        width banner_art records and platform_utils pins its threshold to)."""
+    def test_baked_braille_is_canonical(self):
+        """pyfiglet is gone (dependency-exit rung 5); the braille bakes are the
+        canonical art. Guard their shape: six rows, every glyph a braille cell,
+        and the full mark is exactly the 96 columns banner_art records and
+        platform_utils pins its threshold to."""
         from spruce_grove import banner_art
 
         assert banner_art.SPRUCE_GROVE_NATURAL_WIDTH == 96
         for baked in (splash._BANNER_FULL, splash._BANNER_COMPACT):
             assert len(baked) == 6
             assert all(isinstance(ln, str) and ln == ln.rstrip() for ln in baked)
-            assert all(len(ln) <= banner_art.SPRUCE_GROVE_NATURAL_WIDTH for ln in baked)
+            assert all(0x2800 <= ord(c) <= 0x28FF for ln in baked for c in ln)
+        assert all(
+            len(ln) == banner_art.SPRUCE_GROVE_NATURAL_WIDTH
+            for ln in splash._BANNER_FULL
+        )
 
 
 class TestComposeRows:
@@ -123,7 +128,7 @@ class TestComposeRows:
         rows = splash._compose_rows(70, 50)
         text_rows = [c for k, c in rows if k == "text" and c]
         assert len(text_rows) == len(splash._BANNER_COMPACT)
-        assert "\u2588" in text_rows[0]
+        assert any(0x2800 <= ord(c) <= 0x28FF for c in text_rows[0])
 
     def test_narrow_terminal_gets_pyramid_only(self):
         rows = splash._compose_rows(45, 50)
