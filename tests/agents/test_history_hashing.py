@@ -9,6 +9,8 @@ Properties under test:
   a pydantic-ai class rename does not invalidate existing dedup hashes.
 """
 
+import dataclasses
+import enum
 import hashlib
 
 from pydantic_ai import BinaryContent
@@ -131,3 +133,97 @@ def test_text_part_uses_part_kind_not_class_name():
     s = stringify_part(TextPart(content="hi"))
     assert s.startswith("text|")
     assert "TextPart" not in s
+
+
+# --- Rich-payload resilience (the CaptureGeometry regression) -----------------
+#
+# stringify_part hashes *every* part on *every* model request. A single
+# non-JSON-encodable object anywhere in a tool payload used to raise TypeError
+# and abort the whole turn (computer-use state carried a dataclass). These
+# tests pin the defensive ``default=_json_default`` fallback so that class of
+# crash cannot silently return.
+
+
+@dataclasses.dataclass
+class _Geometry:
+    x: int
+    y: int
+
+
+class _Shade(enum.Enum):
+    RED = "red"
+    CLEAR = "clear"
+
+
+def _rich_payload() -> dict:
+    return {
+        "geom": _Geometry(1, 2),
+        "shade": _Shade.RED,
+        "tags": {"beta", "alpha"},
+        "blob": b"\x89PNG",
+        "nested": {"deep": _Geometry(3, 4)},
+    }
+
+
+def test_rich_tool_payload_does_not_raise():
+    """The exact crash: a dataclass inside a tool-return dict must not raise."""
+    part = ToolReturnPart(
+        tool_name="computer", content=_rich_payload(), tool_call_id="c1"
+    )
+    assert stringify_part(part)  # must not raise TypeError
+
+
+def test_rich_payload_is_deterministic():
+    def make():
+        return ModelRequest(
+            parts=[
+                ToolReturnPart(
+                    tool_name="computer", content=_rich_payload(), tool_call_id="c1"
+                )
+            ]
+        )
+
+    assert hash_message(make()) == hash_message(make())
+
+
+def test_set_order_does_not_change_hash():
+    """Sets are unordered; fallback sorts by repr so the hash is content-stable."""
+    a = ToolReturnPart(
+        tool_name="t", content={"tags": {"a", "b", "c"}}, tool_call_id="x"
+    )
+    b = ToolReturnPart(
+        tool_name="t", content={"tags": {"c", "b", "a"}}, tool_call_id="x"
+    )
+    assert stringify_part(a) == stringify_part(b)
+
+
+def test_bytes_in_payload_participates_in_hash():
+    def make(data: bytes):
+        return ModelRequest(
+            parts=[
+                ToolReturnPart(tool_name="t", content={"blob": data}, tool_call_id="x")
+            ]
+        )
+
+    assert hash_message(make(b"one")) == hash_message(make(b"one"))
+    assert hash_message(make(b"one")) != hash_message(make(b"two"))
+
+
+def test_arbitrary_object_with_dict_does_not_raise():
+    class _Opaque:
+        def __init__(self):
+            self.public = 1
+            self._private = 2
+
+    part = ToolReturnPart(tool_name="t", content={"obj": _Opaque()}, tool_call_id="x")
+    s = stringify_part(part)
+    assert "public" in s
+
+
+def test_json_default_handles_nested_pydantic_and_enum():
+    from spruce_grove.agents._history import _json_default
+
+    assert _json_default(_Shade.RED) == "red"
+    assert _json_default(_Geometry(1, 2)) == {"x": 1, "y": 2}
+    assert _json_default(b"abc").startswith("<bytes ")
+    assert isinstance(_json_default(object()), str)  # repr fallback, never raises

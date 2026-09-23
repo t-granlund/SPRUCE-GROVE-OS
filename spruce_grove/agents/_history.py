@@ -8,6 +8,7 @@ needed, already-resolved strings / tool dicts) in explicitly.
 from __future__ import annotations
 
 import dataclasses
+import enum
 import hashlib
 import io
 import json
@@ -41,6 +42,42 @@ def _digest_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()[:16]
 
 
+def _json_default(value: Any) -> Any:
+    """``json.dumps`` fallback for values the stdlib encoder cannot handle.
+
+    Tool payloads routinely carry rich Python objects — dataclasses, enums,
+    sets, ``Decimal``/``UUID``, arbitrary ``__dict__`` instances. The stdlib
+    encoder raises ``TypeError`` on all of these, and because
+    :func:`stringify_part` hashes *every* message part on *every* model
+    request, a single such object anywhere in history used to abort the turn
+    (see the ``CaptureGeometry`` crash from computer-use state). We only need a
+    *stable* string for hashing, not a wire-accurate encoding, so fall back
+    defensively rather than ever raising.
+
+    Ordering matters: dataclasses and pydantic models before the generic
+    ``__dict__`` arm, and ``repr`` last so unknown objects still contribute a
+    deterministic, type-identifying string instead of vanishing from the hash.
+    """
+    if dataclasses.is_dataclass(value) and not isinstance(value, type):
+        # ``asdict`` recurses into nested dataclasses; ``default`` handles any
+        # remaining leaf type the recursion surfaces.
+        return dataclasses.asdict(value)
+    if isinstance(value, enum.Enum):
+        return value.value if value.value is not None else value.name
+    if isinstance(value, pydantic.BaseModel):
+        return value.model_dump()
+    if isinstance(value, (set, frozenset)):
+        # Sets are unordered; sort by repr so the hash is content-stable.
+        return sorted(repr(item) for item in value)
+    if isinstance(value, (bytes, bytearray)):
+        return f"<bytes {_digest_bytes(bytes(value))}>"
+    if hasattr(value, "__dict__"):
+        return {
+            key: val for key, val in vars(value).items() if not key.startswith("__")
+        }
+    return repr(value)
+
+
 def stringify_part(part: Any) -> str:
     """Return a stable, timestamp-free string representation of a message part.
 
@@ -72,9 +109,13 @@ def stringify_part(part: Any) -> str:
     elif isinstance(content, str):
         attributes.append(f"content={content}")
     elif isinstance(content, pydantic.BaseModel):
-        attributes.append(f"content={json.dumps(content.model_dump(), sort_keys=True)}")
+        attributes.append(
+            f"content={json.dumps(content.model_dump(), sort_keys=True, default=_json_default)}"
+        )
     elif isinstance(content, dict):
-        attributes.append(f"content={json.dumps(content, sort_keys=True)}")
+        attributes.append(
+            f"content={json.dumps(content, sort_keys=True, default=_json_default)}"
+        )
     elif isinstance(content, list):
         for item in content:
             if isinstance(item, str):
