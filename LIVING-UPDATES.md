@@ -44,6 +44,37 @@ The harness wins by running three moves in parallel, not sequentially:
 
 <!-- LIVING:BEGIN -->
 
+### 2026-09-22 — Fifteen private agents cross into the grove, and the last code_puppy tie gets a name
+- Source: build session ("port over all the agents I had so they stand completely on their own")
+- Status: shipped
+- Origin: grove-grown
+- Tyler's code_puppy agents turned out to be 15 JSON definitions in
+  `~/.code_puppy/agents/` - not the Python framework under
+  `code_puppy/agents/`, which grove already carried. All 15 now live in
+  `~/.spruce_grove/agents/`: the roster went 8 -> 22.
+- Porting was a migration, not a copy: agent references (`code-puppy` ->
+  `spruce-grove`, `web-puppy` -> `web-retriever`), config paths
+  (`~/.code_puppy` -> `~/.spruce_grove`), and trailing-space `display_name`s.
+  Agents keep their own names, including `web-puppy`, which coexists with
+  grove's built-in `web-retriever`.
+- They stay private. These files carry real business context and the repo is
+  public; a public route is a later, deliberate decision.
+- Two contradictions surfaced and were fixed: `tenantfleet-scanner` promised
+  a 512,000-token window while pinned to the *small* model (prompt corrected,
+  pin moved to the large tier), and `tenantfleet-architect` claimed a
+  397-billion-parameter MoE no pin backed. Unresolvable pins were retargeted:
+  `emoji-artist` and `release-gate-arbiter` came off Opus-only identifiers
+  that grove cannot reach without Claude credentials.
+- The last tie has a name: the third-party UC plugin hard-codes its tools
+  directory at `~/.code_puppy/plugins/universal_constructor`. Grove now owns
+  the data in `~/.spruce_grove/lib/universal_constructor` and bridges the
+  legacy path with a symlink; `scripts/check_uc_tools.py` reports that
+  relationship and repairs it idempotently. Removing the constant for real
+  means vendoring the plugin - ladder item 9, still council-parked.
+- Tooling landed in `scripts/`: `port_code_puppy_agents.py` (dry-run
+  migration), `dial_user_agents.py` (audit: load, tool resolution, model
+  pins; non-zero exit gates a pass), `check_uc_tools.py`.
+
 ### 2026-09-22 — The harness seam learns its own word for tool context: RunContext -> ToolContext
 - Source: build session (harness exit, bead SPRUCE-GROVE-OS-tdy)
 - Status: shipped

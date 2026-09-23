@@ -338,3 +338,50 @@ passed; import smoke test confirms
 **Next for the harness exit:** item 2 — agent loop + streaming events, the
 biggest single surface — then Phase 3 grove implementation behind the
 protocol.
+
+# ADDENDUM — 2026-09-22 late (fifteen user agents ported; the UC tie named)
+
+## What landed
+
+- **Three maintenance scripts** (92352b4, pushed):
+`scripts/port_code_puppy_agents.py` (dry-run migration from a legacy
+install), `scripts/dial_user_agents.py` (audits user agents against live
+grove — load, tool resolution, model pins, unknown keys; non-zero exit so
+it can gate a pass), `scripts/check_uc_tools.py`.
+- **Fifteen private agents** ported into `~/.spruce_grove/agents/`
+(roster 8 -> 22). Deliberately **not committed**: they carry business
+context and the repo is public. Verified: all load, zero dangling tools,
+zero code_puppy residue.
+- **Fixes found by auditing rather than assuming**: stale `embed_text` tool
+reference removed; two false capability claims corrected
+(`tenantfleet-scanner`'s 512,000-token window while pinned small;
+`tenantfleet-architect`'s 397-billion-parameter MoE); pins grove cannot
+resolve retargeted (`emoji-artist` -> `syn:large:vision` because its QA loop
+is visual, `release-gate-arbiter` -> `syn:large:text`, `web-puppy` off a
+GLM-Flash leftover).
+
+## The UC tie, named
+
+The UC plugin hard-codes its tools directory at
+`~/.code_puppy/plugins/universal_constructor`. Grove cannot edit dependency
+code, so grove owns the data (`~/.spruce_grove/lib/universal_constructor`)
+and bridges the legacy path with a symlink. `scripts/check_uc_tools.py`
+reports the relationship (owned / drifted / split / canonical-only) and
+repairs it idempotently without ever deleting tools. **Exit condition:**
+vendor the UC plugin (ladder item 9, council-parked) or upstream gains a
+configurable directory. Bead: SPRUCE-GROVE-OS-947.
+
+## Still open (Tyler's call)
+
+- Five prompt paths point at work-machine assets absent here
+(`~/dev/emoji-builder/**`, `~/dev/htt-brands-master-brand-book.md`,
+`~/dev/01-htt-brands/.../logos/`). Prompts now verify the path first and ask
+instead of guessing; the assets themselves need his machine.
+- `web-puppy` keeps its own name alongside grove's built-in
+`web-retriever`; both work, so the overlap is a documented choice.
+
+## Method note
+
+Most editing this session ran through asserted single-pass scripts rather
+than many hand edits (every replacement had to match exactly once), because
+ad-hoc shell editing and repeated tool calls proved unreliable.
