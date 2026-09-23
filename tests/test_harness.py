@@ -16,6 +16,7 @@ framework executes underneath. These tests prove four things:
 """
 
 import inspect
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -181,3 +182,41 @@ class TestToolContextVocabulary:
 
         assert seam.ToolContext is not None
         assert "ToolContext" in seam.__all__
+
+    def test_binding_failure_explains_itself(self, monkeypatch):
+        """A failure to bind must name the likely cause, not just raise.
+
+        Regression: a long-lived process imported pre-upgrade kept a stale
+        ``spruce_grove.harness`` module in memory. Lazy imports then failed
+        with a bare, baffling ImportError. The message now points at the
+        stale-process cause and the fix (restart).
+        """
+        import sys
+
+        import spruce_grove.harness as seam
+        from spruce_grove.harness import selector
+
+        def boom():
+            raise AttributeError("no attribute 'tool_context_type'")
+
+        fake_harness = MagicMock()
+        fake_harness.tool_context_type = boom
+        # Patch at the source: tool_context does ``from ...selector import
+        # get_harness``, so a re-import must pick the fake up from selector.
+        monkeypatch.setattr(selector, "get_harness", lambda: fake_harness)
+        monkeypatch.delitem(
+            sys.modules, "spruce_grove.harness.tool_context", raising=False
+        )
+
+        with pytest.raises(ImportError) as excinfo:
+            seam.__getattr__("ToolContext")
+
+        message = str(excinfo.value)
+        assert "restart" in message.lower()
+        assert "upgraded" in message.lower()
+
+    def test_unknown_attribute_still_raises_attribute_error(self):
+        import spruce_grove.harness as seam
+
+        with pytest.raises(AttributeError):
+            seam.__getattr__("NotARealThing")

@@ -39,7 +39,19 @@ def __getattr__(name: str):
     the seam.
     """
     if name == "ToolContext":
-        from spruce_grove.harness.tool_context import ToolContext
+        try:
+            from spruce_grove.harness.tool_context import ToolContext
+        except Exception as exc:  # noqa: BLE001 - re-raised with context
+            # A bare ImportError here is baffling to debug. The usual cause
+            # is a long-lived process, imported before this vocabulary
+            # existed, whose in-memory module never reloaded after the
+            # on-disk code was upgraded. Say so.
+            raise ImportError(
+                "spruce_grove.harness.ToolContext could not be bound "
+                f"({type(exc).__name__}: {exc}). The installed code may have "
+                "been upgraded underneath a running process — restart the CLI "
+                "so the harness module is re-imported."
+            ) from exc
 
         return ToolContext
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

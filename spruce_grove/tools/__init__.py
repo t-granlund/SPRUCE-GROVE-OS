@@ -1,9 +1,12 @@
+import logging
 import os
 import sys
 
 from spruce_grove.callbacks import on_register_agent_tools, on_register_tools
 from spruce_grove.messaging import emit_warning
 from spruce_grove.tools._lazy import lazy_registration
+
+logger = logging.getLogger(__name__)
 
 register_list_agents = lazy_registration(
     "spruce_grove.tools.agent_tools", "register_list_agents"
@@ -326,9 +329,24 @@ def register_tools_for_agent(
         ):
             continue  # Skip UC if disabled in config
 
-        # Register the individual tool
+        # Register the individual tool. A single tool that fails to import
+        # (a stale module in a long-lived process, a platform's missing
+        # optional dep, a typo in a plugin) must never take down the whole
+        # agent: lose that one tool, warn loudly, keep every other one.
         register_func = TOOL_REGISTRY[tool_name]
-        register_func(agent)
+        try:
+            register_func(agent)
+        except Exception as exc:  # noqa: BLE001 - one bad tool != a dead agent
+            logger.warning(
+                "tool %r failed to register and was skipped: %s: %s",
+                tool_name,
+                type(exc).__name__,
+                exc,
+            )
+            emit_warning(
+                f"Warning: tool '{tool_name}' failed to load "
+                f"({type(exc).__name__}) and was skipped."
+            )
 
 
 def _register_uc_tool_wrapper(agent, uc_tool_name: str):

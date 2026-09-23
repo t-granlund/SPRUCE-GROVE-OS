@@ -192,6 +192,63 @@ class TestRegisterToolsForAgent:
         register_tools_for_agent(agent, ["uc:api.weather"])
         mock_uc_reg.assert_called_once_with(agent, "api.weather")
 
+    @patch("spruce_grove.tools._load_plugin_tools")
+    @patch("spruce_grove.tools.has_extended_thinking_active", return_value=False)
+    def test_one_broken_tool_does_not_kill_the_agent(self, mock_ext, mock_load):
+        """A tool whose import fails must be skipped, not fatal.
+
+        Regression: a stale module in a long-lived process once made
+        ``browser_control`` raise ImportError during registration, which
+        propagated out of ``register_tools_for_agent`` and took down the
+        ENTIRE agent invocation -- sub-agent delegation included.
+        """
+        from spruce_grove.tools import TOOL_REGISTRY, register_tools_for_agent
+
+        registered = []
+
+        def good(_agent):
+            registered.append("good")
+
+        def broken(_agent):
+            raise ImportError("cannot import name 'ToolContext'")
+
+        def also_good(_agent):
+            registered.append("also_good")
+
+        TOOL_REGISTRY["__test_good_a"] = good
+        TOOL_REGISTRY["__test_broken"] = broken
+        TOOL_REGISTRY["__test_good_b"] = also_good
+        try:
+            register_tools_for_agent(
+                MagicMock(),
+                ["__test_good_a", "__test_broken", "__test_good_b"],
+            )
+        finally:
+            for name in ("__test_good_a", "__test_broken", "__test_good_b"):
+                del TOOL_REGISTRY[name]
+
+        # The healthy tools still ran; the broken one was skipped.
+        assert registered == ["good", "also_good"]
+
+    @patch("spruce_grove.tools._load_plugin_tools")
+    @patch("spruce_grove.tools.has_extended_thinking_active", return_value=False)
+    @patch("spruce_grove.tools.emit_warning")
+    def test_broken_tool_warns_the_user(self, mock_warn, mock_ext, mock_load):
+        """The skip is loud: the user is told which tool went missing."""
+        from spruce_grove.tools import TOOL_REGISTRY, register_tools_for_agent
+
+        def broken(_agent):
+            raise ImportError("boom")
+
+        TOOL_REGISTRY["__test_broken_warn"] = broken
+        try:
+            register_tools_for_agent(MagicMock(), ["__test_broken_warn"])
+        finally:
+            del TOOL_REGISTRY["__test_broken_warn"]
+
+        assert mock_warn.called
+        assert "__test_broken_warn" in mock_warn.call_args[0][0]
+
 
 class TestRegisterUcToolWrapper:
     @patch("code_puppy_core_plugins.universal_constructor.registry.get_registry")
