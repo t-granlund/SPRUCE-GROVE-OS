@@ -58,7 +58,7 @@ class TestGetGradientBanner:
         assert _plain(content) == "BANNER"
         art.assert_called_once_with("GROVE")
 
-    def test_with_pyfiglet(self):
+    def test_banner_renders_from_baked_art(self):
         from spruce_grove.command_line.onboarding_slides import get_gradient_banner
 
         content = get_gradient_banner()

@@ -63,6 +63,18 @@ The harness wins by running three moves in parallel, not sequentially:
   talk transcripts, as the reference for the new pillar.
 - The `cli.banner.grove_closer` key was missing from `es` and `fr-CA`
   catalogs — a pre-existing i18n gap, closed while here.
+- **Made durable.** The art lives in two places by necessity (`splash.py`
+  cannot import `spruce_grove` and keeps its own copy), so the baker is now
+  `scripts/bake_braille_banner.py` with a `--check` drift guard: it re-derives
+  the art and fails if either copy has wandered. `Pillow` was already a
+  runtime dependency, so nothing new was pulled in. `tests/test_banner_durability.py`
+  (21 tests) locks the contract cross-platform — 6 rows, 96 columns,
+  braille-only, both copies byte-identical — and, wherever a usable font
+  exists, asserts a fresh bake reproduces the committed art exactly.
+- That test caught a real one on the way in: the splash's first braille tier
+  map only lit the "core" tier when a dot had a horizontal neighbour — but a
+  braille cell is two dots wide, so *nothing* ever qualified and the whole
+  wordmark rendered in the mid glow. Now tiered by dot density instead.
 
 ### 2026-09-22 — Fifteen private agents cross into the grove, and the last code_puppy tie gets a name
 - Source: build session ("port over all the agents I had so they stand completely on their own")

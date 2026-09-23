@@ -6,9 +6,9 @@ import os
 import shutil
 import sys
 
-# ``SPRUCE GROVE`` rendered in pyfiglet's ansi_shadow spans 96 columns
+# The braille-rendered ``SPRUCE GROVE`` wordmark spans 96 columns
 # (pinned by tests/test_platform_utils.py). Baked so banner selection
-# stays import-light -- no pyfiglet needed just to pick a label.
+# stays import-light -- no font library needed just to pick a label.
 _FULL_BANNER = "SPRUCE GROVE"
 _FULL_BANNER_WIDTH = 96
 _COMPACT_BANNER = "GROVE"

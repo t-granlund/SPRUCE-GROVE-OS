@@ -236,19 +236,19 @@ class TestMain:
     @pytest.mark.anyio
     async def test_narrow_terminal_interactive_mode_uses_compact_banner(self):
         mock_inter = AsyncMock()
-        mock_figlet = MagicMock(return_value="LOGO\n\n")
+        mock_banner = MagicMock(return_value="LOGO\n\n")
         # Rich's Console honors COLUMNS, so this squeezes the banner width
-        # below the full SPRUCE GROVE figlet (79 cols).
+        # below the full SPRUCE GROVE wordmark width.
         with patch.dict(os.environ, {"COLUMNS": "50"}):
             await self._run_main(
                 ["spruce-grove"],
                 extra_patches={
                     "spruce_grove.cli_runner.interactive_mode": mock_inter,
-                    "spruce_grove.banner_art.art_for_label": mock_figlet,
+                    "spruce_grove.banner_art.art_for_label": mock_banner,
                 },
             )
 
-        mock_figlet.assert_called_once_with("GROVE")
+        mock_banner.assert_called_once_with("GROVE")
 
     @pytest.mark.anyio
     async def test_with_command_args(self):

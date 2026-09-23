@@ -56,11 +56,11 @@ class TestStartupBannerText:
     def test_narrow_terminal_gets_compact_banner(self):
         assert platform_utils.startup_banner_text(78) == "GROVE"
 
-    def test_threshold_matches_baked_figlet_width(self):
+    def test_threshold_matches_baked_banner_width(self):
         from spruce_grove import banner_art
 
-        # The threshold is pinned to the unwrapped render width, measured at
-        # bake time (banner_art replaced the pyfiglet dependency).
+        # The threshold is pinned to the baked wordmark width, measured at
+        # bake time (scripts/bake_braille_banner.py).
         assert (
             platform_utils._FULL_BANNER_WIDTH == banner_art.SPRUCE_GROVE_NATURAL_WIDTH
         )

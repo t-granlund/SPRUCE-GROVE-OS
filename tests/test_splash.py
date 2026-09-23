@@ -158,9 +158,9 @@ class TestComposeRows:
     def test_compact_grove_centered_under_pyramid(self):
         rows = splash._compose_rows(70, 50)
         text_lines = [c for k, c in rows if k == "text" and c]
-        # Centered means left/right margins stay balanced; the figlet glyph
-        # itself may carry a leading space (rounded letters), so compare
-        # margins rather than absolute padding.
+        # Centered means left/right margins stay balanced; a banner row may
+        # carry blank braille cells (rendered as spaces) at its edges, so
+        # compare margins rather than absolute padding.
         for line in text_lines:
             left = len(line) - len(line.lstrip())
             right = len(line) - len(line.rstrip())

@@ -114,7 +114,7 @@ the terminal splash.
 
 ### Terminal theming
 
-The boot splash renders a shimmering pyramid + figlet lockup
+The boot splash renders a shimmering pyramid + a braille wordmark
 ("SPRUCE GROVE", compact "GROVE" on narrow terminals) in a truecolor
 canopy-to-cedar gradient: halo `#2D4F3A` → glow `#588F5E` → core `#D2A069`,
 with a mist-white crest (`#F0E1C8`) where the sheen passes. ANSI fallbacks
