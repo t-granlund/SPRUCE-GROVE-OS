@@ -15,11 +15,14 @@ launch ─▶ daemon thread ─▶ GET pypi.org/pypi/spruce-grove/json
                         ─▶ compare (installed vs latest)
                         ├─ equal ──────▶ idle (one "current version" line)
                         └─ newer ──────▶ report status (message bus)
-                                        └▶ uv tool upgrade spruce-grove
-                                           ├─ exit 0 ─▶ "self-update complete;
-                                           │             next launch starts on
-                                           │             the new version"
-                                           └─ failure ▶ warn + manual command
+                                        ├─ owns console? ─▶ schedule for exit
+                                        │                   (env stash)
+                                        └─ is a child? ───▶ report only;
+                                                            parent upgrades
+   ...
+run ─▶ exit path (atexit) ─▶ pending? ─▶ uv tool upgrade spruce-grove
+                                        ├─ exit 0 ─▶ next launch is current
+                                        └─ failure ▶ log + manual command
 ```
 
 Pieces it operates with:
@@ -36,19 +39,68 @@ Pieces it operates with:
 ## Session-safety model
 
 The design question: how do you swap the code of a running program without
-breaking it? Answer: **you don't.** You swap the *disk*, and let process
+breaking it? Answer: **you don't touch the disk while the process is
+importing from it.** Actuation is deferred to process exit, and process
 boundaries do the rest.
 
-- A running session has all its modules warm and internally consistent —
-  it keeps executing the version it started with, to the end of its life.
-- The on-disk environment is replaced by `uv tool upgrade` (fresh venv,
-  atomic enough at the uv layer).
+- A running session keeps executing the version it started with — its
+  modules stay warm, and **nothing on disk changes underneath it**.
+- `uv tool upgrade` runs on the exit path (`atexit`), once the interpreter
+  has finished importing grove code. The disk is replaced only when nothing
+  can import from it any more.
 - The **next** process launched resolves imports from the new code.
 
-No lazy-import mixing matters in practice because the running session's
-imports are already resolved; the exposure window is a daemon-threaded
-long-runner importing a brand-new submodule mid-session, which the
-"restart to switch" message makes explicit rather than pretending away.
+### The premise this used to get wrong
+
+Earlier revisions of this document claimed the risk was negligible, because
+"the running session's imports are already resolved" and the only exposure
+was "a daemon-threaded long-runner importing a brand-new submodule
+mid-session." **That premise was false, and the architecture is what made it
+false.** The grove imports tool modules *lazily*, at the moment an agent
+first needs them:
+
+```python
+# spruce_grove/tools/_lazy.py
+def lazy_registration(module: str, name: str):
+    def register(*args, **kwargs):
+        return getattr(import_module(module), name)(*args, **kwargs)  # imports at first use
+```
+
+So mid-session imports are the **normal path for every tool**, not an edge
+case — and the first `invoke_agent` is exactly when they happen. Upgrading
+the disk during a session therefore half-mixed two versions: the process held
+the old module table while the files on disk were new.
+
+Observed live (2026-09-22/23): a session started 18:04 cached
+`spruce_grove.harness` before the ToolContext vocabulary landed; the install
+was upgraded at 09:29; the next lazy import of a browser tool raised
+`ImportError`, and because tool registration had no per-tool guard, **every**
+agent whose toolset included it died — delegation included.
+
+Three fixes, in layers:
+
+1. **Deferral** (this document's contract): actuation waits for exit, so the
+   hazard class is gone rather than merely survivable.
+2. **Per-tool isolation** (`8d74d2d`): a tool that fails to register is
+   skipped and named, never fatal to the agent run.
+3. **A diagnosable binding**: the lazy `ToolContext` resolution raises an
+   ImportError that names the stale-process cause and the restart fix,
+   instead of a bare `ImportError`.
+
+The honest label for (2) and (3): they are **graceful degradation**, not
+full function. A stale session survives, minus the tools that could not
+import. Only a restart restores everything. (1) is what stops it happening
+at all.
+
+### When the grove is a child process
+
+The desktop shell (and any other parent driving the CLI as a child) is a
+special case: the child's `stdin` is a pipe, not a console. A child must not
+upgrade its own live installation — the parent is mid-flight, and the parent
+owns the console. So in that case actuation is **reported, not performed**:
+the child says a newer release exists and leaves the upgrade to the process
+that owns it. A bare interactive session owns its console and defers to its
+own exit.
 
 ## Contracts (the part that must never rot)
 
@@ -60,8 +112,12 @@ long-runner importing a brand-new submodule mid-session, which the
 3. **Never actuate on source checkouts.** `self_update_supported()`
    requires the `uv` binary *and* the package to live under
    `.../uv/tools/...`. Editable installs are sacred.
-4. **Actuation is a subprocess with a 180s timeout.** The daemon thread is
-   never joined; worst case is a warning line.
+4. **Actuation is a subprocess with a bounded timeout.** 180s inline; 60s on
+   the exit path (`EXIT_UPGRADE_TIMEOUT_SECONDS`), where the wait is
+   user-visible and a miss simply defers to the next launch.
+5. **Actuation never runs while the process can still import.** Deferred to
+   the exit path; a child process never actuates at all (it reports and lets
+   its parent act).
 
 ## Escape hatches & rollback
 
@@ -69,6 +125,7 @@ long-runner importing a brand-new submodule mid-session, which the
 |---|---|
 | Keep checking, never auto-upgrade | `NO_AUTO_UPDATE=1` |
 | Silence the entire check | `NO_VERSION_UPDATE=1` (pre-existing gate in `cli_runner.py`) |
+| Check normally, skip the exit-time install | `SPRUCE_GROVE_UPDATE_AT_EXIT=0` |
 | Pin a known-good version | `uv tool install spruce-grove==X.Y.Z` |
 | Force re-resolve after a just-published release | `uv cache clean spruce-grove && uv tool upgrade spruce-grove` |
 

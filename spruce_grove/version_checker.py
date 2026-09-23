@@ -62,16 +62,19 @@ def fetch_latest_version(package_name):
 
 
 def _maybe_self_update(current_version, latest_version) -> None:
-    """Close the self-heal loop: actuate the upgrade, best-effort, never raise.
+    """Close the self-heal loop: schedule the upgrade, best-effort, never raise.
 
     Runs on the startup daemon thread after the status messages land, so the
-    user sees what is happening and startup is never blocked. Any failure is
-    reported and swallowed - a broken updater must never break a session.
+    user sees what is happening and startup is never blocked. Actuation is
+    requested with ``defer_to_exit=True``: the upgrade must not touch the disk
+    while this process can still lazily import tool modules, which is exactly
+    how a session gets broken mid-flight. Any failure is reported and
+    swallowed - a broken updater must never break a session.
     """
     try:
         from spruce_grove.self_update import perform_self_update
 
-        perform_self_update(current_version, latest_version)
+        perform_self_update(current_version, latest_version, defer_to_exit=True)
     except Exception as e:  # pragma: no cover - absolute last resort
         emit_warning(t("version.self_update_failed", error=e))
 

@@ -391,5 +391,7 @@
   "agent_manager.discovery.json_shadowed": "JSON agent '{agent_name}' skipped: builtin Python agent with the same name takes precedence.",
   "agent_manager.delete.file_not_found": "Clone file for '{agent_name}' does not exist.",
   "agent_manager.discovery.json_discovery_failed": "Warning: Could not discover JSON agents: {error}",
-  "agent_manager.delete.success": "Deleted clone '{agent_name}'."
+  "agent_manager.delete.success": "Deleted clone '{agent_name}'.",
+  "version.self_update_deferred_exit": "Update to {latest} is scheduled; it installs as this session exits, so nothing you are running gets swapped underneath you.",
+  "version.self_update_deferred_parent": "A newer release ({latest}) is available. This session is running inside a parent process, so the upgrade is left to that process rather than done mid-session."
 }

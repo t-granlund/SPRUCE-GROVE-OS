@@ -10,6 +10,8 @@ apply_all_patches()
 
 import argparse
 import asyncio
+import atexit
+import logging
 import time
 import json
 import os
@@ -1621,3 +1623,24 @@ def main_entry():
         reset_unix_terminal()
     # Guard None -> 0 and propagate to the process exit status.
     sys.exit(rc if rc is not None else 0)
+
+
+def _run_deferred_self_update() -> None:
+    """Actuate any upgrade stashed during startup. Runs at exit, once.
+
+    Placed after the interpreter has finished importing grove code: nothing
+    can lazily import a half-replaced module from here, which is the whole
+    reason actuation waits until now. Never raises -- a broken updater must
+    not turn a clean shutdown into a failed one.
+    """
+    try:
+        from spruce_grove.self_update import run_deferred_update
+
+        run_deferred_update()
+    except Exception as e:  # pragma: no cover - absolute last resort
+        logging.getLogger(__name__).debug("deferred self-update skipped: %s", e)
+
+
+# Registered at import: runs on every exit path (normal, ``sys.exit``, or an
+# uncaught fall-through), and is a cheap no-op when nothing is pending.
+atexit.register(_run_deferred_self_update)

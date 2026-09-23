@@ -260,5 +260,7 @@
   "agent_manager.discovery.json_discovery_failed": "Avertissement : impossible de découvrir les agents JSON : {error}",
   "agent_manager.delete.success": "Clone '{agent_name}' supprimé.",
   "cli.banner.powered_by": "Soutenu par le Leather Apron Club (Junto) · auto-réparation · pilotage vocal ·",
-  "cli.banner.grove_closer": "Il n’y a pas de lignes droites dans la nature · Ensemble, nous sommes meilleurs, toujours"
+  "cli.banner.grove_closer": "Il n’y a pas de lignes droites dans la nature · Ensemble, nous sommes meilleurs, toujours",
+  "version.self_update_deferred_exit": "La mise à jour vers {latest} est planifiée ; elle s'installera à la fermeture de cette session, pour que rien de ce que vous exécutez ne soit remplacé sous vos pieds.",
+  "version.self_update_deferred_parent": "Une version plus récente ({latest}) est disponible. Cette session s'exécute dans un processus parent ; la mise à jour est donc laissée à ce processus plutôt que faite en cours de session."
 }
