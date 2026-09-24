@@ -20,6 +20,13 @@ set -eu
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="${1:-$ROOT/_site}"
 
+# Normalize to an absolute path FIRST: CI passes the relative `_site`, which
+# the guard below would otherwise reject because it checks the literal string.
+case "$OUT" in
+  /*) ;;
+  *) OUT="$ROOT/$OUT" ;;
+esac
+
 case "$OUT" in
   "$ROOT"/* | /tmp/*) ;;
   *) echo "build-site: refusing to build into $OUT (must be under $ROOT or /tmp)" >&2; exit 2 ;;
