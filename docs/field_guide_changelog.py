@@ -15,6 +15,7 @@ Shape returned by `_get_recent_commits`:
     }
 """
 
+import re
 import subprocess
 from collections import defaultdict
 from datetime import datetime
@@ -39,6 +40,38 @@ GROVE_DISPLAY_NAME = "the grove"
 def _display_author(author: str) -> str:
     """Anonymize the grove's own commit author for public rendering."""
     return GROVE_DISPLAY_NAME if author.strip().lower() in GROVE_AUTHORS else author
+
+
+#: Personal identity that can appear inside a commit SUBJECT, not just its
+#: author. Redacting `%an` alone was not enough: seven subjects on the live
+#: site named the person or their domain, because the words were typed into the
+#: message rather than the author field.
+#:
+#: `t-granlund` is deliberately NOT matched here -- it is the account handle in
+#: URLs and remotes, it cannot change without an org transfer, and replacing it
+#: inside a pasted URL would produce a broken link rather than a private one.
+#: `(?<![-\w])` is load-bearing, not decoration: without it the generic
+#: surname rule rewrites the `t-granlund` HANDLE into `t-the grove` and breaks
+#: every URL that contains it. Order also matters -- the specific patterns run
+#: before the generic one, so a domain is described rather than half-replaced.
+_PERSONAL_IN_SUBJECT = (
+    (re.compile(r"\btylergranlund\.com\b", re.I), "the grove site"),
+    (re.compile(r"\btyler\s+granlund\b", re.I), GROVE_DISPLAY_NAME),
+    (re.compile(r"\bgranlund-grove\b", re.I), "grove"),
+    (re.compile(r"(?<![-\w])granlund\b", re.I), GROVE_DISPLAY_NAME),
+    (re.compile(r"\btyler\b", re.I), GROVE_DISPLAY_NAME),
+)
+
+
+def _display_subject(subject: str) -> str:
+    """Anonymize the grove's own commit subject for public rendering.
+
+    Same policy as :func:`_display_author`, applied to the message text. Keeps
+    the sentence and its meaning; only the person leaves.
+    """
+    for pattern, replacement in _PERSONAL_IN_SUBJECT:
+        subject = pattern.sub(replacement, subject)
+    return subject
 
 
 def _get_recent_commits(_run, repo_root: Path) -> dict:
@@ -75,7 +108,7 @@ def _get_recent_commits(_run, repo_root: Path) -> dict:
             current = {
                 "hash": full_hash,
                 "short_hash": short_hash,
-                "subject": subject,
+                "subject": _display_subject(subject),
                 "author": _display_author(author),
                 "date": date_str,
                 "month": month_str,

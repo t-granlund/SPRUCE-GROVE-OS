@@ -204,8 +204,13 @@ def _get_tools() -> list[dict]:
     return tools
 
 
-def _get_agents() -> list[dict]:
-    """Discover built-in Python agents and JSON agents."""
+def _get_agents() -> tuple[list[dict], int]:
+    """Discover built-in Python agents; count private ones without naming them.
+
+    Returns ``(public_agents, private_agent_count)``. Private agents live in
+    the user's own ``~/.spruce_grove/agents/`` and are never published -- the
+    field guide is a public surface, and "agents stay private" is the rule.
+    """
     sys.path.insert(0, str(REPO_ROOT))
     os.environ["TERM"] = "dumb"
 
@@ -241,29 +246,24 @@ def _get_agents() -> list[dict]:
         except Exception as exc:
             print(f"Warning: could not load agent {modname}: {exc}")
 
-    # JSON agents from user config
+    # JSON agents from user config.
+    #
+    # These are PRIVATE agents: `~/.spruce_grove/agents/` is a user's own
+    # directory, not the repo. Publishing their names, descriptions and tool
+    # lists to the public field guide leaks both private work AND whatever
+    # personal detail a description happens to contain -- which is exactly what
+    # happened: one user agent's description named the maintainer on the live
+    # site. The rule is "agents stay private", so the field guide counts them
+    # without naming them.
     user_agents_dir = Path.home() / ".spruce_grove" / "agents"
+    private_agent_count = 0
     if user_agents_dir.exists():
-        for json_file in sorted(user_agents_dir.glob("*.json")):
-            try:
-                data = json.loads(json_file.read_text())
-                name = data.get("name", json_file.stem)
-                if name in seen_names:
-                    continue
-                seen_names.add(name)
-                agents.append(
-                    {
-                        "name": name,
-                        "display_name": data.get("display_name", name),
-                        "description": data.get("description", "Custom JSON agent"),
-                        "type": "json",
-                        "tools": data.get("tools", []),
-                    }
-                )
-            except Exception as exc:
-                print(f"Warning: could not read JSON agent {json_file}: {exc}")
+        named = sorted(p.stem for p in user_agents_dir.glob("*.json"))
+        # An agent also defined in-repo is public already; only the rest are
+        # private, so the count says something meaningful.
+        private_agent_count = sum(1 for stem in named if stem not in seen_names)
 
-    return sorted(agents, key=lambda a: a["name"])
+    return sorted(agents, key=lambda a: a["name"]), private_agent_count
 
 
 def _first_sentence(text: str, limit: int = 160) -> str:
@@ -651,6 +651,9 @@ def main() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     changelog_data = _get_recent_commits(_run, REPO_ROOT)
+    # Discover once -- _get_agents imports every agent module, so calling it per
+    # reference (as this used to) re-imports the world four times over.
+    agents, private_agent_count = _get_agents()
 
     data = {
         "meta": {
@@ -663,14 +666,15 @@ def main() -> None:
         },
         "stats": {
             "tools": len(_get_tools()),
-            "agents": len(_get_agents()),
+            "agents": len(agents),
+            "privateAgents": private_agent_count,
             "plugins": len(_get_plugins()),
             "skills": len(_get_skills()),
             "commitsLast2Months": changelog_data["total_commits"],
             "releases": len(changelog_data["releases"]),
         },
         "tools": _get_tools(),
-        "agents": _get_agents(),
+        "agents": agents,
         "plugins": _get_plugins(),
         "skills": _get_skills(),
         "sdlc": SDLC_STAGES,

@@ -18,6 +18,8 @@ before it bumps the version, so a regression here **blocks the release**.
 
 from __future__ import annotations
 
+import json
+import os
 import re
 import subprocess
 import tomllib
@@ -272,3 +274,131 @@ class TestRedactionAllowlistStaysWhole:
             module.GROVE_AUTHORS
         )
         assert module.GROVE_DISPLAY_NAME == "the grove"
+
+
+class TestGeneratedArtifacts:
+    """The public site is generated, so the REDACTION must be tested, not the output.
+
+    Two live leaks came from here: seven commit SUBJECTS naming the person (the
+    author was redacted, the message was not), and fifteen private user agents
+    whose names and descriptions the field guide published to the world.
+    """
+
+    def _module(self):
+        import importlib.util
+
+        spec = importlib.util.spec_from_file_location(
+            "_fgc_subject", REPO / "docs" / "field_guide_changelog.py"
+        )
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+
+    @pytest.mark.parametrize(
+        "subject",
+        [
+            "logo pack: the granlund glyph, one geometry four jobs",
+            "relicense MIT -> Apache-2.0: LICENSE (full text, Granlund 2026)",
+            "OFFICIAL: the mark is three TreeMarks (canonical tylergranlund.com fir)",
+            "in the wild: flagship tylergranlund.com with stack call-outs",
+            "fix(pages): ship phases + progress boards -- the 404 Tyler caught",
+        ],
+    )
+    def test_commit_subjects_are_redacted(self, subject):
+        """The real subjects that were live on the site."""
+        assert not DENY.search(self._module()._display_subject(subject))
+
+    def test_the_handle_survives_subject_redaction(self):
+        """Over-redaction is a bug: it would produce broken URLs."""
+        out = self._module()._display_subject(
+            "update: see https://github.com/t-granlund/SPRUCE-GROVE-OS"
+        )
+        assert "t-granlund/SPRUCE-GROVE-OS" in out, (
+            "subject redaction mangled the account handle -- the bare surname "
+            "rule needs a negative lookbehind for '-'"
+        )
+
+    def test_upstream_credit_survives_subject_redaction(self):
+        out = self._module()._display_subject(
+            "feat: credit Michael Pfaffenberger for Code Puppy"
+        )
+        assert "Pfaffenberger" in out
+
+    def test_generated_site_carries_no_personal_name(self):
+        """End to end: the committed artifacts the site serves."""
+        offenders = []
+        for rel in ("docs/field-guide/data.js", "docs/field-guide-flat.html"):
+            offenders.extend(
+                f"{rel}:{n}: {line}"
+                for n, line in _lines_with_name(rel)
+                if "[truncated]" not in line  # ignore this test's own marker wording
+            )
+        assert not offenders, "generated public artifacts leak a name:\n" + "\n".join(
+            offenders
+        )
+
+
+class TestPrivateAgentsStayPrivate:
+    """`~/.spruce_grove/agents/` is the user's own dir, not the repo."""
+
+    def test_field_guide_publishes_only_in_repo_agents(self, monkeypatch, tmp_path):
+        """
+        The generator must COUNT private agents, never NAME them.
+
+        Regression it pins: the field guide published 15 user agents' names,
+        descriptions and tool lists -- and one description named the maintainer.
+        This drives the real discovery function with a planted private agent, so
+        it fails if someone reintroduces the user-agents loop.
+        """
+        import importlib.util
+
+        home = tmp_path / "home"
+        (home / ".spruce_grove" / "agents").mkdir(parents=True)
+        (home / ".spruce_grove" / "agents" / "secret-agent.json").write_text(
+            json.dumps(
+                {
+                    "name": "secret-agent",
+                    "description": "planted by Granlund, must never ship",
+                    "tools": ["shell"],
+                }
+            )
+        )
+        monkeypatch.setattr(Path, "home", staticmethod(lambda: home))
+        # The generator clobbers os.environ["TERM"] = "dumb" as a side effect
+        # (it wants plain-text agent imports). Pin it so teardown restores the
+        # real value -- otherwise this leaks and breaks unrelated splash tests.
+        monkeypatch.setenv("TERM", os.environ.get("TERM", "xterm-256color"))
+
+        docs = str(REPO / "docs")
+        monkeypatch.syspath_prepend(docs)  # generator imports its sibling module
+        spec = importlib.util.spec_from_file_location(
+            "_fg_private", REPO / "docs" / "generate-field-guide.py"
+        )
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+
+        public_agents, private_count = module._get_agents()
+        names = {a["name"] for a in public_agents}
+
+        assert "secret-agent" not in names, (
+            "a private agent from ~/.spruce_grove/agents was published"
+        )
+        assert private_count == 1, (
+            f"the private agent should be counted, not listed (got {private_count})"
+        )
+
+    def test_the_public_artifacts_contain_no_private_agent_names(self):
+        private_dir = Path.home() / ".spruce_grove" / "agents"
+        if not private_dir.is_dir():
+            pytest.skip("no private agents on this machine")
+        names = [
+            json.loads(p.read_text()).get("name", p.stem)
+            for p in private_dir.glob("*.json")
+            if p.is_file()
+        ]
+        if not names:
+            pytest.skip("no private agents to check")
+
+        data = (REPO / "docs" / "field-guide" / "data.js").read_text()
+        leaked = [n for n in names if f'"{n}"' in data]
+        assert not leaked, f"private agent names published in the field guide: {leaked}"

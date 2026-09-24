@@ -1,18 +1,19 @@
 window.FIELD_GUIDE_DATA = {
   "meta": {
-    "generatedAt": "2026-09-18T12:47:54.416966+00:00",
+    "generatedAt": "2026-09-24T16:14:49.037830+00:00",
     "repoPath": "/Users/tygranlund/dev/SPRUCE-GROVE-OS",
-    "repoHead": "aacad29",
+    "repoHead": "5cebf11",
     "branch": "main",
-    "currentVersion": "spruce-grove v1.0.59",
+    "currentVersion": "spruce-grove v1.0.76",
     "sourceUrl": "https://github.com/mpfaffenberger/code_puppy"
   },
   "stats": {
     "tools": 61,
     "agents": 7,
-    "plugins": 69,
+    "privateAgents": 15,
+    "plugins": 71,
     "skills": 4,
-    "commitsLast2Months": 192,
+    "commitsLast2Months": 247,
     "releases": 1
   },
   "tools": [
@@ -685,7 +686,7 @@ window.FIELD_GUIDE_DATA = {
         },
         {
           "name": "skills_install_menu.py",
-          "lines": 609
+          "lines": 608
         },
         {
           "name": "skills_menu.py",
@@ -807,7 +808,7 @@ window.FIELD_GUIDE_DATA = {
         },
         {
           "name": "register_callbacks.py",
-          "lines": 154
+          "lines": 156
         }
       ],
       "hasReadme": true,
@@ -916,7 +917,7 @@ window.FIELD_GUIDE_DATA = {
         },
         {
           "name": "utils.py",
-          "lines": 602
+          "lines": 604
         }
       ],
       "hasReadme": false,
@@ -990,7 +991,7 @@ window.FIELD_GUIDE_DATA = {
         },
         {
           "name": "model_filter.py",
-          "lines": 98
+          "lines": 101
         },
         {
           "name": "model_provider.py",
@@ -1167,21 +1168,20 @@ window.FIELD_GUIDE_DATA = {
     {
       "name": "context_indicator",
       "tier": "core-package",
-      "description": "Register callbacks for the ``context_indicator`` plugin.",
+      "description": "Expose ``/context`` for a detailed token-usage breakdown.",
       "hooks": [
         "custom_command",
-        "custom_command_help",
-        "startup"
+        "custom_command_help"
       ],
       "hasCustomCommand": true,
       "files": [
         {
           "name": "__init__.py",
-          "lines": 14
+          "lines": 7
         },
         {
           "name": "register_callbacks.py",
-          "lines": 249
+          "lines": 160
         },
         {
           "name": "usage.py",
@@ -1584,6 +1584,57 @@ window.FIELD_GUIDE_DATA = {
       "hasSkill": false
     },
     {
+      "name": "grove_console",
+      "tier": "builtin",
+      "description": "Register `/console`, the live-session panel.",
+      "hooks": [
+        "custom_command",
+        "custom_command_help"
+      ],
+      "hasCustomCommand": true,
+      "files": [
+        {
+          "name": "__init__.py",
+          "lines": 7
+        },
+        {
+          "name": "model.py",
+          "lines": 185
+        },
+        {
+          "name": "panel.py",
+          "lines": 200
+        },
+        {
+          "name": "register_callbacks.py",
+          "lines": 68
+        }
+      ],
+      "hasReadme": false,
+      "hasSkill": false
+    },
+    {
+      "name": "grove_spinner",
+      "tier": "builtin",
+      "description": "Install the grove spinner art into the third-party plugin's extension point.",
+      "hooks": [
+        "startup"
+      ],
+      "hasCustomCommand": false,
+      "files": [
+        {
+          "name": "__init__.py",
+          "lines": 15
+        },
+        {
+          "name": "register_callbacks.py",
+          "lines": 118
+        }
+      ],
+      "hasReadme": false,
+      "hasSkill": false
+    },
+    {
       "name": "herdr",
       "tier": "core-package",
       "description": "herdr integration  Makes code-puppy a first-class citizen in [**herdr**](https://herdr.dev), a terminal workspace manager for coding agents.",
@@ -1592,6 +1643,7 @@ window.FIELD_GUIDE_DATA = {
         "agent_run_end",
         "agent_run_start",
         "awaiting_user_input",
+        "handle_cli_args",
         "interactive_turn_cancel",
         "interactive_turn_end",
         "post_autosave",
@@ -1610,15 +1662,19 @@ window.FIELD_GUIDE_DATA = {
         },
         {
           "name": "client.py",
-          "lines": 518
+          "lines": 549
         },
         {
           "name": "register_callbacks.py",
-          "lines": 231
+          "lines": 279
         },
         {
           "name": "reporter.py",
-          "lines": 337
+          "lines": 342
+        },
+        {
+          "name": "restore.py",
+          "lines": 284
         },
         {
           "name": "smoke.py",
@@ -1873,7 +1929,7 @@ window.FIELD_GUIDE_DATA = {
         },
         {
           "name": "transcriber.py",
-          "lines": 121
+          "lines": 256
         }
       ],
       "hasReadme": true,
@@ -2471,7 +2527,7 @@ window.FIELD_GUIDE_DATA = {
         },
         {
           "name": "prompt_patch.py",
-          "lines": 95
+          "lines": 94
         },
         {
           "name": "register_callbacks.py",
@@ -2510,7 +2566,7 @@ window.FIELD_GUIDE_DATA = {
         },
         {
           "name": "register_callbacks.py",
-          "lines": 137
+          "lines": 142
         }
       ],
       "hasReadme": false,
@@ -2621,7 +2677,7 @@ window.FIELD_GUIDE_DATA = {
         },
         {
           "name": "register_callbacks.py",
-          "lines": 348
+          "lines": 347
         },
         {
           "name": "rich_themes.py",
@@ -2769,7 +2825,7 @@ window.FIELD_GUIDE_DATA = {
         },
         {
           "name": "judges_menu.py",
-          "lines": 607
+          "lines": 605
         },
         {
           "name": "register_callbacks.py",
@@ -2895,96 +2951,481 @@ window.FIELD_GUIDE_DATA = {
     }
   ],
   "changelog": {
-    "total_commits": 192,
+    "total_commits": 247,
     "releases": [
       {
         "month": "2026-09",
-        "commit_count": 192,
+        "commit_count": 247,
         "commits": [
           {
-            "hash": "aacad29e46aacdd899bd141457c3f6eee544cd30",
-            "short_hash": "aacad29",
-            "subject": "handoff: 9/18 addendum — manifesto landed (b6b53ce), barbershop P1 verified+closed, public-repo guard on handoff files (8l7 filed)",
+            "hash": "5cebf1108c0cef1a2d0e8e7f8885f95465a9d737",
+            "short_hash": "5cebf11",
+            "subject": "fix(mockingbird): stop the \"thank you, thank you, thank you\" dictation bug",
             "author": "the grove",
-            "date": "2026-09-18",
+            "date": "2026-09-24",
             "month": "2026-09"
           },
           {
-            "hash": "d1f519954ff3eaa861c1b67307663bcab7cc2df9",
-            "short_hash": "d1f5199",
+            "hash": "8417e4ad228805ea0250b3a1fa3545ed04201be3",
+            "short_hash": "8417e4a",
             "subject": "chore: bump version [ci skip]",
             "author": "github-actions[bot]",
-            "date": "2026-09-18",
+            "date": "2026-09-24",
             "month": "2026-09"
           },
           {
-            "hash": "0f3b0311920ca4f4da45a2826aa19ccd30697562",
-            "short_hash": "0f3b031",
-            "subject": "pages: the manifesto rendered for the web — hub card, nav entry, publish loop",
+            "hash": "64b630c471745b9f885d8abbc8863acabe46d957",
+            "short_hash": "64b630c",
+            "subject": "fix(anonymity): finish the pivot on the surfaces it never reached",
             "author": "the grove",
-            "date": "2026-09-17",
+            "date": "2026-09-24",
             "month": "2026-09"
           },
           {
-            "hash": "2f3126b7129ab5e90c484f2a20a7b862f363da53",
-            "short_hash": "2f3126b",
+            "hash": "f892bd99a640bc37c1b8c8eadf043f302fc10e51",
+            "short_hash": "f892bd9",
             "subject": "chore: bump version [ci skip]",
             "author": "github-actions[bot]",
-            "date": "2026-09-17",
+            "date": "2026-09-23",
             "month": "2026-09"
           },
           {
-            "hash": "899066a4233227ec58a8f02aa5e08fd2ed5147de",
-            "short_hash": "899066a",
-            "subject": "handoff: 9/16 addendum — Disc decided (Sevardhet), propagation complete, desktop audit pointer",
-            "author": "the grove",
-            "date": "2026-09-17",
-            "month": "2026-09"
-          },
-          {
-            "hash": "cf0d7c2481cca06ffa312d6f7c74f00c3c219bb8",
-            "short_hash": "cf0d7c2",
-            "subject": "chore: ruff format drift (10 files, mechanical)",
-            "author": "the grove",
-            "date": "2026-09-17",
-            "month": "2026-09"
-          },
-          {
-            "hash": "83fc83df4ba7341882bc874f89a3893201898ef5",
-            "short_hash": "83fc83d",
+            "hash": "a4dc87107fb773256d8ee6fdb15e5fdab4be681c",
+            "short_hash": "a4dc871",
             "subject": "chore: bump version [ci skip]",
             "author": "github-actions[bot]",
-            "date": "2026-09-16",
+            "date": "2026-09-23",
             "month": "2026-09"
           },
           {
-            "hash": "95a152341e0e793cb8a543d80b86bc7265614271",
-            "short_hash": "95a1523",
-            "subject": "plan: log Core Disc v6 propagation",
+            "hash": "2ac101390e6b5e0c628cb8a2e85fea7aa90823b2",
+            "short_hash": "2ac1013",
+            "subject": "docs(sovereignty): step 2 of the harness exit is complete, and say why",
             "author": "the grove",
-            "date": "2026-09-16",
+            "date": "2026-09-23",
             "month": "2026-09"
           },
           {
-            "hash": "f8b8e3ca4496731333ab514a8fb3f7f4356d2bf5",
-            "short_hash": "f8b8e3c",
-            "subject": "logos: Core Disc reborn — Sevardhet master, Kungsleden + Birch variants, full propagation",
-            "author": "the grove",
-            "date": "2026-09-16",
-            "month": "2026-09"
-          },
-          {
-            "hash": "1838aca363dbd4a4df8ed51c6e3a768d265e50dc",
-            "short_hash": "1838aca",
+            "hash": "36b41b86f099c5bf3ec93bd00af47dea1cd8b266",
+            "short_hash": "36b41b8",
             "subject": "chore: bump version [ci skip]",
             "author": "github-actions[bot]",
-            "date": "2026-09-16",
+            "date": "2026-09-23",
+            "month": "2026-09"
+          },
+          {
+            "hash": "d84a0dc370ca9d67eb2899835abfd8f60d830a6f",
+            "short_hash": "d84a0dc",
+            "subject": "fix(site): give every published page an apple-touch-icon, correctly rooted",
+            "author": "the grove",
+            "date": "2026-09-23",
+            "month": "2026-09"
+          },
+          {
+            "hash": "c4a2f7fcac500f971d5882fa79a9cc5cbb31a5e7",
+            "short_hash": "c4a2f7f",
+            "subject": "feat(spinner): grove-owned braille spinner, seated as the default",
+            "author": "the grove",
+            "date": "2026-09-23",
+            "month": "2026-09"
+          },
+          {
+            "hash": "f6e6a4ffef795cd20775a9938a2cb974b3e7c4cf",
+            "short_hash": "f6e6a4f",
+            "subject": "chore: bump version [ci skip]",
+            "author": "github-actions[bot]",
+            "date": "2026-09-23",
             "month": "2026-09"
           }
         ]
       }
     ],
     "commits": [
+      {
+        "hash": "5cebf1108c0cef1a2d0e8e7f8885f95465a9d737",
+        "short_hash": "5cebf11",
+        "subject": "fix(mockingbird): stop the \"thank you, thank you, thank you\" dictation bug",
+        "author": "the grove",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "8417e4ad228805ea0250b3a1fa3545ed04201be3",
+        "short_hash": "8417e4a",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "64b630c471745b9f885d8abbc8863acabe46d957",
+        "short_hash": "64b630c",
+        "subject": "fix(anonymity): finish the pivot on the surfaces it never reached",
+        "author": "the grove",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "f892bd99a640bc37c1b8c8eadf043f302fc10e51",
+        "short_hash": "f892bd9",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "a4dc87107fb773256d8ee6fdb15e5fdab4be681c",
+        "short_hash": "a4dc871",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "2ac101390e6b5e0c628cb8a2e85fea7aa90823b2",
+        "short_hash": "2ac1013",
+        "subject": "docs(sovereignty): step 2 of the harness exit is complete, and say why",
+        "author": "the grove",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "36b41b86f099c5bf3ec93bd00af47dea1cd8b266",
+        "short_hash": "36b41b8",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "d84a0dc370ca9d67eb2899835abfd8f60d830a6f",
+        "short_hash": "d84a0dc",
+        "subject": "fix(site): give every published page an apple-touch-icon, correctly rooted",
+        "author": "the grove",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "c4a2f7fcac500f971d5882fa79a9cc5cbb31a5e7",
+        "short_hash": "c4a2f7f",
+        "subject": "feat(spinner): grove-owned braille spinner, seated as the default",
+        "author": "the grove",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "f6e6a4ffef795cd20775a9938a2cb974b3e7c4cf",
+        "short_hash": "f6e6a4f",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "f6fb2a96b7dece556b0812abf65ea5622b9c4f4d",
+        "short_hash": "f6fb2a9",
+        "subject": "feat(grove_console): /console panel to see and tend live sessions",
+        "author": "the grove",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "cfc96edfb3264de1044012a1a1f4ab9980801aed",
+        "short_hash": "cfc96ed",
+        "subject": "ci: derive publish version from PyPI so queued runs cannot collide",
+        "author": "the grove",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "c5e0b0f6efb11ea28baba626b707167cce0bf7dd",
+        "short_hash": "c5e0b0f",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "76233b62b53cea6f39a4241c383c099215c38c59",
+        "short_hash": "76233b6",
+        "subject": "feat: live-session scanner + `--console` headless read",
+        "author": "the grove",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "597443735a46f81117fc67a28ce4ec300967ca60",
+        "short_hash": "5974437",
+        "subject": "Merge remote-tracking branch 'origin/main'",
+        "author": "the grove",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "a5e2bb05835c999636f5c112428157a573341f9e",
+        "short_hash": "a5e2bb0",
+        "subject": "docs: decision layer plan (System One-style bounded decisions, local-first)",
+        "author": "the grove",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "9d7f2b25fbf31132625465ef06e8b83272cef640",
+        "short_hash": "9d7f2b2",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "4533b2d614237b377d639ea8184de17f1172be83",
+        "short_hash": "4533b2d",
+        "subject": "fix: never raise when hashing rich tool payloads",
+        "author": "the grove",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "fb6dbe1f24e85d63882abd6344d0245d03c391b2",
+        "short_hash": "fb6dbe1",
+        "subject": "docs: those session dumps are iTerm2 AutoLog, not grove output",
+        "author": "the grove",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "8732db1fea81092f1fb84f139ae074931473145e",
+        "short_hash": "8732db1",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "918c18b194be432b0a77c6b62d2bddeda3c51aba",
+        "short_hash": "918c18b",
+        "subject": "fix: name the stale-install cause at the lazy tool seam",
+        "author": "the grove",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "fd98a2820d59608c0c50254329f566bff661c316",
+        "short_hash": "fd98a28",
+        "subject": "fix: defer self-update actuation to exit so it can't break a session",
+        "author": "the grove",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "41ea45040983088f4643ebd782d45500c5df87b2",
+        "short_hash": "41ea450",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "423e2a210ba0992cf7940c0800b321bb9bf37bf7",
+        "short_hash": "423e2a2",
+        "subject": "chore: catch every session-log dump, not just NEWLog",
+        "author": "the grove",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "a6736a46c23cc89ec9ab4f87503f6a738058f008",
+        "short_hash": "a6736a4",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "8d74d2dcadf578f0ed5977971ced55a2df107fa1",
+        "short_hash": "8d74d2d",
+        "subject": "fix: one broken tool must never kill an agent run",
+        "author": "the grove",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "d64cdc6979dc56eb6350f57a7f53de0986627935",
+        "short_hash": "d64cdc6",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "a87c0dd51eef0e62e563e8038cac0a137bc0245a",
+        "short_hash": "a87c0dd",
+        "subject": "test: make the braille boot art durable and guarded",
+        "author": "the grove",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "bc90252e40ea6f72b4eab48ec97504729aeba023",
+        "short_hash": "bc90252",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "dd8035ef8c7b5ded636c3220f0231824b93c266e",
+        "short_hash": "dd8035e",
+        "subject": "feat: braille boot mark, and Wiggledom as the fourth ethos pillar",
+        "author": "the grove",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "c0b96de9a7846b6e03082815a357c1699a1d0c19",
+        "short_hash": "c0b96de",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "706170ca147acadf2951e39a5d6735148a7ae45d",
+        "short_hash": "706170c",
+        "subject": "scripts: make grove's ownership of the UC tools durable",
+        "author": "the grove",
+        "date": "2026-09-22"
+      },
+      {
+        "hash": "3b434d429d60ed95bcfe2d8684db7207168453ca",
+        "short_hash": "3b434d4",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "d799d546772d22d639b2eff9236dd4cfbe6a1e0d",
+        "short_hash": "d799d54",
+        "subject": "scripts: tooling for porting and auditing user JSON agents",
+        "author": "the grove",
+        "date": "2026-09-22"
+      },
+      {
+        "hash": "0f3d3332b9167259adb57f1dd28ab4a7b55c7667",
+        "short_hash": "0f3d333",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-23"
+      },
+      {
+        "hash": "f34397b07d7bc2714a611f1685dbcdb07b8f1e0e",
+        "short_hash": "f34397b",
+        "subject": "docs: record the ToolContext vocabulary landing + recompute the census",
+        "author": "the grove",
+        "date": "2026-09-22"
+      },
+      {
+        "hash": "c18c61a3bf014d2b2b36bacd1e0200a9b9e794f4",
+        "short_hash": "c18c61a",
+        "subject": "harness: finish ToolContext vocabulary migration outside tools",
+        "author": "the grove",
+        "date": "2026-09-22"
+      },
+      {
+        "hash": "0e90325aea2affe51addb4a2eadde60ef2f72572",
+        "short_hash": "0e90325",
+        "subject": "harness: migrate tool context vocabulary to ToolContext",
+        "author": "the grove",
+        "date": "2026-09-22"
+      },
+      {
+        "hash": "f9ee589a7901b7e4d4a461434be65f94f9a37fec",
+        "short_hash": "f9ee589",
+        "subject": "harness: grove-owned ToolContext vocabulary — tool context through the seam",
+        "author": "the grove",
+        "date": "2026-09-22"
+      },
+      {
+        "hash": "db1cb83b85a7a3d9cdf56251b8c17a270fda44ea",
+        "short_hash": "db1cb83",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-22"
+      },
+      {
+        "hash": "d91cc693de3403a99711001616db1f09f93fdddc",
+        "short_hash": "d91cc69",
+        "subject": "config: one-time puppy.cfg -> grove.cfg migration + routing doctor (fourth bug)",
+        "author": "the grove",
+        "date": "2026-09-22"
+      },
+      {
+        "hash": "2cb6d145da194b7da64205c36c45496526a25ec1",
+        "short_hash": "2cb6d14",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-22"
+      },
+      {
+        "hash": "887c298de1e5fed443b327f51625112bfbd49c3d",
+        "short_hash": "887c298",
+        "subject": "config: agent model pins dual-load the legacy [agents] section; routing repair documented",
+        "author": "the grove",
+        "date": "2026-09-22"
+      },
+      {
+        "hash": "2b5914341906497fad16f59978d020845cabb58c",
+        "short_hash": "2b59143",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-22"
+      },
+      {
+        "hash": "52c02a9029517e83c360adc0b04de77421ab914d",
+        "short_hash": "52c02a9",
+        "subject": "harness: the settings surface crosses the seam — 3 of 61 call-site files routed; observatory provenance classifier unified",
+        "author": "the grove",
+        "date": "2026-09-22"
+      },
+      {
+        "hash": "446eacc4ac987b5c1436d399e20e36d389b71081",
+        "short_hash": "446eacc",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-22"
+      },
+      {
+        "hash": "c3e7a055bcb47511f244e5af55f5a4681e24a261",
+        "short_hash": "c3e7a05",
+        "subject": "docs: session handoff addendum — synthetic.new lineup refresh (2026-09-21)",
+        "author": "the grove",
+        "date": "2026-09-22"
+      },
+      {
+        "hash": "4c20d9aaa8676d637b48c7e1bcacbe919ca77e4c",
+        "short_hash": "4c20d9a",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-21"
+      },
+      {
+        "hash": "67bb580b8db19fa614d83c506ea8cc9a26abf5d3",
+        "short_hash": "67bb580",
+        "subject": "feat(synthetic): route default vision to syn:large:text (cheapest multimodal)",
+        "author": "the grove",
+        "date": "2026-09-21"
+      },
+      {
+        "hash": "cf69820c06093b9d7b0b1ff6fd3b395765ad9bfe",
+        "short_hash": "cf69820",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-21"
+      },
+      {
+        "hash": "0292fdfe04668e0f6b75485df672fc29dbc33fb5",
+        "short_hash": "0292fdf",
+        "subject": "feat(synthetic): refresh lineup for 2026-09 subscription model changes",
+        "author": "the grove",
+        "date": "2026-09-21"
+      },
+      {
+        "hash": "19f4ce357994febbfce747a1a832bc2b535f6893",
+        "short_hash": "19f4ce3",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-18"
+      },
+      {
+        "hash": "c7c3e35efb05033b4ae880f96824fa0512aed18a",
+        "short_hash": "c7c3e35",
+        "subject": "handoff: anonymity-pivot policy recorded — businesses nameable, grove people generalized (bcc846c), residue tracked in r8c",
+        "author": "the grove",
+        "date": "2026-09-18"
+      },
+      {
+        "hash": "1670ed3ef9c6984a807bbf9324fac1481a6867be",
+        "short_hash": "1670ed3",
+        "subject": "anonymity pivot: public surfaces show seats, not names — persons generalized, stories kept",
+        "author": "the grove",
+        "date": "2026-09-18"
+      },
+      {
+        "hash": "edc866757b5d11bad4524f3d3ade83bc6a7a3e97",
+        "short_hash": "edc8667",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-18"
+      },
       {
         "hash": "aacad29e46aacdd899bd141457c3f6eee544cd30",
         "short_hash": "aacad29",
@@ -3268,7 +3709,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "f33619feeb0a85f8b37abf245d3494dc004e016e",
         "short_hash": "f33619f",
-        "subject": "logo pack: the granlund glyph, one geometry four jobs — Core Disc (statement roundel: stickers/app-icons/favicons), Grove Mark (dark+light), Ghost (watermark line art), Lockups (Fraunces wordmark). Translated from tylergranlund.com's spruce DNA. Swept across the board: shell chrome, era-ghosts, favicons, README badge; BRAND.md 'The logo pack' + design.html Logo Pack section; legacy marks demoted to legacy.",
+        "subject": "logo pack: the the grove glyph, one geometry four jobs — Core Disc (statement roundel: stickers/app-icons/favicons), Grove Mark (dark+light), Ghost (watermark line art), Lockups (Fraunces wordmark). Translated from the grove site's spruce DNA. Swept across the board: shell chrome, era-ghosts, favicons, README badge; BRAND.md 'The logo pack' + design.html Logo Pack section; legacy marks demoted to legacy.",
         "author": "the grove",
         "date": "2026-09-15"
       },
@@ -3541,7 +3982,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "f0e8ace081d1216bb1076d84a82734f5e66b6469",
         "short_hash": "f0e8ace",
-        "subject": "relicense MIT -> Apache-2.0: LICENSE (full text, Granlund 2026 + Pfaffenberger lineage), NOTICE (Code Puppy MIT notice preserved verbatim — the receipt travels), TRADEMARKS.md, CODE_OF_CONDUCT.md (the covenant), pyproject/README/CHANGELOG updated; wheel verified carrying LICENSE+NOTICE; reasoning in docs/LICENSE-ANALYSIS.md",
+        "subject": "relicense MIT -> Apache-2.0: LICENSE (full text, the grove 2026 + Pfaffenberger lineage), NOTICE (Code Puppy MIT notice preserved verbatim — the receipt travels), TRADEMARKS.md, CODE_OF_CONDUCT.md (the covenant), pyproject/README/CHANGELOG updated; wheel verified carrying LICENSE+NOTICE; reasoning in docs/LICENSE-ANALYSIS.md",
         "author": "the grove",
         "date": "2026-09-15"
       },
@@ -3674,7 +4115,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "8bd08fa70059c2008fed32f80b252da26ec8b415",
         "short_hash": "8bd08fa",
-        "subject": "OFFICIAL: the mark is three TreeMarks (canonical tylergranlund.com fir) — masters, badges, nav, hub, README, BRAND.md all rebuilt from the canonical geometry",
+        "subject": "OFFICIAL: the mark is three TreeMarks (canonical the grove site fir) — masters, badges, nav, hub, README, BRAND.md all rebuilt from the canonical geometry",
         "author": "the grove",
         "date": "2026-09-14"
       },
@@ -3870,7 +4311,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "82e017c0381cae5c641068fe30c1814a630b0d39",
         "short_hash": "82e017c",
-        "subject": "in the wild: flagship tylergranlund.com with stack call-outs; benton drones + barbershop link to full build stories",
+        "subject": "in the wild: flagship the grove site with stack call-outs; benton drones + barbershop link to full build stories",
         "author": "the grove",
         "date": "2026-09-12"
       },
@@ -3912,7 +4353,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "a58b6ac2b6e1e5c744a5b29e833c6d9c929aa4c0",
         "short_hash": "a58b6ac",
-        "subject": "product: the complete machine -- local dev instance of the full product overview page (5 working mechanic demos: ACP stream, voice gate, steering, look-in, durability kill-test; Koenigsegg specs, Ive restraint, Holzhausen surfaces; granlund-grove tokens)",
+        "subject": "product: the complete machine -- local dev instance of the full product overview page (5 working mechanic demos: ACP stream, voice gate, steering, look-in, durability kill-test; Koenigsegg specs, Ive restraint, Holzhausen surfaces; grove tokens)",
         "author": "the grove",
         "date": "2026-09-11"
       },
@@ -3996,7 +4437,7 @@ window.FIELD_GUIDE_DATA = {
       {
         "hash": "1148a3c006556926a73c8ca51d3b1d786e620c74",
         "short_hash": "1148a3c",
-        "subject": "fix(pages): ship phases + progress boards -- the 404 Tyler caught",
+        "subject": "fix(pages): ship phases + progress boards -- the 404 the grove caught",
         "author": "the grove",
         "date": "2026-09-11"
       },

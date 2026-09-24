@@ -76,4 +76,11 @@ MASTER-MASTER-PROMPT.srt
 
 # Private session handoffs: working notes, never a public surface.
 # Local copies live in ~/.spruce_grove/handoff/ (see docs/ANONYMITY-EXIT.md, item D).
+# Both the single-file idiom and the directory idiom must be ignored -- this is a
+# PUBLIC repo, and handoff notes routinely quote the maintainer's real identity.
 SESSION-HANDOFF.md
+.handoff/
+
+# Personal voice memos and offsite notes: recorded human life, addresses in the
+# filenames, never a public surface. Keep them out no matter the "OFFSITE-" name.
+docs/OFFSITE-*/
