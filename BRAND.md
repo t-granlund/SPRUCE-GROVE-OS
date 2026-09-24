@@ -1,7 +1,11 @@
 # BRAND — Spruce Grove OS
 
-Visual and verbal identity, shared with the granlund-grove design system
-(tylergranlund.com). Dark-first. Nordic forest. No glitter, just grain.
+Visual and verbal identity. Dark-first. Nordic forest. No glitter, just
+grain.
+
+Public surfaces show seats, not names: this document describes the design
+system by what it *is*, not by whose family it came from. The heritage is
+told as etymology and ethos, never as a personal brand.
 
 ## The design language — GRAN
 
@@ -36,18 +40,30 @@ nothing improvises.
 
 ## Wordmark
 
-`gran·lund · sv. · spruce grove`
+`spruce · grove · os`
 
-Name derivation, per truth-for-truth's-sake: "granlund" maps to "spruce
-grove" in Swedish. Say that, nothing fancier.
+### Start with why — the name and the mark
+
+A grove is what you get when spruces grow together: no single tree carries
+the forest, but the stand outlasts any one of them. That is the whole thesis.
+
+The name has Scandinavian roots: *gran* is spruce, *lund* is grove — so the
+word we build under literally means **spruce grove**. We say that plainly,
+nothing fancier. The visual language follows from it: Nordic, dark-first,
+grain over glitter, a forest (not a tree) as the mark, and a single ground
+line the way a stand shares one forest floor.
+
+Everything else — the council, the Leather Apron ethos, the receipts in
+public — is downstream of that one belief: **together we are better,
+always.**
 
 ## The logo pack — one geometry, four jobs
 
-Source of truth for the glyph: the granlund spruce on tylergranlund.com —
-stepped canopy, trunk notch, rounded joins, a low-opacity fill wash under
-the stroke. Every file in the pack is that one geometry, composed and
-dressed per job. Masters live in `logos/`; site-chrome copies in
-`pages-hub/assets/`.
+Source of truth for the glyph: `logos/spruce-core-disc.svg` — stepped
+canopy, trunk notch, rounded joins, one shared ground line. Every file in
+the pack is that one geometry, composed and dressed per job. Masters live
+in `logos/`; site-chrome copies in `pages-hub/assets/`, kept identical by
+`scripts/sync-brand-assets.sh` (run `--check` to prove it).
 
 | Piece | Files | Job |
 |---|---|---|
@@ -66,7 +82,7 @@ Rules that carry forward: geometry is the identity — never decorate it;
 one ground line; the center tree is the light-bringer; below 20px only the
 Disc survives.
 
-## Color tokens (source of truth: granlund-grove `src/styles.css`)
+## Color tokens (source of truth: `pages-hub/assets/tokens.css`)
 
 | Token | OKLCH | Role |
 |---|---|---|

@@ -61,10 +61,9 @@ and works for the town. The standing question is Franklin's own —
 No mockups — every showcase below is live today, built by the agent and
 shipped to a real door:
 
-- **[tylergranlund.com](https://tylergranlund.com)** — the flagship: TanStack
-  Start · React 19 SSR · TypeScript strict · Tailwind v4 · Vitest gates —
-  resale desk, ventures, career, writing, and a colophon that declares its
-  own stack.
+- **A flagship production site** — TanStack Start · React 19 SSR · TypeScript
+  strict · Tailwind v4 · Vitest gates: resale desk, ventures, career, writing,
+  and a colophon that declares its own stack.
 - **[leads.bentondrones.com](https://leads.bentondrones.com)** — lead intake:
   form → geocode → Jira → dashboard. Python stdlib + SQLite core, Render,
   Playwright-verified.
@@ -89,9 +88,8 @@ to invented facts. Rename it anytime in `grove.cfg`.
 ## Design system
 
 Nordic forest, dark-first. Charcoal base, deep spruce, warm cedar accents,
-mist typography. Tokens shared with
-[tylergranlund.com](https://tylergranlund.com) — the same palette that colors
-the terminal splash.
+mist typography. Tokens live in `pages-hub/assets/tokens.css` — the same
+palette that colors the terminal splash.
 
 ### Color tokens
 

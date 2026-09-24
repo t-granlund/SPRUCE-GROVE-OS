@@ -33,7 +33,7 @@ everywhere the grove's name is on the door.
 
 ## Enforcement
 
-Report to Tyler Granlund (hello@tylergranlund.com) or any council member.
+Report to any council member, or to the grove's stewardship.
 Reports are handled quietly, facts first. Consequences scale with the act:
 a reminder, a cooling-off, or removal. Grievances about enforcement go to the
 council and are heard out loud.
