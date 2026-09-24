@@ -25,6 +25,8 @@ repo_path() {
 PAIRS="pages-hub|assets/favicon-64.png|favicon-64.png
 pages-hub|assets/apple-touch-icon.png|apple-touch-icon.png
 pages-hub|assets/spruce_grove_official.png|spruce_grove_official.png
+pages-hub|assets/grove-mark.svg|spruce-grove-mark.svg
+pages-hub|assets/spruce-core-disc.svg|spruce-core-disc.svg
 docs/field-guide|assets/favicon-64.png|favicon-64.png
 docs/field-guide|assets/apple-touch-icon.png|apple-touch-icon.png
 docs/field-guide|assets/spruce-grove-mark.svg|spruce-grove-mark.svg
