@@ -9,10 +9,31 @@ important half.
 """
 
 import re
+import subprocess
 from pathlib import Path
 
 
-SITE = Path(__file__).resolve().parent.parent / "_site"
+REPO = Path(__file__).resolve().parent.parent
+
+
+def _site_root() -> Path:
+    """The PUBLISHED layout, composed on demand.
+
+    ``_site/`` is a build output and is gitignored, so the test builds it
+    through ``scripts/build-site.sh`` -- the same script CI runs. Verifying a
+    stale committed copy is exactly how the icon prefix bug hid once already.
+    """
+    out = REPO / "_site"
+    subprocess.run(
+        ["bash", str(REPO / "scripts" / "build-site.sh"), str(out)],
+        cwd=REPO,
+        check=True,
+        capture_output=True,
+    )
+    return out
+
+
+SITE = _site_root()
 
 FAVICON_RE = re.compile(r'<link\s+rel=["\']icon["\'][^>]*>', re.IGNORECASE)
 APPLE_RE = re.compile(r'<link\s+rel=["\']apple-touch-icon["\'][^>]*>', re.IGNORECASE)

@@ -84,3 +84,7 @@ SESSION-HANDOFF.md
 # Personal voice memos and offsite notes: recorded human life, addresses in the
 # filenames, never a public surface. Keep them out no matter the "OFFSITE-" name.
 docs/OFFSITE-*/
+
+# Published site is a BUILD OUTPUT (scripts/build-site.sh). CI composes it;
+# a tracked copy goes stale and re-leaks whatever the sources just cleaned.
+_site/
