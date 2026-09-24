@@ -72,21 +72,38 @@ STRICT = [
     "NOTICE",
     "TRADEMARKS.md",
     "spruce_grove/**/*.py",
+    # Everything that ships or deploys, cleaned 2026-09-24. These were the
+    # loudest surfaces: the pages people actually read, the docs a contributor
+    # lands on, the logo masters, and the internal ops board.
+    "BRAND.md",
+    "CODE_OF_CONDUCT.md",
+    "README.md",
+    "CHANGELOG.md",
+    "FACTCHECK.md",
+    "SOVEREIGNTY.md",
+    "LIVING-UPDATES.md",
+    "BUILD-LOG.md",
+    "mission-control.html",
+    "changelog/index.html",
+    "pages-hub/**/*.html",
+    "pages-hub/assets/**/*.js",
+    "logos/**/*.svg",
 ]
 
-#: Surfaces still to clean, with their 2026-09-23 counts. The test reports
-#: these instead of failing, so progress is visible without blocking work.
-#: Cleaned 2026-09-23: `SESSION-HANDOFF.md` (20 hits) -- untracked, gitignored,
-#: replaced by the name-free `docs/SESSION-START.md`.
+#: Surfaces still to clean. The test reports these instead of failing, so
+#: progress is visible without blocking work.
+#:
+#: Cleaned 2026-09-23: `SESSION-HANDOFF.md` -- untracked, gitignored, replaced
+#: by the name-free `docs/SESSION-START.md`.
+#: Cleaned 2026-09-24 (moved into STRICT above): `BUILD-LOG.md`,
+#: `pages-hub/dashboard.html`, `mission-control.html`, `LIVING-UPDATES.md`,
+#: `BRAND.md`. Also cleared this day by untracking, as private-by-nature:
+#: the raw terminal logs (`*Log at *.txt`), the personal-life notes
+#: (`FB-*.md`), the third-party conference transcript (`docs/*-sxsw.md`).
 BACKLOG = {
-    "BUILD-LOG.md": 16,
-    "pages-hub/dashboard.html": 14,
-    "mission-control.html": 13,
     "docs/SOVEREIGNTY-EXECUTION.md": 10,
     "SOURCITY.md": 8,
-    "LIVING-UPDATES.md": 6,
     "docs/LICENSE-ANALYSIS.md": 6,
-    "BRAND.md": 5,
 }
 
 

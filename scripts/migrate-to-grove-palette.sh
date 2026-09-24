@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────
-# Migrate Spruce Grove design tokens to the Granlund-Grove forest palette.
+# Migrate Spruce Grove design tokens to the grove forest palette.
 #
 # Maps the old blue-grey / periwinkle / cyan / mint palette to the grove's
 # warm cedar + forest-green system. Every value is WCAG-AAA verified on

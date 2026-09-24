@@ -205,7 +205,7 @@ the beads-managed block).
 a trust-ceremony README.md written for a NON-DEVELOPER at the /plugins prompt.
 
 **What shipped (user tier, uncommitted library):** `~/.spruce_grove/lib/grove_site_core/`
--- tokens.py (granlund-grove palette ported from pages-hub/assets/tokens.css),
+-- tokens.py (grove palette ported from pages-hub/assets/tokens.css),
 builder.py (`build_site(profile, outdir)`: index + checklist pages, html-escaped,
 network-free, writes-only-in-outdir), `__init__.py` facade. This core is the reuse
 base the creative-cohort scaffold (5al.5) rides on.
@@ -252,7 +252,7 @@ city permits). NOT-LEGAL-ADVICE banner rendered in both the panel and the markdo
 
 **Tier note:** shipped user-tier (like junto), not project-tier -- back-office risk is
 general-purpose across every cohort business; user tier makes the command available
-everywhere Tyler works. Close reason annotated on the bead.
+everywhere a steward works. Close reason annotated on the bead.
 
 **Verification evidence (fresh):** ruff clean; URL sweep live-verified (11x HTTP 200,
 ATAP 302 into its app portal, annotated on the item); headless dispatch True/None for
@@ -339,7 +339,7 @@ plugin verifiers are now committed for re-runs: `scripts/verify_5al3_barber_scaf
   (pure line-wrap formatting, zero semantics; import smoke-tested).
 - **.3 barber scaffold:** `verify_5al3_barber_scaffold.py` -- **10/10 PASS** headless:
   unknown profile writes nothing, `/barber-scaffold` + alias `/bbc-scaffold` build
-  `site-out/{index.html,checklist.html}`, granlund-grove token `#0E130F` rendered,
+  `site-out/{index.html,checklist.html}`, grove token `#0E130F` rendered,
   brand name rendered, rebuild idempotent (2 pages stable). Token lineage 7/7 exact
   match against `pages-hub/assets/tokens.css` (--BB-bg/bg-elev/bg-card/panel/t1/t2/t3).
   Trust README (`.../barber_scaffold/README.md`) reviewed: plain-language
@@ -874,7 +874,7 @@ path, .app bundle build.
 
 ## 26. 2026-09-10 20:05Z-21:10Z -- uvx boot proven; fork is standalone; ~/code_puppy demoted to reference
 
-Question from Tyler: can we boot the `uvx spruce-grove` instance and operate
+Question from a steward: can we boot the `uvx spruce-grove` instance and operate
 away from the `~/code_puppy` checkout entirely. Answer, verified step by step:
 
 - **Independence audit:** zero references to `/Users/tygranlund/code_puppy`
@@ -889,7 +889,7 @@ away from the `~/code_puppy` checkout entirely. Answer, verified step by step:
   keeps the `code_puppy` -> `spruce_grove` compat shim aliasing correctly, and
   pulls `code_puppy_core_plugins` 0.0.48 from PyPI.
 - **First real boot:** headless `-p` run completed the first-boot config
-  ceremony (grove.cfg written: grove_name Junto, owner Tyler), reached the
+  ceremony (grove.cfg written: grove_name Junto, owner steward), reached the
   model layer (default `syn:large:text` from grove `extra_models.json`), and
   got a honest 401 -- `SYNTHETIC_API_KEY` is absent from shell env, keychain,
   rc files, and both extra_models copies (env-refs only, zero inline keys).
@@ -979,7 +979,7 @@ build-log documented them lovingly; the code itself was homeless. Fixed:
   the session after -- plugins load at startup).
 - user-plugins/README.md carries the ritual + a plugin/bead table.
 - Read all three pre-existing plugins before vendoring: no secrets, just
-  granlund-branding and bead references (they are public-facing grove
+  branding and bead references (they are public-facing grove
   artifacts -- phases.html already brags about them).
 - Verified: installer run for real (4 plugins + lib), user tier reloads intact
   after the round-trip, ruff clean across user-plugins/ and scripts/.
@@ -1040,7 +1040,7 @@ would need a separate placeholder. Heads-up recorded: from the moment the
 secret exists, every push to main ships -- `[ci skip]` to land work without
 releasing.
 
-docs synced: this log. Dashboard ask honored: OPERATION GRANLUND mission
+docs synced: this log. Dashboard ask honored: OPERATION GROVE mission
 dashboard (1.MASTER-ORCHESTRATION/dashboard/index.html) opened in the
 browser. All commits local then pushed per session rules.
 
@@ -1084,7 +1084,7 @@ desktop dictation, platform complete. CHANGELOG.md born (the build-log
 ladder remains the detailed trail). Tag v1.0.0 pushed.
 
 **Announcement page live.** pages-hub/announce.html: lean launch landing in
-the Granlund Grove token system -- hero, the 4-step voice loop, the real
+the grove token system -- hero, the 4-step voice loop, the real
 "Thank you." dogfood rendered as a terminal card, three download trails
 (uv tool install one-liner with copy buttons, desktop release asset, source),
 ethos band, provenance footer. Deployed to GitHub Pages at site root
@@ -1187,7 +1187,7 @@ Bead ledger: 11 closed, 4 tracked (epic, 5al.6 one-human-click, parked
 
 The public launch errands, finished:
 
-**PyPI -- claimed with zero tokens.** Tyler registered the pending trusted
+**PyPI -- claimed with zero tokens.** a steward registered the pending trusted
 publisher on PyPI (project `spruce-grove`, repo
 `t-granlund/SPRUCE-GROVE-OS`, workflow `publish.yml`); publish.yml was
 converted from twine+secret to `pypa/gh-action-pypi-publish` (OIDC,

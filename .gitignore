@@ -88,3 +88,10 @@ docs/OFFSITE-*/
 # Published site is a BUILD OUTPUT (scripts/build-site.sh). CI composes it;
 # a tracked copy goes stale and re-leaks whatever the sources just cleaned.
 _site/
+
+# Personal-life working notes (marketplace listing, resume) -- not the project.
+FB-*.md
+
+# Third-party conference transcripts (copyrighted; names of unconsenting
+# speakers). Research-only; never publishable.
+docs/*-sxsw.md

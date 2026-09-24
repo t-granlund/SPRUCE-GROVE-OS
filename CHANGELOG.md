@@ -1,7 +1,7 @@
 # Changelog — Spruce Grove OS
 
 An agentic coding CLI grown from Code Puppy (MIT, Michael Pfaffenberger) into
-the Granlund Grove. Together we are better. Always.
+a grove all its own. Together we are better. Always.
 
 ## How to read this page
 

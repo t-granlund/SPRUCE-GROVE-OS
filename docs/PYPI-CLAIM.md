@@ -13,7 +13,7 @@ clean (`uv build` -> `dist/spruce_grove-0.1.0*`, `twine check` PASSED) and
 `.github/workflows/publish.yml` is fully wired — it publishes **on every push
 to main** using a `PYPI_API_TOKEN` repo secret (auto patch-bump, twine upload,
 tag). The only missing ingredient is the secret, and the secret needs an
-account only Tyler can create.
+account only a steward can create.
 
 ## The errand (one sitting, ~10 min)
 

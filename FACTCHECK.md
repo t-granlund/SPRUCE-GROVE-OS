@@ -17,5 +17,5 @@ sponsorships) is ledgered publicly and donated to the 43 Institute.
 | Donations unrestricted, "used where needed most" | VERIFIED (their phrasing) | 43i.org/donate |
 | Origin story: Ken met Damon Way in a Palomar art class; a screen-printing art project became DC Shoes | VERIFIED (their telling) | 43i.org/impact |
 | Four pillars: mentorship pathways, creating access, skills development, mental & physical health | VERIFIED | 43i.org/impact |
-| "The grove's proof is a woman with no college degree who became a director of the work at thirty-five" | VERIFIED per T. Granlund | The Method provenance (deck FACTCHECK) |
-| "Any profit is ledgered publicly and donated" | COMMITMENT by T. Granlund, 2026-09-15 | this pledge; ledger to be published beside the work |
+| "The grove's proof is a woman with no college degree who became a director of the work at thirty-five" | VERIFIED per the steward | The Method provenance (deck FACTCHECK) |
+| "Any profit is ledgered publicly and donated" | COMMITMENT by the stewards, 2026-09-15 | this pledge; ledger to be published beside the work |

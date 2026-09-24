@@ -41,7 +41,7 @@ def main():
     check("site-out/checklist.html exists", (out / "checklist.html").is_file())
 
     html = (out / "index.html").read_text(encoding="utf-8")
-    check("granlund-grove token present (#0E130F)", "#0E130F" in html)
+    check("grove token present (#0E130F)", "#0E130F" in html)
     check("brand name rendered", "Bentonville Barber" in html)
 
     # 3. idempotent rebuild: page count stable at 2

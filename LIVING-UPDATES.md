@@ -2,7 +2,7 @@
 
 Release notes record what landed. This ledger records what *happened* — the
 decisions, pivots, and additions made organically in voice-dictation sessions
-while Tyler works through the harness with Cedar. Everything here is real
+while the steward works through the harness with Cedar. Everything here is real
 conversation-turned-work; entries graduate into `CHANGELOG.md` when they ship.
 
 ## The protocol (how entries get added)
@@ -80,7 +80,7 @@ The harness wins by running three moves in parallel, not sequentially:
 - Source: build session ("port over all the agents I had so they stand completely on their own")
 - Status: shipped
 - Origin: grove-grown
-- Tyler's code_puppy agents turned out to be 15 JSON definitions in
+- the steward's code_puppy agents turned out to be 15 JSON definitions in
   `~/.code_puppy/agents/` - not the Python framework under
   `code_puppy/agents/`, which grove already carried. All 15 now live in
   `~/.spruce_grove/agents/`: the roster went 8 -> 22.
@@ -132,7 +132,7 @@ The harness wins by running three moves in parallel, not sequentially:
 - Source: build session ("we're supposed to be smart about the right models for the right thing")
 - Status: shipped
 - Origin: grove-grown
-- Tyler's observation was exactly right: everything ran GLM-5.3-Flash.
+- The steward's observation was exactly right: everything ran GLM-5.3-Flash.
   Three compounding causes, all verified: (1) the global default pointed
   at the pinned GLM-5.3-Flash entry instead of the `syn:large:text`
   driving seat; (2) all seven per-agent pins sat under an `[agents]`
@@ -150,7 +150,7 @@ The harness wins by running three moves in parallel, not sequentially:
   pin the whole contract.
 - THEN the fourth bug surfaced — the umbrella over everything: the
   rebrand renamed the config file `puppy.cfg` → `grove.cfg` in code but
-  never migrated the file, so Tyler's entire curated config sat in
+  never migrated the file, so the steward's entire curated config sat in
   `puppy.cfg` while every supported version read a `grove.cfg` that did
   not exist. Identity, theme, routing: silently ignored since the
   rename. Shipped a one-time migration in `ensure_config_exists` (copy
@@ -355,8 +355,8 @@ The harness wins by running three moves in parallel, not sequentially:
 - Source: voice dictation session with Junto (this one)
 - Status: shipped
 - Origin: grove-grown
-- The flat green trio read clip-art against the granlund look. Built the
-  pack from the tylergranlund.com glyph DNA — stepped canopy, trunk notch,
+- The flat green trio read clip-art against the grove look. Built the
+  pack from the grove glyph DNA — stepped canopy, trunk notch,
   rounded joins, low-opacity fill wash: the **Core Disc** (statement
   roundel — stickers, laptops, app icons, favicons), the **Grove Mark**
   (app/nav logo, dark + light variants), the **Ghost** (watermark line

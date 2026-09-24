@@ -44,7 +44,7 @@ gh api -X PUT "repos/$REPO/environments/release" \
 {"deployment_branch_policy": {"protected_branches": true, "custom_branch_policies": false}}
 EOF
 echo "   'release' environment created."
-echo "   TYLER-ONLY step: Repo Settings → Environments → release →"
+echo "   STEWARD-ONLY step: Repo Settings → Environments → release →"
 echo "   'Required reviewers' → add the steward handles. The publish"
 echo "   workflow must reference environment: release to be gated by it."
 

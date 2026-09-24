@@ -1,4 +1,4 @@
-"""grove_site_core.tokens -- granlund-grove design tokens as code.
+"""grove_site_core.tokens -- grove design tokens as code.
 
 Single source for the scaffolder's palette and base CSS. Ported from the
 Spruce Grove pages-hub tokens.css (BB_ forest theme, WCAG 2.2 AAA on #0E130F).

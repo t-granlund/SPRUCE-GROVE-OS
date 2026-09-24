@@ -107,12 +107,12 @@ A living brief on what this is, what's backed up where, and how to stay self-suf
 | Layer | Location | Purpose | Status |
 |---|---|---|---|
 | **Working source clone** | `~/spruce_grove/` | Live development + install source |  main @ v0.0.768 |
-| **Public fork** | `github.com/t-granlund/code_puppy` | Backup; mirrors upstream + Tyler's work |  auto-synced by updater; **GitHub Pages site** at t-granlund.github.io/spruce_grove/ (hub / field-guide / releases / flat) |
+| **Public fork** | `github.com/t-granlund/code_puppy` | Backup; mirrors upstream + steward work |  auto-synced by updater; **GitHub Pages site** at t-granlund.github.io/spruce_grove/ (hub / field-guide / releases / flat) |
 | **Private mirror (insurance)** | `github.com/t-granlund/Multi-Agent-Orch-CLI` | Untouchable fallback if public repo dies |  auto-synced by updater |
 | **Installed tool** | `~/.local/share/uv/tools/spruce-grove/` | Currently-running CLI (uv tool install) |  v0.0.768 |
 | **Offline wheel** | `~/spruce_grove/dist/spruce_grove-0.0.768-py3-none-any.whl` | Zero-network reinstall artifact |  built Aug 22 (current; rebuild with `uv build` if needed) |
 | **User profile** | `~/.spruce_grove/` | plugins/, agents/, config, kennel (memory), logs |  not in any repo |
-| **Apr-2026 OAuth fix (history)** | tag `snapshot-old-myfork-main` | Tyler's callback/Claude-OAuth sync; since superseded by upstream | archived as tag |
+| **Apr-2026 OAuth fix (history)** | tag `snapshot-old-myfork-main` | a steward's callback/Claude-OAuth sync; since superseded by upstream | archived as tag |
 
 ## Remotes on `~/spruce_grove`
 
