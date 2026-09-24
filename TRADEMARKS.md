@@ -36,6 +36,9 @@ wear the apron.
 ## Asking
 
 Marks questions, permission requests, and misuse reports:
-Tyler Granlund — hello@tylergranlund.com. The first response to honest use
-will always be a yes and a thank-you. The first response to a rip will be
-this file, cited.
+open an issue at https://github.com/t-granlund/SPRUCE-GROVE-OS/issues. The
+first response to honest use will always be a yes and a thank-you. The first
+response to a rip will be this file, cited.
+
+(A role contact address will replace the issue tracker here once a monitored
+mailbox exists for it and the project publishes its own.)

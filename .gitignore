@@ -73,3 +73,7 @@ MASTER-MASTER-PROMPT.srt
 .dolt/
 *.db
 .beads-credential-key
+
+# Private session handoffs: working notes, never a public surface.
+# Local copies live in ~/.spruce_grove/handoff/ (see docs/ANONYMITY-EXIT.md, item D).
+SESSION-HANDOFF.md
