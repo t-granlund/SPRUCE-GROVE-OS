@@ -32,22 +32,21 @@ _SILENCE_PEAK_DBFS = -50.0
 
 #: Whisper was trained on YouTube captions and *hallucinates* on non-speech —
 #: the canonical artifacts are "Thank you.", "Thanks for watching!", and
-#: bare "you" / "." fragments repeated across a whole take. A transcript that
-#: consists only of one of these, on a take we could not otherwise vouch for,
-#: is dropped rather than shown as if the user had said it. Patterns are
-#: anchored to the *whole* cleaned transcript, so real speech that merely
-#: contains "thank you" is untouched.
-_HALLUCINATION_ONLY = re.compile(
-    r"""^[\s.!?…-]*(?:
+#: bare "you" / "." fragments. The reported live bug was the token *repeated*
+#: ("thank you, thank you, thank you"), across lines as often as within one,
+#: so this matches a single stock token and :func:`_is_stock_artifact` strips
+#: every occurrence to decide whether anything of the user actually remained.
+#: Real speech that merely *contains* "thank you" leaves residue behind and is
+#: therefore never dropped.
+_STOCK_TOKEN = re.compile(
+    r"""(?:
         thank\s+you(?:\s+(?:very\s+)?much)?
       | thanks?(?:\s+(?:for|a\s+lot))?(?:\s+watching)?
-      | thank\s+you\s+for\s+watching
       | you
       | (?:bye|goodbye)
       | please\s+subscribe
-      | (?:subtitles?|captions?)(?:\s+by)?[^a-z]*
-      | \.
-    )[\s.!?…-]*$""",
+      | (?:subtitles?|captions?)(?:\s+by)?
+    )""",
     re.IGNORECASE | re.VERBOSE,
 )
 
@@ -100,11 +99,23 @@ _LONG_TAKE_SECONDS = 3.0
 #: one-word result over that much audio is the hallucination signature.
 _MIN_ARTIFACT_SECONDS = 1.5
 
-#: Measured 2026-09-23 on real speech through this rig: 17-19 characters per
-#: second, tightly clustered (17.4 / 17.5 / 18.9 across three takes). A
-#: hallucination over non-speech produced 0.2-2 chars/sec. 4.0 sits cleanly
-#: between the two populations.
-_MIN_CHARS_PER_SECOND = 4.0
+#: Characters per second OF SPEECH (pauses excluded) below which a long take
+#: reads as non-speech. Measured 2026-09-24 over real takes in
+#: ~/.spruce_grove/mockingbird/: continuous speech runs 14-19 chars/sec; a
+#: pause-heavy take (17.3 s of speech inside 25.8 s) still holds 4.3; a loud
+#: 440 Hz tone yields 0.15. 2.0 sits between the noise floor and the lowest
+#: honest speech, with room for very riff-y takes.
+#:
+#: History: this was 4.0 measured against TOTAL duration, which wrongly
+#: rejected pause-heavy real speech ("Testing, testing. Is this thing
+#: working?") as a hallucination -- the exact failure that made /rec look
+#: broken to the person using it.
+_MIN_CHARS_PER_SECOND = 2.0
+
+#: Silence detection for the density check: below this level for at least this
+#: long counts as a pause rather than speech.
+_SILENCE_NOISE_DB = -30.0
+_SILENCE_MIN_SECONDS = 0.5
 
 
 def _duration_seconds(wav_path: Path) -> float:
@@ -126,26 +137,73 @@ def _duration_seconds(wav_path: Path) -> float:
         return 0.0
 
 
-def _looks_like_hallucination(text: str, duration: float) -> bool:
+def _is_stock_artifact(text: str) -> bool:
+    """True when *text* is nothing but repeated stock Whisper tokens.
+
+    Strip every recognized token plus surrounding punctuation/whitespace; if
+    the whole transcript disappears, the user said none of it. This is what
+    catches "Thank you.\\nThank you.\\nThank you." -- the reported bug -- which
+    a single-line anchored pattern missed.
+    """
+    residue = _STOCK_TOKEN.sub(" ", text)
+    return not re.sub(r"[\s.!?…,\-]+", "", residue)
+
+
+def _speech_seconds(wav_path: Path, total_seconds: float) -> float:
+    """Seconds of *wav_path* that actually contain sound (pauses excluded).
+
+    /rec is explicitly a pause-and-resume tool, so a take's total length is a
+    poor denominator for "how much speech is here": 8 s of silence in the
+    middle must not count as 8 s that failed to produce words. Falls back to
+    the total duration whenever silence can't be measured, so the check can
+    only ever be as strict as before, never stricter.
+    """
+    cmd = [
+        ffmpeg_binary(),
+        "-hide_banner",
+        "-i",
+        str(wav_path),
+        "-af",
+        f"silencedetect=noise={_SILENCE_NOISE_DB}dB:d={_SILENCE_MIN_SECONDS}",
+        "-f",
+        "null",
+        "-",
+    ]
+    try:
+        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+    except subprocess.TimeoutExpired:
+        return total_seconds
+    silences = re.findall(r"silence_duration:\s*([\d.]+)", proc.stderr or "")
+    if not silences:
+        return total_seconds
+    return max(total_seconds - sum(float(s) for s in silences), 0.0)
+
+
+def _looks_like_hallucination(
+    text: str, duration: float, speech: float | None = None
+) -> bool:
     """True when whisper 'heard' something other than speech.
 
     Two independent tells, either is enough:
 
-    * **Density** — a long take that yielded only a few characters is
-      non-speech. Real speech here runs 17-19 chars/sec; hallucinations land
-      under 2. This catches loud non-speech (tones, hum) that clears the
-      volume gate.
+    * **Density** — a long take that yielded only a few characters *per second
+      of speech* is non-speech. Real speech here runs 14-19 chars/sec even
+      when pause-heavy; hallucinations and tones land near 0. Dividing by
+      speech (not total) time is what keeps a paused, honest take from being
+      mistaken for an artifact.
     * **Known artifact** — the transcript is *only* a stock Whisper token
       ("Thank you.", "you", "."). Anchored to the whole line, so real speech
       that merely contains those words is never touched.
     """
     stripped = text.strip()
+    if speech is None:
+        speech = duration
     if duration >= _LONG_TAKE_SECONDS:
         chars = len(re.sub(r"\s+", "", stripped))
-        if chars / duration < _MIN_CHARS_PER_SECOND:
+        if speech > 0 and chars / speech < _MIN_CHARS_PER_SECOND:
             return True
     if duration >= _MIN_ARTIFACT_SECONDS:
-        return bool(_HALLUCINATION_ONLY.match(stripped))
+        return _is_stock_artifact(stripped)
     return False
 
 
@@ -243,7 +301,9 @@ def transcribe(wav_path: Path, work_dir: Path) -> str:
         raise TranscriberError(
             "Transcript came back empty — the recording may be too quiet."
         )
-    if _looks_like_hallucination(text, _duration_seconds(wav_path)):
+    duration = _duration_seconds(wav_path)
+    speech = _speech_seconds(wav_path, duration)
+    if _looks_like_hallucination(text, duration, speech):
         raise TranscriberError(
             "Only non-speech came through (whisper hallucinated "
             f"{text!r}). No usable speech in this recording."

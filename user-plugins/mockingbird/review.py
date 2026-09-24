@@ -34,6 +34,15 @@ from .transcriber import TranscriberError, transcribe
 _WINDOW_POLL_SECONDS = 0.15
 _DRAFT_PREVIEW_CHARS = 220
 
+#: The review-loop ask. Hotkey brackets are ESCAPED (``\[``) on purpose:
+#: unescaped, Rich reads ``[s]`` as a strikethrough tag and the keys the user
+#: must press vanish from the menu ("end as prompt · dit · e-record · uit").
+#: Only the OPENING bracket needs escaping -- ``\]`` would print a backslash.
+REVIEW_PROMPT = (
+    "[b]\\[s][/b]end as prompt  ·  [b]\\[e][/b]dit  ·  "
+    "[b]\\[r][/b]e-record  ·  [b]\\[q][/b]uit > "
+)
+
 
 def _fmt_elapsed(seconds: float) -> str:
     minutes, secs = divmod(int(seconds), 60)
@@ -190,11 +199,9 @@ def capture_and_review(session_dir: Path, console: Console) -> Optional[str]:
                     border_style="green",
                 )
             )
-            choice = _ask(
-                "[b][s][/b]end as prompt  ·  [b][e][/b]dit  ·  "
-                "[b][r][/b]e-record  ·  [b][q][/b]uit > ",
-                console,
-            )
+            # Menu lives in REVIEW_PROMPT: its hotkey brackets must stay
+            # escaped or Rich eats the keys (see the constant's comment).
+            choice = _ask(REVIEW_PROMPT, console)
             if choice in ("s", "send", ""):
                 return text
             if choice in ("e", "edit"):

@@ -83,6 +83,81 @@ class TestHallucinationHeuristic:
         assert transcriber._looks_like_hallucination("you", 0.5) is False
 
 
+class TestPauseAwareDensity:
+    """Regression: pause-heavy REAL speech was rejected as a hallucination.
+
+    Reported live 2026-09-24 -- "/rec doesn't work". A real take
+    ("Testing, testing. Is this thing working?") sat inside 25.8 s of audio
+    but only 17.3 s of speech (8.5 s of pauses, because /rec advertises
+    "pause and resume"). The old rule divided characters by TOTAL duration:
+    75 / 25.8 = 2.91 chars/sec, under the 4.0 bar, so an honest recording was
+    refused with "Only non-speech came through". Density must be measured
+    against SPEECH seconds, not the length of the file.
+    """
+
+    #: The real take, verbatim, with its measured timings.
+    REAL_TEXT = "Testing, testing. Is this thing working? Testing, testing.\nTesting, testing, testing."
+    REAL_TOTAL = 25.792
+    REAL_SPEECH = 17.3
+
+    def test_the_reported_take_is_no_longer_flagged(self):
+        assert (
+            transcriber._looks_like_hallucination(
+                self.REAL_TEXT, self.REAL_TOTAL, self.REAL_SPEECH
+            )
+            is False
+        )
+
+    def test_pauses_are_excluded_from_the_density_denominator(self):
+        """More pauses for the same words must never flip a real take."""
+        assert (
+            transcriber._looks_like_hallucination(
+                "Please update the README and add a changelog entry.", 30.0, 5.0
+            )
+            is False
+        )
+
+    def test_genuine_non_speech_still_fails_on_speech_seconds(self):
+        """The fix must not turn the guard off: a tone fails even with the
+        full take counted as 'speech'."""
+        assert transcriber._looks_like_hallucination("you", 20.0, 20.0) is True
+
+
+class TestRepeatedStockArtifact:
+    """`thank you, thank you, thank you` -- repeated, often across lines.
+
+    The original live bug was the token REPEATED, and the previous regex was
+    anchored to a single line, so "Thank you.\\nThank you.\\nThank you." slipped
+    through. The rule now strips every stock token and asks whether anything
+    the user said remains.
+    """
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "Thank you.",
+            "Thank you.\nThank you.",
+            "Thank you.\nThank you.\nThank you.",
+            "Thank you. Thank you. Thank you.",
+            "thanks for watching!\nthanks for watching!",
+            "you\n.\nyou",
+        ],
+    )
+    def test_repetition_is_still_an_artifact(self, text):
+        assert transcriber._looks_like_hallucination(text, 30.0) is True
+
+    @pytest.mark.parametrize(
+        "text",
+        [
+            "Thank you for reviewing this pull request.\nThe changes look correct.",
+            "Thanks for watching the deploy — it went fine.",
+            "You should update the lock file.",
+        ],
+    )
+    def test_a_real_sentence_containing_a_stock_phrase_survives(self, text):
+        assert transcriber._looks_like_hallucination(text, 4.0) is False
+
+
 # ------------------------------ level gate ---------------------------------
 
 
