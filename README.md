@@ -197,5 +197,7 @@ Details: [docs/SELF-UPDATE.md](docs/SELF-UPDATE.md).
 
 Apache-2.0 since September 2026 (previously MIT, inherited from Code Puppy).
 The Code Puppy lineage is preserved verbatim in [NOTICE](NOTICE) — the puppy
-came first, and the receipt travels with the work. See also
+came first, and the receipt travels with the work. The **why** behind the
+Apache-2.0 move is written down in [docs/RELICENSE.md](docs/RELICENSE.md) —
+the patent grant and the trademark boundary, in that order. See also
 [TRADEMARKS.md](TRADEMARKS.md) and [PROVENANCE.md](PROVENANCE.md).

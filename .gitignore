@@ -94,4 +94,6 @@ FB-*.md
 
 # Third-party conference transcripts (copyrighted; names of unconsenting
 # speakers). Research-only; never publishable.
+# Third-party talk transcripts (copyrighted; named speakers). Research-only.
 docs/*-sxsw.md
+docs/jacob-collier-*.md

@@ -50,7 +50,7 @@ removing technology obstacles, and meeting people where they are — as humans.
 ### 4. Wiggledom — how the work moves
 
 From **Jacob Collier**, who calls music "wiggling air" and the feeling it
-makes *the wiggle*. `docs/jacob-collier-wiggly-wonder-of-music.md`. Set a
+makes *the wiggle*. Set a
 straight line against a wiggle: the straight line is rigid, unyielding,
 linear — "like a Roman road or the hand of a clock." The wiggle is soft,
 fluid, "constantly changing shape, but stronger than almost anything — like
