@@ -92,6 +92,8 @@ mkdir -p "$OUT/council"
 cp pages-hub/council.html "$OUT/council/index.html"
 mkdir -p "$OUT/manifesto"
 cp pages-hub/manifesto.html "$OUT/manifesto/index.html"
+mkdir -p "$OUT/about"
+cp pages-hub/about.html "$OUT/about/index.html"
 
 # 4. Fully-offline flat file
 mkdir -p "$OUT/flat"

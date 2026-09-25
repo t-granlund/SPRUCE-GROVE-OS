@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About — Spruce Grove</title>
+<link rel="icon" type="image/png" href="../assets/favicon-64.png" />
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" />
+<meta name="description" content="About Spruce Grove: what it is, why it is shaped this way, and where the name and the mark come from — from the three-spruce glyph to the Scandinavian word that means spruce grove." />
+<link rel="stylesheet" href="../assets/fonts.css" />
+<link rel="stylesheet" href="../assets/tokens.css" />
+<link rel="stylesheet" href="../assets/sidebar.css" />
+<script src="../assets/icons.js"></script>
+<script>window.BB_SHELL = { base: "../", active: "about", assetsBase: "../assets/", subnav: [
+  { href: "#what",   label: "What it is" },
+  { href: "#why",    label: "Why it works this way" },
+  { href: "#name",   label: "The name & the mark" },
+  { href: "#where",  label: "Where it comes from" },
+  { href: "#who",    label: "Who holds it" },
+  { href: "#source", label: "Read the originals" }
+] };</script>
+<script src="../assets/shell.js" defer></script>
+<script src="../assets/sidebar.js" defer></script>
+<style>
+  :root {
+    --bg: #0E130F; --bg-elev: #121813; --bg-card: #161D18;
+    --border: rgba(238,235,229,.09); --border-light: rgba(238,235,229,.16);
+    --text: #EEEBE2; --text-soft: #D1CEC5; --text-muted: #A5A699;
+    --accent: #E4AA71; --accent-2: #F2A26A; --accent-3: #98B79E; --accent-4: #ECEBE5; --danger: #CAAB88;
+    --radius: 14px; --radius-sm: 8px;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --display: "Fraunces", Georgia, "Times New Roman", serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); }
+  .wrap { max-width:860px; margin:0 auto; padding:0 24px; }
+  a { color:var(--accent-3); }
+
+  .hero { padding:72px 0 34px; position:relative; }
+  .kicker { font-family:var(--mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); display:inline-block; border:1px solid var(--border-light); padding:6px 14px; border-radius:999px; margin-bottom:20px; }
+  h1 { font-family:var(--display); font-size:clamp(34px,5vw,52px); font-weight:600; letter-spacing:-.02em; margin:0 0 18px; line-height:1.05; }
+  h1 em { color:var(--accent-3); font-style:italic; }
+  .lede { font-size:17px; color:var(--text-soft); max-width:720px; margin:0; line-height:1.65; }
+  .dateline { font-family:var(--mono); font-size:12px; color:var(--text-muted); margin-top:16px; letter-spacing:.08em; }
+
+  section.g { margin-top:56px; }
+  section.g > h2 { font-size:28px; font-weight:700; letter-spacing:-.02em; padding-bottom:12px; border-bottom:1px solid var(--border); margin-bottom:8px; }
+  section.g .secintro { font-size:16px; color:var(--text-soft); max-width:720px; margin:14px 0 30px; line-height:1.6; }
+  section.g p { font-size:15.5px; color:var(--text-soft); max-width:720px; line-height:1.7; margin:14px 0; }
+  section.g p b, section.g li b { color:var(--text); }
+  section.g p em { color:var(--accent-3); }
+
+  .thesis { background:var(--bg-card); border:1px solid var(--border); border-left:3px solid var(--accent); border-radius:var(--radius); padding:24px 26px; margin:20px 0; }
+  .thesis p { font-size:17px; color:var(--text); margin:0; line-height:1.7; }
+
+  .forgrid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:20px 0; }
+  @media (max-width:720px){ .forgrid { grid-template-columns:1fr; } }
+  .forcard { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; }
+  .forcard h3 { font-size:15.5px; font-weight:700; margin:0 0 8px; color:var(--accent-4); }
+  .forcard p { font-size:14px; margin:0; }
+
+  .quote { font-family:var(--display); font-size:20px; color:var(--text); line-height:1.55; border-left:3px solid var(--accent-3); padding:6px 0 6px 20px; margin:22px 0; }
+  .quote .who { display:block; font-family:var(--mono); font-size:11.5px; color:var(--text-muted); margin-top:10px; }
+
+  /* mark gallery */
+  .marks { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:24px 0; }
+  @media (max-width:720px){ .marks { grid-template-columns:1fr; } }
+  .mark { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:26px 22px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:16px; }
+  .mark .art { height:118px; width:100%; display:flex; align-items:center; justify-content:center; }
+  /* Both marks size by max-height with an intrinsic-ratio width. The wrapper
+     MUST carry a definite width (100%), or the nested flex collapses the image
+     to width:0 -- which is exactly how the Grove Mark rendered blank once. */
+  .mark .art img { max-height:118px; max-width:100%; width:auto; height:auto; }
+  .mark .mt { font-family:var(--mono); font-size:11.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  .mark .md { font-size:13.5px; color:var(--text-soft); line-height:1.55; margin:0; }
+  .swatchline { display:flex; gap:0; border-radius:8px; overflow:hidden; border:1px solid var(--border); margin:20px 0 6px; }
+  .swatchline span { flex:1; height:44px; }
+  .swatchcap { font-family:var(--mono); font-size:11px; color:var(--text-muted); letter-spacing:.06em; }
+
+  .nobody { display:grid; gap:14px; margin:20px 0; }
+  .nobody .cardx { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 22px; }
+  .nobody .cardx h3 { font-size:15.5px; font-weight:700; margin:0 0 6px; color:var(--accent-3); }
+  .nobody .cardx p { font-size:14px; margin:0; }
+
+  ul.plain { list-style:none; padding:0; margin:16px 0; display:grid; gap:10px; }
+  ul.plain li { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px 16px; font-size:14.5px; color:var(--text-soft); line-height:1.6; }
+  ul.plain li b { color:var(--text); }
+
+  footer { border-top:1px solid var(--border); padding:28px 0 40px; margin-top:60px; font-family:var(--mono); font-size:12.5px; color:var(--text-muted); }
+  footer a { color:var(--accent-3); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="hero">
+    <span class="kicker">About</span>
+    <h1>A grove, <em>not a tree</em></h1>
+    <p class="lede">Spruce Grove is a local-first agentic coding harness &mdash; and a small set of
+    beliefs about who gets to build. This page is the plain account: what it is, why it is shaped
+    the way it is, and where the name and the mark come from.</p>
+    <p class="dateline">gran &middot; lund &middot; sv. &middot; spruce grove</p>
+  </header>
+
+  <section class="g" id="what">
+    <h2>What it is</h2>
+    <p class="secintro">A harness, not a model. It borrows the intelligence; it owns the loop.</p>
+    <p><b>Spruce Grove is an agentic coding harness.</b> It does not train a model or serve one.
+    It glues the model you choose to the work you actually do &mdash; reading files, running
+    commands, editing code, keeping a record &mdash; and it does that on your machine, in your
+    working directory, under your account.</p>
+    <p>It comes in two faces that share one engine: a <b>CLI</b> for the terminal, and a
+    <b>desktop app</b> that is a thin chassis around the same engine. One harness, many doors.
+    The desktop never became a dependency of the thing that does the work &mdash; swap the
+    surface and the engine is unchanged.</p>
+    <div class="thesis">
+      <p>It runs on your machine, shows its work while it runs, and keeps the receipts.</p>
+    </div>
+  </section>
+
+  <section class="g" id="why">
+    <h2>Why it works this way</h2>
+    <p class="secintro">Every mechanism is downstream of a belief. Four of them shape the tool.</p>
+    <ul class="plain">
+      <li><b>Local-first, sovereign.</b> The work stays on the machine; the customer is the
+      product. Nothing about your session depends on someone else's server staying up, priced
+      the way they choose, or deciding when you may be current.</li>
+      <li><b>Receipts in public.</b> Claims are traceable to the commit that earned them, and
+      every number on the public surfaces is counted, not asserted. When something is
+      unverified, it says so &mdash; a stated <em>not verified</em> beats a confident guess.</li>
+      <li><b>The grove tends itself.</b> It checks its own pulse on startup and upgrades when a
+      newer self exists, without disturbing the session that noticed. It reports every self-heal
+      in plain words, and it can always be told to wait &mdash; consent survives autonomy.</li>
+      <li><b>Proven at the seams.</b> The parts most projects forget &mdash; protocol fixtures,
+      permission guards, the security floor &mdash; are the parts with tests. CSP and least
+      privilege are locked by guards, not by memory.</li>
+    </ul>
+    <p>None of that is decoration. A tool that touches your files and runs your commands has to
+    be honest about what it did; the value is in being able to see the work, and to walk away with
+    everything still yours.</p>
+  </section>
+
+  <section class="g" id="name">
+    <h2>The name and the mark</h2>
+    <p>Start with the name, because the mark follows from it.</p>
+    <p>A grove is what you get when spruces grow together: <b>no single tree carries the forest,
+    but the stand outlasts any one of them.</b> That is the whole thesis &mdash; it is the
+    sentence the rest of the project is a footnote to.</p>
+    <p>The word itself is Scandinavian. <b><em>gran</em> is spruce; <em>lund</em> is grove</b>
+    &mdash; so the name we build under literally means <em>spruce grove</em>. We say that plainly,
+    nothing fancier. A grove was named for a family, not after one: a surname that reads,
+    in two old words, as the thing this is.</p>
+
+    <div class="marks">
+      <div class="mark">
+        <div class="art"><img src="../assets/grove-mark.svg" alt="The Grove Mark — three stepped spruces sharing one ground line, the center tree in gold" /></div>
+        <span class="mt">The Grove Mark</span>
+        <p class="md">Three stepped spruces, one shared ground line. The center tree is gold
+        &mdash; the light-bringer; its neighbors are stone, recessed. The application logo:
+        nav, docs, sidebars.</p>
+      </div>
+      <div class="mark">
+        <div class="art"><img class="disc" src="../assets/spruce-core-disc.svg" alt="The Core Disc — a cedar roundel with an inset keyline and the three-spruce trio" /></div>
+        <span class="mt">The Core Disc</span>
+        <p class="md">The same geometry, dressed to stand alone: a cedar roundel, an inset
+        keyline, the trio within. It carries favicon and app-icon duty, where only a disc
+        survives.</p>
+      </div>
+    </div>
+
+    <p>Two rules carry forward. <b>Geometry is the identity</b> &mdash; never decorate it; the
+    mark is drawn as strokes, in three symbols only, and no emoji ever. And <b>one ground
+    line</b>: a stand shares one forest floor, the way a team shares one piece of ground. Below
+    roughly twenty pixels, only the Disc survives; everything else is that one geometry,
+    composed for a different job.</p>
+
+    <div class="swatchline" aria-hidden="true">
+      <span style="background:#0E130F"></span>
+      <span style="background:#1E2B22"></span>
+      <span style="background:#2D4F3A"></span>
+      <span style="background:#588F5E"></span>
+      <span style="background:#98B79E"></span>
+      <span style="background:#D2A069"></span>
+      <span style="background:#E4AA71"></span>
+      <span style="background:#F0E1C8"></span>
+    </div>
+    <p class="swatchcap">charcoal &rarr; spruce-deep &rarr; spruce &rarr; moss &rarr; cedar &rarr; mist &mdash; a dark-forest palette, grain over glitter</p>
+  </section>
+
+  <section class="g" id="where">
+    <h2>Where it comes from</h2>
+    <p class="secintro">Honest lineage, and the four sources the ethos is drawn from.</p>
+    <p>Spruce Grove is <b>built from Code Puppy</b>, an open-source agentic coding assistant by
+    <b>Michael Pfaffenberger</b>, and stays import-compatible with it. The puppy shared
+    everything; this grove exists because of that. The exact lineage, sync points, and rename map
+    live in <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/PROVENANCE.md">PROVENANCE.md</a>.
+    The project is <b>Apache-2.0</b> licensed, and the upstream notice is preserved verbatim.</p>
+    <p>The ethos is older than the code. Four sources, one creed:</p>
+    <div class="forgrid">
+      <div class="forcard">
+        <h3>Ozark Bagels &mdash; how to carry yourself</h3>
+        <p>Rules off a bagel-shop wall: be first to say hello, be kinder than necessary, be tough
+        minded but tender hearted, leave everything better than you found it. Closer: <em>spread
+        joy, love, and cream cheese.</em></p>
+      </div>
+      <div class="forcard">
+        <h3>The Junto (1727) &mdash; how to think with others</h3>
+        <p>Franklin's Leather Apron Club: love truth for truth's sake, no invented facts, ask
+        <em>&ldquo;how can I help your honorable designs succeed?&rdquo;</em> Curiosity turned
+        into civic infrastructure.</p>
+      </div>
+      <div class="forcard">
+        <h3>gran&middot;lund &mdash; who is doing the carrying</h3>
+        <p>Help people solve problems. Remove technology obstacles. Meet people where they are,
+        as humans &mdash; and keep the work close to the people closest to the problem.</p>
+      </div>
+      <div class="forcard">
+        <h3>Wiggledom &mdash; how the work moves</h3>
+        <p>Straight lines are brittle; the wiggle is fluid and stronger than almost anything. When
+        the world feels like a straight line, be a wiggler.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="g" id="who">
+    <h2>Who holds it</h2>
+    <p>Spruce Grove is stewarded by a small council in the Leather Apron tradition &mdash; a
+    mutual-improvement circle where decisions start as questions, survive inquiry, and earn their
+    way into the build. The council is <b>three stewards</b>, and they serve anonymously.</p>
+    <div class="quote">
+      Public surfaces show seats, not names: this project is about the ethos and the work, never
+      about persons or companies.
+      <span class="who">GOVERNANCE.md &mdash; the Leather Apron Council &amp; the Approval Wall</span>
+    </div>
+    <p>That is deliberate, and it is the same belief as the name. A grove outlasts its
+    trees; <b>the harness is not tied to any single person.</b> The work carries no personal
+    brand, so it can pass to whoever tends it next.</p>
+  </section>
+
+  <section class="g" id="source">
+    <h2>Read the originals</h2>
+    <p class="secintro">Everything above is sourced from documents in the repository. Read them
+    for yourself.</p>
+    <ul class="plain">
+      <li><b><a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/MANIFESTO.md">MANIFESTO.md</a></b> &mdash; the founding story, dictated in one sitting.</li>
+      <li><b><a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/ETHOS.md">ETHOS.md</a></b> &mdash; the four pillars, and the grove that tends itself.</li>
+      <li><b><a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/BRAND.md">BRAND.md</a></b> &mdash; the name, the mark, and the design language.</li>
+      <li><b><a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/GOVERNANCE.md">GOVERNANCE.md</a></b> &mdash; the council, the gate, and the approval wall.</li>
+      <li><b><a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/PROVENANCE.md">PROVENANCE.md</a></b> &mdash; exact lineage to Code Puppy, and the rename map.</li>
+      <li><b><a href="https://github.com/t-granlund/SPRUCE-GROVE-OS">The source</a></b> &mdash; read it, fork it, run it.</li>
+    </ul>
+  </section>
+
+  <footer>
+    Spruce Grove &middot; about the grove, the name, and the mark &middot;
+    <a href="../manifesto/">the manifesto &rarr;</a>
+  </footer>
+</div>
+</body>
+</html>

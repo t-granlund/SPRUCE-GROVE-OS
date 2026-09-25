@@ -17,6 +17,7 @@
 
   var NAV = [
     { key: "hub",          href: base + "index.html",    label: "Hub",           icon: "hub" },
+    { key: "about",        href: base + "about/",        label: "About",         icon: "info" },
     { key: "manifesto",    href: base + "manifesto/",    label: "Manifesto",     icon: "scroll" },
     { key: "field-guide",  href: base + "field-guide/",  label: "Field Guide",   icon: "book" },
     { key: "releases",     href: base + "releases/",     label: "Releases",      icon: "activity" },
@@ -27,7 +28,7 @@
     { key: "phases",       href: base + "phases.html",   label: "Phases",        icon: "layers" },
     { key: "flat",         href: base + "flat/",         label: "Flat Docs",     icon: "file" }
   ];
-  var account = { href: "https://github.com/t-granlund/code_puppy", icon: "github" };
+  var account = { href: "https://github.com/t-granlund/SPRUCE-GROVE-OS", icon: "github" };
 
   // Optional per-page table of contents: BB_SHELL.subnav = [{href:"#id", label:"..."}, ...]
   var SUBNAV = Array.isArray(cfg.subnav) ? cfg.subnav : [];
