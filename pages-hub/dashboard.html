@@ -22,6 +22,7 @@
   header.hero::before { content:""; position:absolute; inset:-40% -20% auto; height:130%;
     background:radial-gradient(60% 55% at 50% 0%, rgba(88,143,94,.20), transparent 70%); pointer-events:none; }
   .hero .inner { position:relative; }
+  .hero-mark { display:block; margin:0 auto 20px; width:54px; height:auto; }
   .hero h1 { font-size:clamp(30px,4.6vw,50px); margin:22px 0 0; }
   .hero h1 em { font-style:normal; background:var(--BB-grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
   .hero .sub { max-width:760px; margin:18px auto 0; font-size:17px; color:var(--BB-t2); }
@@ -74,12 +75,23 @@
   footer a { color:var(--BB-t2); }
   .links { display:flex; gap:16px; flex-wrap:wrap; }
   @media (max-width:640px){ th,td{padding:8px;} .hide-sm{display:none;} .prog{padding:18px;} }
+  /* On phones the on-page pill rail must WRAP, not run off the right edge.
+     overflow-x:auto was not containing it, so the whole document scrolled. */
+  @media (max-width:640px){ nav.onpage .wrap{ flex-wrap:wrap; overflow-x:visible; } }
+  /* Wide data tables: let each table scroll inside its own box so it can never
+     set the document's width. display:block on a table makes it its own
+     scroll container at every width below the breakpoint. */
+  @media (max-width:820px){
+    table { display:block; width:100%; max-width:100%; overflow-x:auto;
+            -webkit-overflow-scrolling:touch; }
+  }
 </style>
 </head>
 <body>
 
 <header class="hero">
   <div class="wrap inner">
+    <img class="hero-mark" src="./assets/grove-mark.svg" alt="" aria-hidden="true" width="54" height="54">
     <span class="kicker">Spruce Grove OS &middot; end-to-end state of the grove</span>
     <h1>Six programs. One grove.<br>The whole picture, <em>verbosely</em>.</h1>
     <p class="sub">Every program in flight, every phase in it, every open decision, every receipt.

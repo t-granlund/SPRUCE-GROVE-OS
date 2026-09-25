@@ -1,8 +1,8 @@
 window.FIELD_GUIDE_DATA = {
   "meta": {
-    "generatedAt": "2026-09-24T16:14:49.037830+00:00",
+    "generatedAt": "2026-09-25T21:09:15.943252+00:00",
     "repoPath": "/Users/tygranlund/dev/SPRUCE-GROVE-OS",
-    "repoHead": "5cebf11",
+    "repoHead": "232d32c",
     "branch": "main",
     "currentVersion": "spruce-grove v1.0.76",
     "sourceUrl": "https://github.com/mpfaffenberger/code_puppy"
@@ -13,7 +13,7 @@ window.FIELD_GUIDE_DATA = {
     "privateAgents": 15,
     "plugins": 71,
     "skills": 4,
-    "commitsLast2Months": 247,
+    "commitsLast2Months": 263,
     "releases": 1
   },
   "tools": [
@@ -1925,11 +1925,11 @@ window.FIELD_GUIDE_DATA = {
         },
         {
           "name": "review.py",
-          "lines": 225
+          "lines": 232
         },
         {
           "name": "transcriber.py",
-          "lines": 256
+          "lines": 316
         }
       ],
       "hasReadme": true,
@@ -2951,96 +2951,208 @@ window.FIELD_GUIDE_DATA = {
     }
   ],
   "changelog": {
-    "total_commits": 247,
+    "total_commits": 263,
     "releases": [
       {
         "month": "2026-09",
-        "commit_count": 247,
+        "commit_count": 263,
         "commits": [
           {
-            "hash": "5cebf1108c0cef1a2d0e8e7f8885f95465a9d737",
-            "short_hash": "5cebf11",
-            "subject": "fix(mockingbird): stop the \"thank you, thank you, thank you\" dictation bug",
+            "hash": "232d32c0b559e38f0aefcdbfb41b9f2cf97753fa",
+            "short_hash": "232d32c",
+            "subject": "feat(site): an About page, and fix the nav's dead repo link",
             "author": "the grove",
-            "date": "2026-09-24",
+            "date": "2026-09-25",
             "month": "2026-09"
           },
           {
-            "hash": "8417e4ad228805ea0250b3a1fa3545ed04201be3",
-            "short_hash": "8417e4a",
+            "hash": "23ce93b5212226dda20c9c6f4da39f03989613e8",
+            "short_hash": "23ce93b",
             "subject": "chore: bump version [ci skip]",
             "author": "github-actions[bot]",
             "date": "2026-09-24",
             "month": "2026-09"
           },
           {
-            "hash": "64b630c471745b9f885d8abbc8863acabe46d957",
-            "short_hash": "64b630c",
-            "subject": "fix(anonymity): finish the pivot on the surfaces it never reached",
+            "hash": "cb745090f2acd65e20f29c295d2036d53118c0fe",
+            "short_hash": "cb74509",
+            "subject": "chore: bump version [ci skip]",
+            "author": "github-actions[bot]",
+            "date": "2026-09-24",
+            "month": "2026-09"
+          },
+          {
+            "hash": "7d469f6f382f81b0ac6629e0b2ea06019e255362",
+            "short_hash": "7d469f6",
+            "subject": "fix(brand): put the site's nav mark under the sync script too",
             "author": "the grove",
             "date": "2026-09-24",
             "month": "2026-09"
           },
           {
-            "hash": "f892bd99a640bc37c1b8c8eadf043f302fc10e51",
-            "short_hash": "f892bd9",
-            "subject": "chore: bump version [ci skip]",
-            "author": "github-actions[bot]",
-            "date": "2026-09-23",
-            "month": "2026-09"
-          },
-          {
-            "hash": "a4dc87107fb773256d8ee6fdb15e5fdab4be681c",
-            "short_hash": "a4dc871",
-            "subject": "chore: bump version [ci skip]",
-            "author": "github-actions[bot]",
-            "date": "2026-09-23",
-            "month": "2026-09"
-          },
-          {
-            "hash": "2ac101390e6b5e0c628cb8a2e85fea7aa90823b2",
-            "short_hash": "2ac1013",
-            "subject": "docs(sovereignty): step 2 of the harness exit is complete, and say why",
+            "hash": "26f8b76f278ef4f5ec253d436199b0e8e0cc86fe",
+            "short_hash": "26f8b76",
+            "subject": "docs: the Apache-2.0 rationale, publicly, and two more transcripts untracked",
             "author": "the grove",
-            "date": "2026-09-23",
+            "date": "2026-09-24",
             "month": "2026-09"
           },
           {
-            "hash": "36b41b86f099c5bf3ec93bd00af47dea1cd8b266",
-            "short_hash": "36b41b8",
-            "subject": "chore: bump version [ci skip]",
-            "author": "github-actions[bot]",
-            "date": "2026-09-23",
-            "month": "2026-09"
-          },
-          {
-            "hash": "d84a0dc370ca9d67eb2899835abfd8f60d830a6f",
-            "short_hash": "d84a0dc",
-            "subject": "fix(site): give every published page an apple-touch-icon, correctly rooted",
+            "hash": "60be611061f3b8835f41781bd94e3fd0cfd64374",
+            "short_hash": "60be611",
+            "subject": "fix(anonymity): sweep the published surfaces to zero, and guard them",
             "author": "the grove",
-            "date": "2026-09-23",
+            "date": "2026-09-24",
             "month": "2026-09"
           },
           {
-            "hash": "c4a2f7fcac500f971d5882fa79a9cc5cbb31a5e7",
-            "short_hash": "c4a2f7f",
-            "subject": "feat(spinner): grove-owned braille spinner, seated as the default",
+            "hash": "de36660c6d3a16552c368a31837bfb401cd26bd8",
+            "short_hash": "de36660",
+            "subject": "fix(ci): redeploy when the build script changes",
             "author": "the grove",
-            "date": "2026-09-23",
+            "date": "2026-09-24",
             "month": "2026-09"
           },
           {
-            "hash": "f6e6a4ffef795cd20775a9938a2cb974b3e7c4cf",
-            "short_hash": "f6e6a4f",
-            "subject": "chore: bump version [ci skip]",
-            "author": "github-actions[bot]",
-            "date": "2026-09-23",
+            "hash": "c426fe65355daaabc36783b7090017f40056f138",
+            "short_hash": "c426fe6",
+            "subject": "fix(site): normalize the build output path before guarding it",
+            "author": "the grove",
+            "date": "2026-09-24",
+            "month": "2026-09"
+          },
+          {
+            "hash": "4953a46c27f206136b67297b314e723dad1ba658",
+            "short_hash": "4953a46",
+            "subject": "fix(brand): the master icon was the stale one; sync it and de-name the public copy",
+            "author": "the grove",
+            "date": "2026-09-24",
+            "month": "2026-09"
+          },
+          {
+            "hash": "0733e8db27ab6d1f9ded7f0810d1d27518b64643",
+            "short_hash": "0733e8d",
+            "subject": "refactor(site): one build, one source of truth — and stop tracking the output",
+            "author": "the grove",
+            "date": "2026-09-24",
             "month": "2026-09"
           }
         ]
       }
     ],
     "commits": [
+      {
+        "hash": "232d32c0b559e38f0aefcdbfb41b9f2cf97753fa",
+        "short_hash": "232d32c",
+        "subject": "feat(site): an About page, and fix the nav's dead repo link",
+        "author": "the grove",
+        "date": "2026-09-25"
+      },
+      {
+        "hash": "23ce93b5212226dda20c9c6f4da39f03989613e8",
+        "short_hash": "23ce93b",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "cb745090f2acd65e20f29c295d2036d53118c0fe",
+        "short_hash": "cb74509",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "7d469f6f382f81b0ac6629e0b2ea06019e255362",
+        "short_hash": "7d469f6",
+        "subject": "fix(brand): put the site's nav mark under the sync script too",
+        "author": "the grove",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "26f8b76f278ef4f5ec253d436199b0e8e0cc86fe",
+        "short_hash": "26f8b76",
+        "subject": "docs: the Apache-2.0 rationale, publicly, and two more transcripts untracked",
+        "author": "the grove",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "60be611061f3b8835f41781bd94e3fd0cfd64374",
+        "short_hash": "60be611",
+        "subject": "fix(anonymity): sweep the published surfaces to zero, and guard them",
+        "author": "the grove",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "de36660c6d3a16552c368a31837bfb401cd26bd8",
+        "short_hash": "de36660",
+        "subject": "fix(ci): redeploy when the build script changes",
+        "author": "the grove",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "c426fe65355daaabc36783b7090017f40056f138",
+        "short_hash": "c426fe6",
+        "subject": "fix(site): normalize the build output path before guarding it",
+        "author": "the grove",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "4953a46c27f206136b67297b314e723dad1ba658",
+        "short_hash": "4953a46",
+        "subject": "fix(brand): the master icon was the stale one; sync it and de-name the public copy",
+        "author": "the grove",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "0733e8db27ab6d1f9ded7f0810d1d27518b64643",
+        "short_hash": "0733e8d",
+        "subject": "refactor(site): one build, one source of truth — and stop tracking the output",
+        "author": "the grove",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "09bd07fb3e501ca7ffc51829047ae9a12dfc1893",
+        "short_hash": "09bd07f",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "7478ac015bc6ff328460173dd04d79347db9c13b",
+        "short_hash": "7478ac0",
+        "subject": "fix(mockingbird): /rec rejected real speech with pauses, and hid its own keys",
+        "author": "the grove",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "89746b04b9c0452da62a6696250292eb37a3e0fa",
+        "short_hash": "89746b0",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "0b299d3c560ec674a722ea37a385ad73e9f49d94",
+        "short_hash": "0b299d3",
+        "subject": "docs: sync Leather Apron Club slide count (47 -> 51)",
+        "author": "the grove",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "234de8c5b89151110c7f73731313051f41693ba5",
+        "short_hash": "234de8c",
+        "subject": "fix(anonymity): the generators were still publishing names",
+        "author": "the grove",
+        "date": "2026-09-24"
+      },
+      {
+        "hash": "aede760c399a9df44de41c39e35e65b0eb38ae59",
+        "short_hash": "aede760",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-24"
+      },
       {
         "hash": "5cebf1108c0cef1a2d0e8e7f8885f95465a9d737",
         "short_hash": "5cebf11",

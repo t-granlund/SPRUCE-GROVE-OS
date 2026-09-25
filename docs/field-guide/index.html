@@ -37,7 +37,14 @@
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    /* Long mono strings and data-driven chip grids can still exceed the
+       viewport on narrow screens. Clip the sideways overflow at the ROOT
+       (html) so it never creates a document scrollbar, while the intentional
+       inner scrollers (tables, <pre>, tool list) keep their own overflow.
+       NOTE: this must live on html, not body -- overflow-x:clip on body alone
+       computes overflow-y:auto, which stops the box from propagating its
+       overflow to the viewport and leaves the document unscrollable-wide. */
+    html { scroll-behavior: smooth; overflow-x: clip; }
     body {
       margin: 0;
       background: var(--bg);
@@ -104,8 +111,8 @@
     }
 
     /* Layout */
-    .fg-layout { display: flex; gap: 0; align-items: flex-start; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-    .fg-content { flex: 1; min-width: 0; padding-left: 28px; }
+    .fg-layout { display: flex; gap: 0; align-items: flex-start; max-width: 1200px; margin: 0 auto; padding: 0 24px; max-width: 100%; overflow-x: hidden; }
+    .fg-content { flex: 1; min-width: 0; width: 100%; max-width: 100%; padding-left: 28px; overflow-x: hidden; }
     @media (max-width: 900px) { .fg-layout { display: block; padding: 0; } .fg-content { padding-left: 0; } }
     .container { max-width: 100%; margin: 0; padding: 0; min-width: 0; }
     main { padding-top: 0; }
@@ -205,7 +212,7 @@
       margin: -36px auto 60px;
       max-width: 900px;
     }
-    @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     .stat {
       background: var(--bg-card);
       border: 1px solid var(--border);
@@ -248,7 +255,7 @@
 
     .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    @media (max-width: 900px) { .grid-3 { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .grid-3 { grid-template-columns: minmax(0, 1fr); } }
     @media (max-width: 680px) { .grid-2 { grid-template-columns: minmax(0, 1fr); } }
 
     .card {
@@ -349,7 +356,9 @@
     }
     .tool-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      /* min(260px,100%) keeps the track from exceeding a narrow viewport;
+         a bare minmax(260px,…) can force a column wider than the screen. */
+      grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
       gap: 10px;
     }
     .tool-item {
@@ -361,8 +370,11 @@
       font-size: 13px;
       display: flex;
       align-items: center;
+      flex-wrap: wrap;         /* let name + description wrap on narrow screens */
       gap: 10px;
+      min-width: 0;            /* let the row shrink inside the grid track */
     }
+    .tool-item > * { min-width: 0; overflow-wrap: anywhere; word-break: break-word; }
     .tool-item .dot {
       width: 8px;
       height: 8px;
@@ -431,8 +443,15 @@
     .agent-card .tools-extra {
       flex: 1 1 100%;
       width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      /* The reveal is height-driven (max-height); without overflow:hidden the
+         collapsed panel's tool chips still lay out and stretch the document
+         sideways on a phone. Clip both axes so a closed panel is truly closed. */
+      overflow: hidden;
       transition: max-height .3s ease;
     }
+    .agent-card, .agent-card .agent-tools-wrap { min-width: 0; max-width: 100%; }
     .agent-card .tools-extra.open {
       margin-top: 6px;
     }
@@ -1150,6 +1169,13 @@
     /* Long unbreakable mono strings (version tags, register_callbacks
        paths) wrap instead of pushing their column/parent out. */
     td, th, .meta, .meta-row, code, dd { overflow-wrap: anywhere; word-break: break-word; }
+    /* Flex/grid chip rows must let their children shrink below the longest
+       token. Without min-width:0 the min-content width of one long
+       tool/plugin name (browser_get_page_info) sets the row width and the
+       whole document scrolls sideways on a phone. */
+    .agent-card .tools, .agent-card .tools span, .agent-card .agent-tools-wrap,
+    .meta-row, .meta-row .tag, .md-d-hooks, .md-d-hooks .tag, .chip,
+    .grid-2, .grid-3, .stats, .stat { min-width: 0; }
     /* Wide data tables scroll inside their own box on narrow viewports.
        The wrapper must be a block box clipped to its parent so the inner
        table's min-width overflows the wrapper (scrolls) not the section. */

@@ -23,6 +23,7 @@
   header.hero::before { content:""; position:absolute; inset:-40% -20% auto; height:130%;
     background:radial-gradient(60% 55% at 50% 0%, rgba(88,143,94,.20), transparent 70%); pointer-events:none; }
   .hero .inner { position:relative; }
+  .hero-mark { display:block; margin:0 auto 20px; width:54px; height:auto; }
   .hero h1 { font-size:clamp(34px,5.6vw,58px); margin:22px 0 0; }
   .hero h1 em { font-style:normal; background:var(--BB-grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
   .hero .sub { max-width:640px; margin:20px auto 0; font-size:18px; color:var(--BB-t2); }
@@ -88,6 +89,7 @@
 
 <header class="hero">
   <div class="wrap inner">
+    <img class="hero-mark" src="./assets/grove-mark.svg" alt="" aria-hidden="true" width="54" height="54">
     <span class="kicker">Spruce Grove OS &middot; v1.0.0 &middot; &ldquo;the grove speaks&rdquo;</span>
     <h1>The agentic coding CLI<br>that speaks <em>your</em> language.</h1>
     <p class="sub">Say what you need out loud. Spruce Grove transcribes it on-device with a
