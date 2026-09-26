@@ -627,6 +627,14 @@ def _write_flat_html(data: dict) -> Path:
         "",
         html_template,
     )
+    # Also drop the now-local fonts.css link: the flat file is standalone, so a
+    # relative woff2 path would not resolve and would only 404. The page falls
+    # back to system fonts (unchanged from before fonts were vendored).
+    html_template = re.sub(
+        r'<link[^>]+href="assets/fonts\.css"[^>]*>\n?',
+        "",
+        html_template,
+    )
 
     # Adjust the launch banner text for direct-file usage
     html_template = html_template.replace(

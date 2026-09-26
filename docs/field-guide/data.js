@@ -1,8 +1,8 @@
 window.FIELD_GUIDE_DATA = {
   "meta": {
-    "generatedAt": "2026-09-25T21:09:15.943252+00:00",
+    "generatedAt": "2026-09-26T02:26:01.801609+00:00",
     "repoPath": "/Users/tygranlund/dev/SPRUCE-GROVE-OS",
-    "repoHead": "232d32c",
+    "repoHead": "11c512d",
     "branch": "main",
     "currentVersion": "spruce-grove v1.0.76",
     "sourceUrl": "https://github.com/mpfaffenberger/code_puppy"
@@ -13,7 +13,7 @@ window.FIELD_GUIDE_DATA = {
     "privateAgents": 15,
     "plugins": 71,
     "skills": 4,
-    "commitsLast2Months": 263,
+    "commitsLast2Months": 267,
     "releases": 1
   },
   "tools": [
@@ -2951,12 +2951,44 @@ window.FIELD_GUIDE_DATA = {
     }
   ],
   "changelog": {
-    "total_commits": 263,
+    "total_commits": 267,
     "releases": [
       {
         "month": "2026-09",
-        "commit_count": 263,
+        "commit_count": 267,
         "commits": [
+          {
+            "hash": "11c512df447ca8590401c7069a5e27a7bb4d71f3",
+            "short_hash": "11c512d",
+            "subject": "fix(site): hub footer labels named repos that don't exist",
+            "author": "the grove",
+            "date": "2026-09-25",
+            "month": "2026-09"
+          },
+          {
+            "hash": "e885cd0cfe8aa662ac802a7ffe69d3bf50b7562d",
+            "short_hash": "e885cd0",
+            "subject": "chore: bump version [ci skip]",
+            "author": "github-actions[bot]",
+            "date": "2026-09-25",
+            "month": "2026-09"
+          },
+          {
+            "hash": "e7ca00964f47902f5532e7f51b581489c2885336",
+            "short_hash": "e7ca009",
+            "subject": "fix(site): make every hub-linked page mobile-clean and brand-consistent",
+            "author": "the grove",
+            "date": "2026-09-25",
+            "month": "2026-09"
+          },
+          {
+            "hash": "fa9e2b903554473334f4146850ec52bb7485ca2b",
+            "short_hash": "fa9e2b9",
+            "subject": "chore: bump version [ci skip]",
+            "author": "github-actions[bot]",
+            "date": "2026-09-25",
+            "month": "2026-09"
+          },
           {
             "hash": "232d32c0b559e38f0aefcdbfb41b9f2cf97753fa",
             "short_hash": "232d32c",
@@ -3004,43 +3036,39 @@ window.FIELD_GUIDE_DATA = {
             "author": "the grove",
             "date": "2026-09-24",
             "month": "2026-09"
-          },
-          {
-            "hash": "de36660c6d3a16552c368a31837bfb401cd26bd8",
-            "short_hash": "de36660",
-            "subject": "fix(ci): redeploy when the build script changes",
-            "author": "the grove",
-            "date": "2026-09-24",
-            "month": "2026-09"
-          },
-          {
-            "hash": "c426fe65355daaabc36783b7090017f40056f138",
-            "short_hash": "c426fe6",
-            "subject": "fix(site): normalize the build output path before guarding it",
-            "author": "the grove",
-            "date": "2026-09-24",
-            "month": "2026-09"
-          },
-          {
-            "hash": "4953a46c27f206136b67297b314e723dad1ba658",
-            "short_hash": "4953a46",
-            "subject": "fix(brand): the master icon was the stale one; sync it and de-name the public copy",
-            "author": "the grove",
-            "date": "2026-09-24",
-            "month": "2026-09"
-          },
-          {
-            "hash": "0733e8db27ab6d1f9ded7f0810d1d27518b64643",
-            "short_hash": "0733e8d",
-            "subject": "refactor(site): one build, one source of truth — and stop tracking the output",
-            "author": "the grove",
-            "date": "2026-09-24",
-            "month": "2026-09"
           }
         ]
       }
     ],
     "commits": [
+      {
+        "hash": "11c512df447ca8590401c7069a5e27a7bb4d71f3",
+        "short_hash": "11c512d",
+        "subject": "fix(site): hub footer labels named repos that don't exist",
+        "author": "the grove",
+        "date": "2026-09-25"
+      },
+      {
+        "hash": "e885cd0cfe8aa662ac802a7ffe69d3bf50b7562d",
+        "short_hash": "e885cd0",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-25"
+      },
+      {
+        "hash": "e7ca00964f47902f5532e7f51b581489c2885336",
+        "short_hash": "e7ca009",
+        "subject": "fix(site): make every hub-linked page mobile-clean and brand-consistent",
+        "author": "the grove",
+        "date": "2026-09-25"
+      },
+      {
+        "hash": "fa9e2b903554473334f4146850ec52bb7485ca2b",
+        "short_hash": "fa9e2b9",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-25"
+      },
       {
         "hash": "232d32c0b559e38f0aefcdbfb41b9f2cf97753fa",
         "short_hash": "232d32c",

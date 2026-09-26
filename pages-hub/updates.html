@@ -201,12 +201,12 @@
     <p class="lede">Everything notable that shipped in spruce-grove over the past 60 days, with plain-language breakdowns of what it is, what it does, and why it matters — plus a complete index of the smaller work.</p>
     <div class="statline">
       <!-- AUTO-BEGIN:stats -->
-      <div class="s"><div class="n">192</div><div class="t">commits</div></div>
-      <div class="s"><div class="n">4</div><div class="t">features</div></div>
-      <div class="s"><div class="n">4</div><div class="t">bug fixes</div></div>
+      <div class="s"><div class="n">267</div><div class="t">commits</div></div>
+      <div class="s"><div class="n">11</div><div class="t">features</div></div>
+      <div class="s"><div class="n">20</div><div class="t">bug fixes</div></div>
       <div class="s"><div class="n">61</div><div class="t">tools</div></div>
       <div class="s"><div class="n">7</div><div class="t">agents</div></div>
-      <div class="s"><div class="n">69</div><div class="t">plugins</div></div>
+      <div class="s"><div class="n">71</div><div class="t">plugins</div></div>
       <!-- AUTO-END:stats -->
     </div>
 
@@ -309,13 +309,44 @@
     <h2>The Living Log <span class="tag">voice-led</span></h2>
     <p class="secintro">This is the live stream of how the harness evolves — the primary engine, not a side channel. The loop: <strong>speak</strong> (dictate while building) &rarr; <strong>capture</strong> (entries land in <code>LIVING-UPDATES.md</code> as they happen) &rarr; <strong>gate</strong> (every signal — ours and upstream's — faces the Leather Apron criteria below) &rarr; <strong>ship</strong> (the self-healing release train carries it) &rarr; <strong>observe</strong> (this page, live) &rarr; <strong>learn</strong> (port what helps, log what differs). The founding story and the rules of the grove live in <a href="https://github.com/t-granlund/SPRUCE-GROVE-OS/blob/main/MANIFESTO.md">MANIFESTO.md</a>. Entries age from <span class="chip">idea</span> through <span class="chip up">in flight</span> to <span class="chip gr">shipped</span>, and the shipped ones graduate into
     <!-- AUTO-BEGIN:living-updates -->
-<div class="pcount">18 entries · newest first</div>
+<div class="pcount">21 entries · newest first</div>
+    <article class="deep">
+      <div class="head"><h3>2026-09-23 — The boot mark learns to wiggle, and Wiggledom becomes the fourth pillar</h3><span class="meta"><span class="chip gr">shipped</span> · build session (Jacob Collier&#x27;s &quot;The Wiggly Wonder of Music&quot;) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>The boot wordmark was pyfiglet&#x27;s <code>ansi_shadow</code> — chunky solid blocks that read as 8-bit. It is now drawn in <strong>braille</strong>: dots, not slabs, with the curved, organic letterforms the grove deserves. <code>banner_art.py</code> and <code>splash.py</code> both carry the new bake; the splash taught itself a braille tier map (cells with an interior dot are the neon core, the rest glow). Same contract, unchanged: six rows, <code>SPRUCE GROVE</code> exactly 96 columns.</dd>
+        <dd>The idea behind the art became the idea behind the tool. <strong>Wiggledom</strong> is now the fourth pillar in <code>ETHOS.md</code> (README too): melody is the through-line, rhythm is space and pace, harmony is the relationship between the parts. Straight lines are brittle; the wiggle is water. The boot tagline now closes with <em>there are no straight lines in nature</em>.</dd>
+        <dd>The Collier transcript moved into <code>docs/</code> (kebab-cased), beside the other talk transcripts, as the reference for the new pillar.</dd>
+        <dd>The <code>cli.banner.grove_closer</code> key was missing from <code>es</code> and <code>fr-CA</code> catalogs — a pre-existing i18n gap, closed while here.</dd>
+        <dd><strong>Made durable.</strong> The art lives in two places by necessity (<code>splash.py</code> cannot import <code>spruce_grove</code> and keeps its own copy), so the baker is now <code>scripts/bake_braille_banner.py</code> with a <code>--check</code> drift guard: it re-derives the art and fails if either copy has wandered. <code>Pillow</code> was already a runtime dependency, so nothing new was pulled in. <code>tests/test_banner_durability.py</code> (21 tests) locks the contract cross-platform — 6 rows, 96 columns, braille-only, both copies byte-identical — and, wherever a usable font exists, asserts a fresh bake reproduces the committed art exactly.</dd>
+      </dl>
+    </article>
+    <article class="deep">
+      <div class="head"><h3>2026-09-22 — Fifteen private agents cross into the grove, and the last code_puppy tie gets a name</h3><span class="meta"><span class="chip gr">shipped</span> · build session (&quot;port over all the agents I had so they stand completely on their own&quot;) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>the steward&#x27;s code_puppy agents turned out to be 15 JSON definitions in <code>~/.code_puppy/agents/</code> - not the Python framework under <code>code_puppy/agents/</code>, which grove already carried. All 15 now live in <code>~/.spruce_grove/agents/</code>: the roster went 8 -&gt; 22.</dd>
+        <dd>Porting was a migration, not a copy: agent references (<code>code-puppy</code> -&gt; <code>spruce-grove</code>, <code>web-puppy</code> -&gt; <code>web-retriever</code>), config paths (<code>~/.code_puppy</code> -&gt; <code>~/.spruce_grove</code>), and trailing-space <code>display_name</code>s. Agents keep their own names, including <code>web-puppy</code>, which coexists with grove&#x27;s built-in <code>web-retriever</code>.</dd>
+        <dd>They stay private. These files carry real business context and the repo is public; a public route is a later, deliberate decision.</dd>
+        <dd>Tooling landed in <code>scripts/</code>: <code>port_code_puppy_agents.py</code> (dry-run migration), <code>dial_user_agents.py</code> (audit: load, tool resolution, model pins; non-zero exit gates a pass), <code>check_uc_tools.py</code>.</dd>
+      </dl>
+    </article>
+    <article class="deep">
+      <div class="head"><h3>2026-09-22 — The harness seam learns its own word for tool context: RunContext -&gt; ToolContext</h3><span class="meta"><span class="chip gr">shipped</span> · build session (harness exit, bead SPRUCE-GROVE-OS-tdy) · <span class="prov gr">grove-grown</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What happened</dt>
+        <dd>pydantic-ai detects the injected tool context by <em>type identity</em>, not by name, so the grove vocabulary could not be a fresh look-alike class -- it has to bind to the exact class the harness injects. That binding lives in the adapter and nowhere else.</dd>
+        <dd>New <code>spruce_grove/harness/tool_context.py</code> binds <code>ToolContext = get_harness().tool_context_type()</code> once at import; the protocol gains a pure <code>tool_context_type()</code> method and <code>harness/__init__</code> exposes <code>ToolContext</code> lazily. <code>protocol.py</code> stays free of pydantic imports (structural test still green).</dd>
+        <dd>28 modules migrated off <code>pydantic_ai.RunContext</code>: all 21 tool modules, then the agent/model/MCP layers (gemini_model, round_robin_model, mcp_/managed_server, agents/_compaction, _model_message_transform, both stream handlers). Only the adapter files keep the direct pydantic-ai reference -- that&#x27;s the point of a seam.</dd>
+      </dl>
+    </article>
     <article class="deep">
       <div class="head"><h3>2026-09-22 — Model routing: the smart-routing config was silently dead — every agent rode the cheapest model</h3><span class="meta"><span class="chip gr">shipped</span> · build session (&quot;we&#x27;re supposed to be smart about the right models for the right thing&quot;) · <span class="prov gr">grove-grown</span></span></div>
       <dl class="qa">
         <dt class="q-what">What happened</dt>
         <dd>The steward&#x27;s observation was exactly right: everything ran GLM-5.3-Flash. Three compounding causes, all verified: (1) the global default pointed at the pinned GLM-5.3-Flash entry instead of the <code>syn:large:text</code> driving seat; (2) all seven per-agent pins sat under an <code>[agents]</code> config section that NO code has ever read (the reader only scans <code>[grove]</code>) — dead config wearing a tie; (3) five of the seven pin names targeted legacy agent names (code_puppy, husky, web_puppy, junto…) that no longer exist — real names verified at runtime: spruce-grove, helios, planning-agent, model-judge, qa-kitten, web-retriever, agent-creator, mail-researcher (+ plugin agents backoffice, creative-scaffold).</dd>
-        <dd>Live config repaired (backup: puppy.cfg.bak-pre-model-routing): driving seat → syn:large:text; reasoning agents (spruce-grove, helios, planning-agent, model-judge, qa-kitten) → syn:large:text; fan-out (web-retriever, agent-creator, backoffice, creative-scaffold) → syn:small:text; compaction summarizer → hf:zai-org/GLM-5.3-Flash (cheapest class at full 524288 context; rotated pin degrades to the sliding-window fallback with a warning).</dd>
+        <dd>THEN the fourth bug surfaced — the umbrella over everything: the rebrand renamed the config file <code>puppy.cfg</code> → <code>grove.cfg</code> in code but never migrated the file, so the steward&#x27;s entire curated config sat in <code>puppy.cfg</code> while every supported version read a <code>grove.cfg</code> that did not exist. Identity, theme, routing: silently ignored since the rename. Shipped a one-time migration in <code>ensure_config_exists</code> (copy verbatim when <code>grove.cfg</code> is absent, legacy file kept as a backup, never overwritten, no dual-read), filed as COMPAT-EXIT contract #9, and ran it live: grove.cfg now exists with the full routing table.</dd>
+        <dd>Live routing table (verified by the new routing doctor — every pin targets a real agent AND a live catalog model, problems: NONE): driving seat → syn:large:text; reasoning agents (spruce-grove, helios, planning-agent, model-judge, qa-kitten) → syn:large:text; fan-out (web-retriever, agent-creator) → syn:small:text; compaction summarizer → hf:zai-org/GLM-5.3-Flash (cheapest class at full 524288 context; rotated pin degrades to the sliding-window fallback). The doctor itself caught two over-pins (backoffice/creative-scaffold are plugin commands, not agents) — removed.</dd>
       </dl>
     </article>
     <article class="deep">
@@ -380,27 +411,6 @@
         <dt class="q-what">What happened</dt>
         <dd>First two call sites migrated with behavior parity proven by tests (same raises, same fallbacks, same handle types). 56 remain; each lands one at a time, tests green, no big-bang rewrite — the Gate applies to our own work too.</dd>
         <dd>Roadmap adopted into SOVEREIGNTY.md: inventory (done) → seam (landed) → grove implementation behind the seam → flip per model → prune. The north star beyond: a core so lean and standard it could wake on real hardware, agnostic and self-owned — the destination, not the next step.</dd>
-      </dl>
-    </article>
-    <article class="deep">
-      <div class="head"><h3>2026-09-15 — The logo pack: one geometry, four jobs</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session with Junto (this one) · <span class="prov gr">grove-grown</span></span></div>
-      <dl class="qa">
-        <dt class="q-what">What happened</dt>
-        <dd>The flat green trio read clip-art against the Nordic carry-through. Built the pack from a single glyph geometry — stepped canopy, trunk notch, rounded joins, one shared ground line: the <strong>Core Disc</strong> (statement roundel — stickers, laptops, app icons, favicons), the <strong>Grove Mark</strong> (app/nav logo, dark + light variants), the <strong>Ghost</strong> (watermark line art), and the <strong>Lockups</strong> (Fraunces wordmark). Wired across the board: shell chrome, every era-ghost, favicons, README badge, and the design system itself — BRAND.md now carries &quot;The logo pack&quot; and design.html a live Logo Pack section.</dd>
-      </dl>
-    </article>
-    <article class="deep">
-      <div class="head"><h3>2026-09-15 — The Mechanics page: one page, ethos to evidence</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session with Junto (this one) · <span class="prov gr">grove-grown</span></span></div>
-      <dl class="qa">
-        <dt class="q-what">What happened</dt>
-        <dd><code>pages-hub/mechanics.html</code> — the lifecycle core as a single-page explainer on the sprucegrove.io site: breathing core, four contracts, heartbeat, gates and judges, the nine-rounds war story, the human layer. Full GRAN design language (Fraunces/mono/EB Garamond, rune lines, one stamp, grain veil, era-ghost). Registered in the site sidebar and the hub, linked to the Release Observatory. The master class, made public.</dd>
-      </dl>
-    </article>
-    <article class="deep">
-      <div class="head"><h3>2026-09-15 — The master class: teaching the lifecycle the way we teach people</h3><span class="meta"><span class="chip gr">shipped</span> · voice dictation session with Junto (this one) · <span class="prov gr">grove-grown</span></span></div>
-      <dl class="qa">
-        <dt class="q-what">What happened</dt>
-        <dd>&quot;The full enchilada&quot;: <code>MASTER-CLASS.md</code> now carries the training methodology — the 8am rule (zero context, zero shame, one concept per breath), the service-counter cadence, and troubleshooting theory run on the judge ABSTAIN war story as the lab. Seven modules: ethos-as-mechanism → breathing core → sovereignty heartbeat → gates &amp; judges → the war story → empathetic service tactics → teach-backs. Graduation standard: the eighth-grader in the room could follow it.</dd>
       </dl>
     </article>
       <!-- AUTO-END:living-updates -->
@@ -582,11 +592,67 @@
   <!-- AUTO-BEGIN:auto-features -->
   <!-- ================= AUTO-DETECTED ================= -->
   <section class="g" id="auto-detected">
-    <h2>New Since Last Curation <span class="tag">auto-detected</span> <span class="pcount">3 grove-grown · 0 upstream-synced</span></h2>
+    <h2>New Since Last Curation <span class="tag">auto-detected</span> <span class="pcount">10 grove-grown · 0 upstream-synced</span></h2>
     <p class="secintro">Feature commits detected by the pipeline that haven't been
     curated into deep-dives yet. These render straight from the changelog so the page
     never goes stale between curation passes.</p>
 
+    <article class="deep" style="border-style:dashed">
+      <div class="head"><h3>an About page, and fix the nav&#x27;s dead repo link</h3><span class="meta"><span class="hash">232d32c</span> · 2026-09-25 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
+        <dt class="q-do">What it does</dt><dd>See commit <code>232d32c</code> in the repo for the implementation diff.</dd>
+        <dt class="q-why">Why it matters</dt><dd>Auto-detected &mdash; a curated narrative will be added on the next observatory curation pass.</dd>
+      </dl>
+    </article>
+    <article class="deep" style="border-style:dashed">
+      <div class="head"><h3>grove-owned braille spinner, seated as the default</h3><span class="meta"><span class="hash">c4a2f7f</span> · 2026-09-23 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
+        <dt class="q-do">What it does</dt><dd>See commit <code>c4a2f7f</code> in the repo for the implementation diff.</dd>
+        <dt class="q-why">Why it matters</dt><dd>Auto-detected &mdash; a curated narrative will be added on the next observatory curation pass.</dd>
+      </dl>
+    </article>
+    <article class="deep" style="border-style:dashed">
+      <div class="head"><h3>/console panel to see and tend live sessions</h3><span class="meta"><span class="hash">f6fb2a9</span> · 2026-09-23 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
+        <dt class="q-do">What it does</dt><dd>See commit <code>f6fb2a9</code> in the repo for the implementation diff.</dd>
+        <dt class="q-why">Why it matters</dt><dd>Auto-detected &mdash; a curated narrative will be added on the next observatory curation pass.</dd>
+      </dl>
+    </article>
+    <article class="deep" style="border-style:dashed">
+      <div class="head"><h3>live-session scanner + `--console` headless read</h3><span class="meta"><span class="hash">76233b6</span> · 2026-09-23 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
+        <dt class="q-do">What it does</dt><dd>See commit <code>76233b6</code> in the repo for the implementation diff.</dd>
+        <dt class="q-why">Why it matters</dt><dd>Auto-detected &mdash; a curated narrative will be added on the next observatory curation pass.</dd>
+      </dl>
+    </article>
+    <article class="deep" style="border-style:dashed">
+      <div class="head"><h3>braille boot mark, and Wiggledom as the fourth ethos pillar</h3><span class="meta"><span class="hash">dd8035e</span> · 2026-09-23 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
+        <dt class="q-do">What it does</dt><dd>See commit <code>dd8035e</code> in the repo for the implementation diff.</dd>
+        <dt class="q-why">Why it matters</dt><dd>Auto-detected &mdash; a curated narrative will be added on the next observatory curation pass.</dd>
+      </dl>
+    </article>
+    <article class="deep" style="border-style:dashed">
+      <div class="head"><h3>route default vision to syn:large:text (cheapest multimodal)</h3><span class="meta"><span class="hash">67bb580</span> · 2026-09-21 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
+        <dt class="q-do">What it does</dt><dd>See commit <code>67bb580</code> in the repo for the implementation diff.</dd>
+        <dt class="q-why">Why it matters</dt><dd>Auto-detected &mdash; a curated narrative will be added on the next observatory curation pass.</dd>
+      </dl>
+    </article>
+    <article class="deep" style="border-style:dashed">
+      <div class="head"><h3>refresh lineup for 2026-09 subscription model changes</h3><span class="meta"><span class="hash">0292fdf</span> · 2026-09-21 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
+      <dl class="qa">
+        <dt class="q-what">What it is</dt><dd>A feature that landed since the last curation pass.</dd>
+        <dt class="q-do">What it does</dt><dd>See commit <code>0292fdf</code> in the repo for the implementation diff.</dd>
+        <dt class="q-why">Why it matters</dt><dd>Auto-detected &mdash; a curated narrative will be added on the next observatory curation pass.</dd>
+      </dl>
+    </article>
     <article class="deep" style="border-style:dashed">
       <div class="head"><h3>Mockingbird /rec plugin -- mic -&gt; whisper -&gt; review -&gt; send-as-prompt (build-log 27)</h3><span class="meta"><span class="hash">9dabbc2</span> · 2026-09-10 · feat<span class="prov gr" title="Authored in the grove">grove</span></span></div>
       <dl class="qa">
@@ -625,6 +691,14 @@
         <span class="count">feat + refactor + docs + chore highlights</span>
         <ul>
           <!-- AUTO-BEGIN:minor-list -->
+          <li><span class="h">0733e8d</span><span class="d">· 09-24</span> · one build, one source of truth — and stop tracking the output<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">26f8b76</span><span class="d">· 09-24</span> · the Apache-2.0 rationale, publicly, and two more transcripts untracked<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">0b299d3</span><span class="d">· 09-24</span> · sync Leather Apron Club slide count (47 -&gt; 51)<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">2ac1013</span><span class="d">· 09-23</span> · step 2 of the harness exit is complete, and say why<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">a5e2bb0</span><span class="d">· 09-23</span> · decision layer plan (System One-style bounded decisions, local-first)<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">fb6dbe1</span><span class="d">· 09-23</span> · those session dumps are iTerm2 AutoLog, not grove output<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">f34397b</span><span class="d">· 09-22</span> · record the ToolContext vocabulary landing + recompute the census<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">c3e7a05</span><span class="d">· 09-22</span> · session handoff addendum — synthetic.new lineup refresh (2026-09-21)<span class="prov gr" title="Authored in the grove">grove</span></li>
           <li><span class="h">28da0c2</span><span class="d">· 09-15</span> · session handoff — the launch document for the next session<span class="prov gr" title="Authored in the grove">grove</span></li>
           <li><span class="h">d40fec8</span><span class="d">· 09-15</span> · root every asset into the self-healing loop — per-persona updates<span class="prov gr" title="Authored in the grove">grove</span></li>
           <li><span class="h">c1ca905</span><span class="d">· 09-15</span> · license analysis — Apache-2.0 vs MIT for the grove (bad-actor playbook, the law behind attribution, NOTICE strategy, standing-your-ground runbook); ground truth: MIT lineage, no NOTICE files, club site unlicensed<span class="prov gr" title="Authored in the grove">grove</span></li>
@@ -635,14 +709,6 @@
           <li><span class="h">28ed62b</span><span class="d">· 09-10</span> · verified live domain pricing -- sprucegrove.io $28.12 first year at Porkbun, .ai $82.70<span class="prov gr" title="Authored in the grove">grove</span></li>
           <li><span class="h">8a6274e</span><span class="d">· 09-10</span> · progress.html -- Then/Now/Next roadmap board (spec vs shipped vs live queue) + index card<span class="prov gr" title="Authored in the grove">grove</span></li>
           <li><span class="h">5277c1a</span><span class="d">· 09-10</span> · build-log 29 -- voice loop dogfooded live, desktop dictation path (4 beads), PyPI claim runbook<span class="prov gr" title="Authored in the grove">grove</span></li>
-          <li><span class="h">0fe1ca6</span><span class="d">· 09-10</span> · build-log 26 -- uvx boot proven, fork standalone, grove installed to PATH<span class="prov gr" title="Authored in the grove">grove</span></li>
-          <li><span class="h">e720dc4</span><span class="d">· 09-10</span> · build-log 25 + dashboard sync -- 5al.6 desktop shell v0 scaffolded<span class="prov gr" title="Authored in the grove">grove</span></li>
-          <li><span class="h">a719a63</span><span class="d">· 09-10</span> · align phases.html with Sept 10 state, add next-steps queue<span class="prov gr" title="Authored in the grove">grove</span></li>
-          <li><span class="h">0302dfc</span><span class="d">· 09-10</span> · build-log 24 -- 5al.8 twelfth-pass re-verify; G2 diagnosed as pre-fix harness install<span class="prov gr" title="Authored in the grove">grove</span></li>
-          <li><span class="h">6fb4ba2</span><span class="d">· 09-10</span> · build-log 23 -- 5al.8 ratchet emptied, judge-panel evidence deferred to next harness cycle<span class="prov gr" title="Authored in the grove">grove</span></li>
-          <li><span class="h">15a1521</span><span class="d">· 09-10</span> · G3 judge-model ceremony evidence, G2 live-attempt record, AGENTS.md trimmed under 10k loading cap<span class="prov gr" title="Authored in the grove">grove</span></li>
-          <li><span class="h">357ec67</span><span class="d">· 09-10</span> · tick completed final-review boxes in judge-abstain remediation doc; G2/G3/G4/G5 remain open gates<span class="prov gr" title="Authored in the grove">grove</span></li>
-          <li><span class="h">390b72f</span><span class="d">· 09-10</span> · ninth sprint re-verification 5al.1/.3/.2/.4/.5 -- fresh evidence after repeated judge endpoint error<span class="prov gr" title="Authored in the grove">grove</span></li>
       <!-- AUTO-END:minor-list -->
         </ul>
       </div>
@@ -652,10 +718,24 @@
         <span class="count">fix bucket highlights</span>
         <ul>
           <!-- AUTO-BEGIN:fixes-list -->
+          <li><span class="h">11c512d</span><span class="d">· 09-25</span> · hub footer labels named repos that don&#x27;t exist<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">e7ca009</span><span class="d">· 09-25</span> · make every hub-linked page mobile-clean and brand-consistent<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">7d469f6</span><span class="d">· 09-24</span> · put the site&#x27;s nav mark under the sync script too<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">60be611</span><span class="d">· 09-24</span> · sweep the published surfaces to zero, and guard them<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">de36660</span><span class="d">· 09-24</span> · redeploy when the build script changes<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">c426fe6</span><span class="d">· 09-24</span> · normalize the build output path before guarding it<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">4953a46</span><span class="d">· 09-24</span> · the master icon was the stale one; sync it and de-name the public copy<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">7478ac0</span><span class="d">· 09-24</span> · /rec rejected real speech with pauses, and hid its own keys<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">234de8c</span><span class="d">· 09-24</span> · the generators were still publishing names<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">5cebf11</span><span class="d">· 09-24</span> · stop the &quot;thank you, thank you, thank you&quot; dictation bug<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">64b630c</span><span class="d">· 09-24</span> · finish the pivot on the surfaces it never reached<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">d84a0dc</span><span class="d">· 09-23</span> · give every published page an apple-touch-icon, correctly rooted<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">4533b2d</span><span class="d">· 09-23</span> · never raise when hashing rich tool payloads<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">918c18b</span><span class="d">· 09-23</span> · name the stale-install cause at the lazy tool seam<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">fd98a28</span><span class="d">· 09-23</span> · defer self-update actuation to exit so it can&#x27;t break a session<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">8d74d2d</span><span class="d">· 09-23</span> · one broken tool must never kill an agent run<span class="prov gr" title="Authored in the grove">grove</span></li>
           <li><span class="h">569c184</span><span class="d">· 09-15</span> · sidebar brand logo pointed at spruce_grove_logo_white.png, which exists nowhere — 404 on every page since the sidebar shipped. Pointed at the spruce-trio noback mark (on-brand, on-transparency, already deployed).<span class="prov gr" title="Authored in the grove">grove</span></li>
-          <li><span class="h">1148a3c</span><span class="d">· 09-11</span> · ship phases + progress boards -- the 404 a steward caught<span class="prov gr" title="Authored in the grove">grove</span></li>
-          <li><span class="h">f036762</span><span class="d">· 09-10</span> · tolerate non-string metadata in custom_openai chat completions<span class="prov gr" title="Authored in the grove">grove</span></li>
-          <li><span class="h">0e796f7</span><span class="d">· 09-08</span> · brand new upstream test files; correct pure-brand resolutions for add_model_menu, core_commands, models_dev_parser<span class="prov gr" title="Authored in the grove">grove</span></li>
+          <li><span class="h">1148a3c</span><span class="d">· 09-11</span> · ship phases + progress boards -- the 404 the grove caught<span class="prov gr" title="Authored in the grove">grove</span></li>
       <!-- AUTO-END:fixes-list -->
         </ul>
       </div>
