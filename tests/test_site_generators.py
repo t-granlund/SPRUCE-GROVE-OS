@@ -85,3 +85,24 @@ def test_field_guide_never_publishes_a_home_absolute_path():
     repo_path = data.get("meta", {}).get("repoPath", "")
     assert "/Users/" not in repo_path and "/home/" not in repo_path, repo_path
     assert str(Path.home()) not in data_js
+
+
+def test_committed_field_guide_inventory_is_nonempty():
+    """The committed data.js must carry a real inventory.
+
+    CI cannot import the grove (no pydantic_ai on the runner), so the generator
+    carries tool/agent/plugin/skill counts forward from THIS committed file. If
+    a zeroed data.js were ever committed, CI would faithfully republish zeros —
+    the exact regression that shipped "0 tools" once. Pin a non-empty floor.
+    """
+    import json
+
+    data_js = (REPO_ROOT / "docs" / "field-guide" / "data.js").read_text(encoding="utf-8")
+    for prefix in ("window.FIELD_GUIDE_DATA = ", "const FIELD_GUIDE_DATA = "):
+        if data_js.startswith(prefix):
+            data_js = data_js[len(prefix):]
+            break
+    stats = json.loads(data_js.strip().rstrip(";\n")).get("stats", {})
+    assert stats.get("tools", 0) > 0, stats
+    assert stats.get("agents", 0) > 0, stats
+    assert stats.get("plugins", 0) > 0, stats

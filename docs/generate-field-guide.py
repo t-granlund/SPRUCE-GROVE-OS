@@ -675,36 +675,88 @@ def _write_flat_html(data: dict) -> Path:
     return flat_path
 
 
+def _load_previous_data() -> dict | None:
+    """Read the committed data.js, so a degraded run can carry inventory forward."""
+    if not OUTPUT_FILE.exists():
+        return None
+    try:
+        text = OUTPUT_FILE.read_text(encoding="utf-8").strip()
+        for prefix in ("window.FIELD_GUIDE_DATA = ", "const FIELD_GUIDE_DATA = "):
+            if text.startswith(prefix):
+                text = text[len(prefix):]
+                break
+        return json.loads(text.strip().rstrip(";\n"))
+    except Exception:
+        return None
+
+
+def _introspection_available() -> bool:
+    """True when the grove package is importable, so inventory scans are real.
+
+    Tool/agent/skill discovery imports grove modules (and their dependencies).
+    On a machine where spruce-grove is not installed -- notably a CI runner --
+    those imports fail and the scan returns an empty or partial inventory. That
+    is a DEGRADED environment, not a grove with zero tools, so the caller must
+    carry the previous numbers forward rather than publish a zeroed site.
+    """
+    try:
+        import pydantic_ai  # noqa: F401
+    except Exception:
+        return False
+    return True
+
+
 def main() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    prev = _load_previous_data()
+    healthy = _introspection_available()
 
     changelog_data = _get_recent_commits(_run, REPO_ROOT)
     # Discover once -- _get_agents imports every agent module, so calling it per
     # reference (as this used to) re-imports the world four times over.
     agents, private_agent_count = _get_agents()
+    tools = _get_tools()
+    plugins = _get_plugins()
+    skills = _get_skills()
+
+    repo_path = _display_repo_path(REPO_ROOT)
+    if not healthy and prev:
+        # Changelog (git-only) stays fresh; inventory and the runner path carry
+        # forward from the committed data.js generated in a full environment.
+        tools = prev.get("tools") or tools
+        agents = prev.get("agents") or agents
+        private_agent_count = prev.get("stats", {}).get("privateAgents", private_agent_count)
+        plugins = prev.get("plugins") or plugins
+        skills = prev.get("skills") or skills
+        repo_path = prev.get("meta", {}).get("repoPath", repo_path)
+        print(
+            "WARNING: grove not importable (no pydantic_ai) -- carrying inventory "
+            "forward from the committed data.js; only the changelog is refreshed."
+        )
 
     data = {
         "meta": {
             "generatedAt": datetime.now(timezone.utc).isoformat(),
-            "repoPath": _display_repo_path(REPO_ROOT),
+            "repoPath": repo_path,
             "repoHead": _get_git_info()["head"],
             "branch": _get_git_info()["branch"],
             "currentVersion": _get_current_version(),
             "sourceUrl": "https://github.com/mpfaffenberger/code_puppy",
         },
         "stats": {
-            "tools": len(_get_tools()),
+            "tools": len(tools),
             "agents": len(agents),
             "privateAgents": private_agent_count,
-            "plugins": len(_get_plugins()),
-            "skills": len(_get_skills()),
+            "plugins": len(plugins),
+            "skills": len(skills),
             "commitsLast2Months": changelog_data["total_commits"],
             "releases": len(changelog_data["releases"]),
         },
-        "tools": _get_tools(),
+        "tools": tools,
         "agents": agents,
-        "plugins": _get_plugins(),
-        "skills": _get_skills(),
+        "plugins": plugins,
+        "skills": skills,
         "sdlc": SDLC_STAGES,
         "changelog": changelog_data,
         "excerpts": {

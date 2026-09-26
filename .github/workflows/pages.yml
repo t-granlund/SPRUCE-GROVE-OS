@@ -73,9 +73,15 @@ jobs:
                   break
           stats = json.loads(text.strip().rstrip(";\n")).get("stats", {})
           n = stats.get("commitsLast2Months", 0)
-          print(f"commitsLast2Months = {n}, tools = {stats.get('tools')}")
+          tools = stats.get("tools", 0)
+          print(f"commitsLast2Months = {n}, tools = {tools}, agents = {stats.get('agents')}")
           if not n:
               sys.exit("generated changelog is EMPTY -- refusing to deploy a zeroed site")
+          # The runner cannot import the grove, so the generator must carry the
+          # inventory forward from the committed data.js. If that ever fails we
+          # would publish "0 tools" -- catch it here instead.
+          if not tools:
+              sys.exit("tool inventory is EMPTY -- introspection degraded and no carried-forward data")
           PY
 
       - name: Prepare Pages artifact
