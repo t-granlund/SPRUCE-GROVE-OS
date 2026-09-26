@@ -1,14 +1,12 @@
 name: Deploy Field Guide to GitHub Pages
 
 on:
+  # Every push to main, NOT a path-filtered subset. The /releases observatory
+  # and the hub's live stats are derived from commit history and source shape,
+  # so a code-only commit still changes what the site should say. A paths
+  # filter here is exactly how the page once went stale.
   push:
     branches: [main]
-    paths:
-      - "docs/field-guide/**"
-      - "docs/field-guide-flat.html"
-      - "pages-hub/**"
-      - "scripts/build-site.sh"
-      - ".github/workflows/pages.yml"
   workflow_dispatch: {}
 
 permissions:
@@ -23,7 +21,62 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # fetch-depth: 0 is REQUIRED, not tidiness. Both generators read commit
+      # history via `git log main --since=2 months ago`; on the default shallow
+      # clone that yields nothing and the site would deploy with a zeroed
+      # release observatory. The guard step below turns any such silent
+      # regression into a red build instead of a wrong page.
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      # Regenerate the two derived artifacts BEFORE composing the site, so the
+      # deployed /releases and field guide always reflect the commit being
+      # published -- never the last time a human remembered to run them.
+      #   docs/generate-field-guide.py -> docs/field-guide/data.js + -flat.html
+      #   pages-hub/generate-updates.py -> pages-hub/updates.html (from data.js)
+      # Both are stdlib-only; ubuntu-latest ships python3.
+      - name: Regenerate derived site data
+        run: |
+          set -eu
+          # On a push event the checkout is a detached SHA; `git log main`
+          # needs a real local main. Point it at the pushed tip when absent.
+          git show-ref --verify --quiet refs/heads/main \
+            || git branch main "$GITHUB_SHA"
+          python3 docs/generate-field-guide.py
+          python3 pages-hub/generate-updates.py
+
+      # Fail closed on the two ways derived data can silently go wrong.
+      #
+      # 1. SHALLOW HISTORY. `git log main --since=2 months ago` on a depth-1
+      #    clone returns just that one commit: a non-zero count that still
+      #    misrepresents the project. Counting alone cannot catch this (tested:
+      #    a shallow clone yields commitsLast2Months = 1), so detect depth
+      #    directly. This is the failure the fetch-depth: 0 above exists to
+      #    prevent -- the guard is what makes it enforced, not merely intended.
+      # 2. EMPTY CHANGELOG. A missing/broken `main` ref yields zero commits.
+      - name: Verify generated data is complete
+        run: |
+          set -eu
+          if [ "$(git rev-parse --is-shallow-repository)" = "true" ]; then
+            echo "checkout is SHALLOW -- commit history is truncated; refusing to deploy" >&2
+            exit 1
+          fi
+          echo "main history depth: $(git rev-list --count main) commits"
+          python3 - <<'PY'
+          import json, pathlib, sys
+          text = pathlib.Path("docs/field-guide/data.js").read_text(encoding="utf-8")
+          for prefix in ("window.FIELD_GUIDE_DATA = ", "const FIELD_GUIDE_DATA = "):
+              if text.startswith(prefix):
+                  text = text[len(prefix):]
+                  break
+          stats = json.loads(text.strip().rstrip(";\n")).get("stats", {})
+          n = stats.get("commitsLast2Months", 0)
+          print(f"commitsLast2Months = {n}, tools = {stats.get('tools')}")
+          if not n:
+              sys.exit("generated changelog is EMPTY -- refusing to deploy a zeroed site")
+          PY
 
       - name: Prepare Pages artifact
         # The layout lives in scripts/build-site.sh -- one source of truth

@@ -1,8 +1,8 @@
 window.FIELD_GUIDE_DATA = {
   "meta": {
-    "generatedAt": "2026-09-26T02:26:01.801609+00:00",
-    "repoPath": "/Users/tygranlund/dev/SPRUCE-GROVE-OS",
-    "repoHead": "11c512d",
+    "generatedAt": "2026-09-26T02:37:46.331748+00:00",
+    "repoPath": "~/dev/SPRUCE-GROVE-OS",
+    "repoHead": "938116f",
     "branch": "main",
     "currentVersion": "spruce-grove v1.0.76",
     "sourceUrl": "https://github.com/mpfaffenberger/code_puppy"
@@ -13,7 +13,7 @@ window.FIELD_GUIDE_DATA = {
     "privateAgents": 15,
     "plugins": 71,
     "skills": 4,
-    "commitsLast2Months": 267,
+    "commitsLast2Months": 269,
     "releases": 1
   },
   "tools": [
@@ -2951,12 +2951,28 @@ window.FIELD_GUIDE_DATA = {
     }
   ],
   "changelog": {
-    "total_commits": 267,
+    "total_commits": 269,
     "releases": [
       {
         "month": "2026-09",
-        "commit_count": 267,
+        "commit_count": 269,
         "commits": [
+          {
+            "hash": "938116f3a9709eb20dc3bfbaedc3002db58e5136",
+            "short_hash": "938116f",
+            "subject": "feat(site): self-host the field guide's fonts; refresh the release observatory",
+            "author": "the grove",
+            "date": "2026-09-25",
+            "month": "2026-09"
+          },
+          {
+            "hash": "8798c9411af3811b6cb54471099644d4c21edc5d",
+            "short_hash": "8798c94",
+            "subject": "chore: bump version [ci skip]",
+            "author": "github-actions[bot]",
+            "date": "2026-09-26",
+            "month": "2026-09"
+          },
           {
             "hash": "11c512df447ca8590401c7069a5e27a7bb4d71f3",
             "short_hash": "11c512d",
@@ -3020,27 +3036,25 @@ window.FIELD_GUIDE_DATA = {
             "author": "the grove",
             "date": "2026-09-24",
             "month": "2026-09"
-          },
-          {
-            "hash": "26f8b76f278ef4f5ec253d436199b0e8e0cc86fe",
-            "short_hash": "26f8b76",
-            "subject": "docs: the Apache-2.0 rationale, publicly, and two more transcripts untracked",
-            "author": "the grove",
-            "date": "2026-09-24",
-            "month": "2026-09"
-          },
-          {
-            "hash": "60be611061f3b8835f41781bd94e3fd0cfd64374",
-            "short_hash": "60be611",
-            "subject": "fix(anonymity): sweep the published surfaces to zero, and guard them",
-            "author": "the grove",
-            "date": "2026-09-24",
-            "month": "2026-09"
           }
         ]
       }
     ],
     "commits": [
+      {
+        "hash": "938116f3a9709eb20dc3bfbaedc3002db58e5136",
+        "short_hash": "938116f",
+        "subject": "feat(site): self-host the field guide's fonts; refresh the release observatory",
+        "author": "the grove",
+        "date": "2026-09-25"
+      },
+      {
+        "hash": "8798c9411af3811b6cb54471099644d4c21edc5d",
+        "short_hash": "8798c94",
+        "subject": "chore: bump version [ci skip]",
+        "author": "github-actions[bot]",
+        "date": "2026-09-26"
+      },
       {
         "hash": "11c512df447ca8590401c7069a5e27a7bb4d71f3",
         "short_hash": "11c512d",

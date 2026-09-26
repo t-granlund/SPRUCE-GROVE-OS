@@ -9,11 +9,19 @@ public observatory.
 """
 
 import importlib.util
+import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CHANGELOG = REPO_ROOT / "docs" / "field_guide_changelog.py"
 UPDATES = REPO_ROOT / "pages-hub" / "generate-updates.py"
+
+# generate-field-guide.py does `from field_guide_changelog import ...` at module
+# scope; running it as a script puts docs/ on the path, loading it from here
+# does not. Add it so the import resolves.
+_DOCS = str(REPO_ROOT / "docs")
+if _DOCS not in sys.path:
+    sys.path.insert(0, _DOCS)
 
 
 def _load(path: Path, name: str):
@@ -50,3 +58,30 @@ def test_both_generators_classify_from_one_canonical_set():
     assert updates.GROVE_AUTHORS == changelog.GROVE_AUTHORS
     # And the display form the changelog emits is recognized by the chips.
     assert updates._is_grove_author(changelog.GROVE_DISPLAY_NAME)
+
+
+def test_field_guide_never_publishes_a_home_absolute_path():
+    """The published field guide must not name the maintainer's account.
+
+    data.js ships to sprucegrove.io/field-guide/. An absolute checkout path
+    (`/Users/<name>/...`) put a username on the public page. The generator now
+    emits a home-relative `~/...` form — assert that, and that no home root
+    leaks in any rendered artifact.
+    """
+    import json
+
+    gen = _load(REPO_ROOT / "docs" / "generate-field-guide.py", "gen_field_guide")
+    shown = gen._display_repo_path(REPO_ROOT)
+    assert shown.startswith("~/"), shown
+    assert str(Path.home()) not in shown
+
+    # And the committed data.js the site builds from carries no home root.
+    data_js = (REPO_ROOT / "docs" / "field-guide" / "data.js").read_text(encoding="utf-8")
+    for prefix in ("window.FIELD_GUIDE_DATA = ", "const FIELD_GUIDE_DATA = "):
+        if data_js.startswith(prefix):
+            data_js = data_js[len(prefix):]
+            break
+    data = json.loads(data_js.strip().rstrip(";\n"))
+    repo_path = data.get("meta", {}).get("repoPath", "")
+    assert "/Users/" not in repo_path and "/home/" not in repo_path, repo_path
+    assert str(Path.home()) not in data_js

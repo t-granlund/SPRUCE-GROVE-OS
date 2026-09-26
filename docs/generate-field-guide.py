@@ -17,6 +17,7 @@ import base64
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -105,14 +106,33 @@ def _get_git_info() -> dict:
         return {"head": "unknown", "branch": "unknown"}
 
 
-def _get_current_version() -> str:
+def _display_repo_path(path: Path) -> str:
+    """Home-relative form of the checkout path.
+
+    The field guide is dual-purpose: a local tool ("your clone at <path>") that
+    is ALSO published to sprucegrove.io. An absolute path puts the maintainer's
+    account name on the public page (`/Users/<name>/...`), so publish `~/...`
+    instead -- still readable on the machine that generated it, never leaking a
+    username to the web.
+    """
     try:
-        version = _run(["/opt/homebrew/bin/uv", "tool", "list"], check=False)
-        for line in version.splitlines():
-            if line.startswith("spruce-grove"):
-                return line.strip()
-    except Exception:
-        pass
+        return "~/" + str(path.relative_to(Path.home()))
+    except ValueError:
+        return str(path)
+
+
+def _get_current_version() -> str:
+    # Resolve `uv` on PATH rather than assuming Homebrew's macOS layout; CI is
+    # Linux and has no /opt/homebrew. Absent uv, fall back to pyproject below.
+    uv = shutil.which("uv")
+    if uv:
+        try:
+            version = _run([uv, "tool", "list"], check=False)
+            for line in version.splitlines():
+                if line.startswith("spruce-grove"):
+                    return line.strip()
+        except Exception:
+            pass
     try:
         import tomllib
 
@@ -666,7 +686,7 @@ def main() -> None:
     data = {
         "meta": {
             "generatedAt": datetime.now(timezone.utc).isoformat(),
-            "repoPath": str(REPO_ROOT),
+            "repoPath": _display_repo_path(REPO_ROOT),
             "repoHead": _get_git_info()["head"],
             "branch": _get_git_info()["branch"],
             "currentVersion": _get_current_version(),
