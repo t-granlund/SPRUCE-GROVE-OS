@@ -38,7 +38,7 @@
   h1,h2,h3 { margin:0; line-height:1.25; font-family:var(--display); letter-spacing:-0.02em; }
   p { margin:0 0 14px; color:var(--text-soft); }
 
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  .wrap { width:100%; max-width: 1080px; margin: 0 auto; padding: 0 24px; }
 
   .hero { padding:60px 0 48px; }
   .kicker { font-family:var(--mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); display:inline-block; border:1px solid var(--border-light); padding:6px 14px; border-radius:999px; margin-bottom:20px; }
@@ -46,7 +46,7 @@
   .hero h1 em { font-style:normal; background:linear-gradient(92deg,#E4AA71,#F2A26A,#98B79E); -webkit-background-clip:text; background-clip:text; color:transparent; }
   .hero p.lede { max-width:720px; font-size:19px; color:var(--text-soft); margin-top:22px; }
 
-  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin:44px 0 12px; }
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(160px, 100%), 1fr)); gap:14px; margin:44px 0 12px; }
   .stat { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; text-align:center; box-shadow:var(--shadow); }
   .stat .n { font-size:34px; font-weight:700; color:var(--accent); font-family:var(--mono); }
   .stat .l { font-size:12.5px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.08em; margin-top:6px; }
@@ -57,10 +57,13 @@
   .card.t-accent .ci { color:var(--accent); }
   .card.t-4 .ci { color:var(--accent-4); background:rgba(236,235,229,.09); border-color:rgba(236,235,229,.22);}
   .watermark { position:absolute; top:-20px; right:-40px; width:400px; height:auto; opacity:.05; pointer-events:none; object-fit:contain; }
-  .hero { position:relative; }
-  .hero::before { content:""; position:absolute; top:-40px; left:50%; transform:translateX(-50%); width:600px; height:300px; background:radial-gradient(ellipse, rgba(228,170,113,.06), transparent 70%); pointer-events:none; z-index:-1; }
+  .hero { position:relative; overflow:clip; }
+  /* min(600px,100%) so the decorative glow cannot exceed the hero. A bare
+     600px centred with translateX(-50%) stuck 105px past the right edge at a
+     390px viewport, widening the whole document (scrollWidth 495 vs 390). */
+  .hero::before { content:""; position:absolute; top:-40px; left:50%; transform:translateX(-50%); width:min(600px,100%); height:300px; background:radial-gradient(ellipse, rgba(228,170,113,.06), transparent 70%); pointer-events:none; z-index:-1; }
   @media(max-width:820px){ .watermark{display:none} }
-  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; padding:24px 0 80px; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(300px, 100%), 1fr)); gap:20px; padding:24px 0 80px; }
   .cards-head { margin-bottom:8px; }
   .cards-head h2 { font-size:24px; }
   .cards-head p { font-size:14px; color:var(--text-muted); margin-top:4px; }

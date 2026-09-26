@@ -10,7 +10,10 @@
   <link rel="stylesheet" href="./assets/fonts.css" />
   <link rel="stylesheet" href="./assets/tokens.css" />
   <link rel="stylesheet" href="./assets/product.css" />
-  <style>
+  <style>  /* Global border-box: width:100% plus horizontal padding must not exceed
+      the container. Pages without this overflowed by exactly their padding. */
+  *,*::before,*::after { box-sizing:border-box; }
+
     body { background: radial-gradient(ellipse 1000px 480px at 50% -10%, rgba(88,143,94,.15), transparent 62%),
       radial-gradient(ellipse 700px 400px at 92% 106%, rgba(228,170,113,.07), transparent 60%), #0e130f;
       color: #e8ece9; font-family: "Inter", -apple-system, sans-serif; }
@@ -41,7 +44,7 @@
       padding: 14px 16px; margin: 12px 0 4px; white-space: pre-wrap; }
     .copybox .hl { color: #e4aa71; }
     .hint { font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: #8b988e; margin: 8px 0 0; }
-    .num-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .num-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 12px; }
     .num { border: 1px solid #223026; background: #101812; padding: 14px 16px; }
     .num .n { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 24px; color: #e4aa71; display: block; }
     .num .w { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #8b988e; }

@@ -10,7 +10,10 @@
   <link rel="stylesheet" href="./assets/fonts.css" />
   <link rel="stylesheet" href="./assets/tokens.css" />
   <link rel="stylesheet" href="./assets/product.css" />
-  <style>
+  <style>  /* Global border-box: width:100% plus horizontal padding must not exceed
+      the container. Pages without this overflowed by exactly their padding. */
+  *,*::before,*::after { box-sizing:border-box; }
+
     /* owners-page voice — same tokens, owner vocabulary */
     .o-hero { padding: 178px 0 46px; text-align: center; position: relative; }
     .o-hero .kicker, .o-hero h1, .o-hero .lede { position: relative; z-index: 2; }

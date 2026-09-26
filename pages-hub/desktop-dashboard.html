@@ -7,7 +7,13 @@
 <link rel="icon" type="image/png" href="./assets/favicon-64.png" />
 <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
 <link rel="stylesheet" href="./assets/fonts.css">
-<style>
+<style>  /* Wide tables scroll inside their own box instead of widening the page. */
+  /* Wide tables scroll inside their own box at EVERY width. Keying this to a
+     viewport media query cannot work: the sidebar and page padding make the
+     content box narrower than the viewport, so a phone-only rule misses a
+     desktop-width window with a wide table. */
+  table { display:block; width:100%; max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
 :root{--bg:#0e130f;--card:#141b16;--line:#223026;--halo:#2d4f3a;--glow:#588f5e;
 --mint:#98b79e;--cedar:#d2a069;--text:#e8ece9;--dim:#93a096;--err:#d98a6a;
 --sans:"Inter",-apple-system,sans-serif;--disp:"Fraunces",Georgia,serif;--mono:"JetBrains Mono",monospace}
@@ -17,13 +23,13 @@
 h1{font-family:var(--disp);font-weight:500;font-size:46px;margin:14px 0 8px}
 h1 .dot{color:var(--cedar)}
 .sub{color:var(--dim);max-width:620px;margin:0 auto}
-.wrap{max-width:1020px;margin:0 auto;padding:24px 24px 90px}
+.wrap{ width:100%;max-width:1020px;margin:0 auto;padding:24px 24px 90px}
 .banner{border:1px solid var(--halo);background:rgba(45,79,58,.14);border-radius:14px;padding:18px 22px;margin:26px 0;display:flex;gap:14px;align-items:center}
 .banner .dot{width:10px;height:10px;border-radius:50%;background:var(--glow);box-shadow:0 0 0 4px rgba(88,143,94,.18);flex:none}
 .banner b{color:var(--mint)}
 h2{font-family:var(--disp);font-weight:500;font-size:26px;margin:44px 0 14px}
 h2 .n{color:var(--cedar);font-family:var(--mono);font-size:14px;vertical-align:middle;margin-right:10px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px, 100%), 1fr));gap:12px}
 .card{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:14px 16px}
 .card h3{margin:0 0 6px;font-size:15px;font-weight:600}
 .card p{margin:0;color:var(--dim);font-size:13.5px}

@@ -10,7 +10,16 @@
   <link rel="stylesheet" href="./assets/fonts.css" />
   <link rel="stylesheet" href="./assets/tokens.css" />
   <link rel="stylesheet" href="./assets/product.css" />
-    <style>
+    <style>  /* Global border-box: width:100% plus horizontal padding must not exceed
+      the container. Pages without this overflowed by exactly their padding. */
+  *,*::before,*::after { box-sizing:border-box; }
+  /* Wide tables scroll inside their own box instead of widening the page. */
+  /* Wide tables scroll inside their own box at EVERY width. Keying this to a
+     viewport media query cannot work: the sidebar and page padding make the
+     content box narrower than the viewport, so a phone-only rule misses a
+     desktop-width window with a wide table. */
+  table { display:block; width:100%; max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
     .aud-switch { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 10px 0;
       border-bottom: 1px solid var(--line, #223026); font-family: "JetBrains Mono", monospace;
       font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }

@@ -10,7 +10,10 @@
   <link rel="stylesheet" href="./assets/fonts.css" />
   <link rel="stylesheet" href="./assets/tokens.css" />
   <link rel="stylesheet" href="./assets/product.css" />
-  <style>
+  <style>  /* Global border-box: width:100% plus horizontal padding must not exceed
+      the container. Pages without this overflowed by exactly their padding. */
+  *,*::before,*::after { box-sizing:border-box; }
+
     body { background: radial-gradient(ellipse 1000px 480px at 50% -10%, rgba(88,143,94,.15), transparent 62%),
       radial-gradient(ellipse 700px 400px at 92% 106%, rgba(228,170,113,.07), transparent 60%), #0e130f;
       color: #e8ece9; font-family: "Inter", -apple-system, sans-serif; }
@@ -36,7 +39,7 @@
       text-transform: uppercase; color: #6fa97a; display: block; margin-bottom: 6px; }
     .beat h2 { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 23px; margin: 0 0 8px; color: #e8ece9; }
     .beat p { font-size: 16.5px; margin: 0; color: #93a096; }
-    .doors { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin: 40px 0 0; }
+    .doors { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 14px; margin: 40px 0 0; }
     .doors a { display: block; border: 1px solid #223026; background: #141b16; padding: 18px 18px 14px;
       text-decoration: none; transition: border-color .15s, transform .15s; }
     .doors a:hover { border-color: rgba(228,170,113,.45); transform: translateY(-2px); }

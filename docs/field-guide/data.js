@@ -1,10 +1,10 @@
 window.FIELD_GUIDE_DATA = {
   "meta": {
-    "generatedAt": "2026-09-26T02:41:24.347028+00:00",
+    "generatedAt": "2026-09-26T03:18:31.964437+00:00",
     "repoPath": "~/dev/SPRUCE-GROVE-OS",
-    "repoHead": "b36fb48",
+    "repoHead": "10472d3",
     "branch": "main",
-    "currentVersion": "spruce-grove v1.0.76",
+    "currentVersion": "spruce-grove v1.0.94",
     "sourceUrl": "https://github.com/mpfaffenberger/code_puppy"
   },
   "stats": {
@@ -13,7 +13,7 @@ window.FIELD_GUIDE_DATA = {
     "privateAgents": 15,
     "plugins": 71,
     "skills": 4,
-    "commitsLast2Months": 271,
+    "commitsLast2Months": 272,
     "releases": 1
   },
   "tools": [
@@ -2951,12 +2951,20 @@ window.FIELD_GUIDE_DATA = {
     }
   ],
   "changelog": {
-    "total_commits": 271,
+    "total_commits": 272,
     "releases": [
       {
         "month": "2026-09",
-        "commit_count": 271,
+        "commit_count": 272,
         "commits": [
+          {
+            "hash": "10472d38aa78e9dfa927e66a158a39fcfe8d2ecd",
+            "short_hash": "10472d3",
+            "subject": "fix(site): CI regeneration must not publish a zeroed inventory",
+            "author": "the grove",
+            "date": "2026-09-25",
+            "month": "2026-09"
+          },
           {
             "hash": "b36fb48e6f3bebcc88d0e57267cb45bd23d9da2b",
             "short_hash": "b36fb48",
@@ -3028,19 +3036,18 @@ window.FIELD_GUIDE_DATA = {
             "author": "the grove",
             "date": "2026-09-25",
             "month": "2026-09"
-          },
-          {
-            "hash": "23ce93b5212226dda20c9c6f4da39f03989613e8",
-            "short_hash": "23ce93b",
-            "subject": "chore: bump version [ci skip]",
-            "author": "github-actions[bot]",
-            "date": "2026-09-24",
-            "month": "2026-09"
           }
         ]
       }
     ],
     "commits": [
+      {
+        "hash": "10472d38aa78e9dfa927e66a158a39fcfe8d2ecd",
+        "short_hash": "10472d3",
+        "subject": "fix(site): CI regeneration must not publish a zeroed inventory",
+        "author": "the grove",
+        "date": "2026-09-25"
+      },
       {
         "hash": "b36fb48e6f3bebcc88d0e57267cb45bd23d9da2b",
         "short_hash": "b36fb48",

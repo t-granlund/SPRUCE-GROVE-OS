@@ -84,7 +84,7 @@
   .fanwrap{flex:2 1 auto;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px 24px 26px;max-width:100%}
   .stagetrain{display:flex;align-items:stretch;max-width:100%}
 
-  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px, 100%), 1fr));gap:14px}
 
   /* ---- inventory ---- */
   .invbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;position:sticky;top:61px;z-index:40;background:rgba(14,19,15,.88);backdrop-filter:blur(14px);padding:12px 0;border-bottom:1px solid var(--line)}

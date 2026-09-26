@@ -41,7 +41,7 @@
   .sec-sub { color:var(--BB-t3); font-size:14.5px; margin-bottom:26px; max-width:640px; }
 
   /* tokens swatches */
-  .swgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); gap:14px; }
+  .swgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(170px, 100%), 1fr)); gap:14px; }
   .sw { border:1px solid var(--BB-line); border-radius:var(--BB-radius-sm); overflow:hidden; background:var(--BB-bg-card); }
   .sw .chip { height:74px; display:grid; place-items:center; font-family:var(--BB-mono); font-size:12px; font-weight:600; }
   .sw .meta { padding:10px 12px; font-size:12.5px; }
@@ -50,7 +50,7 @@
   .sw .meta .r { color:var(--BB-mint); font-family:var(--BB-mono); font-size:11px; }
 
   /* iconography */
-  .icongrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(110px,1fr)); gap:12px; }
+  .icongrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(110px, 100%), 1fr)); gap:12px; }
   .iccell { border:1px solid var(--BB-line); border-radius:var(--BB-radius-sm); padding:16px 10px; display:flex; flex-direction:column; align-items:center; gap:10px; background:var(--BB-bg-card); }
   .iccell .ic { color:var(--BB-peri); display:grid; place-items:center; }
   .iccell .nm { font-family:var(--BB-mono); font-size:10.5px; color:var(--BB-t3); }

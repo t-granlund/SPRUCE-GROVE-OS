@@ -398,3 +398,18 @@ footer .club-band .rune {
   .nav .ver { display: none; }
   .nav .wrap .wordmark { font-size: 15px; }
 }
+
+/* Small phones (iPhone SE and narrower, to 320px). The 960px tier stops at a
+   3-across stat row, which is still too wide here -- the six cells only fit at
+   one per row. Without this the row pushed the document 23px past the screen. */
+@media (max-width: 560px) {
+  .specs .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .spec { padding: 20px 12px 18px; }
+}
+@media (max-width: 420px) {
+  .specs .wrap { grid-template-columns: minmax(0, 1fr); }
+  .spec { padding: 16px 0; border-left: 0; }
+  .spec .v { font-size: clamp(1.4rem, 8vw, 1.9rem); }
+  .spec .k { letter-spacing: .08em; }
+  .rung { grid-template-columns: minmax(0, 1fr); }
+}

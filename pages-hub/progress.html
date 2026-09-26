@@ -8,19 +8,22 @@
 <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
 <link rel="stylesheet" href="./assets/fonts.css" />
 <link rel="stylesheet" href="./assets/tokens.css" />
-<style>
+<style>  /* Global border-box: width:100% plus horizontal padding must not exceed
+      the container. Pages without this overflowed by exactly their padding. */
+  *,*::before,*::after { box-sizing:border-box; }
+
   .skip-link { position:absolute; left:-999px; top:0; z-index:200; background:var(--BB-peri); color:var(--BB-bg); font-weight:700; padding:10px 16px; border-radius:0 0 10px 0; text-decoration:none; }
   body { margin:0; background:var(--BB-bg); color:var(--BB-t2); font-family:var(--BB-sans); font-size:15px; line-height:1.7; -webkit-font-smoothing:antialiased; }
   code, .mono { font-family:var(--BB-mono); }
   code { background:rgba(242,162,106,.10); color:var(--BB-cyan); padding:2px 6px; border-radius:5px; font-size:.92em; }
   h1,h2,h3 { margin:0; line-height:1.25; font-family:var(--BB-display); letter-spacing:-0.02em; color:var(--BB-t1); }
-  .wrap { max-width:1060px; margin:0 auto; padding:56px 24px 80px; }
+  .wrap { width:100%; max-width:1060px; margin:0 auto; padding:56px 24px 80px; }
   .kicker { font-family:var(--BB-mono); font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--BB-peri); display:inline-block; border:1px solid var(--BB-line-2); padding:6px 14px; border-radius:999px; margin-bottom:20px; }
   .hero-mark { display:block; margin:0 0 20px; width:54px; height:auto; }
   .hero h1 { font-size:clamp(30px,4.6vw,44px); }
   .hero h1 em { font-style:normal; background:var(--BB-grad); -webkit-background-clip:text; background-clip:text; color:transparent; }
   .hero p.sub { max-width:70ch; color:var(--BB-t2); margin:14px 0 0; }
-  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:28px 0 8px; }
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(150px, 100%), 1fr)); gap:12px; margin:28px 0 8px; }
   .stat { border:1px solid var(--BB-line); border-radius:var(--BB-radius); padding:14px 16px; background:var(--BB-bg-card); }
   .stat .v { font-family:var(--BB-display); font-size:26px; font-weight:600; color:var(--BB-t1); }
   .stat .k { font-family:var(--BB-mono); font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--BB-t3); margin-top:4px; }
@@ -30,7 +33,7 @@
   .sec-h h2 { font-size:22px; }
   .sec-sub { color:var(--BB-t3); margin:6px 0 18px; max-width:78ch; }
   .tag { font-family:var(--BB-mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--BB-mint); border:1px solid var(--BB-line); border-radius:999px; padding:3px 10px; margin-left:8px; vertical-align:middle; }
-  .grid2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:14px; }
+  .grid2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(300px, 100%), 1fr)); gap:14px; }
   .card { border:1px solid var(--BB-line); border-radius:var(--BB-radius); background:var(--BB-bg-card); padding:18px 20px; }
   .card h3 { font-size:16px; margin-bottom:8px; }
   .card p { margin:0 0 8px; }
@@ -46,7 +49,9 @@
   .meter-row { display:flex; align-items:center; gap:12px; margin-top:12px; }
   .meter { flex:1; height:8px; border-radius:999px; background:var(--BB-bg-elev, rgba(255,255,255,.05)); overflow:hidden; border:1px solid var(--BB-line); }
   .meter i { display:block; height:100%; background:var(--BB-grad); }
-  .meter-cap { font-family:var(--BB-mono); font-size:11px; color:var(--BB-t3); white-space:nowrap; }
+  /* Not nowrap: a long "95% · isu 55a 8xz qz6 gc…" caption is wider than a
+     320px screen and pushed the page 56px. Let it wrap instead. */
+  .meter-cap { font-family:var(--BB-mono); font-size:11px; color:var(--BB-t3); overflow-wrap:anywhere; }
   .pipe { display:grid; gap:12px; }
   .pipe .step { border:1px solid var(--BB-line); border-radius:var(--BB-radius); background:var(--BB-bg-card); padding:16px 18px; position:relative; }
   .pipe .num { font-family:var(--BB-mono); font-size:11px; letter-spacing:.14em; color:var(--BB-mint); text-transform:uppercase; }

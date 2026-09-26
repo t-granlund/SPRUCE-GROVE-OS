@@ -25,7 +25,13 @@
   ] };</script>
 <script src="../assets/shell.js" defer></script>
 <script src="../assets/sidebar.js" defer></script>
-<style>
+<style>  /* Wide tables scroll inside their own box instead of widening the page. */
+  /* Wide tables scroll inside their own box at EVERY width. Keying this to a
+     viewport media query cannot work: the sidebar and page padding make the
+     content box narrower than the viewport, so a phone-only rule misses a
+     desktop-width window with a wide table. */
+  table { display:block; width:100%; max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
   :root {
     --bg: #0E130F; --bg-elev: #121813; --bg-card: #161D18;
     --border: rgba(238,235,229,.09); --border-light: rgba(238,235,229,.16);
@@ -61,7 +67,7 @@
   h1,h2,h3,h4 { margin:0; line-height:1.25; font-family:var(--display); letter-spacing:-0.02em; }
   p { margin:0 0 14px; }
 
-  .wrap { max-width:900px; margin:0 auto; padding:0 24px; }
+  .wrap { width:100%; max-width:900px; margin:0 auto; padding:0 24px; }
   /* long-form reading voice (GRAN rule 3: EB Garamond) */
   .prose p, .prose li { font-family:var(--reading); font-size:18.5px; line-height:1.75; color:var(--text-soft); }
   .prose p b, .prose li b { color:var(--text); font-family:var(--sans); font-size:15px; }
@@ -99,7 +105,7 @@
   .runeline svg { color:var(--accent-3); flex:none; }
 
   .panel { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:24px 26px; box-shadow:var(--shadow); }
-  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(240px, 100%), 1fr)); gap:16px; }
   .card-sm { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:20px 22px; }
   .card-sm h4 { font-family:var(--mono); font-size:12.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent-3); margin-bottom:10px; }
   .card-sm p { font-size:14px; color:var(--text-soft); margin:0; }

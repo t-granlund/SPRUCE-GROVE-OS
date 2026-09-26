@@ -9,9 +9,18 @@
 <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
 <link rel="stylesheet" href="./assets/fonts.css" />
 <link rel="stylesheet" href="./assets/tokens.css" />
-<style>
+<style>  /* Global border-box: width:100% plus horizontal padding must not exceed
+      the container. Pages without this overflowed by exactly their padding. */
+  *,*::before,*::after { box-sizing:border-box; }
+  /* Wide tables scroll inside their own box instead of widening the page. */
+  /* Wide tables scroll inside their own box at EVERY width. Keying this to a
+     viewport media query cannot work: the sidebar and page padding make the
+     content box narrower than the viewport, so a phone-only rule misses a
+     desktop-width window with a wide table. */
+  table { display:block; width:100%; max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
   body { margin:0; background:var(--BB-bg); color:var(--BB-t2); font-family:var(--BB-sans); font-size:16px; line-height:1.7; -webkit-font-smoothing:antialiased; }
-  .wrap { max-width:1080px; margin:0 auto; padding:0 24px; }
+  .wrap { width:100%; max-width:1080px; margin:0 auto; padding:0 24px; }
   a { color:var(--BB-cyan); text-decoration:none; }
   a:hover { text-decoration:underline; }
   h1,h2,h3 { font-family:var(--BB-display); color:var(--BB-t1); line-height:1.25; margin:0; letter-spacing:-0.02em; }
@@ -19,7 +28,7 @@
   code { background:rgba(242,162,106,.10); color:var(--BB-cyan); padding:2px 7px; border-radius:6px; font-size:.9em; }
   .kicker { font-family:var(--BB-mono); font-size:11.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--BB-peri); display:inline-block; border:1px solid var(--BB-line-2); padding:6px 14px; border-radius:999px; }
   header.hero { padding:84px 0 44px; text-align:center; position:relative; overflow:hidden; }
-  header.hero::before { content:""; position:absolute; inset:-40% -20% auto; height:130%;
+  header.hero::before { content:""; position:absolute; inset:-40% 0 auto; height:130%;
     background:radial-gradient(60% 55% at 50% 0%, rgba(88,143,94,.20), transparent 70%); pointer-events:none; }
   .hero .inner { position:relative; }
   .hero-mark { display:block; margin:0 auto 20px; width:54px; height:auto; }
@@ -37,7 +46,7 @@
   .sec-h .kicker { margin-bottom:12px; }
   .sec-h h2 { font-size:clamp(22px,3vw,32px); }
   .sec-h p { max-width:780px; margin:10px 0 0; color:var(--BB-t3); font-size:14.5px; }
-  .statgrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-top:6px; }
+  .statgrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(160px, 100%), 1fr)); gap:12px; margin-top:6px; }
   .stat { border:1px solid var(--BB-line); border-radius:14px; background:var(--BB-bg-card); padding:16px 18px; }
   .stat .n { font-family:var(--BB-display); font-size:27px; color:var(--BB-t1); }
   .stat .l { font-family:var(--BB-mono); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--BB-t3); margin-top:4px; }
@@ -78,13 +87,16 @@
   /* On phones the on-page pill rail must WRAP, not run off the right edge.
      overflow-x:auto was not containing it, so the whole document scrolled. */
   @media (max-width:640px){ nav.onpage .wrap{ flex-wrap:wrap; overflow-x:visible; } }
-  /* Wide data tables: let each table scroll inside its own box so it can never
-     set the document's width. display:block on a table makes it its own
-     scroll container at every width below the breakpoint. */
-  @media (max-width:820px){
-    table { display:block; width:100%; max-width:100%; overflow-x:auto;
-            -webkit-overflow-scrolling:touch; }
-  }
+  /* Wide data tables: each table scrolls inside its own box so it can never
+     set the document's width. This is UNCONDITIONAL, not a phone breakpoint.
+     The table's intrinsic width is ~1090px and .wrap caps at 1080px, so it
+     overflows at EVERY viewport -- but the old rule only fired below 820px.
+     At 1024px the wrap was ~910px wide while the table stayed 1090px, so the
+     document scrolled 90px on a laptop-sized window. Keying a scroll container
+     to the viewport cannot work when the content box is narrower than the
+     viewport (page padding, and the sidebar above 981px). */
+  table { display:block; width:100%; max-width:100%; overflow-x:auto;
+          -webkit-overflow-scrolling:touch; }
 </style>
 </head>
 <body>

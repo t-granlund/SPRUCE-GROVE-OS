@@ -46,7 +46,12 @@
   dd, dt, p, li { overflow-wrap:anywhere; }
   h1,h2,h3,h4 { margin:0; line-height:1.3; font-family:var(--display); letter-spacing:-0.02em; }
   p { margin:0 0 12px; color:var(--text-soft); }
-  .wrap { max-width:860px; margin:0 auto; padding:0 24px; }
+  /* width:100% is load-bearing. .wrap is a flex item in the shell's .sb-main;
+     without it the item sized to its max-width (860px) and stayed 860px wide
+     even in a 390px viewport. Every section inherits that width, so the whole
+     page silently ran off-screen -- hidden by an `overflow-x: clip`, which is
+     why no scrollbar ever appeared to give it away. */
+  .wrap { width:100%; max-width:860px; margin:0 auto; padding:0 24px; }
 
   .hero { padding:70px 0 36px; position:relative; overflow:hidden; }
   /* section-heading icons, tinted per section accent */
@@ -89,13 +94,30 @@
   .deep .meta { font-family:var(--mono); font-size:12px; color:var(--text-muted); }
   .deep .meta .hash { color:var(--accent-2); }
 
-  .qa { display:grid; grid-template-columns:110px 1fr; gap:14px 18px; margin-top:22px; }
-  .qa dt { font-family:var(--mono); font-size:11.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; padding-top:3px; }
+  /* Term / description pairs. Placement is EXPLICIT, never auto-flowed.
+     Several entries carry more than one <dd> under a single <dt> (a Living
+     Log day often has five things that happened). Auto-placement walks a grid
+     row-wise, so every second <dd> landed in the 110px label column and wrapped
+     one word per line -- a 110x689px column of single words. Pinning dt -> col 1
+     and dd -> col 2 fixes that regardless of how many <dd>s follow. */
+  .qa { display:grid; grid-template-columns:110px minmax(0,1fr); gap:14px 18px; margin-top:22px; }
+  .qa dt { grid-column:1; font-family:var(--mono); font-size:11.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; padding-top:3px; overflow-wrap:anywhere; }
+  .qa dd { grid-column:2; margin:0; font-size:15px; color:var(--text-soft); line-height:1.62; }
+  /* Distinct things that happened on the same day are separated by a rule, not
+     run together as one paragraph. */
+  .qa dd + dd { margin-top:12px; padding-top:12px; border-top:1px solid var(--border); }
   .qa dt.q-what { color:var(--accent-2); }
   .qa dt.q-do { color:var(--accent-3); }
   .qa dt.q-why { color:var(--accent); }
-  .qa dd { margin:0; font-size:15px; color:var(--text-soft); }
   .qa dd code { font-size:12.5px; }
+  /* Below the grid's comfortable width, stack label over text: a two-column
+     grid at ~360px leaves the text column too narrow to read. */
+  @media (max-width:560px){
+    .qa { grid-template-columns:1fr; gap:6px 0; }
+    .qa dt { grid-column:1; padding-top:10px; }
+    .qa dd { grid-column:1; }
+    .qa dd + dd { margin-top:10px; padding-top:10px; }
+  }
 
   .split { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:50px; }
   @media (max-width:720px){ .split { grid-template-columns:1fr; } }
@@ -129,12 +151,25 @@
   .minor li .prov, .fixes li .prov { margin-left:7px; font-size:8.5px; padding:0 5px; float:right; }
   #upstream-live { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 24px; }
   #upstream-live ul.uplist { list-style:none; margin:0; padding:0; }
-  #upstream-live .uplist li { display:flex; gap:12px; align-items:baseline; padding:7px 0; border-bottom:1px solid var(--border); font-size:13.5px; }
+  /* flex-wrap:wrap is required. The row is hash + date + repo + message +
+     provenance chip; the chip is nowrap, so without wrapping the fixed-width
+     columns already exceed a phone-width row and the chip is pushed past the
+     container's right edge (measured: chip right edge 448px in a 390px
+     viewport). Wrapping lets the chip and message fall to the next line. */
+  #upstream-live .uplist li { display:flex; gap:12px; align-items:baseline; padding:7px 0; border-bottom:1px solid var(--border); font-size:13.5px; flex-wrap:wrap; }
   #upstream-live .uplist li:last-child { border-bottom:none; }
   #upstream-live .uh { font-family:var(--mono); font-size:11px; color:var(--accent-2); flex:0 0 64px; }
   #upstream-live .ud { font-family:var(--mono); font-size:11px; color:var(--text-muted); flex:0 0 52px; }
   #upstream-live .uu { font-family:var(--mono); font-size:11px; color:var(--accent-3); flex:0 0 120px; overflow:hidden; text-overflow:ellipsis; }
-  #upstream-live .um { color:var(--text-soft); overflow-wrap:anywhere; }
+  #upstream-live .um { color:var(--text-soft); overflow-wrap:anywhere; flex:1 1 auto; min-width:0; }
+  /* Trim the fixed columns on phones so the row actually fits before wrapping. */
+  @media (max-width:560px){
+    #upstream-live { padding:16px 14px; }
+    #upstream-live .uplist li { gap:8px; font-size:12.5px; }
+    #upstream-live .uh { flex:0 0 58px; }
+    #upstream-live .ud { flex:0 0 46px; }
+    #upstream-live .uu { flex:1 1 100%; }
+  }
   .upnote { margin:0; font-size:13px; color:var(--text-muted); }
   .prov.gate { color:var(--accent); border:1px solid rgba(228,170,113,.4); font-size:8.5px; padding:0 5px; }
   .beat { color:var(--text-muted); font-size:10px; }
@@ -184,7 +219,10 @@
 
   /* anchor clearance for the sticky bar */
   section.g { scroll-margin-top: 76px; }
-  html, body { overflow-x: clip; }
+  /* No `overflow-x: clip` here on purpose. It was masking a real layout bug
+     (.wrap stuck at 860px, see above) by silently cutting content off at the
+     viewport edge. With the width fixed, the page fits honestly -- and any
+     future overflow will show up in scrollWidth instead of being hidden. */
   @media (max-width: 980px) {
     .tocbar { top: 68px; }
     section.g { scroll-margin-top: 134px; }
